@@ -221,6 +221,7 @@ C'est un moment rare : environ 1 aube sur 4, à partir de la nuit 3. Après le t
 - Les cartes gagnées à l'aube et au troc sont des **renforts temporaires** : elles ne valent que pour la partie en cours, et ne sont proposées que parmi les cartes de la collection.
 - Le personnage ne fixe plus le deck : il donne seulement sa relique de départ.
 - Défi quotidien : un deck de 24 cartes tiré au sort pour la journée, avec toutes les cartes.
+- **Affichage de la collection (v126)** : trois états bien distincts. Débloquée : en couleur, pastille verte ✓. À portée (assez de points) : en couleur avec un halo doré et un gros bouton « Débloquer · N pts ». Hors de portée : grisée avec un cadenas et « il en manque N ». Les cartes de victoire ont un trophée. Un résumé indique le nombre de cartes débloquées et à portée, et le filtre « À portée » les isole.
 
 ## Les survivants nommés
 
@@ -278,6 +279,15 @@ Un survivant nommé qui tombe après 100 victimes ou plus laisse un souvenir (3 
 ## Le retour visuel
 
 Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Triple ! » ou « Carnage ×N » quand 3 zombies ou plus meurent d'un coup, gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), ralenti à la mort du Colosse, chiffres de l'aube qui défilent.
+
+## Le tableau des combats (v126)
+
+Inspiré de Details! dans *World of Warcraft*. Le bouton en forme de graphique, en haut de l'écran, l'ouvre et le ferme à tout moment (jour et nuit). Il se met à jour en direct pendant la nuit.
+- Onglets : **Dégâts** (total et par tour, zombies tués), **Encaissés** (murs, unités et l'abri), **Soins** donnés (soigneurs et réparateurs), **Reçus**, **Morts** (qui est tombé, blessé ou mort pour de bon, et quel zombie l'a eu).
+- Portée : **la nuit** en cours (ou la dernière, le jour) ou **toute la partie**.
+- Chaque survivant a sa ligne. Les murs, pièges et cartes sont regroupés par type ; brûlures et saignements ont leur ligne.
+- Sur ordinateur et téléphone tourné, il se range dans la colonne de droite ; en portrait, il s'ouvre en bas de l'écran.
+- Le moteur compte tout dans `st.mtN` (nuit), `st.mtR` (partie) et `st.mtD` (morts).
 
 ## Les zombies
 

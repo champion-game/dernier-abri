@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-title" content="Dernier Abri">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="src/style.css?v=125">
+<link rel="stylesheet" href="src/style.css?v=126">
 </head>
 <body>
 
@@ -25,6 +25,7 @@
     <div class="brand">Dernier Abri</div>
     <button type="button" class="mute" id="mute"></button>
     <button type="button" class="mute fs" id="fs" aria-label="Plein écran" hidden><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button type="button" class="mute mtb" id="mtb" aria-label="Détails des combats"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M7 20v-6M12 20V8M17 20v-11"/></svg></button>
     <button type="button" class="round" id="round" aria-label="Ton deck et tes reliques"></button>
     <div class="shel"><div class="shel-t"><span>Abri</span><b id="shelT"></b></div><div class="shel-bar"><i id="shelB"></i></div></div>
   </div>
@@ -38,6 +39,7 @@
   <canvas class="map" id="map" aria-label="Carte autour de l’abri"></canvas>
  <div class="side side2">
   <div class="tip" id="tip" hidden></div>
+  <div class="meter" id="meter" hidden></div>
   <div class="info" id="info"></div>
   <div class="table" id="table">
     <div class="piles"><button type="button" class="pile draw" id="pDraw" aria-label="Pioche"></button><button type="button" class="pile res" id="pRes" aria-label="Réserve" hidden></button></div>
@@ -49,8 +51,8 @@
 </div>
 <div class="overlay" id="ov"><div class="panel" id="panel"></div></div>
 
-<script src="src/engine.js?v=125"></script>
-<script src="src/audio.js?v=125"></script>
-<script src="src/game.js?v=125"></script>
+<script src="src/engine.js?v=126"></script>
+<script src="src/audio.js?v=126"></script>
+<script src="src/game.js?v=126"></script>
 </body>
 </html>

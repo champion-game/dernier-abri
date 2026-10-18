@@ -34,6 +34,10 @@ async function run(vp,label){
   await p.evaluate(()=>{const r=document.querySelector('[data-o=sfx]');r.value=40;r.dispatchEvent(new Event('input',{bubbles:true}))});if(await p.evaluate(()=>OPT.sfx)!==.4)problems.push(`${label} : le volume ne s’enregistre pas`);await click('[data-a=optclose]')});
  // une partie
  await step('nouvelle partie',async()=>{await click('[data-a=new]');await click('[data-a=edit]');await shot('04-deck');await overflow('éditeur de deck');await click('[data-a=new]');await click('[data-a=start]');await p.waitForTimeout(400)});
+ await step('tableau des combats',async()=>{await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));await click('#mtb');
+  const vis=await p.evaluate(()=>{const m=document.querySelector('#meter');return !!m&&!m.hidden&&m.getBoundingClientRect().height>40});
+  if(!vis)problems.push(`${label} : le tableau des combats ne s’ouvre pas`);await click('[data-mt="t:dead"]');await shot('05c-details');await overflow('tableau des combats');
+  await click('[data-mt="t:dmg"]');if(!vis)return;await click('#mtb');if(await p.evaluate(()=>!document.querySelector('#meter').hidden))problems.push(`${label} : le tableau des combats ne se ferme pas`)});
  const box=await p.$eval('#map',e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width}});const cs=box.w/9;
  const at=i=>[box.x+(i%9+.5)*cs,box.y+(Math.floor(i/9)+.5)*cs];
  let reached=0;

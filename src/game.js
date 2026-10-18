@@ -192,7 +192,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v125 · 17 oct.';
+const VERSION='v126 · 18 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -963,6 +963,7 @@ const rarTag=t=>rar(t)==='com'?'':`<span class="rt ${rar(t)}">${Z.RARITY[rar(t)]
 const WIDE=matchMedia('(min-width:760px)');
 const left0=()=>Math.max(0,G.energy??0);
 function render(){
+ try{meterSync()}catch(e){}
  $('#round').innerHTML=(S.busy?`Nuit ${G.night}`:`Jour ${G.night}`)+(G.menace?`<small class="mtag">M${G.menace}</small>`:'');
  $('#shelT').textContent=`${Math.max(0,G.shelter)}/${Z.maxS(G)}`;
  const sb=$('#shelB');sb.style.width=Math.max(0,G.shelter)/Z.maxS(G)*100+'%';sb.className=G.shelter<=3?'low':'';
@@ -1361,7 +1362,7 @@ const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 function cfBar(own){return `<div class="cfbar"><input type="search" data-f="q" placeholder="Chercher une carte…" value="${CF.q.replace(/"/g,'&quot;')}" aria-label="Chercher une carte">
  <select data-f="sort" aria-label="Trier"><option value="cat">Par type</option><option value="cost">Par coût</option><option value="rar">Par rareté</option><option value="name">Par nom</option><option value="fam">Par faction</option></select>
  <select data-f="fam" aria-label="Faction"><option value="">Toutes les factions</option>${Object.keys(Z.FAM).map(f=>`<option value="${f}">${Z.FAM[f].n}</option>`).join('')}<option value="-">Sans faction</option></select>
- ${own?`<select data-f="own" aria-label="Débloquées"><option value="">Toutes</option><option value="y">Débloquées</option><option value="n">À débloquer</option></select>`:''}</div>`}
+ ${own?`<select data-f="own" aria-label="Débloquées"><option value="">Toutes</option><option value="y">Débloquées</option><option value="n">À débloquer</option><option value="b">À portée</option></select>`:''}</div>`}
 function cfGrid(ts,item){
  ts=ts.filter(t=>!CF.fam||(CF.fam==='-'?!Z.famOf(t):Z.famOf(t)===CF.fam));
  const key=t=>`<div class="citem-w" data-n="${norm(Z.U[t].n+' '+(Z.U[t].d||''))}">${item(t)}</div>`;
@@ -1377,10 +1378,20 @@ function deckEditor(keep){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.d
  show(`<h2 class="pw">Deck ${META.slot+1}</h2><p><b>${d.length}</b> / ${Z.DECK_MAX} cartes (minimum ${Z.DECK_MIN}). ${err?`<span class="bad">${err}</span>`:'✓ Prêt.'} Commune ×3, rare ×2, épique ×1 au maximum.</p>
   ${cfBar(false)}${cfGrid(META.cards.slice(),t=>`<div class="citem${cnt[t]?' in':''}">${cardFace(t,{base:1})}<span class="qty"><button type="button" data-a="dkm" data-v="${t}" ${cnt[t]?'':'disabled'}>−</button><b>${cnt[t]||0}/${Z.copyMax(t)}</b><button type="button" data-a="dkp" data-v="${t}" ${(cnt[t]||0)>=Z.copyMax(t)||d.length>=Z.DECK_MAX?'disabled':''}>+</button></span></div>`)}
   <button type="button" class="go" data-a="new">Terminé</button><button type="button" class="skip" data-a="dkreset">Remettre le deck de départ</button><button type="button" class="skip" data-a="coll">Collection</button>`,keep);cfSync()}
-function collectionScreen(keep){const own=META.cards;
- show(`<h2 class="pw">Collection</h2><p>Tu as <b>${META.points}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>
+function collectionScreen(keep){const own=META.cards,pts=META.points,price=t=>Z.CARD_PRICE[Z.RAR[t]||'com'];
+ // trois états bien distincts : débloquée (couleur + coche), achetable maintenant (couleur, cadre doré, bouton), hors de portée (grisée + cadenas)
+ const state=t=>own.includes(t)?'in':Z.U[t].vic!=null?'vic':pts>=price(t)?'buy':'far';
+ const nIn=Z.KEYS.filter(t=>own.includes(t)).length,nBuy=Z.KEYS.filter(t=>state(t)==='buy').length;
+ show(`<h2 class="pw">Collection</h2><p>Tu as <b>${pts}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>
+  <div class="csum"><span class="cs-in">✓ ${nIn}/${Z.KEYS.length} débloquées</span><span class="cs-buy">${ii('unlock')} ${nBuy} à portée</span></div>
   <button type="button" class="skip evob" data-a="evo">✦ Évolutions secrètes · ${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length} découvertes</button>
-  ${cfBar(true)}${cfGrid(Z.KEYS.filter(t=>!CF.own||(CF.own==='y')===own.includes(t)),t=>{const has=own.includes(t),pr=Z.CARD_PRICE[Z.RAR[t]||'com'];return `<div class="citem${has?' in':' locked'}">${cardFace(t,{base:1})}<span class="qty">${has?'<b>✓ Débloquée</b>':Z.U[t].vic!=null?`<b class="vlock">${ii('trophy')} Victoire en Mutation ${Z.U[t].vic}</b>`:`<button type="button" class="buy" data-a="unlock" data-v="${t}" ${META.points>=pr?'':'disabled'}>${pr} pts</button>`}</span></div>`})}
+  ${cfBar(true)}${cfGrid(Z.KEYS.filter(t=>!CF.own||(CF.own==='b'?state(t)==='buy':(CF.own==='y')===own.includes(t))),t=>{const st=state(t),pr=price(t);
+   const badge=st==='in'?`<span class="cbadge ok">✓</span>`:st==='vic'?`<span class="cbadge vic">${ii('trophy')}</span>`:st==='far'?`<span class="cbadge lk">${ii('lock')}</span>`:'';
+   const foot=st==='in'?'<b class="cok">Débloquée</b>'
+    :st==='vic'?`<b class="vlock">${ii('trophy')} Victoire en Mutation ${Z.U[t].vic}</b>`
+    :st==='buy'?`<button type="button" class="buy ok" data-a="unlock" data-v="${t}">${ii('unlock')} Débloquer · ${pr} pts</button>`
+    :`<span class="cfar"><span>${ii('lock')} ${pr} pts</span><small>il en manque ${pr-pts}</small></span>`;
+   return `<div class="citem s-${st}${st==='in'?' in':st==='buy'?'':' locked'}">${badge}${cardFace(t,{base:1})}<span class="qty">${foot}</span></div>`})}
   <button type="button" class="go" data-a="new">Préparer une partie</button><button type="button" class="skip" data-a="title">Accueil</button>`,keep);cfSync()}
 // page des évolutions secrètes : les cartes découvertes en grand avec leur recette, les autres en silhouette avec un indice
 function evoScreen(){const ev=META.evo||[],n=Z.EVO_KEYS.filter(k=>ev.includes(k)).length;
@@ -1528,6 +1539,32 @@ ${(d=>d?`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase
 applyOpt();newGame();render();requestAnimationFrame(frame);title();
 
 // bouton son
+/* v126 : tableau des combats (comme Details! dans WoW) : dégâts, encaissés, soins donnés et reçus, morts, pour la nuit ou toute la partie.
+   Sur ordinateur et téléphone tourné, il se range dans la colonne de droite ; en portrait, il s'ouvre en bas de l'écran par-dessus la main. */
+const MT={tab:'dmg',all:0,at:0};
+const MT_TABS=[['dmg','Dégâts'],['tak','Encaissés'],['hg','Soins'],['hr','Reçus'],['dead','Morts']];
+const MT_X={x_burn:'Brûlures',x_bleed:'Saignements',x_shelter:'L’abri'};
+const mtName=t=>MT_X[t]||(Z.U[t]?Z.U[t].n:t);
+const mtCol=t=>{if(t==='x_shelter')return'#c94a4a';if(MT_X[t])return'#e07a2a';const c=(Z.U[t]||{}).cat;return{shoot:'#d9a441',melee:'#c9573a',help:'#6fae5a',wall:'#9a8f7e',trap:'#b07a3c',post:'#5a8fc9'}[c]||'#a77ad9'};
+const fmt1=v=>(Math.round(v*10)/10).toLocaleString('fr-FR');
+// l'en-tête (onglets) n'est reconstruit que quand on change d'onglet : le corps se met à jour en direct sans voler les clics
+function meterHead(){const night=!MT.all;return `<div class="mt-h"><b class="mt-ttl"></b><span class="mt-sc"><button type="button" data-mt="n" class="${night?'on':''}">Nuit</button><button type="button" data-mt="a" class="${night?'':'on'}">Partie</button></span><button type="button" class="mt-x" data-mt="x" aria-label="Fermer">×</button></div>
+  <div class="mt-tabs">${MT_TABS.map(([k,n])=>`<button type="button" data-mt="t:${k}" class="${MT.tab===k?'on':''}">${n}</button>`).join('')}</div><div class="mt-b"></div>`}
+function meterBody(){const night=!MT.all,m=(night?G.mtN:G.mtR)||{},ticks=(night?G.mtT:G.mtRT)||0;
+ if(MT.tab==='dead'){const ds=(G.mtD||[]).filter(d=>!night||d.night===G.night).slice(-40).reverse();
+  return ds.length?`<ul class="mt-dead">${ds.map(d=>`<li><i style="background:${mtCol(d.t)}"></i><span><b>${d.name||mtName(d.t)}</b>${d.name?` <small>${mtName(d.t)}</small>`:''}<br><small>${night?'':`Nuit ${d.night} · `}${d.ko?'blessé, part en réserve':'mort pour de bon'}${d.by&&Z.ZT[d.by]?` · ${Z.ZT[d.by].n}`:''}</small></span></li>`).join('')}</ul>`:`<p class="mt-0">Personne n’est tombé${night?' cette nuit':''}.</p>`}
+ const k=MT.tab,rows=Object.values(m).filter(r=>r[k]>0).sort((a,b)=>b[k]-a[k]),max=rows.length?rows[0][k]:1,tot=rows.reduce((a,r)=>a+r[k],0);
+ if(!rows.length)return `<p class="mt-0">${G.mtN?'Rien pour l’instant.':'Les chiffres apparaîtront pendant la première nuit.'}</p>`;
+ const per=k==='dmg'&&ticks>0;
+ return `<ol class="mt-rows">${rows.slice(0,14).map(r=>`<li><i class="mt-bar" style="width:${Math.max(3,r[k]/max*100)}%;background:${mtCol(r.t)}"></i><span class="mt-n">${r.name?`${r.name} <small>${mtName(r.t)}</small>`:mtName(r.t)}</span><span class="mt-v">${r[k]}${per?` <small>${fmt1(r[k]/ticks)}/t</small>`:''}${k==='dmg'&&r.kills?` <small>· ${r.kills} ${ii('skull')}</small>`:''}</span></li>`).join('')}</ol>
+  <p class="mt-tot">Total : <b>${tot}</b>${per?` · ${fmt1(tot/ticks)} par tour`:''}${rows.length>14?` · ${rows.length-14} autres`:''}</p>`}
+function meterSync(force){const el=$('#meter');if(!el)return;const on=!!OPT.meter;el.hidden=!on;$('#mtb').classList.toggle('on',on);
+ if(!on)return;const now=performance.now();if(!force&&now-MT.at<300)return;MT.at=now;
+ try{const key=MT.tab+MT.all;if(force||el.dataset.k!==key||!el.querySelector('.mt-b')){el.innerHTML=meterHead();el.dataset.k=key}
+  el.querySelector('.mt-ttl').textContent=MT.all?'Toute la partie':`Nuit ${G.night}`;el.querySelector('.mt-b').innerHTML=meterBody()}catch(e){el.innerHTML='<p class="mt-0">Détails indisponibles.</p>'}}
+$('#mtb').addEventListener('click',()=>{OPT.meter=OPT.meter?0:1;saveOpt();meterSync(1)});
+$('#meter').addEventListener('click',e=>{const b=e.target.closest('[data-mt]');if(!b)return;const v=b.dataset.mt;
+ if(v==='x'){OPT.meter=0;saveOpt()}else if(v==='n')MT.all=0;else if(v==='a')MT.all=1;else if(v.startsWith('t:'))MT.tab=v.slice(2);meterSync(1)});
 const muteBtn=$('#mute');
 function muteIcon(){muteBtn.innerHTML=`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>${SFX.muted?'<path d="M16 9l5 6M21 9l-5 6"/>':'<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/>'}</svg>`;muteBtn.setAttribute('aria-label',SFX.muted?'Activer le son':'Couper le son')}
 muteBtn.addEventListener('click',()=>{SFX.toggle();muteIcon()});muteIcon();

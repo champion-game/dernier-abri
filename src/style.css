@@ -600,3 +600,70 @@ html.eco .panel img.heli{animation:none;filter:none}
 @keyframes heliout{0%{transform:none}100%{transform:translate(-140%,-70px) rotate(8deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.panel.lose,.panel.win .bigstamp,.panel.lose .bigstamp,.panel img.heli{animation:none!important}}
 html.eco .panel.lose,html.eco .panel img.heli{animation:none!important}
+/* v126 : collection, trois états bien lisibles (débloquée, à portée, hors de portée) */
+.csum{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.csum span{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.csum .cs-in{background:rgba(70,120,40,.15);color:#2f5a17}
+.csum .cs-buy{background:rgba(196,140,20,.18);color:#7a4a00}
+.csum svg.ink{width:15px;height:15px}
+.citem{position:relative}
+.cbadge{position:absolute;z-index:1;top:-6px;right:-6px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:17px;box-shadow:0 2px 5px rgba(0,0,0,.45);pointer-events:none}
+.cbadge svg.ink{width:17px;height:17px}
+.cbadge.ok{background:#4c8a2a;color:#fff;border:2px solid #e9f5dc}
+.cbadge.lk{background:#3a3128;color:#e8dcc4;border:2px solid #8a7a62}
+.cbadge.lk svg.ink,.cbadge.vic svg.ink{stroke:currentColor}
+.cbadge.vic{background:#7a4a00;color:#ffd77a;border:2px solid #ffd77a}
+.citem.s-far .cf{filter:grayscale(1) brightness(.42)}
+.citem.s-vic .cf{filter:grayscale(.6) brightness(.55) sepia(.3)}
+.citem.s-buy .cf{filter:drop-shadow(0 0 0 #e8b23a) drop-shadow(0 0 7px rgba(232,178,58,.95));animation:cbuy 1.8s ease-in-out infinite}
+@keyframes cbuy{50%{filter:drop-shadow(0 0 2px #e8b23a) drop-shadow(0 0 12px rgba(232,178,58,1))}}
+@media (prefers-reduced-motion:reduce){.citem.s-buy .cf{animation:none}}
+html.eco .citem.s-buy .cf{animation:none}
+.citem .cok{color:#2f5a17;font-size:13.5px}
+.citem button.buy.ok{width:100%;min-height:36px;display:inline-flex;align-items:center;justify-content:center;gap:5px;border-radius:9px;border:2px solid #8a5a00;background:linear-gradient(#f5c94e,#d89a1e);color:#3a2300;font-weight:800;font-size:13.5px;padding:4px 6px;cursor:pointer;box-shadow:0 2px 0 #8a5a00}
+.citem button.buy.ok:active{transform:translateY(2px);box-shadow:none}
+.citem button.buy.ok svg.ink{width:15px;height:15px;stroke:#3a2300}
+.citem .cfar{display:flex;flex-direction:column;align-items:center;color:#5a4a38;font-weight:700;font-size:13.5px;line-height:1.15}
+.citem .cfar svg.ink{width:14px;height:14px;vertical-align:-2px}
+.citem .cfar small{font-weight:600;font-size:11.5px;color:#8a6a4a}
+/* v126 : tableau des combats (feutre vert comme la fiche de nuit) */
+.mtb.on{color:#ffd77a;border-color:#ffd77a}
+.meter{color:#e8dcc2;border:1px solid #0c160f;border-radius:12px;padding:8px 10px 6px;font-size:13px;
+ background:repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0 2px,rgba(0,0,0,0) 2px 4px),radial-gradient(120% 140% at 50% 0%,#24402c 0%,#1a3021 60%,#13241a 100%);
+ box-shadow:inset 0 0 0 3px rgba(0,0,0,.25),inset 0 0 0 5px rgba(240,220,170,.12),0 6px 16px rgba(0,0,0,.6)}
+.meter[hidden]{display:none}
+.mt-h{display:flex;align-items:center;gap:8px}
+.mt-h>b{font-family:'Special Elite',serif;font-size:15px;color:#f3e6c4;margin-right:auto;white-space:nowrap}
+.mt-sc{display:flex;border:1px solid rgba(240,220,170,.3);border-radius:8px;overflow:hidden}
+.mt-sc button,.mt-tabs button{background:none;border:0;color:#cfc3a6;font:inherit;font-size:12.5px;padding:4px 9px;cursor:pointer}
+.mt-sc button.on{background:rgba(240,220,170,.2);color:#fff}
+.mt-x{background:none;border:0;color:#cfc3a6;font-size:22px;line-height:1;padding:0 2px 2px;cursor:pointer}
+.mt-tabs{display:flex;gap:3px;margin:7px 0 6px;border-bottom:1px solid rgba(240,220,170,.18)}
+.mt-tabs button{flex:1;padding:5px 2px;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.mt-tabs button.on{color:#ffd77a;border-bottom-color:#ffd77a;font-weight:700}
+.mt-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.mt-rows li{position:relative;display:flex;align-items:center;gap:6px;min-height:24px;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.28);overflow:hidden}
+.mt-bar{position:absolute;left:0;top:0;bottom:0;opacity:.55;border-radius:5px;transition:width .3s}
+.mt-n,.mt-v{position:relative;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+.mt-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;color:#fff}
+.mt-n small,.mt-v small,.mt-dead small{font-weight:400;color:#d8ccb0;font-size:11.5px}
+.mt-v{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;color:#fff}
+.mt-v .ink{width:12px;height:12px;vertical-align:-1px}
+.mt-tot{margin:6px 0 0;font-size:12px;color:#cfc3a6;text-align:right}
+.mt-0{margin:8px 0;color:#cfc3a6;text-align:center}
+.mt-dead{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.mt-dead li{display:flex;gap:8px;align-items:flex-start;padding:4px 7px;border-radius:5px;background:rgba(0,0,0,.28);line-height:1.25}
+.mt-dead li>i{flex:none;width:6px;align-self:stretch;border-radius:3px}
+/* en portrait : il s'ouvre en haut, par-dessus la fiche de nuit et la piste (la carte et la main restent visibles) */
+.meter{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 50px);width:min(440px,calc(100vw - 24px));max-height:min(44vh,330px);overflow:auto;z-index:8}
+/* sur ordinateur et téléphone tourné : rangé dans la colonne de droite, dans l'espace libre */
+@media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){
+ .meter{position:static;transform:none;width:auto;max-height:none;min-height:0;overflow:auto;flex:0 1 auto;margin-bottom:auto;z-index:auto}
+ .side2 .tip:not([hidden])+.meter{margin-top:0}
+ .side2 .tip{margin-bottom:0}
+ .side2 .tip+.meter[hidden]{display:none}
+}
+/* téléphone tourné : pas de place dans la colonne, il flotte au-dessus de la carte */
+@media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px) and (max-height:520px){
+ .meter{position:fixed;left:10px;top:10px;width:min(330px,45vw);max-height:calc(100dvh - 20px);margin:0;z-index:8;opacity:.96}
+}

@@ -145,6 +145,18 @@ check('Électricien : plus de coupure de courant',()=>{const st=fresh();st.event
  Z.startNight(st,rng(1));st.pending=[];const z={id:1,k:'fat',pos:4*9+3,hp:99,max:99,cd:99,style:0};st.z=[z];Z.step(st);Z.step(st);ok(z.hp<99,'la Tesla ne tire pas')});
 check('Infirmière de campagne : soigne la réserve à l’aube',()=>{const st=fresh();st.grid[2*9+4]={t:'fieldnurse',hp:3};st.bench=[{t:'gun',hp:1}];Z.endNight(st);eq(st.bench[0].hp,3)});
 
+check('Tableau des combats : dégâts, zombies tués, encaissés, soins et morts comptés',()=>{const st=fresh();st.grid[3*9+4]={t:'gun',hp:3,name:'Léa'};st.grid[3*9+3]={t:'pharma',hp:4};
+ Z.startNight(st,rng(1));st.pending=[];const z={id:1,k:'walk',pos:2*9+4,hp:3,max:3,cd:99,style:0};st.z=[z];for(let k=0;k<4;k++)Z.step(st);
+ const rows=Object.values(st.mtN),lea=rows.find(r=>r.name==='Léa');ok(lea&&lea.dmg===3&&lea.kills===1,'dégâts ou tué non comptés '+JSON.stringify(lea));
+ ok(st.mtR[lea.id].dmg===3,'total de la partie');
+ const g=st.grid[3*9+4];g.hp=1;const z2={id:2,k:'fat',pos:2*9+4,hp:99,max:99,cd:1,style:0};st.z=[z2];for(let k=0;k<6;k++)Z.step(st);
+ ok(Object.values(st.mtN).some(r=>r.tak>0),'dégâts encaissés non comptés');
+ ok((st.mtD||[]).some(d=>d.name==='Léa'&&d.by==='fat')||Object.values(st.mtN).some(r=>r.hg>0),'ni mort ni soin compté');
+ Z.startNight(st,rng(2));ok(!Object.keys(st.mtN).length&&Object.keys(st.mtR).length,'remise à zéro de la nuit')});
+check('Tableau des combats : soin compté pour le soigneur et le soigné',()=>{const st=fresh();st.grid[3*9+4]={t:'gun',hp:1,name:'Paul'};st.grid[3*9+3]={t:'pharma',hp:4,name:'Ana'};
+ Z.startNight(st,rng(1));st.pending=[];st.z=[];for(let k=0;k<4;k++)Z.step(st);const r=Object.values(st.mtN);
+ ok(r.find(x=>x.name==='Ana').hg>0&&r.find(x=>x.name==='Paul').hr>0,JSON.stringify(r))});
+
 /* ---------- 4. nuits aléatoires ---------- */
 const PLACE=PLAY.filter(t=>!Z.U[t].react&&!Z.U[t].instant&&!Z.U[t].onUnit);
 const NIGHTS=+process.env.NIGHTS||300;let maxZ=0,slow=0,worst=0;
