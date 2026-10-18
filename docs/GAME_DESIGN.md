@@ -287,6 +287,7 @@ Inspiré de Details! dans *World of Warcraft*. Le bouton en forme de graphique, 
 - Portée : **la nuit** en cours (ou la dernière, le jour) ou **toute la partie**.
 - Chaque survivant a sa ligne. Les murs, pièges et cartes sont regroupés par type ; brûlures et saignements ont leur ligne.
 - Sur ordinateur et téléphone tourné, il se range dans la colonne de droite ; en portrait, il s'ouvre en bas de l'écran.
+- À la fin de la partie (défaite ou départ en hélicoptère), le bouton « Détails de la partie » rouvre ce tableau pour toute la partie.
 - Le moteur compte tout dans `st.mtN` (nuit), `st.mtR` (partie) et `st.mtD` (morts).
 
 ## Les zombies

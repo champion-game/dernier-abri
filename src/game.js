@@ -172,7 +172,7 @@ const GLY={skull:'M12 3a7 7 0 0 0-7 7v3l2 2v4h10v-4l2-2v-3a7 7 0 0 0-7-7z M7.5 1
  vest:'M8 3l4 3 4-3 3 3v15H5V6z M12 6v15 M8 12h2 M14 12h2',binoc:'M6 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M18 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M3 17V8l3-4h3v10 M21 17V8l-3-4h-3v10 M9 11h6',
  medkit:'M4 8h16v12H4z M9 8V5h6v3 M12 11v6 M9 14h6',torch:'M8 3h8l-2 6v12h-4V9z M8 3l-.5-1 M12 12v3',pills:'M5 13l8-8a4 4 0 0 1 6 6l-8 8a4 4 0 0 1-6-6z M9 9l6 6',
  tape:'M12 5a7 7 0 1 0 0 14a7 7 0 1 0 0-14z M12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z M19 12h3v4',keys:'M8 9a4 4 0 1 0 0 8a4 4 0 1 0 0-8z M12 13h9 M18 13v3 M21 13v2',
- heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z'};
+ heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11'};
 const ii=(k,cls)=>`<svg class="ink${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
 const P2D={};const glyph=(k,x,y,sz,col,lw)=>{const p=P2D[k]||(P2D[k]=new Path2D(GLY[k]));ctx.save();ctx.translate(x-sz/2,y-sz/2);ctx.scale(sz/24,sz/24);ctx.lineWidth=(lw||2.2);ctx.lineCap=ctx.lineJoin='round';ctx.strokeStyle=col;ctx.stroke(p);ctx.restore()};
 const ink=k=>`<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
@@ -192,7 +192,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v126 · 18 oct.';
+const VERSION='v127 · 18 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -1251,7 +1251,7 @@ function victory(){G.won=1;const m=G.menace||0,pts=G.daily?0:Z.winPoints(m),unl=
   <button type="button" class="go" data-a="win-leave">Partir avec les secours</button><button type="button" class="skip" data-a="win-stay">Rester : une nuit de plus (mode infini, pour le score)</button>
   <p class="ver">Si tu restes, ta victoire est déjà acquise : la horde grandit chaque nuit, jusqu’à ce qu’elle gagne.</p>`)}
 function leaveWin(){clearSave();logRun(1);const nights=G.night;let pts=0;if(!G.daily){pts=Z.runPoints(nights,G.kills);META.points=(META.points||0)+pts;META.best=Math.max(META.best,nights);META.total+=nights;META.runs++;saveMeta(META)}
- show(`<img class="heli away" src="assets/ui/heli.webp?v=121" alt=""><h2 class="ok">Victoire</h2><p>L’hélicoptère décolle. Derrière toi, la horde envahit la clairière… mais tu es parti.</p><div class="big">${plural(nights,'nuit survécue','nuits survécues')}</div>${pts?`<p>+<b>${pts}</b> points de survie pour ces ${nights} nuits (total : ${META.points}).</p>`:''}<button type="button" class="go" data-a="title">Accueil</button>`)}
+ show(`<img class="heli away" src="assets/ui/heli.webp?v=121" alt=""><h2 class="ok">Victoire</h2><p>L’hélicoptère décolle. Derrière toi, la horde envahit la clairière… mais tu es parti.</p><div class="big">${plural(nights,'nuit survécue','nuits survécues')}</div>${pts?`<p>+<b>${pts}</b> points de survie pour ces ${nights} nuits (total : ${META.points}).</p>`:''}${detBtn()}<button type="button" class="go" data-a="title">Accueil</button>`);keepEnd()}
 function statsScreen(){const h=META.hist||[],pl=Object.entries(META.played||{}).filter(([t])=>Z.U[t]).sort((a,b)=>b[1]-a[1]).slice(0,6),avg=h.length?Math.round(h.reduce((a,x)=>a+x.n,0)/h.length*10)/10:0;
  const tile=(v,l)=>`<div class="stile"><b>${v}</b><span>${l}</span></div>`;
  show(`<h2 class="pw">Statistiques</h2><div class="stiles">${tile(META.best||0,'record de nuits')}${tile(META.wins||0,'victoires')}${tile(META.menaceWon>=0?META.menaceWon:'—','Mutation vaincue')}${tile(META.runs||0,'parties')}${tile(META.total||0,'nuits au total')}${tile(META.kills||0,'zombies éliminés')}</div>
@@ -1269,7 +1269,7 @@ function end(){
  const best=META.best,after=Z.unlocks(META);
  const fresh=[...after.chars.filter(k=>!before.chars.includes(k)).map(k=>'Personnage : '+Z.CHARS[k].n),...after.places.filter(k=>!before.places.includes(k)).map(k=>'Lieu : '+Z.PLACES[k].n),];
  const dailyTxt=G.daily?dailyEnd(nights):'';
- show(`<i class="bigstamp ko">Tombé</i><h2 class="ko">L’abri est tombé</h2><p>La horde est entrée pendant la nuit <b>${G.night}</b>.</p><div class="big">${plural(nights,'nuit survécue','nuits survécues')}</div><p><b>${G.kills}</b> zombies éliminés. Record : <b>${plural(best,'nuit','nuits')}</b>${newRec?' (nouveau record !)':''}.</p>${dailyTxt}${legs.length?`<p>${ii('medal')} <b>Héritage :</b> ${legs.map(f=>`${f.name} (${Z.U[f.t].n}, ${f.kills} zombies)`).join(', ')} ${legs.length>1?'laissent':'laisse'} un souvenir pour ta prochaine partie : le premier ${legs.length>1?'survivant du même métier':Z.U[legs[0].t].n} posé aura +1 dégât et +2 PV.</p>`:''}${pts?`<p>+<b>${pts}</b> points de survie (total : ${META.points}). Débloque de nouvelles cartes dans la <b>Collection</b>.</p>`:''}${fresh.length?`<h3>Débloqué !</h3><ul>${fresh.map(f=>`<li><b>${f}</b></li>`).join('')}</ul>`:''}<h3>Mémorial</h3>${memorialHtml()}<button type="button" class="go" data-a="new">Rejouer</button><button type="button" class="skip" data-a="coll">Collection</button><button type="button" class="skip" data-a="title">Accueil</button>`);
+ show(`<i class="bigstamp ko">Tombé</i><h2 class="ko">L’abri est tombé</h2><p>La horde est entrée pendant la nuit <b>${G.night}</b>.</p><div class="big">${plural(nights,'nuit survécue','nuits survécues')}</div><p><b>${G.kills}</b> zombies éliminés. Record : <b>${plural(best,'nuit','nuits')}</b>${newRec?' (nouveau record !)':''}.</p>${dailyTxt}${legs.length?`<p>${ii('medal')} <b>Héritage :</b> ${legs.map(f=>`${f.name} (${Z.U[f.t].n}, ${f.kills} zombies)`).join(', ')} ${legs.length>1?'laissent':'laisse'} un souvenir pour ta prochaine partie : le premier ${legs.length>1?'survivant du même métier':Z.U[legs[0].t].n} posé aura +1 dégât et +2 PV.</p>`:''}${pts?`<p>+<b>${pts}</b> points de survie (total : ${META.points}). Débloque de nouvelles cartes dans la <b>Collection</b>.</p>`:''}${fresh.length?`<h3>Débloqué !</h3><ul>${fresh.map(f=>`<li><b>${f}</b></li>`).join('')}</ul>`:''}<h3>Mémorial</h3>${memorialHtml()}<button type="button" class="go" data-a="new">Rejouer</button>${detBtn()}<button type="button" class="skip" data-a="coll">Collection</button><button type="button" class="skip" data-a="title">Accueil</button>`);keepEnd();
 }
 const CATN={wall:'Défenses',post:'Postes de soutien',shoot:'Tireurs',melee:'Corps à corps',help:'Soutien',trap:'Pièges',item:'Objets',react:'Réactions'};
 const deckHtml=()=>Object.keys(CATN).map(c=>`<h3>${CATN[c]}</h3><div class="deck">${Z.KEYS.filter(t=>Z.U[t].cat===c).map(t=>`<div class="dk" style="--cc:${cc(t)}">${art(t)}<span><b>${Z.U[t].n}</b>${rarTag(t)}<em class="ce">${Z.cost(t)} énergie</em> · ${Z.U[t].d}${famLine(t)}</span></div>`).join('')}</div>`).join('');
@@ -1419,6 +1419,8 @@ const ACT={
  dkm:v=>{const d=META.decks[META.slot],k=d.indexOf(v);if(k>=0){d.splice(k,1);saveMeta(META)}deckEditor(1)},
  dkreset:()=>{META.decks[META.slot]=Z.STARTER_DECK.slice();saveMeta(META);deckEditor()},
  coll:()=>collectionScreen(),
+ mdet:()=>detScreen(),
+ mback:()=>{if(S.endHtml)show(S.endHtml);else title()},
  evo:()=>evoScreen(),
  unlock:v=>{if(Z.U[v].vic!=null)return;const pr=Z.CARD_PRICE[Z.RAR[v]||'com'];if(!META.cards.includes(v)&&META.points>=pr){META.points-=pr;META.cards.push(v);saveMeta(META);SFX.play('dawn')}collectionScreen(1)},
  char:v=>{pendingChar=v;placeScreen()},
@@ -1565,6 +1567,12 @@ function meterSync(force){const el=$('#meter');if(!el)return;const on=!!OPT.mete
 $('#mtb').addEventListener('click',()=>{OPT.meter=OPT.meter?0:1;saveOpt();meterSync(1)});
 $('#meter').addEventListener('click',e=>{const b=e.target.closest('[data-mt]');if(!b)return;const v=b.dataset.mt;
  if(v==='x'){OPT.meter=0;saveOpt()}else if(v==='n')MT.all=0;else if(v==='a')MT.all=1;else if(v.startsWith('t:'))MT.tab=v.slice(2);meterSync(1)});
+// v126 : à la fin d'une partie (défaite ou départ en hélico), on peut revoir le tableau des combats de toute la partie
+const detBtn=()=>G&&G.mtR&&Object.keys(G.mtR).length?`<button type="button" class="skip" data-a="mdet">${ii('chart')} Détails de la partie</button>`:'';
+function keepEnd(){S.endHtml=panel.innerHTML}
+function detScreen(){MT.all=1;show(`<h2 class="pw">Détails de la partie</h2><p>${plural(G.night,'nuit','nuits')}, ${G.kills} zombies éliminés.</p><div class="meter inpanel" id="meterP"></div><button type="button" class="go" data-a="mback">Retour</button>`);detSync()}
+function detSync(){const el=document.getElementById('meterP');if(!el)return;el.innerHTML=meterHead();el.querySelector('.mt-ttl').textContent=MT.all?'Toute la partie':`Nuit ${G.night}`;el.querySelector('.mt-b').innerHTML=meterBody();const x=el.querySelector('.mt-x');if(x)x.remove()}
+panel.addEventListener('click',e=>{const b=e.target.closest('#meterP [data-mt]');if(!b)return;const v=b.dataset.mt;if(v==='n')MT.all=0;else if(v==='a')MT.all=1;else if(v.startsWith('t:'))MT.tab=v.slice(2);detSync()});
 const muteBtn=$('#mute');
 function muteIcon(){muteBtn.innerHTML=`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>${SFX.muted?'<path d="M16 9l5 6M21 9l-5 6"/>':'<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/>'}</svg>`;muteBtn.setAttribute('aria-label',SFX.muted?'Activer le son':'Couper le son')}
 muteBtn.addEventListener('click',()=>{SFX.toggle();muteIcon()});muteIcon();

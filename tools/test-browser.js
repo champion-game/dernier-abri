@@ -71,7 +71,9 @@ async function run(vp,label){
     const sel=['#ov [data-a=lvl]','#ov button.relic:not([disabled])','#ov button.pick:not([disabled])','#ov [data-a=evc]:not([disabled])','#ov .go:not([disabled])','#ov .skip:not([disabled])'];
     let done=false;for(const s of sel){if(await click(s)){done=true;break}}if(!done)break}
    const h=await ov();if(h&&!fell){await shot(`bloque-nuit${n}`);problems.push(`${label} : bloqué sur l’écran « ${h} » après la nuit ${n}`)}});
-  if(fell){await shot('08-defaite');break}
+  if(fell){await shot('08-defaite');
+   if(await click('[data-a=mdet]')){if(!(await p.$('#meterP .mt-rows, #meterP .mt-0')))problems.push(`${label} : les détails de la partie sont vides`);await shot('08b-details');await click('[data-a=mback]')}
+   else problems.push(`${label} : pas de bouton « Détails de la partie » après la défaite`);break}
   const nn=await p.evaluate(()=>G.night);if(nn!==n+1)problems.push(`${label} : après la nuit ${n}, le jeu est au jour ${nn} (attendu ${n+1})`);
   reached=n;
  }
