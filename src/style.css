@@ -687,3 +687,6 @@ html.eco .citem.s-buy .cf{animation:none}
 .achi.on{opacity:1;background:rgba(232,178,58,.15);border-color:#c8922a}
 .achi.on .ach-ic{background:#e8b23a;color:#2b1a0c}
 @media (prefers-reduced-motion:reduce){.achtoast{animation:none}}
+/* révélation progressive (v129) */
+.newb{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:9px;background:var(--lantern);color:#1f1a12;font-size:11px;font-weight:700;vertical-align:middle}
+.newx{border-left:3px solid var(--lantern);padding-left:8px}

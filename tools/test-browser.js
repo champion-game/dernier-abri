@@ -12,7 +12,7 @@ const problems=[];let shots=0;
 
 async function run(vp,label){
  const b=await pw.chromium.launch(exe?{executablePath:exe}:{});const ctx=await b.newContext({viewport:vp,deviceScaleFactor:1});
- await ctx.addInitScript(()=>{try{if(!localStorage.getItem('abri-tuto'))localStorage.setItem('abri-tuto','5')}catch(e){}});
+ await ctx.addInitScript(()=>{try{if(!localStorage.getItem('abri-tuto'))localStorage.setItem('abri-tuto','5');if(!localStorage.getItem('abri-opts'))localStorage.setItem('abri-opts','{"all":1}')}catch(e){}});
  const p=await ctx.newPage();const errs=[];
  p.on('pageerror',e=>errs.push('erreur JS : '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push('console : '+m.text())});
  p.on('requestfailed',r=>errs.push('fichier manquant : '+r.url().replace('file://'+ROOT,'')));

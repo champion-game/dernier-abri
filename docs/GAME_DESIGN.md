@@ -475,6 +475,16 @@ L'équilibrage est vérifié par simulation (`node tools/simulate.js`). Un bot p
 - Tout le hasard de la partie (pioche, nuits, aube, événements, mutations, prénoms) passe par un générateur à graine sauvegardé avec la partie. Les effets visuels gardent un hasard libre.
 - Pas encore de classement en ligne : il faudra un serveur (ou les classements Steam).
 
+## La révélation progressive (v129)
+
+Comme dans *Balatro*, les systèmes avancés tournent dès le départ, mais leur affichage attend que le joueur les rencontre (souvenir dans `abri-meta.hints`) :
+
+- **Première partie** : « Jouer » lance directement la partie (Survivant, Maison des bois, deck de départ, sans Mutation), sans écran de préparation. Le bouton « Collection et decks » n'apparaît qu'après la 1ʳᵉ partie, avec un badge « Nouveau ! » jusqu'à la première visite.
+- **Factions** : pictogramme de faction sur les cartes, compteurs en haut de l'écran, section Factions du panneau et résumé du deck cachés jusqu'au premier bonus de faction (bulle « Bonus de faction »).
+- **Niveaux** : la fiche d'une unité n'annonce pas le prochain niveau avant le premier niveau gagné ; l'écran de ce premier niveau explique le principe.
+- **Évolutions** : déjà secrètes, révélées à la découverte.
+- Option **« Tout afficher dès le départ »** pour les habitués (et pour le test navigateur).
+
 ## Le tutoriel
 
 À la toute première partie, une bulle jaune guide les premiers gestes : choisir une carte, la poser, l'énergie, la nuit et l'accélération, puis le choix de la carte à l'aube. Elle ne revient plus ensuite.

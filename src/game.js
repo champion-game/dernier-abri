@@ -175,6 +175,10 @@ const GLY={skull:'M12 3a7 7 0 0 0-7 7v3l2 2v4h10v-4l2-2v-3a7 7 0 0 0-7-7z M7.5 1
  heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11',undo:'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3'};
 const ii=(k,cls)=>`<svg class="ink${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
 const P2D={};const glyph=(k,x,y,sz,col,lw)=>{const p=P2D[k]||(P2D[k]=new Path2D(GLY[k]));ctx.save();ctx.translate(x-sz/2,y-sz/2);ctx.scale(sz/24,sz/24);ctx.lineWidth=(lw||2.2);ctx.lineCap=ctx.lineJoin='round';ctx.strokeStyle=col;ctx.stroke(p);ctx.restore()};
+/* révélation progressive (v129) : factions, niveaux et menus restent cachés tant que le joueur ne les a pas rencontrés.
+   Les règles s'appliquent quand même ; seul l'affichage attend. Option « Tout afficher » pour les habitués. */
+function seen(k){try{return !!(OPT.all||(META.hints&&META.hints[k]))}catch(e){return true}}
+function novice(){try{return !OPT.all&&!META.runs}catch(e){return false}}
 const ink=k=>`<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
 function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=cardStats(D),f=Z.famOf(t),ro=Z.roleOf(t),u=artUrl(t),cost=o.cost??(o.base?Z.cost(t):Z.costOf(G,t));
  const atk=st.atk!=null?`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`:st.heal?`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`:'';
@@ -182,7 +186,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
  // texte de la carte : pour un chef, la faction est déjà indiquée par le pictogramme, on raccourcit
  const txt=U0.chief?U0.d.replace(/^Che(?:f|ffe) d[^:]*: /,'').replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/,'. Faction : +1 palier'):U0.d;
  // faction et rôle : pictogrammes à l'encre en bas de la carte, entre les dégâts et les PV (rôle en couleur : tank / soin / DPS)
- const marks=(f?`<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>`:'')+(ro?`<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>`:'');
+ const marks=(f&&seen('fam1')?`<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>`:'')+(ro?`<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>`:'');
  return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}">${o.gold?`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
   <span class="cf-art"${u?` style="background-image:url('${u}')"`:''}>${u?'':svg(t)}</span><span class="cf-vig"></span>${u&&popUrl(t)?`<span class="cf-pop" style="background-image:url('${popUrl(t)}')"></span>`:''}
   ${r!=='com'?`<span class="cf-rar" title="${Z.RARITY[r].n}"></span>`:''}<span class="cf-cost">${cost}</span>
@@ -192,7 +196,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v128 · 19 oct.';
+const VERSION='v129 · 19 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -202,7 +206,7 @@ const VERSION='v128 · 19 oct.';
   location.replace(location.pathname+'?v='+v.slice(1)+location.hash)}).catch(()=>{})}catch(e){}})();
 // slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
-const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,back:'',shelter:'',lang:'fr'};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
+const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',lang:'fr'};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
 function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang}
 const TICK=650;let SPEED=1,slowT=0;const tickMs=()=>TICK/SPEED*(performance.now()<slowT?3:1);
@@ -1003,8 +1007,8 @@ function tagsHtml(){const mut=G.muts&&G.muts[0],soon=Z.mutNight(G.night);return 
 const cardName=t=>Z.stat(G,t).n;
 const roleTag=t=>{const r=Z.roleOf(t);return r?`<span class="role" title="${Z.ROLES[r].n}">${ink(r)}</span>`:''};
 const roleLine=t=>{const r=Z.roleOf(t);return r?` <em class="ce">${ink(r)} ${Z.ROLES[r].n}</em>`:''};
-const famTag=t=>{const f=Z.famOf(t);return f?`<span class="ft">${ink(f)}</span>`:''};
-const famLine=t=>{const f=Z.famOf(t);return f?` <em class="ce">${ink(f)} ${Z.FAM[f].n}</em>`:''};
+const famTag=t=>{const f=Z.famOf(t);return f&&seen('fam1')?`<span class="ft">${ink(f)}</span>`:''};
+const famLine=t=>{const f=Z.famOf(t);return f&&seen('fam1')?` <em class="ce">${ink(f)} ${Z.FAM[f].n}</em>`:''};
 const rar=t=>Z.RAR[t]||'com';
 const rarTag=t=>rar(t)==='com'?'':`<span class="rt ${rar(t)}">${Z.RARITY[rar(t)].n}</span>`;
 const WIDE=matchMedia('(min-width:760px)');
@@ -1026,7 +1030,7 @@ function render(){
    const tr=Z.isTrace(t),ch=tr?Z.charges(G,t,true):0;
    return `<button type="button" class="card reuse${on?' sel':''}" data-u="${k}" ${S.busy||Z.buildCost(G,t,true)>(G.energy??0)||(tr&&!ch)?'disabled':''}>${cardFace(t,{mini:1,cost:Z.buildCost(G,t,true),tag:tr?`Encore ${ch} case${ch>1?'s':''}`:'Encore'+(n>1?' ×'+n:'')})}</button>`}).join('')
   ;try{pilesHtml();animPiles()}catch(e){}
- const fc=Z.famCounts(G),fl=Z.famLevels(G);const nU=Z.unitCount(G),cap=Z.unitCap(G);$('#fams').innerHTML=`<span class="fam cap${nU>=cap?' full':''}" title="Unités sur le terrain (murs et pièges illimités)">${ink('cap')} ${nU}/${cap}</span>`+Object.keys(Z.FAM).filter(f=>fc[f]).map(f=>`<span class="fam l${fl[f]}" title="${Z.FAM[f].n}">${ink(f)} ${fc[f]}${fl[f]?' '+'★'.repeat(fl[f]):'/'+Z.FAM[f].lv[0]}</span>`).join('')+tagsHtml();
+ const fc=Z.famCounts(G),fl=Z.famLevels(G);const nU=Z.unitCount(G),cap=Z.unitCap(G);$('#fams').innerHTML=`<span class="fam cap${nU>=cap?' full':''}" title="Unités sur le terrain (murs et pièges illimités)">${ink('cap')} ${nU}/${cap}</span>`+Object.keys(Z.FAM).filter(f=>fc[f]&&seen('fam1')).map(f=>`<span class="fam l${fl[f]}" title="${Z.FAM[f].n}">${ink(f)} ${fc[f]}${fl[f]?' '+'★'.repeat(fl[f]):'/'+Z.FAM[f].lv[0]}</span>`).join('')+tagsHtml();
  const info=$('#info');info.className='info';
  if(S.busy&&S.sel!==null&&S.sel>=0){const t=S.hand[S.sel];info.innerHTML=`<b>${cardName(t)}</b> : ${Z.U[t].d}. `+(Z.U[t].react==='unit'?'Touche une unité blessée.':'Touche une case de la carte.')}
  else if(S.pause&&S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+' Touche une case libre en bleu pour le déplacer.';
@@ -1107,14 +1111,14 @@ function placeLineUI(cells){const t=selCard(),re=selReuse();if(Z.lineCost(G,t,ce
 function unitLine(u){const tr=Z.TRAITS[u.trait],D=Z.U[u.t],lv=(u.lvA||0)+(u.lvD||0),k=u.kills||0,i=G.grid.indexOf(u),ro=Z.roleOf(u.t);
  const rl=ro?` · ${ink(ro)} <b>${Z.ROLES[ro].n}</b>`+(ro==='tank'?` (provoque à ${Z.TAUNT} cases, bloque 1 coup sur 3)`:'')+(Z.squad(G,i)?' · <b>escouade</b> (+1)':''):'';
  return (u.name?`<b>${u.name}</b>, ${cardName(u.t)}`:`<b>${cardName(u.t)}</b>`)+rl+(u.gold?` <b class="gold">${stars(u)} doré</b>`:'')+(D.evo?' <b class="evo">✦ évolution</b>':'')
-  +(tr?` · <b>${tr.n}</b> (${tr.d})`:'')+(D.dmg?` · ${plural(k,'zombie tué','zombies tués')}, niveau suivant à ${Z.lvKills(Z.lvOf(k)+1)}`:'')
+  +(tr?` · <b>${tr.n}</b> (${tr.d})`:'')+(D.dmg?` · ${plural(k,'zombie tué','zombies tués')}`+(seen('lvl')?`, niveau suivant à ${Z.lvKills(Z.lvOf(k)+1)}`:''):'')
   +(lv?` · niveau ${lv} (+${u.lvA||0} dégât, +${(u.lvD||0)*3} PV)`:'')+(u.leg?` · porte le souvenir de <b>${u.leg}</b> (+1 dégât, +2 PV)`:'')
   +(g=>g.length>1?` · <b>rempart de ${g.length} murs</b> : ${g.reduce((a,k)=>a+G.grid[k].hp,0)}/${g.reduce((a,k)=>a+Z.maxHp(G,G.grid[k]),0)} PV en commun`:'')(Z.wallGroup(G,G.grid.indexOf(u)))+(u.scar?' · <b>cicatrice</b> : la prochaine chute sera fatale':'')+(Z.eqOf(u).length?` · équipé : ${Z.eqOf(u).map(t=>ii(EQIC[t]||'pack')+' '+Z.U[t].n).join(', ')}`:'')+` · ${u.hp}/${Z.maxHp(G,u)} PV.`}
 /* conseils au bon moment : une bulle, une seule fois par joueur, la première fois qu'une situation se présente */
 const HINTS={
  fuse:ii('star')+' <b>Fusion !</b> 3 unités identiques deviennent une nouvelle carte avec une étoile de plus : plus de PV, +1 dégât, 2 places libérées, et les 3 cartes repartent dans ta défausse.',
  evo:'✦ <b>Évolution !</b> Certaines paires de cartes posées côte à côte deviennent une nouvelle carte unique, et les deux cartes repartent dans ta défausse. Il en existe d’autres à découvrir : retrouve-les dans la Collection, page Évolutions secrètes.',
- fam1:ii('medal')+' <b>Bonus de faction.</b> 2 survivants de la même faction débloquent son 1ᵉʳ bonus. À 5 survivants : 2ᵉ bonus et équipe complète (+1 dégât, +2 PV).',
+ fam1:ii('medal')+' <b>Bonus de faction.</b> 2 survivants de la même faction débloquent son 1ᵉʳ bonus. À 5 survivants : 2ᵉ bonus et équipe complète (+1 dégât, +2 PV). Le pictogramme de faction s’affiche désormais en bas des cartes et en haut de l’écran.',
  fam2:ii('medal')+' <b>Équipe complète !</b> 5 survivants de la même faction : 2ᵉ bonus, +1 dégât et +2 PV pour toute la faction.',
  squad:ink('tank')+ink('heal')+ink('dps')+' <b>Escouade !</b> Un Tank, un Soin et un DPS voisins gagnent chacun +1 dégât (ou +1 soin).',
  cap:ink('cap')+' <b>Limite d’unités atteinte.</b> Fusionne des unités identiques, ou rappelle-en une dans la réserve (touche-la, puis « Rappeler »). Murs, pièges et postes ne comptent pas.',
@@ -1252,8 +1256,8 @@ function dawnStep(ph,picks){
   return show(`<h2 class="ok">Nuit ${G.night} survécue</h2>${dawnTxt()}<p>Dans les décombres, tu trouves un objet rare. Choisis une <b>relique</b> : elle reste active toute la partie.</p>
    <div class="relics">${picks.map(r=>`<button type="button" class="relic" data-a="relic" data-v="${r}">${relicIc(r)}<span><b>${Z.RELICS[r].n}</b>${Z.RELICS[r].d}</span></button>`).join('')}</div>`)}
  if(ph==='lvl'){S.picks=picks;save();const u=G.grid[picks[0]];if(!u||Z.lvPending(u)<=0){S.phase=null;return dawn()}
-  const lv=(u.lvA||0)+(u.lvD||0)+1;SFX.play('lvl');
-  return show(`<h2 class="ok">Niveau ${lv} !</h2>${dawnTxt()}<p><b>${u.name||cardName(u.t)}</b>${u.name?` (${cardName(u.t)})`:''} a tué <b>${u.kills} zombies</b>. Choisis son amélioration, elle dure toute la partie :</p>
+  const lv=(u.lvA||0)+(u.lvD||0)+1;SFX.play('lvl');const lvNew=!seen('lvl');META.hints=META.hints||{};if(lvNew){META.hints.lvl=1;saveMeta(META)}
+  return show(`<h2 class="ok">Niveau ${lv} !</h2>${dawnTxt()}<p><b>${u.name||cardName(u.t)}</b>${u.name?` (${cardName(u.t)})`:''} a tué <b>${u.kills} zombies</b>. Choisis son amélioration, elle dure toute la partie :</p>${lvNew?'<p class="newx">'+ii('star')+' <b>Nouveau : les niveaux.</b> Plus un survivant tue de zombies, plus il monte en niveau. Son niveau s’affiche sur la carte (N1, N2…).</p>':''}
    <div class="relics"><button type="button" class="relic" data-a="lvl" data-v="atk">${svg('shot')}<span><b>Offensive</b>+1 dégât à chaque coup</span></button><button type="button" class="relic" data-a="lvl" data-v="def">${svg('riot')}<span><b>Défensive</b>+3 PV max, et tous ses PV récupérés</span></button></div>`)}
  if(ph==='event'){S.picks=picks;save();const E=Z.DAWN[picks[0]];
   return show(`<h2 class="pw">${E.n}</h2>${dawnTxt()}<p>${E.d}</p><div class="relics">${E.ch.map((c,k)=>`<button type="button" class="relic evc" data-a="evc" data-v="${k}" ${c.ok&&!c.ok(G)?'disabled':''}><span><b>${c.n}</b>${c.d}</span></button>`).join('')}</div>`)}
@@ -1353,6 +1357,7 @@ function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
   <label class="chk"><input type="checkbox" data-o="shake" ${OPT.shake?'checked':''}> Secousses de l’écran</label>
   ${navigator.vibrate?`<label class="chk"><input type="checkbox" data-o="vib" ${OPT.vib?'checked':''}> Vibrations du téléphone</label>`:''}
   ${(typeof META!=='undefined'&&META.wins>0)?`<label>Dos des cartes<select data-o="back"><option value="" ${OPT.back!=='gold'?'selected':''}>Classique</option><option value="gold" ${OPT.back==='gold'?'selected':''}>Doré (victoire)</option></select></label><label>Abri<select data-o="shelter"><option value="" ${OPT.shelter!=='fort'?'selected':''}>Maison</option><option value="fort" ${OPT.shelter==='fort'?'selected':''}>Maison fortifiée (victoire)</option></select></label>`:''}
+  <label class="chk"><input type="checkbox" data-o="all" ${OPT.all?'checked':''}> Tout afficher dès le départ (factions, niveaux, collection), pour les joueurs habitués</label>
   <label class="chk"><input type="checkbox" data-o="eco" ${OPT.eco?'checked':''}> Mode économie (petits téléphones : moins d’effets, plateau moins détaillé)</label>
   <label class="chk"><input type="checkbox" data-o="text" ${OPT.text?'checked':''}> Texte plus grand</label>
  </div><button type="button" class="go" data-a="optclose">Retour</button>`)}
@@ -1361,7 +1366,7 @@ function runInfo(){onTitle=false;
  show(`<h2 class="pw">${Z.CHARS[G.char].n}</h2><p><b>${G.kills}</b> zombies éliminés · <b>${G.scrap}</b> ferraille</p>
   <h3>Reliques</h3>${G.relics.length?`<div class="deck">${G.relics.map(r=>`<div class="dk" style="--cc:var(--lantern)">${relicIc(r)}<span><b>${Z.RELICS[r].n}</b>${Z.RELICS[r].d}</span></div>`).join('')}</div>`:'<p>Aucune pour l’instant. Tu en trouves une toutes les 5 nuits.</p>'}
   <h3>Mutation instable de la horde</h3>${G.muts.length?`<div class="deck">${G.muts.map(m=>`<div class="dk" style="--cc:var(--blood)">${svg('mut')}<span><b>${Z.MUTS[m].n}</b>${Z.MUTS[m].d}</span></div>`).join('')}</div>`:'<p>Aucune pour l’instant. Mutation instable toutes les 5 nuits.</p>'}
-  <h3>Factions</h3><div class="deck">${Object.keys(Z.FAM).map(f=>{const F=Z.FAM[f],c=Z.famCounts(G)[f]||0,l=Z.famLevels(G)[f];return `<div class="dk" style="--cc:${l?'var(--lantern)':'var(--muted)'}"><span class="fic">${ink(f)}</span><span><b>${F.n} : ${c}</b>${l?'Actif : '+F.d.slice(0,l).join(' ; '):`Encore ${F.lv[0]-c} pour : ${F.d[0]}`}</span></div>`}).join('')}</div> 
+  ${seen('fam1')?'':'<!--'}<h3>Factions</h3><div class="deck">${Object.keys(Z.FAM).map(f=>{const F=Z.FAM[f],c=Z.famCounts(G)[f]||0,l=Z.famLevels(G)[f];return `<div class="dk" style="--cc:${l?'var(--lantern)':'var(--muted)'}"><span class="fic">${ink(f)}</span><span><b>${F.n} : ${c}</b>${l?'Actif : '+F.d.slice(0,l).join(' ; '):`Encore ${F.lv[0]-c} pour : ${F.d[0]}`}</span></div>`}).join('')}</div>${seen('fam1')?'':'-->'} 
   <h3>Tes survivants</h3>${G.grid.some(u=>u&&u.name)?`<div class="deck">${G.grid.filter(u=>u&&u.name).map(u=>`<div class="dk" style="--cc:${cc(u.t)}">${svg(u.t)}<span><b>${u.name}</b>${cardName(u.t)} · ${Z.TRAITS[u.trait].n} (${Z.TRAITS[u.trait].d}) · ${plural(u.kills||0,'zombie','zombies')} · ${u.hp}/${Z.maxHp(G,u)} PV</span></div>`).join('')}</div>`:'<p>Aucun survivant posé.</p>'}
   <button type="button" class="skip" data-a="options">${ii('gear')} Options</button>
   <h3>Mémorial</h3>${memorialHtml()}
@@ -1408,7 +1413,7 @@ function prepScreen(){const u=Z.unlocks(META);PREP.menace=Math.max(0,Math.min(ME
  const d=META.decks[META.slot],err=Z.deckError(d,META.cards),fc={};d.forEach(t=>{const f=Z.famOf(t);if(f)fc[f]=(fc[f]||0)+1});
  show(`<h2 class="pw">Préparer la partie</h2>
   <h3>Ton deck</h3><div class="tabs">${META.decks.map((x,k)=>`<button type="button" class="tab${k===META.slot?' on':''}" data-a="prepdeck" data-v="${k}">Deck ${k+1}<small>${x.length} cartes</small></button>`).join('')}</div>
-  <p>${err?`<span class="bad">${err}</span>`:`<b>${d.length}</b> cartes · ${Object.entries(fc).sort((a,b)=>b[1]-a[1]).map(([f,n])=>`${ink(f)} ${n}`).join(' ')||'aucune faction'}`}</p>
+  <p>${err?`<span class="bad">${err}</span>`:`<b>${d.length}</b> cartes${seen('fam1')?' · '+(Object.entries(fc).sort((a,b)=>b[1]-a[1]).map(([f,n])=>`${ink(f)} ${n}`).join(' ')||'aucune faction'):''}`}</p>
   <button type="button" class="skip" data-a="edit">Modifier le deck ${META.slot+1}</button>
   <h3>Ton survivant</h3><div class="tabs wrap">${Object.keys(Z.CHARS).map(k=>u.chars.includes(k)?`<button type="button" class="tab${k===PREP.ch?' on':''}" data-a="prepch" data-v="${k}">${Z.CHARS[k].n}</button>`:`<button type="button" class="tab" disabled>${ii('lock')} ${Z.CHARS[k].n}</button>`).join('')}</div>
   <p>${Z.CHARS[PREP.ch].d}</p>
@@ -1468,7 +1473,7 @@ const ACT={
  closeov:()=>{hide();render()},
  bpick:v=>{S.bsel=+v;S.sel=null;S.moveFrom=null;S.inspect=null;hide();render()},
  artstyle:()=>{ART_STYLE=ART_STYLE==='cartoon'?'real':'cartoon';try{localStorage.setItem('abri-style',ART_STYLE)}catch(e){}title()},
- new:()=>prepScreen(),
+ new:()=>{if(novice()){PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';return ACT.start()}prepScreen()},
  prepdeck:v=>{META.slot=+v;saveMeta(META);prepScreen()},
  prepch:v=>{PREP.ch=v;prepScreen()},
  preppl:v=>{PREP.pl=v;prepScreen()},
@@ -1481,7 +1486,7 @@ const ACT={
  dkp:v=>{const d=META.decks[META.slot];if(d.length<Z.DECK_MAX&&(deckCount(d)[v]||0)<Z.copyMax(v)&&META.cards.includes(v)){d.push(v);saveMeta(META)}deckEditor(1)},
  dkm:v=>{const d=META.decks[META.slot],k=d.indexOf(v);if(k>=0){d.splice(k,1);saveMeta(META)}deckEditor(1)},
  dkreset:()=>{META.decks[META.slot]=Z.STARTER_DECK.slice();saveMeta(META);deckEditor()},
- coll:()=>collectionScreen(),
+ coll:()=>{if(!seen('coll')){META.hints=META.hints||{};META.hints.coll=1;saveMeta(META)}collectionScreen()},
  mdet:()=>detScreen(),
  achs:()=>achScreen(),
  mback:()=>{if(S.endHtml)show(S.endHtml);else title()},
@@ -1529,7 +1534,7 @@ panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
 panel.addEventListener('input',e=>{const el=e.target.closest('[data-o]');if(!el)return;const k=el.dataset.o;
  if(k==='sfx'||k==='mus'){OPT[k]=+el.value/100;const b=el.parentElement.querySelector('b');if(b)b.textContent=el.value+' %'}
- else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
+ else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
  saveOpt();applyOpt();if(k==='sfx')SFX.play('ui')});
 $('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else night()});
 
@@ -1601,7 +1606,7 @@ function title(){onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?'Aube':'Jour'} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:'<button type="button" class="go" data-a="new">Jouer</button>')(loadSave())}
-<button type="button" class="skip" data-a="rules">Règles du jeu</button><button type="button" class="skip" data-a="coll">Collection et decks</button><button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="achs">${ii('trophy')} Succès · ${ACH.filter(a=>(META.ach||{})[a[0]]).length}/${ACH.length}</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
+<button type="button" class="skip" data-a="rules">Règles du jeu</button>${novice()?'':`<button type="button" class="skip" data-a="coll">Collection et decks${seen('coll')?'':' <span class="newb">Nouveau !</span>'}</button>`}<button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="achs">${ii('trophy')} Succès · ${ACH.filter(a=>(META.ach||{})[a[0]]).length}/${ACH.length}</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
 applyOpt();newGame();render();requestAnimationFrame(frame);title();
 
 // bouton son
