@@ -59,7 +59,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 ## Prochaines étapes (par ordre de priorité)
 
-Équilibrage : Amine est satisfait de l’état v114 (frénésie +10 %/nuit sur PV et dégâts, curée, 4 énergies). Le joueur automatique de `tools/balance.js` est à jour des règles mais joue bien moins bien qu’Amine : il sert à comparer les cartes, pas à mesurer la difficulté.
+Équilibrage : Amine est satisfait de l’état v114 (frénésie +10 %/nuit sur les PV seulement depuis la v131, curée, 4 énergies). Le joueur automatique de `tools/balance.js` est à jour des règles mais joue bien moins bien qu’Amine : il sert à comparer les cartes, pas à mesurer la difficulté.
 
 
 1. Performance : v115 a allégé la nuit (obscurité mi-résolution, plafonds de sons, particules et lumières) et ajouté un Mode économie. À confirmer sur un téléphone d’entrée de gamme.

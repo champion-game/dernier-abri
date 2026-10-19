@@ -365,7 +365,7 @@ Nuits 1 à 10 : table fixe. Ensuite, chaque nuit ajoute des zombies de chaque ty
 
 ## Les mutations de la horde
 
-**Frénésie meurtrière** (v114) : dès la nuit 5, +10 % de PV **et de dégâts** pour tous les zombies, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %, nuit 30 : +260 %). Les fractions de dégât s’accumulent coup après coup (1,5 = un coup sur deux à 2). **Curée** : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus, pas le Colosse) : un tank qui attire la horde doit être soigné.
+**Frénésie meurtrière** (v114) : dès la nuit 5, +10 % de PV pour tous les zombies, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %, nuit 30 : +260 %). **Depuis la v131, elle ne touche plus les dégâts** (décision d'Amine après un test en nuit 15 : le tank mourait même soigné ; la horde grossit déjà en nombre). **Curée** : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus, pas le Colosse) : un tank qui attire la horde doit être soigné.
 
 Toutes les 4 nuits (nuits 4, 8, 12…), la horde gagne une mutation tirée au hasard, permanente pour toute la partie. Elle est annoncée à l'aube, et le bandeau du haut prévient la veille (« mute à l'aube »). Le but : casser les défenses qui semblaient sûres (par exemple une armée de tireurs) sans ajouter de mécanique à gérer pour le joueur.
 

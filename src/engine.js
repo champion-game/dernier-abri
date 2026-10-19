@@ -480,7 +480,7 @@ const Z=(()=>{
  };
  const mutNight=n=>n%5===0;
  const mc=(st,m)=>(st.muts||[]).filter(x=>x===m).length;
- // frénésie meurtrière : à partir de la nuit 4, chaque nuit multiplie les PV et les dégâts des zombies par 1,08 (cumulatif :
+ // frénésie meurtrière : à partir de la nuit 4, chaque nuit multiplie les PV (et non plus les dégâts depuis la v131) des zombies par 1,08 (cumulatif :
  // +8 % nuit 4, +17 % nuit 5, +71 % nuit 10, +151 % nuit 15, +270 % nuit 20)
  const FRENZY_FROM=HP_FROM,FRENZY=HP_STEP;
  // frénésie meurtrière supprimée (v67) : la difficulté vient du nombre, des mutations et des brèches, pas d'un multiplicateur infini
@@ -491,10 +491,10 @@ const Z=(()=>{
  const zspd=(st,k)=>{const s=ZT[k].spd;return s>1&&!ZT[k].boss?Math.max(1,s-mc(st,'frenesie')):s};
  const CUREE_MAX=2;
  const zdmg=(st,k)=>ZT[k].dmg+((k==='walk'||k==='run')?mc(st,'enrage'):0)+dmgBonus(st.night||1);
- // dégâts réels d'un coup : la frénésie ajoute des fractions de dégât que chaque zombie accumule (+1 dégât dès que le reste atteint 1)
+ // dégâts réels d'un coup (v131, décision d'Amine) : la frénésie ne touche plus les dégâts, seulement les PV
  // le Colosse frappe une défense ou une unité : 10 dégâts à la nuit 10, +2 toutes les 10 nuits (il ne tue plus d'un coup, v85)
  const bossHit=st=>10+2*Math.max(0,Math.floor((st.night||10)/10)-1);
- function zhit(st,z){const raw=zdmg(st,z.k)*frenzyMult(st);let d=Math.floor(raw+1e-9);z.acc=(z.acc||0)+raw-d;if(z.acc>=1-1e-9){d++;z.acc-=1}return d}
+ function zhit(st,z){return zdmg(st,z.k)}
  const CHARS={
   surv:{n:'Le survivant',d:'Aucun bonus. Idéal pour apprendre.',deck:['bar','bar','car','gun','gun','axe','trap','food','grenade'],relic:null},
   cop:{n:'La policière',d:'Commence avec la Lunette de visée : tes tireurs ont +1 portée.',deck:['bar','fen','gun','gun','snp','cop','lamp','food','grenade'],relic:'lunette'},
@@ -1014,6 +1014,6 @@ const Z=(()=>{
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
  return{BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
-  DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,FRENZY,FRENZY_FROM,dmgBonus,pressure,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
+  DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,FRENZY,FRENZY_FROM,dmgBonus,pressure,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;
