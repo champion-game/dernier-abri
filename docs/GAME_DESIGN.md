@@ -281,7 +281,7 @@ Les munitions anti-Colosse marchent sur les trois. Les illustrations de la Mère
 
 **Lance-roquettes** (carte épique, 3 énergie, sans faction) : 2 dégâts tous les 2 tours à portée 3, ×5 contre le Colosse et les Gonflés. L'option « deck anti-Colosse ».
 
-Seule la nuit du Colosse (toutes les 10 nuits) est coupée en 2 vagues ; le Colosse arrive dans la 2ᵉ. Quand la 1ʳᵉ vague est repoussée, la nuit se met en pause : le joueur déplace librement toutes ses unités et peut jouer ses réactions, puis lance la 2ᵉ vague. L'annonce « ⚠ Nuit du Colosse : 2 vagues » apparaît pendant la journée. Toutes les autres nuits arrivent d'un seul tenant (choix d'Amine : la pause est réservée à l'élite).
+Seule la nuit du Colosse (toutes les 10 nuits) est coupée en 2 vagues ; le Colosse arrive dans la 2ᵉ. Quand la 1ʳᵉ vague est repoussée, la nuit se met en pause : le joueur déplace librement toutes ses unités et peut jouer ses réactions, puis lance la 2ᵉ vague. L'annonce « ⚠ Nuit du Colosse : 2 vagues » apparaît pendant la journée. Toutes les autres nuits arrivent d'un seul tenant (choix d'Amine : la pause est réservée à l'élite). Si la 1ʳᵉ vague reste bloquée (ex. un cracheur hors de portée qui crache sur un mur réparé), la 2ᵉ vague arrive quand même 60 tours après le dernier zombie de la 1ʳᵉ, sans pause (v137).
 
 ## L'héritage des survivants
 

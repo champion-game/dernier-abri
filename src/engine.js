@@ -856,6 +856,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   const bl=[];const L=leadBoss(st.night);if(L&&w[L])for(let j=0;j<w[L];j++)bl.push(L);BOSSES.forEach(k=>{if(k!==L)for(let j=0;j<(w[k]||0);j++)bl.push(k)});
   bl.forEach((k,j)=>st.pending.push({k,wave:big?WAVES_N:1,at:10+j*12,pos:edges[Math.floor(rnd()*edges.length)]}));
   st.cap=Math.max(90,st.pending.reduce((m,p)=>Math.max(m,p.at),0)+60);
+  st.wend=st.pending.filter(p=>(p.wave||1)===1).reduce((m,p)=>Math.max(m,p.at),0)+60;
   st.z=[];st.tick=0}
  const power=st=>st.event.id!=='coupure'||st.relics.includes('groupe')||has(st,'solar')||has(st,'genmech');
  const lampB=(st,i,pow)=>pow?around(i).reduce((s,j)=>s+(st.grid[j]&&st.grid[j].t==='lamp'?stat(st,'lamp').buff:0),0):0;
@@ -987,6 +988,8 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   const done=(!st.pending.length&&!st.z.length)||st.shelter<=0||st.wtick>(st.cap||90)+(boss?110:0);
   // fin d'une vague : pause (le joueur déplace librement ses unités et peut jouer ses réactions avant la suivante)
   if(!done&&st.waves&&!st.z.length&&!st.pending.some(p=>(p.wave||1)===st.wave)){st.freeMove=1;return{ev,done:false,pause:st.wave}}
+  // vague bloquée (ex. un cracheur qui crache sur un mur réparé sans que personne ne puisse l'atteindre) : la vague suivante arrive quand même, sans pause
+  if(!done&&st.waves&&st.wave<st.waves&&st.wtick>(st.wend||150)&&!st.pending.some(p=>(p.wave||1)===st.wave))nextWave(st)
   return{ev,done};
  }
  // l'aube : l'essence s'éteint, les soins et la ferraille de l'aube s'appliquent

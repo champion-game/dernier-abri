@@ -172,6 +172,9 @@ check('Tableau des combats : soin compté pour le soigneur et le soigné',()=>{c
 check('Boss : Colosse nuit 10, la Mère nuit 20 (+1 Colosse), le Patient Zéro nuit 30 (+2 Colosses)',()=>{
  for(const [n,lead,nb] of [[10,'boss',1],[20,'mere',2],[30,'zero',3]]){const st=fresh();st.night=n;Z.startNight(st,rng(1));const b=st.pending.filter(p=>Z.ZT[p.k].boss);
   eq(b.length,nb);eq(b[0].k,lead);ok(st.waves===2,'pas de pause entre les vagues nuit '+n)}});
+check('Nuit de boss : un zombie bloqué en 1re vague n\'empêche pas le boss d\'arriver',()=>{const st=fresh();st.night=10;st.shelter=st.maxS=1e6;Z.startNight(st,rng(1));
+ st.pending=st.pending.filter(p=>p.wave===2);st.z=[{id:950,k:'spit',pos:1*9+4,hp:1e6,max:1e6,cd:1e6,style:0}];let t=0;
+ while(!st.z.some(z=>Z.ZT[z.k].boss)&&t<400){Z.step(st);t++}ok(st.z.some(z=>Z.ZT[z.k].boss),'le boss n\'arrive jamais (vague '+st.wave+')')});
 check('La Mère pond des rampants (6 au plus) et en libère 2 en mourant',()=>{const st=fresh();st.night=20;Z.startNight(st,rng(1));st.pending=[];
  const m={id:900,k:'mere',pos:2*9+4,hp:999,max:999,cd:999,style:0};st.z=[m];for(let k=0;k<40;k++)Z.step(st);
  ok((m.kids||0)===6,'pontes '+m.kids);
