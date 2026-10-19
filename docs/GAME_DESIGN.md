@@ -365,7 +365,7 @@ Nuits 1 à 10 : table fixe. Ensuite, chaque nuit ajoute des zombies de chaque ty
 
 ## Les mutations de la horde
 
-**Frénésie meurtrière** (v114) : dès la nuit 5, +10 % de PV pour tous les zombies, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %, nuit 30 : +260 %). **Depuis la v131, elle ne touche plus les dégâts** (décision d'Amine après un test en nuit 15 : le tank mourait même soigné ; la horde grossit déjà en nombre). **Curée** : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus, pas le Colosse) : un tank qui attire la horde doit être soigné.
+**Frénésie meurtrière** (v114) : dès la nuit 5, +10 % de PV pour tous les zombies, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %, nuit 30 : +260 %). **Depuis la v131, elle ne touche plus les dégâts** (décision d'Amine après un test en nuit 15 : le tank mourait même soigné ; la horde grossit déjà en nombre). **Curée** : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus, pas le Colosse). **Depuis la v132, les Tanks l'ignorent** (en nuit 15, un tank soigné par la Doctoresse et l'Hôpital tombait à chaque fois). Avant : un tank qui attire la horde devait être soigné.
 
 Toutes les 4 nuits (nuits 4, 8, 12…), la horde gagne une mutation tirée au hasard, permanente pour toute la partie. Elle est annoncée à l'aube, et le bandeau du haut prévient la veille (« mute à l'aube »). Le but : casser les défenses qui semblaient sûres (par exemple une armée de tireurs) sans ajouter de mécanique à gérer pour le joueur.
 
@@ -666,7 +666,7 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 - **Escouade** : seule règle de rôles restante. Un Tank, un Soin et un DPS voisins gagnent chacun +1 dégât (ou +1 soin). Plus de bonus « DPS à côté d’un Tank » ni de « soin double sur un Tank ». Le Tank garde sa provocation et son blocage.
 - **Unités et postes** : une unité est un survivant ou une machine qui combat ou soigne (elle compte dans la limite). Les bâtiments sans survivant deviennent des postes de soutien hors limite : Projecteur, Radio, Sirène, Panneau solaire, Hôpital de campagne, Épouvantail, Atelier, Marché. Postes en double retirés : Caisse de munitions (doublon du Projecteur), Poste de secours (de l’Hôpital), Établi (de l’Atelier). Les postes n’ont pas de rôle.
 - **Une seule règle de réutilisation** : seules les cartes à tracer (murs en ligne, barbelés, palissade) restent en main pour leurs N cases de la journée. Les autres constructions se jouent comme une carte normale et reviennent à la défausse quand elles tombent.
-- **Nuit rouge** : toutes les 5 nuits, +25 % de zombies, puis à l’aube une mutation et une relique (annoncée dans la barre « Cette nuit »).
+- **Nuit rouge** : toutes les 5 nuits, +15 % de zombies (v132, calculés sur le total : l'arrondi type par type faisait monter l'ancien +25 % à +40 %), puis à l’aube une mutation et une relique (annoncée dans la barre « Cette nuit »).
 - **Munition anti-Colosse** : une carte réaction (achetée au troc, elle arrive en main) qui frappe le Colosse sur la carte.
 - **Événements de l’aube** : environ 1 aube sur 4 (au lieu de presque 1 sur 2).
 
@@ -777,7 +777,7 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
   5. Mutation précoce : une mutation dès la nuit 1.
   6. Curée : jusqu’à +3 dégâts.
   7. Blessures profondes : convalescence de 4 nuits.
-  8. Nuits de sang : nuits rouges à +50 % de zombies (au lieu de +25 %).
+  8. Nuits de sang : nuits rouges à +40 % de zombies (au lieu de +15 %).
   9. Double Colosse : un Colosse de plus à chaque nuit du Colosse.
   10. Dernier Abri : abri −3 PV max, frénésie dès la nuit 3.
 - L’accueil affiche la meilleure Menace vaincue et le nombre de victoires ; la Menace en cours s’affiche à côté du jour (« M3 »). Le défi du jour reste en Menace 0.
