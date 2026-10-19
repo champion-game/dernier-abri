@@ -6,7 +6,7 @@ body{margin:0;font-size:14px}
   --bg:#0d0f0c; --panel:#161a14; --panel2:#1d2219; --line:#2b3326; --ink:#ebe7da; --muted:#8f9684;
   --lantern:#f2b33d; --blood:#e5484d; --good:#9fd86b;
   --k-wall:#c9a27a; --k-shoot:#f2b33d; --k-melee:#ff7a59; --k-help:#7cc7ff; --k-trap:#e5484d; --k-item:#d6c2ff;
-  --z-walk:#8fd14f; --z-run:#d8e45a; --z-fat:#b98be0; --z-zdog:#c98a4a; --z-crawl:#6fb0b0; --z-spit:#c6e83a; --z-armor:#a9b3bd; --z-howl:#e0a0c0; --z-sap:#ff8a3a; --z-boss:#ff5a3a;
+  --z-walk:#8fd14f; --z-run:#d8e45a; --z-fat:#b98be0; --z-zdog:#c98a4a; --z-crawl:#6fb0b0; --z-spit:#c6e83a; --z-armor:#a9b3bd; --z-howl:#e0a0c0; --z-sap:#ff8a3a; --z-boss:#ff5a3a; --z-mere:#d8706a; --z-zero:#ff3a6a;
   --f-disp:'Special Elite','Courier New',monospace;
   --f-body:'Atkinson Hyperlegible',system-ui,-apple-system,sans-serif;
   color-scheme:dark;
@@ -670,3 +670,20 @@ html.eco .citem.s-buy .cf{animation:none}
 /* v126 : le tableau des combats dans l'écran de fin de partie */
 .panel .meter.inpanel{position:static!important;transform:none;width:auto;max-height:none;margin:10px 0;opacity:1;text-align:left}
 .panel .meter.inpanel p{color:#cfc3a6}.panel .meter.inpanel p b{color:#fff}
+/* v128 : succès (bandeau et page) */
+.achtoast{position:fixed;left:50%;transform:translateX(-50%);top:max(10px,env(safe-area-inset-top,0px));z-index:30;width:min(92vw,420px);display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;cursor:pointer;
+ background:linear-gradient(#2b2214,#1c160d);border:2px solid #e8b23a;color:#f3e6c4;box-shadow:0 8px 24px rgba(0,0,0,.6);animation:achin .35s ease-out}
+.achtoast[hidden]{display:none}
+@keyframes achin{from{transform:translate(-50%,-20px);opacity:0}}
+.achtoast small{display:block;font-size:11.5px;color:#e8b23a;text-transform:uppercase;letter-spacing:.06em}
+.achtoast b{display:block;font-family:'Special Elite',serif;font-size:17px}
+.achtoast em,.achi em{display:block;font-style:normal;font-size:12.5px;color:#cfc3a6}
+.ach-ic{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#e8b23a;color:#2b1a0c}
+.ach-ic .ink{width:22px;height:22px}
+.achs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin:10px 0}
+.achi{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:rgba(60,40,20,.08);border:1px solid rgba(60,40,20,.2);opacity:.7}
+.achi b{color:#2b1a0c}.achi em{color:#6a5640}
+.achi .ach-ic{background:#b8a88a;color:#f3e6c4}
+.achi.on{opacity:1;background:rgba(232,178,58,.15);border-color:#c8922a}
+.achi.on .ach-ic{background:#e8b23a;color:#2b1a0c}
+@media (prefers-reduced-motion:reduce){.achtoast{animation:none}}

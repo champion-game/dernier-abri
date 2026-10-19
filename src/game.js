@@ -120,7 +120,7 @@ const SPRDC={},SPRC={},DOWN=Math.PI/2;
  ['fix',0,40,'fire spike net bear wire'],['fix',0,32,'trap mine clay gas smoke bait dyn firetrap'],
  ['fix',0,48,'tower'],['rot',DOWN,46,'handler welder scout assassin fieldnurse genmech'],['fix',0,40,'brasero'],['fix',0,40,'trench rocks'],['fix',0,36,'pump flood'],['fix',0,42,'pit'],['wallh',0,50,'gate gabion'],
  ['rot',DOWN,48,'v_hmg v_medic v_sniper'],['rot',DOWN,42,'v_rdog'],['rot',DOWN,56,'v_apc'],['fix',0,46,'v_radio'],['fix',0,52,'v_cont'],['fix',0,40,'v_mines'],
- ['rot',DOWN,34,'z_walk z_run z_sap z_armor z_howl z_crawl z_spit z_boss'],['rot',DOWN,40,'z_fat'],['rot',DOWN,30,'z_zdog']
+ ['rot',DOWN,34,'z_walk z_run z_sap z_armor z_howl z_crawl z_spit z_boss z_mere z_zero'],['rot',DOWN,40,'z_fat'],['rot',DOWN,30,'z_zdog']
 ].forEach(([m,b,z,ids])=>ids.split(' ').forEach(k=>{SPRDC[k]=[m,b,z];const im=new Image();im.onload=()=>SPRC[k]=im;im.src='assets/sprites_cartoon/'+k+'.webp'}));
 // le sprite à utiliser selon le style choisi (cartoon si disponible, sinon réaliste)
 function sprK(k){if((ART_STYLE==='cartoon'||!SPRD[k])&&SPRC[k])return[SPRC[k],SPRDC[k]];return[SPR[k],SPRD[k]]}
@@ -137,7 +137,7 @@ const CART_FILES=('chief_police chief_mil chief_pyro chief_trap chief_farm chief
  'med lamp radio cook mech siren lead solar pharma hospital priest stretch scare workshop teacher market carp canteen '+
  'fortin autogun tracker brasero dyn bear food kit rep roadmap gas molotov grenade shot flare bait patch napalm rush horn air trap wire mine spike tear firetrap fen fire clay sand bar modwall barrier bunker door car '+
  'tire smoke coffee net heavyflame slaughter gang saint handler welder scout assassin fieldnurse genmech shell gear binoc bandage medkit torch pills pack tape keys tower trench pump flood palis gate gabion log pit glass cans rocks supply airdrop jerry rest radioop talkie storm bomber noise v_heli v_hmg v_radio v_medic v_cont v_sniper v_mines v_rdog v_napalm v_apc').split(' ');
-const CART_ZOMB='walk fat sap armor zdog crawl run howl spit boss'.split(' ');
+const CART_ZOMB='walk fat sap armor zdog crawl run howl spit boss mere zero'.split(' ');
 const CART_POP=CART_FILES.slice(0,10);
 const cartoon=t=>CART_FILES.includes(t)&&(ART_STYLE==='cartoon'||!ART_FILES.includes(t));
 const popUrl=t=>popOK(t)&&CART_POP.includes(t)?'assets/cards_cartoon/'+t+'_pop.webp':'';
@@ -172,7 +172,7 @@ const GLY={skull:'M12 3a7 7 0 0 0-7 7v3l2 2v4h10v-4l2-2v-3a7 7 0 0 0-7-7z M7.5 1
  vest:'M8 3l4 3 4-3 3 3v15H5V6z M12 6v15 M8 12h2 M14 12h2',binoc:'M6 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M18 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M3 17V8l3-4h3v10 M21 17V8l-3-4h-3v10 M9 11h6',
  medkit:'M4 8h16v12H4z M9 8V5h6v3 M12 11v6 M9 14h6',torch:'M8 3h8l-2 6v12h-4V9z M8 3l-.5-1 M12 12v3',pills:'M5 13l8-8a4 4 0 0 1 6 6l-8 8a4 4 0 0 1-6-6z M9 9l6 6',
  tape:'M12 5a7 7 0 1 0 0 14a7 7 0 1 0 0-14z M12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z M19 12h3v4',keys:'M8 9a4 4 0 1 0 0 8a4 4 0 1 0 0-8z M12 13h9 M18 13v3 M21 13v2',
- heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11'};
+ heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11',undo:'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3'};
 const ii=(k,cls)=>`<svg class="ink${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
 const P2D={};const glyph=(k,x,y,sz,col,lw)=>{const p=P2D[k]||(P2D[k]=new Path2D(GLY[k]));ctx.save();ctx.translate(x-sz/2,y-sz/2);ctx.scale(sz/24,sz/24);ctx.lineWidth=(lw||2.2);ctx.lineCap=ctx.lineJoin='round';ctx.strokeStyle=col;ctx.stroke(p);ctx.restore()};
 const ink=k=>`<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
@@ -192,7 +192,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v127 · 18 oct.';
+const VERSION='v128 · 19 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -202,7 +202,7 @@ const VERSION='v127 · 18 oct.';
   location.replace(location.pathname+'?v='+v.slice(1)+location.hash)}).catch(()=>{})}catch(e){}})();
 // slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
-const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,text:0,eco:0,back:'',shelter:'',lang:'fr'};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
+const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,back:'',shelter:'',lang:'fr'};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
 function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang}
 const TICK=650;let SPEED=1,slowT=0;const tickMs=()=>TICK/SPEED*(performance.now()<slowT?3:1);
@@ -216,7 +216,10 @@ const seedFrom=str=>{let h=2166136261;for(const c of str)h=Math.imul(h^c.charCod
 const shuffle=a=>Z.shuffle(a,R);
 const plural=(n,s,p)=>n+' '+(n>1?p:s);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const ZN={walk:['rôdeur','rôdeurs'],run:['coureur','coureurs'],fat:['gonflé','gonflés'],zdog:['chien zombie','chiens zombies'],crawl:['rampant','rampants'],spit:['cracheur','cracheurs'],armor:['blindé','blindés'],howl:['hurleur','hurleurs'],sap:['sapeur','sapeurs'],boss:['Colosse','Colosses']};
+const ZN={walk:['rôdeur','rôdeurs'],run:['coureur','coureurs'],fat:['gonflé','gonflés'],zdog:['chien zombie','chiens zombies'],crawl:['rampant','rampants'],spit:['cracheur','cracheurs'],armor:['blindé','blindés'],howl:['hurleur','hurleurs'],sap:['sapeur','sapeurs'],boss:['Colosse','Colosses'],mere:['Mère','Mères'],zero:['Patient Zéro','Patients Zéro']};
+// v128 : le boss qui mène la nuit (Colosse, Mère, Patient Zéro)
+const bossName=n=>({boss:'le Colosse',mere:'la Mère',zero:'le Patient Zéro'})[Z.leadBoss(n)]||'le Colosse';
+const capF=t=>t.charAt(0).toUpperCase()+t.slice(1);
 
 /* ---------- state ---------- */
 let S,G;
@@ -225,6 +228,44 @@ function loadMeta(){let m={};try{m=JSON.parse(localStorage.getItem('abri-meta'))
  if(m.cards)m.cards=m.cards.filter(t=>Z.U[t]);if(m.decks)for(const k in m.decks)if(Array.isArray(m.decks[k]))m.decks[k]=m.decks[k].filter(t=>Z.U[t]);
  if(!m.best){try{m.best=+localStorage.getItem('abri-best-nuits')||0}catch(e){}}m.best=m.best||0;m.total=m.total||m.best||0;m.runs=m.runs||0;return m}
 function saveMeta(m){try{localStorage.setItem('abri-meta',JSON.stringify(m))}catch(e){}}
+/* v128 : succès. Débloqués pour toujours (META.ach), annoncés par un bandeau, listés dans une page depuis l'accueil et les statistiques.
+   Ils ne changent pas les règles : ce sont des objectifs pour guider le joueur (et préparer ceux de Steam). */
+const ACH=[
+ ['n5','spark','Premiers pas','Tenir 5 nuits.'],['n10','spark','Le cap des dix','Tenir 10 nuits.'],['n20','spark','Vétéran','Tenir 20 nuits.'],
+ ['win','trophy','Les secours sont là','Gagner une partie : tenir 30 nuits.'],['m5','trophy','Souche instable','Gagner en Mutation 5.'],['m10','trophy','Dernière souche','Gagner en Mutation 10.'],
+ ['n40','moon','Gardien de la vallée','Rester après la victoire et tenir 40 nuits.'],['daily','medal','Défi relevé','Finir un défi du jour.'],
+ ['colosse','skull','Abattre le Colosse','Tuer le Colosse.'],['mere','skull','Matricide','Tuer la Mère.'],['zero','skull','Fin de l’épidémie','Tuer le Patient Zéro.'],
+ ['ammo','skull','Gros calibre','Achever un boss avec une Munition anti-Colosse.'],['bossclean','vest','Pas une égratignure','Finir une nuit de boss sans que l’abri perde de PV.'],
+ ['carnage','drop','Carnage','Tuer 5 zombies d’un coup.'],['night50','drop','Marée noire','Tuer 50 zombies en une seule nuit.'],
+ ['k100','drop','Cent de plus','Tuer 100 zombies au total.'],['k1000','drop','Mille morts','Tuer 1 000 zombies au total.'],
+ ['hero','medal','Légende vivante','Un survivant tue 100 zombies dans la même partie.'],['nolos','heart','Personne ne reste derrière','Tenir 10 nuits sans perdre ni blesser un survivant.'],
+ ['fuse','star','Ensemble','Réussir une fusion.'],['fuse2','star','Élite','Obtenir une unité ★★.'],['evo','star','Évolution','Découvrir une évolution secrète.'],['evoall','star','Naturaliste','Découvrir les 10 évolutions secrètes.'],
+ ['chief','medal','Le chef est là','Poser un chef de faction.'],['fam5','medal','Équipe complète','Avoir 5 survivants de la même faction.'],
+ ['relic5','gift','Collectionneur','Avoir 5 reliques dans une partie.'],['rich','post','Ferrailleur','Avoir 50 ferraille en même temps.'],['coll','card','Tout le paquet','Débloquer toutes les cartes de la collection.']
+];
+const ACHQ=[];let achEl=null,achT=0;
+function ach(id){try{META.ach=META.ach||{};if(META.ach[id])return;const a=ACH.find(x=>x[0]===id);if(!a)return;META.ach[id]=Date.now();saveMeta(META);ACHQ.push(a);showAch()}catch(e){}}
+function showAch(){if(achEl&&!achEl.hidden)return;const a=ACHQ.shift();if(!a)return;
+ if(!achEl){achEl=document.createElement('div');achEl.className='achtoast';achEl.setAttribute('role','status');document.body.appendChild(achEl);achEl.addEventListener('click',()=>{achEl.hidden=true;clearTimeout(achT);setTimeout(showAch,200)})}
+ achEl.innerHTML=`<span class="ach-ic">${ii(a[1])}</span><span><small>Succès débloqué</small><b>${a[2]}</b><em>${a[3]}</em></span>`;achEl.hidden=false;try{SFX.play('relic',.5)}catch(e){}vib(80);
+ clearTimeout(achT);achT=setTimeout(()=>{achEl.hidden=true;setTimeout(showAch,300)},3800)}
+// vérifications à l'aube, à la fin d'une partie, et après une pose
+function achCheck(){try{if(!G)return;const n=G.won?G.night:G.night-(S.busy?0:0);
+ const nights=G.shelter>0?G.night:G.night-1;if(nights>=5)ach('n5');if(nights>=10)ach('n10');if(nights>=20)ach('n20');if(G.won&&nights>=40)ach('n40');
+ const tot=(META.kills||0)+(G.kills||0);if(tot>=100)ach('k100');if(tot>=1000)ach('k1000');
+ if(G.grid.concat(G.bench||[]).some(u=>u&&(u.kills||0)>=100))ach('hero');
+ if(G.grid.some(u=>u&&(u.gold||0)>=2))ach('fuse2');if(G.grid.some(u=>u&&u.t.startsWith('chief_')))ach('chief');
+ const fc=Z.famCounts(G);if(Object.values(fc).some(v=>v>=5))ach('fam5');
+ if((G.relics||[]).length>=5)ach('relic5');if((G.scrap||0)>=50)ach('rich');
+ if((META.evo||[]).filter(k=>Z.EVO[k]).length>=1)ach('evo');if((META.evo||[]).filter(k=>Z.EVO[k]).length>=Z.EVO_KEYS.length)ach('evoall');
+ if(Z.KEYS.filter(t=>Z.U[t].vic==null).every(t=>META.cards.includes(t)))ach('coll')}catch(e){}}
+// après une nuit : succès liés à la nuit qui vient de finir
+function achNight(kills){try{if(kills>=50)ach('night50');
+ if(Z.bigNight(G)&&G.shelter>0&&!((G.mtN||{})['t:x_shelter']||{}).tak)ach('bossclean');
+ if(G.night>=10&&G.shelter>0&&!(G.mtD||[]).length)ach('nolos');achCheck()}catch(e){}}
+function achScreen(back){const got=META.ach||{},n=ACH.filter(a=>got[a[0]]).length;
+ show(`<h2 class="pw">Succès</h2><p>Tu en as débloqué <b>${n} sur ${ACH.length}</b>.</p><div class="achs">${ACH.map(a=>`<div class="achi${got[a[0]]?' on':''}"><span class="ach-ic">${got[a[0]]?ii(a[1]):ii('lock')}</span><span><b>${a[2]}</b><em>${a[3]}</em></span></div>`).join('')}</div>
+  <button type="button" class="go" data-a="${back||'title'}">Retour</button>`)}
 let META=loadMeta();
 // tutoriel de la première partie : une bulle d'aide par étape (0 à 4 ; 5 = terminé)
 let TUTO=5;try{TUTO=+(localStorage.getItem('abri-tuto')??(META.runs||META.best?5:0))}catch(e){}
@@ -242,7 +283,7 @@ function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if
  need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
  const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
 const TIPS=['Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.','Touche une case en pointillés jaunes pour la poser.','Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».','Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.'];
-function newGame(ch,pl,daily,deck){
+function newGame(ch,pl,daily,deck){try{UNDO=[]}catch(e){}
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
  S={draw:shuffle([...(deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
@@ -306,7 +347,7 @@ function save(){try{G.rs=RS;const g={...G,event:G.event.id,z:[],pending:[],tick:
 function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
   if(Array.isArray(d.g.grid))d.g.grid=d.g.grid.map(u=>u&&Z.U[u.t]?u:null);if(Array.isArray(d.g.bench))d.g.bench=d.g.bench.filter(u=>u&&Z.U[u.t]);return d}}catch(e){}return null}
 function clearSave(){try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
-function resume(d){
+function resume(d){try{UNDO=[]}catch(e){}
  newGame(d.g.char,d.g.place);
  Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});Z.touch(G);
  RS=d.g.rs||RS;Object.assign(S,d.s,{sel:null,busy:false});if(G.ammo>0){for(let k=0;k<G.ammo;k++)S.hand.push('shell');G.ammo=0}S.used=S.used||[];G.bench=G.bench||[];S.bsel=null;S.board=G.grid.filter(Boolean).concat(G.bench);POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
@@ -379,6 +420,8 @@ function splat(x,y,big){const n=big?9:3;for(let k=0;k<n;k++){const a=Math.random
 const V=new Map(),FX=[],PT=[],facing=Array(Z.N*Z.N).fill(null);
 let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
 // tremblement de l'écran : k = force ; une secousse plus forte remplace une plus faible
+// v128 : vibrations du téléphone (Android ; l'iPhone ne les permet pas dans le navigateur), au plus une toutes les 250 ms
+let vibT=0;function vib(p){if(!OPT.vib||!navigator.vibrate)return;const n=performance.now();if(n-vibT<250)return;vibT=n;try{navigator.vibrate(p)}catch(e){}}
 function shake(now,k){if(!OPT.shake)return;if(now-shakeT>200||k>=shakeK){shakeT=now;shakeK=k}}
 // compteur de victimes de la nuit (affiché en haut à gauche)
 const KC={n:0,t:0,on:0};
@@ -704,13 +747,13 @@ function drawWires(){const W=i=>!!(G.grid[i]&&G.grid[i].t==='wire'),seen=new Set
 function drawGuide(now){const g=guideStep();if(!g||g.cell==null||G.grid[g.cell])return;const p=tc(g.cell),k=.5+.5*Math.sin(now/220);
  ctx.save();ctx.strokeStyle=`rgba(255,210,90,${.55+.45*k})`;ctx.lineWidth=4;ctx.shadowColor='#ffd25a';ctx.shadowBlur=12+10*k;ctx.strokeRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);
  ctx.fillStyle=`rgba(255,210,90,${.12+.12*k})`;ctx.fillRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);ctx.restore()}
-function drawBossRoute(now){if(!S.pause||!G.pending)return;const ps=[...new Set(G.pending.filter(p=>p.k==='boss').map(p=>p.pos))];if(!ps.length)return;
+function drawBossRoute(now){if(!S.pause||!G.pending)return;const bp=G.pending.filter(p=>(Z.ZT[p.k]||{}).boss),ps=[...new Set(bp.map(p=>p.pos))];if(!ps.length)return;
  const k=.55+.35*Math.sin(now/220);ctx.save();ctx.lineCap='round';
  ps.forEach(pos=>{const a=tc(pos),b=CEN,ang=Math.atan2(b.y-a.y,b.x-a.x),ex=b.x-Math.cos(ang)*T*.75,ey=b.y-Math.sin(ang)*T*.75;
   ctx.strokeStyle=`rgba(0,0,0,${.5*k})`;ctx.lineWidth=T*.42;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(ex,ey);ctx.stroke();
   ctx.strokeStyle=`rgba(229,72,77,${k})`;ctx.lineWidth=T*.3;ctx.setLineDash([T*.35,T*.22]);ctx.lineDashOffset=-now/40;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(ex,ey);ctx.stroke();ctx.setLineDash([]);
   ctx.fillStyle=`rgba(229,72,77,${k})`;ctx.beginPath();ctx.moveTo(ex+Math.cos(ang)*T*.4,ey+Math.sin(ang)*T*.4);ctx.lineTo(ex+Math.cos(ang+2.4)*T*.4,ey+Math.sin(ang+2.4)*T*.4);ctx.lineTo(ex+Math.cos(ang-2.4)*T*.4,ey+Math.sin(ang-2.4)*T*.4);ctx.fill();
-  safeTxt(a.x+Math.cos(ang)*T*.9,a.y+Math.sin(ang)*T*.9-T*.35,'Colosse','#ff6b6b')});
+  safeTxt(a.x+Math.cos(ang)*T*.9,a.y+Math.sin(ang)*T*.9-T*.35,ZN[bp.find(p=>p.pos===pos).k][0],'#ff6b6b')});
  ctx.restore()}
 // abri fortifié (récompense de victoire, réglable dans les Options)
 const FORT=new Image();FORT.src='assets/ui/shelter_fort.webp';
@@ -736,7 +779,7 @@ function drawShelter(now){
 /* zombies : silhouette commune, chaque type a sa taille, sa peau, ses vêtements et un détail qui le rend reconnaissable */
 const ZL={walk:{sz:1,skin:'#8fa070',cloth:'#4a4a42'},run:{sz:.92,skin:'#a7b062',cloth:'#5a4836',lean:1},fat:{sz:1.35,skin:'#9c8aa8',cloth:'#4b3b4f',fat:1},
  zdog:{sz:.85,skin:'#6d7a4a',cloth:'#4a3b2a',dog:1},crawl:{sz:.85,skin:'#7f9c96',cloth:'#3a4646',low:1},spit:{sz:1,skin:'#b4c85a',cloth:'#4a5a22',spit:1},
- armor:{sz:1.08,skin:'#8fa070',cloth:'#2e3640',helm:'#6e7780',vest:1},howl:{sz:1,skin:'#c4a0b4',cloth:'#5a3a4a',howl:1},sap:{sz:1.05,skin:'#9aa86a',cloth:'#4a4030',sap:1},boss:{sz:2.2,skin:'#8a5a52',cloth:'#2e2020',boss:1}};
+ armor:{sz:1.08,skin:'#8fa070',cloth:'#2e3640',helm:'#6e7780',vest:1},howl:{sz:1,skin:'#c4a0b4',cloth:'#5a3a4a',howl:1},sap:{sz:1.05,skin:'#9aa86a',cloth:'#4a4030',sap:1},boss:{sz:2.2,skin:'#8a5a52',cloth:'#2e2020',boss:1},mere:{sz:2.1,skin:'#b89a8a',cloth:'#3a2a2a',boss:1},zero:{sz:1.75,skin:'#c07060',cloth:'#2a1a1a',boss:1}};
 function drawZombie(v,now){
  const p=v.dying?{x:v.dx,y:v.dy}:zpos(v,now),k=v.k;let alpha=clamp((now-v.born)/350,0,1);
  if(v.dying){alpha=1-clamp((now-v.dying)/500,0,1);if(alpha<=0)return false}
@@ -745,7 +788,9 @@ function drawZombie(v,now){
  if(v.burn&&!v.dying&&Math.random()<.3)PT.push({x:p.x+(Math.random()-.5)*10,y:p.y-4,vx:0,vy:-.04,t0:now,dur:300,c:Math.random()<.5?'#ff9a2e':'#ffd25a',r:2.5,light:0});
  ctx.save();ctx.globalAlpha=alpha;ctx.translate(p.x,p.y);
  // jeu de plateau : même socle rond que les survivants, en rouge sang
- socle(0,1,11.5*sz,k==='boss'?'#6e1410':'#4a1512',k==='boss'?'#ff5a3a':'#b8302a','round');
+ // Patient Zéro : cercle pointillé sur la zone où la horde accélère (2 cases)
+ if((Z.ZT[k]||{}).haste&&!v.dying){ctx.save();ctx.strokeStyle='rgba(255,58,106,.45)';ctx.lineWidth=2;ctx.setLineDash([7,6]);ctx.lineDashOffset=-now/60;ctx.beginPath();ctx.arc(0,0,T*Z.ZT[k].haste+T*.5,0,7);ctx.stroke();ctx.restore()}
+ const isB=!!(Z.ZT[k]||{}).boss;socle(0,1,11.5*sz,isB?'#6e1410':'#4a1512',isB?'#ff5a3a':'#b8302a','round');
  const zk='z_'+k,[zim,zd]=sprK(zk),zup=zim&&zd[0]==='up';ctx.rotate(zup?wob*.6+(v.dying?.6:0):a+wob);ctx.scale(sz,sz);
  if(v.dying&&!zup)ctx.rotate(.6);
  if(zim){if(zup&&Math.cos(a)<-.1)ctx.scale(-1,1);drawSpr(zk,0,0,0,0)}
@@ -772,7 +817,7 @@ function drawZombie(v,now){
  }
  if(v.flash&&now-v.flash<110){ctx.globalAlpha=alpha*.8;circ(0,0,11,'#fff')}
  ctx.restore();
- if(!v.dying){const ex=Math.cos(a+wob),ey=Math.sin(a+wob);if(!sprK('z_'+k)[0])EYES.push([p.x+ex*5.5*sz,p.y+ey*5.5*sz,-ey,ex,sz,alpha]);if(v.hp<v.max||k==='boss')hpBar(p.x,p.y-17*sz,v.hp/v.max,'#e5484d')}
+ if(!v.dying){const ex=Math.cos(a+wob),ey=Math.sin(a+wob);if(!sprK('z_'+k)[0])EYES.push([p.x+ex*5.5*sz,p.y+ey*5.5*sz,-ey,ex,sz,alpha]);if(v.hp<v.max||(Z.ZT[k]||{}).boss)hpBar(p.x,p.y-17*sz,v.hp/v.max,'#e5484d')}
  return true;
 }
 
@@ -893,7 +938,8 @@ function playEvents(ev,types,now){
   dead.forEach(e=>{const v=V.get(e.zid),p=v?zpos(v,now):tc(e.i);burst(p.x,p.y,'#d8d0b8',5,.07,1.6);burst(p.x,p.y,'rgba(140,20,24,.9)',9,.1,2.4);addFX({type:'ring',x:p.x,y:p.y,r:26,c:'rgba(229,72,77,.8)',dur:260});
    // gros zombies : éclair et secousse à leur mort
    if(v&&['fat','armor','howl','sap'].includes(v.k)&&!e.boss){shake(now,4);addFX({type:'flash',x:p.x,y:p.y,r:22,c:'rgba(255,120,80,.6)',dur:180})}
-   if(e.boss){slowT=now+1800;shake(now,14);addFX({type:'ring',x:p.x,y:p.y,r:120,c:'#f2b33d',dur:900});addFX({type:'flash',x:p.x,y:p.y,r:50,c:'rgba(255,200,90,.9)',dur:700,light:T*3});burst(p.x,p.y,'rgba(140,20,24,.9)',30,.15,3);floatTxt(CEN.x,CEN.y-50,'LE COLOSSE EST TOMBÉ','#f2b33d',20);SFX.play('boom')}})}
+   if(e.boss){vib(220);slowT=now+1800;shake(now,14);addFX({type:'ring',x:p.x,y:p.y,r:120,c:'#f2b33d',dur:900});addFX({type:'flash',x:p.x,y:p.y,r:50,c:'rgba(255,200,90,.9)',dur:700,light:T*3});burst(p.x,p.y,'rgba(140,20,24,.9)',30,.15,3);floatTxt(CEN.x,CEN.y-50,(v&&v.k==='mere')?'LA MÈRE EST TOMBÉE':(v&&v.k==='zero')?'LE PATIENT ZÉRO EST TOMBÉ':'LE COLOSSE EST TOMBÉ','#f2b33d',20);SFX.play('boom');if(v)ach(v.k==='mere'?'mere':v.k==='zero'?'zero':'colosse')}})
+  if(dead.length>=5)ach('carnage')}
  const SND={v_hmg:'mg',v_sniper:'snp',v_rdog:'bark',v_apc:'melee',sap:'boom',rocket:'cannon',doc:'shot',nailer:'mg',ranger:'snp',chief_comm:'shot',chief_tech:'mg',amb:'melee',orderly:'melee',chief_care:'melee',nightsnp:'snp',heavyflame:'flame',fortin:'shot',autogun:'mg',slaughter:'melee',gang:'shot',saint:'melee',tracker:'bow',k9squad:'bark',swat:'snp',vigile:'shot',hunter:'bow',sentry:'mg',turret:'mg',mortar:'cannon',tesla:'hit',bunker:'shot',riot:'melee',k9:'bark',dogs:'bark',pitch:'melee',gun:'shot',kid:'shot',snp:'snp',sht:'sht',mg:'mg',xbow:'bow',flame:'flame',axe:'melee',dog:'bark',cop:'melee',butch:'melee',monk:'melee'};
  for(const e of ev){
   try{if(e.k==='hit'){const sd=SND[types[e.src]]||'hit';SFX.play(sd,sd==='bark'?.7:undefined)}else if(e.k==='bite'||e.k==='spit')SFX.play(e.i===Z.C?'shelter':'bite');
@@ -922,8 +968,9 @@ function playEvents(ev,types,now){
   }
   if(e.k==='boom'){const p=tc(e.i);addFX({type:'flash',x:p.x,y:p.y,r:46,c:'rgba(255,160,60,.9)',dur:380,light:T*2.2});addFX({type:'ring',x:p.x,y:p.y,r:70,c:'#ffb35c',dur:420});burst(p.x,p.y,'#ff9a2e',22,.2,3);burst(p.x,p.y,'#3a3a3a',14,.12,4);shake(now,8);gx.fillStyle='rgba(15,12,10,.6)';gx.beginPath();gx.arc(p.x,p.y,22,0,7);gx.fill()}
   if(e.k==='bite'){const v=V.get(e.zid),p=tc(e.i);
-   if(e.i===Z.C){shake(now,8);hurtT=now;if(v){if(v.k==='boss'){v.lunge=now;v.lx=p.x;v.ly=p.y}else v.bit=1}floatTxt(p.x,p.y-8,e.txt,'#ff6b6b');burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2)}
+   if(e.i===Z.C){shake(now,8);hurtT=now;vib(45);if(v){if((Z.ZT[v.k]||{}).boss){v.lunge=now;v.lx=p.x;v.ly=p.y}else v.bit=1}floatTxt(p.x,p.y-8,e.txt,'#ff6b6b');burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2)}
    else{if(v){v.lunge=now;v.lx=p.x;v.ly=p.y}floatTxt(p.x,p.y,e.txt,'#ff6b6b');burst(p.x,p.y,types[e.i]==='car'?'#9a9a9a':'#a07a4a',5,.07,2)}}
+  if(e.k==='ko'||e.k==='lost')vib(e.name?[70,50,70]:30);
   if(e.k==='ko'){const p=tc(e.i);burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2);floatTxt(p.x,p.y-12,'Blessé : en réserve','#ffb35c',13)}
   if(e.k==='lost'){const p=tc(e.i);burst(p.x,p.y,'#8a6a45',16,.12,3);burst(p.x,p.y,'rgba(140,20,24,.9)',6,.08,2);splat(p.x,p.y,true)}
   if(e.k==='spit'){const v=V.get(e.zid),p=tc(e.i),f=v?zpos(v,now):tc(e.from);addFX({type:'tracer',x1:f.x,y1:f.y,x2:p.x,y2:p.y,c:'#c6e83a',w:3,dur:220});burst(p.x,p.y,'#b7d83a',6,.06,2);floatTxt(p.x,p.y,e.txt,'#c6e83a');if(e.i===Z.C){shake(now,5);hurtT=now}}
@@ -943,13 +990,13 @@ function playEvents(ev,types,now){
 /* ---------- UI ---------- */
 // jeu de société : la fiche de nuit (événement, jetons de zombies, frénésie, tampon) et la piste des nuits
 function ficheHtml(){const w=Z.waveList(G),fz=Z.frenzy(G),dm=Z.dmgBonus(G.night),boss=Z.bigNight(G,w);
- const fin=G.night===Z.WIN_NIGHT&&!G.won;const stamp=S.busy?'':fin?'<i class="stamp boss">Colosse final</i>':boss?'<i class="stamp boss">Colosse</i>':Z.pressure(G.night)?'<i class="stamp red">Nuit rouge</i>':Z.respite(G.night,G)?'<i class="stamp calm">Répit</i>':'';
+ const fin=G.night===Z.WIN_NIGHT&&!G.won;const stamp=S.busy?'':fin?'<i class="stamp boss">Boss final</i>':boss?`<i class="stamp boss">${ZN[Z.leadBoss(G.night)||'boss'][0]}</i>`:Z.pressure(G.night)?'<i class="stamp red">Nuit rouge</i>':Z.respite(G.night,G)?'<i class="stamp calm">Répit</i>':'';
  const toks=S.busy?'':Z.ZK.filter(k=>w[k]).map(k=>`<span class="ztk" title="${plural(w[k],...ZN[k])}"><span class="ztk-i" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></span><b>${w[k]}</b></span>`).join('');
  const fzt=fz&&!S.busy?`<span class="ztk fz" title="Frénésie meurtrière : +${fz} % de PV et de dégâts"><span class="ztk-i">${ii('drop','zw')}</span><b>+${fz}%</b></span>`:'';
  return `<div class="fiche-top"><b title="${G.event.n}">${G.night===Z.WIN_NIGHT&&!G.won?'Dernière nuit : les secours arrivent à l’aube.':G.event.p||G.event.n}</b>${G.side>=0?`<span class="poem">Fusée : ils viendront ${['du nord','du sud','de l’ouest','de l’est'][G.side]}</span>`:''}</div>${toks||fzt?`<div class="ztoks">${toks}${fzt}</div>`:''}${stamp}`}
 function trackHtml(){const a=Math.floor((G.night-1)/10)*10+1,mut=G.muts&&G.muts[0],soon=Z.mutNight(G.night),cells=[];
  for(let n=a;n<a+10;n++){const cls=(n%10===0?' boss':n%5===0?' red':Z.respite(n,G)?' calm':'')+(n<G.night?' past':'')+(n===G.night?' now':'');
-  cells.push(`<span class="tc${cls}" title="Nuit ${n}${n%10===0?' : le Colosse':n%5===0?' : nuit rouge':Z.respite(n,G)?' : nuit de répit':''}">${n%10===0?ii('skull'):n}${n===G.night?'<i class="meeple"></i>':''}</span>`)}
+  cells.push(`<span class="tc${cls}" title="Nuit ${n}${n%10===0?' : '+bossName(n):n%5===0?' : nuit rouge':Z.respite(n,G)?' : nuit de répit':''}">${n%10===0?ii('skull'):n}${n===G.night?'<i class="meeple"></i>':''}</span>`)}
  return `<span class="track">${cells.join('')}</span>`}
 // jetons mutation et ferraille : au bout de la rangée des jetons d'unités et de factions
 function tagsHtml(){const mut=G.muts&&G.muts[0],soon=Z.mutNight(G.night);return `<span class="tags">${mut?`<span class="tok mut${soon?' soon':''}" data-tok="mut" title="Mutation instable : ${Z.MUTS[mut].n}">${svg('mut')}</span>`:''}<span class="tok coin" title="Ferraille">${G.scrap}</span></span>`}
@@ -983,13 +1030,14 @@ function render(){
  const info=$('#info');info.className='info';
  if(S.busy&&S.sel!==null&&S.sel>=0){const t=S.hand[S.sel];info.innerHTML=`<b>${cardName(t)}</b> : ${Z.U[t].d}. `+(Z.U[t].react==='unit'?'Touche une unité blessée.':'Touche une case de la carte.')}
  else if(S.pause&&S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+' Touche une case libre en bleu pour le déplacer.';
- else if(S.pause)info.innerHTML=`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> Le Colosse arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+`<span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left0()))}</span> ${left0()} énergie pour tes réactions.`;
+ else if(S.pause)info.innerHTML=`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> ${capF(bossName(G.night))} arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+`<span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left0()))}</span> ${left0()} énergie pour tes réactions.`;
  else if(S.busy){const left=G.z.length+G.pending.length,hasR=S.hand.some(t=>Z.U[t].react);info.innerHTML=`<b>${plural(left,'zombie','zombies')}</b> encore dehors.`+(hasR?` <span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left0()))}</span> ${left0()} énergie pour tes réactions.`:'')}
  else if(S.bsel!=null&&G.bench[S.bsel]){const u=G.bench[S.bsel];info.innerHTML=unitLine(u)+(u.koUntil?` <b>Blessé :</b> se repose, de retour au jour ${u.koUntil+1}.`:Z.capFull(G,u.t)?` <b>Limite de ${Z.unitCap(G)} unités atteinte</b> : rappelle ou fusionne une unité.`:' En réserve : touche une case en vert pour la reposer gratuitement.')}
  else if(S.sel!==null&&!S.busy){const t=selCard(),D=Z.U[t];info.innerHTML=(Z.isUnit(t)&&Z.capFull(G,t)?`<b>Limite de ${Z.unitCap(G)} unités atteinte.</b> Fusionne, ou rappelle une unité dans la réserve. `:'')+`<b>${cardName(t)}</b> (${selCost()} énergie${selReuse()?', réutilisée':''}) : ${D.d}.`+(Z.isTrace(t)?` Carte à tracer : ${Z.charges(G,t,selReuse())} case${Z.charges(G,t,selReuse())>1?'s':''} à poser aujourd’hui${selReuse()?'':' pour le prix de la carte'}, une par une ou d’un glissé.`:'')+(D.onUnit?' Touche une unité blessée.':D.instant?' Touche l’abri.':D.near?' Touche une case collée à l’abri.':Z.LINE.includes(t)?' Touche une case, ou glisse pour tracer une ligne.':' Touche un emplacement.')}
  else if(S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+' Touche une case libre en bleu pour la déplacer.'+(Z.canRecall(G,S.moveFrom)?' <button type="button" class="recall" data-a="recall">'+ii('back')+' Rappeler</button>':'');
  else if(S.inspect!==null&&G.grid[S.inspect])info.innerHTML=unitLine(G.grid[S.inspect])+(Z.canRecall(G,S.inspect)?' <button type="button" class="recall" data-a="recall">'+ii('back')+' Rappeler</button>':'');
  else info.innerHTML=`<span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-left))}</span> <b>${left}</b> énergie. Touche une carte posée pour la déplacer ou la rappeler.`;
+ if(canUndo())info.insertAdjacentHTML('beforeend',` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`);
  // bouton de tir : un seul élément, mis à jour sans être recréé (sinon le toucher peut se perdre pendant la nuit)
  updatePreview();checkHints();
  const tip=$('#tip'),gs=guideStep();if(gs&&ov.hidden){tip.hidden=false;tip.textContent=gs.txt}else if(TUTO<4&&ov.hidden&&(S.busy?TUTO===3:TUTO<3)&&!GUIDE){tip.hidden=false;tip.textContent=TIPS[TUTO]}else tip.hidden=true;
@@ -1002,7 +1050,7 @@ $('#hand').addEventListener('click',e=>{const b=e.target.closest('.card');if(!b|
  if(b.dataset.u!==undefined){const k=-1-(+b.dataset.u);S.sel=S.sel===k?null:k;S.moveFrom=null;S.inspect=null;render();return}const k=+b.dataset.k;
  if(S.busy&&Z.U[S.hand[k]].react==='any'){playReact(k,Z.C);return}S.sel=S.sel===k?null:k;S.moveFrom=null;S.inspect=null;if(S.sel!==null)tuto(0);render()});
 // rappeler une unité dans la réserve (le jour) : elle garde tout et se repose gratuitement
-$('#info').addEventListener('click',e=>{const b=e.target.closest('[data-a=recall]');if(!b||S.busy)return;const i=S.moveFrom??S.inspect;if(i==null||!Z.recall(G,i))return;
+$('#info').addEventListener('click',e=>{if(e.target.closest('[data-a=undo]')){doUndo();return}const b=e.target.closest('[data-a=recall]');if(!b||S.busy)return;const i=S.moveFrom??S.inspect;if(i==null)return;snapUndo();if(!Z.recall(G,i)){UNDO.pop();return}
  const p=tc(i),u=G.bench[G.bench.length-1];facing[i]=null;addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#9ee08a',dur:350});floatTxt(p.x,p.y-14,`${u.name||cardName(u.t)} en réserve`,'#9ee08a');SFX.play('back');
  S.moveFrom=null;S.inspect=null;syncBoard();save();render()});
 // munition anti-Colosse : 30 dégâts, ignore l'armure
@@ -1035,7 +1083,7 @@ addEventListener('pointerup',e=>{if(!HD)return;const d=HD;HD=null;if(!d.on)retur
 addEventListener('pointercancel',()=>{if(HD&&HD.g)HD.g.remove();HD=null});
 $('#round').addEventListener('click',()=>{if(!S.busy&&ov.hidden)runInfo()});
 $('#event').addEventListener('click',()=>{if(S.busy||!ov.hidden)return;const w=Z.waveList(G),fz=Z.frenzy(G),dm=Z.dmgBonus(G.night);SFX.play('ui');
- show(`<h2 class="pw">Nuit ${G.night}</h2>${G.event.p?`<p class="poem">${G.event.p}</p>`:''}<p><b>${G.event.n}</b> : ${G.event.d}.</p>${Z.pressure(G.night)?`<p>${ii('drop')} <b>Nuit rouge</b> : 25 % de zombies en plus, puis une mutation instable et une relique à l’aube.</p>`:''}${Z.respite(G.night,G)?`<p>${ii('moon')} <b>Nuit de répit</b> : 30 % de zombies en moins.</p>`:''}${Z.bigNight(G,w)?`<p>${ii('skull')} <b>Nuit du Colosse</b> : la horde arrive en 2 vagues, le Colosse dans la seconde.</p>`:''}${fz?`<p>${ii('drop')} <b>Frénésie meurtrière</b> : +${fz} % de PV et de dégâts pour tous les zombies (+10 % de plus chaque nuit).</p>`:''}
+ show(`<h2 class="pw">Nuit ${G.night}</h2>${G.event.p?`<p class="poem">${G.event.p}</p>`:''}<p><b>${G.event.n}</b> : ${G.event.d}.</p>${Z.pressure(G.night)?`<p>${ii('drop')} <b>Nuit rouge</b> : 25 % de zombies en plus, puis une mutation instable et une relique à l’aube.</p>`:''}${Z.respite(G.night,G)?`<p>${ii('moon')} <b>Nuit de répit</b> : 30 % de zombies en moins.</p>`:''}${Z.bigNight(G,w)?`<p>${ii('skull')} <b>Nuit de boss : ${bossName(G.night)}</b>. La horde arrive en 2 vagues, le boss dans la seconde. ${Z.ZT[Z.leadBoss(G.night)||'boss'].info.replace(/^[^:]*: /,'')}.</p>`:''}${fz?`<p>${ii('drop')} <b>Frénésie meurtrière</b> : +${fz} % de PV et de dégâts pour tous les zombies (+10 % de plus chaque nuit).</p>`:''}
   <div class="deck">${Z.ZK.filter(k=>w[k]).map(k=>`<div class="dk" style="--cc:var(--z-${k})"><span class="ztk-i big" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></span><span><b>${plural(w[k],...ZN[k])}</b>${Z.ZT[k].info}</span></div>`).join('')}</div><button type="button" class="go" data-a="closeov">Fermer</button>`)});
 $('#fams').addEventListener('click',e=>{const t=e.target.closest('[data-tok=mut]');if(!t||!ov.hidden)return;const m=Z.MUTS[G.muts[0]];SFX.play('ui');
  show(`<h2 class="pw">Mutation instable</h2><p><b>${m.n}</b> : ${m.d}.</p><p>Instable, elle ne dure que jusqu’à la prochaine (toutes les 5 nuits).</p><button type="button" class="go" data-a="closeov">Fermer</button>`)});
@@ -1074,9 +1122,11 @@ const HINTS={
  equip:ii('pack')+' <b>Équipement.</b> Il reste sur l’unité, même rappelée. Une unité porte un seul exemplaire de chaque équipement.',
  ko:ii('band')+' <b>Unité blessée.</b> Elle part en réserve avec ses étoiles et ses niveaux, et revient après 3 nuits de repos. Attention : sa prochaine chute sera fatale.',
  red:ii('drop')+' <b>Nuit rouge ce soir.</b> 25 % de zombies en plus. À l’aube : une nouvelle mutation instable et une relique pour toi.',
- boss:ii('skull')+' <b>Le Colosse attaque ce soir.</b> La horde arrive en 2 vagues. Pendant la pause, sa route s’affiche en rouge : mets-y murs, Tank et pièges. Il fait 10 dégâts par coup et frappe l’abri sans mourir.',
- pause:'⏸️ <b>Pause entre les vagues.</b> Le Colosse arrivera par la route en rouge. Déplace tes cartes sur son chemin, puis relance.',
- respite:ii('moon')+' <b>Nuit de répit.</b> 30 % de zombies en moins après le Colosse… mais la frénésie meurtrière, elle, ne s’arrête pas : chaque nuit, +10 % de PV et de dégâts.',
+ boss:ii('skull')+' <b>Nuit de boss.</b> Toutes les 10 nuits, un boss mène la horde : le Colosse (nuit 10), la Mère (20), le Patient Zéro (30). La horde arrive en 2 vagues. Pendant la pause, sa route s’affiche en rouge : mets-y murs, Tank et pièges. Il fait 10 dégâts par coup et frappe l’abri sans mourir.',
+ pause:'⏸️ <b>Pause entre les vagues.</b> Le boss arrivera par la route en rouge. Déplace tes cartes sur son chemin, puis relance.',
+ mere:ii('skull')+' <b>La Mère attaque ce soir.</b> Elle pond un rampant tous les 4 tours, et en libère 2 en mourant. Les rampants passent sous les murs : garde des tireurs près de l’abri.',
+ zero:ii('skull')+' <b>Le Patient Zéro, boss final.</b> Plus fragile que le Colosse mais plus rapide : les zombies autour de lui accélèrent. Abats-le vite, les munitions anti-Colosse marchent aussi sur lui.',
+ respite:ii('moon')+' <b>Nuit de répit.</b> 30 % de zombies en moins après le boss… mais la frénésie meurtrière, elle, ne s’arrête pas : chaque nuit, +10 % de PV et de dégâts.',
  mut:svg('mut')+' <b>Mutation instable.</b> La horde a un affixe pendant 5 nuits (voir l’icône en haut). Puis une autre mutation instable le remplace.'
 };
 const HQ=[];let hintEl=null,hintT=0;
@@ -1089,33 +1139,42 @@ function checkHints(){try{if(!G||!S)return;const fl=Object.values(Z.famLevels(G)
  if(G.grid.some((u,i)=>u&&Z.squad(G,i)))hint('squad');if(Z.unitCount(G)>=Z.unitCap(G))hint('cap');
  if(G.grid.some(u=>u&&Z.U[u.t].cat==='post'))hint('post');if(G.grid.some(u=>u&&Z.eqOf(u).length))hint('equip');
  if((G.bench||[]).some(u=>u.koUntil))hint('ko');if(G.muts&&G.muts.length)hint('mut');if(S.pause)hint('pause');
- if(!S.busy&&ov.hidden){if(Z.bigNight(G))hint('boss');else if(Z.pressure(G.night))hint('red');if(Z.respite(G.night,G))hint('respite')}}catch(e){}}
+ if(!S.busy&&ov.hidden){if(Z.bigNight(G)){hint('boss');const L=Z.leadBoss(G.night);if(L&&L!=='boss')hint(L)}else if(Z.pressure(G.night))hint('red');if(Z.respite(G.night,G))hint('respite')}}catch(e){}}
 // fusion ou évolution juste après une pose ou un déplacement : effets, son, et découverte enregistrée dans la collection
 function mergeFx(m){if(!m||typeof m!=='object')return;const p=tc(m.i),now=performance.now();
  const pull=(j,c)=>{const q=tc(j);facing[j]=null;addFX({type:'tracer',x1:q.x,y1:q.y,x2:p.x,y2:p.y,c,w:3,dur:450});burst(q.x,q.y,c,12,.09,2)};
- if(m.k==='fuse'){hint('fuse');m.from.forEach(j=>pull(j,'#f2c23d'));addFX({type:'ring',x:p.x,y:p.y,r:64,c:'#f2c23d',dur:650});addFX({type:'flash',x:p.x,y:p.y,r:32,c:'rgba(255,210,90,.8)',dur:420,light:T*1.5});floatTxt(p.x,p.y-22,`Fusion ! ${cardName(m.t)} ${'★'.repeat(m.gold||1)}`,'#f2c23d',16);SFX.play('fuse')}
+ if(m.k==='fuse'){hint('fuse');ach('fuse');m.from.forEach(j=>pull(j,'#f2c23d'));addFX({type:'ring',x:p.x,y:p.y,r:64,c:'#f2c23d',dur:650});addFX({type:'flash',x:p.x,y:p.y,r:32,c:'rgba(255,210,90,.8)',dur:420,light:T*1.5});floatTxt(p.x,p.y-22,`Fusion ! ${cardName(m.t)} ${'★'.repeat(m.gold||1)}`,'#f2c23d',16);SFX.play('fuse')}
  if(m.k==='evo'){hint('evo');pull(m.j,'#c58cff');addFX({type:'ring',x:p.x,y:p.y,r:72,c:'#c58cff',dur:750});addFX({type:'flash',x:p.x,y:p.y,r:36,c:'rgba(200,150,255,.85)',dur:500,light:T*1.6});burst(p.x,p.y,'#e0c8ff',18,.12,2.5);floatTxt(p.x,p.y-22,`Évolution : ${Z.U[m.t].n} !`,'#d9b8ff',16);SFX.play('evo');
   META.evo=META.evo||[];if(!META.evo.includes(m.t)){META.evo.push(m.t);saveMeta(META);floatTxt(p.x,p.y+6,'Nouvelle découverte','#ffffff',13)}}
- shake(now,4)}
+ shake(now,4);achCheck()}
 // jouer une réaction pendant la nuit
 function playReact(k,i){const t=S.hand[k];const types=G.grid.map(u=>u&&u.t);const ev=Z.react(G,t,i);if(!ev)return false;
  S.hand.splice(k,1);countPlay(t);if(!Z.U[t].once)S.discard.push(t);syncBoard();S.sel=null;const now=performance.now();syncZ(now);playEvents(ev,types,now);
- const p=tc(i);if(t==='shell'){SFX.play('snp');SFX.play('boom');shake(now,9);const z=ev.find(e=>e.k==='shot'),v=z&&V.get(z.zid),q=v?zpos(v,now):CEN;floatTxt(q.x,q.y-30,'Munition !','#ffd25a',20)}if(t==='grenade'||t==='air')SFX.play('boom');else if(t==='shot')SFX.play('snp');else SFX.play('place');
+ const p=tc(i);if(t==='shell'&&ev.some(e=>e.k==='die'&&e.boss))ach('ammo');if(t==='shell'){SFX.play('snp');SFX.play('boom');shake(now,9);const z=ev.find(e=>e.k==='shot'),v=z&&V.get(z.zid),q=v?zpos(v,now):CEN;floatTxt(q.x,q.y-30,'Munition !','#ffd25a',20)}if(t==='grenade'||t==='air')SFX.play('boom');else if(t==='shot')SFX.play('snp');else SFX.play('place');
  if(t==='horn'){addFX({type:'ring',x:CEN.x,y:CEN.y,r:200,c:'#f2b33d',dur:600});floatTxt(CEN.x,CEN.y-20,'Reculez !','#f2b33d')}
  if(t==='rush')floatTxt(CEN.x,CEN.y-20,'Adrénaline !','#ff7a59');
  if(t==='patch')floatTxt(p.x,p.y,'+5 PV','#9fd86b');
  render();return true}
+// v128 : annuler les actions du jour (pose, déplacement, rappel), jusqu'à 10 en arrière. Vidé à la tombée de la nuit.
+let UNDO=[];
+function snapUndo(t){try{UNDO.push({g:JSON.stringify({...G,event:G.event.id}),s:JSON.stringify({draw:S.draw,discard:S.discard,hand:S.hand,used:S.used}),rs:RS,night:G.night,t:t||null});if(UNDO.length>10)UNDO.shift()}catch(e){UNDO=[]}}
+const canUndo=()=>!S.busy&&!S.pause&&UNDO.length>0&&UNDO[UNDO.length-1].night===G.night;
+function doUndo(){if(!canUndo())return;const u=UNDO.pop();try{const g=JSON.parse(u.g),s2=JSON.parse(u.s);
+  for(const k of Object.keys(G))if(!(k in g))delete G[k];Object.assign(G,g,{event:Z.EVENTS.find(e=>e.id===g.event)||G.event});Z.touch(G);
+  RS=u.rs;Object.assign(S,s2,{sel:null,moveFrom:null,inspect:null,bsel:null});if(u.t&&META.played&&META.played[u.t]>0){META.played[u.t]--;saveMeta(META)}
+  S.board=G.grid.filter(Boolean).concat(G.bench||[]);POS=new Map();G.grid.forEach((x,j)=>{if(x)POS.set(x,j)});DISC0=-1;facing.fill(null);
+  SFX.play('ui');save()}catch(e){UNDO=[]}render()}
 function tapCell(i){
  if(S.busy&&!(S.pause&&S.sel===null)){if(S.sel!==null&&S.sel>=0&&Z.U[S.hand[S.sel]].react)playReact(S.sel,i);return}
- if(S.bsel!=null&&!S.busy){const k=S.bsel;S.bsel=null;const mg=Z.placeBench(G,k,i);if(mg){facing[i]=null;syncBoard();mergeFx(mg);S.inspect=typeof mg==='object'?i:null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#9ee08a',dur:350});SFX.play('place');save()}render();return}
+ if(S.bsel!=null&&!S.busy){const k=S.bsel;S.bsel=null;snapUndo();const mg=Z.placeBench(G,k,i);if(!mg)UNDO.pop();if(mg){facing[i]=null;syncBoard();mergeFx(mg);S.inspect=typeof mg==='object'?i:null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#9ee08a',dur:350});SFX.play('place');save()}render();return}
  if(S.sel===null){
   // déplacement d'une carte posée : on la touche, puis on touche une case libre
-  if(S.moveFrom!==null){const a=S.moveFrom;S.moveFrom=null;S.inspect=null;const mv=Z.move(G,a,i);if(mv){facing[i]=facing[a];facing[a]=null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#7cc7ff',dur:350});syncBoard();mergeFx(mv);if(typeof mv==='object')S.inspect=i;if(!S.busy)save()}render();return}
+  if(S.moveFrom!==null){const a=S.moveFrom;S.moveFrom=null;S.inspect=null;if(!S.busy)snapUndo();const mv=Z.move(G,a,i);if(!mv&&!S.busy)UNDO.pop();if(mv){facing[i]=facing[a];facing[a]=null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#7cc7ff',dur:350});syncBoard();mergeFx(mv);if(typeof mv==='object')S.inspect=i;if(!S.busy)save()}render();return}
   S.inspect=null;if(G.grid[i])S.moveFrom=i;render();
   return}
  const t=selCard(),D=Z.U[t],re=selReuse(),build=Z.isTrace(t);
  if(selCost()>(G.energy??0)||!Z.canPlace(G,t,i))return;
- tuto(1);if(!re)countPlay(t);if(build)useBuild(t);else S.hand.splice(S.sel,1);const mg=Z.place(G,t,i,R,false,{reuse:re});spentTrace(t);if(!D.instant)facing[i]=null;if(D.instant)S.discard.push(t);syncBoard();if(!build)S.sel=null;S.moveFrom=null;S.inspect=mg?i:null;
+ snapUndo(re?null:t);tuto(1);if(!re)countPlay(t);if(build)useBuild(t);else S.hand.splice(S.sel,1);const mg=Z.place(G,t,i,R,false,{reuse:re});spentTrace(t);if(!D.instant)facing[i]=null;if(D.instant)S.discard.push(t);syncBoard();if(!build)S.sel=null;S.moveFrom=null;S.inspect=mg?i:null;
  if(!mg&&G.grid[i]&&G.grid[i].name){const q=tc(i);floatTxt(q.x,q.y-14,`${G.grid[i].name} rejoint l’abri`,'#f2b33d')}
  if(!mg&&G.grid[i]&&G.grid[i].leg){const q=tc(i);floatTxt(q.x,q.y+14,`Souvenir de ${G.grid[i].leg} : +1 dégât, +2 PV`,'#f2c23d',14);addFX({type:'ring',x:q.x,y:q.y,r:50,c:'#f2c23d',dur:600})}
  const p=D.instant&&!D.onUnit?CEN:tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#f2b33d',dur:350});SFX.play(D.cat==='shoot'?'cock':'place');
@@ -1125,7 +1184,8 @@ function tapCell(i){
  if(t==='kit')floatTxt(p.x,p.y,'Soigné','#9fd86b');
  if(t==='coffee')floatTxt(CEN.x,CEN.y,'+2 énergie','#f2b33d');
  if(t==='flare')floatTxt(CEN.x,CEN.y,'Fusée !','#ff8a5a');
- mergeFx(mg);save();render();
+ mergeFx(mg);save();render();achCheck();
+ if(G.drawNow||D.peek)UNDO=[];
  if(G.drawNow){const n=G.drawNow;G.drawNow=0;drawCards(Math.min(n,Math.max(0,Z.HAND_MAX-S.hand.length)));floatTxt(CEN.x,CEN.y-30,'Largage : +'+n+' cartes','#9ee08a');save();render()}
  if(D.peek)peekScreen();
 }
@@ -1139,11 +1199,12 @@ function peekScreen(){
 // pause entre deux vagues d'une très grosse nuit : le joueur peut déplacer une unité et jouer ses réactions
 function wavePause(n){return new Promise(res=>{S.pause=n;S.moveFrom=null;S.inspect=null;S.resume=res;SFX.play('dawn');
  floatTxt(CEN.x,CEN.y-40,`Vague ${n} repoussée !`,'#9fd86b',18);render()})}
-function resumeWave(){if(!S.pause)return;S.pause=0;S.moveFrom=null;S.inspect=null;Z.nextWave(G);const f=S.resume;S.resume=null;floatTxt(CEN.x,CEN.y-40,`Vague ${G.wave} sur ${G.waves} : le Colosse arrive !`,'#ff6b6b',18);SFX.play('roar');render();f&&f()}
+function resumeWave(){if(!S.pause)return;S.pause=0;S.moveFrom=null;S.inspect=null;Z.nextWave(G);const f=S.resume;S.resume=null;vib([150,80,150]);floatTxt(CEN.x,CEN.y-40,`Vague ${G.wave} sur ${G.waves} : ${bossName(G.night)} arrive !`,'#ff6b6b',18);SFX.play('roar');render();f&&f()}
 async function night(){
  if(S.busy)return;S.busy=true;SPEED=OPT.speed||1;S.sel=null;S.drag=null;S.discard.push(...S.used);S.used=[];
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
+ UNDO=[];
  if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;Z.startNight(G,R);render();
  // v125 : météo sonore (pluie, orage) et corne de la nuit rouge
  try{SFX.setWeather(G.event.id==='pluie'?'amb-rain':G.event.id==='coupure'?'amb-storm':null);if(Z.pressure(G.night))setTimeout(()=>SFX.play('horn'),300)}catch(e){}
@@ -1167,6 +1228,7 @@ async function night(){
  const fallen=(G.fallen||[]).filter(f=>f.night===G.night);
  const rewardCard=null;
  S.dawn={kills:G.kills-kills0,scrap:G.scrap-scrap0,heal:dawnInfo.heal,mut,rewardCard,relicReward:dawnInfo.relic,tier:dawnInfo.tier,hero:hero?{name:hero.name,t:hero.t,nk:hero.nk}:null,fallen};save();render();
+ achNight(G.kills-kills0);
  if(G.night===Z.WIN_NIGHT&&!G.won)return victory();
  dawn();
 }
@@ -1211,7 +1273,7 @@ function shopScreen(){
  S.phase='shop';S.picks=null;save();
  const row=(k,ex)=>{const o=Z.SHOP[k],c=Z.shopCost(G,k),ok=G.scrap>=c&&!ex;return `<button type="button" class="shopi" data-a="shop-${k}" ${ok?'':'disabled'}><span><b>${o.n}</b>${o.d}</span><span class="cost">${svg('scrap')}${c}</span></button>`};
  const upg=deckTypes().filter(t=>Z.UPGRADABLE.includes(t)&&!G.upg[t]);
- show(`<h2 class="pw">Le troc de l’aube</h2><p>Tu as <b>${G.scrap} ferraille</b>. Un zombie éliminé rapporte 1 ferraille, le Colosse 15. Économise pour ce qui compte. ${G.night%10===9?'<b>Le Colosse attaque demain !</b> ':''}Munitions anti-Colosse : <b>${ammoOwned()}/${Z.ammoMax(G)}</b>.</p>
+ show(`<h2 class="pw">Le troc de l’aube</h2><p>Tu as <b>${G.scrap} ferraille</b>. Un zombie éliminé rapporte 1 ferraille, un boss 15. Économise pour ce qui compte. ${G.night%10===9?`<b>${capF(bossName(G.night+1))} attaque demain !</b> `:''}Munitions anti-Colosse : <b>${ammoOwned()}/${Z.ammoMax(G)}</b>.</p>
   <div class="shop">${S.store?`<button type="button" class="shopi" data-a="store-open"><span><b>Retourner à la boutique</b>Déjà ouverte pour cette aube</span><span class="cost">✓</span></button>`:row('store')}${row('heal',G.shelter>=Z.maxS(G))}${row('upgrade',!upg.length)}${row('remove',deckList().length<=5)}</div>
   <button type="button" class="go" data-a="nightpick">Continuer</button>`);
 }
@@ -1237,7 +1299,7 @@ function nextDay(offer){
  fillHand();save();hide();render();
 }
 // victoire : la nuit 30 est tenue, les secours arrivent. Partir (victoire) ou rester (infini, pour le score)
-function victory(){G.won=1;const m=G.menace||0,pts=G.daily?0:Z.winPoints(m),unl=!G.daily&&m<Z.MENACE_MAX&&(META.menace||0)<=m;
+function victory(){G.won=1;try{ach('win');if((G.menace||0)>=5)ach('m5');if((G.menace||0)>=10)ach('m10');if(G.daily)ach('daily');achCheck()}catch(e){}const m=G.menace||0,pts=G.daily?0:Z.winPoints(m),unl=!G.daily&&m<Z.MENACE_MAX&&(META.menace||0)<=m;
  let relUnl=null,relStart=null,cardUnl=null;
  if(!G.daily){const vc=Z.VICTORY_CARDS.find(t=>Z.U[t].vic===m);if(vc&&!META.cards.includes(vc)){cardUnl=vc;META.cards.push(vc)}}
  if(!G.daily){const vr=Z.VICTORY_RELICS.find(r=>Z.RELICS[r].lock===m&&!(META.relicsUnl||[]).includes(r));if(vr){relUnl=vr;META.relicsUnl=[...(META.relicsUnl||[]),vr]}
@@ -1257,11 +1319,11 @@ function statsScreen(){const h=META.hist||[],pl=Object.entries(META.played||{}).
  show(`<h2 class="pw">Statistiques</h2><div class="stiles">${tile(META.best||0,'record de nuits')}${tile(META.wins||0,'victoires')}${tile(META.menaceWon>=0?META.menaceWon:'—','Mutation vaincue')}${tile(META.runs||0,'parties')}${tile(META.total||0,'nuits au total')}${tile(META.kills||0,'zombies éliminés')}</div>
   <h3>Dernières parties</h3>${h.length?`<p>Moyenne : <b>${avg}</b> nuits.</p><div class="hist">${h.slice(0,10).map(x=>`<div class="hrow${x.w?' win':''}"><span class="hn">${x.w?ii('trophy'):ii('skull')} ${x.n} nuits</span><span>${Z.CHARS[x.ch]?Z.CHARS[x.ch].n:''} · ${Z.PLACES[x.pl]?Z.PLACES[x.pl].n:''}${x.m?` · Mutation ${x.m}`:''}</span><span class="hk">${x.k} zombies</span></div>`).join('')}</div>`:'<p>Aucune partie terminée pour l’instant.</p>'}
   <h3>Tes cartes préférées</h3>${pl.length?`<div class="cgrid fav">${pl.map(([t,n])=>`<div class="citem">${cardFace(t,{base:1,mini:1})}<span class="qty">${plural(n,'fois','fois')}</span></div>`).join('')}</div>`:'<p>Joue quelques parties pour voir tes cartes préférées.</p>'}
-  <button type="button" class="go" data-a="title">Retour</button>`)}
+  <button type="button" class="skip" data-a="achs">${ii('trophy')} Succès</button><button type="button" class="go" data-a="title">Retour</button>`)}
 // historique des parties (les 20 dernières) et victimes au total
 function logRun(win){if(G.daily)return;META.kills=(META.kills||0)+G.kills;(META.hist=META.hist||[]).unshift({n:win?G.night:G.night-1,w:win?1:0,m:G.menace||0,k:G.kills,ch:G.char,pl:G.place,d:Date.now()});META.hist=META.hist.slice(0,20);saveMeta(META)}
 function end(){
- SFX.play('death');if(!G.won)logRun(0);else logRun(1);
+ SFX.play('death');vib([300,120,300]);achCheck();if(G.daily)ach('daily');if(!G.won)logRun(0);else logRun(1);
  clearSave();const nights=G.night-1;
  const before=Z.unlocks(META),newRec=nights>META.best&&nights>0;
  const legs=G.daily?[]:Z.legacies(G);if(legs.length){META.legacy=[...(META.legacy||[]),...legs.map(f=>({name:f.name,t:f.t,kills:f.kills}))].sort((a,b)=>b.kills-a.kills).slice(0,3)}
@@ -1289,6 +1351,7 @@ function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
   <label><span>Musique et ambiance <b>${pc(OPT.mus)} %</b></span><input type="range" min="0" max="100" step="5" value="${pc(OPT.mus)}" data-o="mus"></label>
   <label>Vitesse de la nuit au départ<select data-o="speed">${[1,2,4].map(v=>`<option value="${v}" ${OPT.speed==v?'selected':''}>× ${v}</option>`).join('')}</select></label>
   <label class="chk"><input type="checkbox" data-o="shake" ${OPT.shake?'checked':''}> Secousses de l’écran</label>
+  ${navigator.vibrate?`<label class="chk"><input type="checkbox" data-o="vib" ${OPT.vib?'checked':''}> Vibrations du téléphone</label>`:''}
   ${(typeof META!=='undefined'&&META.wins>0)?`<label>Dos des cartes<select data-o="back"><option value="" ${OPT.back!=='gold'?'selected':''}>Classique</option><option value="gold" ${OPT.back==='gold'?'selected':''}>Doré (victoire)</option></select></label><label>Abri<select data-o="shelter"><option value="" ${OPT.shelter!=='fort'?'selected':''}>Maison</option><option value="fort" ${OPT.shelter==='fort'?'selected':''}>Maison fortifiée (victoire)</option></select></label>`:''}
   <label class="chk"><input type="checkbox" data-o="eco" ${OPT.eco?'checked':''}> Mode économie (petits téléphones : moins d’effets, plateau moins détaillé)</label>
   <label class="chk"><input type="checkbox" data-o="text" ${OPT.text?'checked':''}> Texte plus grand</label>
@@ -1420,9 +1483,10 @@ const ACT={
  dkreset:()=>{META.decks[META.slot]=Z.STARTER_DECK.slice();saveMeta(META);deckEditor()},
  coll:()=>collectionScreen(),
  mdet:()=>detScreen(),
+ achs:()=>achScreen(),
  mback:()=>{if(S.endHtml)show(S.endHtml);else title()},
  evo:()=>evoScreen(),
- unlock:v=>{if(Z.U[v].vic!=null)return;const pr=Z.CARD_PRICE[Z.RAR[v]||'com'];if(!META.cards.includes(v)&&META.points>=pr){META.points-=pr;META.cards.push(v);saveMeta(META);SFX.play('dawn')}collectionScreen(1)},
+ unlock:v=>{if(Z.U[v].vic!=null)return;const pr=Z.CARD_PRICE[Z.RAR[v]||'com'];if(!META.cards.includes(v)&&META.points>=pr){META.points-=pr;META.cards.push(v);saveMeta(META);SFX.play('dawn');achCheck()}collectionScreen(1)},
  char:v=>{pendingChar=v;placeScreen()},
  place:v=>{newGame(pendingChar,v);save();hide();render()},
  load:()=>{const d=loadSave();if(d)resume(d);else prepScreen()},
@@ -1465,7 +1529,7 @@ panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
 panel.addEventListener('input',e=>{const el=e.target.closest('[data-o]');if(!el)return;const k=el.dataset.o;
  if(k==='sfx'||k==='mus'){OPT[k]=+el.value/100;const b=el.parentElement.querySelector('b');if(b)b.textContent=el.value+' %'}
- else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco')OPT[k]=el.checked?1:0;else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
+ else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
  saveOpt();applyOpt();if(k==='sfx')SFX.play('ui')});
 $('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else night()});
 
@@ -1487,7 +1551,7 @@ function dailyScreen(){const day=today(),c=dailySetup(day),b=dailyBest(day);
   <button type="button" class="go" data-a="daily-go">Jouer le défi</button><button type="button" class="skip" data-a="title">Retour</button>`)}
 // règles du jeu (v123) : des fiches illustrées, avec un sommaire pour sauter à une fiche
 const RULES=[
- ['but','trophy','Le but',()=>`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b>. À l’aube de la nuit ${Z.WIN_NIGHT}, après le dernier Colosse, les secours arrivent : tu peux <b>partir</b> (victoire) ou <b>rester</b> en mode infini pour le score, jusqu’à ce que la horde gagne.</p><p>Chaque victoire débloque une <b>Mutation de la horde</b> plus dure (10 niveaux, à choisir avant la partie), une carte de victoire et des reliques.</p>`],
+ ['but','trophy','Le but',()=>`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b>. À l’aube de la nuit ${Z.WIN_NIGHT}, après le Patient Zéro, les secours arrivent : tu peux <b>partir</b> (victoire) ou <b>rester</b> en mode infini pour le score, jusqu’à ce que la horde gagne.</p><p>Chaque victoire débloque une <b>Mutation de la horde</b> plus dure (10 niveaux, à choisir avant la partie), une carte de victoire et des reliques.</p>`],
  ['jour','bolt','Le jour',()=>`<p>Tu as <b>${Z.ENERGY} énergies</b> par jour. Chaque carte coûte 0 à 3 : touche-la puis touche une case, ou glisse-la sur le plateau. Les cartes non jouées restent en main.</p><p>Les <b>murs et barbelés</b> se tracent : une carte donne plusieurs cases pour la journée, une par une ou d’un glissé en ligne.</p><p>Tu peux <b>déplacer</b> ce que tu as posé, et <b>rappeler</b> une unité dans ta réserve pour la reposer gratuitement plus tard.</p><p><b>Limite</b> : ${Z.unitCap(G||{night:1})} unités au plus sur le terrain (+1 toutes les 10 nuits). Murs, pièges et postes de soutien ne comptent pas.</p>`],
  ['nuit','moon','La nuit',()=>`<p>Les zombies sortent de la forêt <b>par les 4 routes</b> et marchent vers l’abri : un mur en travers d’une route la ferme. Ils contournent tes défenses si le détour est plus court, sinon ils attaquent le point le plus faible.</p><p>Tes survivants se défendent <b>tout seuls</b>. Garde de l’énergie pour tes cartes <b>Réaction</b> (grenade, tir de l’abri…), jouables pendant l’attaque.</p><p>Dans la forêt, les zombies sont <b>intouchables</b>. Si l’un d’eux blesse l’abri, c’est la <b>brèche</b> : toute la horde avance d’un coup.</p>`],
  ['aube','spark','L’aube',()=>`<p>Choisis une carte de ta <b>pioche</b> pour l’avoir en main le lendemain. Puis le <b>troc</b> : répare l’abri, améliore ou jette une carte, ou ouvre la <b>boutique</b> (objets absents de ton deck et munitions anti-Colosse, 2 au plus, usage unique).</p><p>Parfois, un <b>événement</b> te propose un choix risqué ou prudent. Toutes les 5 nuits, tu trouves une <b>relique</b>.</p>`],
@@ -1496,7 +1560,7 @@ const RULES=[
  ['fusion','star','Fusion, évolutions, niveaux',()=>`<p><b>Fusion</b> : 3 unités identiques (même nombre d’étoiles) deviennent une <b>nouvelle carte ★</b> : plus de PV, +1 dégât, 2 places libérées, et les 3 cartes repartent dans ta défausse.</p><p><b>Évolution</b> ✦ : certaines paires posées côte à côte deviennent une nouvelle carte unique (page Évolutions secrètes de la Collection).</p><p>Une carte ★ ou ✦ ne retourne jamais dans le deck : blessée, elle part en réserve ; détruite, elle disparaît.</p><p><b>Niveaux</b> : à 20 zombies tués, puis 25 de plus, 30…, l’unité gagne +1 dégât ou +3 PV.</p>`],
  ['murs','post','Les remparts',()=>`<p>Des murs posés côte à côte forment un <b>rempart</b> : chaque mur gagne +1 PV par mur voisin (jusqu’à +3). Chaque mur garde ses PV : une brèche s’ouvre là où ça cède.</p>`],
  ['surv','band','Les survivants',()=>`<p>Chaque survivant a un <b>prénom</b> et un trait. La première fois qu’il tombe, il part blessé en réserve pour 3 nuits et garde une cicatrice ; la seconde fois, il est perdu pour de bon.</p>`],
- ['horde','skull','La horde',()=>`<p><b>Frénésie meurtrière</b> : dès la nuit 5, +10 % de PV et de dégâts pour tous les zombies, puis +10 % de plus chaque nuit.</p><p><b>Curée</b> : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus).</p><p><b>Nuit rouge</b> toutes les 5 nuits : +25 % de zombies, puis une mutation instable (un affixe qui change toutes les 5 nuits) et une relique.</p><p><b>Colosse</b> toutes les 10 nuits : il arrive dans une 2ᵉ vague, frappe très fort et ne meurt pas en touchant l’abri. Entre les deux vagues, tu déplaces tes unités. La nuit suivante est un <b>répit</b> (30 % de zombies en moins).</p>`],
+ ['horde','skull','La horde',()=>`<p><b>Frénésie meurtrière</b> : dès la nuit 5, +10 % de PV et de dégâts pour tous les zombies, puis +10 % de plus chaque nuit.</p><p><b>Curée</b> : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus).</p><p><b>Nuit rouge</b> toutes les 5 nuits : +25 % de zombies, puis une mutation instable (un affixe qui change toutes les 5 nuits) et une relique.</p><p><b>Boss</b> toutes les 10 nuits : <b>le Colosse</b> (nuit 10), <b>la Mère</b> (20, elle pond des rampants), <b>le Patient Zéro</b> (30, il accélère la horde), accompagnés de Colosses en renfort. Le boss arrive dans une 2ᵉ vague, frappe très fort et ne meurt pas en touchant l’abri. Entre les deux vagues, tu déplaces tes unités. La nuit suivante est un <b>répit</b> (30 % de zombies en moins).</p>`],
  ['mut','dna','Mutations de la horde',()=>`<p>Après ta première victoire, choisis un niveau de Mutation avant la partie. Les niveaux s’additionnent :</p><div class="deck">${Z.MENACES.slice(1).map((x,k)=>`<div class="dk"><span class="fic mnum">${k+1}</span><span><b>${x.n}</b>${x.d}.</span></div>`).join('')}</div>`]];
 const rulesHtml=()=>`<div class="rindex">${RULES.map(([id,ic,t])=>`<button type="button" class="rchip" data-a="rgo" data-v="${id}">${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</button>`).join('')}</div>${RULES.map(([id,ic,t,f])=>`<section class="rfiche" id="r-${id}"><h3>${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</h3>${f()}</section>`).join('')}`;
 // logo du jeu (aussi dans assets/ui/logo.svg), dessiné en SVG avec les polices du jeu
@@ -1537,7 +1601,7 @@ function title(){onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?'Aube':'Jour'} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:'<button type="button" class="go" data-a="new">Jouer</button>')(loadSave())}
-<button type="button" class="skip" data-a="rules">Règles du jeu</button><button type="button" class="skip" data-a="coll">Collection et decks</button><button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
+<button type="button" class="skip" data-a="rules">Règles du jeu</button><button type="button" class="skip" data-a="coll">Collection et decks</button><button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="achs">${ii('trophy')} Succès · ${ACH.filter(a=>(META.ach||{})[a[0]]).length}/${ACH.length}</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
 applyOpt();newGame();render();requestAnimationFrame(frame);title();
 
 // bouton son

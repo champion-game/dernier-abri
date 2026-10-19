@@ -264,6 +264,17 @@ Inspiré de *Super Auto Pets*, *Vampire Survivors* et *Rogue Tower* : les unité
 
 - **Niveaux** : tous les 20 zombies tués (20, 40, 60…), une unité gagne un niveau. À l'aube, le joueur choisit : offensif (+1 dégât) ou défensif (+3 PV max et soin complet). Le niveau est affiché sur l'unité (N1, N2…).
 
+## Les trois boss (v128)
+
+Toutes les 10 nuits, un boss mène la horde ; les autres boss de la nuit sont des Colosses en renfort (autant de boss qu'avant : 1 la nuit 10, 2 la nuit 20, 3 la nuit 30).
+| Nuit | Boss | PV de base | Vitesse | Capacité |
+|---|---|---|---|---|
+| 10, 40… | Le Colosse | 58 | lent (3) | fonce tout droit, 10 dégâts par coup (+2 toutes les 10 nuits) |
+| 20, 50… | La Mère (+1 Colosse) | 50 | lent (3) | comme le Colosse, et pond un rampant tous les 4 tours (6 au plus) ; en mourant, libère 2 rampants |
+| 30, 60… | Le Patient Zéro (+2 Colosses), boss final | 42 | normal (2) | comme le Colosse ; les zombies à 2 cases de lui avancent plus vite (vitesse 2 → 1, 3 → 2), zone montrée par un cercle pointillé |
+
+Les munitions anti-Colosse marchent sur les trois. Les illustrations de la Mère et du Patient Zéro sont provisoires (images de la réserve, agrandies) : à faire dessiner avant Steam.
+
 ## La nuit du Colosse en 2 vagues
 
 **Préparer le Colosse** : un compte à rebours dans le bandeau (« Colosse dans N nuits »), et à la boutique du troc des **munitions anti-Colosse** (20 ferraille, 2 au plus en ta possession, usage unique depuis la v111). Pendant sa nuit, un bouton « Tirer sur le Colosse » apparaît : chaque munition lui inflige 30 dégâts (sans tenir compte de l'armure). Trois munitions retirent environ 90 de ses ~123 PV à la nuit 10 : il faut toujours une défense pour finir le travail. Le but : donner un objectif d'économie aux nuits 1 à 9.
@@ -279,6 +290,12 @@ Un survivant nommé qui tombe après 100 victimes ou plus laisse un souvenir (3 
 ## Le retour visuel
 
 Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Triple ! » ou « Carnage ×N » quand 3 zombies ou plus meurent d'un coup, gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), ralenti à la mort du Colosse, chiffres de l'aube qui défilent.
+
+## Confort et objectifs (v128)
+
+- **Annuler** : pendant le jour, un bouton « Annuler » apparaît sous la carte après une pose, un déplacement ou un rappel. On peut revenir jusqu'à 10 actions en arrière. Impossible après une carte qui révèle la pioche (Largage, cartes qui montrent les prochaines cartes), et tout est effacé à la tombée de la nuit.
+- **Vibrations** (téléphones Android ; l'iPhone ne les permet pas dans le navigateur) : brèche dans l'abri, survivant blessé ou mort, arrivée et mort d'un boss, défaite, succès. Option « Vibrations du téléphone ».
+- **Succès** : 28 objectifs permanents (nuits tenues, victoires, Mutations, boss tués, carnages, fusions, évolutions, factions, collection…). Un bandeau les annonce ; la page « Succès » est accessible depuis l'accueil et les statistiques. Ils préparent ceux de Steam et ne changent pas les règles.
 
 ## Le tableau des combats (v126)
 

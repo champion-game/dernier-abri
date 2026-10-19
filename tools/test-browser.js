@@ -38,6 +38,10 @@ async function run(vp,label){
   const vis=await p.evaluate(()=>{const m=document.querySelector('#meter');return !!m&&!m.hidden&&m.getBoundingClientRect().height>40});
   if(!vis)problems.push(`${label} : le tableau des combats ne s’ouvre pas`);await click('[data-mt="t:dead"]');await shot('05c-details');await overflow('tableau des combats');
   await click('[data-mt="t:dmg"]');if(!vis)return;await click('#mtb');if(await p.evaluate(()=>!document.querySelector('#meter').hidden))problems.push(`${label} : le tableau des combats ne se ferme pas`)});
+ await step('annuler une pose',async()=>{const st=()=>p.evaluate(()=>JSON.stringify([S.hand,G.energy,G.grid.map(u=>u&&u.t)]));const s0=await st();
+  const t=await p.evaluate(()=>{for(let k=0;k<S.hand.length;k++){const t=S.hand[k];if(Z.U[t].instant||Z.U[t].react)continue;const cs=[...Array(81).keys()].filter(j=>Z.canPlace(G,t,j));if(cs.length&&Z.cost(t)<=G.energy){S.sel=k;tapCell(cs[0]);return t}}return null});
+  if(!t)return;await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));
+  if(!(await click('[data-a=undo]')))problems.push(`${label} : pas de bouton Annuler après une pose`);else if(await st()!==s0)problems.push(`${label} : Annuler ne remet pas la main, l’énergie et le plateau comme avant`)});
  const box=await p.$eval('#map',e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width}});const cs=box.w/9;
  const at=i=>[box.x+(i%9+.5)*cs,box.y+(Math.floor(i/9)+.5)*cs];
  let reached=0;

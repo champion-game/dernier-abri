@@ -157,6 +157,19 @@ check('Tableau des combats : soin compté pour le soigneur et le soigné',()=>{c
  Z.startNight(st,rng(1));st.pending=[];st.z=[];for(let k=0;k<4;k++)Z.step(st);const r=Object.values(st.mtN);
  ok(r.find(x=>x.name==='Ana').hg>0&&r.find(x=>x.name==='Paul').hr>0,JSON.stringify(r))});
 
+check('Boss : Colosse nuit 10, la Mère nuit 20 (+1 Colosse), le Patient Zéro nuit 30 (+2 Colosses)',()=>{
+ for(const [n,lead,nb] of [[10,'boss',1],[20,'mere',2],[30,'zero',3]]){const st=fresh();st.night=n;Z.startNight(st,rng(1));const b=st.pending.filter(p=>Z.ZT[p.k].boss);
+  eq(b.length,nb);eq(b[0].k,lead);ok(st.waves===2,'pas de pause entre les vagues nuit '+n)}});
+check('La Mère pond des rampants (6 au plus) et en libère 2 en mourant',()=>{const st=fresh();st.night=20;Z.startNight(st,rng(1));st.pending=[];
+ const m={id:900,k:'mere',pos:2*9+4,hp:999,max:999,cd:999,style:0};st.z=[m];for(let k=0;k<40;k++)Z.step(st);
+ ok((m.kids||0)===6,'pontes '+m.kids);
+ st.z=[{id:901,k:'mere',pos:2*9+4,hp:1,max:50,cd:999,style:0}];st.grid[3*9+4]={t:'gun',hp:3};const before=st.spawned||0;for(let k=0;k<3;k++)Z.step(st);
+ ok((st.spawned||0)-before>=2,'pas de rampants à la mort')});
+check('Patient Zéro : les zombies proches avancent plus vite',()=>{const run=withZero=>{const st=fresh();st.night=30;Z.startNight(st,rng(1));st.pending=[];
+  const w={id:1,k:'walk',pos:1*9+4,hp:999,max:999,cd:2,style:0};st.z=[w];if(withZero)st.z.push({id:2,k:'zero',pos:1*9+3,hp:999,max:999,cd:999,style:0});
+  let t=0;while(w.pos!==3*9+4&&t<20){Z.step(st);t++}return t};
+ ok(run(1)<run(0),'pas plus rapide')});
+
 /* ---------- 4. nuits aléatoires ---------- */
 const PLACE=PLAY.filter(t=>!Z.U[t].react&&!Z.U[t].instant&&!Z.U[t].onUnit);
 const NIGHTS=+process.env.NIGHTS||300;let maxZ=0,slow=0,worst=0;
