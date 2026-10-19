@@ -48,7 +48,8 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - La boucle d'affichage ne doit jamais s'arrêter sur une erreur : chaque élément est dessiné dans un bloc protégé. Évite les API de canvas récentes sans solution de secours (exemple : `roundRect`, déjà remplacé si absent).
 - Mets à jour `docs/GAME_DESIGN.md` quand une décision de conception change.
 - Fais des commits petits, avec un message clair en français.
-- Après chaque mise en ligne, donne toujours à Amine le lien pour tester la dernière version : https://champion-game.github.io/dernier-abri/ (publié depuis `main`). Si le travail est sur une autre branche, propose de le fusionner dans `main` pour qu'il soit en ligne.
+- Après chaque mise en ligne, donne toujours à Amine le lien pour tester la dernière version : https://champion-game.github.io/dernier-abri/ (publié depuis `main`).
+- Travaille et pousse toujours directement sur `main`, sans pull request (décision d'Amine) : c'est `main` qui est en ligne. Si la session impose une autre branche, fusionne-la dans `main` à chaque mise en ligne.
 - Avant chaque mise en ligne, lance `node tools/test.js` et corrige tout ce qui échoue :
   - `tools/test-engine.js` (Node, ~3 s) : intégrité des cartes et zombies, pose de chaque carte, règles clés, et 300 nuits aléatoires (jusqu’à la nuit 60, avec mutations et événements) qui ne doivent jamais planter, produire de valeurs absurdes, laisser un zombie dans la forêt ou dépasser 2 s ;
   - `tools/test-browser.js` (Chromium, ~3 min) : le vrai jeu en 390 × 844, 1280 × 800 et 844 × 390 (téléphone tourné), tous les écrans, pose des cartes de la main, plusieurs nuits complètes avec l’aube, la pause du Colosse et la reprise de sauvegarde ; vérifie l’absence d’erreur console, de fichier manquant et de défilement horizontal, et les images/s. Les captures sont dans `tools/test-out/` : regarde-les quand un changement est visuel.
