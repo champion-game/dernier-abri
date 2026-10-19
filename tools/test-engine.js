@@ -71,6 +71,8 @@ check('mutations plafonnées (Carapace 3, Pas pressés 2)',()=>{const st=fresh()
 check('PV zombies : par paliers réguliers, pas d’explosion',()=>{const a=Z.hpMult(20)-Z.hpMult(10),b=Z.hpMult(100)-Z.hpMult(90);ok(Math.abs(a-b)<1e-9,'croissance non linéaire')});
 check('curée : les Tanks l’ignorent (v132)',()=>{const st=fresh();st.night=3;const T=6*9+4;Z.place(st,'v_apc',T,rng(1),true);Z.startNight(st,rng(1));st.pending=[];
  st.z=[7*9+3,7*9+4,7*9+5].map((p,i)=>({id:i+1,k:'walk',pos:p,hp:50,max:50,cd:0,style:0}));const u=st.grid[T],h0=u.hp;Z.step(st);ok(h0-u.hp<=3,'perte '+(h0-u.hp))});
+check('plafond de l’Agent anti-émeute : jamais plus de 2 PV par coup, même avec les bonus (v133)',()=>{const d0=Z.ZT.walk.dmg;try{Z.ZT.walk.dmg=6;const st=fresh();st.night=3;const T=6*9+4;Z.place(st,'riot',T,rng(1),true);Z.startNight(st,rng(1));st.pending=[];
+ st.z=[{id:1,k:'walk',pos:7*9+4,hp:50,max:50,cd:0,style:0}];const u=st.grid[T],h0=u.hp;Z.step(st);ok(h0-u.hp<=2,'perte '+(h0-u.hp))}finally{Z.ZT.walk.dmg=d0}});
 check('nuit rouge : +15 % de zombies sur le total (v132)',()=>{const st=fresh(),sum=w=>Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((a,k)=>a+w[k],0);st.night=15;const a=sum(Z.waveList(st));const b=Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((x,k)=>x+Z.waveCount(k,15),0);eq(a,b+Math.round(b*Z.PRESSURE))});
 check('nuit de pression : plus de zombies que la nuit d’avant',()=>{const st=fresh();st.night=15;const a=Z.waveList(st).walk;st.night=14;ok(a>Z.waveList(st).walk)});
 check('Communauté palier 2 : 1re carte moins chère une seule fois',()=>{const st=fresh();st.energy=10;['vigile','teacher','market','carp','lead','monk'].forEach((t,k)=>st.grid[2*9+1+k]={t,hp:3});

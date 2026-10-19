@@ -896,9 +896,11 @@ const Z=(()=>{
    // 15 dégâts au mur frappé (le surplus passe aux murs reliés les plus proches), 6 à une unité, puis 3 autour
    const cells=D.cat==='wall'?[n,...wallGroup(st,n).filter(j=>j!==n).sort((a,b)=>cheb(a,n)-cheb(b,n))]:[n];
    for(const j of cells){const v=st.grid[j];if(!v||left<=0)continue;const d=Math.min(left,v.hp);v.hp-=d;ouch(st,v,d,d);left-=d;ev.push({i:j,txt:'−'+d,k:'bite',zid:z.id});if(v.hp<=0)lose(st,j,v,ev)}
-   sapBlast(st,z.pos,ev);return}let d=T.boss?bossHit(st):zhit(st,z);if(roleOf(u.t)==='tank'){u.blk=(u.blk||0)+1;if(u.blk%((hasEq(u,'gear')||hasR(st,'gilet'))?2:3)===0){ev.push({i:n,txt:'bloqué',k:'block',zid:z.id});return}}if(!T.boss&&(st._fl||{}).police&&famOf(u.t)==='police')d=Math.max(1,d-1);if(D.cap&&!T.boss)d=Math.min(d,D.cap);if(!T.boss&&isUnit(u.t)&&nearPost(st,n,'trench'))d=Math.max(1,d-1);
+   sapBlast(st,z.pos,ev);return}let d=T.boss?bossHit(st):zhit(st,z);if(roleOf(u.t)==='tank'){u.blk=(u.blk||0)+1;if(u.blk%((hasEq(u,'gear')||hasR(st,'gilet'))?2:3)===0){ev.push({i:n,txt:'bloqué',k:'block',zid:z.id});return}}if(!T.boss&&(st._fl||{}).police&&famOf(u.t)==='police')d=Math.max(1,d-1);if(!T.boss&&isUnit(u.t)&&nearPost(st,n,'trench'))d=Math.max(1,d-1);
   // curée (v114) : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus). v132 : les Tanks l'ignorent (ils sont faits pour être encerclés)
   if(!T.boss&&isUnit(u.t)&&roleOf(u.t)!=='tank')d+=Math.min(CUREE_MAX+(men(st,6)?1:0),st.z.filter(o=>o!==z&&o.hp>0&&!ZT[o.k].boss&&cheb(o.pos,n)<=1).length);
+  // plafond par coup (Agent anti-émeute, Sacs de sable) : appliqué en dernier, après tous les bonus (v133)
+  if(D.cap&&!T.boss)d=Math.min(d,D.cap);
   const tn=n,tu=u;
   ouch(st,tu,d,tu.hp);tu.hp-=d;ev.push({i:tn,txt:'−'+d,k:ranged?'spit':'bite',zid:z.id,from:z.pos});
   if(!ranged&&u.t==='fen'&&pow){const el=(st._fl||{}).tech||0;hit(st,z,((st.relics.includes('groupe')||has(st,'solar')||has(st,'genmech'))?2:1)+(el?1:0),ev,n);if(el>=2)z.cd+=1;if(ally(st,'short'))z.burnT=Math.max(z.burnT||0,3)}
