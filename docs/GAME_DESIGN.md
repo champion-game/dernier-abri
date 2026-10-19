@@ -485,6 +485,10 @@ Comme dans *Balatro*, les systèmes avancés tournent dès le départ, mais leur
 - **Évolutions** : déjà secrètes, révélées à la découverte.
 - Option **« Tout afficher dès le départ »** pour les habitués (et pour le test navigateur).
 
+## Le mode test (v130)
+
+Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit la nuit de départ (1 à 60), Survivant et Maison des bois, deck de départ, énergie illimitée (99 par jour), 999 ferraille, toutes les cartes proposées à l'aube et au troc. Pendant le jour, « + Carte (test) » ouvre la liste de toutes les cartes (avec recherche) pour en mettre n'importe laquelle en main (8 au plus). Rien n'est enregistré : ni record, ni points, ni succès, ni bulles vues, ni sauvegarde de partie ; la partie en cours normale reste intacte.
+
 ## Le tutoriel
 
 À la toute première partie, une bulle jaune guide les premiers gestes : choisir une carte, la poser, l'énergie, la nuit et l'accélération, puis le choix de la carte à l'aube. Elle ne revient plus ensuite.

@@ -196,7 +196,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v129 · 19 oct.';
+const VERSION='v130 · 19 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -231,7 +231,9 @@ let S,G;
 function loadMeta(){let m={};try{m=JSON.parse(localStorage.getItem('abri-meta'))||{}}catch(e){}
  if(m.cards)m.cards=m.cards.filter(t=>Z.U[t]);if(m.decks)for(const k in m.decks)if(Array.isArray(m.decks[k]))m.decks[k]=m.decks[k].filter(t=>Z.U[t]);
  if(!m.best){try{m.best=+localStorage.getItem('abri-best-nuits')||0}catch(e){}}m.best=m.best||0;m.total=m.total||m.best||0;m.runs=m.runs||0;return m}
-function saveMeta(m){try{localStorage.setItem('abri-meta',JSON.stringify(m))}catch(e){}}
+var TEST=false,TEST_N=1;// mode test : rien n'est enregistré (record, points, succès, sauvegarde)
+function endTest(){if(!TEST)return;TEST=false;META=loadMeta()}
+function saveMeta(m){if(TEST)return;try{localStorage.setItem('abri-meta',JSON.stringify(m))}catch(e){}}
 /* v128 : succès. Débloqués pour toujours (META.ach), annoncés par un bandeau, listés dans une page depuis l'accueil et les statistiques.
    Ils ne changent pas les règles : ce sont des objectifs pour guider le joueur (et préparer ceux de Steam). */
 const ACH=[
@@ -287,7 +289,7 @@ function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if
  need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
  const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
 const TIPS=['Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.','Touche une case en pointillés jaunes pour la poser.','Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».','Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.'];
-function newGame(ch,pl,daily,deck){try{UNDO=[]}catch(e){}
+function newGame(ch,pl,daily,deck){endTest();try{UNDO=[]}catch(e){}
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
  S={draw:shuffle([...(deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
@@ -347,10 +349,10 @@ $('#pRes').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');const b
 
 /* ---------- sauvegarde (localStorage, marche aussi dans Electron/Tauri) ---------- */
 const SAVE_KEY='abri-save',SAVE_V=3; // v3 : carte 9×9 (les anciennes sauvegardes en 7×7 sont ignorées)
-function save(){try{G.rs=RS;const g={...G,event:G.event.id,z:[],pending:[],tick:0};localStorage.setItem(SAVE_KEY,JSON.stringify({v:SAVE_V,g,s:{draw:S.draw,discard:S.discard,hand:S.hand,used:S.used,next:S.next,phase:S.phase,picks:S.picks,store:S.store}}))}catch(e){}}
+function save(){if(TEST)return;try{G.rs=RS;const g={...G,event:G.event.id,z:[],pending:[],tick:0};localStorage.setItem(SAVE_KEY,JSON.stringify({v:SAVE_V,g,s:{draw:S.draw,discard:S.discard,hand:S.hand,used:S.used,next:S.next,phase:S.phase,picks:S.picks,store:S.store}}))}catch(e){}}
 function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
   if(Array.isArray(d.g.grid))d.g.grid=d.g.grid.map(u=>u&&Z.U[u.t]?u:null);if(Array.isArray(d.g.bench))d.g.bench=d.g.bench.filter(u=>u&&Z.U[u.t]);return d}}catch(e){}return null}
-function clearSave(){try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
+function clearSave(){if(TEST)return;try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function resume(d){try{UNDO=[]}catch(e){}
  newGame(d.g.char,d.g.place);
  Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});Z.touch(G);
@@ -1034,13 +1036,14 @@ function render(){
  const info=$('#info');info.className='info';
  if(S.busy&&S.sel!==null&&S.sel>=0){const t=S.hand[S.sel];info.innerHTML=`<b>${cardName(t)}</b> : ${Z.U[t].d}. `+(Z.U[t].react==='unit'?'Touche une unité blessée.':'Touche une case de la carte.')}
  else if(S.pause&&S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+' Touche une case libre en bleu pour le déplacer.';
- else if(S.pause)info.innerHTML=`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> ${capF(bossName(G.night))} arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+`<span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left0()))}</span> ${left0()} énergie pour tes réactions.`;
- else if(S.busy){const left=G.z.length+G.pending.length,hasR=S.hand.some(t=>Z.U[t].react);info.innerHTML=`<b>${plural(left,'zombie','zombies')}</b> encore dehors.`+(hasR?` <span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left0()))}</span> ${left0()} énergie pour tes réactions.`:'')}
+ else if(S.pause)info.innerHTML=`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> ${capF(bossName(G.night))} arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`;
+ else if(S.busy){const left=G.z.length+G.pending.length,hasR=S.hand.some(t=>Z.U[t].react);info.innerHTML=`<b>${plural(left,'zombie','zombies')}</b> encore dehors.`+(hasR?` <span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`:'')}
  else if(S.bsel!=null&&G.bench[S.bsel]){const u=G.bench[S.bsel];info.innerHTML=unitLine(u)+(u.koUntil?` <b>Blessé :</b> se repose, de retour au jour ${u.koUntil+1}.`:Z.capFull(G,u.t)?` <b>Limite de ${Z.unitCap(G)} unités atteinte</b> : rappelle ou fusionne une unité.`:' En réserve : touche une case en vert pour la reposer gratuitement.')}
  else if(S.sel!==null&&!S.busy){const t=selCard(),D=Z.U[t];info.innerHTML=(Z.isUnit(t)&&Z.capFull(G,t)?`<b>Limite de ${Z.unitCap(G)} unités atteinte.</b> Fusionne, ou rappelle une unité dans la réserve. `:'')+`<b>${cardName(t)}</b> (${selCost()} énergie${selReuse()?', réutilisée':''}) : ${D.d}.`+(Z.isTrace(t)?` Carte à tracer : ${Z.charges(G,t,selReuse())} case${Z.charges(G,t,selReuse())>1?'s':''} à poser aujourd’hui${selReuse()?'':' pour le prix de la carte'}, une par une ou d’un glissé.`:'')+(D.onUnit?' Touche une unité blessée.':D.instant?' Touche l’abri.':D.near?' Touche une case collée à l’abri.':Z.LINE.includes(t)?' Touche une case, ou glisse pour tracer une ligne.':' Touche un emplacement.')}
  else if(S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+' Touche une case libre en bleu pour la déplacer.'+(Z.canRecall(G,S.moveFrom)?' <button type="button" class="recall" data-a="recall">'+ii('back')+' Rappeler</button>':'');
  else if(S.inspect!==null&&G.grid[S.inspect])info.innerHTML=unitLine(G.grid[S.inspect])+(Z.canRecall(G,S.inspect)?' <button type="button" class="recall" data-a="recall">'+ii('back')+' Rappeler</button>':'');
- else info.innerHTML=`<span class="nrg">${'<i class="on"></i>'.repeat(Math.max(0,left))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-left))}</span> <b>${left}</b> énergie. Touche une carte posée pour la déplacer ou la rappeler.`;
+ else info.innerHTML=`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left)))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-left))}</span> <b>${left}</b> énergie. Touche une carte posée pour la déplacer ou la rappeler.`;
+ if(TEST&&!S.busy)info.insertAdjacentHTML('beforeend',` <button type="button" class="recall" data-a="tcards">+ Carte (test)</button>`);
  if(canUndo())info.insertAdjacentHTML('beforeend',` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`);
  // bouton de tir : un seul élément, mis à jour sans être recréé (sinon le toucher peut se perdre pendant la nuit)
  updatePreview();checkHints();
@@ -1054,7 +1057,7 @@ $('#hand').addEventListener('click',e=>{const b=e.target.closest('.card');if(!b|
  if(b.dataset.u!==undefined){const k=-1-(+b.dataset.u);S.sel=S.sel===k?null:k;S.moveFrom=null;S.inspect=null;render();return}const k=+b.dataset.k;
  if(S.busy&&Z.U[S.hand[k]].react==='any'){playReact(k,Z.C);return}S.sel=S.sel===k?null:k;S.moveFrom=null;S.inspect=null;if(S.sel!==null)tuto(0);render()});
 // rappeler une unité dans la réserve (le jour) : elle garde tout et se repose gratuitement
-$('#info').addEventListener('click',e=>{if(e.target.closest('[data-a=undo]')){doUndo();return}const b=e.target.closest('[data-a=recall]');if(!b||S.busy)return;const i=S.moveFrom??S.inspect;if(i==null)return;snapUndo();if(!Z.recall(G,i)){UNDO.pop();return}
+$('#info').addEventListener('click',e=>{if(e.target.closest('[data-a=undo]')){doUndo();return}if(e.target.closest('[data-a=tcards]')){ACT.tcards();return}const b=e.target.closest('[data-a=recall]');if(!b||S.busy)return;const i=S.moveFrom??S.inspect;if(i==null)return;snapUndo();if(!Z.recall(G,i)){UNDO.pop();return}
  const p=tc(i),u=G.bench[G.bench.length-1];facing[i]=null;addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#9ee08a',dur:350});floatTxt(p.x,p.y-14,`${u.name||cardName(u.t)} en réserve`,'#9ee08a');SFX.play('back');
  S.moveFrom=null;S.inspect=null;syncBoard();save();render()});
 // munition anti-Colosse : 30 dégâts, ignore l'armure
@@ -1468,12 +1471,22 @@ function evoScreen(){const ev=META.evo||[],n=Z.EVO_KEYS.filter(k=>ev.includes(k)
    :`<div class="citem evo-x"><span class="cf"><span class="cf-art"><i class="evo-sil" style="background-image:url('assets/sprites_cartoon/${k}.webp')"></i></span><span class="cf-vig"></span><span class="cf-name">???</span><span class="cf-txt"><span>Pas encore découverte</span></span></span><span class="qty recipe">Indice : ${Z.U[a].n} + ?</span></div>`}).join('')}</div>
   <button type="button" class="go" data-a="coll">Collection</button><button type="button" class="skip" data-a="title">Accueil</button>`)}
 const ACT={
+ testmode:()=>{onTitle=true;show(`<h2 class="pw">Mode test</h2><p>Pour essayer les cartes : tu choisis la nuit de départ, l’énergie est illimitée, 999 ferraille, et le bouton <b>« + Carte (test) »</b> met n’importe quelle carte dans ta main. <b>Rien n’est enregistré</b> : ni record, ni points, ni succès, ni sauvegarde.</p>
+  <label class="tnight">Nuit de départ <input type="number" id="tnight" min="1" max="60" value="${TEST_N}" inputmode="numeric"></label>
+  <button type="button" class="go" data-a="teststart">Lancer</button><button type="button" class="skip" data-a="title">Accueil</button>`)},
+ teststart:()=>{const el=document.getElementById('tnight');TEST_N=Math.max(1,Math.min(60,Math.round(+(el&&el.value)||1)));
+  newGame('surv','bois',null,Z.STARTER_DECK);TEST=true;GUIDE=false;G.test=1;G.night=TEST_N;G.energy=99;G.scrap=999;G.pool=Z.KEYS.filter(t=>!Z.U[t].evo);onTitle=false;hide();render()},
+ tcards:()=>{if(!TEST||S.busy)return;const full=S.hand.length>=Z.HAND_MAX;
+  show(`<h2 class="pw">Ajouter une carte</h2><p>Main : <b>${S.hand.length}/${Z.HAND_MAX}</b>${full?' · <span class="bad">main pleine : joue une carte d’abord</span>':''}</p><input type="search" class="tq" placeholder="Chercher une carte" aria-label="Chercher une carte" oninput="const q=this.value.toLowerCase();this.parentElement.querySelectorAll('[data-a=tadd]').forEach(b=>b.hidden=q&&!b.dataset.n.includes(q))">`
+   +Object.keys(CATL).map(c=>{const ks=Z.KEYS.filter(t=>Z.U[t].cat===c);return ks.length?`<h3>${CATL[c]}</h3><div class="cgrid tgrid">${ks.map(t=>`<button type="button" class="citem in" data-a="tadd" data-v="${t}" data-n="${Z.U[t].n.toLowerCase()}" ${full?'disabled':''}>${cardFace(t,{mini:1})}</button>`).join('')}</div>`:''}).join('')
+   +`<button type="button" class="go" data-a="closeov">Fermer</button>`)},
+ tadd:v=>{if(!TEST||!Z.U[v]||S.hand.length>=Z.HAND_MAX)return;S.hand.push(v);render();ACT.tcards()},
  options:()=>optionsScreen(onTitle?'title':'game'),
  optclose:()=>{if(optBack==='game'){hide();render()}else title()},
  closeov:()=>{hide();render()},
  bpick:v=>{S.bsel=+v;S.sel=null;S.moveFrom=null;S.inspect=null;hide();render()},
  artstyle:()=>{ART_STYLE=ART_STYLE==='cartoon'?'real':'cartoon';try{localStorage.setItem('abri-style',ART_STYLE)}catch(e){}title()},
- new:()=>{if(novice()){PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';return ACT.start()}prepScreen()},
+ new:()=>{endTest();if(novice()){PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';return ACT.start()}prepScreen()},
  prepdeck:v=>{META.slot=+v;saveMeta(META);prepScreen()},
  prepch:v=>{PREP.ch=v;prepScreen()},
  preppl:v=>{PREP.pl=v;prepScreen()},
@@ -1602,11 +1615,11 @@ const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 210" role="
  <path d="M64 128 q4 0 4 5 v9 q0 3 -2.5 3 q-2.5 0 -2.5 -3 v-5 q-3 0 -3 -4 q0 -5 4 -5z" fill="#8e1d12" opacity=".9"/>
  <text x="180" y="206" text-anchor="middle" font-family="'Atkinson Hyperlegible',sans-serif" font-size="12.5" letter-spacing="4" fill="#5a4630">UNE NUIT DE PLUS</text>
 </svg>`;
-function title(){onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
+function title(){endTest();onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?'Aube':'Jour'} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:'<button type="button" class="go" data-a="new">Jouer</button>')(loadSave())}
-<button type="button" class="skip" data-a="rules">Règles du jeu</button>${novice()?'':`<button type="button" class="skip" data-a="coll">Collection et decks${seen('coll')?'':' <span class="newb">Nouveau !</span>'}</button>`}<button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="achs">${ii('trophy')} Succès · ${ACH.filter(a=>(META.ach||{})[a[0]]).length}/${ACH.length}</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
+<button type="button" class="skip" data-a="rules">Règles du jeu</button>${novice()?'':`<button type="button" class="skip" data-a="coll">Collection et decks${seen('coll')?'':' <span class="newb">Nouveau !</span>'}</button>`}<button type="button" class="skip" data-a="daily">Défi du jour</button><button type="button" class="skip" data-a="deck">Cartes et bestiaire</button><button type="button" class="skip" data-a="stats">Statistiques</button><button type="button" class="skip" data-a="achs">${ii('trophy')} Succès · ${ACH.filter(a=>(META.ach||{})[a[0]]).length}/${ACH.length}</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button><button type="button" class="skip" data-a="testmode">Mode test</button>${iosHint()?'<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>':''}<p class="ver">Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).</p><p class="ver">${VERSION}</p>`)}
 applyOpt();newGame();render();requestAnimationFrame(frame);title();
 
 // bouton son

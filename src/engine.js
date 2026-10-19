@@ -638,7 +638,7 @@ const Z=(()=>{
   if(deck.length>DECK_MAX)return`${DECK_MAX} cartes au maximum.`;
   const c={};for(const t of deck){c[t]=(c[t]||0)+1;if(owned&&!owned.includes(t))return`${U[t].n} n’est pas dans ta collection.`;if(c[t]>copyMax(t))return`${U[t].n} : ${copyMax(t)} exemplaire(s) au maximum.`}
   return''}
- function newDay(st,rnd,offer){st.night++;(st.bench||[]).forEach(u=>{if(u.koUntil&&st.night>u.koUntil){delete u.koUntil;u.hp=maxHp(st,u)}});st.charges={};st.energy=ENERGY+(st.nextE||0)+(hasR(st,'pacte')?1:0)+(hasR(st,'fanion')?1:0);st.disc=0;st.nextE=0;st.moved=0;st.rushT=0;
+ function newDay(st,rnd,offer){st.night++;(st.bench||[]).forEach(u=>{if(u.koUntil&&st.night>u.koUntil){delete u.koUntil;u.hp=maxHp(st,u)}});st.charges={};st.energy=ENERGY+(st.nextE||0)+(hasR(st,'pacte')?1:0)+(hasR(st,'fanion')?1:0);st.disc=0;st.nextE=0;st.moved=0;st.rushT=0;if(st.test)st.energy=99;
   if(offer){st.event=EVENTS.find(e=>e.id===offer.event)||EVENTS[0];st.tier=offer.tier}else{st.event=rnd()<.2?EVENTS[0]:EVENTS[1+Math.floor(rnd()*(EVENTS.length-1))];st.tier='base'}}
  const has=(st,t)=>st.grid.some(u=>u&&u.t===t);
  // Communauté au palier 2 : la 1ʳᵉ carte jouée chaque jour coûte 1 énergie de moins (minimum 0)

@@ -330,7 +330,7 @@ button.ammo[hidden]{display:none}
 }
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px) and (min-height:640px){
 }
-@media (max-width:400px){.brand{font-size:16px}.shel{min-width:78px}.top{gap:6px}}
+@media (max-width:400px){.brand{font-size:16px}.shel{min-width:66px}.top{gap:5px}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){#preview.land{display:block;bottom:auto;right:auto}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:1500px) and (min-height:900px){.app{--sw:520px}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){
@@ -690,3 +690,7 @@ html.eco .citem.s-buy .cf{animation:none}
 /* révélation progressive (v129) */
 .newb{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:9px;background:var(--lantern);color:#1f1a12;font-size:11px;font-weight:700;vertical-align:middle}
 .newx{border-left:3px solid var(--lantern);padding-left:8px}
+/* mode test */
+.tnight{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}.tnight input{width:80px;font-size:18px;padding:6px;text-align:center}
+button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}button.citem:disabled{opacity:.4;cursor:default}
+.cgrid.tgrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px}.tq{width:100%;box-sizing:border-box;font-size:16px;padding:8px;margin:4px 0 6px}

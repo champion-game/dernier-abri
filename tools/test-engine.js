@@ -33,7 +33,7 @@ check('reliques : 22, dont 6 de victoire, tirées seulement si débloquées',()=
 check('reliques : effets (insigne, plan, recettes, pacte, sifflet, coffre, cartouches)',()=>{const st=fresh();const c0=Z.unitCap(st);Z.addRelic(st,'insigne');eq(Z.unitCap(st),c0+1);
  const m0=Z.maxS(st);Z.addRelic(st,'plan');eq(Z.maxS(st),m0+3);
  const s2=fresh();Z.addRelic(s2,'recettes');[2*9+2,2*9+4].forEach(i=>Z.place(s2,'gun',i,rng(1)));eq(s2.grid.filter(Boolean).length,1);eq(s2.grid.find(Boolean).gold,1);
- const s3=fresh();Z.addRelic(s3,'pacte');Z.newDay(s3,rng(1));eq(s3.energy,Z.ENERGY+1);
+ const s3=fresh();Z.addRelic(s3,'pacte');Z.newDay(s3,rng(1));eq(s3.energy,Z.ENERGY+1);const sT=fresh();sT.test=1;Z.newDay(sT,rng(1));eq(sT.energy,99);
  const s4=fresh();Z.addRelic(s4,'sifflet');eq(Z.stat(s4,'dog').dmg,Z.U.dog.dmg+1);
  const s5=fresh();Z.addRelic(s5,'coffre');eq(Z.storeOffer(s5,[],rng(2)).length,Z.STORE_N+1);
  const s6=fresh();eq(Z.ammoMax(s6),2);Z.addRelic(s6,'cartouches');eq(Z.ammoMax(s6),3)});
