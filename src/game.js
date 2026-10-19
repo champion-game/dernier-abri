@@ -196,7 +196,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v134 · 19 oct.';
+const VERSION='v135 · 19 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -1641,7 +1641,7 @@ function meterBody(){const night=!MT.all,m=(night?G.mtN:G.mtR)||{},ticks=(night?
  const k=MT.tab,rows=Object.values(m).filter(r=>r[k]>0).sort((a,b)=>b[k]-a[k]),max=rows.length?rows[0][k]:1,tot=rows.reduce((a,r)=>a+r[k],0);
  if(!rows.length)return `<p class="mt-0">${G.mtN?'Rien pour l’instant.':'Les chiffres apparaîtront pendant la première nuit.'}</p>`;
  const per=k==='dmg'&&ticks>0;
- return `<ol class="mt-rows">${rows.slice(0,14).map(r=>`<li><i class="mt-bar" style="width:${Math.max(3,r[k]/max*100)}%;background:${mtCol(r.t)}"></i><span class="mt-n">${r.name?`${r.name} <small>${mtName(r.t)}</small>`:mtName(r.t)}</span><span class="mt-v">${r[k]}${per?` <small>${fmt1(r[k]/ticks)}/t</small>`:''}${k==='dmg'&&r.kills?` <small>· ${r.kills} ${ii('skull')}</small>`:''}</span></li>`).join('')}</ol>
+ return `<ol class="mt-rows">${rows.slice(0,14).map(r=>`<li><i class="mt-bar" style="width:${Math.max(3,r[k]/max*100)}%;background:${mtCol(r.t)}"></i><span class="mt-n">${r.name&&r.name!==mtName(r.t)?`${r.name} <small>${mtName(r.t)}</small>`:(r.name||mtName(r.t))}</span><span class="mt-v">${r[k]}${per?` <small>${fmt1(r[k]/ticks)}/t</small>`:''}${k==='dmg'&&r.kills?` <small>· ${r.kills} ${ii('skull')}</small>`:''}</span></li>`).join('')}</ol>
   <p class="mt-tot">Total : <b>${tot}</b>${per?` · ${fmt1(tot/ticks)} par tour`:''}${rows.length>14?` · ${rows.length-14} autres`:''}</p>`}
 function meterSync(force){const el=$('#meter');if(!el)return;const on=!!OPT.meter;el.hidden=!on;$('#mtb').classList.toggle('on',on);
  if(!on)return;const now=performance.now();if(!force&&now-MT.at<300)return;MT.at=now;
