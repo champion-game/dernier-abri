@@ -31,6 +31,15 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - `tools/test.js` : les tests automatiques (moteur et navigateur).
 - `docs/GAME_DESIGN.md` : le document de conception, à tenir à jour.
 
+## Économie de tokens (demande d'Amine)
+
+- Une seule capture d'écran par changement visuel, en largeur téléphone (390 px). PC et téléphone tourné seulement si quelque chose cloche ou si Amine le demande.
+- Ne regarde pas les captures de `tools/test-out/` si le test ne signale aucun problème.
+- Cherche avec `grep` et lis seulement les passages utiles : jamais un fichier entier, les lignes de `game.js` sont très longues.
+- Lance le test navigateur complet une seule fois, juste avant la mise en ligne ; entre-temps, `node tools/test-engine.js` suffit.
+- Réponses courtes. Pas de longue analyse sans demande.
+- Une conversation par sujet : quand un sujet est terminé, propose à Amine d'ouvrir une nouvelle conversation (avec le dépôt champion-game/dernier-abri) pour le suivant.
+
 ## Règles de travail
 
 - Garde la séparation moteur / rendu : une règle de jeu va dans `engine.js`, jamais dans `game.js`.
