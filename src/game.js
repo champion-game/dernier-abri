@@ -196,7 +196,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v133 · 19 oct.';
+const VERSION='v134 · 19 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -231,7 +231,7 @@ let S,G;
 function loadMeta(){let m={};try{m=JSON.parse(localStorage.getItem('abri-meta'))||{}}catch(e){}
  if(m.cards)m.cards=m.cards.filter(t=>Z.U[t]);if(m.decks)for(const k in m.decks)if(Array.isArray(m.decks[k]))m.decks[k]=m.decks[k].filter(t=>Z.U[t]);
  if(!m.best){try{m.best=+localStorage.getItem('abri-best-nuits')||0}catch(e){}}m.best=m.best||0;m.total=m.total||m.best||0;m.runs=m.runs||0;return m}
-var TEST=false,TEST_N=1;// mode test : rien n'est enregistré (record, points, succès, sauvegarde)
+var TEST=false,TEST_N=1,TEST_P=true;// mode test : rien n'est enregistré (record, points, succès, sauvegarde)
 function endTest(){if(!TEST)return;TEST=false;META=loadMeta()}
 function saveMeta(m){if(TEST)return;try{localStorage.setItem('abri-meta',JSON.stringify(m))}catch(e){}}
 /* v128 : succès. Débloqués pour toujours (META.ach), annoncés par un bandeau, listés dans une page depuis l'accueil et les statistiques.
@@ -1473,9 +1473,10 @@ function evoScreen(){const ev=META.evo||[],n=Z.EVO_KEYS.filter(k=>ev.includes(k)
 const ACT={
  testmode:()=>{onTitle=true;show(`<h2 class="pw">Mode test</h2><p>Pour essayer les cartes : tu choisis la nuit de départ, l’énergie est illimitée, 999 ferraille, et le bouton <b>« + Carte (test) »</b> met n’importe quelle carte dans ta main. <b>Rien n’est enregistré</b> : ni record, ni points, ni succès, ni sauvegarde.</p>
   <label class="tnight">Nuit de départ <input type="number" id="tnight" min="1" max="60" value="${TEST_N}" inputmode="numeric"></label>
+  <label class="chk"><input type="checkbox" id="tprog" ${TEST_P?'checked':''}> Progression simulée : les reliques et la mutation de la horde d’une vraie partie, et des survivants avec des niveaux (1 niveau toutes les 6 nuits)</label>
   <button type="button" class="go" data-a="teststart">Lancer</button><button type="button" class="skip" data-a="title">Accueil</button>`)},
- teststart:()=>{const el=document.getElementById('tnight');TEST_N=Math.max(1,Math.min(60,Math.round(+(el&&el.value)||1)));
-  newGame('surv','bois',null,Z.STARTER_DECK);TEST=true;GUIDE=false;G.test=1;G.night=TEST_N;G.energy=99;G.scrap=999;G.pool=Z.KEYS.filter(t=>!Z.U[t].evo);onTitle=false;hide();render()},
+ teststart:()=>{const el=document.getElementById('tnight');TEST_N=Math.max(1,Math.min(60,Math.round(+(el&&el.value)||1)));const pc=document.getElementById('tprog');TEST_P=!pc||pc.checked;
+  newGame('surv','bois',null,Z.STARTER_DECK);TEST=true;GUIDE=false;G.test=1;G.night=TEST_N;if(TEST_P)Z.testProgress(G,TEST_N,R);G.energy=99;G.scrap=999;G.pool=Z.KEYS.filter(t=>!Z.U[t].evo);onTitle=false;hide();render()},
  tcards:()=>{if(!TEST||S.busy)return;const full=S.hand.length>=Z.HAND_MAX;
   show(`<h2 class="pw">Ajouter une carte</h2><p>Main : <b>${S.hand.length}/${Z.HAND_MAX}</b>${full?' · <span class="bad">main pleine : joue une carte d’abord</span>':''}</p><input type="search" class="tq" placeholder="Chercher une carte" aria-label="Chercher une carte" oninput="const q=this.value.toLowerCase();this.parentElement.querySelectorAll('[data-a=tadd]').forEach(b=>b.hidden=q&&!b.dataset.n.includes(q))">`
    +Object.keys(CATL).map(c=>{const ks=Z.KEYS.filter(t=>Z.U[t].cat===c);return ks.length?`<h3>${CATL[c]}</h3><div class="cgrid tgrid">${ks.map(t=>`<button type="button" class="citem in" data-a="tadd" data-v="${t}" data-n="${Z.U[t].n.toLowerCase()}" ${full?'disabled':''}>${cardFace(t,{mini:1})}</button>`).join('')}</div>`:''}).join('')
