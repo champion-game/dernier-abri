@@ -74,6 +74,12 @@ check('curée : les Tanks l’ignorent (v132)',()=>{const st=fresh();st.night=3;
 check('plafond de l’Agent anti-émeute : jamais plus de 2 PV par coup, même avec les bonus (v133)',()=>{const d0=Z.ZT.walk.dmg;try{Z.ZT.walk.dmg=6;const st=fresh();st.night=3;const T=6*9+4;Z.place(st,'riot',T,rng(1),true);Z.startNight(st,rng(1));st.pending=[];
  st.z=[{id:1,k:'walk',pos:7*9+4,hp:50,max:50,cd:0,style:0}];const u=st.grid[T],h0=u.hp;Z.step(st);ok(h0-u.hp<=2,'perte '+(h0-u.hp))}finally{Z.ZT.walk.dmg=d0}});
 check('mode test : progression simulée (reliques, mutation, niveaux)',()=>{const st=fresh();eq(Z.testProgress(st,15,rng(3)),2);eq(st.relics.length,2);eq(st.muts.length,1);eq(st.testLv,2);Z.place(st,'gun',5*9+4,rng(2));const u=st.grid[5*9+4];eq((u.lvA||0)+(u.lvD||0),2);eq(Z.lvPending(u),0)});
+// dégâts infligés en 20 tours à un zombie increvable placé en (7,4) ; unité en P, tank éventuel en (6,4)
+function dps20(k,P,tank,lv){const st=fresh();st.night=3;st.testLv=lv||0;if(k)Z.place(st,k,P,rng(1),true);if(tank)Z.place(st,'v_apc',6*9+4,rng(1),true);Z.startNight(st,rng(1));st.pending=[];
+ const z={id:1,k:'walk',pos:7*9+4,hp:1e6,max:1e6,cd:99,style:0};st.z=[z];for(let t=0;t<20;t++){z.cd=99;z.pos=7*9+4;Z.step(st)}return 1e6-z.hp}
+check('tir de soutien : un DPS fait +1 sur un zombie collé à un Tank (v136)',()=>{const T=dps20(null,0,1);eq(dps20('gun',5*9+4,0),40);eq(dps20('gun',5*9+4,1)-T,60)});
+check('tirs lents : bonus fixes multipliés par l’intervalle (v136)',()=>{eq(dps20('snp',5*9+4,0,2),10*(5+2))});
+check('tanks : 1 dégât de base (v136)',()=>{['cop','monk','riot','amb','handler','v_apc','saint','chief_farm'].forEach(k=>eq(Z.U[k].dmg,1));eq(Z.U.pitch.dmg,2)});
 check('nuit rouge : +15 % de zombies sur le total (v132)',()=>{const st=fresh(),sum=w=>Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((a,k)=>a+w[k],0);st.night=15;const a=sum(Z.waveList(st));const b=Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((x,k)=>x+Z.waveCount(k,15),0);eq(a,b+Math.round(b*Z.PRESSURE))});
 check('nuit de pression : plus de zombies que la nuit d’avant',()=>{const st=fresh();st.night=15;const a=Z.waveList(st).walk;st.night=14;ok(a>Z.waveList(st).walk)});
 check('Communauté palier 2 : 1re carte moins chère une seule fois',()=>{const st=fresh();st.energy=10;['vigile','teacher','market','carp','lead','monk'].forEach((t,k)=>st.grid[2*9+1+k]={t,hp:3});

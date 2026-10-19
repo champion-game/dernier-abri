@@ -30,9 +30,9 @@ const Z=(()=>{
   // corps à corps
   axe:{n:'Bûcheron',cat:'melee',hp:7,block:1,rng:1,dmg:5,every:1,v:'5 · P1',d:'5 dégâts par tour au corps à corps, 7 PV'},
   dog:{n:'Chien',cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,hits:2,v:'2 ×2',d:'Mord 2 fois par tour (2 dégâts) au corps à corps, 5 PV'},
-  cop:{n:'Policier',cat:'melee',hp:9,block:1,rng:1,dmg:2,every:1,push:1,v:'2 · Recul',d:'2 dégâts au contact et repousse le zombie d’une case, 9 PV'},
+  cop:{n:'Policier',cat:'melee',hp:9,block:1,rng:1,dmg:1,every:1,push:1,v:'1 · Recul',d:'1 dégât au contact et repousse le zombie d’une case, 9 PV'},
   butch:{n:'Boucher',cat:'melee',hp:6,block:1,rng:1,dmg:5,every:1,feed:1,v:'5 · Soin',d:'5 dégâts au contact, récupère 1 PV à chaque zombie tué'},
-  monk:{n:'Moine',cat:'melee',hp:11,block:1,rng:1,dmg:2,every:1,aoe:1,v:'2 zone',d:'2 dégâts à tous les zombies autour de lui, 11 PV'},
+  monk:{n:'Moine',cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,aoe:1,v:'1 zone',d:'1 dégât à tous les zombies autour de lui, 11 PV'},
   // soutien
   med:{n:'Infirmière',cat:'help',hp:2,block:1,heal:1,hrng:2,v:'Soin · P2',d:'Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases ou moins'},
   lamp:{n:'Projecteur',cat:'post',hp:2,block:1,buff:1,v:'+1',d:'Les unités autour font +1 dégât'},
@@ -59,7 +59,7 @@ const Z=(()=>{
   coffee:{n:'Café',cat:'item',instant:1,v:'+2 énergie',d:'Utilise-le sur l’abri : gratuit, +2 énergie aujourd’hui'},
   roadmap:{n:'Carte routière',cat:'item',instant:1,peek:3,v:'Fouille',d:'Utilise-la sur l’abri : regarde les 3 prochaines cartes de ta pioche et prends-en une'},
   // --- extension : nouvelles cartes de faction ---
-  riot:{n:'Agent anti-émeute',cat:'melee',hp:14,block:1,rng:1,dmg:2,every:1,push:1,cap:2,v:'2 · Bouclier',d:'Bouclier : 14 PV, ne perd jamais plus de 2 PV par coup, 2 dégâts et repousse'},
+  riot:{n:'Agent anti-émeute',cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,push:1,cap:2,v:'1 · Bouclier',d:'Bouclier : 14 PV, ne perd jamais plus de 2 PV par coup, 1 dégât et repousse'},
   k9:{n:'Chien policier',cat:'melee',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,stun:1,v:'1 ×2 · Étourdit',d:'Mord 2 fois par tour (1 dégât) ; la 1ʳᵉ morsure du tour étourdit le zombie 1 tour'},
   barrier:{n:'Barrage de police',cat:'wall',hp:7,block:1,v:'7 PV',d:'Barrières de police : bloque, 7 PV'},
   swat:{n:'Tireur d’élite du GIGN',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2'},
@@ -77,7 +77,7 @@ const Z=(()=>{
   bear:{n:'Piège à ours',cat:'trap',hp:1,block:0,trap:10,v:'10',d:'Le premier zombie qui marche dessus subit 10 dégâts'},
   hunter:{n:'Chasseur',cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2'},
   dogs:{n:'Meute de chiens',cat:'melee',hp:7,block:1,rng:1,dmg:1,every:1,hits:4,v:'1 ×4',d:'4 morsures de 1 dégât par tour au corps à corps'},
-  pitch:{n:'Fermier à la fourche',cat:'melee',hp:10,block:1,rng:1,dmg:3,every:1,push:1,v:'3 · Recul',d:'3 dégâts au contact et repousse le zombie d’une case, 10 PV'},
+  pitch:{n:'Fermier à la fourche',cat:'melee',hp:10,block:1,rng:1,dmg:2,every:1,push:1,v:'2 · Recul',d:'2 dégâts au contact et repousse le zombie d’une case, 10 PV'},
   scare:{n:'Épouvantail',cat:'post',hp:6,block:1,lure:2,v:'Attire',d:'Les zombies à 2 cases ou moins marchent vers lui au lieu de l’abri, 6 PV'},
   turret:{n:'Tourelle bricolée',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2, 4 PV'},
   workshop:{n:'Atelier',cat:'post',hp:5,block:1,mech:1,mechAll:1,v:'Répare tout',d:'Répare 1 PV à toutes les défenses et tous les postes voisins à chaque tour'},
@@ -91,7 +91,7 @@ const Z=(()=>{
   napalm:{n:'Napalm',cat:'react',react:'cell',v:'Feu zone',d:'Pendant la nuit : la case visée et autour s’embrasent (flaques de feu jusqu’à l’aube)'},
   air:{n:'Frappe aérienne',cat:'react',react:'cell',v:'10 zone',d:'Pendant la nuit : 10 dégâts à tous les zombies à 2 cases ou moins de la case visée'},
   // combattants des factions de soutien
-  amb:{n:'Ambulancier',cat:'melee',hp:11,block:1,rng:1,dmg:2,every:1,push:1,v:'2 · Recul',d:'Bloque avec son brancard : 11 PV, 2 dégâts au contact et repousse le zombie'},
+  amb:{n:'Ambulancier',cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,push:1,v:'1 · Recul',d:'Bloque avec son brancard : 11 PV, 1 dégât au contact et repousse le zombie'},
   doc:{n:'Médecin de garde',cat:'shoot',hp:4,block:1,rng:1,dmg:1,every:1,selfHeal:1,v:'1 · P1 · Soin',d:'Pistolet : 1 dégât par tour, portée 1, et récupère 1 PV tous les 2 tours'},
   orderly:{n:'Infirmier costaud',cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,healKill:1,v:'2 · Soigne',d:'2 dégâts au contact. À chaque zombie tué, ses voisins récupèrent 1 PV'},
   nailer:{n:'Cloueur',cat:'shoot',hp:4,block:1,rng:2,dmg:1,every:1,hits:2,v:'1 ×2 · P2',d:'Cloueuse pneumatique : 2 tirs de 1 dégât par tour, portée 2'},
@@ -102,7 +102,7 @@ const Z=(()=>{
   chief_care:{n:'La Doctoresse',cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,heal:2,hfast:1,hrng:2,chief:'care',v:'Soin 2 · P2',d:'Cheffe des Soignants : soin à distance de 2 PV à chaque tour (2 cases) et coups de scalpel au contact (2 dégâts). Compte pour 2 Soignants'},
   chief_pyro:{n:'Le Pyromane',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,aoe:1,ignite:3,chief:'pyro',v:'Feu zone',d:'Chef des Pyromanes : enflamme tous les zombies à 2 cases. Compte pour 2 Pyromanes'},
   chief_trap:{n:'Le Braconnier',cat:'shoot',hp:4,block:1,rng:3,dmg:3,every:2,chief:'trap',v:'3 · P3',d:'Chef des Trappeurs : 3 dégâts tous les 2 tours, portée 3. Compte pour 2 Trappeurs'},
-  chief_farm:{n:'La Fermière',cat:'melee',hp:14,block:1,rng:1,dmg:2,every:1,hits:2,chief:'farm',v:'2 ×2',d:'Cheffe des Fermiers : 2 coups de 2 dégâts par tour, 14 PV. Compte pour 2 Fermiers'},
+  chief_farm:{n:'La Fermière',cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,hits:2,chief:'farm',v:'1 ×2',d:'Cheffe des Fermiers : 2 coups de 1 dégât par tour, 14 PV. Compte pour 2 Fermiers'},
   chief_tech:{n:'L’Ingénieur',cat:'help',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,mech:2,chief:'tech',v:'Répare 2 · 1 ×2',d:'Chef des Bricoleurs : répare 2 PV aux défenses et postes voisins à chaque tour et tire 2 clous par tour (portée 1). Compte pour 2 Bricoleurs'},
   chief_comm:{n:'Le Maire',cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,lead:1,chief:'comm',v:'Rythme · 2',d:'Chef de la Communauté : les unités autour attaquent plus souvent, et il tire (2 dégâts, portée 1). Compte pour 2 dans la faction Communauté'},
   // réactions : jouables seulement pendant la nuit, avec l'énergie gardée du jour
@@ -115,7 +115,7 @@ const Z=(()=>{
   rocket:{n:'Lance-roquettes',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:2,heavy:5,v:'2 · ×5 gros',d:'Tous les 2 tours, une roquette : 2 dégâts, et 5 fois plus (10) contre le Colosse et les Gonflés. Portée 2'},
   flare:{n:'Fusée de détresse',cat:'item',instant:1,flare:1,v:'1 côté',d:'Utilise-la sur l’abri : la nuit prochaine, la horde n’arrive que d’un seul côté'},
   // --- v89 : 6 nouveaux survivants ---
-  handler:{n:'Maître-chien',cat:'melee',hp:12,block:1,rng:1,dmg:2,every:1,dogBoost:1,v:'2 · Chiens +1',d:'Tank : 12 PV, 2 dégâts au contact. Les chiens voisins font +1 dégât'},
+  handler:{n:'Maître-chien',cat:'melee',hp:12,block:1,rng:1,dmg:1,every:1,dogBoost:1,v:'1 · Chiens +1',d:'Tank : 12 PV, 1 dégât au contact. Les chiens voisins font +1 dégât'},
   welder:{n:'Soudeuse',cat:'help',hp:4,block:1,mech:2,v:'Répare 2',d:'Répare 2 PV par tour à une défense ou un poste voisin'},
   scout:{n:'Éclaireur',cat:'shoot',hp:3,block:1,rng:4,dmg:2,every:1,mark:2,v:'2 · P4 · Marque',d:'2 dégâts par tour, portée 4. Le zombie touché est marqué 2 tours : il prend +1 dégât de chaque coup'},
   assassin:{n:'Assassin',cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,exec:4,v:'2 · Exécute',d:'2 dégâts au contact. Toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas le Colosse)'},
@@ -131,7 +131,7 @@ const Z=(()=>{
   v_mines:{n:'Champ de mines',cat:'trap',hp:3,block:0,mine:8,multi:1,vic:6,v:'8 zone ×3',d:'Explose au passage : 8 dégâts sur la case et autour, 3 fois'},
   v_rdog:{n:'Chien de sauvetage',cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,hits:2,heal:1,vic:7,v:'2 ×2 · Soin',d:'Mord 2 fois par tour (2 dégâts) et soigne 1 PV à un voisin tous les 2 tours'},
   v_napalm:{n:'Frappe au napalm',cat:'react',react:'cell',vic:8,v:'4 · Feu zone',d:'Pendant la nuit : 4 dégâts sur la case visée et autour, qui s’embrasent ensuite'},
-  v_apc:{n:'Blindé des secours',cat:'melee',hp:30,block:1,rng:1,dmg:2,every:1,push:1,vic:9,v:'30 PV · 2',d:'Tank : 30 PV, 2 dégâts et repousse ; attire les zombies proches'},
+  v_apc:{n:'Blindé des secours',cat:'melee',hp:30,block:1,rng:1,dmg:1,every:1,push:1,vic:9,v:'30 PV · 1',d:'Tank : 30 PV, 1 dégât et repousse ; attire les zombies proches'},
   // --- v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et réactions) ---
   // équipements : se posent sur une de tes unités et y restent (même rappelée). Une unité ne porte qu'un exemplaire de chaque équipement.
   gear:{n:'Matériel lourd',cat:'item',instant:1,onUnit:1,equip:1,v:'+4 PV',d:'Équipement : l’unité gagne 4 PV max. Un Tank équipé bloque 1 coup sur 2'},
@@ -179,7 +179,7 @@ const Z=(()=>{
   slaughter:{n:'Équarrisseur',cat:'melee',hp:9,block:1,rng:1,dmg:5,every:1,aoe:1,feed:1,evo:1,v:'5 zone · Soin',d:'5 dégâts à tous les zombies autour, récupère 1 PV par zombie tué'},
   canteen:{n:'Cantine de campagne',cat:'help',hp:6,block:1,heal:2,hfast:1,cook:2,evo:1,v:'Soin 2 · +2 abri',d:'Soin au contact : 2 PV à chaque tour à l’unité voisine la plus blessée, et l’abri récupère 2 PV à chaque aube'},
   gang:{n:'Bande de gamins',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:4,evo:1,v:'1 ×4 · P2',d:'Toute la classe au lance-pierre : 4 tirs de 1 dégât par tour, portée 2'},
-  saint:{n:'Le Saint',cat:'melee',hp:13,block:1,rng:1,dmg:2,every:1,aoe:1,bless:1,evo:1,v:'2 zone · Protège',d:'2 dégâts à tous les zombies autour, et ses voisins survivent une fois à un coup fatal'},
+  saint:{n:'Le Saint',cat:'melee',hp:13,block:1,rng:1,dmg:1,every:1,aoe:1,bless:1,evo:1,v:'1 zone · Protège',d:'1 dégât à tous les zombies autour, et ses voisins survivent une fois à un coup fatal'},
   tracker:{n:'Traqueur',cat:'shoot',hp:5,block:1,rng:3,dmg:2,every:1,hits:2,distinct:1,evo:1,v:'2 ×2 · P3',d:'À chaque tour, 2 dégâts à 2 zombies différents, portée 3'}
  };
  /* rôles des unités : 🛡️ Tank, ❤️ Soin, ⚔️ DPS (les autres sont des murs, pièges, objets ou du soutien)
@@ -860,7 +860,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const power=st=>st.event.id!=='coupure'||st.relics.includes('groupe')||has(st,'solar')||has(st,'genmech');
  const lampB=(st,i,pow)=>pow?around(i).reduce((s,j)=>s+(st.grid[j]&&st.grid[j].t==='lamp'?stat(st,'lamp').buff:0),0):0;
  // un zombie encore dans la forêt (anneau extérieur) ne peut pas être touché : il faut qu'il entre sur la carte
- function hit(st,z,d,ev,src,fire){if(isEdge(z.pos))return false;if(d>0&&z.markT>0)d++;if(d>0&&st._flood&&st._flood.some(j=>cheb(j,z.pos)<=2))d++;if(!fire){const a=(ZT[z.k].armor||0)+(z.k==='walk'?Math.min(3,mc(st,'carapace')):0);if(a)d=Math.max(0,d-a)}const was=z.hp;z.hp-=d;ev.push({i:z.pos,txt:d?'−'+d:'0',k:'hit',zid:z.id,src});
+ function hit(st,z,d,ev,src,fire){if(isEdge(z.pos))return false;if(d>0&&z.markT>0)d++;
+ // tir de soutien (v136) : un DPS fait +1 dégât (une fois par tour) sur un zombie au contact d'un Tank
+ if(d>0){const a=st._su||(src>=0?st.grid[src]:null);if(a&&a._sup!==st.tick&&roleOf(a.t)==='dps'&&st.grid.some((v,j)=>v&&roleOf(v.t)==='tank'&&cheb(j,z.pos)<=1)){a._sup=st.tick;d++}}if(d>0&&st._flood&&st._flood.some(j=>cheb(j,z.pos)<=2))d++;if(!fire){const a=(ZT[z.k].armor||0)+(z.k==='walk'?Math.min(3,mc(st,'carapace')):0);if(a)d=Math.max(0,d-a)}const was=z.hp;z.hp-=d;ev.push({i:z.pos,txt:d?'−'+d:'0',k:'hit',zid:z.id,src});
   const su=st._su||(src>=0?st.grid[src]:null);if(su&&was>0){mtr(st,su,'dmg',Math.min(d,was));if(z.hp<=0)mtr(st,su,'kills',1)}return was>0&&z.hp<=0}
  function explode(st,i,d,ev){st.z.filter(o=>o.hp>0&&cheb(o.pos,i)<=1).forEach(o=>hit(st,o,d,ev,i,1));ev.push({i,k:'boom'})}
  // la cible d'un zombie : le leurre (Sirène, Épouvantail) ou le Tank le plus proche à portée de provocation, sinon l'abri
@@ -946,7 +948,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
     const reps=1+(around(i).some(j=>{const L=st.grid[j]&&U[st.grid[j].t];return L&&L.lead&&st.tick%(L.chief?3:2)===0})?1:0)+(st.rushT>0?1:0);
     const F=famOf(u.t),rng=Math.max(1,D.rng-(e==='brume'&&D.cat==='shoot'?1:0)+(D.cat==='shoot'&&ally(st,'martial')?1:0)+((TRAITS[u.trait]||{}).rngB||0)+(fl.police>=2&&F==='police'?1:0)+(fl.comm&&F==='comm'&&D.rng>1?1:0)+(D.rng>1&&hasEq(u,'binoc')?1:0)+(D.cat==='shoot'&&D.rng>1&&nearPost(st,i,'tower')?1:0)+(e==='brume'&&D.cat==='shoot'&&hasEq(u,'torch')?1:0)),
      dmg=D.dmg+lampB(st,i,pow)+(D.cat==='shoot'&&st.grid.some((v,j)=>v&&v.t==='v_radio'&&j!==i&&cheb(j,i)<=2)?1:0)+unitDmg(u)+sol(st,i,u)+(fl.mil&&F==='mil'?1:0)+(D.cat==='melee'&&fl.farm?1:0)+(fl.tech&&F==='tech'?1:0)+(fl.care&&F==='care'?1:0)+(D.cat==='melee'&&ally(st,'hunt')?1:0)+(squad(st,i)?1:0)+(F&&fl[F]>=2?1:0)+(DOGS.includes(u.t)&&around(i).some(j=>st.grid[j]&&U[st.grid[j].t].dogBoost)?1:0)+(D.cat==='shoot'&&st.alarmT>=st.tick?1:0);
-    for(let r=0;r<reps;r++)attack(st,i,u,D,rng,dmg,ev)}
+    // v136 : les tirs lents (Sniper…) reçoivent leurs bonus fixes multipliés par leur intervalle, pour ne pas perdre la moitié des bonus
+    const bon=dmg-D.dmg,dmgF=D.every>1&&bon>0?D.dmg+bon*D.every:dmg;
+    for(let r=0;r<reps;r++)attack(st,i,u,D,rng,dmgF,ev)}
    if(D.heal&&(D.hfast||st.tick%2===0)){const ns=(D.hrng>1?st.grid.map((v,j)=>j).filter(j=>j!==i&&inRange(j,i,D.hrng)):around(i)).map(j=>st.grid[j]).filter(v=>v&&isUnit(v.t)&&v.hp<maxHp(st,v));if(ns.length){ns.sort((a,b)=>(a.hp-maxHp(st,a))-(b.hp-maxHp(st,b)));cure(st,ns[0],D.heal+(fl.care?1:0)+(hasR(st,'chirurgien')?1:0)+(u.gold||0)+(squad(st,i)?1:0),u);ev.push({i,k:'heal'})}}
    if(D.mech&&!D.mechAll){const ns=around(i).filter(j=>st.grid[j]&&repairable(st.grid[j].t)&&st.grid[j].hp<maxHp(st,st.grid[j])&&repOK(st,j));if(ns.length){repDone(st,ns[0]);const w=st.grid[ns[0]];cure(st,w,(D.mech>1?D.mech:1)+(fl.tech>=2?1:0)+(u.gold||0)+(sol(st,i,u)?1:0),u);ev.push({i:ns[0],k:'heal'})}}
    if(D.selfHeal&&st.tick%2===0&&u.hp<maxHp(st,u)){cure(st,u,1,u);ev.push({i,k:'heal'})}

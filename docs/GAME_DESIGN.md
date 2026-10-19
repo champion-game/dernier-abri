@@ -187,7 +187,7 @@ Pour que chaque faction ait de quoi remplir un deck, 28 unités et 3 réactions 
 | Piège à ours | 🪤 Trappeurs | Rare | 2 | Le premier zombie qui marche dessus subit 10 dégâts |
 | Chasseur | 🪤 Trappeurs | Commune | 2 | 2 dégâts tous les 2 tours, portée 3 |
 | Meute de chiens | 🐕 Fermiers | Rare | 2 | 4 morsures de 1 dégât par tour au corps à corps |
-| Fermier à la fourche | 🐕 Fermiers | Commune | 2 | 2 dégâts au contact et repousse le zombie d’une case |
+| Fermier à la fourche | 🐕 Fermiers | Commune | 2 | 2 dégâts au contact (3 avant la v136) et repousse le zombie d’une case |
 | Épouvantail | 🐕 Fermiers | Commune | 1 | Les zombies à 2 cases ou moins marchent vers lui au lieu de l’abri, 6 PV |
 | Tourelle bricolée | ⚡ Bricoleurs | Commune | 2 | 1 dégât par tour, portée 2, 4 PV |
 | Atelier | ⚡ Bricoleurs | Rare | 3 | Répare 1 PV à toutes les défenses voisines à chaque tour |
@@ -259,7 +259,7 @@ Inspiré de *Super Auto Pets*, *Vampire Survivors* et *Rogue Tower* : les unité
 | Équarrisseur | Bûcheron + Boucher | 3 dégâts en zone, se soigne en tuant |
 | Cantine de campagne | Infirmière + Cuisinier | soigne 2 par tour, +2 PV à l'abri à l'aube |
 | Bande de gamins | Gamin + Institutrice | 4 tirs de 1, portée 2 |
-| Le Saint | Moine + Prêtre | 2 dégâts en zone, protège ses voisins d'un coup fatal |
+| Le Saint | Moine + Prêtre | 1 dégât en zone, protège ses voisins d'un coup fatal |
 | Traqueur | Arbalète + Chasseur | 2 dégâts à 2 zombies par tour, portée 4 |
 
 - **Niveaux** : tous les 20 zombies tués (20, 40, 60…), une unité gagne un niveau. À l'aube, le joueur choisit : offensif (+1 dégât) ou défensif (+3 PV max et soin complet). Le niveau est affiché sur l'unité (N1, N2…).
@@ -296,6 +296,14 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - **Annuler** : pendant le jour, un bouton « Annuler » apparaît sous la carte après une pose, un déplacement ou un rappel. On peut revenir jusqu'à 10 actions en arrière. Impossible après une carte qui révèle la pioche (Largage, cartes qui montrent les prochaines cartes), et tout est effacé à la tombée de la nuit.
 - **Vibrations** (téléphones Android ; l'iPhone ne les permet pas dans le navigateur) : brèche dans l'abri, survivant blessé ou mort, arrivée et mort d'un boss, défaite, succès. Option « Vibrations du téléphone ».
 - **Succès** : 28 objectifs permanents (nuits tenues, victoires, Mutations, boss tués, carnages, fusions, évolutions, factions, collection…). Un bandeau les annonce ; la page « Succès » est accessible depuis l'accueil et les statistiques. Ils préparent ceux de Steam et ne changent pas les règles.
+
+## Rôles : tank et DPS (v136)
+
+Constat d'Amine en nuit 24 : l'Agent anti-émeute faisait plus de dégâts que les Snipers. Le tank frappe à chaque tour (il attire la horde) et les bonus fixes (+1 par attaque) profitent surtout aux unités qui attaquent souvent.
+
+- **Tanks à 1 dégât de base** (Policier, Moine, Agent anti-émeute, Ambulancier, Maître-chien, Blindé des secours, Le Saint, La Fermière 2 × 1) ; le Fermier à la fourche passe de 3 à 2. Leur rôle est d'encaisser.
+- **Tir de soutien** : un DPS fait +1 dégât, une fois par tour, sur un zombie au contact d'un Tank. Formation récompensée : tank devant, tireurs derrière.
+- **Tirs lents** : une unité qui attaque tous les N tours reçoit ses bonus fixes (niveaux, faction, solidarité…) multipliés par N (Sniper : ×2).
 
 ## Le tableau des combats (v126)
 
