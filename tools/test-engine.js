@@ -175,6 +175,9 @@ check('Boss : Colosse nuit 10, la Mère nuit 20 (+1 Colosse), le Patient Zéro n
 check('Nuit de boss : un zombie bloqué en 1re vague n\'empêche pas le boss d\'arriver',()=>{const st=fresh();st.night=10;st.shelter=st.maxS=1e6;Z.startNight(st,rng(1));
  st.pending=st.pending.filter(p=>p.wave===2);st.z=[{id:950,k:'spit',pos:1*9+4,hp:1e6,max:1e6,cd:1e6,style:0}];let t=0;
  while(!st.z.some(z=>Z.ZT[z.k].boss)&&t<400){Z.step(st);t++}ok(st.z.some(z=>Z.ZT[z.k].boss),'le boss n\'arrive jamais (vague '+st.wave+')')});
+check('Cracheur : après 3 crachats sur un mur, il avance au contact',()=>{const st=fresh();Z.startNight(st,rng(1));st.pending=[];
+ const z={id:960,k:'spit',pos:1*9+4,hp:1e6,max:1e6,cd:1,style:0};st.z=[z];Z.around(Z.C).forEach(j=>st.grid[j]={t:'bar',hp:1e6});let t=0;
+ while(z.pos===1*9+4&&t<200){Z.step(st);t++}ok(z.pos===2*9+4,'le cracheur ne bouge pas (case '+z.pos+')')});
 check('La Mère pond des rampants (6 au plus) et en libère 2 en mourant',()=>{const st=fresh();st.night=20;Z.startNight(st,rng(1));st.pending=[];
  const m={id:900,k:'mere',pos:2*9+4,hp:999,max:999,cd:999,style:0};st.z=[m];for(let k=0;k<40;k++)Z.step(st);
  ok((m.kids||0)===6,'pontes '+m.kids);

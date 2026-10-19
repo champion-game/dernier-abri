@@ -326,7 +326,7 @@ Les zombies sont peu nombreux mais coriaces : ils doivent arriver jusqu'aux déf
 | Gonflé | 30 | avance tous les 3 tours | 2 | très lent, 2 dégâts par coup |
 | Chien zombie | 4 | avance chaque tour | 1 | rapide et fragile |
 | Rampant | 8 | avance tous les 2 tours | 1 | passe sous les défenses (barricades, épaves…) |
-| Cracheur | 11 | avance tous les 2 tours | 1 | crache sur ce qui est à 2 cases devant lui |
+| Cracheur | 11 | avance tous les 2 tours | 1 | crache sur ce qui est à 2 cases devant lui ; après 3 crachats sur une défense, il avance au contact (v138) |
 | Blindé | 19 | avance tous les 2 tours | 1 | encaisse 1 dégât de moins par coup, sauf le feu |
 | Hurleur | 15 | avance tous les 2 tours | 1 | appelle 2 rôdeurs en mourant |
 | Le Colosse | 112 | avance tous les 3 tours | 2 | boss de la nuit 10 : détruit une défense d’un coup et frappe l’abri sans mourir |

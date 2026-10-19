@@ -252,7 +252,7 @@ const Z=(()=>{
   fat:{n:'Gonflé',hp:45,spd:3,dmg:2,info:'très lent, 2 dégâts par coup'},
   zdog:{n:'Chien zombie',hp:6,spd:1,dmg:1,info:'rapide et fragile'},
   crawl:{n:'Rampant',hp:12,spd:2,dmg:1,crawl:1,info:'passe sous les défenses (barricades, épaves…)'},
-  spit:{n:'Cracheur',hp:17,spd:2,dmg:1,spit:1,info:'crache sur ce qui est à 2 cases devant lui'},
+  spit:{n:'Cracheur',hp:17,spd:2,dmg:1,spit:1,info:'crache sur ce qui est à 2 cases devant lui, puis avance après 3 crachats'},
   armor:{n:'Blindé',hp:29,spd:2,dmg:1,armor:1,info:'encaisse 1 dégât de moins par coup, sauf le feu'},
   howl:{n:'Hurleur',hp:23,spd:2,dmg:1,howl:2,info:'appelle 2 rôdeurs en mourant'},
   sap:{n:'Sapeur',hp:18,spd:2,dmg:3,sap:1,info:'fonce sur les murs et explose : 15 dégâts au rempart, 3 autour, même s’il est tué avant'},
@@ -899,6 +899,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const repairable=t=>!!(U[t]&&U[t].block&&(U[t].cat==='wall'||U[t].cat==='post'));
  // réparations : une même case de défense ne reçoit qu'une réparation par tour
  const repOK=(st,j)=>(st._rep||{})[j]!==st.tick,repDone=(st,j)=>{(st._rep||(st._rep={}))[j]=st.tick};
+ const SPITS=3;
  // un zombie frappe une unité qui bloque (au contact, ou à distance pour le cracheur)
  function strike(st,z,n,u,ev,ranged,pow){st._zk=z.k;if(!z.reach){z.reach=1;st.reached=(st.reached||0)+1}const T=ZT[z.k],D=stat(st,u.t);
   if(T.sap){z.hp=0;z.bit=1;let left=D.cat==='wall'?(D.antiSap||SAP_WALL):6;
@@ -974,7 +975,8 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    if(u&&U[u.t].block&&!(T.crawl&&U[u.t].cat==='wall')){strike(st,z,n,u,ev,false,pow);continue}
    if(T.spit&&!isEdge(z.pos)){const n2=pathStep(st,n,tgt,zmode(T),z.style);
     if(n2===C){if(!z.reach){z.reach=1;st.reached=(st.reached||0)+1}const dm=zhit(st,z);mtr(st,{t:'x_shelter'},'tak',dm);st.shelter-=dm;ev.push({i:C,txt:'−'+dm,k:'spit',zid:z.id,from:z.pos});continue}
-    const u2=st.grid[n2];if(u2&&U[u2.t].block){strike(st,z,n2,u2,ev,true,pow);continue}}
+    // après 3 crachats sur la même défense, il avance au contact (sinon il reste hors de portée et bloque la vague)
+    const u2=st.grid[n2];if(u2&&U[u2.t].block&&(z.spits||0)<SPITS){z.spits=(z.spits||0)+1;strike(st,z,n2,u2,ev,true,pow);continue}z.spits=0}
    z.pos=n;st._su=u||null;enter(st,z,n,u,ev);st._su=null
   }
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;if(!z.bit){const T=ZT[z.k];st.kills++;st.scrap+=killScrap(st,T.boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!T.boss});
