@@ -894,8 +894,19 @@ function drawPlace(now){const pl=G.place;
   [[T*1.2,L-T*1.4],[L-T*1.6,T*1.2]].forEach(([x,y])=>{ctx.fillStyle='#8e2d2a';ctx.fillRect(x,y,14,20);ctx.fillStyle='#ddd';ctx.fillRect(x+3,y+3,8,6)})}
  if(pl==='mall'){ctx.fillStyle='rgba(90,95,100,.45)';ctx.fillRect(T,T,L-2*T,L-2*T);ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1.5;for(let c=1;c<Z.N;c++){ctx.beginPath();ctx.moveTo(c*T,T);ctx.lineTo(c*T,T*1.6);ctx.moveTo(c*T,L-T);ctx.lineTo(c*T,L-T*1.6);ctx.stroke()}}
 }
+// v139 : écran d'accueil vivant : la nuit tombe sur la maison et quelques zombies rôdent (décor, hors des règles)
+let TTL=false,decoOn=0,decoNext=0;const DECO=[];let decoId=900000;
+function titleDeco(now){
+ if(TTL&&!ov.hidden&&!S.busy){nightTarget=.85;
+  if(!decoOn){decoOn=1;decoNext=0}
+  if(DECO.length<6&&now>=decoNext){decoNext=now+(DECO.length<3?150:1400+Math.random()*1200);const ks=Z.ZK.filter(k=>!Z.ZT[k].boss),k=ks[Math.floor(Math.random()*ks.length)],a=Math.random()*Math.PI*2,r=L*(.3+Math.random()*.22),p={x:CEN.x+Math.cos(a)*r,y:CEN.y+Math.sin(a)*r};
+   const v={id:++decoId,k,pos:-1,from:p,to:p,t0:now,dur:1,hp:1,max:1,born:now,deco:1};V.set(v.id,v);DECO.push(v)}
+  for(let n=DECO.length-1;n>=0;n--){const v=DECO[n];if(now-v.t0<v.dur)continue;const p=v.to,dx=CEN.x-p.x,dy=CEN.y-p.y,d=Math.hypot(dx,dy)||1;
+   if(d<L*.2){v.dying=now;v.dx=p.x;v.dy=p.y;DECO.splice(n,1);continue}
+   const st=18+Math.random()*14,sd=(Math.random()-.5)*30;v.from=p;v.to={x:p.x+dx/d*st-dy/d*sd,y:p.y+dy/d*st+dx/d*sd};v.t0=now+Math.random()*900;v.dur=(Z.ZT[v.k].spd===1?1100:2200)}
+ }else if(decoOn){decoOn=0;DECO.forEach(v=>{if(!v.dying){const p=zpos(v,now);v.dying=now;v.dx=p.x;v.dy=p.y}});DECO.length=0;if(!S.busy)nightTarget=0}}
 function frameInner(now){
- const dt=Math.min(50,now-last);last=now;fit();
+ const dt=Math.min(50,now-last);last=now;fit();try{titleDeco(now)}catch(e){}
  nightAmt+=(nightTarget-nightAmt)*Math.min(1,dt/450);SFX.night(nightAmt);
  let sx=0,sy=0;if(now-shakeT<260&&!reduce){const k=(1-(now-shakeT)/260)*shakeK;sx=(Math.random()-.5)*k;sy=(Math.random()-.5)*k}
  ctx.setTransform(SC,0,0,SC,sx*SC,sy*SC);
@@ -1218,7 +1229,7 @@ async function night(){
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
  UNDO=[];
- if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;Z.startNight(G,R);render();
+ if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;nightBanner();Z.startNight(G,R);render();
  // v125 : météo sonore (pluie, orage) et corne de la nuit rouge
  try{SFX.setWeather(G.event.id==='pluie'?'amb-rain':G.event.id==='coupure'?'amb-storm':null);if(Z.pressure(G.night))setTimeout(()=>SFX.play('horn'),300)}catch(e){}
  await nwait(900);if(run!==RUN)return;
@@ -1398,7 +1409,9 @@ function placeScreen(){
   <button type="button" class="skip" data-a="new">Retour</button>`);
 }
 const ov=$('#ov'),panel=$('#panel');
-function show(h,keep){const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop;panel.innerHTML=h;ov.hidden=false;panel.scrollTop=keep?y:0;
+function show(h,keep){TTL=false;const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop,was=ov.hidden;panel.innerHTML=h;ov.hidden=false;panel.scrollTop=keep?y:0;
+ // v139 : fondu de l'écran à l'ouverture, contenu qui glisse quand on change d'écran
+ if(!keep){ov.classList.remove('oin');panel.classList.remove('pin');void panel.offsetWidth;if(was)ov.classList.add('oin');panel.classList.add('pin')}
  // v123 : défaite (secousse et voile rouge) et victoire (lueur dorée) animées
  const lose=h.includes('bigstamp ko'),win=h.includes('bigstamp ok');panel.classList.remove('lose','win');ov.classList.remove('lose','win');if(lose||win){void panel.offsetWidth;panel.classList.add(lose?'lose':'win');ov.classList.add(lose?'lose':'win')}
  countUp()}
@@ -1637,6 +1650,9 @@ function abortNight(){RUN++;unpause();S.pause=0;if(S.resume){const f=S.resume;S.
  if(S.busy){S.busy=false;nightTarget=0;KC.on=0;try{SFX.setWeather(null)}catch(e){}}}
 $('#pz').addEventListener('click',()=>{if(ov.hidden)pauseMenu()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.busy&&!USERP&&ov.hidden)pauseMenu()});
+// v139 : bandeau « Nuit N » au début de la nuit
+function nightBanner(){try{const red=Z.pressure(G.night),el=document.createElement('div');el.className='nightban'+(red?' red':'');
+ el.innerHTML=`<b>Nuit ${G.night}</b>${G.event&&G.event.n?`<small>${G.event.n}</small>`:''}`;document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}catch(e){}}
 // v139 : grande carte (clic droit ou appui long sur une carte de la main)
 function zoomCard(t){if(!Z.U[t])return;onTitle=false;show(`<div class="zoomc">${cardFace(t)}</div><button type="button" class="go" data-a="closeov">Fermer</button>`)}
 const handT=b=>b.dataset.b!==undefined?(G.bench[+b.dataset.b]||{}).t:b.dataset.u!==undefined?S.used[+b.dataset.u]:S.hand[+b.dataset.k];
@@ -1656,7 +1672,7 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if(k===' '||k==='Enter'){e.preventDefault();const g=$('#go');if(!g.disabled&&!g.hidden)g.click();return}
  if(k==='d'||k==='D'){$('#mtb').click();return}
  if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
-function title(){endTest();onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
+function title(){endTest();onTitle=true;setTimeout(()=>{if(!ov.hidden&&panel.querySelector('.logo'))TTL=true},0);show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?'Aube':'Jour'} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:'<button type="button" class="go" data-a="new">Jouer</button>')(loadSave())}

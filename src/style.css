@@ -705,3 +705,19 @@ button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;colo
 .zoomc{width:min(300px,72vw,calc((100dvh - 150px)*.75));margin:0 auto 12px}
 .keys{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:6px 0 14px;font-size:14px;text-align:left}
 .keys dt{font-weight:700;white-space:nowrap}.keys dd{margin:0;color:var(--muted)}
+/* v139 : transitions d'écran */
+.overlay.oin{animation:ovin .22s ease-out}
+@keyframes ovin{from{opacity:0}}
+.panel.pin>*{animation:pin .26s ease-out both}
+.panel.pin>:nth-child(2){animation-delay:.03s}.panel.pin>:nth-child(3){animation-delay:.06s}.panel.pin>:nth-child(n+4){animation-delay:.09s}
+@keyframes pin{from{opacity:0;transform:translateY(8px)}}
+/* main : la carte se soulève au survol de la souris */
+@media (hover:hover){.hand .card:not(:disabled):hover{transform:translateY(-10px) scale(1.06);z-index:3}.hand .card.sel:hover{transform:translateY(-12px) scale(1.06)}}
+/* bandeau « Nuit N » */
+.nightban{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);z-index:9;pointer-events:none;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;
+ padding:14px 34px;background:linear-gradient(90deg,transparent,rgba(8,10,14,.85) 18%,rgba(8,10,14,.85) 82%,transparent);color:#dfe6f0;animation:nban 2.1s ease-in-out both;white-space:nowrap}
+.nightban b{font-family:var(--f-disp);font-weight:400;font-size:clamp(34px,9vw,56px);letter-spacing:.06em;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.nightban small{font-size:15px;color:#aab4c4}
+.nightban.red b{color:#ff6b5a}
+@keyframes nban{0%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}15%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.nightban{display:none}}
