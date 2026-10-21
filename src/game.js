@@ -1367,7 +1367,7 @@ function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
   <label class="chk"><input type="checkbox" data-o="all" ${OPT.all?'checked':''}> Tout afficher dès le départ (factions, niveaux, collection), pour les joueurs habitués</label>
   <label class="chk"><input type="checkbox" data-o="eco" ${OPT.eco?'checked':''}> Mode économie (petits téléphones : moins d’effets, plateau moins détaillé)</label>
   <label class="chk"><input type="checkbox" data-o="text" ${OPT.text?'checked':''}> Texte plus grand</label>
- </div><button type="button" class="go" data-a="optclose">Retour</button>`)}
+ </div>${matchMedia('(hover: hover)').matches?`<h3>Raccourcis clavier</h3><dl class="keys">${KEYS_HELP.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`:''}<button type="button" class="go" data-a="optclose">Retour</button>`)}
 function runInfo(){onTitle=false;
  const counts={};deckList().forEach(t=>counts[t]=(counts[t]||0)+1);
  show(`<h2 class="pw">${Z.CHARS[G.char].n}</h2><p><b>${G.kills}</b> zombies éliminés · <b>${G.scrap}</b> ferraille</p>
@@ -1635,6 +1635,25 @@ function abortNight(){RUN++;unpause();S.pause=0;if(S.resume){const f=S.resume;S.
  if(S.busy){S.busy=false;nightTarget=0;KC.on=0;try{SFX.setWeather(null)}catch(e){}}}
 $('#pz').addEventListener('click',()=>{if(ov.hidden)pauseMenu()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.busy&&!USERP&&ov.hidden)pauseMenu()});
+// v139 : grande carte (clic droit ou appui long sur une carte de la main)
+function zoomCard(t){if(!Z.U[t])return;onTitle=false;show(`<div class="zoomc">${cardFace(t)}</div><button type="button" class="go" data-a="closeov">Fermer</button>`)}
+const handT=b=>b.dataset.b!==undefined?(G.bench[+b.dataset.b]||{}).t:b.dataset.u!==undefined?S.used[+b.dataset.u]:S.hand[+b.dataset.k];
+$('#hand').addEventListener('contextmenu',e=>{const b=e.target.closest('.card');if(!b)return;e.preventDefault();if(HD&&HD.g)HD.g.remove();HD=null;zoomCard(handT(b))});
+// clic droit sur la carte : annule la sélection ; sur une unité, affiche sa fiche
+cv.addEventListener('contextmenu',e=>{e.preventDefault();if(!ov.hidden)return;const i=cellAt(e);S.sel=null;S.bsel=null;S.drag=null;S.moveFrom=null;S.inspect=i!=null&&i>=0&&G.grid[i]?i:null;render()});
+// v139 : raccourcis clavier (ordinateur)
+const KEYS_HELP=[['Espace','Affronter la nuit · changer la vitesse · vague suivante'],['1 à 9','Choisir une carte de la main'],['Échap','Annuler la sélection · pause et menu'],['Ctrl + Z','Annuler la dernière action du jour'],['M','Couper ou remettre le son'],['D','Tableau des combats'],['Clic droit','Grande carte (main) · fiche d’une unité (plateau)']];
+addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName))return;if(e.altKey||e.metaKey)return;
+ const k=e.key,open=!ov.hidden;
+ if(k==='Escape'){e.preventDefault();if(open){const b=panel.querySelector('[data-a=presume],[data-a=closeov],[data-a=close],[data-a=optclose],[data-a=pmenu]');if(b)b.click();return}
+  if(S.sel!==null||S.bsel!=null||S.moveFrom!==null||S.inspect!==null){S.sel=null;S.bsel=null;S.moveFrom=null;S.inspect=null;render()}else pauseMenu();return}
+ if((e.ctrlKey&&(k==='z'||k==='Z'))){if(!open){e.preventDefault();doUndo()}return}
+ if(e.ctrlKey)return;
+ if(k==='m'||k==='M'){muteBtn.click();return}
+ if(open)return;
+ if(k===' '||k==='Enter'){e.preventDefault();const g=$('#go');if(!g.disabled&&!g.hidden)g.click();return}
+ if(k==='d'||k==='D'){$('#mtb').click();return}
+ if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
 function title(){endTest();onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}

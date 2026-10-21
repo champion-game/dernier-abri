@@ -694,3 +694,7 @@ html.eco .citem.s-buy .cf{animation:none}
 .tnight{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}.tnight input{width:80px;font-size:18px;padding:6px;text-align:center}
 button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}button.citem:disabled{opacity:.4;cursor:default}
 .cgrid.tgrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px}.tq{width:100%;box-sizing:border-box;font-size:16px;padding:8px;margin:4px 0 6px}
+/* v139 : grande carte et raccourcis clavier */
+.zoomc{width:min(300px,72vw,calc((100dvh - 150px)*.75));margin:0 auto 12px}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:6px 0 14px;font-size:14px;text-align:left}
+.keys dt{font-weight:700;white-space:nowrap}.keys dd{margin:0;color:var(--muted)}
