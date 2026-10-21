@@ -34,6 +34,8 @@ async function run(vp,label){
   await p.evaluate(()=>{const r=document.querySelector('[data-o=sfx]');r.value=40;r.dispatchEvent(new Event('input',{bubbles:true}))});if(await p.evaluate(()=>OPT.sfx)!==.4)problems.push(`${label} : le volume ne s’enregistre pas`);await click('[data-a=optclose]')});
  // une partie
  await step('nouvelle partie',async()=>{await click('[data-a=new]');await click('[data-a=edit]');await shot('04-deck');await overflow('éditeur de deck');await click('[data-a=new]');await click('[data-a=start]');await p.waitForTimeout(400)});
+ await step('menu pause',async()=>{await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));await click('#pz');if(!/Pause/.test(await ov()))problems.push(`${label} : le menu pause ne s’ouvre pas`);await overflow('menu pause');
+  await click('[data-a=options]');await click('[data-a=optclose]');if(!/Pause/.test(await ov()))problems.push(`${label} : les options ne reviennent pas au menu pause`);await click('[data-a=presume]');if(await ov())problems.push(`${label} : « Reprendre » ne ferme pas le menu pause`)});
  await step('tableau des combats',async()=>{await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));await click('#mtb');
   const vis=await p.evaluate(()=>{const m=document.querySelector('#meter');return !!m&&!m.hidden&&m.getBoundingClientRect().height>40});
   if(!vis)problems.push(`${label} : le tableau des combats ne s’ouvre pas`);await click('[data-mt="t:dead"]');await shot('05c-details');await overflow('tableau des combats');

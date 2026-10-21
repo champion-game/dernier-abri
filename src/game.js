@@ -212,6 +212,10 @@ function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:1
 const TICK=650;let SPEED=1,slowT=0;const tickMs=()=>TICK/SPEED*(performance.now()<slowT?3:1);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+// v139 : pause du joueur (menu) ; RUN change quand on abandonne la nuit en cours, ce qui arrête sa boucle
+let USERP=false,RUN=0;const pauseQ=[];
+const nwait=async ms=>{await wait(ms);while(USERP)await new Promise(r=>pauseQ.push(r))};
+function unpause(){USERP=false;pauseQ.splice(0).forEach(f=>f())}
 const $=s=>document.querySelector(s);
 // hasard de la partie, à graine : la graine est sauvegardée, et le défi quotidien utilise la même pour tout le monde.
 // Les effets visuels (particules, sang…) gardent Math.random.
@@ -1212,23 +1216,23 @@ async function night(){
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
  UNDO=[];
- if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;Z.startNight(G,R);render();
+ if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;Z.startNight(G,R);render();
  // v125 : météo sonore (pluie, orage) et corne de la nuit rouge
  try{SFX.setWeather(G.event.id==='pluie'?'amb-rain':G.event.id==='coupure'?'amb-storm':null);if(Z.pressure(G.night))setTimeout(()=>SFX.play('horn'),300)}catch(e){}
- await wait(900);
+ await nwait(900);if(run!==RUN)return;
  let r;
  do{const types=G.grid.map(u=>u&&u.t);
   r=Z.step(G);syncBoard();const now=performance.now();
   syncZ(now);playEvents(r.ev,types,now);render();
-  if(r.pause)await wavePause(r.pause);
+  if(r.pause){await wavePause(r.pause);if(run!==RUN)return}
   const lostEv=r.ev.filter(e=>e.k==='lost'),koEv=r.ev.filter(e=>e.k==='ko');
   if(lostEv.length||koEv.length){const info=$('#info');info.className='info warn';const ppl=lostEv.filter(e=>e.name),obj=lostEv.filter(e=>!e.name);
    info.innerHTML=[koEv.length?`${ii('band')} ${koEv.map(e=>`<b>${e.name||Z.U[e.t].n}</b>`).join(', ')} ${koEv.length>1?'sont blessés et partent':'est blessé et part'} en réserve (repos 3 nuits).`:'',ppl.length?`${ii('cross')} ${ppl.map(e=>`<b>${e.name}</b> (${Z.U[e.t].n})`).join(', ')} ${ppl.length>1?'sont tombés':'est tombé'}.`:'',obj.length?`${obj.map(e=>Z.U[e.t].n).join(', ')} détruit${obj.length>1?'s':''} !`:''].join(' ')}
-  await wait(tickMs());
+  await nwait(tickMs());if(run!==RUN)return;
  }while(!r.done);
- await wait(700);
+ await nwait(700);if(run!==RUN)return;
  try{SFX.setWeather(null)}catch(e){}
- const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;KC.on=0;S.busy=false;render();await wait(900);
+ const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;KC.on=0;S.busy=false;render();await nwait(900);if(run!==RUN)return;
  if(G.shelter<=0)return end();
  const mut=Z.mutNight(G.night)?Z.mutate(G,R):null;
  const hero=G.grid.filter(u=>u&&u.name&&u.nk>0).sort((a,b)=>b.nk-a.nk)[0];
@@ -1482,8 +1486,13 @@ const ACT={
    +Object.keys(CATL).map(c=>{const ks=Z.KEYS.filter(t=>Z.U[t].cat===c);return ks.length?`<h3>${CATL[c]}</h3><div class="cgrid tgrid">${ks.map(t=>`<button type="button" class="citem in" data-a="tadd" data-v="${t}" data-n="${Z.U[t].n.toLowerCase()}" ${full?'disabled':''}>${cardFace(t,{mini:1})}</button>`).join('')}</div>`:''}).join('')
    +`<button type="button" class="go" data-a="closeov">Fermer</button>`)},
  tadd:v=>{if(!TEST||!Z.U[v]||S.hand.length>=Z.HAND_MAX)return;S.hand.push(v);render();ACT.tcards()},
- options:()=>optionsScreen(onTitle?'title':'game'),
- optclose:()=>{if(optBack==='game'){hide();render()}else title()},
+ options:()=>optionsScreen(onTitle?'title':USERP||panel.querySelector('[data-a=presume]')?'pause':'game'),
+ optclose:()=>{if(optBack==='pause')pauseMenu();else if(optBack==='game'){hide();render()}else title()},
+ presume:()=>{hide();unpause();render()},
+ pquit:()=>{abortNight();title()},
+ prestart:()=>show(`<h2 class="ko">Recommencer ?</h2><p>La partie en cours sera <b>perdue</b>, sans points de survie.</p><button type="button" class="go" data-a="prestart2">Oui, recommencer</button><button type="button" class="skip" data-a="pmenu">Non, retour</button>`),
+ prestart2:()=>{const t=TEST,d=G.daily;abortNight();clearSave();if(t)ACT.testmode();else if(d)ACT.daily();else ACT.new()},
+ pmenu:()=>pauseMenu(),
  closeov:()=>{hide();render()},
  bpick:v=>{S.bsel=+v;S.sel=null;S.moveFrom=null;S.inspect=null;hide();render()},
  artstyle:()=>{ART_STYLE=ART_STYLE==='cartoon'?'real':'cartoon';try{localStorage.setItem('abri-style',ART_STYLE)}catch(e){}title()},
@@ -1616,6 +1625,16 @@ const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 210" role="
  <path d="M64 128 q4 0 4 5 v9 q0 3 -2.5 3 q-2.5 0 -2.5 -3 v-5 q-3 0 -3 -4 q0 -5 4 -5z" fill="#8e1d12" opacity=".9"/>
  <text x="180" y="206" text-anchor="middle" font-family="'Atkinson Hyperlegible',sans-serif" font-size="12.5" letter-spacing="4" fill="#5a4630">UNE NUIT DE PLUS</text>
 </svg>`;
+// v139 : menu pause (bouton en haut, Échap, ou quand on quitte l'appli pendant la nuit)
+function pauseMenu(){if(!G)return;onTitle=false;const nt=S.busy;if(nt)USERP=true;
+ show(`<h2 class="pw">Pause</h2><p>${nt?`Nuit ${G.night} : la horde attend.`:`Jour ${G.night}.`}</p>
+  <button type="button" class="go" data-a="presume">Reprendre</button><button type="button" class="skip" data-a="options">${ii('gear')} Options</button><button type="button" class="skip" data-a="pquit">Quitter vers l’accueil</button><button type="button" class="skip" data-a="prestart">Recommencer une partie</button>
+  <p class="ver">${TEST?'Mode test : rien n’est sauvegardé.':nt?'Si tu quittes maintenant, cette nuit sera rejouée depuis le début quand tu reprendras la partie.':'Ta partie est sauvegardée : « Continuer » sur l’accueil la reprend.'}</p>`)}
+// abandonne la nuit en cours (quitter ou recommencer) : la boucle s'arrête, la sauvegarde du début de nuit reste
+function abortNight(){RUN++;unpause();S.pause=0;if(S.resume){const f=S.resume;S.resume=null;f()}
+ if(S.busy){S.busy=false;nightTarget=0;KC.on=0;try{SFX.setWeather(null)}catch(e){}}}
+$('#pz').addEventListener('click',()=>{if(ov.hidden)pauseMenu()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.busy&&!USERP&&ov.hidden)pauseMenu()});
 function title(){endTest();onTitle=true;show(`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?`<p>Ton record : <b>${plural(META.best,'nuit survécue','nuits survécues')}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,'partie','parties')}.</p>`:''}${nextUnlockTxt()}

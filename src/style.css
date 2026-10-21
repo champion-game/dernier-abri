@@ -330,7 +330,7 @@ button.ammo[hidden]{display:none}
 }
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px) and (min-height:640px){
 }
-@media (max-width:400px){.brand{font-size:16px}.shel{min-width:66px}.top{gap:5px}}
+@media (max-width:440px){.top .brand{display:none}.shel{min-width:66px}.top{gap:5px}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){#preview.land{display:block;bottom:auto;right:auto}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:1500px) and (min-height:900px){.app{--sw:520px}}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){
