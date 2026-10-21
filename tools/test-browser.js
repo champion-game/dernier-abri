@@ -28,7 +28,7 @@ async function run(vp,label){
  await step('bestiaire',async()=>{await click('[data-a=deck]');await p.waitForTimeout(300);await shot('02-cartes');await overflow('cartes et zombies');await click('[data-a=title]')});
  await step('collection',async()=>{await click('[data-a=coll]');await p.waitForTimeout(300);await p.fill('[data-f=q]','tir');await p.waitForTimeout(150);
   const n=await p.$$eval('.citem-w',es=>es.filter(e=>!e.hidden).length);if(!n)problems.push(`${label} : la recherche « tir » ne trouve rien`);
-  await p.selectOption('[data-f=sort]','cost');await p.waitForTimeout(200);await shot('03-collection');await overflow('collection');await click('[data-a=title]')});
+  await p.selectOption('[data-f=sort]','cost');await p.waitForTimeout(200);await shot('03-collection');await p.click('#panel .citem-w:not([hidden]) .cf',{button:'right',timeout:3000}).catch(()=>{});await p.waitForTimeout(250);if(!await p.evaluate(()=>{const z=document.querySelector('.zoomv');return !!z&&!z.hidden}))problems.push(`${label} : le clic droit n’affiche pas la carte en grand`);await p.keyboard.press('Escape');await p.waitForTimeout(100);await overflow('collection');await click('[data-a=title]')});
 
  await step('options',async()=>{await click('[data-a=options]');await p.waitForTimeout(200);if(!/Options/.test(await ov()))problems.push(`${label} : l’écran d’options ne s’ouvre pas`);await shot('03b-options');await overflow('options');
   await p.evaluate(()=>{const r=document.querySelector('[data-o=sfx]');r.value=40;r.dispatchEvent(new Event('input',{bubbles:true}))});if(await p.evaluate(()=>OPT.sfx)!==.4)problems.push(`${label} : le volume ne s’enregistre pas`);await click('[data-a=optclose]')});

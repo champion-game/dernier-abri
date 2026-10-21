@@ -301,7 +301,7 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 
 - **Menu pause** : bouton ⏸ en haut (ou Échap). Pendant la nuit, il fige la horde. Il propose Reprendre, Options, Quitter vers l’accueil (la partie reste sauvegardée ; une nuit quittée en cours sera rejouée depuis le début) et Recommencer une partie (la partie en cours est perdue, sans points de survie). Le jeu se met en pause tout seul si on quitte l’appli pendant la nuit.
 - **Raccourcis clavier** (listés dans les options sur ordinateur) : Espace (nuit, vitesse, vague suivante), 1 à 9 (cartes de la main), Échap (annuler la sélection, puis pause), Ctrl+Z (annuler), M (son), D (tableau des combats).
-- **Clic droit / appui long** : sur une carte de la main, elle s’affiche en grand ; sur le plateau, annule la sélection et montre la fiche de l’unité.
+- **Clic droit / appui long** (v140, iPhone compris) : sur n’importe quelle carte (main, collection, deck, bestiaire, aube, troc…), elle s’affiche en grand par-dessus l’écran ; un toucher ou Échap la ferme. Sur le plateau, le clic droit annule la sélection. Dans les menus, les cartes grossissent un peu au survol de la souris.
 - **Hors ligne** : une fois chargé, le jeu marche sans internet ; les polices sont dans le jeu.
 - **Habillage** : fondu et glissement des écrans, carte qui se soulève au survol de la souris, bandeau « Nuit N » au début de chaque nuit, accueil de nuit avec des zombies qui rôdent autour de la maison.
 - **Option daltonisme** : barres de vie bleu/orange (tes unités) et rose (zombies) au lieu de vert/rouge.

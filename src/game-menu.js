@@ -73,15 +73,31 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.busy&
 function nightBanner(){try{const red=Z.pressure(G.night),el=document.createElement('div');el.className='nightban'+(red?' red':'');
  el.innerHTML=`<b>Nuit ${G.night}</b>${G.event&&G.event.n?`<small>${G.event.n}</small>`:''}`;document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}catch(e){}}
 // v139 : grande carte (clic droit ou appui long sur une carte de la main)
-function zoomCard(t){if(!Z.U[t])return;onTitle=false;show(`<div class="zoomc">${cardFace(t)}</div><button type="button" class="go" data-a="closeov">Fermer</button>`)}
-const handT=b=>b.dataset.b!==undefined?(G.bench[+b.dataset.b]||{}).t:b.dataset.u!==undefined?S.used[+b.dataset.u]:S.hand[+b.dataset.k];
-$('#hand').addEventListener('contextmenu',e=>{const b=e.target.closest('.card');if(!b)return;e.preventDefault();if(HD&&HD.g)HD.g.remove();HD=null;zoomCard(handT(b))});
+// v140 : grande carte partout (main, collection, deck, bestiaire, aube…) : clic droit, ou appui long au doigt (iPhone compris).
+// Elle s'ouvre par-dessus l'écran en cours ; un toucher ou Échap la ferme.
+const zoomEl=document.createElement('div');zoomEl.className='zoomv';zoomEl.hidden=true;document.body.appendChild(zoomEl);
+let lpAt=0,LP=null;
+function zoomCf(cf,lp){if(!cf)return;if(lp)lpAt=performance.now();if(HD&&HD.g)HD.g.remove();HD=null;const c=cf.cloneNode(true);c.classList.remove('ghost');
+ zoomEl.innerHTML='<div class="zoomc"></div><p>Touche pour fermer</p>';zoomEl.firstChild.appendChild(c);zoomEl.hidden=false;try{SFX.play('ui')}catch(e){}}
+function zoomClose(){zoomEl.hidden=true;zoomEl.innerHTML=''}
+zoomEl.addEventListener('click',()=>{if(performance.now()-lpAt>500)zoomClose()});
+zoomEl.addEventListener('contextmenu',e=>{e.preventDefault();zoomClose()});
+const zoomTarget=e=>{const t=e.target.closest&&e.target.closest('.cf');return t&&(t.closest('#hand')||t.closest('#panel'))?t:null};
+addEventListener('contextmenu',e=>{const cf=zoomTarget(e);if(!cf)return;e.preventDefault();if(zoomEl.hidden)zoomCf(cf)});
+// appui long (doigt ou stylet) : 450 ms sans bouger
+addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;const cf=zoomTarget(e);if(!cf)return;clearTimeout(LP&&LP.t);
+ LP={x:e.clientX,y:e.clientY,t:setTimeout(()=>{LP=null;zoomCf(cf,1)},450)}},true);
+addEventListener('pointermove',e=>{if(LP&&Math.hypot(e.clientX-LP.x,e.clientY-LP.y)>10){clearTimeout(LP.t);LP=null}},true);
+['pointerup','pointercancel','scroll'].forEach(n=>addEventListener(n,()=>{if(LP){clearTimeout(LP.t);LP=null}},true));
+// le clic qui suit un appui long ne doit pas jouer ou choisir la carte
+addEventListener('click',e=>{if(!zoomEl.contains(e.target)&&(!zoomEl.hidden||performance.now()-lpAt<500)){e.stopPropagation();e.preventDefault()}},true);
 // clic droit sur la carte : annule la sélection ; sur une unité, affiche sa fiche
 cv.addEventListener('contextmenu',e=>{e.preventDefault();if(!ov.hidden)return;const i=cellAt(e);S.sel=null;S.bsel=null;S.drag=null;S.moveFrom=null;S.inspect=i!=null&&i>=0&&G.grid[i]?i:null;render()});
 // v139 : raccourcis clavier (ordinateur)
-const KEYS_HELP=[['Espace','Affronter la nuit · changer la vitesse · vague suivante'],['1 à 9','Choisir une carte de la main'],['Échap','Annuler la sélection · pause et menu'],['Ctrl + Z','Annuler la dernière action du jour'],['M','Couper ou remettre le son'],['D','Tableau des combats'],['Clic droit','Grande carte (main) · fiche d’une unité (plateau)']];
+const KEYS_HELP=[['Espace','Affronter la nuit · changer la vitesse · vague suivante'],['1 à 9','Choisir une carte de la main'],['Échap','Annuler la sélection · pause et menu'],['Ctrl + Z','Annuler la dernière action du jour'],['M','Couper ou remettre le son'],['D','Tableau des combats'],['Clic droit','Grande carte (sur n’importe quelle carte) · annuler la sélection (plateau)']];
 addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName))return;if(e.altKey||e.metaKey)return;
  const k=e.key,open=!ov.hidden;
+ if(!zoomEl.hidden){if(k==='Escape'||k===' '){e.preventDefault();zoomClose()}return}
  if(k==='Escape'){e.preventDefault();if(open){const b=panel.querySelector('[data-a=presume],[data-a=closeov],[data-a=close],[data-a=optclose],[data-a=pmenu]');if(b)b.click();return}
   if(S.sel!==null||S.bsel!=null||S.moveFrom!==null||S.inspect!==null){S.sel=null;S.bsel=null;S.moveFrom=null;S.inspect=null;render()}else pauseMenu();return}
  if((e.ctrlKey&&(k==='z'||k==='Z'))){if(!open){e.preventDefault();doUndo()}return}

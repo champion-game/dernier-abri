@@ -702,7 +702,16 @@ html.eco .citem.s-buy .cf{animation:none}
 button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}button.citem:disabled{opacity:.4;cursor:default}
 .cgrid.tgrid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px}.tq{width:100%;box-sizing:border-box;font-size:16px;padding:8px;margin:4px 0 6px}
 /* v139 : grande carte et raccourcis clavier */
-.zoomc{width:min(300px,72vw,calc((100dvh - 150px)*.75));margin:0 auto 12px}
+.zoomv{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(10,7,4,.78);backdrop-filter:blur(2px);animation:ovin .15s ease-out;cursor:zoom-out}
+.zoomv[hidden]{display:none}
+.zoomc{width:min(340px,82vw,calc((100dvh - 90px)*.75));animation:zin .18s ease-out}
+.zoomc .cf{transform:none!important;filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
+.zoomv p{margin:0;color:#cbbfa8;font-size:13px}
+@keyframes zin{from{transform:scale(.85);opacity:0}}
+/* pas de menu « enregistrer l'image » de l'iPhone sur les cartes (appui long = grande carte) */
+#hand .cf,#panel .cf{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+/* menus : la carte grossit un peu au survol de la souris */
+@media (hover:hover){#panel .cf{transition:transform .15s ease-out}#panel .cf:hover{transform:scale(1.06);z-index:2}}
 .keys{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:6px 0 14px;font-size:14px;text-align:left}
 .keys dt{font-weight:700;white-space:nowrap}.keys dd{margin:0;color:var(--muted)}
 /* v139 : transitions d'écran */
