@@ -578,6 +578,8 @@ function dogShape(skin,coat,dark,now,wag){
  oEll(8,-4.5,2,3,dark,1);oEll(8,4.5,2,3,dark,1)}
 const CATC={post:'#9ee08a',wall:'#c9a27a',shoot:'#f2b33d',melee:'#ff7a59',help:'#7cc7ff',trap:'#e5484d',item:'#d6c2ff'};
 let BARS=[],EYES=[],LABELS=[];
+// v139 : couleurs adaptées au daltonisme (palette Okabe-Ito) : bleu et orange pour tes unités, rose pour les zombies
+const HPC=()=>OPT.cb?{ok:'#56b4e9',low:'#e69f00',z:'#cc79a7'}:{ok:'#9fd86b',low:'#e5484d',z:'#e5484d'};
 function hpBar(x,y,f,c){if(f>=1)return;BARS.push([x,y,f,c])}
 function drawBars(){for(const[x,y,f,c]of BARS){ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(x-18,y-1,36,7);ctx.fillStyle=c;ctx.fillRect(x-17,y,34*clamp(f,0,1),5)}}
 const EQIC={gear:'vest',binoc:'binoc',bandage:'band',medkit:'medkit',torch:'torch',pills:'pills',pack:'pack',tape:'tape',keys:'keys'};
@@ -601,7 +603,7 @@ function drawUnit(i,u,now){
  if(u.gold)safeTxt(p0.x-19,p0.y-17,u.gold>1?u.gold+'★':'★','#f2c23d');else if(D0.evo)safeTxt(p0.x-19,p0.y-17,'✦','#c58cff');
  const lv=(u.lvA||0)+(u.lvD||0);if(lv){ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(p0.x+11,p0.y+14,18,12);ctx.fillStyle='#9fd86b';ctx.font='bold 9px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText('N'+lv,p0.x+20,p0.y+23)}
  const eq=Z.eqOf(u);if(eq.length){ctx.font='10px system-ui,sans-serif';ctx.textAlign='center';eq.slice(0,4).forEach((t,k)=>{const ex=p0.x-25,ey=p0.y-8+k*13;circ(ex,ey,6.8,'rgba(10,10,10,.8)');glyph(EQIC[t]||'pack',ex,ey,9,'#fff',2.6)})}
- const mx=Z.maxHp(G,u);if(D0.block)hpBar(p0.x,p0.y-31,u.hp/mx,u.hp/mx>.4?'#9fd86b':'#e5484d');
+ const mx=Z.maxHp(G,u);if(D0.block)hpBar(p0.x,p0.y-31,u.hp/mx,u.hp/mx>.4?HPC().ok:HPC().low);
  if(u.name&&nightAmt<.5)LABELS.push([p0.x,p0.y+33,u.name.replace(/^(Le |La |L’)/,'')+(u.gold?' '+stars(u):'')]);
 }
 function drawUnitInner(i,u,now){
@@ -739,7 +741,7 @@ function drawRamparts(ramp){const seen=new Set();
     if(!corner){const[r0,c0]=Z.rc(k),[r1,c1]=Z.rc(ls[0]),[r2,c2]=Z.rc(ls[1]);corner=(r1-r0)!==(r0-r2)||(c1-c0)!==(c0-c2)}
     if(corner&&PLAIN.has(G.grid[k].t))wallPost(mat(k),p.x,p.y)})}
   g.forEach(k=>{if(PLAIN.has(G.grid[k].t)){ramp.add(k);const u2=G.grid[k],p=tc(k);if(u2.gold)LABELS.push([p.x,p.y+4,u2.gold>1?u2.gold+'★':'★'])}});
-  g.forEach(k=>{const p=tc(k),f=fw(k);hpBar(p.x,p.y-24,f,f>.4?'#9fd86b':'#e5484d')})})}
+  g.forEach(k=>{const p=tc(k),f=fw(k);hpBar(p.x,p.y-24,f,f>.4?HPC().ok:HPC().low)})})}
 /* barbelés : dessinés en code ; des barbelés voisins se raccordent en une ligne continue de rouleaux, piquets aux bouts et aux angles */
 function wireSect(d,r){ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(0,-7,d,14);
  for(let o=-1;o<=1;o+=2){ctx.beginPath();for(let x=0;x<=d;x+=2){const y=o*5*Math.cos(x/6.5*Math.PI);ctx.lineTo(x,y)}ctx.strokeStyle=INK;ctx.lineWidth=2.8;ctx.stroke();ctx.strokeStyle='#a8adb2';ctx.lineWidth=1.2;ctx.stroke()}
@@ -829,7 +831,7 @@ function drawZombie(v,now){
  }
  if(v.flash&&now-v.flash<110){ctx.globalAlpha=alpha*.8;circ(0,0,11,'#fff')}
  ctx.restore();
- if(!v.dying){const ex=Math.cos(a+wob),ey=Math.sin(a+wob);if(!sprK('z_'+k)[0])EYES.push([p.x+ex*5.5*sz,p.y+ey*5.5*sz,-ey,ex,sz,alpha]);if(v.hp<v.max||(Z.ZT[k]||{}).boss)hpBar(p.x,p.y-17*sz,v.hp/v.max,'#e5484d')}
+ if(!v.dying){const ex=Math.cos(a+wob),ey=Math.sin(a+wob);if(!sprK('z_'+k)[0])EYES.push([p.x+ex*5.5*sz,p.y+ey*5.5*sz,-ey,ex,sz,alpha]);if(v.hp<v.max||(Z.ZT[k]||{}).boss)hpBar(p.x,p.y-17*sz,v.hp/v.max,HPC().z)}
  return true;
 }
 
@@ -1380,6 +1382,7 @@ function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
   <label class="chk"><input type="checkbox" data-o="all" ${OPT.all?'checked':''}> Tout afficher dès le départ (factions, niveaux, collection), pour les joueurs habitués</label>
   <label class="chk"><input type="checkbox" data-o="eco" ${OPT.eco?'checked':''}> Mode économie (petits téléphones : moins d’effets, plateau moins détaillé)</label>
   <label class="chk"><input type="checkbox" data-o="text" ${OPT.text?'checked':''}> Texte plus grand</label>
+  <label class="chk"><input type="checkbox" data-o="cb" ${OPT.cb?'checked':''}> Couleurs adaptées au daltonisme (barres de vie bleu, orange et rose)</label>
  </div>${matchMedia('(hover: hover)').matches?`<h3>Raccourcis clavier</h3><dl class="keys">${KEYS_HELP.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`:''}<button type="button" class="go" data-a="optclose">Retour</button>`)}
 function runInfo(){onTitle=false;
  const counts={};deckList().forEach(t=>counts[t]=(counts[t]||0)+1);
@@ -1572,7 +1575,7 @@ panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
 panel.addEventListener('input',e=>{const el=e.target.closest('[data-o]');if(!el)return;const k=el.dataset.o;
  if(k==='sfx'||k==='mus'){OPT[k]=+el.value/100;const b=el.parentElement.querySelector('b');if(b)b.textContent=el.value+' %'}
- else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
+ else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'||k==='cb'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang')OPT.lang=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
  saveOpt();applyOpt();if(k==='sfx')SFX.play('ui')});
 $('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else night()});
 
