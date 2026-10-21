@@ -16,14 +16,21 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - HTML, CSS et JavaScript sans framework ni étape de build. Ouvrir `index.html` suffit pour jouer.
 - Rendu de la carte en Canvas 2D (`src/game.js`). Tous les graphismes sont dessinés en code pour l'instant.
-- Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), via Google Fonts.
+- Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), fichiers dans `assets/fonts/`.
 - Interface entièrement en français.
 
 ## Structure
 
 - `index.html` : la page et la structure de l'interface.
 - `src/engine.js` : le moteur, avec les règles pures (cartes, zombies, vagues, événements, déroulé d'une nuit tour par tour). Aucun accès au DOM, il doit tourner dans Node comme dans le navigateur. Il expose l'objet global `Z`.
-- `src/game.js` : le rendu canvas, les animations, les cartes en main, les écrans de fin de nuit et la boucle de jeu.
+- `src/game.js` et `src/game-*.js` : l’interface, découpée en fichiers chargés dans l’ordre par `index.html` (ils partagent leurs variables) :
+  - `game.js` : constantes (dont `VERSION`), cartes affichées, progression, sauvegarde ;
+  - `game-draw.js` : dessin de la carte (canvas), effets visuels, boucle d’affichage ;
+  - `game-ui.js` : fiche, main, plateau, déroulé de la nuit ;
+  - `game-screens.js` : aube, options, collection, decks, préparation, actions des boutons (`ACT`) ;
+  - `game-menu.js` : défi du jour, tableau des combats, menu pause, raccourcis clavier, accueil et démarrage.
+- `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
+- `assets/fonts/` : les polices, intégrées au jeu (plus de Google Fonts).
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
 - `src/style.css` : le style de l'interface.
 - `tools/simulate.js` : ancienne simulation d’équilibrage (remplacée par `tools/balance.js`).
@@ -35,7 +42,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - Une seule capture d'écran par changement visuel, en largeur téléphone (390 px). PC et téléphone tourné seulement si quelque chose cloche ou si Amine le demande.
 - Ne regarde pas les captures de `tools/test-out/` si le test ne signale aucun problème.
-- Cherche avec `grep` et lis seulement les passages utiles : jamais un fichier entier, les lignes de `game.js` sont très longues.
+- Cherche avec `grep` et lis seulement les passages utiles : jamais un fichier entier, les lignes des fichiers `game*.js` sont très longues.
 - Lance le test navigateur complet une seule fois, juste avant la mise en ligne ; entre-temps, `node tools/test-engine.js` suffit.
 - Réponses courtes. Pas de longue analyse sans demande.
 - Une conversation par sujet : quand un sujet est terminé, propose à Amine d'ouvrir une nouvelle conversation (avec le dépôt champion-game/dernier-abri) pour le suivant.
@@ -55,7 +62,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `tools/test-browser.js` (Chromium, ~3 min) : le vrai jeu en 390 × 844, 1280 × 800 et 844 × 390 (téléphone tourné), tous les écrans, pose des cartes de la main, plusieurs nuits complètes avec l’aube, la pause du Colosse et la reprise de sauvegarde ; vérifie l’absence d’erreur console, de fichier manquant et de défilement horizontal, et les images/s. Les captures sont dans `tools/test-out/` : regarde-les quand un changement est visuel.
   - Quand une règle change, ajoute ou adapte le test correspondant dans `tools/test-engine.js`.
 - Test d'équilibrage : `node tools/balance.js` (~3 min), **seulement quand Amine le demande**. Il produit `tools/balance-out/rapport.md` (courbe de difficulté avec un joueur automatique, montée en puissance de la horde, valeur de chaque carte comparée aux cartes de son type) et ajoute une ligne à `tools/balance-out/historique.csv` pour comparer les versions. Résume-lui les points saillants et propose des corrections, sans les appliquer avant son accord.
-- À chaque mise en ligne, change `VERSION` en haut de `src/game.js` (affichée sur l’écran d’accueil), le numéro `?v=` des fichiers dans `index.html` et le numéro dans `version.txt` (même numéro, ex. `v70`) : le jeu compare `version.txt` à sa version et se recharge tout seul s’il est en retard (cache du site ou du téléphone).
+- À chaque mise en ligne, change `VERSION` en haut de `src/game.js` (affichée sur l’écran d’accueil), le numéro `?v=` de tous les fichiers dans `index.html` et le numéro dans `version.txt` (même numéro, ex. `v70`) : le jeu compare `version.txt` à sa version et se recharge tout seul s’il est en retard (cache du site ou du téléphone).
 
 ## Prochaines étapes (par ordre de priorité)
 

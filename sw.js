@@ -3,7 +3,7 @@
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
 const CACHE='abri-1';
-const CORE=['./','index.html','src/style.css','src/engine.js','src/audio.js','src/game.js','manifest.webmanifest',
+const CORE=['./','index.html','src/style.css','src/engine.js','src/audio.js','src/game.js','src/game-draw.js','src/game-ui.js','src/game-screens.js','src/game-menu.js','manifest.webmanifest',
  'assets/fonts/special-elite.woff2','assets/fonts/atkinson-400.woff2','assets/fonts/atkinson-700.woff2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});

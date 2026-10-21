@@ -297,6 +297,15 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - **Vibrations** (téléphones Android ; l'iPhone ne les permet pas dans le navigateur) : brèche dans l'abri, survivant blessé ou mort, arrivée et mort d'un boss, défaite, succès. Option « Vibrations du téléphone ».
 - **Succès** : 28 objectifs permanents (nuits tenues, victoires, Mutations, boss tués, carnages, fusions, évolutions, factions, collection…). Un bandeau les annonce ; la page « Succès » est accessible depuis l'accueil et les statistiques. Ils préparent ceux de Steam et ne changent pas les règles.
 
+## Menu pause et confort (v139)
+
+- **Menu pause** : bouton ⏸ en haut (ou Échap). Pendant la nuit, il fige la horde. Il propose Reprendre, Options, Quitter vers l’accueil (la partie reste sauvegardée ; une nuit quittée en cours sera rejouée depuis le début) et Recommencer une partie (la partie en cours est perdue, sans points de survie). Le jeu se met en pause tout seul si on quitte l’appli pendant la nuit.
+- **Raccourcis clavier** (listés dans les options sur ordinateur) : Espace (nuit, vitesse, vague suivante), 1 à 9 (cartes de la main), Échap (annuler la sélection, puis pause), Ctrl+Z (annuler), M (son), D (tableau des combats).
+- **Clic droit / appui long** : sur une carte de la main, elle s’affiche en grand ; sur le plateau, annule la sélection et montre la fiche de l’unité.
+- **Hors ligne** : une fois chargé, le jeu marche sans internet ; les polices sont dans le jeu.
+- **Habillage** : fondu et glissement des écrans, carte qui se soulève au survol de la souris, bandeau « Nuit N » au début de chaque nuit, accueil de nuit avec des zombies qui rôdent autour de la maison.
+- **Option daltonisme** : barres de vie bleu/orange (tes unités) et rose (zombies) au lieu de vert/rouge.
+
 ## Rôles : tank et DPS (v136)
 
 Constat d'Amine en nuit 24 : l'Agent anti-émeute faisait plus de dégâts que les Snipers. Le tank frappe à chaque tour (il attire la horde) et les bonus fixes (+1 par attaque) profitent surtout aux unités qui attaquent souvent.
