@@ -20,3 +20,7 @@
   - phatphrogstudio : « zombie voice growl », « zombie voice idle moans 2 » → `zombie-32.mp3`, `zombie-33.mp3`
   - floraphonic : « fireball whoosh 5 » → `fx-flame.mp3`
 - **Sound Fishing** (soundfishing.eu, bruitages libres de droits) : canon 01 → `fx-cannon.mp3` ; chien moyen aboiements 02 → `fx-bark.mp3` ; orage → `amb-rain.mp3` ; tonnerre et vent → `amb-storm.mp3` ; Alien → `fx-roar2.mp3` ; tomahawk corps → `fx-melee-tomahawk.mp3`
+
+# Polices
+
+- **Special Elite** (Astigmatic) et **Atkinson Hyperlegible** (Braille Institute) : licence SIL Open Font License 1.1, fichiers dans `assets/fonts/`.
