@@ -10,13 +10,20 @@ const URL='file://'+path.join(ROOT,'index.html'),NIGHTS=+process.env.NIGHTS||5;
 const exe=fs.existsSync('/opt/pw-browsers/chromium')?'/opt/pw-browsers/chromium':undefined;
 const problems=[];let shots=0;
 
-async function run(vp,label){
+async function run(vp,label,lang='fr'){
  const b=await pw.chromium.launch(exe?{executablePath:exe}:{});const ctx=await b.newContext({viewport:vp,deviceScaleFactor:1});
- await ctx.addInitScript(()=>{try{if(!localStorage.getItem('abri-tuto'))localStorage.setItem('abri-tuto','5');if(!localStorage.getItem('abri-opts'))localStorage.setItem('abri-opts','{"all":1}')}catch(e){}});
+ await ctx.addInitScript(LG=>{try{if(!localStorage.getItem('abri-tuto'))localStorage.setItem('abri-tuto','5');if(!localStorage.getItem('abri-opts'))localStorage.setItem('abri-opts',JSON.stringify({all:1,lang:LG}))}catch(e){}
+  // textes dessinés sur le canvas, pour repérer le français oublié en anglais
+  window.__txt=new Set();const f=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(t,...a){if(window.__txt.size<3000)window.__txt.add(String(t));return f.call(this,t,...a)}},lang);
  const p=await ctx.newPage();const errs=[];
  p.on('pageerror',e=>errs.push('erreur JS : '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push('console : '+m.text())});
  p.on('requestfailed',r=>errs.push('fichier manquant : '+r.url().replace('file://'+ROOT,'')));
- const shot=async n=>{await p.screenshot({path:path.join(OUT,`${label}-${n}.png`)});shots++};
+ // en anglais : tout texte visible qui ressemble à du français est signalé
+ const FRW=/(^|[^\p{L}])(le|la|les|des|du|une|tes|ton|ta|tu|et|abri|ferraille|dégâts?|nuits?|cartes?|jour|pioche|défausse|aube|vague|énergies?|zombies? éliminés?|choisis|touche)(?![\p{L}])|[éèêàùçôîû’]/iu;
+ const NAMES=/La Sonothèque|Léa|Inès|Chloé|Théo|Zoé|Médor|Français|Sonothèque|Pokémon|Barricard/g;
+ const french=async where=>{if(lang!=='en')return;const t=await p.evaluate(()=>[document.body.innerText,...[...document.querySelectorAll('[aria-label],[title],[placeholder]')].map(e=>(e.getAttribute('aria-label')||'')+' '+(e.getAttribute('title')||'')+' '+(e.getAttribute('placeholder')||'')),...window.__txt].join('\n'));
+  for(const l of t.split('\n')){const c=l.replace(NAMES,'');if(FRW.test(c)&&!frSeen.has(l)){frSeen.add(l);problems.push(`${label} : français restant (${where}) : ${l.trim().slice(0,120)}`)}}};const frSeen=new Set();
+ const shot=async n=>{await french(n);await p.screenshot({path:path.join(OUT,`${label}-${n}.png`)});shots++};
  const overflow=async where=>{const o=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);if(o>2)problems.push(`${label} : défilement horizontal de ${o} px (${where})`)};
  const ov=()=>p.evaluate(()=>{const o=document.querySelector('#ov');if(!o||o.hidden)return'';const h=o.querySelector('h2');return h?h.textContent.trim():'(sans titre)'});
  const click=async sel=>{const e=await p.$(sel);if(!e)return false;await e.click({timeout:3000}).catch(()=>{});await p.waitForTimeout(150);return true};
@@ -26,7 +33,7 @@ async function run(vp,label){
  // écrans d'accueil
  await step('accueil',async()=>{await shot('01-accueil');await overflow('accueil')});
  await step('bestiaire',async()=>{await click('[data-a=deck]');await p.waitForTimeout(300);await shot('02-cartes');await overflow('cartes et zombies');await click('[data-a=title]')});
- await step('collection',async()=>{await click('[data-a=coll]');await p.waitForTimeout(300);await p.fill('[data-f=q]','tir');await p.waitForTimeout(150);
+ await step('collection',async()=>{await click('[data-a=coll]');await p.waitForTimeout(300);await p.fill('[data-f=q]',lang==='en'?'gun':'tir');await p.waitForTimeout(150);
   const n=await p.$$eval('.citem-w',es=>es.filter(e=>!e.hidden).length);if(!n)problems.push(`${label} : la recherche « tir » ne trouve rien`);
   await p.selectOption('[data-f=sort]','cost');await p.waitForTimeout(200);await shot('03-collection');await p.click('#panel .citem-w:not([hidden]) .cf',{button:'right',timeout:3000}).catch(()=>{});await p.waitForTimeout(250);if(!await p.evaluate(()=>{const z=document.querySelector('.zoomv');return !!z&&!z.hidden}))problems.push(`${label} : le clic droit n’affiche pas la carte en grand`);await p.keyboard.press('Escape');await p.waitForTimeout(100);await overflow('collection');await click('[data-a=title]')});
 
@@ -55,8 +62,8 @@ async function run(vp,label){
       if(cells.length)return{i,cell:cells[Math.floor(Math.random()*cells.length)]}}return null});
     if(!pick)break;await click(`.card[data-k="${pick.i}"]`);await p.mouse.click(...at(pick.cell));await p.waitForTimeout(120);
     if(await p.evaluate(()=>S.sel!==null&&S.sel<0))await p.evaluate(()=>{S.sel=null;render()})}
-   if(n===1){await shot('05-jour');await click('#pDraw');await p.waitForTimeout(200);if(!/Pioche/.test(await ov()))problems.push(`${label} : la pioche ne s’ouvre pas`);await click('#ov [data-a=closeov]');
-    await click('#pDisc');await p.waitForTimeout(200);if(!/Défausse/.test(await ov()))problems.push(`${label} : la défausse ne s’ouvre pas`);await click('#ov [data-a=closeov]')}await overflow('jour');
+   if(n===1){await shot('05-jour');await click('#pDraw');await p.waitForTimeout(200);if(!/Pioche|Draw/.test(await ov()))problems.push(`${label} : la pioche ne s’ouvre pas`);await click('#ov [data-a=closeov]');
+    await click('#pDisc');await p.waitForTimeout(200);if(!/Défausse|Discard/.test(await ov()))problems.push(`${label} : la défausse ne s’ouvre pas`);await click('#ov [data-a=closeov]')}await overflow('jour');
    // rappel d'une unité dans la réserve, puis remise en jeu gratuite
    if(n===2){const u=await p.evaluate(()=>G.grid.findIndex((v,j)=>Z.canRecall(G,j)));if(u>=0){await p.mouse.click(...at(u));await click('#info [data-a=recall]');
     if(await p.evaluate(()=>G.bench.length)!==1)problems.push(`${label} : le rappel d’une unité ne marche pas`);else{await shot('05b-reserve');await click('#pRes');
@@ -89,7 +96,10 @@ async function run(vp,label){
  errs.forEach(e=>problems.push(`${label} : ${e}`));
  await b.close();return reached}
 
-(async()=>{const r1=await run({width:390,height:844},'telephone'),r2=await run({width:1280,height:800},'ordinateur'),r3=await run({width:844,height:390},'paysage');
- console.log(`Navigateur : téléphone ${r1} nuit(s) jouée(s), ordinateur ${r2}, téléphone en largeur ${r3}, ${shots} captures dans tools/test-out/.`);
- if(problems.length){console.log([...new Set(problems)].slice(0,40).map(x=>'  ✗ '+x).join('\n'));process.exitCode=1}
+(async()=>{const only=process.env.ONLY;
+ const r1=!only||only==='telephone'?await run({width:390,height:844},'telephone'):'-',r2=!only||only==='ordinateur'?await run({width:1280,height:800},'ordinateur'):'-',r3=!only||only==='paysage'?await run({width:844,height:390},'paysage'):'-';
+ // la même partie en anglais, sur téléphone
+ const r4=!only||only==='anglais'?await run({width:390,height:844},'anglais','en'):'-';
+ console.log(`Navigateur : téléphone ${r1} nuit(s) jouée(s), ordinateur ${r2}, téléphone en largeur ${r3}, en anglais ${r4}, ${shots} captures dans tools/test-out/.`);
+ if(problems.length){console.log([...new Set(problems)].slice(0,+process.env.MAXP||40).map(x=>'  ✗ '+x).join('\n'));process.exitCode=1}
  else console.log('  Aucun problème : pas d’erreur console, pas de fichier manquant, pas de défilement horizontal.')})();

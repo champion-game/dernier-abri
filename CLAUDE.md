@@ -19,7 +19,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - HTML, CSS et JavaScript sans framework ni étape de build. Ouvrir `index.html` suffit pour jouer.
 - Rendu de la carte en Canvas 2D (`src/game.js`). Tous les graphismes sont dessinés en code pour l'instant.
 - Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), fichiers dans `assets/fonts/`.
-- Interface entièrement en français.
+- Interface en français (langue source) et en anglais (`src/lang-en.js`).
 
 ## Structure
 
@@ -34,6 +34,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
 - `assets/fonts/` : les polices, intégrées au jeu (plus de Google Fonts).
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
+- `src/i18n.js` : la traduction (`_t`, langue choisie) ; `src/lang-en.js` : le dictionnaire anglais (clé = texte français).
 - `src/style.css` : le style de l'interface.
 - `tools/simulate.js` : ancienne simulation d’équilibrage (remplacée par `tools/balance.js`).
 - `tools/balance.js` : le test d’équilibrage (à lancer quand Amine le demande).
@@ -75,4 +76,4 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 2. Derniers sons enregistrés (arbalète, lance-flammes, mort d’un survivant, aube, musique de nuit) : fichiers CC0 fournis par Amine, intégrés comme dans `assets/sounds/` (voir `CREDITS.md`).
 3. Graphismes : le jeu est en style cartoon (illustrations et sprites générés). Avant Steam, faire retoucher ou redessiner l’ensemble par un artiste dans ce style, et déclarer l’usage d’IA sur Steam.
 4. Préparer Steam : test à l’aveugle, page Steam, démo pour le Next Fest, version Electron ou Tauri, succès, sauvegarde cloud, classement du défi quotidien.
-5. **Traduction (en dernier, une fois le jeu stabilisé, décision d’Amine)** : sortir tous les textes (cartes, zombies, règles, interface) dans des fichiers de langue et traduire en anglais. Le choix de langue existe déjà dans les options (anglais marqué « bientôt »). D’ici là, écrire les nouveaux textes en français uniquement.
+5. **Traduction anglaise : faite (v146).** Tout nouveau texte s’écrit en français dans `_t('…')` ou `` _t`…${x}…` `` (voir `src/i18n.js`), et sa traduction anglaise s’ajoute dans `src/lang-en.js` (clé = texte français exact). `node tools/test-engine.js` signale tout texte sans traduction.

@@ -207,5 +207,55 @@ for(let g=0;g<NIGHTS;g++){const r=rng(1000+g);
   Z.endNight(st)})}
 check('aucune nuit de plus de 2 s',()=>ok(slow===0,slow+' nuit(s) lente(s), pire '+worst+' ms'));
 
+/* ---------- 5. traduction anglaise ---------- */
+// chaque texte passé à _t dans le code doit avoir sa traduction dans src/lang-en.js, avec les mêmes trous {0}, {1}…
+{const vm=require('vm');
+ const keysOf=src=>{const out=[];let i=0;
+  const cook=raw=>Function('return `'+raw+'`')();
+  // lit un gabarit `…` à partir de src[j]==='`' ; renvoie [clé, fin]
+  const tpl=j=>{let k='',raw='',n=0;j++;for(;j<src.length;j++){const c=src[j];
+    if(c==='\\'){raw+=c+src[j+1];j++;continue}
+    if(c==='`'){k+=cook(raw);return[k,j+1]}
+    if(c==='$'&&src[j+1]==='{'){k+=cook(raw)+'{'+(n++)+'}';raw='';j=expr(j+2)-1;continue}
+    raw+=c}return[k,j]};
+  const expr=j=>{let d=0;for(;j<src.length;j++){const c=src[j];
+    if(c==='\''||c==='"'){const q=c;j++;while(j<src.length&&src[j]!==q){if(src[j]==='\\')j++;j++}continue}
+    if(c==='`'){j=tpl(j)[1]-1;continue}
+    if(c==='/'&&/[(,=:[!&|?{};]/.test(src.slice(0,j).trimEnd().slice(-1))){j++;let cl=0;while(j<src.length&&(src[j]!=='/'||cl)){if(src[j]==='\\')j++;else if(src[j]==='[')cl=1;else if(src[j]===']')cl=0;j++}continue}
+    if(c==='{')d++;else if(c==='}'){if(!d)return j+1;d--}}return j};
+  while((i=src.indexOf('_t',i))>=0){const pre=src[i-1]||' ';if(/[\w$]/.test(pre)){i+=2;continue}
+   const c=src[i+2];
+   if(c==='`'){const [k]=tpl(i+2);out.push(k)}
+   else if(c==='('&&(src[i+3]==='\''||src[i+3]==='"')){const q=src[i+3];let j=i+4;while(src[j]!==q){if(src[j]==='\\')j++;j++}
+    if(src[j+1]===')')out.push(Function('return '+src.slice(i+3,j+1))())}
+   i+=2}
+  return out};
+ const ctx={I18N:{},console};vm.createContext(ctx);
+ vm.runInContext(fs.readFileSync(path.join(ROOT,'src/lang-en.js'),'utf8'),ctx);
+ const EN=ctx.I18N.en||{};const ph=s=>new Set(s.match(/\{\d+\}/g)||[]);
+ for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js']){
+  const ks=keysOf(fs.readFileSync(path.join(ROOT,'src',f),'utf8'));
+  const miss=ks.filter(k=>EN[k]==null);
+  check(`traduction : ${f} (${ks.length} textes) tous traduits`,()=>ok(!miss.length,miss.length+' sans traduction : '+miss.slice(0,3).map(k=>JSON.stringify(k).slice(0,90)).join(' | ')));
+  const bad=ks.filter(k=>EN[k]!=null&&[...ph(EN[k])].some(p=>!ph(k).has(p)));
+  check(`traduction : ${f} trous {0}… cohérents`,()=>ok(!bad.length,bad.slice(0,3).join(' | ')));
+ }
+ // le moteur en anglais : noms traduits et nuits sans plantage
+ const g={I18N:{},console,localStorage:{getItem:()=>JSON.stringify({lang:'en'})},navigator:{language:'en'},NodeFilter:{SHOW_TEXT:4},
+  document:{documentElement:{},body:{},querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null})}};
+ g.globalThis=g;vm.createContext(g);
+ for(const f of ['i18n.js','lang-en.js','engine.js'])vm.runInContext(fs.readFileSync(path.join(ROOT,'src',f),'utf8')+(f==='engine.js'?';globalThis.Z=Z;':''),g);
+ const ZE=g.Z;
+ check('traduction : moteur en anglais (noms de cartes et de zombies)',()=>{eq(ZE.U.gun.n,'Gunner');eq(ZE.ZT.walk.n,'Walker');eq(ZE.U.gun.v,'2 · R2')});
+ const FR=/\b(le|la|les|des|une|tes|ton|abri|ferraille|dégâts?|nuit)\b|’/i;
+ check('traduction : nuits et événements de l’aube en anglais',()=>{const r=rng(5);const P=Object.keys(ZE.U).filter(t=>!ZE.U[t].evo&&!ZE.U[t].react&&!ZE.U[t].instant&&!ZE.U[t].onUnit);
+  for(let g=0;g<12;g++){const st=ZE.newState('surv','bois',r);st.night=1+g*4;st.shelter=st.maxS=1e6;
+   for(let k=0;k<10;k++){const t=P[Math.floor(r()*P.length)],cs=[...Array(81).keys()].filter(j=>!st.grid[j]&&!ZE.isEdge(j)&&j!==ZE.C&&ZE.canPlace(st,t,j));if(cs.length)ZE.place(st,t,cs[Math.floor(r()*cs.length)],r,true)}
+   ZE.startNight(st,r);let res,n=0;do{res=ZE.step(st);if(res.pause)ZE.nextWave(st)}while(!res.done&&n++<3000);ZE.endNight(st)}
+  for(const id of Object.keys(ZE.DAWN))ZE.DAWN[id].ch.forEach((c,k)=>{for(let s=0;s<4;s++){const st=ZE.newState('surv','bois',rng(s+1));st.scrap=50;st.night=6;const o=ZE.resolveDawn(st,id,k,rng(s*7+k),['gun','bar']);
+   ok(typeof o.txt==='string'&&!/undefined|\{\d\}/.test(o.txt),id+' : '+o.txt);ok(!FR.test(o.txt),'français restant ('+id+') : '+o.txt);
+   ok(!FR.test(ZE.DAWN[id].n+' '+c.n+' '+c.d),'français restant : '+ZE.DAWN[id].n+' / '+c.n)}})});
+}
+
 console.log(`Moteur : ${pass} tests réussis, ${fail} échoué(s). Nuits aléatoires : ${NIGHTS} (jusqu’à ${maxZ} zombies, la plus lente ${worst} ms).`);
 if(fail){console.log(fails.slice(0,40).map(f=>'  ✗ '+f).join('\n'));process.exitCode=1}

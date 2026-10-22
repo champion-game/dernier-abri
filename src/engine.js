@@ -1,5 +1,7 @@
 // Moteur du jeu : règles pures, sans DOM. Utilisé par le jeu (navigateur) et par tools/simulate.js (Node).
 const Z=(()=>{
+ // traduction : _t vient de src/i18n.js dans le navigateur ; dans Node (tests), le texte français est gardé tel quel
+ const _t=typeof globalThis!=='undefined'&&typeof globalThis._t==='function'?globalThis._t:(s,...a)=>typeof s==='string'?s:s.reduce((r,q,i)=>r+(i?a[i-1]:'')+q,'');
  // carte de 9×9 cases : l'anneau extérieur est la forêt d'où vient la horde, l'abri est au centre
  const N=9,C=(N*N-1)/2,MID=(N-1)/2,MAXS=10;let HPS=0,HPS2=.12;
  // frénésie meurtrière (v114, demande d'Amine) : +10 % dès la nuit 5, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %…).
@@ -12,181 +14,181 @@ const Z=(()=>{
  const dmgBonus=()=>0;
  const U={
   // défenses
-  bar:{n:'Barricade',cat:'wall',hp:7,block:1,v:'7 PV',d:'Planches clouées : bloque les zombies, 7 PV'},
-  car:{n:'Épave',cat:'wall',hp:14,block:1,v:'14 PV',d:'Carcasse de voiture : bloque, 14 PV'},
-  fen:{n:'Clôture',cat:'wall',hp:5,block:1,thorns:1,v:'5 PV',d:'Clôture électrique : bloque, 5 PV, 1 dégât à chaque zombie qui la frappe'},
-  sand:{n:'Sacs de sable',cat:'wall',hp:6,block:1,cap:1,v:'6 PV',d:'Bloque, 6 PV, ne perd jamais plus de 1 PV par coup'},
-  door:{n:'Porte blindée',cat:'wall',hp:18,block:1,near:1,v:'18 PV',d:'Bloque, 18 PV, seulement sur une case collée à l’abri'},
-  tire:{n:'Mur de pneus',cat:'wall',hp:8,block:1,tire:1,v:'8 PV',d:'Bloque, 8 PV, laisse une flaque d’essence en tombant'},
+  bar:{n:_t('Barricade'),cat:'wall',hp:7,block:1,v:_t('7 PV'),d:_t('Planches clouées : bloque les zombies, 7 PV')},
+  car:{n:_t('Épave'),cat:'wall',hp:14,block:1,v:_t('14 PV'),d:_t('Carcasse de voiture : bloque, 14 PV')},
+  fen:{n:_t('Clôture'),cat:'wall',hp:5,block:1,thorns:1,v:_t('5 PV'),d:_t('Clôture électrique : bloque, 5 PV, 1 dégât à chaque zombie qui la frappe')},
+  sand:{n:_t('Sacs de sable'),cat:'wall',hp:6,block:1,cap:1,v:_t('6 PV'),d:_t('Bloque, 6 PV, ne perd jamais plus de 1 PV par coup')},
+  door:{n:_t('Porte blindée'),cat:'wall',hp:18,block:1,near:1,v:_t('18 PV'),d:_t('Bloque, 18 PV, seulement sur une case collée à l’abri')},
+  tire:{n:_t('Mur de pneus'),cat:'wall',hp:8,block:1,tire:1,v:_t('8 PV'),d:_t('Bloque, 8 PV, laisse une flaque d’essence en tombant')},
   // tireurs
-  gun:{n:'Tireur',cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2'},
-  snp:{n:'Sniper',cat:'shoot',hp:2,block:1,rng:4,dmg:5,every:2,v:'5 · P4',d:'5 dégâts tous les 2 tours, portée 4'},
-  sht:{n:'Fusil à pompe',cat:'shoot',hp:4,block:1,rng:1,dmg:2,every:1,aoe:1,aoeMax:4,v:'2 ×4',d:'2 dégâts aux 4 zombies les plus proches à 1 case'},
-  xbow:{n:'Arbalète',cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,hits:2,distinct:1,v:'2 ×2 · P2',d:'À chaque tour, 2 dégâts à 2 zombies différents, portée 2'},
-  flame:{n:'Lance-flammes',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,ignite:3,v:'Feu · P2',d:'1 dégât à 2 cases et enflamme le zombie : 1 dégât par tour pendant 3 tours, 5 PV'},
-  mg:{n:'Mitrailleuse',cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,hits:3,jam:3,v:'2 ×3 · P2',d:'3 tirs de 2 dégâts par tour, portée 2, s’enraye 1 tour sur 3'},
-  molo:{n:'Cocktails',cat:'shoot',hp:2,block:1,rng:2,dmg:2,every:3,molo:1,v:'Zone · P2',d:'Tous les 3 tours, un cocktail sur le groupe le plus serré : 2 dégâts et feu, portée 2'},
-  kid:{n:'Gamin',cat:'shoot',hp:1,block:1,rng:2,dmg:1,every:1,hits:2,v:'1 ×2 · P2',d:'Lance-pierre : 2 tirs de 1 dégât par tour, portée 2, mais 1 seul PV'},
+  gun:{n:_t('Tireur'),cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,v:_t('2 · P2'),d:_t('2 dégâts par tour, portée 2')},
+  snp:{n:_t('Sniper'),cat:'shoot',hp:2,block:1,rng:4,dmg:5,every:2,v:_t('5 · P4'),d:_t('5 dégâts tous les 2 tours, portée 4')},
+  sht:{n:_t('Fusil à pompe'),cat:'shoot',hp:4,block:1,rng:1,dmg:2,every:1,aoe:1,aoeMax:4,v:'2 ×4',d:_t('2 dégâts aux 4 zombies les plus proches à 1 case')},
+  xbow:{n:_t('Arbalète'),cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,hits:2,distinct:1,v:_t('2 ×2 · P2'),d:_t('À chaque tour, 2 dégâts à 2 zombies différents, portée 2')},
+  flame:{n:_t('Lance-flammes'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,ignite:3,v:_t('Feu · P2'),d:_t('1 dégât à 2 cases et enflamme le zombie : 1 dégât par tour pendant 3 tours, 5 PV')},
+  mg:{n:_t('Mitrailleuse'),cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,hits:3,jam:3,v:_t('2 ×3 · P2'),d:_t('3 tirs de 2 dégâts par tour, portée 2, s’enraye 1 tour sur 3')},
+  molo:{n:_t('Cocktails'),cat:'shoot',hp:2,block:1,rng:2,dmg:2,every:3,molo:1,v:_t('Zone · P2'),d:_t('Tous les 3 tours, un cocktail sur le groupe le plus serré : 2 dégâts et feu, portée 2')},
+  kid:{n:_t('Gamin'),cat:'shoot',hp:1,block:1,rng:2,dmg:1,every:1,hits:2,v:_t('1 ×2 · P2'),d:_t('Lance-pierre : 2 tirs de 1 dégât par tour, portée 2, mais 1 seul PV')},
   // corps à corps
-  axe:{n:'Bûcheron',cat:'melee',hp:7,block:1,rng:1,dmg:5,every:1,v:'5 · P1',d:'5 dégâts par tour au corps à corps, 7 PV'},
-  dog:{n:'Chien',cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,hits:2,v:'2 ×2',d:'Mord 2 fois par tour (2 dégâts) au corps à corps, 5 PV'},
-  cop:{n:'Policier',cat:'melee',hp:9,block:1,rng:1,dmg:1,every:1,push:1,v:'1 · Recul',d:'1 dégât au contact et repousse le zombie d’une case, 9 PV'},
-  butch:{n:'Boucher',cat:'melee',hp:6,block:1,rng:1,dmg:5,every:1,feed:1,v:'5 · Soin',d:'5 dégâts au contact, récupère 1 PV à chaque zombie tué'},
-  monk:{n:'Moine',cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,aoe:1,v:'1 zone',d:'1 dégât à tous les zombies autour de lui, 11 PV'},
+  axe:{n:_t('Bûcheron'),cat:'melee',hp:7,block:1,rng:1,dmg:5,every:1,v:_t('5 · P1'),d:_t('5 dégâts par tour au corps à corps, 7 PV')},
+  dog:{n:_t('Chien'),cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,hits:2,v:'2 ×2',d:_t('Mord 2 fois par tour (2 dégâts) au corps à corps, 5 PV')},
+  cop:{n:_t('Policier'),cat:'melee',hp:9,block:1,rng:1,dmg:1,every:1,push:1,v:_t('1 · Recul'),d:_t('1 dégât au contact et repousse le zombie d’une case, 9 PV')},
+  butch:{n:_t('Boucher'),cat:'melee',hp:6,block:1,rng:1,dmg:5,every:1,feed:1,v:_t('5 · Soin'),d:_t('5 dégâts au contact, récupère 1 PV à chaque zombie tué')},
+  monk:{n:_t('Moine'),cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,aoe:1,v:_t('1 zone'),d:_t('1 dégât à tous les zombies autour de lui, 11 PV')},
   // soutien
-  med:{n:'Infirmière',cat:'help',hp:2,block:1,heal:1,hrng:2,v:'Soin · P2',d:'Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases ou moins'},
-  lamp:{n:'Projecteur',cat:'post',hp:2,block:1,buff:1,v:'+1',d:'Les unités autour font +1 dégât'},
-  radio:{n:'Radio',cat:'post',hp:2,block:1,v:'+1 carte',d:'Tant qu\'elle tient, tu pioches 1 carte de plus chaque jour'},
-  cook:{n:'Cuisinier',cat:'help',hp:2,block:1,cook:1,v:'+1 abri',d:'À chaque aube, l’abri récupère 1 PV'},
-  mech:{n:'Mécanicien',cat:'help',hp:3,block:1,mech:1,v:'Répare',d:'Répare 1 PV à une défense ou un poste voisin à chaque tour'},
-  siren:{n:'Sirène',cat:'post',hp:4,block:1,lure:2,v:'Attire',d:'Les zombies à 2 cases ou moins marchent vers elle au lieu de l’abri'},
-  lead:{n:'Chef de groupe',cat:'help',hp:3,block:1,lead:1,v:'Rythme',d:'Tous les 2 tours, les unités autour attaquent une fois de plus'},
-  solar:{n:'Panneau solaire',cat:'post',hp:2,block:1,solar:1,v:'Courant',d:'Projecteurs et clôtures marchent pendant une coupure, clôtures à 2 dégâts'},
+  med:{n:_t('Infirmière'),cat:'help',hp:2,block:1,heal:1,hrng:2,v:_t('Soin · P2'),d:_t('Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases ou moins')},
+  lamp:{n:_t('Projecteur'),cat:'post',hp:2,block:1,buff:1,v:'+1',d:_t('Les unités autour font +1 dégât')},
+  radio:{n:_t('Radio'),cat:'post',hp:2,block:1,v:_t('+1 carte'),d:_t('Tant qu\'elle tient, tu pioches 1 carte de plus chaque jour')},
+  cook:{n:_t('Cuisinier'),cat:'help',hp:2,block:1,cook:1,v:_t('+1 abri'),d:_t('À chaque aube, l’abri récupère 1 PV')},
+  mech:{n:_t('Mécanicien'),cat:'help',hp:3,block:1,mech:1,v:_t('Répare'),d:_t('Répare 1 PV à une défense ou un poste voisin à chaque tour')},
+  siren:{n:_t('Sirène'),cat:'post',hp:4,block:1,lure:2,v:_t('Attire'),d:_t('Les zombies à 2 cases ou moins marchent vers elle au lieu de l’abri')},
+  lead:{n:_t('Chef de groupe'),cat:'help',hp:3,block:1,lead:1,v:_t('Rythme'),d:_t('Tous les 2 tours, les unités autour attaquent une fois de plus')},
+  solar:{n:_t('Panneau solaire'),cat:'post',hp:2,block:1,solar:1,v:_t('Courant'),d:_t('Projecteurs et clôtures marchent pendant une coupure, clôtures à 2 dégâts')},
   // pièges
-  trap:{n:'Piège à loup',cat:'trap',hp:1,block:0,trap:5,v:'5',d:'Le premier zombie qui marche dessus subit 5 dégâts'},
-  fire:{n:'Essence',cat:'trap',hp:1,block:0,burn:1,v:'1/tour',d:'Flaque enflammée : 1 dégât par tour aux zombies dessus, s\'éteint à l\'aube'},
-  mine:{n:'Mine',cat:'trap',hp:1,block:0,mine:6,v:'6 zone',d:'Explose au passage : 6 dégâts sur la case et autour'},
-  wire:{n:'Barbelés',cat:'trap',hp:1,block:0,wire:1,v:'Ralentit',d:'Ne bloque pas : 1 dégât et ralentit chaque zombie qui passe, reste en place'},
-  spike:{n:'Fosse à pieux',cat:'trap',hp:4,block:0,spike:3,v:'3 ×4',d:'3 dégâts à chaque zombie qui tombe dedans, casse après 4 zombies'},
-  gas:{n:'Bonbonne de gaz',cat:'trap',hp:1,block:1,gas:5,v:'5 zone',d:'Bloque. Explose quand un zombie la frappe : 5 dégâts sur la case et autour'},
-  smoke:{n:'Fumigène',cat:'trap',hp:1,block:0,smoke:3,v:'Étourdit',d:'Le premier zombie qui passe libère la fumée : les zombies autour sont perdus 3 tours'},
-  bait:{n:'Appât',cat:'trap',hp:3,block:0,bait:3,v:'Retient',d:'Viande crue : 3 zombies s’arrêtent 3 tours pour manger'},
-  dyn:{n:'Dynamite',cat:'trap',hp:1,block:0,dyn:8,v:'8 zone',d:'Explose au 8ᵉ tour de la nuit : 8 dégâts sur la case et autour'},
+  trap:{n:_t('Piège à loup'),cat:'trap',hp:1,block:0,trap:5,v:'5',d:_t('Le premier zombie qui marche dessus subit 5 dégâts')},
+  fire:{n:_t('Essence'),cat:'trap',hp:1,block:0,burn:1,v:_t('1/tour'),d:_t('Flaque enflammée : 1 dégât par tour aux zombies dessus, s\'éteint à l\'aube')},
+  mine:{n:_t('Mine'),cat:'trap',hp:1,block:0,mine:6,v:_t('6 zone'),d:_t('Explose au passage : 6 dégâts sur la case et autour')},
+  wire:{n:_t('Barbelés'),cat:'trap',hp:1,block:0,wire:1,v:_t('Ralentit'),d:_t('Ne bloque pas : 1 dégât et ralentit chaque zombie qui passe, reste en place')},
+  spike:{n:_t('Fosse à pieux'),cat:'trap',hp:4,block:0,spike:3,v:'3 ×4',d:_t('3 dégâts à chaque zombie qui tombe dedans, casse après 4 zombies')},
+  gas:{n:_t('Bonbonne de gaz'),cat:'trap',hp:1,block:1,gas:5,v:_t('5 zone'),d:_t('Bloque. Explose quand un zombie la frappe : 5 dégâts sur la case et autour')},
+  smoke:{n:_t('Fumigène'),cat:'trap',hp:1,block:0,smoke:3,v:_t('Étourdit'),d:_t('Le premier zombie qui passe libère la fumée : les zombies autour sont perdus 3 tours')},
+  bait:{n:_t('Appât'),cat:'trap',hp:3,block:0,bait:3,v:_t('Retient'),d:_t('Viande crue : 3 zombies s’arrêtent 3 tours pour manger')},
+  dyn:{n:_t('Dynamite'),cat:'trap',hp:1,block:0,dyn:8,v:_t('8 zone'),d:_t('Explose au 8ᵉ tour de la nuit : 8 dégâts sur la case et autour')},
   // objets
-  food:{n:'Conserves',cat:'item',instant:1,gain:3,v:'+3 abri',d:'Utilise-la sur l\'abri : +3 PV'},
-  rep:{n:'Outils',cat:'item',instant:1,gain:3,v:'+3 PV',d:'Utilise-les sur l\'abri : toutes tes unités récupèrent 3 PV'},
-  kit:{n:'Trousse de secours',cat:'item',instant:1,onUnit:1,v:'Soin total',d:'Utilise-la sur une de tes unités blessées : elle récupère tous ses PV'},
-  coffee:{n:'Café',cat:'item',instant:1,v:'+2 énergie',d:'Utilise-le sur l’abri : gratuit, +2 énergie aujourd’hui'},
-  roadmap:{n:'Carte routière',cat:'item',instant:1,peek:3,v:'Fouille',d:'Utilise-la sur l’abri : regarde les 3 prochaines cartes de ta pioche et prends-en une'},
+  food:{n:_t('Conserves'),cat:'item',instant:1,gain:3,v:_t('+3 abri'),d:_t('Utilise-la sur l\'abri : +3 PV')},
+  rep:{n:_t('Outils'),cat:'item',instant:1,gain:3,v:_t('+3 PV'),d:_t('Utilise-les sur l\'abri : toutes tes unités récupèrent 3 PV')},
+  kit:{n:_t('Trousse de secours'),cat:'item',instant:1,onUnit:1,v:_t('Soin total'),d:_t('Utilise-la sur une de tes unités blessées : elle récupère tous ses PV')},
+  coffee:{n:_t('Café'),cat:'item',instant:1,v:_t('+2 énergie'),d:_t('Utilise-le sur l’abri : gratuit, +2 énergie aujourd’hui')},
+  roadmap:{n:_t('Carte routière'),cat:'item',instant:1,peek:3,v:_t('Fouille'),d:_t('Utilise-la sur l’abri : regarde les 3 prochaines cartes de ta pioche et prends-en une')},
   // --- extension : nouvelles cartes de faction ---
-  riot:{n:'Agent anti-émeute',cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,push:1,cap:2,v:'1 · Bouclier',d:'Bouclier : 14 PV, ne perd jamais plus de 2 PV par coup, 1 dégât et repousse'},
-  k9:{n:'Chien policier',cat:'melee',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,stun:1,v:'1 ×2 · Étourdit',d:'Mord 2 fois par tour (1 dégât) ; la 1ʳᵉ morsure du tour étourdit le zombie 1 tour'},
-  barrier:{n:'Barrage de police',cat:'wall',hp:7,block:1,v:'7 PV',d:'Barrières de police : bloque, 7 PV'},
-  swat:{n:'Tireur d’élite du GIGN',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2'},
-  mortar:{n:'Mortier',cat:'shoot',hp:3,block:1,rng:4,dmg:3,every:3,blast:1,v:'3 zone · P4',d:'Tous les 3 tours, un obus sur le groupe le plus serré : 3 dégâts sur la case et autour'},
-  sentry:{n:'Sentinelle automatique',cat:'shoot',hp:6,block:1,rng:2,dmg:1,every:1,hits:2,v:'1 ×2 · P2',d:'Tourelle : 2 tirs de 1 dégât par tour, portée 2, 6 PV'},
-  clay:{n:'Mine claymore',cat:'trap',hp:1,block:0,clay:4,v:'4 grande zone',d:'Explose au passage : 4 dégâts sur toutes les cases à 2 cases ou moins'},
-  bunker:{n:'Bunker',cat:'wall',hp:16,block:1,rng:1,dmg:1,every:1,v:'16 PV · 1',d:'Bloque, 16 PV, et tire sur les zombies au contact'},
-  pharma:{n:'Pharmacienne',cat:'help',hp:3,block:1,heal:1,hfast:1,v:'Soin rapide',d:'Soin au contact : 1 PV à chaque tour à l’unité voisine la plus blessée (8 cases autour)'},
-  hospital:{n:'Hôpital de campagne',cat:'post',hp:6,block:1,healAll:1,v:'Soin zone',d:'Soin au contact : tous les 2 tours, toutes les unités sur les 8 cases autour récupèrent 1 PV'},
-  priest:{n:'Prêtre',cat:'help',hp:3,block:1,bless:1,v:'Protège',d:'Une fois chacune, les unités voisines qui devraient tomber restent à 1 PV'},
-  stretch:{n:'Brancardier',cat:'help',hp:4,block:1,heal:1,hrng:3,v:'Soin · P3',d:'Soin à distance : il court chercher les blessés, 1 PV tous les 2 tours à l’unité la plus blessée à 3 cases ou moins, 4 PV'},
-  brasero:{n:'Brasero',cat:'wall',hp:5,block:1,aura:1,v:'Brûle autour',d:'Bloque. Tous les 2 tours, 1 dégât et feu aux zombies collés à lui'},
-  firetrap:{n:'Fût piégé',cat:'trap',hp:1,block:0,firetrap:4,v:'4 zone + feu',d:'Explose au passage : 4 dégâts autour et les zombies brûlent 3 tours'},
-  net:{n:'Filet',cat:'trap',hp:2,block:0,net:4,v:'Immobilise',d:'Le zombie qui passe est pris 4 tours, sert 2 fois'},
-  bear:{n:'Piège à ours',cat:'trap',hp:1,block:0,trap:10,v:'10',d:'Le premier zombie qui marche dessus subit 10 dégâts'},
-  hunter:{n:'Chasseur',cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2'},
-  dogs:{n:'Meute de chiens',cat:'melee',hp:7,block:1,rng:1,dmg:1,every:1,hits:4,v:'1 ×4',d:'4 morsures de 1 dégât par tour au corps à corps'},
-  pitch:{n:'Fermier à la fourche',cat:'melee',hp:10,block:1,rng:1,dmg:2,every:1,push:1,v:'2 · Recul',d:'2 dégâts au contact et repousse le zombie d’une case, 10 PV'},
-  scare:{n:'Épouvantail',cat:'post',hp:6,block:1,lure:2,v:'Attire',d:'Les zombies à 2 cases ou moins marchent vers lui au lieu de l’abri, 6 PV'},
-  turret:{n:'Tourelle bricolée',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'2 dégâts par tour, portée 2, 4 PV'},
-  workshop:{n:'Atelier',cat:'post',hp:5,block:1,mech:1,mechAll:1,v:'Répare tout',d:'Répare 1 PV à toutes les défenses et tous les postes voisins à chaque tour'},
-  modwall:{n:'Mur modulaire',cat:'wall',hp:9,block:1,v:'9 PV',d:'Panneaux de tôle : bloque, 9 PV'},
-  tesla:{n:'Bobine Tesla',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:2,hits:3,distinct:1,needPow:1,v:'2 ×3 · P2',d:'Tous les 2 tours, un arc frappe 3 zombies (2 dégâts). Inactive pendant une coupure'},
-  teacher:{n:'Institutrice',cat:'help',hp:3,block:1,draw:1,v:'+1 carte',d:'Tant qu’elle tient, tu pioches 1 carte de plus chaque jour'},
-  market:{n:'Marché',cat:'post',hp:4,block:1,market:2,v:'+2 ferraille',d:'À chaque aube, +2 ferraille'},
-  vigile:{n:'Vigile',cat:'shoot',hp:4,block:1,rng:2,dmg:1,every:1,v:'1 · P2',d:'1 dégât par tour, portée 2, 4 PV'},
-  carp:{n:'Charpentier',cat:'help',hp:4,block:1,carp:2,v:'Répare',d:'À chaque aube, les défenses et les postes voisins récupèrent 2 PV'},
-  tear:{n:'Gaz lacrymogène',cat:'react',react:'cell',v:'Étourdit',d:'Pendant la nuit : les zombies sur la case visée et autour sont perdus 3 tours'},
-  napalm:{n:'Napalm',cat:'react',react:'cell',v:'Feu zone',d:'Pendant la nuit : la case visée et autour s’embrasent (flaques de feu jusqu’à l’aube)'},
-  air:{n:'Frappe aérienne',cat:'react',react:'cell',v:'10 zone',d:'Pendant la nuit : 10 dégâts à tous les zombies à 2 cases ou moins de la case visée'},
+  riot:{n:_t('Agent anti-émeute'),cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,push:1,cap:2,v:_t('1 · Bouclier'),d:_t('Bouclier : 14 PV, ne perd jamais plus de 2 PV par coup, 1 dégât et repousse')},
+  k9:{n:_t('Chien policier'),cat:'melee',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,stun:1,v:_t('1 ×2 · Étourdit'),d:_t('Mord 2 fois par tour (1 dégât) ; la 1ʳᵉ morsure du tour étourdit le zombie 1 tour')},
+  barrier:{n:_t('Barrage de police'),cat:'wall',hp:7,block:1,v:_t('7 PV'),d:_t('Barrières de police : bloque, 7 PV')},
+  swat:{n:_t('Tireur d’élite du GIGN'),cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:_t('2 · P2'),d:_t('2 dégâts par tour, portée 2')},
+  mortar:{n:_t('Mortier'),cat:'shoot',hp:3,block:1,rng:4,dmg:3,every:3,blast:1,v:_t('3 zone · P4'),d:_t('Tous les 3 tours, un obus sur le groupe le plus serré : 3 dégâts sur la case et autour')},
+  sentry:{n:_t('Sentinelle automatique'),cat:'shoot',hp:6,block:1,rng:2,dmg:1,every:1,hits:2,v:_t('1 ×2 · P2'),d:_t('Tourelle : 2 tirs de 1 dégât par tour, portée 2, 6 PV')},
+  clay:{n:_t('Mine claymore'),cat:'trap',hp:1,block:0,clay:4,v:_t('4 grande zone'),d:_t('Explose au passage : 4 dégâts sur toutes les cases à 2 cases ou moins')},
+  bunker:{n:_t('Bunker'),cat:'wall',hp:16,block:1,rng:1,dmg:1,every:1,v:_t('16 PV · 1'),d:_t('Bloque, 16 PV, et tire sur les zombies au contact')},
+  pharma:{n:_t('Pharmacienne'),cat:'help',hp:3,block:1,heal:1,hfast:1,v:_t('Soin rapide'),d:_t('Soin au contact : 1 PV à chaque tour à l’unité voisine la plus blessée (8 cases autour)')},
+  hospital:{n:_t('Hôpital de campagne'),cat:'post',hp:6,block:1,healAll:1,v:_t('Soin zone'),d:_t('Soin au contact : tous les 2 tours, toutes les unités sur les 8 cases autour récupèrent 1 PV')},
+  priest:{n:_t('Prêtre'),cat:'help',hp:3,block:1,bless:1,v:_t('Protège'),d:_t('Une fois chacune, les unités voisines qui devraient tomber restent à 1 PV')},
+  stretch:{n:_t('Brancardier'),cat:'help',hp:4,block:1,heal:1,hrng:3,v:_t('Soin · P3'),d:_t('Soin à distance : il court chercher les blessés, 1 PV tous les 2 tours à l’unité la plus blessée à 3 cases ou moins, 4 PV')},
+  brasero:{n:_t('Brasero'),cat:'wall',hp:5,block:1,aura:1,v:_t('Brûle autour'),d:_t('Bloque. Tous les 2 tours, 1 dégât et feu aux zombies collés à lui')},
+  firetrap:{n:_t('Fût piégé'),cat:'trap',hp:1,block:0,firetrap:4,v:_t('4 zone + feu'),d:_t('Explose au passage : 4 dégâts autour et les zombies brûlent 3 tours')},
+  net:{n:_t('Filet'),cat:'trap',hp:2,block:0,net:4,v:_t('Immobilise'),d:_t('Le zombie qui passe est pris 4 tours, sert 2 fois')},
+  bear:{n:_t('Piège à ours'),cat:'trap',hp:1,block:0,trap:10,v:'10',d:_t('Le premier zombie qui marche dessus subit 10 dégâts')},
+  hunter:{n:_t('Chasseur'),cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,v:_t('2 · P2'),d:_t('2 dégâts par tour, portée 2')},
+  dogs:{n:_t('Meute de chiens'),cat:'melee',hp:7,block:1,rng:1,dmg:1,every:1,hits:4,v:'1 ×4',d:_t('4 morsures de 1 dégât par tour au corps à corps')},
+  pitch:{n:_t('Fermier à la fourche'),cat:'melee',hp:10,block:1,rng:1,dmg:2,every:1,push:1,v:_t('2 · Recul'),d:_t('2 dégâts au contact et repousse le zombie d’une case, 10 PV')},
+  scare:{n:_t('Épouvantail'),cat:'post',hp:6,block:1,lure:2,v:_t('Attire'),d:_t('Les zombies à 2 cases ou moins marchent vers lui au lieu de l’abri, 6 PV')},
+  turret:{n:_t('Tourelle bricolée'),cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:_t('2 · P2'),d:_t('2 dégâts par tour, portée 2, 4 PV')},
+  workshop:{n:_t('Atelier'),cat:'post',hp:5,block:1,mech:1,mechAll:1,v:_t('Répare tout'),d:_t('Répare 1 PV à toutes les défenses et tous les postes voisins à chaque tour')},
+  modwall:{n:_t('Mur modulaire'),cat:'wall',hp:9,block:1,v:_t('9 PV'),d:_t('Panneaux de tôle : bloque, 9 PV')},
+  tesla:{n:_t('Bobine Tesla'),cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:2,hits:3,distinct:1,needPow:1,v:_t('2 ×3 · P2'),d:_t('Tous les 2 tours, un arc frappe 3 zombies (2 dégâts). Inactive pendant une coupure')},
+  teacher:{n:_t('Institutrice'),cat:'help',hp:3,block:1,draw:1,v:_t('+1 carte'),d:_t('Tant qu’elle tient, tu pioches 1 carte de plus chaque jour')},
+  market:{n:_t('Marché'),cat:'post',hp:4,block:1,market:2,v:_t('+2 ferraille'),d:_t('À chaque aube, +2 ferraille')},
+  vigile:{n:_t('Vigile'),cat:'shoot',hp:4,block:1,rng:2,dmg:1,every:1,v:_t('1 · P2'),d:_t('1 dégât par tour, portée 2, 4 PV')},
+  carp:{n:_t('Charpentier'),cat:'help',hp:4,block:1,carp:2,v:_t('Répare'),d:_t('À chaque aube, les défenses et les postes voisins récupèrent 2 PV')},
+  tear:{n:_t('Gaz lacrymogène'),cat:'react',react:'cell',v:_t('Étourdit'),d:_t('Pendant la nuit : les zombies sur la case visée et autour sont perdus 3 tours')},
+  napalm:{n:_t('Napalm'),cat:'react',react:'cell',v:_t('Feu zone'),d:_t('Pendant la nuit : la case visée et autour s’embrasent (flaques de feu jusqu’à l’aube)')},
+  air:{n:_t('Frappe aérienne'),cat:'react',react:'cell',v:_t('10 zone'),d:_t('Pendant la nuit : 10 dégâts à tous les zombies à 2 cases ou moins de la case visée')},
   // combattants des factions de soutien
-  amb:{n:'Ambulancier',cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,push:1,v:'1 · Recul',d:'Bloque avec son brancard : 11 PV, 1 dégât au contact et repousse le zombie'},
-  doc:{n:'Médecin de garde',cat:'shoot',hp:4,block:1,rng:1,dmg:1,every:1,selfHeal:1,v:'1 · P1 · Soin',d:'Pistolet : 1 dégât par tour, portée 1, et récupère 1 PV tous les 2 tours'},
-  orderly:{n:'Infirmier costaud',cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,healKill:1,v:'2 · Soigne',d:'2 dégâts au contact. À chaque zombie tué, ses voisins récupèrent 1 PV'},
-  nailer:{n:'Cloueur',cat:'shoot',hp:4,block:1,rng:2,dmg:1,every:1,hits:2,v:'1 ×2 · P2',d:'Cloueuse pneumatique : 2 tirs de 1 dégât par tour, portée 2'},
-  ranger:{n:'Garde champêtre',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:'2 · P2',d:'Fusil de chasse : 2 dégâts par tour, portée 2'},
+  amb:{n:_t('Ambulancier'),cat:'melee',hp:11,block:1,rng:1,dmg:1,every:1,push:1,v:_t('1 · Recul'),d:_t('Bloque avec son brancard : 11 PV, 1 dégât au contact et repousse le zombie')},
+  doc:{n:_t('Médecin de garde'),cat:'shoot',hp:4,block:1,rng:1,dmg:1,every:1,selfHeal:1,v:_t('1 · P1 · Soin'),d:_t('Pistolet : 1 dégât par tour, portée 1, et récupère 1 PV tous les 2 tours')},
+  orderly:{n:_t('Infirmier costaud'),cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,healKill:1,v:_t('2 · Soigne'),d:_t('2 dégâts au contact. À chaque zombie tué, ses voisins récupèrent 1 PV')},
+  nailer:{n:_t('Cloueur'),cat:'shoot',hp:4,block:1,rng:2,dmg:1,every:1,hits:2,v:_t('1 ×2 · P2'),d:_t('Cloueuse pneumatique : 2 tirs de 1 dégât par tour, portée 2')},
+  ranger:{n:_t('Garde champêtre'),cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:1,v:_t('2 · P2'),d:_t('Fusil de chasse : 2 dégâts par tour, portée 2')},
   // chefs de faction (légendaires) : chacun compte pour 2 survivants de sa faction
-  chief_police:{n:'Le Commissaire',cat:'shoot',hp:5,block:1,rng:2,dmg:2,every:1,chief:'police',v:'2 · P2',d:'Chef de la Police : 2 dégâts par tour, portée 2. Compte pour 2 dans la faction Police'},
-  chief_mil:{n:'La Sergente',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:3,chief:'mil',v:'1 ×3 · P2',d:'Cheffe des Militaires : 3 tirs par tour, portée 2. Compte pour 2 Militaires'},
-  chief_care:{n:'La Doctoresse',cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,heal:2,hfast:1,hrng:2,chief:'care',v:'Soin 2 · P2',d:'Cheffe des Soignants : soin à distance de 2 PV à chaque tour (2 cases) et coups de scalpel au contact (2 dégâts). Compte pour 2 Soignants'},
-  chief_pyro:{n:'Le Pyromane',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,aoe:1,ignite:3,chief:'pyro',v:'Feu zone',d:'Chef des Pyromanes : enflamme tous les zombies à 2 cases. Compte pour 2 Pyromanes'},
-  chief_trap:{n:'Le Braconnier',cat:'shoot',hp:4,block:1,rng:3,dmg:3,every:2,chief:'trap',v:'3 · P3',d:'Chef des Trappeurs : 3 dégâts tous les 2 tours, portée 3. Compte pour 2 Trappeurs'},
-  chief_farm:{n:'La Fermière',cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,hits:2,chief:'farm',v:'1 ×2',d:'Cheffe des Fermiers : 2 coups de 1 dégât par tour, 14 PV. Compte pour 2 Fermiers'},
-  chief_tech:{n:'L’Ingénieur',cat:'help',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,mech:2,chief:'tech',v:'Répare 2 · 1 ×2',d:'Chef des Bricoleurs : répare 2 PV aux défenses et postes voisins à chaque tour et tire 2 clous par tour (portée 1). Compte pour 2 Bricoleurs'},
-  chief_comm:{n:'Le Maire',cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,lead:1,chief:'comm',v:'Rythme · 2',d:'Chef de la Communauté : les unités autour attaquent plus souvent, et il tire (2 dégâts, portée 1). Compte pour 2 dans la faction Communauté'},
+  chief_police:{n:_t('Le Commissaire'),cat:'shoot',hp:5,block:1,rng:2,dmg:2,every:1,chief:'police',v:_t('2 · P2'),d:_t('Chef de la Police : 2 dégâts par tour, portée 2. Compte pour 2 dans la faction Police')},
+  chief_mil:{n:_t('La Sergente'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:3,chief:'mil',v:_t('1 ×3 · P2'),d:_t('Cheffe des Militaires : 3 tirs par tour, portée 2. Compte pour 2 Militaires')},
+  chief_care:{n:_t('La Doctoresse'),cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,heal:2,hfast:1,hrng:2,chief:'care',v:_t('Soin 2 · P2'),d:_t('Cheffe des Soignants : soin à distance de 2 PV à chaque tour (2 cases) et coups de scalpel au contact (2 dégâts). Compte pour 2 Soignants')},
+  chief_pyro:{n:_t('Le Pyromane'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,aoe:1,ignite:3,chief:'pyro',v:_t('Feu zone'),d:_t('Chef des Pyromanes : enflamme tous les zombies à 2 cases. Compte pour 2 Pyromanes')},
+  chief_trap:{n:_t('Le Braconnier'),cat:'shoot',hp:4,block:1,rng:3,dmg:3,every:2,chief:'trap',v:_t('3 · P3'),d:_t('Chef des Trappeurs : 3 dégâts tous les 2 tours, portée 3. Compte pour 2 Trappeurs')},
+  chief_farm:{n:_t('La Fermière'),cat:'melee',hp:14,block:1,rng:1,dmg:1,every:1,hits:2,chief:'farm',v:'1 ×2',d:_t('Cheffe des Fermiers : 2 coups de 1 dégât par tour, 14 PV. Compte pour 2 Fermiers')},
+  chief_tech:{n:_t('L’Ingénieur'),cat:'help',hp:6,block:1,rng:1,dmg:1,every:1,hits:2,mech:2,chief:'tech',v:_t('Répare 2 · 1 ×2'),d:_t('Chef des Bricoleurs : répare 2 PV aux défenses et postes voisins à chaque tour et tire 2 clous par tour (portée 1). Compte pour 2 Bricoleurs')},
+  chief_comm:{n:_t('Le Maire'),cat:'help',hp:5,block:1,rng:1,dmg:2,every:1,lead:1,chief:'comm',v:_t('Rythme · 2'),d:_t('Chef de la Communauté : les unités autour attaquent plus souvent, et il tire (2 dégâts, portée 1). Compte pour 2 dans la faction Communauté')},
   // réactions : jouables seulement pendant la nuit, avec l'énergie gardée du jour
-  grenade:{n:'Grenade',cat:'react',react:'cell',v:'5 zone',d:'Pendant la nuit : 5 dégâts sur la case visée et autour'},
-  shot:{n:'Tir de l’abri',cat:'react',react:'any',v:'6',d:'Pendant la nuit : 6 dégâts au zombie le plus proche de l’abri'},
-  patch:{n:'Réparation express',cat:'react',react:'unit',v:'+5 PV',d:'Pendant la nuit : une de tes unités récupère 5 PV'},
-  molotov:{n:'Molotov',cat:'react',react:'cell',v:'Feu zone',d:'Pendant la nuit : 2 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours'},
-  horn:{n:'Klaxon',cat:'react',react:'any',v:'Recul',d:'Pendant la nuit : tous les zombies reculent d’une case'},
-  rush:{n:'Adrénaline',cat:'react',react:'any',v:'×2',d:'Pendant la nuit : tes unités attaquent deux fois pendant 3 tours'},
-  rocket:{n:'Lance-roquettes',cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:2,heavy:5,v:'2 · ×5 gros',d:'Tous les 2 tours, une roquette : 2 dégâts, et 5 fois plus (10) contre le Colosse et les Gonflés. Portée 2'},
-  flare:{n:'Fusée de détresse',cat:'item',instant:1,flare:1,v:'1 côté',d:'Utilise-la sur l’abri : la nuit prochaine, la horde n’arrive que d’un seul côté'},
+  grenade:{n:_t('Grenade'),cat:'react',react:'cell',v:_t('5 zone'),d:_t('Pendant la nuit : 5 dégâts sur la case visée et autour')},
+  shot:{n:_t('Tir de l’abri'),cat:'react',react:'any',v:'6',d:_t('Pendant la nuit : 6 dégâts au zombie le plus proche de l’abri')},
+  patch:{n:_t('Réparation express'),cat:'react',react:'unit',v:_t('+5 PV'),d:_t('Pendant la nuit : une de tes unités récupère 5 PV')},
+  molotov:{n:_t('Molotov'),cat:'react',react:'cell',v:_t('Feu zone'),d:_t('Pendant la nuit : 2 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours')},
+  horn:{n:_t('Klaxon'),cat:'react',react:'any',v:_t('Recul'),d:_t('Pendant la nuit : tous les zombies reculent d’une case')},
+  rush:{n:_t('Adrénaline'),cat:'react',react:'any',v:'×2',d:_t('Pendant la nuit : tes unités attaquent deux fois pendant 3 tours')},
+  rocket:{n:_t('Lance-roquettes'),cat:'shoot',hp:4,block:1,rng:2,dmg:2,every:2,heavy:5,v:_t('2 · ×5 gros'),d:_t('Tous les 2 tours, une roquette : 2 dégâts, et 5 fois plus (10) contre le Colosse et les Gonflés. Portée 2')},
+  flare:{n:_t('Fusée de détresse'),cat:'item',instant:1,flare:1,v:_t('1 côté'),d:_t('Utilise-la sur l’abri : la nuit prochaine, la horde n’arrive que d’un seul côté')},
   // --- v89 : 6 nouveaux survivants ---
-  handler:{n:'Maître-chien',cat:'melee',hp:12,block:1,rng:1,dmg:1,every:1,dogBoost:1,v:'1 · Chiens +1',d:'Tank : 12 PV, 1 dégât au contact. Les chiens voisins font +1 dégât'},
-  welder:{n:'Soudeuse',cat:'help',hp:4,block:1,mech:2,v:'Répare 2',d:'Répare 2 PV par tour à une défense ou un poste voisin'},
-  scout:{n:'Éclaireur',cat:'shoot',hp:3,block:1,rng:4,dmg:2,every:1,mark:2,v:'2 · P4 · Marque',d:'2 dégâts par tour, portée 4. Le zombie touché est marqué 2 tours : il prend +1 dégât de chaque coup'},
-  assassin:{n:'Assassin',cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,exec:4,v:'2 · Exécute',d:'2 dégâts au contact. Toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas le Colosse)'},
-  fieldnurse:{n:'Infirmière de campagne',cat:'help',hp:3,block:1,heal:1,hrng:2,benchHeal:2,v:'Soin · P2',d:'Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases. À l’aube, les unités en réserve (non blessées) récupèrent 2 PV'},
-  genmech:{n:'Électricien',cat:'help',hp:4,block:1,mech:1,genPow:1,v:'Courant · Répare',d:'Tant qu’il est sur la carte : plus de coupure de courant et clôtures à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin'},
+  handler:{n:_t('Maître-chien'),cat:'melee',hp:12,block:1,rng:1,dmg:1,every:1,dogBoost:1,v:_t('1 · Chiens +1'),d:_t('Tank : 12 PV, 1 dégât au contact. Les chiens voisins font +1 dégât')},
+  welder:{n:_t('Soudeuse'),cat:'help',hp:4,block:1,mech:2,v:_t('Répare 2'),d:_t('Répare 2 PV par tour à une défense ou un poste voisin')},
+  scout:{n:_t('Éclaireur'),cat:'shoot',hp:3,block:1,rng:4,dmg:2,every:1,mark:2,v:_t('2 · P4 · Marque'),d:_t('2 dégâts par tour, portée 4. Le zombie touché est marqué 2 tours : il prend +1 dégât de chaque coup')},
+  assassin:{n:_t('Assassin'),cat:'melee',hp:5,block:1,rng:1,dmg:2,every:1,exec:4,v:_t('2 · Exécute'),d:_t('2 dégâts au contact. Toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas le Colosse)')},
+  fieldnurse:{n:_t('Infirmière de campagne'),cat:'help',hp:3,block:1,heal:1,hrng:2,benchHeal:2,v:_t('Soin · P2'),d:_t('Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases. À l’aube, les unités en réserve (non blessées) récupèrent 2 PV')},
+  genmech:{n:_t('Électricien'),cat:'help',hp:4,block:1,mech:1,genPow:1,v:_t('Courant · Répare'),d:_t('Tant qu’il est sur la carte : plus de coupure de courant et clôtures à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin')},
   // --- v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais en boutique ni à l'achat)
-  v_heli:{n:'Hélicoptère de ravitaillement',cat:'item',instant:1,vic:0,v:'+2 énergie · +2 cartes',d:'Utilise-le sur l’abri : +2 énergie aujourd’hui et pioche 2 cartes'},
-  v_hmg:{n:'Mitrailleuse lourde',cat:'shoot',hp:6,block:1,rng:2,dmg:2,every:1,hits:3,vic:1,v:'2 ×3 · P2',d:'3 tirs de 2 dégâts par tour, portée 2, sans jamais s’enrayer'},
-  v_radio:{n:'Radio militaire',cat:'post',hp:5,block:1,vic:2,v:'Tireurs +1',d:'Les tireurs à 2 cases ou moins font +1 dégât'},
-  v_medic:{n:'Médecin militaire',cat:'help',hp:5,block:1,heal:2,hrng:3,vic:3,v:'Soin 2 · P3',d:'Soin à distance : 2 PV tous les 2 tours à l’unité la plus blessée à 3 cases ou moins'},
-  v_cont:{n:'Mur de conteneurs',cat:'wall',hp:20,block:1,antiSap:5,vic:4,v:'20 PV · anti-sapeur',d:'Bloque, 20 PV. Un Sapeur ne lui fait que 5 dégâts'},
-  v_sniper:{n:'Tireur des secours',cat:'shoot',hp:4,block:1,rng:4,dmg:6,every:2,vic:5,v:'6 · P4',d:'6 dégâts tous les 2 tours, portée 4'},
-  v_mines:{n:'Champ de mines',cat:'trap',hp:3,block:0,mine:8,multi:1,vic:6,v:'8 zone ×3',d:'Explose au passage : 8 dégâts sur la case et autour, 3 fois'},
-  v_rdog:{n:'Chien de sauvetage',cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,hits:2,heal:1,vic:7,v:'2 ×2 · Soin',d:'Mord 2 fois par tour (2 dégâts) et soigne 1 PV à un voisin tous les 2 tours'},
-  v_napalm:{n:'Frappe au napalm',cat:'react',react:'cell',vic:8,v:'4 · Feu zone',d:'Pendant la nuit : 4 dégâts sur la case visée et autour, qui s’embrasent ensuite'},
-  v_apc:{n:'Blindé des secours',cat:'melee',hp:30,block:1,rng:1,dmg:1,every:1,push:1,vic:9,v:'30 PV · 1',d:'Tank : 30 PV, 1 dégât et repousse ; attire les zombies proches'},
+  v_heli:{n:_t('Hélicoptère de ravitaillement'),cat:'item',instant:1,vic:0,v:_t('+2 énergie · +2 cartes'),d:_t('Utilise-le sur l’abri : +2 énergie aujourd’hui et pioche 2 cartes')},
+  v_hmg:{n:_t('Mitrailleuse lourde'),cat:'shoot',hp:6,block:1,rng:2,dmg:2,every:1,hits:3,vic:1,v:_t('2 ×3 · P2'),d:_t('3 tirs de 2 dégâts par tour, portée 2, sans jamais s’enrayer')},
+  v_radio:{n:_t('Radio militaire'),cat:'post',hp:5,block:1,vic:2,v:_t('Tireurs +1'),d:_t('Les tireurs à 2 cases ou moins font +1 dégât')},
+  v_medic:{n:_t('Médecin militaire'),cat:'help',hp:5,block:1,heal:2,hrng:3,vic:3,v:_t('Soin 2 · P3'),d:_t('Soin à distance : 2 PV tous les 2 tours à l’unité la plus blessée à 3 cases ou moins')},
+  v_cont:{n:_t('Mur de conteneurs'),cat:'wall',hp:20,block:1,antiSap:5,vic:4,v:_t('20 PV · anti-sapeur'),d:_t('Bloque, 20 PV. Un Sapeur ne lui fait que 5 dégâts')},
+  v_sniper:{n:_t('Tireur des secours'),cat:'shoot',hp:4,block:1,rng:4,dmg:6,every:2,vic:5,v:_t('6 · P4'),d:_t('6 dégâts tous les 2 tours, portée 4')},
+  v_mines:{n:_t('Champ de mines'),cat:'trap',hp:3,block:0,mine:8,multi:1,vic:6,v:_t('8 zone ×3'),d:_t('Explose au passage : 8 dégâts sur la case et autour, 3 fois')},
+  v_rdog:{n:_t('Chien de sauvetage'),cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,hits:2,heal:1,vic:7,v:_t('2 ×2 · Soin'),d:_t('Mord 2 fois par tour (2 dégâts) et soigne 1 PV à un voisin tous les 2 tours')},
+  v_napalm:{n:_t('Frappe au napalm'),cat:'react',react:'cell',vic:8,v:_t('4 · Feu zone'),d:_t('Pendant la nuit : 4 dégâts sur la case visée et autour, qui s’embrasent ensuite')},
+  v_apc:{n:_t('Blindé des secours'),cat:'melee',hp:30,block:1,rng:1,dmg:1,every:1,push:1,vic:9,v:_t('30 PV · 1'),d:_t('Tank : 30 PV, 1 dégât et repousse ; attire les zombies proches')},
   // --- v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et réactions) ---
   // équipements : se posent sur une de tes unités et y restent (même rappelée). Une unité ne porte qu'un exemplaire de chaque équipement.
-  gear:{n:'Matériel lourd',cat:'item',instant:1,onUnit:1,equip:1,v:'+4 PV',d:'Équipement : l’unité gagne 4 PV max. Un Tank équipé bloque 1 coup sur 2'},
-  binoc:{n:'Jumelles',cat:'item',instant:1,onUnit:1,equip:1,far:1,v:'+1 portée',d:'Équipement d’un tireur : +1 portée, et +1 dégât sur les zombies à plus de 2 cases'},
-  bandage:{n:'Bandages',cat:'item',instant:1,onUnit:1,equip:1,att:1,v:'Soin au kill',d:'Équipement : l’unité récupère 1 PV à chaque zombie qu’elle tue'},
-  medkit:{n:'Sacoche de soins',cat:'item',instant:1,onUnit:1,equip:1,v:'Soigne',d:'Équipement : tous les 2 tours, l’unité soigne 1 PV à un voisin blessé'},
-  torch:{n:'Lampe torche',cat:'item',instant:1,onUnit:1,equip:1,att:1,v:'+1 frais',d:'Équipement : ignore le Brouillard, +1 dégât sur les zombies encore intacts'},
-  pills:{n:'Pilules',cat:'item',instant:1,onUnit:1,equip:1,v:'Sursaut',d:'Équipement : une fois par nuit, l’unité qui devrait tomber reste debout avec 4 PV'},
-  pack:{n:'Sac à dos',cat:'item',instant:1,onUnit:1,equip:1,att:1,v:'Butin',d:'Équipement : à l’aube, +1 ferraille par zombie tué par l’unité pendant la nuit'},
-  tape:{n:'Ruban adhésif',cat:'item',instant:1,onUnit:1,equip:1,gold:1,v:'+1 / ★',d:'Équipement d’une unité fusionnée : +1 dégât par étoile'},
-  keys:{n:'Clés du dépôt',cat:'item',instant:1,onUnit:1,equip:1,v:'Hors limite',d:'Équipement : l’unité ne compte plus dans la limite d’unités'},
+  gear:{n:_t('Matériel lourd'),cat:'item',instant:1,onUnit:1,equip:1,v:_t('+4 PV'),d:_t('Équipement : l’unité gagne 4 PV max. Un Tank équipé bloque 1 coup sur 2')},
+  binoc:{n:_t('Jumelles'),cat:'item',instant:1,onUnit:1,equip:1,far:1,v:_t('+1 portée'),d:_t('Équipement d’un tireur : +1 portée, et +1 dégât sur les zombies à plus de 2 cases')},
+  bandage:{n:_t('Bandages'),cat:'item',instant:1,onUnit:1,equip:1,att:1,v:_t('Soin au kill'),d:_t('Équipement : l’unité récupère 1 PV à chaque zombie qu’elle tue')},
+  medkit:{n:_t('Sacoche de soins'),cat:'item',instant:1,onUnit:1,equip:1,v:_t('Soigne'),d:_t('Équipement : tous les 2 tours, l’unité soigne 1 PV à un voisin blessé')},
+  torch:{n:_t('Lampe torche'),cat:'item',instant:1,onUnit:1,equip:1,att:1,v:_t('+1 frais'),d:_t('Équipement : ignore le Brouillard, +1 dégât sur les zombies encore intacts')},
+  pills:{n:_t('Pilules'),cat:'item',instant:1,onUnit:1,equip:1,v:_t('Sursaut'),d:_t('Équipement : une fois par nuit, l’unité qui devrait tomber reste debout avec 4 PV')},
+  pack:{n:_t('Sac à dos'),cat:'item',instant:1,onUnit:1,equip:1,att:1,v:_t('Butin'),d:_t('Équipement : à l’aube, +1 ferraille par zombie tué par l’unité pendant la nuit')},
+  tape:{n:_t('Ruban adhésif'),cat:'item',instant:1,onUnit:1,equip:1,gold:1,v:'+1 / ★',d:_t('Équipement d’une unité fusionnée : +1 dégât par étoile')},
+  keys:{n:_t('Clés du dépôt'),cat:'item',instant:1,onUnit:1,equip:1,v:_t('Hors limite'),d:_t('Équipement : l’unité ne compte plus dans la limite d’unités')},
   // postes de soutien : ne comptent pas dans la limite d'unités. Leur effet ne se cumule pas (une unité profite d'un seul poste de chaque sorte).
-  tower:{n:'Mirador',cat:'post',hp:8,block:1,v:'+1 portée',d:'Les tireurs voisins ont +1 portée'},
-  trench:{n:'Tranchée',cat:'post',hp:6,block:1,v:'Abri',d:'Les unités voisines perdent 1 PV de moins par coup (au moins 1)'},
-  pump:{n:'Pompe à eau',cat:'post',hp:5,block:1,v:'Soin à l’aube',d:'À l’aube, les unités voisines récupèrent tous leurs PV'},
-  flood:{n:'Projecteur de chantier',cat:'post',hp:3,block:1,v:'Éclaire',d:'Les zombies à 2 cases ou moins prennent +1 dégât de chaque coup. Inactif pendant une coupure'},
+  tower:{n:_t('Mirador'),cat:'post',hp:8,block:1,v:_t('+1 portée'),d:_t('Les tireurs voisins ont +1 portée')},
+  trench:{n:_t('Tranchée'),cat:'post',hp:6,block:1,v:_t('Abri'),d:_t('Les unités voisines perdent 1 PV de moins par coup (au moins 1)')},
+  pump:{n:_t('Pompe à eau'),cat:'post',hp:5,block:1,v:_t('Soin à l’aube'),d:_t('À l’aube, les unités voisines récupèrent tous leurs PV')},
+  flood:{n:_t('Projecteur de chantier'),cat:'post',hp:3,block:1,v:_t('Éclaire'),d:_t('Les zombies à 2 cases ou moins prennent +1 dégât de chaque coup. Inactif pendant une coupure')},
   // défenses
-  palis:{n:'Palissade',cat:'wall',hp:6,block:1,thorns:1,v:'6 PV · pieux',d:'Pieux taillés : bloque, 6 PV, 1 dégât à chaque zombie qui la frappe'},
-  gate:{n:'Grille métallique',cat:'wall',hp:10,block:1,regen:4,v:'10 PV · se répare',d:'Bloque, 10 PV, récupère 1 PV tous les 4 tours'},
-  gabion:{n:'Gabions',cat:'wall',hp:12,block:1,antiSap:5,v:'12 PV · anti-sapeur',d:'Bloque, 12 PV. Un Sapeur ne lui fait que 5 dégâts'},
+  palis:{n:_t('Palissade'),cat:'wall',hp:6,block:1,thorns:1,v:_t('6 PV · pieux'),d:_t('Pieux taillés : bloque, 6 PV, 1 dégât à chaque zombie qui la frappe')},
+  gate:{n:_t('Grille métallique'),cat:'wall',hp:10,block:1,regen:4,v:_t('10 PV · se répare'),d:_t('Bloque, 10 PV, récupère 1 PV tous les 4 tours')},
+  gabion:{n:_t('Gabions'),cat:'wall',hp:12,block:1,antiSap:5,v:_t('12 PV · anti-sapeur'),d:_t('Bloque, 12 PV. Un Sapeur ne lui fait que 5 dégâts')},
   // pièges
-  log:{n:'Tronc oscillant',cat:'trap',hp:1,block:0,log:5,v:'5 · recul ×3',d:'5 dégâts et repousse de 2 cases, 3 fois par nuit'},
-  pit:{n:'Fosse piégée',cat:'trap',hp:1,block:0,pit:1,v:'Avale',d:'Le premier zombie ordinaire qui passe y meurt. Ensuite, le trou ralentit les suivants'},
-  glass:{n:'Verre brisé',cat:'trap',hp:1,block:0,bleed:3,v:'Saigne',d:'Les zombies qui passent saignent : 1 dégât par tour pendant 3 tours'},
-  cans:{n:'Boîtes de conserve',cat:'trap',hp:1,block:0,alarm:3,v:'Alerte',d:'Le premier zombie qui passe donne l’alerte : tes tireurs font +1 dégât pendant 3 tours'},
-  rocks:{n:'Éboulement',cat:'trap',hp:1,block:0,rocks:6,v:'6 zone',d:'Des rochers tombent au passage : 6 dégâts sur la case et autour'},
+  log:{n:_t('Tronc oscillant'),cat:'trap',hp:1,block:0,log:5,v:_t('5 · recul ×3'),d:_t('5 dégâts et repousse de 2 cases, 3 fois par nuit')},
+  pit:{n:_t('Fosse piégée'),cat:'trap',hp:1,block:0,pit:1,v:_t('Avale'),d:_t('Le premier zombie ordinaire qui passe y meurt. Ensuite, le trou ralentit les suivants')},
+  glass:{n:_t('Verre brisé'),cat:'trap',hp:1,block:0,bleed:3,v:_t('Saigne'),d:_t('Les zombies qui passent saignent : 1 dégât par tour pendant 3 tours')},
+  cans:{n:_t('Boîtes de conserve'),cat:'trap',hp:1,block:0,alarm:3,v:_t('Alerte'),d:_t('Le premier zombie qui passe donne l’alerte : tes tireurs font +1 dégât pendant 3 tours')},
+  rocks:{n:_t('Éboulement'),cat:'trap',hp:1,block:0,rocks:6,v:_t('6 zone'),d:_t('Des rochers tombent au passage : 6 dégâts sur la case et autour')},
   // objets
-  supply:{n:'Ravitaillement',cat:'item',instant:1,v:'+6 ferraille',d:'Utilise-le sur l’abri : +6 ferraille'},
-  airdrop:{n:'Largage',cat:'item',instant:1,v:'+3 cartes',d:'Utilise-le sur l’abri : pioche 3 cartes'},
-  jerry:{n:'Jerrican',cat:'item',instant:1,v:'+2 énergie demain',d:'Utilise-le sur l’abri : +2 énergie demain'},
-  rest:{n:'Repos',cat:'item',instant:1,v:'Réserve soignée',d:'Utilise-le sur l’abri : les unités en réserve récupèrent tous leurs PV, et les blessés sont guéris tout de suite'},
-  radioop:{n:'Opérateur radio',cat:'item',instant:1,v:'+1 unité',d:'Utilise-le sur l’abri : +1 unité à la limite, pour toute la partie (une seule fois par partie)'},
+  supply:{n:_t('Ravitaillement'),cat:'item',instant:1,v:_t('+6 ferraille'),d:_t('Utilise-le sur l’abri : +6 ferraille')},
+  airdrop:{n:_t('Largage'),cat:'item',instant:1,v:_t('+3 cartes'),d:_t('Utilise-le sur l’abri : pioche 3 cartes')},
+  jerry:{n:_t('Jerrican'),cat:'item',instant:1,v:_t('+2 énergie demain'),d:_t('Utilise-le sur l’abri : +2 énergie demain')},
+  rest:{n:_t('Repos'),cat:'item',instant:1,v:_t('Réserve soignée'),d:_t('Utilise-le sur l’abri : les unités en réserve récupèrent tous leurs PV, et les blessés sont guéris tout de suite')},
+  radioop:{n:_t('Opérateur radio'),cat:'item',instant:1,v:_t('+1 unité'),d:_t('Utilise-le sur l’abri : +1 unité à la limite, pour toute la partie (une seule fois par partie)')},
   // réactions
-  talkie:{n:'Talkie-walkie',cat:'react',react:'unit',v:'Relève',d:'Pendant la nuit : une unité blessée part en réserve, la plus solide de la réserve prend sa place'},
-  storm:{n:'Orage',cat:'react',react:'any',v:'Ralentit',d:'Pendant la nuit : tous les zombies perdent 2 tours, mais le feu s’éteint'},
-  bomber:{n:'Bombardier',cat:'react',react:'cell',v:'8 en ligne',d:'Pendant la nuit : 8 dégâts à tous les zombies de la ligne visée'},
-  shell:{n:'Munition anti-Colosse',cat:'react',react:'any',antiboss:1,once:1,v:'Boss',d:'Pendant la nuit, quand un boss est sur la carte (Colosse, Mère, Patient Zéro) : un tir qui lui inflige 15 dégâts plus le quart de ses PV max, sans armure. Usage unique'},
-  noise:{n:'Boîte à bruit',cat:'react',react:'cell',v:'Attire',d:'Pendant la nuit : les zombies marchent vers la case visée pendant 4 tours'},
+  talkie:{n:_t('Talkie-walkie'),cat:'react',react:'unit',v:_t('Relève'),d:_t('Pendant la nuit : une unité blessée part en réserve, la plus solide de la réserve prend sa place')},
+  storm:{n:_t('Orage'),cat:'react',react:'any',v:_t('Ralentit'),d:_t('Pendant la nuit : tous les zombies perdent 2 tours, mais le feu s’éteint')},
+  bomber:{n:_t('Bombardier'),cat:'react',react:'cell',v:_t('8 en ligne'),d:_t('Pendant la nuit : 8 dégâts à tous les zombies de la ligne visée')},
+  shell:{n:_t('Munition anti-Colosse'),cat:'react',react:'any',antiboss:1,once:1,v:_t('Boss'),d:_t('Pendant la nuit, quand un boss est sur la carte (Colosse, Mère, Patient Zéro) : un tir qui lui inflige 15 dégâts plus le quart de ses PV max, sans armure. Usage unique')},
+  noise:{n:_t('Boîte à bruit'),cat:'react',react:'cell',v:_t('Attire'),d:_t('Pendant la nuit : les zombies marchent vers la case visée pendant 4 tours')},
   // évolutions secrètes : jamais dans le deck, elles naissent de deux cartes précises posées côte à côte (voir EVO)
-  k9squad:{n:'Brigade canine',cat:'melee',hp:8,block:1,rng:1,dmg:3,every:1,hits:2,stun:1,push:1,evo:1,v:'3 ×2 · Étourdit',d:'Un policier et son chien : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent'},
-  nightsnp:{n:'Tireur de nuit',cat:'shoot',hp:4,block:1,rng:4,dmg:3,every:1,evo:1,v:'3 · P4',d:'Un sniper et son projecteur : 3 dégâts à chaque tour, portée 4'},
-  heavyflame:{n:'Lance-flammes lourd',cat:'shoot',hp:7,block:1,rng:2,dmg:2,every:1,aoe:1,aoeMax:6,ignite:3,evo:1,v:'Feu ×6 · P2',d:'2 dégâts à 6 zombies au plus à 2 cases, qui brûlent ensuite 3 tours'},
-  fortin:{n:'Fortin',cat:'wall',hp:32,block:1,rng:1,dmg:3,every:1,evo:1,v:'32 PV · 3',d:'Épave et bunker soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)'},
-  autogun:{n:'Tourelle automatique',cat:'shoot',hp:7,block:1,rng:2,dmg:1,every:1,hits:3,evo:1,v:'1 ×3 · P2',d:'Montée par le mécanicien : 3 tirs de 1 dégât par tour, portée 2'},
-  slaughter:{n:'Équarrisseur',cat:'melee',hp:9,block:1,rng:1,dmg:5,every:1,aoe:1,feed:1,evo:1,v:'5 zone · Soin',d:'5 dégâts à tous les zombies autour, récupère 1 PV par zombie tué'},
-  canteen:{n:'Cantine de campagne',cat:'help',hp:6,block:1,heal:2,hfast:1,cook:2,evo:1,v:'Soin 2 · +2 abri',d:'Soin au contact : 2 PV à chaque tour à l’unité voisine la plus blessée, et l’abri récupère 2 PV à chaque aube'},
-  gang:{n:'Bande de gamins',cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:4,evo:1,v:'1 ×4 · P2',d:'Toute la classe au lance-pierre : 4 tirs de 1 dégât par tour, portée 2'},
-  saint:{n:'Le Saint',cat:'melee',hp:13,block:1,rng:1,dmg:1,every:1,aoe:1,bless:1,evo:1,v:'1 zone · Protège',d:'1 dégât à tous les zombies autour, et ses voisins survivent une fois à un coup fatal'},
-  tracker:{n:'Traqueur',cat:'shoot',hp:5,block:1,rng:3,dmg:2,every:1,hits:2,distinct:1,evo:1,v:'2 ×2 · P3',d:'À chaque tour, 2 dégâts à 2 zombies différents, portée 3'}
+  k9squad:{n:_t('Brigade canine'),cat:'melee',hp:8,block:1,rng:1,dmg:3,every:1,hits:2,stun:1,push:1,evo:1,v:_t('3 ×2 · Étourdit'),d:_t('Un policier et son chien : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent')},
+  nightsnp:{n:_t('Tireur de nuit'),cat:'shoot',hp:4,block:1,rng:4,dmg:3,every:1,evo:1,v:_t('3 · P4'),d:_t('Un sniper et son projecteur : 3 dégâts à chaque tour, portée 4')},
+  heavyflame:{n:_t('Lance-flammes lourd'),cat:'shoot',hp:7,block:1,rng:2,dmg:2,every:1,aoe:1,aoeMax:6,ignite:3,evo:1,v:_t('Feu ×6 · P2'),d:_t('2 dégâts à 6 zombies au plus à 2 cases, qui brûlent ensuite 3 tours')},
+  fortin:{n:_t('Fortin'),cat:'wall',hp:32,block:1,rng:1,dmg:3,every:1,evo:1,v:_t('32 PV · 3'),d:_t('Épave et bunker soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)')},
+  autogun:{n:_t('Tourelle automatique'),cat:'shoot',hp:7,block:1,rng:2,dmg:1,every:1,hits:3,evo:1,v:_t('1 ×3 · P2'),d:_t('Montée par le mécanicien : 3 tirs de 1 dégât par tour, portée 2')},
+  slaughter:{n:_t('Équarrisseur'),cat:'melee',hp:9,block:1,rng:1,dmg:5,every:1,aoe:1,feed:1,evo:1,v:_t('5 zone · Soin'),d:_t('5 dégâts à tous les zombies autour, récupère 1 PV par zombie tué')},
+  canteen:{n:_t('Cantine de campagne'),cat:'help',hp:6,block:1,heal:2,hfast:1,cook:2,evo:1,v:_t('Soin 2 · +2 abri'),d:_t('Soin au contact : 2 PV à chaque tour à l’unité voisine la plus blessée, et l’abri récupère 2 PV à chaque aube')},
+  gang:{n:_t('Bande de gamins'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:4,evo:1,v:_t('1 ×4 · P2'),d:_t('Toute la classe au lance-pierre : 4 tirs de 1 dégât par tour, portée 2')},
+  saint:{n:_t('Le Saint'),cat:'melee',hp:13,block:1,rng:1,dmg:1,every:1,aoe:1,bless:1,evo:1,v:_t('1 zone · Protège'),d:_t('1 dégât à tous les zombies autour, et ses voisins survivent une fois à un coup fatal')},
+  tracker:{n:_t('Traqueur'),cat:'shoot',hp:5,block:1,rng:3,dmg:2,every:1,hits:2,distinct:1,evo:1,v:_t('2 ×2 · P3'),d:_t('À chaque tour, 2 dégâts à 2 zombies différents, portée 3')}
  };
  /* rôles des unités : 🛡️ Tank, ❤️ Soin, ⚔️ DPS (les autres sont des murs, pièges, objets ou du soutien)
     Tank : provoque les zombies à 3 cases ou moins (ils le visent au lieu de l'abri) et bloque 1 coup sur 3.
     Soin : soigne le double sur un Tank. DPS : +1 dégât s'il a un Tank voisin (à couvert).
     Escouade : une unité qui a, avec ses voisins, un Tank, un Soin et un DPS gagne +1 dégât (ou +1 soin). */
- const ROLES={tank:{n:'Tank',ic:'🛡️'},heal:{n:'Soin',ic:'❤️'},dps:{n:'DPS',ic:'⚔️'}};
+ const ROLES={tank:{n:_t('Tank'),ic:'🛡️'},heal:{n:_t('Soin'),ic:'❤️'},dps:{n:_t('DPS'),ic:'⚔️'}};
  const TANKS='riot amb monk cop pitch chief_farm saint handler v_apc'.split(' '),HEALS='med pharma stretch hospital priest orderly doc chief_care canteen fieldnurse v_medic'.split(' ');
  const TAUNT=3;
  function roleOf(t){const D=U[t];if(!D||!D.block||!isUnit(t))return null;if(TANKS.includes(t))return'tank';if(HEALS.includes(t))return'heal';
@@ -200,13 +202,13 @@ const Z=(()=>{
  const NAMES='Marco Léa Karim Sofia Hugo Nadia Bruno Inès Yanis Chloé Malik Julie Théo Amira Victor Lina Samir Emma Rachid Zoé Paul Yasmine Louis Clara Mehdi Sarah Hector Nora Igor Maya Omar Jade Gaston Lou Bilal Rose Kenji Alice Driss Margot'.split(' ');
  const DOG_NAMES='Rex Kira Brutus Lola Tyson Médor Nala Rocky'.split(' ');
  const TRAITS={
-  costaud:{n:'Costaud',d:'+2 PV',hpB:2},
-  fragile:{n:'Fragile',d:'−1 PV',hpB:-1},
-  precis:{n:'Précis',d:'+1 dégât',dmgB:1,att:1},
-  myope:{n:'Myope',d:'−1 portée',rngB:-1,far:1},
-  increvable:{n:'Increvable',d:'survit une fois à un coup fatal'},
-  coriace:{n:'Coriace',d:'récupère 1 PV à chaque aube',regen:1},
-  aguerri:{n:'Aguerri',d:'+1 dégât après 10 zombies tués',att:1}
+  costaud:{n:_t('Costaud'),d:_t('+2 PV'),hpB:2},
+  fragile:{n:_t('Fragile'),d:_t('−1 PV'),hpB:-1},
+  precis:{n:_t('Précis'),d:_t('+1 dégât'),dmgB:1,att:1},
+  myope:{n:_t('Myope'),d:_t('−1 portée'),rngB:-1,far:1},
+  increvable:{n:_t('Increvable'),d:_t('survit une fois à un coup fatal')},
+  coriace:{n:_t('Coriace'),d:_t('récupère 1 PV à chaque aube'),regen:1},
+  aguerri:{n:_t('Aguerri'),d:_t('+1 dégât après 10 zombies tués'),att:1}
  };
  const named=t=>HUMANS.includes(t)||t==='dog'||t==='k9'||t==='dogs'||!!(U[t]&&U[t].chief);
  // PV max : la version dorée (fusion) a deux fois plus de PV, chaque niveau défensif ajoute 3 PV
@@ -247,28 +249,28 @@ const Z=(()=>{
   shell:1,log:2,pit:2,glass:1,cans:1,rocks:2,supply:1,airdrop:2,jerry:1,rest:0,radioop:3,talkie:1,storm:2,bomber:3,noise:1});
  const cost=t=>COST[t]??2;
  const ZT={
-  walk:{n:'Rôdeur',hp:17,spd:2,dmg:1,info:'lent'},
-  run:{n:'Coureur',hp:12,spd:1,dmg:1,info:'rapide'},
-  fat:{n:'Gonflé',hp:45,spd:3,dmg:2,info:'très lent, 2 dégâts par coup'},
-  zdog:{n:'Chien zombie',hp:6,spd:1,dmg:1,info:'rapide et fragile'},
-  crawl:{n:'Rampant',hp:12,spd:2,dmg:1,crawl:1,info:'passe sous les défenses (barricades, épaves…)'},
-  spit:{n:'Cracheur',hp:17,spd:2,dmg:1,spit:1,info:'crache sur ce qui est à 2 cases devant lui, puis avance après 3 crachats'},
-  armor:{n:'Blindé',hp:29,spd:2,dmg:1,armor:1,info:'encaisse 1 dégât de moins par coup, sauf le feu'},
-  howl:{n:'Hurleur',hp:23,spd:2,dmg:1,howl:2,info:'appelle 2 rôdeurs en mourant'},
-  sap:{n:'Sapeur',hp:18,spd:2,dmg:3,sap:1,info:'fonce sur les murs et explose : 15 dégâts au rempart, 3 autour, même s’il est tué avant'},
-  boss:{n:'Le Colosse',hp:58,spd:3,dmg:2,boss:1,info:'boss de la nuit 10, et renfort des nuits 20 et 30 : 10 dégâts par coup sur tes défenses et tes unités (+2 toutes les 10 nuits), fonce tout droit et frappe l’abri sans mourir'},
+  walk:{n:_t('Rôdeur'),hp:17,spd:2,dmg:1,info:_t('lent')},
+  run:{n:_t('Coureur'),hp:12,spd:1,dmg:1,info:_t('rapide')},
+  fat:{n:_t('Gonflé'),hp:45,spd:3,dmg:2,info:_t('très lent, 2 dégâts par coup')},
+  zdog:{n:_t('Chien zombie'),hp:6,spd:1,dmg:1,info:_t('rapide et fragile')},
+  crawl:{n:_t('Rampant'),hp:12,spd:2,dmg:1,crawl:1,info:_t('passe sous les défenses (barricades, épaves…)')},
+  spit:{n:_t('Cracheur'),hp:17,spd:2,dmg:1,spit:1,info:_t('crache sur ce qui est à 2 cases devant lui, puis avance après 3 crachats')},
+  armor:{n:_t('Blindé'),hp:29,spd:2,dmg:1,armor:1,info:_t('encaisse 1 dégât de moins par coup, sauf le feu')},
+  howl:{n:_t('Hurleur'),hp:23,spd:2,dmg:1,howl:2,info:_t('appelle 2 rôdeurs en mourant')},
+  sap:{n:_t('Sapeur'),hp:18,spd:2,dmg:3,sap:1,info:_t('fonce sur les murs et explose : 15 dégâts au rempart, 3 autour, même s’il est tué avant')},
+  boss:{n:_t('Le Colosse'),hp:58,spd:3,dmg:2,boss:1,info:_t('boss de la nuit 10, et renfort des nuits 20 et 30 : 10 dégâts par coup sur tes défenses et tes unités (+2 toutes les 10 nuits), fonce tout droit et frappe l’abri sans mourir')},
   // v128 : deux nouveaux boss. Toutes les 10 nuits, un boss mène la horde : le Colosse (10), la Mère (20), le Patient Zéro (30), puis on recommence.
-  mere:{n:'La Mère',hp:50,spd:3,dmg:2,boss:1,brood:4,info:'boss de la nuit 20 : fonce tout droit et frappe comme le Colosse, pond un rampant tous les 4 tours (6 au plus) et en libère 2 en mourant'},
-  zero:{n:'Le Patient Zéro',hp:42,spd:2,dmg:2,boss:1,haste:2,info:'boss final de la nuit 30 : plus rapide et plus fragile que le Colosse, frappe aussi fort ; les zombies à 2 cases de lui avancent bien plus vite (sauf les plus rapides)'}
+  mere:{n:_t('La Mère'),hp:50,spd:3,dmg:2,boss:1,brood:4,info:_t('boss de la nuit 20 : fonce tout droit et frappe comme le Colosse, pond un rampant tous les 4 tours (6 au plus) et en libère 2 en mourant')},
+  zero:{n:_t('Le Patient Zéro'),hp:42,spd:2,dmg:2,boss:1,haste:2,info:_t('boss final de la nuit 30 : plus rapide et plus fragile que le Colosse, frappe aussi fort ; les zombies à 2 cases de lui avancent bien plus vite (sauf les plus rapides)')}
  };
  const ZK=Object.keys(ZT);
  const EVENTS=[
-  {id:'calme',n:'Nuit calme',d:'Aucun effet',p:'Le vent retient son souffle.'},
-  {id:'brume',n:'Brouillard',d:'Portée des tireurs −1',p:'La brume avale les silhouettes.'},
-  {id:'lune',n:'Pleine lune',d:'+50 % de zombies',p:'La lune pleine les appelle tous.'},
-  {id:'pluie',n:'Pluie',d:'L\'essence ne brûle pas',p:'L’eau noie les flammes et les pas.'},
-  {id:'coupure',n:'Coupure de courant',d:'Projecteurs et clôtures inactifs',p:'Plus une lueur. Rien que leurs râles.'},
-  {id:'sprint',n:'Horde affamée',d:'Les rôdeurs deviennent des coureurs',p:'Ils ont faim. Ils courent.'}
+  {id:'calme',n:_t('Nuit calme'),d:_t('Aucun effet'),p:_t('Le vent retient son souffle.')},
+  {id:'brume',n:_t('Brouillard'),d:_t('Portée des tireurs −1'),p:_t('La brume avale les silhouettes.')},
+  {id:'lune',n:_t('Pleine lune'),d:_t('+50 % de zombies'),p:_t('La lune pleine les appelle tous.')},
+  {id:'pluie',n:_t('Pluie'),d:_t('L\'essence ne brûle pas'),p:_t('L’eau noie les flammes et les pas.')},
+  {id:'coupure',n:_t('Coupure de courant'),d:_t('Projecteurs et clôtures inactifs'),p:_t('Plus une lueur. Rien que leurs râles.')},
+  {id:'sprint',n:_t('Horde affamée'),d:_t('Les rôdeurs deviennent des coureurs'),p:_t('Ils ont faim. Ils courent.')}
  ];
  // nuits 1 à 10, puis chaque nuit ajoute GROW zombies de chaque type (survie sans fin)
  let WAVES={
@@ -294,30 +296,30 @@ const Z=(()=>{
  // nuit de répit : la nuit qui suit un Colosse (11, 21, 31…) a 30 % de zombies en moins
  const respite=(n,st)=>!men(st,3)&&n>10&&n%10===1;
  const RELICS={
-  lunette:{n:'Lunette de visée',d:'Tes tireurs ont +1 portée'},
-  pieges:{n:'Manuel du trappeur',d:'Tes pièges font +2 dégâts'},
-  soupe:{n:'Marmite de soupe',d:'À chaque aube, l’abri récupère 1 PV'},
-  sac:{n:'Grand sac à dos',d:'Tu pioches 1 carte de plus chaque jour'},
-  clous:{n:'Caisse de clous',d:'Tes défenses ont +3 PV'},
-  rage:{n:'Adrénaline',d:'Tes unités au corps à corps font +1 dégât'},
-  groupe:{n:'Groupe électrogène',d:'Plus de coupure de courant, clôtures à 2 dégâts'},
-  aimant:{n:'Aimant',d:'+3 ferraille à chaque aube'},
+  lunette:{n:_t('Lunette de visée'),d:_t('Tes tireurs ont +1 portée')},
+  pieges:{n:_t('Manuel du trappeur'),d:_t('Tes pièges font +2 dégâts')},
+  soupe:{n:_t('Marmite de soupe'),d:_t('À chaque aube, l’abri récupère 1 PV')},
+  sac:{n:_t('Grand sac à dos'),d:_t('Tu pioches 1 carte de plus chaque jour')},
+  clous:{n:_t('Caisse de clous'),d:_t('Tes défenses ont +3 PV')},
+  rage:{n:_t('Adrénaline'),d:_t('Tes unités au corps à corps font +1 dégât')},
+  groupe:{n:_t('Groupe électrogène'),d:_t('Plus de coupure de courant, clôtures à 2 dégâts')},
+  aimant:{n:_t('Aimant'),d:_t('+3 ferraille à chaque aube')},
   // v119 : 8 nouvelles reliques disponibles tout de suite
-  sifflet:{n:'Sifflet de dresseur',d:'Tes chiens ont +2 PV et +1 dégât'},
-  chirurgien:{n:'Trousse de chirurgien',d:'Tes soins rendent 1 PV de plus'},
-  gilet:{n:'Gilet pare-balles',d:'Tes tanks bloquent 1 coup sur 2 au lieu de 1 sur 3'},
-  coffre:{n:'Coffre de pillard',d:'La boutique propose 6 cartes au lieu de 5'},
-  troc:{n:'Carnet de troc',d:'Améliorer une carte coûte 10 ferraille de moins'},
-  cartouches:{n:'Ceinture de cartouches',d:'Tu peux avoir 3 munitions anti-Colosse au lieu de 2'},
-  pacte:{n:'Pacte du sang',d:'+1 énergie chaque jour, mais l’abri perd 1 PV à chaque aube',risk:1},
-  appat:{n:'Appât vivant',d:'+50 % de ferraille par zombie, mais +15 % de zombies',risk:1},
+  sifflet:{n:_t('Sifflet de dresseur'),d:_t('Tes chiens ont +2 PV et +1 dégât')},
+  chirurgien:{n:_t('Trousse de chirurgien'),d:_t('Tes soins rendent 1 PV de plus')},
+  gilet:{n:_t('Gilet pare-balles'),d:_t('Tes tanks bloquent 1 coup sur 2 au lieu de 1 sur 3')},
+  coffre:{n:_t('Coffre de pillard'),d:_t('La boutique propose 6 cartes au lieu de 5')},
+  troc:{n:_t('Carnet de troc'),d:_t('Améliorer une carte coûte 10 ferraille de moins')},
+  cartouches:{n:_t('Ceinture de cartouches'),d:_t('Tu peux avoir 3 munitions anti-Colosse au lieu de 2')},
+  pacte:{n:_t('Pacte du sang'),d:_t('+1 énergie chaque jour, mais l’abri perd 1 PV à chaque aube'),risk:1},
+  appat:{n:_t('Appât vivant'),d:_t('+50 % de ferraille par zombie, mais +15 % de zombies'),risk:1},
   // v119 : 6 reliques débloquées par les victoires (lock : niveau de Mutation à vaincre)
-  serum:{n:'Sérum expérimental',d:'La convalescence ne dure que 2 nuits',lock:0},
-  cloche:{n:'Cloche d’église',d:'À chaque aube, toutes tes unités récupèrent 2 PV',lock:2},
-  recettes:{n:'Carnet de recettes',d:'Tes fusions ne demandent que 2 unités identiques',lock:4},
-  plan:{n:'Plan de l’abri',d:'L’abri a +3 PV max',lock:6},
-  insigne:{n:'Insigne du sauveteur',d:'+1 unité sur le terrain',lock:8},
-  fanion:{n:'Fanion des secours',d:'+1 énergie chaque jour',lock:10}
+  serum:{n:_t('Sérum expérimental'),d:_t('La convalescence ne dure que 2 nuits'),lock:0},
+  cloche:{n:_t('Cloche d’église'),d:_t('À chaque aube, toutes tes unités récupèrent 2 PV'),lock:2},
+  recettes:{n:_t('Carnet de recettes'),d:_t('Tes fusions ne demandent que 2 unités identiques'),lock:4},
+  plan:{n:_t('Plan de l’abri'),d:_t('L’abri a +3 PV max'),lock:6},
+  insigne:{n:_t('Insigne du sauveteur'),d:_t('+1 unité sur le terrain'),lock:8},
+  fanion:{n:_t('Fanion des secours'),d:_t('+1 énergie chaque jour'),lock:10}
  };
  const hasR=(st,r)=>!!(st&&st.relics&&st.relics.includes(r));
  // reliques débloquées par les victoires : st.relicPool (rempli par le jeu à partir de la sauvegarde du joueur)
@@ -330,14 +332,14 @@ const Z=(()=>{
  // factions : plus il y a d'unités d'une faction sur la carte, plus elle est forte (2 paliers).
  // Le Chef d'une faction (carte légendaire) compte pour 2 survivants.
  const FAM={
-  police:{n:'Police',ic:'👮',cards:['riot','k9','barrier','swat','cop','gun','lamp','siren','handler','chief_police'],lv:[2,5],d:['tes policiers perdent 1 PV de moins par coup','tes policiers ont +1 portée ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  mil:{n:'Militaires',ic:'🎖️',cards:['mortar','sentry','clay','bunker','snp','mg','sht','mine','dyn','assassin','chief_mil'],lv:[2,5],d:['tes militaires font +1 dégât','mines et dynamite : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  care:{n:'Soignants',ic:'⛑️',cards:['amb','doc','orderly','pharma','hospital','priest','stretch','med','cook','fieldnurse','chief_care'],lv:[2,5],d:['soins +1 PV, tes soignants font +1 dégât','à l’aube, toutes tes unités récupèrent 2 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  pyro:{n:'Pyromanes',ic:'🔥',cards:['brasero','firetrap','fire','flame','molo','gas','tire','chief_pyro'],lv:[2,5],d:['le feu fait +1 dégât par tour','les zombies qui meurent en brûlant explosent (2 dégâts autour) ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  trap:{n:'Trappeurs',ic:'🪤',cards:['net','bear','hunter','trap','spike','wire','smoke','bait','xbow','scout','chief_trap'],lv:[2,5],d:['pièges : +2 dégâts','pièges : +4 dégâts au total ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  farm:{n:'Fermiers',ic:'🐕',cards:['dogs','pitch','scare','dog','axe','butch','chief_farm'],lv:[2,5],d:['corps à corps : +1 dégât','corps à corps : +1 PV à chaque zombie tué ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  tech:{n:'Bricoleurs',ic:'⚡',cards:['nailer','turret','workshop','modwall','tesla','fen','solar','mech','radio','welder','genmech','chief_tech'],lv:[2,5],d:['tes bricoleurs font +1 dégât, clôtures +1','clôtures : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction']},
-  comm:{n:'Communauté',ic:'🏠',cards:['ranger','teacher','market','vigile','carp','lead','monk','kid','chief_comm'],lv:[2,5],d:['tes membres de la Communauté ont +1 portée, l’abri +1 PV à l’aube','ta 1ʳᵉ carte de chaque jour coûte 1 énergie de moins ; équipe complète : +1 dégât et +2 PV pour toute la faction']}
+  police:{n:_t('Police'),ic:'👮',cards:['riot','k9','barrier','swat','cop','gun','lamp','siren','handler','chief_police'],lv:[2,5],d:[_t('tes policiers perdent 1 PV de moins par coup'),_t('tes policiers ont +1 portée ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  mil:{n:_t('Militaires'),ic:'🎖️',cards:['mortar','sentry','clay','bunker','snp','mg','sht','mine','dyn','assassin','chief_mil'],lv:[2,5],d:[_t('tes militaires font +1 dégât'),_t('mines et dynamite : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  care:{n:_t('Soignants'),ic:'⛑️',cards:['amb','doc','orderly','pharma','hospital','priest','stretch','med','cook','fieldnurse','chief_care'],lv:[2,5],d:[_t('soins +1 PV, tes soignants font +1 dégât'),_t('à l’aube, toutes tes unités récupèrent 2 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  pyro:{n:_t('Pyromanes'),ic:'🔥',cards:['brasero','firetrap','fire','flame','molo','gas','tire','chief_pyro'],lv:[2,5],d:[_t('le feu fait +1 dégât par tour'),_t('les zombies qui meurent en brûlant explosent (2 dégâts autour) ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  trap:{n:_t('Trappeurs'),ic:'🪤',cards:['net','bear','hunter','trap','spike','wire','smoke','bait','xbow','scout','chief_trap'],lv:[2,5],d:[_t('pièges : +2 dégâts'),_t('pièges : +4 dégâts au total ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  farm:{n:_t('Fermiers'),ic:'🐕',cards:['dogs','pitch','scare','dog','axe','butch','chief_farm'],lv:[2,5],d:[_t('corps à corps : +1 dégât'),_t('corps à corps : +1 PV à chaque zombie tué ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  tech:{n:_t('Bricoleurs'),ic:'⚡',cards:['nailer','turret','workshop','modwall','tesla','fen','solar','mech','radio','welder','genmech','chief_tech'],lv:[2,5],d:[_t('tes bricoleurs font +1 dégât, clôtures +1'),_t('clôtures : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  comm:{n:_t('Communauté'),ic:'🏠',cards:['ranger','teacher','market','vigile','carp','lead','monk','kid','chief_comm'],lv:[2,5],d:[_t('tes membres de la Communauté ont +1 portée, l’abri +1 PV à l’aube'),_t('ta 1ʳᵉ carte de chaque jour coûte 1 énergie de moins ; équipe complète : +1 dégât et +2 PV pour toute la faction')]}
  };
  const CHIEF={police:'chief_police',mil:'chief_mil',care:'chief_care',pyro:'chief_pyro',trap:'chief_trap',farm:'chief_farm',tech:'chief_tech',comm:'chief_comm'};
  const famOf=t=>Object.keys(FAM).find(f=>FAM[f].cards.includes(t));
@@ -362,11 +364,11 @@ const Z=(()=>{
  function sol(){return 0}
  // choisir sa nuit : à l'aube, 2 nuits au choix, l'une prudente, l'autre risquée mais payante
  const TIERS={
-  base:{n:'Nuit',d:'Horde normale.',count:1},
-  calm:{n:'Nuit tranquille',d:'Horde −30 %. Aucun bonus.',count:.7,safe:1},
-  normal:{n:'Nuit ordinaire',d:'Horde normale. +6 ferraille à l’aube.',count:1,scrap:6,safe:1},
-  raid:{n:'Nuit de pillage',d:'Horde +40 %. +15 ferraille à l’aube.',count:1.4,scrap:15},
-  blood:{n:'Nuit sanglante',d:'Horde +70 %. Une relique à l’aube.',count:1.7,relic:1}
+  base:{n:_t('Nuit'),d:_t('Horde normale.'),count:1},
+  calm:{n:_t('Nuit tranquille'),d:_t('Horde −30 %. Aucun bonus.'),count:.7,safe:1},
+  normal:{n:_t('Nuit ordinaire'),d:_t('Horde normale. +6 ferraille à l’aube.'),count:1,scrap:6,safe:1},
+  raid:{n:_t('Nuit de pillage'),d:_t('Horde +40 %. +15 ferraille à l’aube.'),count:1.4,scrap:15},
+  blood:{n:_t('Nuit sanglante'),d:_t('Horde +70 %. Une relique à l’aube.'),count:1.7,relic:1}
  };
  // le choix de la nuit est rare : 1 aube sur 4 environ, à partir de la nuit 3
  // plus de choix de la nuit à affronter (v65) : la nuit suivante est toujours imposée
@@ -379,87 +381,87 @@ const Z=(()=>{
  const freeCells=st=>INNER.filter(i=>!st.grid[i]);
  const randUnit=(st,rnd)=>{const us=st.grid.map((u,i)=>u&&U[u.t].block?i:-1).filter(i=>i>=0);return us.length?us[Math.floor(rnd()*us.length)]:-1};
  const pickR=(a,rnd)=>a[Math.floor(rnd()*a.length)];
- function hurt(st,j,d){const u=st.grid[j];if(!u)return'';u.hp-=d;const nm=u.name||U[u.t].n;if(u.hp<=0){lose(st,j,u,[]);return st.grid[j]?`${nm} s’en sort de justesse.`:`${nm} n’a pas survécu.`}return `${nm} perd ${d} PV.`}
+ function hurt(st,j,d){const u=st.grid[j];if(!u)return'';u.hp-=d;const nm=u.name||U[u.t].n;if(u.hp<=0){lose(st,j,u,[]);return st.grid[j]?_t`${nm} s’en sort de justesse.`:_t`${nm} n’a pas survécu.`}return _t`${nm} perd ${d} PV.`}
  function recruit(st,t,rnd){const fc=freeCells(st);if(!fc.length)return null;const i=pickR(fc,rnd);place(st,t,i,rnd,true);st.grid[i].gen=1;return st.grid[i]}
  const DAWN={
-  stranger:{n:'Un inconnu à la porte',d:'Quelqu’un frappe, à bout de forces. Son bras est caché sous sa veste.',ch:[
-   {n:'L’accueillir',d:'Un survivant gratuit… s’il n’est pas mordu.',go:(st,rnd)=>{if(rnd()<.3){st.shelter=Math.max(1,st.shelter-2);return{txt:'L’inconnu était mordu. La transformation a lieu dans la nuit : l’abri perd 2 PV avant que tout soit fini.'}}
-    const u=recruit(st,pickR(['gun','axe','cop','med'],rnd),rnd);return{txt:u?`${u.name} rejoint l’abri (${U[u.t].n}).`:'Il n’y a plus de place autour de l’abri. L’inconnu repart dans la nuit.'}}},
-   {n:'Lui fermer la porte',d:'Pas de risque.',go:()=>({txt:'Ses coups contre la porte cessent au bout d’une heure.'})}]},
-  raiders:{n:'Des pillards',d:'Trois hommes armés exigent ta ferraille.',ch:[
-   {n:'Payer 8 ferraille',d:'Ils partent sans histoire.',ok:st=>st.scrap>=8,go:st=>{st.scrap-=8;return{txt:'Ils empochent la ferraille et disparaissent.'}}},
-   {n:'Les repousser',d:'+6 ferraille, mais un de tes défenseurs est blessé.',go:(st,rnd)=>{st.scrap+=6;const j=randUnit(st,rnd);return{txt:'Tu récupères leurs affaires (+6 ferraille). '+(j>=0?hurt(st,j,3):'')}}}]},
-  market:{n:'Le supermarché',d:'Un supermarché à moitié pillé, à dix minutes de marche.',ch:[
-   {n:'Fouiller',d:'12 ferraille… ou une embuscade.',go:(st,rnd)=>{if(rnd()<.6){st.scrap+=12;return{txt:'Butin : 12 ferraille.'}}st.shelter=Math.max(1,st.shelter-2);return{txt:'Une embuscade ! Tu rentres en courant, la horde sur les talons : l’abri perd 2 PV.'}}},
-   {n:'Rester à l’abri',d:'Pas de risque.',go:()=>({txt:'Tu passes la matinée à renforcer les planches.'})}]},
-  radio:{n:'Un message radio',d:'Des survivants donnent leur position et demandent de l’aide.',ch:[
-   {n:'Y aller',d:'Un survivant gratuit, mais −1 énergie demain (fatigue).',go:(st,rnd)=>{st.nextE=(st.nextE||0)-1;const u=recruit(st,pickR(['gun','axe','med','vigile'],rnd),rnd);return{txt:u?`${u.name} (${U[u.t].n}) te suit jusqu’à l’abri. Le retour est épuisant.`:'Il n’y a plus de place autour de l’abri. Le retour est épuisant pour rien.'}}},
-   {n:'Ignorer',d:'Pas de risque.',go:()=>({txt:'Le message se répète jusqu’au soir, puis plus rien.'})}]},
-  dog:{n:'Un chien errant',d:'Un chien maigre rôde autour de l’abri.',ch:[
-   {n:'L’adopter',d:'Un chien gratuit autour de l’abri.',go:(st,rnd)=>{const u=recruit(st,'dog',rnd);return{txt:u?`${u.name} monte la garde.`:'Pas de place pour lui. Il s’éloigne.'}}},
-   {n:'Le chasser',d:'Rien ne se passe.',go:()=>({txt:'Il disparaît dans les bois.'})}]},
-  cache:{n:'Une caisse militaire',d:'Une caisse scellée, peut-être piégée.',ch:[
-   {n:'L’ouvrir',d:'Une amélioration gratuite… ou une explosion.',go:(st,rnd,deck)=>{if(rnd()<.5){const ts=[...new Set(deck||[])].filter(t=>UPGRADABLE.includes(t)&&!st.upg[t]);if(ts.length){const t=pickR(ts,rnd);upgrade(st,t);return{txt:`Du matériel de qualité : ${U[t].n} est amélioré.`}}st.scrap+=6;return{txt:'De la ferraille de qualité : +6.'}}
-    const j=randUnit(st,rnd);return{txt:'Piégée ! '+(j>=0?hurt(st,j,4):'Personne n’était à côté.')}}},
-   {n:'La laisser',d:'Pas de risque.',go:()=>({txt:'Tu la recouvres de branches et tu l’oublies.'})}]},
-  mechanic:{n:'Un mécanicien de passage',d:'Il propose de réparer tes défenses contre de la ferraille.',ch:[
-   {n:'Payer 6 ferraille',d:'Toutes tes unités récupèrent tous leurs PV.',ok:st=>st.scrap>=6,go:st=>{st.scrap-=6;st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=maxHp(st,u)});return{txt:'En une matinée, tout est comme neuf.'}}},
-   {n:'Refuser',d:'Pas de risque.',go:()=>({txt:'Il hausse les épaules et reprend la route.'})}]},
-  wounded:{n:'Un blessé dans le fossé',d:'Une personne blessée appelle à l’aide.',ch:[
-   {n:'Soigner la personne',d:'L’abri perd 1 PV (provisions), toutes tes unités récupèrent 3 PV.',go:st=>{st.shelter=Math.max(1,st.shelter-1);st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=Math.min(maxHp(st,u),u.hp+3)});return{txt:'C’était une infirmière. Avant de repartir, elle soigne tout le monde.'}}},
-   {n:'Passer ton chemin',d:'Pas de risque.',go:()=>({txt:'Ses appels s’éteignent dans ton dos.'})}]},
+  stranger:{n:_t('Un inconnu à la porte'),d:_t('Quelqu’un frappe, à bout de forces. Son bras est caché sous sa veste.'),ch:[
+   {n:_t('L’accueillir'),d:_t('Un survivant gratuit… s’il n’est pas mordu.'),go:(st,rnd)=>{if(rnd()<.3){st.shelter=Math.max(1,st.shelter-2);return{txt:_t('L’inconnu était mordu. La transformation a lieu dans la nuit : l’abri perd 2 PV avant que tout soit fini.')}}
+    const u=recruit(st,pickR(['gun','axe','cop','med'],rnd),rnd);return{txt:u?_t`${u.name} rejoint l’abri (${U[u.t].n}).`:_t('Il n’y a plus de place autour de l’abri. L’inconnu repart dans la nuit.')}}},
+   {n:_t('Lui fermer la porte'),d:_t('Pas de risque.'),go:()=>({txt:_t('Ses coups contre la porte cessent au bout d’une heure.')})}]},
+  raiders:{n:_t('Des pillards'),d:_t('Trois hommes armés exigent ta ferraille.'),ch:[
+   {n:_t('Payer 8 ferraille'),d:_t('Ils partent sans histoire.'),ok:st=>st.scrap>=8,go:st=>{st.scrap-=8;return{txt:_t('Ils empochent la ferraille et disparaissent.')}}},
+   {n:_t('Les repousser'),d:_t('+6 ferraille, mais un de tes défenseurs est blessé.'),go:(st,rnd)=>{st.scrap+=6;const j=randUnit(st,rnd);return{txt:_t('Tu récupères leurs affaires (+6 ferraille). ')+(j>=0?hurt(st,j,3):'')}}}]},
+  market:{n:_t('Le supermarché'),d:_t('Un supermarché à moitié pillé, à dix minutes de marche.'),ch:[
+   {n:_t('Fouiller'),d:_t('12 ferraille… ou une embuscade.'),go:(st,rnd)=>{if(rnd()<.6){st.scrap+=12;return{txt:_t('Butin : 12 ferraille.')}}st.shelter=Math.max(1,st.shelter-2);return{txt:_t('Une embuscade ! Tu rentres en courant, la horde sur les talons : l’abri perd 2 PV.')}}},
+   {n:_t('Rester à l’abri'),d:_t('Pas de risque.'),go:()=>({txt:_t('Tu passes la matinée à renforcer les planches.')})}]},
+  radio:{n:_t('Un message radio'),d:_t('Des survivants donnent leur position et demandent de l’aide.'),ch:[
+   {n:_t('Y aller'),d:_t('Un survivant gratuit, mais −1 énergie demain (fatigue).'),go:(st,rnd)=>{st.nextE=(st.nextE||0)-1;const u=recruit(st,pickR(['gun','axe','med','vigile'],rnd),rnd);return{txt:u?_t`${u.name} (${U[u.t].n}) te suit jusqu’à l’abri. Le retour est épuisant.`:_t('Il n’y a plus de place autour de l’abri. Le retour est épuisant pour rien.')}}},
+   {n:_t('Ignorer'),d:_t('Pas de risque.'),go:()=>({txt:_t('Le message se répète jusqu’au soir, puis plus rien.')})}]},
+  dog:{n:_t('Un chien errant'),d:_t('Un chien maigre rôde autour de l’abri.'),ch:[
+   {n:_t('L’adopter'),d:_t('Un chien gratuit autour de l’abri.'),go:(st,rnd)=>{const u=recruit(st,'dog',rnd);return{txt:u?_t`${u.name} monte la garde.`:_t('Pas de place pour lui. Il s’éloigne.')}}},
+   {n:_t('Le chasser'),d:_t('Rien ne se passe.'),go:()=>({txt:_t('Il disparaît dans les bois.')})}]},
+  cache:{n:_t('Une caisse militaire'),d:_t('Une caisse scellée, peut-être piégée.'),ch:[
+   {n:_t('L’ouvrir'),d:_t('Une amélioration gratuite… ou une explosion.'),go:(st,rnd,deck)=>{if(rnd()<.5){const ts=[...new Set(deck||[])].filter(t=>UPGRADABLE.includes(t)&&!st.upg[t]);if(ts.length){const t=pickR(ts,rnd);upgrade(st,t);return{txt:_t`Du matériel de qualité : ${U[t].n} est amélioré.`}}st.scrap+=6;return{txt:_t('De la ferraille de qualité : +6.')}}
+    const j=randUnit(st,rnd);return{txt:_t('Piégée ! ')+(j>=0?hurt(st,j,4):_t('Personne n’était à côté.'))}}},
+   {n:_t('La laisser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Tu la recouvres de branches et tu l’oublies.')})}]},
+  mechanic:{n:_t('Un mécanicien de passage'),d:_t('Il propose de réparer tes défenses contre de la ferraille.'),ch:[
+   {n:_t('Payer 6 ferraille'),d:_t('Toutes tes unités récupèrent tous leurs PV.'),ok:st=>st.scrap>=6,go:st=>{st.scrap-=6;st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=maxHp(st,u)});return{txt:_t('En une matinée, tout est comme neuf.')}}},
+   {n:_t('Refuser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Il hausse les épaules et reprend la route.')})}]},
+  wounded:{n:_t('Un blessé dans le fossé'),d:_t('Une personne blessée appelle à l’aide.'),ch:[
+   {n:_t('Soigner la personne'),d:_t('L’abri perd 1 PV (provisions), toutes tes unités récupèrent 3 PV.'),go:st=>{st.shelter=Math.max(1,st.shelter-1);st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=Math.min(maxHp(st,u),u.hp+3)});return{txt:_t('C’était une infirmière. Avant de repartir, elle soigne tout le monde.')}}},
+   {n:_t('Passer ton chemin'),d:_t('Pas de risque.'),go:()=>({txt:_t('Ses appels s’éteignent dans ton dos.')})}]},
   // v111 : 17 nouveaux événements (25 au total)
-  convoy:{n:'Un convoi abandonné',d:'Trois camions militaires en travers de la route, portières ouvertes.',ch:[
-   {n:'Fouiller les camions',d:'+10 ferraille, mais −1 énergie demain (fatigue).',go:st=>{st.scrap+=10;st.nextE=(st.nextE||0)-1;return{txt:'Tu reviens chargé : +10 ferraille. Tes jambes te le feront payer demain.'}}},
-   {n:'Passer ton chemin',d:'Pas de risque.',go:()=>({txt:'Les camions disparaissent derrière toi dans la brume.'})}]},
-  pharmacy:{n:'La pharmacie',d:'La vitrine est intacte. Quelque chose bouge dans l’arrière-boutique.',ch:[
-   {n:'Forcer la porte',d:'Une Trousse de secours… ou un défenseur blessé.',go:(st,rnd)=>{if(rnd()<.6)return{txt:'Les étagères ne sont pas vides.',cards:['kit']};const j=randUnit(st,rnd);return{txt:'Un rôdeur t’attendait. '+(j>=0?hurt(st,j,3):'Tu t’en sors de justesse.')}}},
-   {n:'Repartir',d:'Pas de risque.',go:()=>({txt:'Tu laisses la pharmacie à ce qui l’habite.'})}]},
-  child:{n:'Un enfant seul',d:'Un gamin, une fronde à la main, te suit de loin depuis l’aube.',ch:[
-   {n:'L’accueillir',d:'Un Gamin rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).',go:(st,rnd)=>{st.shelter=Math.max(1,st.shelter-1);const u=recruit(st,'kid',rnd);return{txt:u?`${u.name} s’installe près de la porte, sa fronde chargée.`:'Pas de place autour de l’abri : il repart avec tes provisions.'}}},
-   {n:'Lui indiquer la route',d:'Pas de risque.',go:()=>({txt:'Il hoche la tête et disparaît vers le sud.'})}]},
-  gunshop:{n:'L’armurerie',d:'Le rideau de fer est à moitié levé.',ch:[
-   {n:'Se glisser dessous',d:'Deux Grenades… ou une embuscade.',go:(st,rnd)=>{if(rnd()<.55)return{txt:'Une caisse oubliée sous le comptoir.',cards:['grenade','grenade']};st.shelter=Math.max(1,st.shelter-2);return{txt:'Une embuscade ! Tu rentres en courant, la horde sur les talons : l’abri perd 2 PV.'}}},
-   {n:'Ne pas tenter le diable',d:'Pas de risque.',go:()=>({txt:'Le rideau grince dans le vent derrière toi.'})}]},
-  generator:{n:'Un groupe électrogène',d:'Il tourne encore, dans un garage. Il faut du carburant pour le ramener.',ch:[
-   {n:'Le ramener (4 ferraille)',d:'+1 énergie demain.',ok:st=>st.scrap>=4,go:st=>{st.scrap-=4;st.nextE=(st.nextE||0)+1;return{txt:'Le moteur ronronne derrière l’abri. Demain, tu iras plus vite.'}}},
-   {n:'Le laisser',d:'Pas de risque.',go:()=>({txt:'Son bruit finira par attirer quelqu’un d’autre.'})}]},
-  trader:{n:'Une marchande ambulante',d:'Une charrette, une vieille femme et un fusil sur les genoux.',ch:[
-   {n:'Échanger 10 ferraille',d:'Une carte rare au hasard rejoint ton deck.',ok:st=>st.scrap>=10,go:(st,rnd)=>{const ts=(st.pool||KEYS).filter(t=>RAR[t]==='rare'&&U[t]&&!U[t].chief);if(!ts.length)return{txt:'Elle n’a rien qui t’intéresse.'};st.scrap-=10;const t=pickR(ts,rnd);return{txt:`Elle te tend ${U[t].n} sans un mot.`,cards:[t]}}},
-   {n:'Refuser',d:'Pas de risque.',go:()=>({txt:'Elle repart en sifflotant.'})}]},
-  church:{n:'L’église en ruine',d:'Le clocher tient encore debout. Le toit est en plomb.',ch:[
-   {n:'Prier un moment',d:'Toutes tes unités récupèrent 2 PV.',go:st=>{st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=Math.min(maxHp(st,u),u.hp+2)});return{txt:'Le silence fait du bien à tout le monde.'}}},
-   {n:'Arracher le plomb du toit',d:'+8 ferraille.',go:st=>{st.scrap+=8;return{txt:'Les cloches ne sonneront plus : +8 ferraille.'}}}]},
-  deserter:{n:'Un soldat déserteur',d:'Il a encore son arme et son uniforme, mais plus de chef.',ch:[
-   {n:'L’engager (10 ferraille)',d:'Un Tireur d’élite rejoint l’abri.',ok:st=>st.scrap>=10,go:(st,rnd)=>{st.scrap-=10;const u=recruit(st,'swat',rnd);return{txt:u?`${u.name} prend position sans un mot.`:'Pas de place autour de l’abri : il garde ta ferraille et s’en va.'}}},
-   {n:'Le désarmer',d:'+5 ferraille, mais un de tes défenseurs est blessé.',go:(st,rnd)=>{st.scrap+=5;const j=randUnit(st,rnd);return{txt:'Il se défend avant de fuir (+5 ferraille). '+(j>=0?hurt(st,j,2):'')}}}]},
-  blaze:{n:'Un incendie au loin',d:'Une maison brûle de l’autre côté du champ.',ch:[
-   {n:'Sauver ce qui peut l’être',d:'+6 ferraille, mais −1 énergie demain.',go:st=>{st.scrap+=6;st.nextE=(st.nextE||0)-1;return{txt:'Tu rentres couvert de suie, les bras chargés : +6 ferraille.'}}},
-   {n:'Regarder brûler',d:'Pas de risque.',go:()=>({txt:'Au moins, les zombies iront voir là-bas.'})}]},
-  diary:{n:'Un carnet de survie',d:'Trouvé sur un banc, plein de notes et de schémas.',ch:[
-   {n:'Le lire',d:'Tu pioches 2 cartes tout de suite.',go:st=>{st.drawNow=(st.drawNow||0)+2;return{txt:'Des idées plein la tête pour aujourd’hui.'}}},
-   {n:'Brûler les pages',d:'+1 PV à l’abri (un peu de chaleur).',go:st=>{st.shelter=Math.min(maxS(st),st.shelter+1);return{txt:'Le feu crépite. Les mots partent en fumée.'}}}]},
-  wolves:{n:'Des loups affamés',d:'Une meute tourne autour de l’abri depuis la nuit.',ch:[
-   {n:'Leur jeter des provisions',d:'L’abri perd 1 PV.',go:st=>{st.shelter=Math.max(1,st.shelter-1);return{txt:'Ils emportent la viande et s’éloignent.'}}},
-   {n:'Les chasser',d:'+4 ferraille (fourrures), mais un défenseur est blessé.',go:(st,rnd)=>{st.scrap+=4;const j=randUnit(st,rnd);return{txt:'La meute recule (+4 ferraille). '+(j>=0?hurt(st,j,3):'')}}}]},
-  crash:{n:'Un hélicoptère écrasé',d:'La carcasse fume encore dans la clairière.',ch:[
-   {n:'Fouiller l’épave',d:'Une Munition anti-Colosse… ou une explosion.',go:(st,rnd)=>{if(rnd()<.5)return{txt:'Dans la soute : une munition de gros calibre.',cards:['shell']};const j=randUnit(st,rnd);return{txt:'Le réservoir explose ! '+(j>=0?hurt(st,j,4):'Personne n’était à côté.')}}},
-   {n:'Ne pas s’approcher',d:'Pas de risque.',go:()=>({txt:'La fumée monte toute la journée.'})}]},
-  library:{n:'La bibliothèque',d:'Des manuels techniques, intacts, sur une étagère.',ch:[
-   {n:'Étudier',d:'Une carte de ton deck est améliorée, mais −1 énergie demain.',go:(st,rnd,deck)=>{const ts=[...new Set(deck||[])].filter(t=>UPGRADABLE.includes(t)&&!st.upg[t]);st.nextE=(st.nextE||0)-1;if(!ts.length)return{txt:'Rien d’utile cette fois. La journée est perdue.'};const t=pickR(ts,rnd);upgrade(st,t);return{txt:`Tu as compris comment mieux utiliser ${U[t].n} : la carte est améliorée.`}}},
-   {n:'Emporter du papier',d:'+3 ferraille.',go:st=>{st.scrap+=3;return{txt:'Ça servira à allumer le feu, et à troquer : +3 ferraille.'}}}]},
-  couple:{n:'Deux survivants armés',d:'Un frère et une sœur, prêts à se battre, mais affamés.',ch:[
-   {n:'Les nourrir',d:'Un Tireur et un Bûcheron rejoignent l’abri, mais l’abri perd 3 PV.',go:(st,rnd)=>{st.shelter=Math.max(1,st.shelter-3);const a=recruit(st,'gun',rnd),b=recruit(st,'axe',rnd);const ns=[a,b].filter(Boolean).map(u=>u.name);return{txt:ns.length?`${ns.join(' et ')} rejoignent l’abri.`:'Pas de place autour de l’abri : ils mangent et repartent.'}}},
-   {n:'Refuser',d:'Pas de risque.',go:()=>({txt:'Ils te regardent longtemps avant de partir.'})}]},
-  storm:{n:'Un orage se prépare',d:'Le ciel noircit à l’ouest. Le toit ne tiendra pas.',ch:[
-   {n:'Renforcer le toit (5 ferraille)',d:'+1 PV max et +1 PV à l’abri.',ok:st=>st.scrap>=5,go:st=>{st.scrap-=5;st.maxS=maxS(st)+1;st.shelter=Math.min(maxS(st),st.shelter+1);return{txt:'Le toit tient bon sous la pluie.'}}},
-   {n:'Prier pour que ça passe',d:'L’abri perd 1 PV.',go:st=>{st.shelter=Math.max(1,st.shelter-1);return{txt:'Une gouttière cède dans la nuit : l’abri perd 1 PV.'}}}]},
-  scavengers:{n:'Des fouilleurs',d:'Deux silhouettes fouillent les poubelles derrière l’abri.',ch:[
-   {n:'Partager le butin',d:'+5 ferraille.',go:st=>{st.scrap+=5;return{txt:'Ils connaissent les bons coins : +5 ferraille.'}}},
-   {n:'Les chasser',d:'Pas de risque.',go:()=>({txt:'Ils filent sans demander leur reste.'})}]},
-  farm:{n:'Une ferme abandonnée',d:'Le potager a poussé tout seul.',ch:[
-   {n:'Remplir les sacs',d:'Des Conserves rejoignent ton deck.',go:()=>({txt:'Carottes, pommes de terre et un bocal de confiture.',cards:['food']})},
-   {n:'Ne pas s’attarder',d:'Pas de risque.',go:()=>({txt:'Un épouvantail te regarde partir.'})}]}
+  convoy:{n:_t('Un convoi abandonné'),d:_t('Trois camions militaires en travers de la route, portières ouvertes.'),ch:[
+   {n:_t('Fouiller les camions'),d:_t('+10 ferraille, mais −1 énergie demain (fatigue).'),go:st=>{st.scrap+=10;st.nextE=(st.nextE||0)-1;return{txt:_t('Tu reviens chargé : +10 ferraille. Tes jambes te le feront payer demain.')}}},
+   {n:_t('Passer ton chemin'),d:_t('Pas de risque.'),go:()=>({txt:_t('Les camions disparaissent derrière toi dans la brume.')})}]},
+  pharmacy:{n:_t('La pharmacie'),d:_t('La vitrine est intacte. Quelque chose bouge dans l’arrière-boutique.'),ch:[
+   {n:_t('Forcer la porte'),d:_t('Une Trousse de secours… ou un défenseur blessé.'),go:(st,rnd)=>{if(rnd()<.6)return{txt:_t('Les étagères ne sont pas vides.'),cards:['kit']};const j=randUnit(st,rnd);return{txt:_t('Un rôdeur t’attendait. ')+(j>=0?hurt(st,j,3):_t('Tu t’en sors de justesse.'))}}},
+   {n:_t('Repartir'),d:_t('Pas de risque.'),go:()=>({txt:_t('Tu laisses la pharmacie à ce qui l’habite.')})}]},
+  child:{n:_t('Un enfant seul'),d:_t('Un gamin, une fronde à la main, te suit de loin depuis l’aube.'),ch:[
+   {n:_t('L’accueillir'),d:_t('Un Gamin rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).'),go:(st,rnd)=>{st.shelter=Math.max(1,st.shelter-1);const u=recruit(st,'kid',rnd);return{txt:u?_t`${u.name} s’installe près de la porte, sa fronde chargée.`:_t('Pas de place autour de l’abri : il repart avec tes provisions.')}}},
+   {n:_t('Lui indiquer la route'),d:_t('Pas de risque.'),go:()=>({txt:_t('Il hoche la tête et disparaît vers le sud.')})}]},
+  gunshop:{n:_t('L’armurerie'),d:_t('Le rideau de fer est à moitié levé.'),ch:[
+   {n:_t('Se glisser dessous'),d:_t('Deux Grenades… ou une embuscade.'),go:(st,rnd)=>{if(rnd()<.55)return{txt:_t('Une caisse oubliée sous le comptoir.'),cards:['grenade','grenade']};st.shelter=Math.max(1,st.shelter-2);return{txt:_t('Une embuscade ! Tu rentres en courant, la horde sur les talons : l’abri perd 2 PV.')}}},
+   {n:_t('Ne pas tenter le diable'),d:_t('Pas de risque.'),go:()=>({txt:_t('Le rideau grince dans le vent derrière toi.')})}]},
+  generator:{n:_t('Un groupe électrogène'),d:_t('Il tourne encore, dans un garage. Il faut du carburant pour le ramener.'),ch:[
+   {n:_t('Le ramener (4 ferraille)'),d:_t('+1 énergie demain.'),ok:st=>st.scrap>=4,go:st=>{st.scrap-=4;st.nextE=(st.nextE||0)+1;return{txt:_t('Le moteur ronronne derrière l’abri. Demain, tu iras plus vite.')}}},
+   {n:_t('Le laisser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Son bruit finira par attirer quelqu’un d’autre.')})}]},
+  trader:{n:_t('Une marchande ambulante'),d:_t('Une charrette, une vieille femme et un fusil sur les genoux.'),ch:[
+   {n:_t('Échanger 10 ferraille'),d:_t('Une carte rare au hasard rejoint ton deck.'),ok:st=>st.scrap>=10,go:(st,rnd)=>{const ts=(st.pool||KEYS).filter(t=>RAR[t]==='rare'&&U[t]&&!U[t].chief);if(!ts.length)return{txt:_t('Elle n’a rien qui t’intéresse.')};st.scrap-=10;const t=pickR(ts,rnd);return{txt:_t`Elle te tend ${U[t].n} sans un mot.`,cards:[t]}}},
+   {n:_t('Refuser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Elle repart en sifflotant.')})}]},
+  church:{n:_t('L’église en ruine'),d:_t('Le clocher tient encore debout. Le toit est en plomb.'),ch:[
+   {n:_t('Prier un moment'),d:_t('Toutes tes unités récupèrent 2 PV.'),go:st=>{st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=Math.min(maxHp(st,u),u.hp+2)});return{txt:_t('Le silence fait du bien à tout le monde.')}}},
+   {n:_t('Arracher le plomb du toit'),d:_t('+8 ferraille.'),go:st=>{st.scrap+=8;return{txt:_t('Les cloches ne sonneront plus : +8 ferraille.')}}}]},
+  deserter:{n:_t('Un soldat déserteur'),d:_t('Il a encore son arme et son uniforme, mais plus de chef.'),ch:[
+   {n:_t('L’engager (10 ferraille)'),d:_t('Un Tireur d’élite rejoint l’abri.'),ok:st=>st.scrap>=10,go:(st,rnd)=>{st.scrap-=10;const u=recruit(st,'swat',rnd);return{txt:u?_t`${u.name} prend position sans un mot.`:_t('Pas de place autour de l’abri : il garde ta ferraille et s’en va.')}}},
+   {n:_t('Le désarmer'),d:_t('+5 ferraille, mais un de tes défenseurs est blessé.'),go:(st,rnd)=>{st.scrap+=5;const j=randUnit(st,rnd);return{txt:_t('Il se défend avant de fuir (+5 ferraille). ')+(j>=0?hurt(st,j,2):'')}}}]},
+  blaze:{n:_t('Un incendie au loin'),d:_t('Une maison brûle de l’autre côté du champ.'),ch:[
+   {n:_t('Sauver ce qui peut l’être'),d:_t('+6 ferraille, mais −1 énergie demain.'),go:st=>{st.scrap+=6;st.nextE=(st.nextE||0)-1;return{txt:_t('Tu rentres couvert de suie, les bras chargés : +6 ferraille.')}}},
+   {n:_t('Regarder brûler'),d:_t('Pas de risque.'),go:()=>({txt:_t('Au moins, les zombies iront voir là-bas.')})}]},
+  diary:{n:_t('Un carnet de survie'),d:_t('Trouvé sur un banc, plein de notes et de schémas.'),ch:[
+   {n:_t('Le lire'),d:_t('Tu pioches 2 cartes tout de suite.'),go:st=>{st.drawNow=(st.drawNow||0)+2;return{txt:_t('Des idées plein la tête pour aujourd’hui.')}}},
+   {n:_t('Brûler les pages'),d:_t('+1 PV à l’abri (un peu de chaleur).'),go:st=>{st.shelter=Math.min(maxS(st),st.shelter+1);return{txt:_t('Le feu crépite. Les mots partent en fumée.')}}}]},
+  wolves:{n:_t('Des loups affamés'),d:_t('Une meute tourne autour de l’abri depuis la nuit.'),ch:[
+   {n:_t('Leur jeter des provisions'),d:_t('L’abri perd 1 PV.'),go:st=>{st.shelter=Math.max(1,st.shelter-1);return{txt:_t('Ils emportent la viande et s’éloignent.')}}},
+   {n:_t('Les chasser'),d:_t('+4 ferraille (fourrures), mais un défenseur est blessé.'),go:(st,rnd)=>{st.scrap+=4;const j=randUnit(st,rnd);return{txt:_t('La meute recule (+4 ferraille). ')+(j>=0?hurt(st,j,3):'')}}}]},
+  crash:{n:_t('Un hélicoptère écrasé'),d:_t('La carcasse fume encore dans la clairière.'),ch:[
+   {n:_t('Fouiller l’épave'),d:_t('Une Munition anti-Colosse… ou une explosion.'),go:(st,rnd)=>{if(rnd()<.5)return{txt:_t('Dans la soute : une munition de gros calibre.'),cards:['shell']};const j=randUnit(st,rnd);return{txt:_t('Le réservoir explose ! ')+(j>=0?hurt(st,j,4):_t('Personne n’était à côté.'))}}},
+   {n:_t('Ne pas s’approcher'),d:_t('Pas de risque.'),go:()=>({txt:_t('La fumée monte toute la journée.')})}]},
+  library:{n:_t('La bibliothèque'),d:_t('Des manuels techniques, intacts, sur une étagère.'),ch:[
+   {n:_t('Étudier'),d:_t('Une carte de ton deck est améliorée, mais −1 énergie demain.'),go:(st,rnd,deck)=>{const ts=[...new Set(deck||[])].filter(t=>UPGRADABLE.includes(t)&&!st.upg[t]);st.nextE=(st.nextE||0)-1;if(!ts.length)return{txt:_t('Rien d’utile cette fois. La journée est perdue.')};const t=pickR(ts,rnd);upgrade(st,t);return{txt:_t`Tu as compris comment mieux utiliser ${U[t].n} : la carte est améliorée.`}}},
+   {n:_t('Emporter du papier'),d:_t('+3 ferraille.'),go:st=>{st.scrap+=3;return{txt:_t('Ça servira à allumer le feu, et à troquer : +3 ferraille.')}}}]},
+  couple:{n:_t('Deux survivants armés'),d:_t('Un frère et une sœur, prêts à se battre, mais affamés.'),ch:[
+   {n:_t('Les nourrir'),d:_t('Un Tireur et un Bûcheron rejoignent l’abri, mais l’abri perd 3 PV.'),go:(st,rnd)=>{st.shelter=Math.max(1,st.shelter-3);const a=recruit(st,'gun',rnd),b=recruit(st,'axe',rnd);const ns=[a,b].filter(Boolean).map(u=>u.name);return{txt:ns.length?_t`${ns.join(_t(' et '))} rejoignent l’abri.`:_t('Pas de place autour de l’abri : ils mangent et repartent.')}}},
+   {n:_t('Refuser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Ils te regardent longtemps avant de partir.')})}]},
+  storm:{n:_t('Un orage se prépare'),d:_t('Le ciel noircit à l’ouest. Le toit ne tiendra pas.'),ch:[
+   {n:_t('Renforcer le toit (5 ferraille)'),d:_t('+1 PV max et +1 PV à l’abri.'),ok:st=>st.scrap>=5,go:st=>{st.scrap-=5;st.maxS=maxS(st)+1;st.shelter=Math.min(maxS(st),st.shelter+1);return{txt:_t('Le toit tient bon sous la pluie.')}}},
+   {n:_t('Prier pour que ça passe'),d:_t('L’abri perd 1 PV.'),go:st=>{st.shelter=Math.max(1,st.shelter-1);return{txt:_t('Une gouttière cède dans la nuit : l’abri perd 1 PV.')}}}]},
+  scavengers:{n:_t('Des fouilleurs'),d:_t('Deux silhouettes fouillent les poubelles derrière l’abri.'),ch:[
+   {n:_t('Partager le butin'),d:_t('+5 ferraille.'),go:st=>{st.scrap+=5;return{txt:_t('Ils connaissent les bons coins : +5 ferraille.')}}},
+   {n:_t('Les chasser'),d:_t('Pas de risque.'),go:()=>({txt:_t('Ils filent sans demander leur reste.')})}]},
+  farm:{n:_t('Une ferme abandonnée'),d:_t('Le potager a poussé tout seul.'),ch:[
+   {n:_t('Remplir les sacs'),d:_t('Des Conserves rejoignent ton deck.'),go:()=>({txt:_t('Carottes, pommes de terre et un bocal de confiture.'),cards:['food']})},
+   {n:_t('Ne pas s’attarder'),d:_t('Pas de risque.'),go:()=>({txt:_t('Un épouvantail te regarde partir.')})}]}
  };
  // événements de l'aube (v111) : rares (15 % des aubes), au moins 3 nuits entre deux événements,
  // et jamais deux fois le même tant que tous n'ont pas été vus dans la partie
@@ -467,16 +469,16 @@ const Z=(()=>{
  function dawnEvent(st,rnd=Math.random){if(st.night<2||st.night-(st.lastEv||-99)<EV_GAP||rnd()>=EV_CHANCE)return null;
   let ks=Object.keys(DAWN).filter(k=>!(st.seenEv||[]).includes(k));if(!ks.length){st.seenEv=[];ks=Object.keys(DAWN)}
   const k=pickR(ks,rnd);st.seenEv=[...(st.seenEv||[]),k];st.lastEv=st.night;return k}
- function resolveDawn(st,id,k,rnd=Math.random,deck){const c=DAWN[id].ch[k];if(c.ok&&!c.ok(st))return{txt:'Impossible.'};const r=c.go(st,rnd,deck)||{};touch(st);return r}
+ function resolveDawn(st,id,k,rnd=Math.random,deck){const c=DAWN[id].ch[k];if(c.ok&&!c.ok(st))return{txt:_t('Impossible.')};const r=c.go(st,rnd,deck)||{};touch(st);return r}
  // mutations : toutes les 5 nuits, une nouvelle mutation remplace la précédente (affixe de la horde)
  const MUTS={
-  peau:{n:'Peau épaisse',d:'Les zombies ont +15 % de PV',stack:99},
-  nombre:{n:'Horde nombreuse',d:'+15 % de zombies chaque nuit',stack:99},
-  enrage:{n:'Enragés',d:'Les rôdeurs et les coureurs font +1 dégât par coup',stack:99},
-  carapace:{n:'Carapace',d:'Les rôdeurs encaissent 1 dégât de moins par coup, sauf le feu et les explosions',stack:3},
-  regen:{n:'Régénération',d:'Les zombies récupèrent 1 PV tous les 3 tours',stack:99},
-  putride:{n:'Putréfaction',d:'En mourant, un zombie éclabousse les unités autour de lui : 1 dégât',stack:99},
-  frenesie:{n:'Pas pressés',d:'Les zombies lents et très lents avancent d’un cran plus vite',stack:2}
+  peau:{n:_t('Peau épaisse'),d:_t('Les zombies ont +15 % de PV'),stack:99},
+  nombre:{n:_t('Horde nombreuse'),d:_t('+15 % de zombies chaque nuit'),stack:99},
+  enrage:{n:_t('Enragés'),d:_t('Les rôdeurs et les coureurs font +1 dégât par coup'),stack:99},
+  carapace:{n:_t('Carapace'),d:_t('Les rôdeurs encaissent 1 dégât de moins par coup, sauf le feu et les explosions'),stack:3},
+  regen:{n:_t('Régénération'),d:_t('Les zombies récupèrent 1 PV tous les 3 tours'),stack:99},
+  putride:{n:_t('Putréfaction'),d:_t('En mourant, un zombie éclabousse les unités autour de lui : 1 dégât'),stack:99},
+  frenesie:{n:_t('Pas pressés'),d:_t('Les zombies lents et très lents avancent d’un cran plus vite'),stack:2}
  };
  const mutNight=n=>n%5===0;
  const mc=(st,m)=>(st.muts||[]).filter(x=>x===m).length;
@@ -499,20 +501,20 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const bossHit=st=>10+2*Math.max(0,Math.floor((st.night||10)/10)-1);
  function zhit(st,z){return zdmg(st,z.k)}
  const CHARS={
-  surv:{n:'Le survivant',d:'Aucun bonus. Idéal pour apprendre.',deck:['bar','bar','car','gun','gun','axe','trap','food','grenade'],relic:null},
-  cop:{n:'La policière',d:'Commence avec la Lunette de visée : tes tireurs ont +1 portée.',deck:['bar','fen','gun','gun','snp','cop','lamp','food','grenade'],relic:'lunette'},
-  farm:{n:'Le fermier',d:'Commence avec le Manuel du trappeur : tes pièges font +2 dégâts.',deck:['bar','bar','trap','trap','mine','fire','spike','dog','grenade'],relic:'pieges'},
-  nurse:{n:'L’infirmière',d:'Commence avec la Marmite de soupe : +1 PV à l’abri à chaque aube.',deck:['bar','car','gun','axe','med','food','rep','kit','grenade'],relic:'soupe'}
+  surv:{n:_t('Le survivant'),d:_t('Aucun bonus. Idéal pour apprendre.'),deck:['bar','bar','car','gun','gun','axe','trap','food','grenade'],relic:null},
+  cop:{n:_t('La policière'),d:_t('Commence avec la Lunette de visée : tes tireurs ont +1 portée.'),deck:['bar','fen','gun','gun','snp','cop','lamp','food','grenade'],relic:'lunette'},
+  farm:{n:_t('Le fermier'),d:_t('Commence avec le Manuel du trappeur : tes pièges font +2 dégâts.'),deck:['bar','bar','trap','trap','mine','fire','spike','dog','grenade'],relic:'pieges'},
+  nurse:{n:_t('L’infirmière'),d:_t('Commence avec la Marmite de soupe : +1 PV à l’abri à chaque aube.'),deck:['bar','car','gun','axe','med','food','rep','kit','grenade'],relic:'soupe'}
  };
  const SHOP={
-  heal:{n:'Réparer l’abri',d:'+3 PV à l’abri',cost:15},
-  store:{n:'La boutique',d:'5 objets qui ne sont pas dans ton deck, et des munitions anti-Colosse. Elle change à chaque visite',cost:5},
-  upgrade:{n:'Améliorer une carte',d:'Toutes tes cartes de ce type sont améliorées. Plus cher à chaque fois',cost:25,more:15},
-  remove:{n:'Jeter une carte',d:'Retire une carte de ton deck',cost:10}
+  heal:{n:_t('Réparer l’abri'),d:_t('+3 PV à l’abri'),cost:15},
+  store:{n:_t('La boutique'),d:_t('5 objets qui ne sont pas dans ton deck, et des munitions anti-Colosse. Elle change à chaque visite'),cost:5},
+  upgrade:{n:_t('Améliorer une carte'),d:_t('Toutes tes cartes de ce type sont améliorées. Plus cher à chaque fois'),cost:25,more:15},
+  remove:{n:_t('Jeter une carte'),d:_t('Retire une carte de ton deck'),cost:10}
  };
  const shopCost=(st,k)=>(k==='store'&&men(st,4)?5:0)-(k==='upgrade'&&hasR(st,'troc')?10:0)+SHOP[k].cost+(SHOP[k].more||0)*Object.keys(st.upg||{}).length;
  // rareté : les cartes puissantes sortent rarement à l'aube et au troc
- const RARITY={com:{n:'Commune',w:67},rare:{n:'Rare',w:27},epic:{n:'Épique',w:6},leg:{n:'Légendaire',w:0}};
+ const RARITY={com:{n:_t('Commune'),w:67},rare:{n:_t('Rare'),w:27},epic:{n:_t('Épique'),w:6},leg:{n:_t('Légendaire'),w:0}};
  const RAR={};
  'bar fen sand gun kid axe dog cop med trap fire wire smoke bait food rep'.split(' ').forEach(t=>RAR[t]='com');
  'car tire snp xbow flame butch monk lamp radio cook mech mine spike kit flare roadmap'.split(' ').forEach(t=>RAR[t]='rare');
@@ -527,7 +529,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  'keys radioop bomber'.split(' ').forEach(t=>RAR[t]='epic');
  'welder fieldnurse'.split(' ').forEach(t=>RAR[t]='com');'handler scout genmech'.split(' ').forEach(t=>RAR[t]='rare');RAR.assassin='epic';RAR.shell='rare';
  KEYS.filter(t=>U[t].chief).forEach(t=>RAR[t]='leg');'molotov horn'.split(' ').forEach(t=>RAR[t]='rare');
- const SIDES=['le nord','le sud','l’ouest','l’est'];
+ const SIDES=[_t('le nord'),_t('le sud'),_t('l’ouest'),_t('l’est')];
  const rc=i=>[Math.floor(i/N),i%N],idx=(r,c)=>r*N+c;
  const isEdge=i=>{const[r,c]=rc(i);return r===0||r===N-1||c===0||c===N-1};
  // portée : au contact (1), les 8 cases autour ; au-delà, un losange (on compte les pas en ligne droite), plus étroit qu'un carré
@@ -589,10 +591,10 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const maxS=st=>st.maxS||MAXS;
  // les lieux : chacun change la carte de départ et une règle
  const PLACES={
-  bois:{n:'La maison des bois',d:'Le lieu d’origine. Ni bonus, ni malus.'},
-  ferme:{n:'La ferme',d:'Une rivière protège le nord : la horde arrive par les 3 autres côtés. Deux bottes de paille (barricades) au départ.',sides:[1,2,3],start:[['bar',3*N+3],['bar',3*N+5]]},
-  station:{n:'La station-service',d:'Deux bonbonnes de gaz et 10 ferraille au départ, l’Essence ne coûte rien. Mais la horde est 15 % plus nombreuse.',start:[['gas',N+MID],['gas',(N-2)*N+MID]],scrap:10,free:['fire'],count:1.15},
-  mall:{n:'Le centre commercial',d:'Murs épais : l’abri a 15 PV au lieu de 10. Mais les zombies ont 15 % de PV en plus.',maxS:15,hp:1.15}
+  bois:{n:_t('La maison des bois'),d:_t('Le lieu d’origine. Ni bonus, ni malus.')},
+  ferme:{n:_t('La ferme'),d:_t('Une rivière protège le nord : la horde arrive par les 3 autres côtés. Deux bottes de paille (barricades) au départ.'),sides:[1,2,3],start:[['bar',3*N+3],['bar',3*N+5]]},
+  station:{n:_t('La station-service'),d:_t('Deux bonbonnes de gaz et 10 ferraille au départ, l’Essence ne coûte rien. Mais la horde est 15 % plus nombreuse.'),start:[['gas',N+MID],['gas',(N-2)*N+MID]],scrap:10,free:['fire'],count:1.15},
+  mall:{n:_t('Le centre commercial'),d:_t('Murs épais : l’abri a 15 PV au lieu de 10. Mais les zombies ont 15 % de PV en plus.'),maxS:15,hp:1.15}
  };
  // progression entre les parties : ce qui est débloqué selon le record (lieux) et le total de nuits survécues (personnages, cartes)
  const UNLOCK={
@@ -620,16 +622,16 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const WIN_NIGHT=30,winPoints=m=>100+50*m;
  // les 10 niveaux de Menace : chacun ajoute une règle, et ils se cumulent ; on débloque le niveau suivant en gagnant
  const MENACES=[null,
-  {n:'Horde coriace',d:'Les zombies ont +10 % de PV dès la nuit 1'},
-  {n:'Réveil difficile',d:'Le premier jour, tu n’as que 3 énergies'},
-  {n:'Sans répit',d:'Plus de nuit de répit après le Colosse'},
-  {n:'Pénurie',d:'La boutique coûte 10 ferraille, et un zombie ordinaire sur deux seulement rapporte de la ferraille'},
-  {n:'Instabilité précoce',d:'Une mutation instable est active dès la nuit 1'},
-  {n:'Curée',d:'La curée monte jusqu’à +3 dégâts au lieu de +2'},
-  {n:'Blessures profondes',d:'Les blessés restent 4 nuits en convalescence au lieu de 3'},
-  {n:'Nuits de sang',d:'Les nuits rouges amènent +40 % de zombies au lieu de +15 %'},
-  {n:'Double Colosse',d:'Chaque nuit du Colosse en amène un de plus'},
-  {n:'Dernier Abri',d:'L’abri perd 3 PV max, et la frénésie démarre dès la nuit 3'}];
+  {n:_t('Horde coriace'),d:_t('Les zombies ont +10 % de PV dès la nuit 1')},
+  {n:_t('Réveil difficile'),d:_t('Le premier jour, tu n’as que 3 énergies')},
+  {n:_t('Sans répit'),d:_t('Plus de nuit de répit après le Colosse')},
+  {n:_t('Pénurie'),d:_t('La boutique coûte 10 ferraille, et un zombie ordinaire sur deux seulement rapporte de la ferraille')},
+  {n:_t('Instabilité précoce'),d:_t('Une mutation instable est active dès la nuit 1')},
+  {n:_t('Curée'),d:_t('La curée monte jusqu’à +3 dégâts au lieu de +2')},
+  {n:_t('Blessures profondes'),d:_t('Les blessés restent 4 nuits en convalescence au lieu de 3')},
+  {n:_t('Nuits de sang'),d:_t('Les nuits rouges amènent +40 % de zombies au lieu de +15 %')},
+  {n:_t('Double Colosse'),d:_t('Chaque nuit du Colosse en amène un de plus')},
+  {n:_t('Dernier Abri'),d:_t('L’abri perd 3 PV max, et la frénésie démarre dès la nuit 3')}];
  const MENACE_MAX=10;
  // à appeler juste après newState : applique les règles de départ de la Menace choisie
  function applyMenace(st,m,rnd=Math.random){st.menace=Math.max(0,Math.min(MENACE_MAX,m|0));
@@ -637,9 +639,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   if(men(st,5)&&!(st.muts||[]).length)mutate(st,rnd);
   if(men(st,10)){st.maxS=Math.max(1,(st.maxS||MAXS)-3);st.shelter=Math.min(st.shelter,st.maxS)}
   return st}
- function deckError(deck,owned){if(deck.length<DECK_MIN)return`Il faut au moins ${DECK_MIN} cartes (${deck.length} pour l’instant).`;
-  if(deck.length>DECK_MAX)return`${DECK_MAX} cartes au maximum.`;
-  const c={};for(const t of deck){c[t]=(c[t]||0)+1;if(owned&&!owned.includes(t))return`${U[t].n} n’est pas dans ta collection.`;if(c[t]>copyMax(t))return`${U[t].n} : ${copyMax(t)} exemplaire(s) au maximum.`}
+ function deckError(deck,owned){if(deck.length<DECK_MIN)return _t`Il faut au moins ${DECK_MIN} cartes (${deck.length} pour l’instant).`;
+  if(deck.length>DECK_MAX)return _t`${DECK_MAX} cartes au maximum.`;
+  const c={};for(const t of deck){c[t]=(c[t]||0)+1;if(owned&&!owned.includes(t))return _t`${U[t].n} n’est pas dans ta collection.`;if(c[t]>copyMax(t))return _t`${U[t].n} : ${copyMax(t)} exemplaire(s) au maximum.`}
   return''}
  function newDay(st,rnd,offer){st.night++;(st.bench||[]).forEach(u=>{if(u.koUntil&&st.night>u.koUntil){delete u.koUntil;u.hp=maxHp(st,u)}});st.charges={};st.energy=ENERGY+(st.nextE||0)+(hasR(st,'pacte')?1:0)+(hasR(st,'fanion')?1:0);st.disc=0;st.nextE=0;st.moved=0;st.rushT=0;if(st.test)st.energy=99;
   if(offer){st.event=EVENTS.find(e=>e.id===offer.event)||EVENTS[0];st.tier=offer.tier}else{st.event=rnd()<.2?EVENTS[0]:EVENTS[1+Math.floor(rnd()*(EVENTS.length-1))];st.tier='base'}}
@@ -653,9 +655,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  /* ---------- améliorations et reliques : statistiques réelles d'une carte ---------- */
  const TRAPF=['trap','mine','spike','gas','dyn'];
  function upgDesc(t){const b=U[t];
-  if(b.dmg)return'+1 dégât';if(TRAPF.some(k=>b[k]))return'+2 dégâts';if(b.burn)return'+1 dégât de feu';
-  if(b.smoke||b.bait)return'+1 tour';if(b.wire)return'+1 dégât';if(b.cat==='wall')return'+4 PV';
-  if(b.buff)return'+1 au bonus';if(b.heal)return'soigne 2 PV';if(b.gain)return'+2 PV soignés';if(b.cat==='help'||b.cat==='post')return'+2 PV';return null}
+  if(b.dmg)return _t('+1 dégât');if(TRAPF.some(k=>b[k]))return _t('+2 dégâts');if(b.burn)return _t('+1 dégât de feu');
+  if(b.smoke||b.bait)return _t('+1 tour');if(b.wire)return _t('+1 dégât');if(b.cat==='wall')return _t('+4 PV');
+  if(b.buff)return _t('+1 au bonus');if(b.heal)return _t('soigne 2 PV');if(b.gain)return _t('+2 PV soignés');if(b.cat==='help'||b.cat==='post')return _t('+2 PV');return null}
  const UPGRADABLE=KEYS.filter(upgDesc);
  const cache=new WeakMap();
  const touch=st=>cache.delete(st);
@@ -906,7 +908,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    // 15 dégâts au mur frappé (le surplus passe aux murs reliés les plus proches), 6 à une unité, puis 3 autour
    const cells=D.cat==='wall'?[n,...wallGroup(st,n).filter(j=>j!==n).sort((a,b)=>cheb(a,n)-cheb(b,n))]:[n];
    for(const j of cells){const v=st.grid[j];if(!v||left<=0)continue;const d=Math.min(left,v.hp);v.hp-=d;ouch(st,v,d,d);left-=d;ev.push({i:j,txt:'−'+d,k:'bite',zid:z.id});if(v.hp<=0)lose(st,j,v,ev)}
-   sapBlast(st,z.pos,ev);return}let d=T.boss?bossHit(st):zhit(st,z);if(roleOf(u.t)==='tank'){u.blk=(u.blk||0)+1;if(u.blk%((hasEq(u,'gear')||hasR(st,'gilet'))?2:3)===0){ev.push({i:n,txt:'bloqué',k:'block',zid:z.id});return}}if(!T.boss&&(st._fl||{}).police&&famOf(u.t)==='police')d=Math.max(1,d-1);if(!T.boss&&isUnit(u.t)&&nearPost(st,n,'trench'))d=Math.max(1,d-1);
+   sapBlast(st,z.pos,ev);return}let d=T.boss?bossHit(st):zhit(st,z);if(roleOf(u.t)==='tank'){u.blk=(u.blk||0)+1;if(u.blk%((hasEq(u,'gear')||hasR(st,'gilet'))?2:3)===0){ev.push({i:n,txt:_t('bloqué'),k:'block',zid:z.id});return}}if(!T.boss&&(st._fl||{}).police&&famOf(u.t)==='police')d=Math.max(1,d-1);if(!T.boss&&isUnit(u.t)&&nearPost(st,n,'trench'))d=Math.max(1,d-1);
   // curée (v114) : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus). v132 : les Tanks l'ignorent (ils sont faits pour être encerclés)
   if(!T.boss&&isUnit(u.t)&&roleOf(u.t)!=='tank')d+=Math.min(CUREE_MAX+(men(st,6)?1:0),st.z.filter(o=>o!==z&&o.hp>0&&!ZT[o.k].boss&&cheb(o.pos,n)<=1).length);
   // plafond par coup (Agent anti-émeute, Sacs de sable) : appliqué en dernier, après tous les bonus (v133)

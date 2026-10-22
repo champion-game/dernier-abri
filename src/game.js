@@ -1,4 +1,5 @@
 // Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
+_tPage();
 const ICON={
  bar:'<path d="M4 6l16 4M4 14l16 4M7 4v17M17 4v17"/>',
  car:'<path d="M3 15l2-5h12l3 5v3H3zM6 10l1.5-3h8l1.5 3"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>',
@@ -145,7 +146,7 @@ const artUrl=t=>CART_FILES.includes(t)?'assets/cards_cartoon/'+t+'.webp':'';
 /* face de carte complète (style Hearthstone) : illustration dans une fenêtre arrondie, gemme de coût, bandeau du nom,
    texte d'effet, gemmes d'attaque et de PV, faction, rôle et rareté. Tout est écrit par le jeu.
    o.mini : version de la main (sans le texte d'effet) ; o.base : stats de base (collection), sinon celles de la partie (améliorations). */
-const CATL={post:'Poste de soutien',wall:'Défense',shoot:'Tireur',melee:'Corps à corps',help:'Soutien',trap:'Piège',item:'Objet',react:'Réaction'};
+const CATL={post:_t('Poste de soutien'),wall:_t('Défense'),shoot:_t('Tireur'),melee:_t('Corps à corps'),help:_t('Soutien'),trap:_t('Piège'),item:_t('Objet'),react:_t('Réaction')};
 const TRAPK=['trap','mine','spike','gas','clay','firetrap','dyn','burn','wire'];
 function cardStats(D){const o={};if(D.dmg)o.atk=D.dmg+(D.hits>1?'×'+D.hits:'');else{const k=TRAPK.find(k=>D[k]);if(k)o.atk=D[k];else if(D.heal||D.mech)o.heal=D.heal||D.mech}
  if(D.block&&D.hp)o.hp=D.hp;return o}
@@ -181,22 +182,22 @@ function seen(k){try{return !!(OPT.all||(META.hints&&META.hints[k]))}catch(e){re
 function novice(){try{return !OPT.all&&!META.runs}catch(e){return false}}
 const ink=k=>`<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
 function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=cardStats(D),f=Z.famOf(t),ro=Z.roleOf(t),u=artUrl(t),cost=o.cost??(o.base?Z.cost(t):Z.costOf(G,t));
- const atk=st.atk!=null?`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`:st.heal?`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`:'';
+ const atk=st.atk!=null?_t`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`:st.heal?_t`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`:'';
  const hp=st.hp?`<span class="cf-hp" title="PV"><b>${st.hp}</b></span>`:'';
  // texte de la carte : pour un chef, la faction est déjà indiquée par le pictogramme, on raccourcit
- const txt=U0.chief?U0.d.replace(/^Che(?:f|ffe) d[^:]*: /,'').replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/,'. Faction : +1 palier'):U0.d;
+ const txt=U0.chief?U0.d.replace(/^Che(?:f|ffe) d[^:]*: /,'').replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/,_t('. Faction : +1 palier')):U0.d;
  // faction et rôle : pictogrammes à l'encre en bas de la carte, entre les dégâts et les PV (rôle en couleur : tank / soin / DPS)
  const marks=(f&&seen('fam1')?`<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>`:'')+(ro?`<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>`:'');
- return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}">${o.gold?`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
+ return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}">${o.gold?_t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
   <span class="cf-art"${u?` style="background-image:url('${u}')"`:''}>${u?'':svg(t)}</span><span class="cf-vig"></span>${u&&popUrl(t)?`<span class="cf-pop" style="background-image:url('${popUrl(t)}')"></span>`:''}
   ${r!=='com'?`<span class="cf-rar" title="${Z.RARITY[r].n}"></span>`:''}<span class="cf-cost">${cost}</span>
   <span class="cf-name">${D.n}</span>
-  ${o.mini?(atk||hp?'':`<span class="cf-v">${o.v||(U0.react?'Nuit':U0.v)}</span>`)+(o.tag?`<span class="cf-tag">${o.tag}</span>`:''):`<span class="cf-rule"></span><span class="cf-txt${txt.length>80?' xlong':txt.length>55?' long':''}"><span>${txt}${D.rng>1&&!/portée/i.test(U0.d)?`. <b>Portée ${D.rng}</b>`:''}</span></span>`}
+  ${o.mini?(atk||hp?'':`<span class="cf-v">${o.v||(U0.react?_t('Nuit'):U0.v)}</span>`)+(o.tag?`<span class="cf-tag">${o.tag}</span>`:''):`<span class="cf-rule"></span><span class="cf-txt${txt.length>80?' xlong':txt.length>55?' long':''}"><span>${txt}${D.rng>1&&!/portée/i.test(U0.d)?_t`. <b>Portée ${D.rng}</b>`:''}</span></span>`}
   <span class="cf-foot">${atk||'<span></span>'}<span class="cf-marks">${marks}${o.mini?'':`<em>${CATL[U0.cat]||''}</em>`}</span>${hp||'<span></span>'}</span></span>`}
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v145 · 22 oct.';
+const VERSION='v146 · 22 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -208,7 +209,7 @@ const VERSION='v145 · 22 oct.';
 try{if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}catch(e){}
 // slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
-const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',lang:'fr'};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
+const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',lang:LANG};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
 function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang}
 const TICK=650;let SPEED=1,slowT=0;const tickMs=()=>TICK/SPEED*(performance.now()<slowT?3:1);
@@ -224,11 +225,11 @@ const $=s=>document.querySelector(s);
 let RS=1;function R(){RS=(RS*16807)%2147483647;return (RS-1)/2147483646}
 const seedFrom=str=>{let h=2166136261;for(const c of str)h=Math.imul(h^c.charCodeAt(0),16777619);return (Math.abs(h)%2147483646)+1};
 const shuffle=a=>Z.shuffle(a,R);
-const plural=(n,s,p)=>n+' '+(n>1?p:s);
+const plural=(n,s,p)=>n+' '+(n>1||(n===0&&LANG!=='fr')?p:s);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const ZN={walk:['rôdeur','rôdeurs'],run:['coureur','coureurs'],fat:['gonflé','gonflés'],zdog:['chien zombie','chiens zombies'],crawl:['rampant','rampants'],spit:['cracheur','cracheurs'],armor:['blindé','blindés'],howl:['hurleur','hurleurs'],sap:['sapeur','sapeurs'],boss:['Colosse','Colosses'],mere:['Mère','Mères'],zero:['Patient Zéro','Patients Zéro']};
+const ZN={walk:[_t('rôdeur'),_t('rôdeurs')],run:[_t('coureur'),_t('coureurs')],fat:[_t('gonflé'),_t('gonflés')],zdog:[_t('chien zombie'),_t('chiens zombies')],crawl:[_t('rampant'),_t('rampants')],spit:[_t('cracheur'),_t('cracheurs')],armor:[_t('blindé'),_t('blindés')],howl:[_t('hurleur'),_t('hurleurs')],sap:[_t('sapeur'),_t('sapeurs')],boss:[_t('Colosse'),_t('Colosses')],mere:[_t('Mère'),_t('Mères')],zero:[_t('Patient Zéro'),_t('Patients Zéro')]};
 // v128 : le boss qui mène la nuit (Colosse, Mère, Patient Zéro)
-const bossName=n=>({boss:'le Colosse',mere:'la Mère',zero:'le Patient Zéro'})[Z.leadBoss(n)]||'le Colosse';
+const bossName=n=>({boss:_t('le Colosse'),mere:_t('la Mère'),zero:_t('le Patient Zéro')})[Z.leadBoss(n)]||_t('le Colosse');
 const capF=t=>t.charAt(0).toUpperCase()+t.slice(1);
 
 /* ---------- state ---------- */
@@ -243,23 +244,23 @@ function saveMeta(m){if(TEST)return;try{localStorage.setItem('abri-meta',JSON.st
 /* v128 : succès. Débloqués pour toujours (META.ach), annoncés par un bandeau, listés dans une page depuis l'accueil et les statistiques.
    Ils ne changent pas les règles : ce sont des objectifs pour guider le joueur (et préparer ceux de Steam). */
 const ACH=[
- ['n5','spark','Premiers pas','Tenir 5 nuits.'],['n10','spark','Le cap des dix','Tenir 10 nuits.'],['n20','spark','Vétéran','Tenir 20 nuits.'],
- ['win','trophy','Les secours sont là','Gagner une partie : tenir 30 nuits.'],['m5','trophy','Souche instable','Gagner en Mutation 5.'],['m10','trophy','Dernière souche','Gagner en Mutation 10.'],
- ['n40','moon','Gardien de la vallée','Rester après la victoire et tenir 40 nuits.'],['daily','medal','Défi relevé','Finir un défi du jour.'],
- ['colosse','skull','Abattre le Colosse','Tuer le Colosse.'],['mere','skull','Matricide','Tuer la Mère.'],['zero','skull','Fin de l’épidémie','Tuer le Patient Zéro.'],
- ['ammo','skull','Gros calibre','Achever un boss avec une Munition anti-Colosse.'],['bossclean','vest','Pas une égratignure','Finir une nuit de boss sans que l’abri perde de PV.'],
- ['carnage','drop','Carnage','Tuer 5 zombies d’un coup.'],['night50','drop','Marée noire','Tuer 50 zombies en une seule nuit.'],
- ['k100','drop','Cent de plus','Tuer 100 zombies au total.'],['k1000','drop','Mille morts','Tuer 1 000 zombies au total.'],
- ['hero','medal','Légende vivante','Un survivant tue 100 zombies dans la même partie.'],['nolos','heart','Personne ne reste derrière','Tenir 10 nuits sans perdre ni blesser un survivant.'],
- ['fuse','star','Ensemble','Réussir une fusion.'],['fuse2','star','Élite','Obtenir une unité ★★.'],['evo','star','Évolution','Découvrir une évolution secrète.'],['evoall','star','Naturaliste','Découvrir les 10 évolutions secrètes.'],
- ['chief','medal','Le chef est là','Poser un chef de faction.'],['fam5','medal','Équipe complète','Avoir 5 survivants de la même faction.'],
- ['relic5','gift','Collectionneur','Avoir 5 reliques dans une partie.'],['rich','post','Ferrailleur','Avoir 50 ferraille en même temps.'],['coll','card','Tout le paquet','Débloquer toutes les cartes de la collection.']
+ ['n5','spark',_t('Premiers pas'),_t('Tenir 5 nuits.')],['n10','spark',_t('Le cap des dix'),_t('Tenir 10 nuits.')],['n20','spark',_t('Vétéran'),_t('Tenir 20 nuits.')],
+ ['win','trophy',_t('Les secours sont là'),_t('Gagner une partie : tenir 30 nuits.')],['m5','trophy',_t('Souche instable'),_t('Gagner en Mutation 5.')],['m10','trophy',_t('Dernière souche'),_t('Gagner en Mutation 10.')],
+ ['n40','moon',_t('Gardien de la vallée'),_t('Rester après la victoire et tenir 40 nuits.')],['daily','medal',_t('Défi relevé'),_t('Finir un défi du jour.')],
+ ['colosse','skull',_t('Abattre le Colosse'),_t('Tuer le Colosse.')],['mere','skull',_t('Matricide'),_t('Tuer la Mère.')],['zero','skull',_t('Fin de l’épidémie'),_t('Tuer le Patient Zéro.')],
+ ['ammo','skull',_t('Gros calibre'),_t('Achever un boss avec une Munition anti-Colosse.')],['bossclean','vest',_t('Pas une égratignure'),_t('Finir une nuit de boss sans que l’abri perde de PV.')],
+ ['carnage','drop',_t('Carnage'),_t('Tuer 5 zombies d’un coup.')],['night50','drop',_t('Marée noire'),_t('Tuer 50 zombies en une seule nuit.')],
+ ['k100','drop',_t('Cent de plus'),_t('Tuer 100 zombies au total.')],['k1000','drop',_t('Mille morts'),_t('Tuer 1 000 zombies au total.')],
+ ['hero','medal',_t('Légende vivante'),_t('Un survivant tue 100 zombies dans la même partie.')],['nolos','heart',_t('Personne ne reste derrière'),_t('Tenir 10 nuits sans perdre ni blesser un survivant.')],
+ ['fuse','star',_t('Ensemble'),_t('Réussir une fusion.')],['fuse2','star',_t('Élite'),_t('Obtenir une unité ★★.')],['evo','star',_t('Évolution'),_t('Découvrir une évolution secrète.')],['evoall','star',_t('Naturaliste'),_t('Découvrir les 10 évolutions secrètes.')],
+ ['chief','medal',_t('Le chef est là'),_t('Poser un chef de faction.')],['fam5','medal',_t('Équipe complète'),_t('Avoir 5 survivants de la même faction.')],
+ ['relic5','gift',_t('Collectionneur'),_t('Avoir 5 reliques dans une partie.')],['rich','post',_t('Ferrailleur'),_t('Avoir 50 ferraille en même temps.')],['coll','card',_t('Tout le paquet'),_t('Débloquer toutes les cartes de la collection.')]
 ];
 const ACHQ=[];let achEl=null,achT=0;
 function ach(id){try{META.ach=META.ach||{};if(META.ach[id])return;const a=ACH.find(x=>x[0]===id);if(!a)return;META.ach[id]=Date.now();saveMeta(META);ACHQ.push(a);showAch()}catch(e){}}
 function showAch(){if(achEl&&!achEl.hidden)return;const a=ACHQ.shift();if(!a)return;
  if(!achEl){achEl=document.createElement('div');achEl.className='achtoast';achEl.setAttribute('role','status');document.body.appendChild(achEl);achEl.addEventListener('click',()=>{achEl.hidden=true;clearTimeout(achT);setTimeout(showAch,200)})}
- achEl.innerHTML=`<span class="ach-ic">${ii(a[1])}</span><span><small>Succès débloqué</small><b>${a[2]}</b><em>${a[3]}</em></span>`;achEl.hidden=false;try{SFX.play('relic',.5)}catch(e){}vib(80);
+ achEl.innerHTML=_t`<span class="ach-ic">${ii(a[1])}</span><span><small>Succès débloqué</small><b>${a[2]}</b><em>${a[3]}</em></span>`;achEl.hidden=false;try{SFX.play('relic',.5)}catch(e){}vib(80);
  clearTimeout(achT);achT=setTimeout(()=>{achEl.hidden=true;setTimeout(showAch,300)},3800)}
 // vérifications à l'aube, à la fin d'une partie, et après une pose
 function achCheck(){try{if(!G)return;const n=G.won?G.night:G.night-(S.busy?0:0);
@@ -278,8 +279,8 @@ function achNight(kills){try{if(kills>=50)ach('night50');
 function achScreen(back){const got=META.ach||{},n=ACH.filter(a=>got[a[0]]).length,pc=Math.round(n/ACH.length*100);
  const tile=(v,l)=>`<div class="stile"><b>${v}</b><span>${l}</span></div>`,row=a=>`<div class="achi${got[a[0]]?' on':''}"><span class="ach-ic">${got[a[0]]?ii(a[1]):ii('lock')}</span><span><b>${a[2]}</b><em>${a[3]}</em></span></div>`;
  const on=ACH.filter(a=>got[a[0]]),off=ACH.filter(a=>!got[a[0]]);
- show(`<h2 class="pw">Succès</h2><div class="stiles">${tile(n,'obtenus')}${tile(ACH.length-n,'à obtenir')}${tile(pc+' %','complété')}</div><div class="achbar"><i style="width:${pc}%"></i></div>
-  ${on.length?`<h3>Obtenus</h3><div class="achs">${on.map(row).join('')}</div>`:''}${off.length?`<h3>À obtenir</h3><div class="achs">${off.map(row).join('')}</div>`:''}
+ show(_t`<h2 class="pw">Succès</h2><div class="stiles">${tile(n,_t('obtenus'))}${tile(ACH.length-n,_t('à obtenir'))}${tile(pc+' %',_t('complété'))}</div><div class="achbar"><i style="width:${pc}%"></i></div>
+  ${on.length?_t`<h3>Obtenus</h3><div class="achs">${on.map(row).join('')}</div>`:''}${off.length?_t`<h3>À obtenir</h3><div class="achs">${off.map(row).join('')}</div>`:''}
   <button type="button" class="go" data-a="${back||'title'}">Retour</button>`)}
 let META=loadMeta();
 // tutoriel de la première partie : une bulle d'aide par étape (0 à 4 ; 5 = terminé)
@@ -290,14 +291,14 @@ function tuto(n){if(TUTO===n){TUTO=n+1;try{localStorage.setItem('abri-tuto',TUTO
    GUIDE est vrai tant que la première journée guidée n'est pas finie ; ensuite les bulles habituelles prennent le relais. */
 let GUIDE=false;const GUIDE_CELLS={gun:31,bar:58};
 function guideStep(){if(!GUIDE||!G||G.night!==1||S.busy)return null;const has=t=>G.grid.some(u=>u&&u.t===t),sel=selCard();
- if(!has('gun'))return sel==='gun'?{n:1,cell:GUIDE_CELLS.gun,txt:'Pose-le juste au-dessus de la maison : touche la case qui brille.'}:{n:0,card:'gun',txt:'Les zombies sortent de la forêt par les 4 routes et marchent vers ta maison. Pour te défendre, touche le Tireur en bas de l’écran (il coûte 2 énergies).'};
- if(!has('bar'))return sel==='bar'?{n:3,cell:GUIDE_CELLS.bar,txt:'Pose-la sur la route du sud pour la fermer : touche la case qui brille.'}:{n:2,card:'bar',txt:'Bien ! Ton tireur tirera tout seul sur les zombies à sa portée. Maintenant, touche la Barricade.'};
- return{n:4,go:1,txt:'Ton énergie est dépensée pour aujourd’hui. Touche « Affronter la nuit » : tes survivants se défendront tout seuls.'}}
+ if(!has('gun'))return sel==='gun'?{n:1,cell:GUIDE_CELLS.gun,txt:_t('Pose-le juste au-dessus de la maison : touche la case qui brille.')}:{n:0,card:'gun',txt:_t('Les zombies sortent de la forêt par les 4 routes et marchent vers ta maison. Pour te défendre, touche le Tireur en bas de l’écran (il coûte 2 énergies).')};
+ if(!has('bar'))return sel==='bar'?{n:3,cell:GUIDE_CELLS.bar,txt:_t('Pose-la sur la route du sud pour la fermer : touche la case qui brille.')}:{n:2,card:'bar',txt:_t('Bien ! Ton tireur tirera tout seul sur les zombies à sa portée. Maintenant, touche la Barricade.')};
+ return{n:4,go:1,txt:_t('Ton énergie est dépensée pour aujourd’hui. Touche « Affronter la nuit » : tes survivants se défendront tout seuls.')}}
 // au lancement de la toute première partie : le Tireur et la Barricade sont dans la main
 function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if(!need.every(t=>S.hand.includes(t)||S.draw.includes(t)))return;
  need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
  const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
-const TIPS=['Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.','Touche une case en pointillés jaunes pour la poser.','Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».','Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.'];
+const TIPS=[_t('Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.'),_t('Touche une case en pointillés jaunes pour la poser.'),_t('Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».'),_t('Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.')];
 function newGame(ch,pl,daily,deck){endTest();try{UNDO=[]}catch(e){}
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
@@ -345,16 +346,16 @@ function animPiles(){const pd=$('#pDraw'),px=$('#pDisc');if(!pd||!px)return;
  FLYSRC.length=0;LASTRECT=null}
 const backHtml=n=>`<span class="pb"><b>${n}</b></span>`;
 function pilesHtml(){const pd=$('#pDraw'),px=$('#pDisc'),pr=$('#pRes');if(!pd)return;
- pd.innerHTML=`${backHtml(S.draw.length)}<em>Pioche</em>`;pd.disabled=S.busy;
- const top=S.discard[S.discard.length-1];px.innerHTML=(top?`<span class="pt" style="background-image:url('${artUrl(top)}')"></span>`:'<span class="pt empty"></span>')+`<b class="pn">${S.discard.length}</b><em>Défausse</em>`;px.disabled=S.busy;
- const b=G.bench||[];pr.hidden=!b.length;if(b.length){pr.innerHTML=`<span class="pt${b[0].gold?' gold':''}" style="background-image:url('${artUrl(b[0].t)}')">${b[0].gold?`<i class="pstars">${'★'.repeat(b[0].gold)}</i>`:''}</span><b class="pn">${b.length}</b><em>Réserve</em>`;pr.disabled=S.busy;pr.classList.toggle('sel',S.bsel!=null)}}
+ pd.innerHTML=_t`${backHtml(S.draw.length)}<em>Pioche</em>`;pd.disabled=S.busy;
+ const top=S.discard[S.discard.length-1];px.innerHTML=(top?`<span class="pt" style="background-image:url('${artUrl(top)}')"></span>`:'<span class="pt empty"></span>')+_t`<b class="pn">${S.discard.length}</b><em>Défausse</em>`;px.disabled=S.busy;
+ const b=G.bench||[];pr.hidden=!b.length;if(b.length){pr.innerHTML=_t`<span class="pt${b[0].gold?' gold':''}" style="background-image:url('${artUrl(b[0].t)}')">${b[0].gold?`<i class="pstars">${'★'.repeat(b[0].gold)}</i>`:''}</span><b class="pn">${b.length}</b><em>Réserve</em>`;pr.disabled=S.busy;pr.classList.toggle('sel',S.bsel!=null)}}
 // voir le contenu d'un tas
-const pileView=(ts,ordered)=>{if(!ts.length)return '<p>Vide.</p>';if(ordered)return `<div class="plist">${ts.map(t=>`<div class="pl"><span class="pt" style="background-image:url('${artUrl(t)}')"></span>${cardName(t)}</div>`).join('')}</div>`;
+const pileView=(ts,ordered)=>{if(!ts.length)return _t('<p>Vide.</p>');if(ordered)return `<div class="plist">${ts.map(t=>`<div class="pl"><span class="pt" style="background-image:url('${artUrl(t)}')"></span>${cardName(t)}</div>`).join('')}</div>`;
  const c={};ts.forEach(t=>c[t]=(c[t]||0)+1);return `<div class="plist">${Object.keys(c).sort((a,b)=>cardName(a).localeCompare(cardName(b))).map(t=>`<div class="pl"><span class="pt" style="background-image:url('${artUrl(t)}')"></span>${cardName(t)}${c[t]>1?` <b>×${c[t]}</b>`:''}</div>`).join('')}</div>`};
-$('#pDraw').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');show(`<h2 class="pw">Pioche : ${plural(S.draw.length,'carte','cartes')}</h2><p>Les cartes que tu vas piocher, dans le désordre (l’ordre reste secret). Quand la pioche est vide, la défausse est mélangée pour la remplir.</p>${pileView(S.draw)}<button type="button" class="go" data-a="closeov">Fermer</button>`)});
-$('#pDisc').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');show(`<h2 class="pw">Défausse : ${plural(S.discard.length,'carte','cartes')}</h2><p>Les cartes jouées, utilisées ou tombées, de la plus récente à la plus ancienne. Elles reviendront quand la pioche sera vide.</p>${pileView(S.discard.slice().reverse(),1)}<button type="button" class="go" data-a="closeov">Fermer</button>`)});
+$('#pDraw').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');show(_t`<h2 class="pw">Pioche : ${plural(S.draw.length,_t('carte'),_t('cartes'))}</h2><p>Les cartes que tu vas piocher, dans le désordre (l’ordre reste secret). Quand la pioche est vide, la défausse est mélangée pour la remplir.</p>${pileView(S.draw)}<button type="button" class="go" data-a="closeov">Fermer</button>`)});
+$('#pDisc').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');show(_t`<h2 class="pw">Défausse : ${plural(S.discard.length,_t('carte'),_t('cartes'))}</h2><p>Les cartes jouées, utilisées ou tombées, de la plus récente à la plus ancienne. Elles reviendront quand la pioche sera vide.</p>${pileView(S.discard.slice().reverse(),1)}<button type="button" class="go" data-a="closeov">Fermer</button>`)});
 $('#pRes').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');const b=G.bench||[];if(b.length===1&&!b[0].koUntil){S.bsel=S.bsel===0?null:0;S.sel=null;S.moveFrom=null;S.inspect=null;render();return}
- show(`<h2 class="pw">Réserve</h2><p>Tes unités rappelées. Choisis-en une, puis touche une case en vert pour la reposer gratuitement.</p><div class="picks">${b.map((u,k)=>`<button type="button" class="pick" data-a="bpick" data-v="${k}" ${u.koUntil?'disabled':''}>${cardFace(u.t,{mini:1,cost:0,gold:u.gold,tag:u.koUntil?`Blessé · jour ${u.koUntil+1}`:(u.name||'')})}</button>`).join('')}</div><button type="button" class="skip" data-a="closeov">Fermer</button>`)});
+ show(_t`<h2 class="pw">Réserve</h2><p>Tes unités rappelées. Choisis-en une, puis touche une case en vert pour la reposer gratuitement.</p><div class="picks">${b.map((u,k)=>`<button type="button" class="pick" data-a="bpick" data-v="${k}" ${u.koUntil?'disabled':''}>${cardFace(u.t,{mini:1,cost:0,gold:u.gold,tag:u.koUntil?_t`Blessé · jour ${u.koUntil+1}`:(u.name||'')})}</button>`).join('')}</div><button type="button" class="skip" data-a="closeov">Fermer</button>`)});
 
 /* ---------- sauvegarde (localStorage, marche aussi dans Electron/Tauri) ---------- */
 const SAVE_KEY='abri-save',SAVE_V=3; // v3 : carte 9×9 (les anciennes sauvegardes en 7×7 sont ignorées)
