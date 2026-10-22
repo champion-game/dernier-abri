@@ -24,11 +24,16 @@ jobs:
           if [ -n "$BUTLER_API_KEY" ] && [ -n "$ITCH_GAME" ]; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "Réglages itch.io absents : envoi sauté."; fi
       - uses: actions/checkout@v4
         if: steps.ok.outputs.go == '1'
-      - name: Préparer le jeu (seulement les fichiers utiles)
+      - name: Préparer le jeu (seulement les fichiers utiles, code sans commentaires)
         if: steps.ok.outputs.go == '1'
         run: |
           mkdir -p build
           cp -r index.html sw.js version.txt manifest.webmanifest src assets build/
+          rm -rf build/assets/extras
+          find build -name '*.md' -delete
+          npm i -s --no-save terser@5 csso-cli@4
+          for f in build/src/*.js build/sw.js; do npx terser "$f" -c -m --comments false -o "$f"; done
+          npx csso build/src/style.css -o build/src/style.css
       - name: Envoyer sur itch.io
         if: steps.ok.outputs.go == '1'
         run: |
