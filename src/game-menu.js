@@ -26,7 +26,7 @@ const RULES=[
  ['mut','dna','Mutations de la horde',()=>`<p>Après ta première victoire, choisis un niveau de Mutation avant la partie. Les niveaux s’additionnent :</p><div class="deck">${Z.MENACES.slice(1).map((x,k)=>`<div class="dk"><span class="fic mnum">${k+1}</span><span><b>${x.n}</b>${x.d}.</span></div>`).join('')}</div>`]];
 const rulesHtml=()=>`<div class="rindex">${RULES.map(([id,ic,t])=>`<button type="button" class="rchip" data-a="rgo" data-v="${id}">${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</button>`).join('')}</div>${RULES.map(([id,ic,t,f])=>`<section class="rfiche" id="r-${id}"><h3>${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</h3>${f()}</section>`).join('')}`;
 // logo du jeu (aussi dans assets/ui/logo.svg), dessiné en SVG avec les polices du jeu
-const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 210" role="img" aria-label="Barricard">
+const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 232" role="img" aria-label="Barricard">
  <defs>
   <radialGradient id="lg-moon" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#fff4cf"/><stop offset=".7" stop-color="#f2d58a"/><stop offset="1" stop-color="#d9a640"/></radialGradient>
   <radialGradient id="lg-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd25a" stop-opacity=".9"/><stop offset="1" stop-color="#ffb020" stop-opacity="0"/></radialGradient>
@@ -53,11 +53,15 @@ const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 210" role="
   <path d="M60 136 q30 -3 60 -2 M230 168 q40 -2 70 1 M70 176 q25 -2 50 -1" stroke="#b5814a" stroke-width="1.5" fill="none" opacity=".6"/>
   <circle cx="40" cy="138" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/><circle cx="320" cy="138" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/>
   <circle cx="44" cy="177" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/><circle cx="316" cy="177" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/>
-  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#1e140c" transform="translate(2,3)">BARRICARD</text>
-  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#f2e1b0" stroke="#2a1a0c" stroke-width="1.2" paint-order="stroke">BARRICARD</text>
+  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#1e140c" transform="translate(2,3)"><tspan font-size="33">BARRI</tspan><tspan font-size="41" dx="1">CARD</tspan></text>
+  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#f2e1b0" stroke="#2a1a0c" stroke-width="1.2" paint-order="stroke"><tspan font-size="33">BARRI</tspan><tspan font-size="41" dx="1" fill="#f5b52e" stroke="#3a1c06" stroke-width="1.6">CARD</tspan></text>
  </g>
  <path d="M64 128 q4 0 4 5 v9 q0 3 -2.5 3 q-2.5 0 -2.5 -3 v-5 q-3 0 -3 -4 q0 -5 4 -5z" fill="#8e1d12" opacity=".9"/>
- <text x="180" y="206" text-anchor="middle" font-family="'Atkinson Hyperlegible',sans-serif" font-size="12.5" letter-spacing="4" fill="#5a4630">UNE NUIT DE PLUS</text>
+ <g transform="rotate(-4 180 212)">
+  <rect x="88" y="197" width="184" height="30" rx="4" fill="rgba(25,8,4,.6)" stroke="#e8402e" stroke-width="3"/>
+  <rect x="93" y="202" width="174" height="20" rx="2" fill="none" stroke="#e8402e" stroke-width="1.2"/>
+  <text x="180" y="217.5" text-anchor="middle" font-family="'Atkinson Hyperlegible',sans-serif" font-size="14.5" font-weight="700" letter-spacing="2" fill="#ff5a44">UNE NUIT DE PLUS</text>
+ </g>
 </svg>`;
 // v139 : menu pause (bouton en haut, Échap, ou quand on quitte l'appli pendant la nuit)
 function pauseMenu(){if(!G)return;onTitle=false;const nt=S.busy;if(nt)USERP=true;
