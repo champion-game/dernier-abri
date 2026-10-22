@@ -1,4 +1,4 @@
-# Dernier Abri
+# Barricard (anciennement Dernier Abri)
 
 Roguelite de cartes de survie zombie. Prototype jouable dans un navigateur.
 

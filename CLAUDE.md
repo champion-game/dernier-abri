@@ -1,4 +1,6 @@
-# Dernier Abri
+# Barricard (anciennement « Dernier Abri »)
+
+Nom du jeu (v144, décision d’Amine) : **Barricard** (barricade + card), le même dans toutes les langues. « Dernier Abri » reste l’indicatif radio de la maison dans l’histoire et le nom de la Mutation 10. Le dépôt et l’adresse du site gardent l’ancien nom.
 
 Roguelite de cartes de survie zombie, destiné d'abord à Steam (PC), avec une version mobile ensuite.
 Le jour, le joueur pose des cartes autour de sa maison. La nuit, la horde attaque en temps réel et la défense se joue toute seule. Le but est de tenir 30 nuits jusqu’à l’arrivée des secours (victoire, puis 10 niveaux de Mutation) ; le joueur peut aussi rester en mode infini pour le score.

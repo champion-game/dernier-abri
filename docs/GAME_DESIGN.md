@@ -1,4 +1,6 @@
-# Dernier Abri — Document de conception
+# Barricard — Document de conception
+
+**Nom (v144)** : le jeu s’appelle **Barricard** (barricade + card), dans toutes les langues. « Dernier Abri » reste l’indicatif radio de la maison (voir `docs/HISTOIRE.md`) et le nom de la Mutation 10.
 
 ## Le pitch
 
