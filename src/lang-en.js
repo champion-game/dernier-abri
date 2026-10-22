@@ -1338,4 +1338,5 @@ I18N.en={
 "<p class=\"demob\">Démo</p><p>Tiens <b>{0} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>{1}":"<p class=\"demob\">Demo</p><p>Hold out for <b>{0} nights</b> and drive back the Colossus. In the full game: 30 nights until help arrives, 3 bosses and 10 Mutations.</p>{1}",
 "<p>Tiens <b>{0} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>":"<p>Hold out for <b>{0} nights</b> until help arrives… or stay for <b>one more night</b>. Each night, the horde grows larger and tougher.</p>",
 "<button type=\"button\" class=\"skip\" data-a=\"daily\">Défi du jour</button>":"<button type=\"button\" class=\"skip\" data-a=\"daily\">Daily challenge</button>",
+"<button type=\"button\" class=\"skip lockb\" disabled title=\"Dans le jeu complet\">{0} Défi du jour</button>":"<button type=\"button\" class=\"skip lockb\" disabled title=\"In the full game\">{0} Daily challenge</button>",
 };

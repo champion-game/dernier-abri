@@ -918,3 +918,7 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
 
 /* démo (v153) : étiquette sous le logo */
 #panel p.demob,p.demob{width:max-content!important;max-width:none!important;margin:-4px auto 8px!important;padding:3px 16px!important;border:0!important;border-radius:6px;background:var(--blood)!important;color:#fff!important;font-family:"Special Elite",serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 2px 6px #0008}
+.panel button.skip.lockb:disabled,button.skip.lockb:disabled{opacity:.85;background:linear-gradient(#f0dcb0,#d4b37a);box-shadow:0 4px 0 #2a170b;color:#5a4630;filter:grayscale(.75) brightness(.8);cursor:default}
+/* v154 : tout ce qui est verrouillé reste lisible, simplement grisé (demande d'Amine) */
+.panel .tab:disabled,.tab:disabled{opacity:.85;background:linear-gradient(#f0dcb0,#d4b37a);color:#5a4630;box-shadow:0 3px 0 #2a170b;filter:grayscale(.8) brightness(.8)}
+.panel .char:disabled,.char:disabled{opacity:.85;background:linear-gradient(#f0dcb0,#d4b37a);color:#5a4630;filter:grayscale(.8) brightness(.8)}
