@@ -860,4 +860,4 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 - Image d’ambiance (`assets/ui/keyart.webp`) derrière l’accueil et les écrans ouverts depuis l’accueil (règles, défi, bestiaire, statistiques, succès, options…). Pendant une partie (pause, aube…), le plateau assombri reste derrière, sans l’image.
 - Accueil : textes dans des bandeaux de papier ; crédits et version en petit texte clair, sans bandeau.
 
-**v148** : image d’ambiance en deux formats : `keyart-portrait.webp` (841 × 1870) sur les écrans en hauteur (téléphone), `keyart.webp` (1672 × 941) sur les écrans en largeur ; voile sombre allégé.
+**v148** : image d’ambiance en deux formats : `keyart-portrait.webp` (841 × 1870) sur les écrans en hauteur (téléphone), `keyart.webp` (2000 × 1125 depuis la v149) sur les écrans en largeur ; voile sombre allégé.

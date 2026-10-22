@@ -1,4 +1,4 @@
-/* Barricard : jeu jouable sans internet (v148).
+/* Barricard : jeu jouable sans internet (v149).
    - Code (page, scripts, styles) : réseau d'abord, copie gardée pour jouer hors ligne. Les mises à jour arrivent donc tout de suite.
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
