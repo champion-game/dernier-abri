@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v150 · 22 oct.';
+const VERSION='v151 · 22 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -299,12 +299,12 @@ function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if
  need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
  const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
 const TIPS=[_t('Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.'),_t('Touche une case en pointillés jaunes pour la poser.'),_t('Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».'),_t('Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.')];
-function newGame(ch,pl,daily,deck){onTitle=false;endTest();try{UNDO=[]}catch(e){}
+function newGame(ch,pl,daily,deck,plan){onTitle=false;endTest();try{UNDO=[]}catch(e){}
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
- G=Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
+ G=plan?Z.dailyState(plan,deck,R):Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
  S={draw:shuffle([...(deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
  V.clear();FX.length=0;PT.length=0;facing.fill(null);clearDecals();POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
- fillHand();if(!daily)guideStart();else GUIDE=false;
+ if(plan){S.hand=S.draw.splice(0)}else fillHand();if(!daily)guideStart();else GUIDE=false;
 }
 // la carte choisie à l'aube arrive d'office dans la main, le reste est pioché
 // la main se garde d'un jour à l'autre : on la complète jusqu'au nombre de cartes du jour (au moins 1 nouvelle), sans dépasser HAND_MAX

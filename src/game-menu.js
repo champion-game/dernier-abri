@@ -1,16 +1,40 @@
 /* Dernier Abri : défi quotidien, tableau des combats, menu pause, raccourcis, accueil et démarrage.
    Les fichiers src/game*.js partagent leurs variables (scripts classiques chargés dans l’ordre par index.html). */
-/* ---------- défi quotidien : même graine, même personnage et même lieu pour tout le monde ce jour-là ---------- */
+/* ---------- défi du jour (v151) : une seule nuit contre la horde du jour, 8 cartes tirées « 1 parmi 3 », même tirage pour tout le monde ---------- */
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-function dailySetup(day){const r=seedFrom('cfg-'+day),ch=Object.keys(Z.CHARS),pl=Object.keys(Z.PLACES);return{ch:ch[r%ch.length],pl:pl[Math.floor(r/7)%pl.length]}}
-function dailyBest(day){try{const d=JSON.parse(localStorage.getItem('abri-daily'))||{};return d[day]??null}catch(e){return null}}
-function dailyEnd(n){let prev=null;try{const d=JSON.parse(localStorage.getItem('abri-daily'))||{};prev=d[G.daily]??null;if(prev===null||n>prev){d[G.daily]=n;localStorage.setItem('abri-daily',JSON.stringify(d))}}catch(e){}
- return _t`<p>Défi du jour : <b>${plural(n,_t('nuit'),_t('nuits'))}</b>${prev!==null?_t` (ton meilleur aujourd’hui : ${plural(Math.max(prev,n),_t('nuit'),_t('nuits'))})`:''}. Compare ton score avec tes amis : tout le monde a la même partie aujourd’hui.</p>`}
-function dailyScreen(){const day=today(),c=dailySetup(day),b=dailyBest(day);
- show(_t`<h2 class="pw">Défi du jour</h2><p>Aujourd’hui, tout le monde joue <b>la même partie</b> : même personnage, même lieu, mêmes cartes et mêmes nuits. Tu peux le rejouer autant que tu veux.</p>
-  <ul><li>Personnage : <b>${Z.CHARS[c.ch].n}</b></li><li>Lieu : <b>${Z.PLACES[c.pl].n}</b></li><li>Toutes les cartes sont disponibles.</li></ul>
-  ${b!==null?_t`<p>Ton meilleur score aujourd’hui : <b>${plural(b,_t('nuit'),_t('nuits'))}</b>.</p>`:''}<p>Les défis ne comptent pas pour les déblocages.</p>
-  <button type="button" class="go" data-a="daily-go">Jouer le défi</button><button type="button" class="skip" data-a="title">Retour</button>`)}
+// ancien défi (une partie complète) : fin d'une partie sauvegardée avant la v151
+function dailyEnd(n){return ''}
+const dailyPlan=day=>Z.dailyPlan(rng(seedFrom('defi-'+day)));
+function dailyBest(day){try{const d=JSON.parse(localStorage.getItem('abri-defi'))||{};return d[day]??null}catch(e){return null}}
+let DLY=null; // tirage en cours : {day, plan, picks}
+// la horde du jour : une carte par type de zombie, avec le nombre
+// nombre réel de chaque type (pleine lune, mutation et lieu compris)
+const hordeHtml=p=>{const w=Z.waveList(Z.dailyState(p,[],()=>.5));return `<div class="horde">${Z.ZK.filter(k=>w[k]>0).map(k=>`<div class="hz">${zombieFace(k)}<b class="hn">×${w[k]}</b></div>`).join('')}</div>`};
+const dailyRules=p=>{const e=Z.EVENTS.find(x=>x.id===p.event)||Z.EVENTS[0];return `<ul class="dmods">${p.event!=='calme'?`<li><b>${e.n}</b> : ${e.d}</li>`:''}${p.mut?_t`<li>Mutation <b>${Z.MUTS[p.mut].n}</b> : ${Z.MUTS[p.mut].d}</li>`:''}<li>${_t('Personnage')} : <b>${Z.CHARS[p.ch].n}</b> · ${_t('Lieu')} : <b>${Z.PLACES[p.pl].n}</b></li></ul>`};
+function dailyScreen(){const day=today(),p=dailyPlan(day),b=dailyBest(day);
+ show(_t`<h2 class="pw">Défi du jour</h2><p>Une seule nuit contre <b>la horde du jour</b>, aussi forte qu’une nuit ${p.night}. Tout le monde affronte la même horde et tire les mêmes cartes.</p>
+  ${hordeHtml(p)}${dailyRules(p)}
+  <p>Choisis <b>${Z.DAILY.picks} cartes</b>, une parmi 3 à chaque tirage, dans toute la collection. Énergie illimitée, survivants au niveau ${Z.DAILY.lv}.</p>
+  ${b!==null?_t`<p>Ton meilleur score aujourd’hui : <b>${b}</b>.</p>`:''}<p>Les défis ne comptent pas pour les déblocages.</p>
+  <button type="button" class="go" data-a="daily-go">Tirer mes cartes</button><button type="button" class="skip" data-a="title">Retour</button>`)}
+function dailyDraft(){const d=DLY,p=d.plan,k=d.picks.length;
+ if(k>=Z.DAILY.picks)return dailyStart();
+ show(_t`<h2 class="pw">Tirage ${k+1} sur ${Z.DAILY.picks}</h2><p>Garde une carte. ${Z.DAILY.picks-k>1?_t`Encore ${Z.DAILY.picks-k-1} après celle-ci.`:_t('C’est la dernière.')}</p>
+  <div class="picks">${p.offers[k].map(t=>pickBtn(t,'dpick',t)).join('')}</div>
+  ${k?_t`<p class="dgot">Tes cartes : ${d.picks.map(t=>`<b>${Z.U[t].n}</b>`).join(', ')}</p>`:''}
+  <details class="dhorde"><summary>${_t('La horde du jour')}</summary>${hordeHtml(p)}${dailyRules(p)}</details>`)}
+function dailyStart(){const d=DLY;DLY=null;newGame(d.plan.ch,d.plan.pl,d.day,d.picks,d.plan);save();hide();render()}
+// fin du défi : gagné si l'abri tient, score = zombies tués + bonus de victoire et PV restants
+function dailyOver(){const won=G.shelter>0,sc=Z.dailyScore(G,won),day=G.daily,tot=Object.values(G.fixedW||{}).reduce((a,b)=>a+b,0);let prev=null;
+ try{const d=JSON.parse(localStorage.getItem('abri-defi'))||{};prev=d[day]??null;if(prev===null||sc>prev){d[day]=sc;localStorage.setItem('abri-defi',JSON.stringify(d))}}catch(e){}
+ try{ach('daily');achCheck()}catch(e){}clearSave();
+ if(won){SFX.play('dawn');vib([100,60,100])}else{SFX.play('death');vib([300,120,300])}
+ show(_t`<i class="bigstamp ${won?'ok':'ko'}">${won?_t('Tenu'):_t('Tombé')}</i><h2 class="${won?'ok':'ko'}">${won?_t('L’abri a tenu !'):_t('L’abri est tombé')}</h2>
+  <div class="big">${_t`Score : ${sc}`}</div>
+  <p><b>${G.kills}</b> zombies éliminés${won?_t`, <b>${Math.max(0,G.shelter)}</b> PV d’abri restants`:''}.</p>
+  <p class="dsc">${_t`Score : ${Z.DAILY.score.kill} par zombie, plus ${Z.DAILY.score.win} en cas de victoire et ${Z.DAILY.score.hp} par PV d’abri restant.`}</p>
+  <p>${prev!==null&&prev>=sc?_t`Ton meilleur score aujourd’hui : <b>${prev}</b>.`:prev!==null?_t('Nouveau meilleur score du jour !'):''} ${_t('Tout le monde a la même horde aujourd’hui : compare avec tes amis.')}</p>
+  <button type="button" class="go" data-a="daily">Rejouer le défi</button><button type="button" class="skip" data-a="title">Accueil</button>`)}
 // règles du jeu (v123) : des fiches illustrées, avec un sommaire pour sauter à une fiche
 const RULES=[
  ['but','trophy',_t('Le but'),()=>_t`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b>. À l’aube de la nuit ${Z.WIN_NIGHT}, après le Patient Zéro, les secours arrivent : tu peux <b>partir</b> (victoire) ou <b>rester</b> en mode infini pour le score, jusqu’à ce que la horde gagne.</p><p>Chaque victoire débloque une <b>Mutation de la horde</b> plus dure (10 niveaux, à choisir avant la partie), une carte de victoire et des reliques.</p>`],

@@ -222,7 +222,7 @@ C'est un moment rare : environ 1 aube sur 4, à partir de la nuit 3. Après le t
 - **Pendant la partie** : on pioche dans son deck. Une unité posée quitte la pioche ; quand elle est détruite, qu'un piège se déclenche ou qu'elle est remplacée, sa carte revient dans la défausse et peut être repiochée. Les objets et les réactions vont dans la défausse après usage. Les unités offertes par le jeu (lieu, événements, pneus en feu) ne sont pas des cartes et ne reviennent pas.
 - Les cartes gagnées à l'aube et au troc sont des **renforts temporaires** : elles ne valent que pour la partie en cours, et ne sont proposées que parmi les cartes de la collection.
 - Le personnage ne fixe plus le deck : il donne seulement sa relique de départ.
-- Défi quotidien : un deck de 24 cartes tiré au sort pour la journée, avec toutes les cartes.
+- Défi quotidien (v151) : une seule nuit, 8 cartes tirées « 1 parmi 3 » dans toutes les cartes (voir « Le défi quotidien »).
 - **Affichage de la collection (v126)** : trois états bien distincts. Débloquée : en couleur, pastille verte ✓. À portée (assez de points) : en couleur avec un halo doré et un gros bouton « Débloquer · N pts ». Hors de portée : grisée avec un cadenas et « il en manque N ». Les cartes de victoire ont un trophée. Un résumé indique le nombre de cartes débloquées et à portée, et le filtre « À portée » les isole.
 
 ## Les survivants nommés
@@ -498,9 +498,16 @@ L'équilibrage est vérifié par simulation (`node tools/simulate.js`). Un bot p
 
 ## Le défi quotidien
 
-- Chaque jour, tout le monde joue la même partie : même graine de hasard, même personnage et même lieu (tirés à partir de la date), toutes les cartes disponibles.
-- Rejouable à volonté ; le meilleur score du jour est gardé dans le navigateur. Il ne compte pas pour les déblocages.
-- Tout le hasard de la partie (pioche, nuits, aube, événements, mutations, prénoms) passe par un générateur à graine sauvegardé avec la partie. Les effets visuels gardent un hasard libre.
+Refait en v151 (décision d’Amine) : une seule manche, on gagne ou on perd, avec un score.
+
+- Chaque jour, tout le monde a le même défi (graine tirée de la date, `Z.dailyPlan`) : personnage, lieu, événement de nuit, 0 ou 1 mutation, et **la horde du jour**.
+- **La horde** : 3 à 5 types de zombies tirés au sort, parfois un boss (35 %). Elle a la force d’une **nuit 20** (frénésie : PV et dégâts ×2,6), mais son effectif vaut la moitié d’une vraie nuit 20 (`Z.DAILY.scale` = 0,5) parce qu’on n’a que 8 cartes. La horde est affichée avant le tirage.
+- **Le tirage** : 8 fois, 1 carte à garder parmi 3, dans toute la collection (même les cartes pas encore débloquées). Les 3 cartes de chaque tirage sont les mêmes pour tout le monde. Une carte proposée ne revient pas dans les tirages suivants.
+- **La nuit** : les 8 cartes sont en main, énergie illimitée, limite d’unités relevée à 8, survivants posés au niveau 4 (comme vers la nuit 20). Pas d’aube : la fin de la nuit termine le défi.
+- **Score** : 10 par zombie tué ; en cas de victoire, +1000 et +100 par PV d’abri restant. Le meilleur score du jour est gardé dans le navigateur (`abri-defi`).
+- Rejouable à volonté ; ne compte pas pour les déblocages ni les statistiques.
+- Réglage (v151) : avec le joueur automatique, ~20 % de victoires ; Amine devrait gagner plus souvent.
+- Plus tard : certains jours (le dimanche ?), **jouer la horde** contre une défense tirée au sort.
 - Pas encore de classement en ligne : il faudra un serveur (ou les classements Steam).
 
 ## La révélation progressive (v129)

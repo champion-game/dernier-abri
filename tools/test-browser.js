@@ -39,6 +39,15 @@ async function run(vp,label,lang='fr'){
 
  await step('options',async()=>{await click('[data-a=options]');await p.waitForTimeout(200);if(!/Options/.test(await ov()))problems.push(`${label} : l’écran d’options ne s’ouvre pas`);await shot('03b-options');await overflow('options');
   await p.evaluate(()=>{const r=document.querySelector('[data-o=sfx]');r.value=40;r.dispatchEvent(new Event('input',{bubbles:true}))});if(await p.evaluate(()=>OPT.sfx)!==.4)problems.push(`${label} : le volume ne s’enregistre pas`);await click('[data-a=optclose]')});
+ // défi du jour (v151) : horde du jour, tirage de 8 cartes, une nuit, écran du score
+ await step('défi du jour',async()=>{await click('[data-a=daily]');await p.waitForTimeout(300);await shot('03c-defi');await overflow('défi du jour');await click('[data-a=daily-go]');
+  for(let k=0;k<8;k++){if(!await click('.picks .pick'))break}await p.waitForTimeout(300);await overflow('défi : plateau');
+  const g=await p.evaluate(()=>({one:G.oneNight,hand:S.hand.length,cap:Z.unitCap(G)}));if(!g.one||g.hand!==8)problems.push(`${label} : le défi ne démarre pas avec 8 cartes en main (${JSON.stringify(g)})`);
+  await p.evaluate(()=>{for(const t of [...S.hand]){const D=Z.U[t];if(D.react)continue;const c=[...Array(81).keys()].filter(i=>(D.equip||D.onUnit||D.instant||!G.grid[i])&&Z.canPlace(G,t,i)).sort((a,b)=>Z.manh(a,Z.C)-Z.manh(b,Z.C))[0];if(c==null)continue;Z.place(G,t,c,R);S.hand.splice(S.hand.indexOf(t),1)}syncBoard();render();OPT.speed=4});
+  await click('#go');const t0=Date.now();let done=false;while(Date.now()-t0<90000){await p.waitForTimeout(800);if(await p.evaluate(()=>S.pause))await click('#go');if(await p.$('[data-a=daily] , .bigstamp')&&await p.evaluate(()=>!G.oneNight||!!document.querySelector('#ov:not([hidden]) .bigstamp'))){done=true;break}}
+  if(!done)problems.push(`${label} : la nuit du défi ne se termine pas`);else{await shot('03d-defi-fin');await overflow('fin du défi')}await click('[data-a=title]');
+  // le succès « Défi relevé » s'affiche en haut de l'écran : on le ferme pour ne pas gêner la suite
+  await p.evaluate(()=>{try{ACHQ.length=0;if(achEl)achEl.hidden=true}catch(e){}})});
  // une partie
  await step('nouvelle partie',async()=>{await click('[data-a=new]');await click('[data-a=edit]');await shot('04-deck');await overflow('éditeur de deck');await click('[data-a=new]');await click('[data-a=start]');await p.waitForTimeout(400)});
  await step('menu pause',async()=>{await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));await click('#pz');if(!/Pause/.test(await ov()))problems.push(`${label} : le menu pause ne s’ouvre pas`);await overflow('menu pause');

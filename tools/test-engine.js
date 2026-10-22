@@ -211,6 +211,14 @@ for(let g=0;g<NIGHTS;g++){const r=rng(1000+g);
   Z.endNight(st)})}
 check('aucune nuit de plus de 2 s',()=>ok(slow===0,slow+' nuit(s) lente(s), pire '+worst+' ms'));
 
+/* ---------- défi du jour (v151) : une nuit, horde tirée au sort, 8 cartes « 1 parmi 3 » ---------- */
+for(let d=0;d<40;d++){const p=Z.dailyPlan(rng(900+d)),p2=Z.dailyPlan(rng(900+d));
+ check(`défi ${d} : même graine, même défi`,()=>eq(JSON.stringify(p),JSON.stringify(p2)));
+ check(`défi ${d} : ${Z.DAILY.picks} tirages de 3 cartes connues, horde non vide`,()=>{eq(p.offers.length,Z.DAILY.picks);p.offers.forEach(o=>{eq(o.length,3);o.forEach(t=>ok(Z.U[t],t+' inconnue'));ok(new Set(o).size===3,'doublon '+o)});ok(Object.values(p.w).reduce((a,b)=>a+b,0)>0);ok(Z.CHARS[p.ch]&&Z.PLACES[p.pl]&&Z.EVENTS.some(e=>e.id===p.event)&&(!p.mut||Z.MUTS[p.mut]))});
+ check(`défi ${d} : la nuit se joue sans planter, énergie illimitée, place pour les 8 cartes`,()=>{const r=rng(50+d),deck=p.offers.map(o=>o[d%3]),st=Z.dailyState(p,deck,r);
+  ok(st.oneNight&&st.energy>=99,'énergie');ok(Z.unitCap(st)>=deck.length,'limite '+Z.unitCap(st));
+  const w=Z.waveList(st);Z.ZK.filter(k=>Z.ZT[k].boss).forEach(k=>eq(w[k],p.w[k]||0));
+  Z.runNight(st,r);ok(fin(st.kills)&&fin(st.shelter),'valeurs');const sc=Z.dailyScore(st,st.shelter>0);ok(fin(sc)&&sc>=0,'score '+sc)})}
 /* ---------- 5. traduction anglaise ---------- */
 // chaque texte passé à _t dans le code doit avoir sa traduction dans src/lang-en.js, avec les mêmes trous {0}, {1}…
 {const vm=require('vm');

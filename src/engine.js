@@ -687,6 +687,24 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   while(out.length<n){let r=rnd()*100,rr='com';for(const k in RARITY){if(r<RARITY[k].w){rr=k;break}r-=RARITY[k].w}
    const cand=pool.filter(t=>RAR[t]===rr&&!out.includes(t));if(cand.length)out.push(cand[Math.floor(rnd()*cand.length)]);else if(!pool.some(t=>!out.includes(t)))break}
   return out}
+ // défi du jour (v151) : une seule nuit contre une horde tirée au sort, à la force d'une nuit 20 (PV et dégâts de frénésie),
+ // mais réglée pour un deck de DAILY.picks cartes (survivants posés au niveau DAILY.lv, comme vers la nuit 20) tirées « 1 parmi 3 » dans toutes les cartes, sans limite d'énergie.
+ // Tout vient de rnd (graine du jour) : tout le monde a la même horde et les mêmes tirages.
+ const DAILY={night:20,picks:8,scale:.5,lv:4,score:{kill:10,hp:100,win:1000}};
+ function dailyPlan(rnd=Math.random){const pick=a=>a[Math.floor(rnd()*a.length)];
+  const ch=pick(Object.keys(CHARS)),pl=pick(Object.keys(PLACES)),event=rnd()<.4?'calme':pick(EVENTS.slice(1)).id,mut=rnd()<.7?pick(Object.keys(MUTS)):null;
+  const n=DAILY.night,norm=ZK.filter(k=>!ZT[k].boss);let budget=DAILY.scale*norm.reduce((s,k)=>s+waveCount(k,n)*ZT[k].hp,0);
+  const w={};ZK.forEach(k=>w[k]=0);
+  const boss=rnd()<.35?pick(BOSSES):null;if(boss){w[boss]=1;budget-=ZT[boss].hp*3}
+  const types=shuffle(norm.slice(),rnd).slice(0,3+Math.floor(rnd()*3)),wt=types.map(()=>1+rnd()*2),tw=wt.reduce((a,b)=>a+b,0);
+  types.forEach((k,j)=>w[k]=Math.max(1,Math.round(budget*wt[j]/tw/ZT[k].hp)));
+  const offers=[],seen=[];for(let j=0;j<DAILY.picks;j++){const pool=KEYS.filter(t=>!seen.includes(t)),o=draftChoices(rnd,3,pool.length>=3?pool:KEYS);seen.push(...o);offers.push(o)}
+  return{night:n,ch,pl,event,mut,w,offers}}
+ // la partie du défi : l'état de la nuit, le deck tiré, énergie illimitée et assez de place pour les 8 cartes
+ function dailyState(plan,deck,rnd=Math.random){const st=newState(plan.ch,plan.pl,rnd);st.night=plan.night;st.event=EVENTS.find(e=>e.id===plan.event)||EVENTS[0];
+  st.muts=plan.mut?[plan.mut]:[];st.fixedW={...plan.w};st.oneNight=1;st.energy=99;st.testLv=DAILY.lv;st.capD=Math.max(0,deck.length-unitCap(st));return st}
+ // score du défi : zombies tués, plus un bonus de victoire et les PV restants de l'abri
+ const dailyScore=(st,won)=>st.kills*DAILY.score.kill+(won?DAILY.score.win+Math.max(0,st.shelter)*DAILY.score.hp:0);
  // boutique (v111) : on paie pour l'ouvrir ; elle propose 5 objets (objets et réactions, jamais d'unité), même pas encore débloqués
  // absents du deck, chacun achetable une fois, plus des munitions anti-Colosse (AMMO_MAX au plus en ta possession)
  const STORE_N=5,AMMO_COST=20,STORE_PRICE={com:8,rare:14,epic:22,leg:30};
@@ -706,7 +724,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
 
  /* ---------- pose des cartes ---------- */
  // limite d'unités sur le terrain : 5, puis +1 toutes les 10 nuits. Murs et pièges illimités.
- const unitCap=st=>5+Math.floor(((st&&st.night)||1)/10)+((st&&st.capB)||0)+(hasR(st,'insigne')?1:0);
+ const unitCap=st=>5+Math.floor(((st&&st.night)||1)/10)+((st&&st.capB)||0)+((st&&st.capD)||0)+(hasR(st,'insigne')?1:0);
  const unitCount=st=>st.grid.reduce((n,u)=>n+(u&&isUnit(u.t)&&!hasEq(u,'keys')?1:0),0);
  // une pose qui déclenche une fusion ou une évolution ne prend pas de place en plus : elle reste permise à la limite
  function frees(st,t,i){if(!U[t].evo&&evoAt(st,t,i))return true;if(!canFuse(t))return false;
@@ -838,7 +856,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  // nuits de pression : toutes les 5 nuits, +15 % de zombies pour la nuit (v132 : calculé sur le total, avant on arrondissait type par type et le pic montait à +40 %)
  const pressure=n=>n%5===0,PRESSURE=.15;
  function waveList(st){const e=st.event.id,w={};
-  for(const k of ZK){let v=waveCount(k,st.night);if(!ZT[k].boss){if(e==='lune')v*=1.5;v=Math.round(v*(1+.15*mc(st,'nombre'))*(respite(st.night,st)?.7:1)*((PLACES[st.place]||{}).count||1)*((TIERS[st.tier]||TIERS.base).count)*(hasR(st,'appat')?1.15:1))}w[k]=v}
+  for(const k of ZK){let v=st.fixedW?(st.fixedW[k]||0):waveCount(k,st.night);if(!ZT[k].boss){if(e==='lune')v*=1.5;v=Math.round(v*(1+.15*mc(st,'nombre'))*(respite(st.night,st)?.7:1)*((PLACES[st.place]||{}).count||1)*((TIERS[st.tier]||TIERS.base).count)*(hasR(st,'appat')?1.15:1))}w[k]=v}
   if(pressure(st.night)){const ks=ZK.filter(k=>!ZT[k].boss&&w[k]>0),p=men(st,8)?.4:PRESSURE,tot=ks.reduce((a,k)=>a+w[k],0);let extra=Math.round(tot*p);
    // le surplus se répartit selon la part de chaque type (plus grands restes d'abord)
    const sh=ks.map(k=>({k,x:w[k]*p}));sh.forEach(o=>{const f=Math.floor(o.x);w[o.k]+=f;extra-=f});sh.sort((a,b)=>(b.x%1)-(a.x%1));for(let i=0;extra>0&&sh.length;i++,extra--)w[sh[i%sh.length].k]++}
@@ -1041,7 +1059,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;st.kills++;st.scrap+=killScrap(st,ZT[z.k].boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!ZT[z.k].boss});if(ZT[z.k].brood)broodDeath(st,z,ev)}
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
- return{BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
+ return{DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
   DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;

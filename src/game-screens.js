@@ -338,7 +338,8 @@ const ACT={
  nightpick:()=>{S.store=null;return Z.nightChoice(G,R)?nightScreen():nextDay()},
  nightgo:v=>{const o=S.picks&&S.picks[+v];nextDay(o)},
  daily:()=>dailyScreen(),
- 'daily-go':()=>{const day=today(),c=dailySetup(day),r=rng(seedFrom('deck-'+day)),d=[],ks=Z.KEYS.slice();while(d.length<24){const t=ks[Math.floor(r()*ks.length)];if(d.filter(x=>x===t).length<Z.copyMax(t))d.push(t)}newGame(c.ch,c.pl,day,d);save();hide();render()},
+ 'daily-go':()=>{const day=today();DLY={day,plan:dailyPlan(day),picks:[]};dailyDraft()},
+ dpick:v=>{if(!DLY||!Z.U[v]||!DLY.plan.offers[DLY.picks.length].includes(v))return;DLY.picks.push(v);dailyDraft()},
  peek:v=>{const k=S.draw.lastIndexOf(v);if(k>=0){S.draw.splice(k,1);S.hand.push(v)}save();hide();render()}
 };
 // barre de recherche / tri : le texte filtre sur place, les listes redessinent l'écran ouvert

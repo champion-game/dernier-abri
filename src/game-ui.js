@@ -83,7 +83,7 @@ const WIDE=matchMedia('(min-width:760px)');
 const left0=()=>Math.max(0,G.energy??0);
 function render(){
  try{meterSync()}catch(e){}
- $('#round').innerHTML=(S.busy?_t`Nuit ${G.night}`:_t`Jour ${G.night}`)+(G.menace?`<small class="mtag">M${G.menace}</small>`:'');
+ $('#round').innerHTML=(G.oneNight?_t('Défi'):S.busy?_t`Nuit ${G.night}`:_t`Jour ${G.night}`)+(G.menace?`<small class="mtag">M${G.menace}</small>`:'');
  $('#shelT').textContent=`${Math.max(0,G.shelter)}/${Z.maxS(G)}`;
  const sb=$('#shelB');sb.style.width=Math.max(0,G.shelter)/Z.maxS(G)*100+'%';sb.className=G.shelter<=3?'low':'';
  $('#event').innerHTML=ficheHtml();
@@ -102,12 +102,13 @@ function render(){
  const info=$('#info');info.className='info';
  if(S.busy&&S.sel!==null&&S.sel>=0){const t=S.hand[S.sel];info.innerHTML=`<b>${cardName(t)}</b> : ${Z.U[t].d}. `+(Z.U[t].react==='unit'?_t('Touche une unité blessée.'):_t('Touche une case de la carte.'))}
  else if(S.pause&&S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+_t(' Touche une case libre en bleu pour le déplacer.');
- else if(S.pause)info.innerHTML=_t`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> ${capF(bossName(G.night))} arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+_t`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`;
- else if(S.busy){const left=G.z.length+G.pending.length,hasR=S.hand.some(t=>Z.U[t].react);info.innerHTML=_t`<b>${plural(left,_t('zombie'),_t('zombies'))}</b> encore dehors.`+(hasR?_t` <span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`:'')}
+ else if(S.pause)info.innerHTML=_t`<b>Pause : vague ${S.pause} sur ${G.waves} repoussée.</b> ${capF(bossName(G.night))} arrivera par la route en rouge. Déplace tes cartes librement : touche-en une, puis une case libre. `+`${G.oneNight?_t('Énergie illimitée pour tes réactions.'):_t`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`}`;
+ else if(S.busy){const left=G.z.length+G.pending.length,hasR=S.hand.some(t=>Z.U[t].react);info.innerHTML=_t`<b>${plural(left,_t('zombie'),_t('zombies'))}</b> encore dehors.`+(hasR?` ${G.oneNight?_t('Énergie illimitée pour tes réactions.'):_t`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left0())))}</span> ${left0()} énergie pour tes réactions.`}`:'')}
  else if(S.bsel!=null&&G.bench[S.bsel]){const u=G.bench[S.bsel];info.innerHTML=unitLine(u)+(u.koUntil?_t` <b>Blessé :</b> se repose, de retour au jour ${u.koUntil+1}.`:Z.capFull(G,u.t)?_t` <b>Limite de ${Z.unitCap(G)} unités atteinte</b> : rappelle ou fusionne une unité.`:_t(' En réserve : touche une case en vert pour la reposer gratuitement.'))}
  else if(S.sel!==null&&!S.busy){const t=selCard(),D=Z.U[t];info.innerHTML=(Z.isUnit(t)&&Z.capFull(G,t)?_t`<b>Limite de ${Z.unitCap(G)} unités atteinte.</b> Fusionne, ou rappelle une unité dans la réserve. `:'')+_t`<b>${cardName(t)}</b> (${selCost()} énergie${selReuse()?_t(', réutilisée'):''}) : ${D.d}.`+(Z.isTrace(t)?_t` Carte à tracer : ${Z.charges(G,t,selReuse())} case${Z.charges(G,t,selReuse())>1?'s':''} à poser aujourd’hui${selReuse()?'':_t(' pour le prix de la carte')}, une par une ou d’un glissé.`:'')+(D.onUnit?_t(' Touche une unité blessée.'):D.instant?_t(' Touche l’abri.'):D.near?_t(' Touche une case collée à l’abri.'):Z.LINE.includes(t)?_t(' Touche une case, ou glisse pour tracer une ligne.'):_t(' Touche un emplacement.'))}
  else if(S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+_t(' Touche une case libre en bleu pour la déplacer.')+(Z.canRecall(G,S.moveFrom)?' <button type="button" class="recall" data-a="recall">'+ii('back')+_t(' Rappeler</button>'):'');
  else if(S.inspect!==null&&G.grid[S.inspect])info.innerHTML=unitLine(G.grid[S.inspect])+(Z.canRecall(G,S.inspect)?' <button type="button" class="recall" data-a="recall">'+ii('back')+_t(' Rappeler</button>'):'');
+ else if(G.oneNight)info.innerHTML=_t`<b>Défi du jour</b> : énergie illimitée. Pose tes cartes, puis affronte la horde. Touche une carte posée pour la déplacer.`;
  else info.innerHTML=_t`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left)))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-left))}</span> <b>${left}</b> énergie. Touche une carte posée pour la déplacer ou la rappeler.`;
  if(TEST&&!S.busy)info.insertAdjacentHTML('beforeend',_t` <button type="button" class="recall" data-a="tcards">+ Carte (test)</button>`);
  if(canUndo())info.insertAdjacentHTML('beforeend',_t` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`);
@@ -295,6 +296,7 @@ async function night(){
  await nwait(700);if(run!==RUN)return;
  try{SFX.setWeather(null)}catch(e){}
  const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;KC.on=0;S.busy=false;render();await nwait(900);if(run!==RUN)return;
+ if(G.oneNight)return dailyOver();
  if(G.shelter<=0)return end();
  const mut=Z.mutNight(G.night)?Z.mutate(G,R):null;
  const hero=G.grid.filter(u=>u&&u.name&&u.nk>0).sort((a,b)=>b.nk-a.nk)[0];
