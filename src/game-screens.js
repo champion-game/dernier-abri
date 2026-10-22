@@ -153,9 +153,14 @@ function placeScreen(){
   <button type="button" class="skip" data-a="new">Retour</button>`);
 }
 const ov=$('#ov'),panel=$('#panel');
-function show(h,keep){TTL=false;const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop,was=ov.hidden;panel.innerHTML=h;ov.hidden=false;panel.scrollTop=keep?y:0;
- // v139 : fondu de l'écran à l'ouverture, contenu qui glisse quand on change d'écran
- if(!keep){ov.classList.remove('oin');panel.classList.remove('pin');void panel.offsetWidth;if(was)ov.classList.add('oin');panel.classList.add('pin')}
+// v142 : les boutons de fin d'écran (Retour, Terminé…) sont rangés sur une étagère qui reste visible quand l'écran défile
+function pfoot(){try{const ks=[...panel.children];let k=ks.length;while(k>0&&ks[k-1].matches('button.go,button.skip,.bgrid'))k--;
+ if(k<ks.length&&k>0){const f=document.createElement('div');f.className='pfoot'+(ks.slice(k).filter(e=>e.matches('.skip')).length===1?' one':'');ks.slice(k).forEach(e=>f.appendChild(e));panel.appendChild(f)}
+ panel.classList.toggle('scrolls',panel.scrollHeight>panel.clientHeight+4)}catch(e){}}
+addEventListener('resize',()=>{if(!ov.hidden)panel.classList.toggle('scrolls',panel.scrollHeight>panel.clientHeight+4)});
+function show(h,keep){TTL=false;const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop,was=ov.hidden;panel.innerHTML=h;ov.hidden=false;pfoot();panel.scrollTop=keep?y:0;
+ // v139 : fondu de l'écran à l'ouverture, contenu qui glisse quand on change d'écran (pas quand on reste sur le même écran)
+ if(keep)panel.classList.remove('pin');else{ov.classList.remove('oin');panel.classList.remove('pin');void panel.offsetWidth;if(was)ov.classList.add('oin');panel.classList.add('pin')}
  // v123 : défaite (secousse et voile rouge) et victoire (lueur dorée) animées
  const lose=h.includes('bigstamp ko'),win=h.includes('bigstamp ok');panel.classList.remove('lose','win');ov.classList.remove('lose','win');if(lose||win){void panel.offsetWidth;panel.classList.add(lose?'lose':'win');ov.classList.add(lose?'lose':'win')}
  countUp()}
@@ -190,15 +195,17 @@ function prepScreen(){const u=Z.unlocks(META);PREP.menace=Math.max(0,Math.min(ME
   ${legacyTxt()}<button type="button" class="go" data-a="start" ${err?'disabled':''}>Commencer</button>
   <div class="bgrid"><button type="button" class="skip" data-a="coll">Collection · ${META.points} pts</button><button type="button" class="skip" data-a="title">Retour</button></div>`)}
 /* recherche et tri des cartes (collection et éditeur de deck) */
-const CF={q:'',sort:'cat',fam:'',own:''};
+const CF={q:'',sort:'cat',fam:'',own:'',role:''};
 const RORD={com:0,rare:1,epic:2,leg:3};
 const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 function cfBar(own){return `<div class="cfbar"><input type="search" data-f="q" placeholder="Chercher une carte…" value="${CF.q.replace(/"/g,'&quot;')}" aria-label="Chercher une carte">
  <select data-f="sort" aria-label="Trier"><option value="cat">Par type</option><option value="cost">Par coût</option><option value="rar">Par rareté</option><option value="name">Par nom</option><option value="fam">Par faction</option></select>
+ <select data-f="role" aria-label="Rôle ou type"><option value="">Tous les rôles</option><optgroup label="Rôle"><option value="tank">Tank</option><option value="heal">Soin</option><option value="dps">DPS</option></optgroup><optgroup label="Type">${Object.keys(CATN).map(c=>`<option value="c:${c}">${CATN[c]}</option>`).join('')}</optgroup></select>
  <select data-f="fam" aria-label="Faction"><option value="">Toutes les factions</option>${Object.keys(Z.FAM).map(f=>`<option value="${f}">${Z.FAM[f].n}</option>`).join('')}<option value="-">Sans faction</option></select>
  ${own?`<select data-f="own" aria-label="Débloquées"><option value="">Toutes</option><option value="y">Débloquées</option><option value="n">À débloquer</option><option value="b">À portée</option></select>`:''}</div>`}
 function cfGrid(ts,item){
  ts=ts.filter(t=>!CF.fam||(CF.fam==='-'?!Z.famOf(t):Z.famOf(t)===CF.fam));
+ ts=ts.filter(t=>!CF.role||(CF.role.startsWith('c:')?Z.U[t].cat===CF.role.slice(2):Z.roleOf(t)===CF.role));
  const key=t=>`<div class="citem-w" data-n="${norm(Z.U[t].n+' '+(Z.U[t].d||''))}">${item(t)}</div>`;
  if(CF.sort==='cat')return Object.keys(CATN).map(c=>{const g=ts.filter(t=>Z.U[t].cat===c);return g.length?`<section class="cfsec"><h3>${CATN[c]}</h3><div class="cgrid">${g.map(key).join('')}</div></section>`:''}).join('')||'<p>Aucune carte.</p>';
  const by={cost:t=>Z.cost(t),rar:t=>-RORD[Z.RAR[t]||'com'],name:()=>0,fam:t=>Z.famOf(t)?Object.keys(Z.FAM).indexOf(Z.famOf(t)):99}[CF.sort];
@@ -283,7 +290,7 @@ const ACT={
  stats:()=>statsScreen(),
  rgo:v=>{const e=document.getElementById('r-'+v);if(e)e.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})},
  retuto:()=>{TUTO=0;try{localStorage.setItem('abri-tuto','0')}catch(e){}ACT.new()},
- deck:()=>show(`<h2 class="pw">Les cartes</h2><p>Toutes les cartes du jeu, par type. Les règles sont dans <button type="button" class="round" data-a="rules">Règles du jeu</button>.</p>${deckHtml()}<h2 class="pw">Le bestiaire</h2>${zedHtml()}<h2 class="pw">Les mutations instables</h2><p>Une seule à la fois, elle change toutes les 5 nuits.</p><div class="deck">${Object.values(Z.MUTS).map(m=>`<div class="dk" style="--cc:var(--blood)">${svg('mut')}<span><b>${m.n}</b>${m.d}</span></div>`).join('')}</div><button type="button" class="go" data-a="title">Retour</button>`),
+ deck:()=>show(`<h2 class="pw">Le bestiaire</h2><p>Les zombies de la horde et leurs mutations. Tes cartes sont dans la Collection.</p>${zedHtml()}<h2 class="pw">Les mutations instables</h2><p>Une seule à la fois, elle change toutes les 5 nuits.</p><div class="deck">${Object.values(Z.MUTS).map(m=>`<div class="dk" style="--cc:var(--blood)">${svg('mut')}<span><b>${m.n}</b>${m.d}</span></div>`).join('')}</div><button type="button" class="go" data-a="title">Retour</button>`),
  dawn:()=>dawn(),
  lvl:v=>{const i=S.picks&&S.picks[0];if(i!=null&&Z.levelUp(G,i,v==='atk'?'atk':'def')){const p=tc(i);floatTxt(p.x,p.y-20,v==='atk'?'+1 dégât':'+3 PV','#9fd86b',15);addFX({type:'ring',x:p.x,y:p.y,r:44,c:'#9fd86b',dur:500})}S.phase=null;save();render();dawn()},
  relic:v=>{Z.addRelic(G,v);SFX.play('relic');afterRelic()},

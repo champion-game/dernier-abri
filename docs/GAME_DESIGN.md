@@ -313,6 +313,7 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - **Pas d’emoji** : uniquement les symboles dessinés du jeu.
 - **Collection** : halo vert autour des cartes acquises, halo noir et carte grisée pour celles pas encore acquises.
 - **Sans défilement** : accueil, préparation de la partie et options tiennent sur l’écran (téléphone 390 × 844 et ordinateur 1280 × 800). Les écrans longs (collection, éditeur de deck, règles) défilent avec une fine barre couleur bois.
+- **v142** : vraie texture de bois (image `assets/ui/wood.webp`, générée par `tools/wood.py`, raccordable sans démarcation) et clous ronds (`assets/ui/nail.png`). Quand un écran défile, ses boutons de fin (Retour, Terminé…) restent visibles sur une étagère en bas. Champs de recherche et menus déroulants en papier enfoncé dans le bois. Filtre par rôle (tank, soin, DPS) ou par type dans la collection et l’éditeur de deck. Succès présentés comme les statistiques (tuiles, barre de progression, obtenus puis à obtenir). Le bestiaire ne montre plus que les zombies et les mutations (les cartes du joueur sont dans la Collection). Ajouter ou retirer une carte, ou en acheter une, ne rejoue plus l’animation d’ouverture de l’écran.
 
 ## Rôles : tank et DPS (v136)
 

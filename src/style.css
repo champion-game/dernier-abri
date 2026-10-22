@@ -808,3 +808,50 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 .panel .citem .qty button:not(.buy):not(:disabled):active{transform:translateY(1px);box-shadow:0 0 0 #2a170b,inset 0 3px 6px rgba(0,0,0,.5)}
 .panel .citem .qty button:not(.buy):disabled{background:rgba(0,0,0,.25);color:#a8916e;border-color:#3a2412;box-shadow:inset 0 2px 4px rgba(0,0,0,.5);transform:none}
 .panel .citem .qty b{color:#fbecc9}
+
+/* ===== v142 : vraie texture de bois (raccordable, sans démarcation), clous ronds ===== */
+.panel{background:
+  url(../assets/ui/nail.png) left 6px top 6px/14px 14px no-repeat,url(../assets/ui/nail.png) right 6px top 6px/14px 14px no-repeat,
+  url(../assets/ui/nail.png) left 6px bottom 6px/14px 14px no-repeat,url(../assets/ui/nail.png) right 6px bottom 6px/14px 14px no-repeat,
+  url(../assets/ui/wood.webp) 0 0/512px 384px repeat,#5e3b20;
+ background-attachment:scroll,scroll,scroll,scroll,local,local}
+/* boutons toujours visibles en bas des écrans qui défilent : une étagère en bois */
+.pfoot{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px 8px}
+.pfoot .go{grid-column:1/-1}
+.pfoot .skip{margin:0}
+.panel.scrolls .pfoot{position:sticky;bottom:-16px;z-index:4;margin:2px -16px -16px;padding:12px 16px 14px;
+ background:url(../assets/ui/wood.webp) 0 -128px/512px 384px repeat,#5e3b20;border-top:3px solid #2a170b;
+ box-shadow:inset 0 3px 0 #8c5d34,0 -8px 14px rgba(0,0,0,.55)}
+/* titres des fiches de papier (règles) en encre sombre */
+.panel .rfiche h3{color:#3a2a18;text-shadow:none}
+.panel .rfiche p{color:#5a4630}.panel .rfiche p b{color:#2b1a0c}
+/* champs de texte et menus déroulants : papier enfoncé dans le bois, flèche dessinée */
+.panel select,.panel input[type=search],.panel input[type=number],.panel input[type=text]{
+ -webkit-appearance:none;appearance:none;font:14px var(--f-body);color:#2b1a0c;min-height:36px;border-radius:8px;border:1.5px solid #2a170b;
+ background-color:#f0e2c0;box-shadow:inset 0 2px 5px rgba(80,50,20,.45),0 1px 0 rgba(255,220,170,.25);padding:6px 10px;outline:none}
+.panel select{padding-right:28px;cursor:pointer;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b1a0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+ background-repeat:no-repeat;background-position:right 10px center}
+.panel select:focus,.panel input:focus{border-color:#e09a2a;box-shadow:inset 0 2px 5px rgba(80,50,20,.45),0 0 0 2px rgba(255,200,90,.6)}
+.panel input::placeholder{color:#8a6a4a}
+.panel .opts select{transform:none;box-shadow:inset 0 2px 5px rgba(80,50,20,.45)}
+/* barre de recherche et filtres : planche sombre, comme le reste */
+.panel .cfbar{background:rgba(20,10,4,.35);border:1.5px solid #2a170b;box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 1px 0 rgba(255,220,170,.15);border-radius:10px;padding:8px;
+ display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.panel .cfbar input{grid-column:1/-1}
+.panel .cfbar select{min-width:0;width:100%}
+/* range (volume) aux couleurs du jeu */
+.panel input[type=range]{accent-color:#e09a2a}
+/* succès : tuiles comme les statistiques, fiches de papier */
+.achbar{height:12px;border-radius:6px;background:rgba(0,0,0,.4);box-shadow:inset 0 2px 4px rgba(0,0,0,.6);overflow:hidden}
+.achbar i{display:block;height:100%;background:linear-gradient(#ffd56a,#e09a2a);border-radius:6px}
+.panel .achs{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;margin:2px 0}
+.panel .achi{opacity:1;background:linear-gradient(#f0e2c0,#e2cc9c);border:1.5px solid #2a170b;box-shadow:0 2px 4px rgba(0,0,0,.45);padding:7px 9px}
+.panel .achi b{color:#2b1a0c}.panel .achi em{color:#5a4630}
+.panel .achi:not(.on){filter:grayscale(.6) brightness(.72)}
+.panel .achi:not(.on) .ach-ic{background:#5a4a38;color:#d9c9a8}
+.panel .achi.on{box-shadow:0 0 0 2px #ffe08a,0 0 10px rgba(255,200,90,.5),0 2px 4px rgba(0,0,0,.45)}
+.panel .achi.on .ach-ic{background:radial-gradient(circle at 35% 30%,#ffe9a0,#e8a820 70%);color:#3a2300;box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+.panel .cfbar select,.panel .opts select{background:#f0e2c0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b1a0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+ border:1.5px solid #2a170b;box-shadow:inset 0 2px 5px rgba(80,50,20,.45);transform:none;padding-right:28px}
+.pfoot.one .skip,.pfoot .bgrid{grid-column:1/-1}

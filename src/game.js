@@ -196,7 +196,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v141 · 22 oct.';
+const VERSION='v142 · 22 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -275,8 +275,11 @@ function achCheck(){try{if(!G)return;const n=G.won?G.night:G.night-(S.busy?0:0);
 function achNight(kills){try{if(kills>=50)ach('night50');
  if(Z.bigNight(G)&&G.shelter>0&&!((G.mtN||{})['t:x_shelter']||{}).tak)ach('bossclean');
  if(G.night>=10&&G.shelter>0&&!(G.mtD||[]).length)ach('nolos');achCheck()}catch(e){}}
-function achScreen(back){const got=META.ach||{},n=ACH.filter(a=>got[a[0]]).length;
- show(`<h2 class="pw">Succès</h2><p>Tu en as débloqué <b>${n} sur ${ACH.length}</b>.</p><div class="achs">${ACH.map(a=>`<div class="achi${got[a[0]]?' on':''}"><span class="ach-ic">${got[a[0]]?ii(a[1]):ii('lock')}</span><span><b>${a[2]}</b><em>${a[3]}</em></span></div>`).join('')}</div>
+function achScreen(back){const got=META.ach||{},n=ACH.filter(a=>got[a[0]]).length,pc=Math.round(n/ACH.length*100);
+ const tile=(v,l)=>`<div class="stile"><b>${v}</b><span>${l}</span></div>`,row=a=>`<div class="achi${got[a[0]]?' on':''}"><span class="ach-ic">${got[a[0]]?ii(a[1]):ii('lock')}</span><span><b>${a[2]}</b><em>${a[3]}</em></span></div>`;
+ const on=ACH.filter(a=>got[a[0]]),off=ACH.filter(a=>!got[a[0]]);
+ show(`<h2 class="pw">Succès</h2><div class="stiles">${tile(n,'obtenus')}${tile(ACH.length-n,'à obtenir')}${tile(pc+' %','complété')}</div><div class="achbar"><i style="width:${pc}%"></i></div>
+  ${on.length?`<h3>Obtenus</h3><div class="achs">${on.map(row).join('')}</div>`:''}${off.length?`<h3>À obtenir</h3><div class="achs">${off.map(row).join('')}</div>`:''}
   <button type="button" class="go" data-a="${back||'title'}">Retour</button>`)}
 let META=loadMeta();
 // tutoriel de la première partie : une bulle d'aide par étape (0 à 4 ; 5 = terminé)
