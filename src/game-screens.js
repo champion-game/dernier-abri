@@ -188,7 +188,7 @@ function prepScreen(){const u=Z.unlocks(META);PREP.menace=Math.max(0,Math.min(ME
   <h3>Mutation de la horde</h3>${menaceTabs()}<p>${menaceTxt(PREP.menace)}</p>
   <h3>Relique de départ</h3>${(META.startPool||[]).length?`<div class="tabs wrap"><button type="button" class="tab${!PREP.relic?' on':''}" data-a="preprel" data-v="">Aucune</button>${META.startPool.map(r=>`<button type="button" class="tab${PREP.relic===r?' on':''}" data-a="preprel" data-v="${r}">${Z.RELICS[r].n}</button>`).join('')}</div><p>${PREP.relic?`<b>${Z.RELICS[PREP.relic].n}</b> : ${Z.RELICS[PREP.relic].d}.`:'Tu commences sans relique en plus.'}</p>`:'<p>Chaque victoire ajoute une relique à ta réserve : tu pourras en choisir une ici avant la partie.</p>'}
   ${legacyTxt()}<button type="button" class="go" data-a="start" ${err?'disabled':''}>Commencer</button>
-  <button type="button" class="skip" data-a="coll">Collection (${META.points} points)</button><button type="button" class="skip" data-a="title">Retour</button>`)}
+  <div class="bgrid"><button type="button" class="skip" data-a="coll">Collection · ${META.points} pts</button><button type="button" class="skip" data-a="title">Retour</button></div>`)}
 /* recherche et tri des cartes (collection et éditeur de deck) */
 const CF={q:'',sort:'cat',fam:'',own:''};
 const RORD={com:0,rare:1,epic:2,leg:3};
@@ -209,7 +209,7 @@ function cfApply(){const q=norm(CF.q.trim());panel.querySelectorAll('.citem-w').
  panel.querySelectorAll('.cfsec').forEach(s=>s.hidden=!s.querySelector('.citem-w:not([hidden])'))}
 function cfSync(){panel.querySelectorAll('[data-f]').forEach(e=>{if(e.tagName==='SELECT')e.value=CF[e.dataset.f]});cfApply()}
 function deckEditor(keep){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.deckError(d,META.cards);
- show(`<h2 class="pw">Deck ${META.slot+1}</h2><p><b>${d.length}</b> / ${Z.DECK_MAX} cartes (minimum ${Z.DECK_MIN}). ${err?`<span class="bad">${err}</span>`:'✓ Prêt.'} Commune ×3, rare ×2, épique ×1 au maximum.</p>
+ show(`<h2 class="pw">Deck ${META.slot+1}</h2><p><b>${d.length}</b> / ${Z.DECK_MAX} cartes (minimum ${Z.DECK_MIN}). ${err?`<span class="bad">${err}</span>`:'Prêt.'} Commune ×3, rare ×2, épique ×1 au maximum.</p>
   ${cfBar(false)}${cfGrid(META.cards.slice(),t=>`<div class="citem${cnt[t]?' in':''}">${cardFace(t,{base:1})}<span class="qty"><button type="button" data-a="dkm" data-v="${t}" ${cnt[t]?'':'disabled'}>−</button><b>${cnt[t]||0}/${Z.copyMax(t)}</b><button type="button" data-a="dkp" data-v="${t}" ${(cnt[t]||0)>=Z.copyMax(t)||d.length>=Z.DECK_MAX?'disabled':''}>+</button></span></div>`)}
   <button type="button" class="go" data-a="new">Terminé</button><button type="button" class="skip" data-a="dkreset">Remettre le deck de départ</button><button type="button" class="skip" data-a="coll">Collection</button>`,keep);cfSync()}
 function collectionScreen(keep){const own=META.cards,pts=META.points,price=t=>Z.CARD_PRICE[Z.RAR[t]||'com'];
@@ -217,10 +217,10 @@ function collectionScreen(keep){const own=META.cards,pts=META.points,price=t=>Z.
  const state=t=>own.includes(t)?'in':Z.U[t].vic!=null?'vic':pts>=price(t)?'buy':'far';
  const nIn=Z.KEYS.filter(t=>own.includes(t)).length,nBuy=Z.KEYS.filter(t=>state(t)==='buy').length;
  show(`<h2 class="pw">Collection</h2><p>Tu as <b>${pts}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>
-  <div class="csum"><span class="cs-in">✓ ${nIn}/${Z.KEYS.length} débloquées</span><span class="cs-buy">${ii('unlock')} ${nBuy} à portée</span></div>
+  <div class="csum"><span class="cs-in">${nIn}/${Z.KEYS.length} débloquées</span><span class="cs-buy">${ii('unlock')} ${nBuy} à portée</span></div>
   <button type="button" class="skip evob" data-a="evo">✦ Évolutions secrètes · ${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length} découvertes</button>
   ${cfBar(true)}${cfGrid(Z.KEYS.filter(t=>!CF.own||(CF.own==='b'?state(t)==='buy':(CF.own==='y')===own.includes(t))),t=>{const st=state(t),pr=price(t);
-   const badge=st==='in'?`<span class="cbadge ok">✓</span>`:st==='vic'?`<span class="cbadge vic">${ii('trophy')}</span>`:st==='far'?`<span class="cbadge lk">${ii('lock')}</span>`:'';
+   const badge=st==='in'?'':st==='vic'?`<span class="cbadge vic">${ii('trophy')}</span>`:st==='far'?`<span class="cbadge lk">${ii('lock')}</span>`:'';
    const foot=st==='in'?'<b class="cok">Débloquée</b>'
     :st==='vic'?`<b class="vlock">${ii('trophy')} Victoire en Mutation ${Z.U[t].vic}</b>`
     :st==='buy'?`<button type="button" class="buy ok" data-a="unlock" data-v="${t}">${ii('unlock')} Débloquer · ${pr} pts</button>`

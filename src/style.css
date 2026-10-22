@@ -730,3 +730,81 @@ button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;colo
 .nightban.red b{color:#ff6b5a}
 @keyframes nban{0%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}15%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.97)}}
 @media (prefers-reduced-motion:reduce){.nightban{display:none}}
+
+/* ===== v141 : panneaux en bois (option A), boutons en relief, halos de la collection ===== */
+.panel{--ink:#fbecc9;--muted:#e6d2aa;--lantern:#ffd88a;--blood:#ff8a73;--good:#a6e07a;--line:#2a170b;
+ --k-wall:#e2bf92;--k-shoot:#ffcf5a;--k-melee:#ff9a6a;--k-help:#8fd0ff;--k-trap:#ff7a66;--k-item:#d2b0ff;--k-post:#a6e07a;--k-react:#ff7a66;
+ color-scheme:dark;color:var(--ink);border:3px solid #2a170b;border-radius:12px;padding:18px 16px 16px;gap:9px;max-width:420px;
+ background:
+  radial-gradient(circle at 35% 30%,#e6dfd2 0,#7a7064 45%,#2c2620 68%,transparent 72%) left 7px top 7px/12px 12px no-repeat,
+  radial-gradient(circle at 35% 30%,#e6dfd2 0,#7a7064 45%,#2c2620 68%,transparent 72%) right 7px top 7px/12px 12px no-repeat,
+  radial-gradient(circle at 35% 30%,#e6dfd2 0,#7a7064 45%,#2c2620 68%,transparent 72%) left 7px bottom 7px/12px 12px no-repeat,
+  radial-gradient(circle at 35% 30%,#e6dfd2 0,#7a7064 45%,#2c2620 68%,transparent 72%) right 7px bottom 7px/12px 12px no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.22' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"),
+  repeating-linear-gradient(180deg,transparent 0 118px,rgba(0,0,0,.5) 118px 120px,rgba(255,220,170,.08) 120px 121px),
+  linear-gradient(160deg,#7a4e2b,#5e3b20 55%,#4c2f19);
+ background-attachment:scroll,scroll,scroll,scroll,local,local,local;
+ box-shadow:inset 0 0 0 3px #8c5d34,inset 0 0 26px rgba(0,0,0,.55),0 12px 32px rgba(0,0,0,.7);
+ scrollbar-width:thin;scrollbar-color:#c99a5e rgba(0,0,0,.25)}
+.panel::-webkit-scrollbar{width:7px}.panel::-webkit-scrollbar-track{background:rgba(0,0,0,.25);border-radius:4px}.panel::-webkit-scrollbar-thumb{background:#c99a5e;border-radius:4px}
+.panel h2{font-size:26px;text-align:center;color:#ffd88a;text-shadow:0 2px 0 #2a170b,0 0 10px rgba(0,0,0,.6)}
+.panel h2.pw{color:#ffd88a}.panel h2.ok{color:#b6ec8a}.panel h2.ko{color:#ff8a73}
+.panel h3{font-size:16px;margin:3px 0 -2px;color:#f6d9a0;text-shadow:0 1px 0 #2a170b}
+.panel p{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.panel p.poem{color:#f0dcb4}.panel .big{color:#fff2d6;text-shadow:0 2px 0 #2a170b}
+.panel p.mwon{color:#ffd88a}.panel p.rip{color:#ffb4a4}
+.panel p>.ink:first-child,.tipin .ink{color:#ffd88a}
+.panel p.tipin{background:rgba(0,0,0,.25);color:var(--ink)}
+.panel .evob{color:#3d2266}
+.citem .recipe{color:#fbecc9}.citem .cok{color:#b6ec8a}.citem .vlock{color:#ffd88a}
+.citem .cfar{color:#f0dcb4}.citem .cfar small{color:#d9bf94}
+/* petites fiches de papier posées sur le bois : texte sombre */
+.panel .relic,.panel .char,.panel .shopi,.panel .rfiche,.panel .stile,.panel .hrow,.panel .dk.ed,.panel .deck.pickable .dk,.panel .pl,.panel .cfbar,.panel .rchip,.panel .csum span,.panel .opts select,.panel input,
+.panel .tab,.panel .skip,.panel .dk .qty button{
+ --ink:#2b1a0c;--muted:#5a4630;--lantern:#9a6200;--blood:#a8231c;--good:#2e6b3a;
+ --k-wall:#7a5530;--k-shoot:#8a5a00;--k-melee:#b0441f;--k-help:#1f6a9a;--k-trap:#a8231c;--k-item:#6a4a9a;--k-post:#2e6b3a;--k-react:#a8231c}
+.panel .relic,.panel .rfiche,.panel .stile,.panel .hrow,.panel .dk.ed,.panel .deck.pickable .dk,.panel .pl,.panel .cfbar,.panel .csum span{background:linear-gradient(#f0e2c0,#e2cc9c);border-color:#2a170b;color:var(--ink);box-shadow:0 2px 4px rgba(0,0,0,.45)}
+.panel .relic p,.panel .relic span{color:var(--muted)}.panel .relic b{color:var(--ink)}
+/* boutons en relief : bombés, s'enfoncent au clic ; choisi = enfoncé et doré ; bloqué = plat et creux */
+.panel .skip,.panel .tab,.panel button.char,.panel button.relic,.panel button.shopi,.panel .rchip,.panel .dk .qty button,.panel .opts select{
+ color:#2b1a0c;border:1.5px solid #2a170b;background:linear-gradient(#f0dcb0,#d4b37a);cursor:pointer;
+ box-shadow:0 4px 0 #2a170b,0 6px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-2px);transition:transform .08s,box-shadow .08s,filter .1s}
+.panel .skip{margin-top:2px}
+.panel .tabs{padding-top:2px}
+.panel .skip:not(:disabled):active,.panel .tab:not(:disabled):active,.panel button.char:not(:disabled):active,.panel button.relic:active,.panel button.shopi:not(:disabled):active,.panel .rchip:active,.panel .dk .qty button:not(:disabled):active{
+ transform:translateY(2px);box-shadow:0 0 0 #2a170b,inset 0 3px 6px rgba(0,0,0,.5)}
+.panel .tab.on,.panel .rchip.on{background:linear-gradient(#f7c55a,#e09a2a);color:#2b1a0c;font-weight:700;transform:translateY(1px);
+ box-shadow:0 1px 0 #2a170b,inset 0 2px 5px rgba(80,40,0,.55),0 0 0 2px #ffe08a,0 0 12px rgba(255,200,90,.55)}
+.panel .tab small{color:#5a4630}
+.panel .skip:disabled,.panel .tab:disabled,.panel button.char:disabled,.panel button.shopi:disabled,.panel .dk .qty button:disabled{
+ background:rgba(0,0,0,.25);color:#a8916e;border-color:#3a2412;box-shadow:inset 0 2px 4px rgba(0,0,0,.5);transform:none;cursor:default}
+.panel .tab:disabled .ink,.panel button.char:disabled .ink{stroke:#a8916e}
+.panel .go{border:2px solid #2a170b;background:linear-gradient(#ffd56a,#e6a12c);color:#2b1a0c;
+ box-shadow:0 5px 0 #6b3d0c,0 8px 12px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.7);transform:translateY(-2px);transition:transform .08s,box-shadow .08s}
+.panel .go:not(:disabled):active{transform:translateY(3px);box-shadow:0 0 0 #6b3d0c,inset 0 3px 6px rgba(80,40,0,.5)}
+.panel .go:disabled{filter:grayscale(.7) brightness(.7);transform:none;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
+@media (hover:hover){.panel .skip:not(:disabled):hover,.panel .tab:not(:disabled):not(.on):hover,.panel button.char:not(:disabled):hover,.panel button.relic:hover,.panel button.shopi:not(:disabled):hover,.panel .go:not(:disabled):hover,.panel .dk .qty button:not(:disabled):hover{filter:brightness(1.08)}}
+/* collection : halo vert = carte acquise, halo noir = pas encore acquise */
+.citem.in .cf{filter:drop-shadow(0 0 3px rgba(150,230,100,.95)) drop-shadow(0 0 9px rgba(120,210,80,.75))}
+.citem.s-far .cf,.citem.s-vic .cf,.citem.locked .cf{filter:grayscale(1) brightness(.5) drop-shadow(0 0 6px rgba(0,0,0,.95)) drop-shadow(0 0 2px #000)}
+.citem.s-buy .cf{filter:grayscale(.3) brightness(.8) drop-shadow(0 0 6px rgba(0,0,0,.95)) drop-shadow(0 0 2px #000);animation:none}
+html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-offset:1px;border-radius:6px}
+/* boutons secondaires côte à côte, pour que les menus tiennent sans défiler */
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px 8px;padding-top:2px}
+.bgrid .skip{margin:0;padding:9px 6px;font-size:13.5px}
+.panel .tabs.menace{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.panel .tabs.menace .tab{min-width:0;padding:5px 0;font-size:12px}
+.panel .tabs.menace .tab .ink{display:none}
+.panel .tab{padding:6px 8px}
+.panel .go{padding:11px}
+.panel .skip{padding:9px}
+.opts{gap:8px!important}
+.panel{max-height:calc(100dvh - 20px)}
+@media (min-width:700px){.panel:has(.opts){max-width:740px}.panel .opts{display:grid!important;grid-template-columns:1fr 1fr;gap:10px 22px!important;align-items:start}
+ .panel:has(.opts) .keys{grid-template-columns:auto 1fr auto 1fr}}
+.opts .chk input{flex:none;width:20px;height:20px;accent-color:#e09a2a}
+.panel .citem .qty button:not(.buy){color:#2b1a0c;border:1.5px solid #2a170b;background:linear-gradient(#f0dcb0,#d4b37a);border-radius:7px;min-width:30px;height:28px;font-weight:700;cursor:pointer;
+ box-shadow:0 3px 0 #2a170b,0 5px 6px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-2px);transition:transform .08s,box-shadow .08s}
+.panel .citem .qty button:not(.buy):not(:disabled):active{transform:translateY(1px);box-shadow:0 0 0 #2a170b,inset 0 3px 6px rgba(0,0,0,.5)}
+.panel .citem .qty button:not(.buy):disabled{background:rgba(0,0,0,.25);color:#a8916e;border-color:#3a2412;box-shadow:inset 0 2px 4px rgba(0,0,0,.5);transform:none}
+.panel .citem .qty b{color:#fbecc9}

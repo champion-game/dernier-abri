@@ -306,6 +306,14 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - **Habillage** : fondu et glissement des écrans, carte qui se soulève au survol de la souris, bandeau « Nuit N » au début de chaque nuit, accueil de nuit avec des zombies qui rôdent autour de la maison.
 - **Option daltonisme** : barres de vie bleu/orange (tes unités) et rose (zombies) au lieu de vert/rouge.
 
+## Habillage des menus (v141)
+
+- **Panneaux en bois** (option A choisie par Amine) : planches, grain, clous aux coins, texte clair. Les petites fiches posées dessus (reliques, règles, statistiques) restent en papier.
+- **Boutons en relief** : bombés avec une épaisseur dessous, ils s’enfoncent au clic. Un choix sélectionné reste enfoncé et devient doré (pas de coche). Un choix bloqué est plat et creux.
+- **Pas d’emoji** : uniquement les symboles dessinés du jeu.
+- **Collection** : halo vert autour des cartes acquises, halo noir et carte grisée pour celles pas encore acquises.
+- **Sans défilement** : accueil, préparation de la partie et options tiennent sur l’écran (téléphone 390 × 844 et ordinateur 1280 × 800). Les écrans longs (collection, éditeur de deck, règles) défilent avec une fine barre couleur bois.
+
 ## Rôles : tank et DPS (v136)
 
 Constat d'Amine en nuit 24 : l'Agent anti-émeute faisait plus de dégâts que les Snipers. Le tank frappe à chaque tour (il attire la horde) et les bonus fixes (+1 par attaque) profitent surtout aux unités qui attaquent souvent.
