@@ -855,3 +855,14 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 .panel .cfbar select,.panel .opts select{background:#f0e2c0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b1a0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
  border:1.5px solid #2a170b;box-shadow:inset 0 2px 5px rgba(80,50,20,.45);transform:none;padding-right:28px}
 .pfoot.one .skip,.pfoot .bgrid{grid-column:1/-1}
+
+/* ===== v143 ===== */
+/* symboles de mutation et textes d'alerte : rouge vif sur le bois */
+.panel{--blood:#ff3b2b}
+/* troc : article impossible = fiche de papier grisée, encore lisible */
+.panel button.shopi:disabled{opacity:1;background:linear-gradient(#a99c87,#8f8371);color:#3e352c;border-color:#2a170b;box-shadow:0 2px 0 #2a170b,inset 0 1px 0 rgba(255,255,255,.25);transform:none;filter:grayscale(.7)}
+.panel button.shopi:disabled b{color:#2e2720}.panel button.shopi:disabled span{color:#4a4036}
+.panel button.shopi:disabled .cost{color:#4a4036}.panel button.shopi:disabled img,.panel button.shopi:disabled svg{opacity:.7}
+/* filtres collés en haut : fond opaque, les cartes passent dessous sans se voir */
+.panel .cfbar{top:-18px;z-index:6;margin:6px 0 4px;background:linear-gradient(rgba(25,12,5,.5),rgba(25,12,5,.5)),url(../assets/ui/wood.webp) 0 0/512px 384px,#3e2614;
+ box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 6px 10px rgba(0,0,0,.55)}
