@@ -25,44 +25,6 @@ const RULES=[
  ['horde','skull',_t('La horde'),()=>_t`<p><b>Frénésie meurtrière</b> : dès la nuit 5, +10 % de PV pour tous les zombies, puis +10 % de plus chaque nuit.</p><p><b>Curée</b> : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus). Les Tanks ne la subissent pas.</p><p><b>Nuit rouge</b> toutes les 5 nuits : +15 % de zombies, puis une mutation instable (un affixe qui change toutes les 5 nuits) et une relique.</p><p><b>Boss</b> toutes les 10 nuits : <b>le Colosse</b> (nuit 10), <b>la Mère</b> (20, elle pond des rampants), <b>le Patient Zéro</b> (30, il accélère la horde), accompagnés de Colosses en renfort. Le boss arrive dans une 2ᵉ vague, frappe très fort et ne meurt pas en touchant l’abri. Entre les deux vagues, tu déplaces tes unités. La nuit suivante est un <b>répit</b> (30 % de zombies en moins).</p>`],
  ['mut','dna',_t('Mutations de la horde'),()=>_t`<p>Après ta première victoire, choisis un niveau de Mutation avant la partie. Les niveaux s’additionnent :</p><div class="deck">${Z.MENACES.slice(1).map((x,k)=>`<div class="dk"><span class="fic mnum">${k+1}</span><span><b>${x.n}</b>${x.d}.</span></div>`).join('')}</div>`]];
 const rulesHtml=()=>`<div class="rindex">${RULES.map(([id,ic,t])=>`<button type="button" class="rchip" data-a="rgo" data-v="${id}">${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</button>`).join('')}</div>${RULES.map(([id,ic,t,f])=>`<section class="rfiche" id="r-${id}"><h3>${ic==='dna'?svg('mut'):ic==='shield'?ink('tank'):ii(ic)}${t}</h3>${f()}</section>`).join('')}`;
-// logo du jeu (aussi dans assets/ui/logo.svg), dessiné en SVG avec les polices du jeu
-const LOGO=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 232" role="img" aria-label="Barricard">
- <defs>
-  <radialGradient id="lg-moon" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#fff4cf"/><stop offset=".7" stop-color="#f2d58a"/><stop offset="1" stop-color="#d9a640"/></radialGradient>
-  <radialGradient id="lg-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd25a" stop-opacity=".9"/><stop offset="1" stop-color="#ffb020" stop-opacity="0"/></radialGradient>
-  <linearGradient id="lg-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6a3a"/><stop offset=".5" stop-color="#7a4f28"/><stop offset="1" stop-color="#5a3818"/></linearGradient>
- </defs>
- <circle cx="180" cy="74" r="62" fill="#2a1d13"/>
- <circle cx="180" cy="74" r="57" fill="url(#lg-moon)"/>
- <circle cx="158" cy="56" r="7" fill="#e3bf6c" opacity=".55"/><circle cx="204" cy="92" r="9" fill="#e3bf6c" opacity=".45"/><circle cx="208" cy="50" r="4" fill="#e3bf6c" opacity=".5"/>
- <g fill="#1e140c">
-  <path d="M118 128 L123 82 L119 70 L126 80 L128 60 L131 84 L137 74 L133 92 L136 128Z"/>
-  <path d="M232 128 L235 90 L229 78 L238 88 L240 66 L243 90 L249 80 L245 98 L248 128Z"/>
-  <path d="M138 130 L138 92 L180 60 L222 92 L222 130Z"/>
-  <rect x="200" y="66" width="10" height="20"/>
-  <path d="M130 96 L180 54 L230 96 L224 100 L180 63 L136 100Z"/>
- </g>
- <circle cx="180" cy="100" r="22" fill="url(#lg-glow)"/>
- <rect x="171" y="92" width="18" height="17" rx="1.5" fill="#ffc947"/>
- <path d="M180 92v17M171 100.5h18" stroke="#1e140c" stroke-width="2.4"/>
- <path d="M150 112 h12 v18 h-12z" fill="#3a2614"/>
- <g>
-  <path d="M22 126 Q180 112 338 126 L332 190 Q180 178 28 190Z" fill="#1e140c" transform="translate(0,4)"/>
-  <path d="M22 126 Q180 112 338 126 L332 190 Q180 178 28 190Z" fill="url(#lg-wood)" stroke="#2a1a0c" stroke-width="3"/>
-  <path d="M26 158 Q180 146 334 158" stroke="#4a2e14" stroke-width="2" fill="none" opacity=".7"/>
-  <path d="M60 136 q30 -3 60 -2 M230 168 q40 -2 70 1 M70 176 q25 -2 50 -1" stroke="#b5814a" stroke-width="1.5" fill="none" opacity=".6"/>
-  <circle cx="40" cy="138" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/><circle cx="320" cy="138" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/>
-  <circle cx="44" cy="177" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/><circle cx="316" cy="177" r="4" fill="#c9a35a" stroke="#3a2410" stroke-width="1.5"/>
-  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#1e140c" transform="translate(2,3)"><tspan font-size="33">BARRI</tspan><tspan font-size="41" dx="1">CARD</tspan></text>
-  <text x="180" y="170" text-anchor="middle" font-family="'Special Elite',serif" font-size="35" letter-spacing="1.5" fill="#f2e1b0" stroke="#2a1a0c" stroke-width="1.2" paint-order="stroke"><tspan font-size="33">BARRI</tspan><tspan font-size="41" dx="1" fill="#f5b52e" stroke="#3a1c06" stroke-width="1.6">CARD</tspan></text>
- </g>
- <path d="M64 128 q4 0 4 5 v9 q0 3 -2.5 3 q-2.5 0 -2.5 -3 v-5 q-3 0 -3 -4 q0 -5 4 -5z" fill="#8e1d12" opacity=".9"/>
- <g transform="rotate(-4 180 212)">
-  <rect x="88" y="197" width="184" height="30" rx="4" fill="rgba(25,8,4,.6)" stroke="#e8402e" stroke-width="3"/>
-  <rect x="93" y="202" width="174" height="20" rx="2" fill="none" stroke="#e8402e" stroke-width="1.2"/>
-  <text x="180" y="217.5" text-anchor="middle" font-family="'Atkinson Hyperlegible',sans-serif" font-size="14.5" font-weight="700" letter-spacing="2" fill="#ff5a44">${_t('UNE NUIT DE PLUS')}</text>
- </g>
-</svg>`;
 // v139 : menu pause (bouton en haut, Échap, ou quand on quitte l'appli pendant la nuit)
 function pauseMenu(){if(!G)return;onTitle=false;const nt=S.busy;if(nt)USERP=true;
  show(_t`<h2 class="pw">Pause</h2><p>${nt?_t`Nuit ${G.night} : la horde attend.`:_t`Jour ${G.night}.`}</p>
@@ -111,7 +73,9 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if(k===' '||k==='Enter'){e.preventDefault();const g=$('#go');if(!g.disabled&&!g.hidden)g.click();return}
  if(k==='d'||k==='D'){$('#mtb').click();return}
  if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
-function title(){endTest();onTitle=true;setTimeout(()=>{if(!ov.hidden&&panel.querySelector('.logo'))TTL=true},0);show(_t`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
+// v147 : logo du jeu (illustration d’Amine)
+const LOGO='<img src="assets/ui/barricard.webp" alt="Barricard" width="840" height="420">';
+function title(){endTest();onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?_t`<p>Ton record : <b>${plural(META.best,_t('nuit survécue'),_t('nuits survécues'))}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,_t('partie'),_t('parties'))}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?_t`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?_t('Aube'):_t('Jour')} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:_t('<button type="button" class="go" data-a="new">Jouer</button>'))(loadSave())}

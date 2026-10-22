@@ -854,3 +854,8 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 - Langue : Options → Langue (le jeu se recharge). Par défaut, celle du navigateur (français si le navigateur est en français, anglais sinon).
 - Vocabulaire anglais : abri = shelter, ferraille = scrap, PV = HP, portée = range (P2 → R2), niveau N1 → L1, troc = barter, réserve = reserve, pioche = draw pile, défausse = discard pile, Colosse = Colossus, Mère = Mother, Patient Zéro = Patient Zero, frénésie meurtrière = killing frenzy, curée = killing spree, « Une nuit de plus » = « One more night ».
 - `tools/test-engine.js` vérifie que chaque texte du code a sa traduction (mêmes trous) et fait tourner le moteur en anglais ; `tools/test-browser.js` joue aussi une partie en anglais et signale tout texte visible qui ressemble à du français.
+
+**v147** : nouvelle identité visuelle de l’accueil (illustrations d’Amine).
+- Logo « Barricard — One More Night » (`assets/ui/barricard.webp`), le même dans toutes les langues ; il remplace le logo SVG de la v101.
+- Image d’ambiance (`assets/ui/keyart.webp`) derrière l’accueil et les écrans ouverts depuis l’accueil (règles, défi, bestiaire, statistiques, succès, options…). Pendant une partie (pause, aube…), le plateau assombri reste derrière, sans l’image.
+- Accueil : textes dans des bandeaux de papier ; crédits et version en petit texte clair, sans bandeau.

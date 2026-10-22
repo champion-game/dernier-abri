@@ -454,7 +454,7 @@ body{background:
 
 /* v101 : logo sur l'accueil, règles du jeu dans leur propre écran */
 .logo{margin:-6px auto 0;width:min(100%,340px);line-height:0}
-.logo svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.logo img{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(0,0,0,.8))}
 ul.rules .ink{width:1.1em;height:1.1em}
 
 /* v101 : les écrans (accueil, aube, troc, collection…) deviennent des fiches de papier posées sur la table */
@@ -538,7 +538,7 @@ ul.rules .ink{width:1.1em;height:1.1em}
 
 /* v115 : mode économie (petits téléphones) : pas de flous ni d'ombres portées calculées, pas d'animations décoratives */
 html.eco .overlay{backdrop-filter:none}
-html.eco .cf,html.eco .hand .card.sel .cf,html.eco .citem.in .cf,html.eco .cf.gold,html.eco #preview,html.eco .flyc,html.eco .logo svg,html.eco .cf-pop{filter:none!important}
+html.eco .cf,html.eco .hand .card.sel .cf,html.eco .citem.in .cf,html.eco .cf.gold,html.eco #preview,html.eco .flyc,html.eco .logo img,html.eco .cf-pop{filter:none!important}
 html.eco .hand .card.guide,html.eco .go.guide{animation:none;outline:3px solid #ffd25a}
 
 /* v116 : niveaux de Menace et victoire */
@@ -866,3 +866,11 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 /* filtres collés en haut : fond opaque, les cartes passent dessous sans se voir */
 .panel .cfbar{top:-18px;z-index:6;margin:6px 0 4px;background:linear-gradient(rgba(25,12,5,.5),rgba(25,12,5,.5)),url(../assets/ui/wood.webp) 0 0/512px 384px,#3e2614;
  box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 6px 10px rgba(0,0,0,.55)}
+
+/* v147 : image d'ambiance derrière les menus hors partie (accueil et ses écrans), nouveau logo Barricard */
+#ov.home{background:linear-gradient(rgba(15,10,6,.35),rgba(15,10,6,.55)),#1a1f33 url(../assets/ui/keyart.webp) center 40%/cover no-repeat;backdrop-filter:none}
+#panel.ttl{background:none;box-shadow:none;border:0;outline:0}
+.panel.ttl .logo{width:min(100%,420px);margin:0 auto 8px}
+.panel.ttl p{color:#2b1a0c;background:rgba(239,227,198,.92);border-radius:8px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,.6)}
+.panel.ttl p b{color:#a8231c}
+.panel.ttl p.ver{background:none;box-shadow:none;padding:2px 8px;color:#f2e6c8;opacity:.85;text-shadow:0 1px 3px #000,0 0 6px #000}

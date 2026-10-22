@@ -158,7 +158,7 @@ function pfoot(){try{const ks=[...panel.children];let k=ks.length;while(k>0&&ks[
  if(k<ks.length&&k>0){const f=document.createElement('div');f.className='pfoot'+(ks.slice(k).filter(e=>e.matches('.skip')).length===1?' one':'');ks.slice(k).forEach(e=>f.appendChild(e));panel.appendChild(f)}
  panel.classList.toggle('scrolls',panel.scrollHeight>panel.clientHeight+4)}catch(e){}}
 addEventListener('resize',()=>{if(!ov.hidden)panel.classList.toggle('scrolls',panel.scrollHeight>panel.clientHeight+4)});
-function show(h,keep){TTL=false;const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop,was=ov.hidden;panel.innerHTML=h;ov.hidden=false;pfoot();panel.scrollTop=keep?y:0;
+function show(h,keep){TTL=false;const pv=document.getElementById('preview');if(pv)pv.hidden=true;const y=panel.scrollTop,was=ov.hidden;panel.innerHTML=h;ov.hidden=false;ov.classList.toggle('home',!!onTitle);panel.classList.toggle('ttl',!!panel.querySelector('.logo'));pfoot();panel.scrollTop=keep?y:0;
  // v139 : fondu de l'écran à l'ouverture, contenu qui glisse quand on change d'écran (pas quand on reste sur le même écran)
  if(keep)panel.classList.remove('pin');else{ov.classList.remove('oin');panel.classList.remove('pin');void panel.offsetWidth;if(was)ov.classList.add('oin');panel.classList.add('pin')}
  // v123 : défaite (secousse et voile rouge) et victoire (lueur dorée) animées

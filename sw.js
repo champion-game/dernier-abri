@@ -1,10 +1,10 @@
-/* Barricard : jeu jouable sans internet (v146).
+/* Barricard : jeu jouable sans internet (v147).
    - Code (page, scripts, styles) : réseau d'abord, copie gardée pour jouer hors ligne. Les mises à jour arrivent donc tout de suite.
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
 const CACHE='abri-1';
 const CORE=['./','index.html','src/style.css','src/i18n.js','src/lang-en.js','src/engine.js','src/audio.js','src/game.js','src/game-draw.js','src/game-ui.js','src/game-screens.js','src/game-menu.js','manifest.webmanifest',
- 'assets/fonts/special-elite.woff2','assets/fonts/atkinson-400.woff2','assets/fonts/atkinson-700.woff2'];
+ 'assets/fonts/special-elite.woff2','assets/fonts/atkinson-400.woff2','assets/fonts/atkinson-700.woff2','assets/ui/keyart.webp','assets/ui/barricard.webp'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 const put=(req,res)=>{if(res&&res.ok&&res.type==='basic'){const c=res.clone();caches.open(CACHE).then(ca=>ca.put(req,c)).catch(()=>{})}return res};

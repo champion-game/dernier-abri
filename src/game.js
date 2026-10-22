@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v146 · 22 oct.';
+const VERSION='v147 · 22 oct.';
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */
@@ -299,7 +299,7 @@ function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if
  need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
  const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
 const TIPS=[_t('Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.'),_t('Touche une case en pointillés jaunes pour la poser.'),_t('Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».'),_t('Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.')];
-function newGame(ch,pl,daily,deck){endTest();try{UNDO=[]}catch(e){}
+function newGame(ch,pl,daily,deck){onTitle=false;endTest();try{UNDO=[]}catch(e){}
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
  S={draw:shuffle([...(deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
@@ -363,7 +363,7 @@ function save(){if(TEST)return;try{G.rs=RS;const g={...G,event:G.event.id,z:[],p
 function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
   if(Array.isArray(d.g.grid))d.g.grid=d.g.grid.map(u=>u&&Z.U[u.t]?u:null);if(Array.isArray(d.g.bench))d.g.bench=d.g.bench.filter(u=>u&&Z.U[u.t]);return d}}catch(e){}return null}
 function clearSave(){if(TEST)return;try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
-function resume(d){try{UNDO=[]}catch(e){}
+function resume(d){onTitle=false;try{UNDO=[]}catch(e){}
  newGame(d.g.char,d.g.place);
  Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});Z.touch(G);
  RS=d.g.rs||RS;Object.assign(S,d.s,{sel:null,busy:false});if(G.ammo>0){for(let k=0;k<G.ammo;k++)S.hand.push('shell');G.ammo=0}S.used=S.used||[];G.bench=G.bench||[];S.bsel=null;S.board=G.grid.filter(Boolean).concat(G.bench);POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
