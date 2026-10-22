@@ -28,6 +28,10 @@ for(const f of Object.keys(Z.FAM))check(`faction ${f} : cartes existantes, 2 pal
 for(const k of Z.EVO_KEYS)check(`évolution ${k} : recette valide`,()=>Z.EVO[k].forEach(t=>ok(Z.U[t],t+' inconnue')));
 check('évolution : nouvelle carte, les 2 cartes de la recette repartent en défausse',()=>{const st=fresh();Z.place(st,'cop',2*9+3,rng(1));Z.place(st,'dog',2*9+4,rng(1));const u=st.grid.find(v=>v&&v.t==='k9squad');ok(u,'pas d’évolution');eq([...u.fbk].sort(),['cop','dog']);eq(u.src,[])});
 check('deck de départ valide',()=>eq(Z.deckError(Z.STARTER_DECK,Z.STARTER_CARDS),''));
+check('cartes offertes : 0/1/2/3 selon les nuits',()=>eq([4,5,9,10,19,20,30].map(Z.giftCount),[0,1,1,2,2,3,3]));
+check('cartes offertes : 3 cartes achetables, distinctes, pas encore débloquées',()=>{for(let i=0;i<50;i++){const o=Z.giftOffer(Z.STARTER_CARDS,rng(i+1));eq(o.length,3);ok(new Set(o).size===3,'doublon');
+ for(const k of o){ok(!Z.STARTER_CARDS.includes(k),k+' déjà débloquée');ok(Z.U[k].vic==null,k+' carte de victoire');ok(Z.CARD_PRICE[Z.RAR[k]],k+' sans prix')}}});
+check('cartes offertes : moins de 3 quand presque tout est débloqué',()=>{const all=Z.KEYS.filter(k=>Z.U[k].vic==null&&Z.CARD_PRICE[Z.RAR[k]]);eq(Z.giftOffer(all.slice(1),rng(3)),[all[0]]);eq(Z.giftOffer(all,rng(3)),[])});
 check('les 4 routes sont au bord, hors forêt',()=>Z.ROADS.forEach(i=>ok(Z.isEdge(i)&&!Z.isForest(i))));
 check('reliques : 22, dont 6 de victoire, tirées seulement si débloquées',()=>{eq(Object.keys(Z.RELICS).length,22);eq(Z.VICTORY_RELICS.length,6);const st=fresh();for(let k=0;k<40;k++)Z.relicChoices(st,rng(k),5).forEach(r=>ok(Z.RELICS[r].lock==null,r+' verrouillée'));st.relicPool=['serum'];ok([...Array(60).keys()].some(k=>Z.relicChoices(st,rng(k),3).includes('serum')))});
 check('reliques : effets (insigne, plan, recettes, pacte, sifflet, coffre, cartouches)',()=>{const st=fresh();const c0=Z.unitCap(st);Z.addRelic(st,'insigne');eq(Z.unitCap(st),c0+1);
@@ -236,7 +240,7 @@ check('aucune nuit de plus de 2 s',()=>ok(slow===0,slow+' nuit(s) lente(s), pire
  for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js']){
   const ks=keysOf(fs.readFileSync(path.join(ROOT,'src',f),'utf8'));
   const miss=ks.filter(k=>EN[k]==null);
-  check(`traduction : ${f} (${ks.length} textes) tous traduits`,()=>ok(!miss.length,miss.length+' sans traduction : '+miss.slice(0,3).map(k=>JSON.stringify(k).slice(0,90)).join(' | ')));
+  check(`traduction : ${f} (${ks.length} textes) tous traduits`,()=>ok(!miss.length,miss.length+' sans traduction : '+miss.slice(0,process.env.ALLMISS?99:3).map(k=>JSON.stringify(k).slice(0,process.env.ALLMISS?2000:90)).join(' | ')));
   const bad=ks.filter(k=>EN[k]!=null&&[...ph(EN[k])].some(p=>!ph(k).has(p)));
   check(`traduction : ${f} trous {0}… cohérents`,()=>ok(!bad.length,bad.slice(0,3).join(' | ')));
  }

@@ -75,7 +75,7 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
 // v147 : logo du jeu (illustration d’Amine)
 const LOGO='<img src="assets/ui/barricard.webp" alt="Barricard" width="840" height="420">';
-function title(){endTest();onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
+function title(){endTest();if(META.gift){S.endHtml=null;giftScreen();return}onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1><p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?_t`<p>Ton record : <b>${plural(META.best,_t('nuit survécue'),_t('nuits survécues'))}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,_t('partie'),_t('parties'))}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?_t`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?_t('Aube'):_t('Jour')} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:_t('<button type="button" class="go" data-a="new">Jouer</button>'))(loadSave())}

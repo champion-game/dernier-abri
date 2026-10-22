@@ -1289,5 +1289,15 @@ I18N.en={
 "Carte autour de l’abri":"Map around the shelter",
 "Pioche":"Draw pile",
 "Réserve":"Reserve",
-"Défausse":"Discard pile"
+"Défausse":"Discard pile",
+"Les 3 cartes sont pour toi.":"All 3 cards are yours.",
+"Choisis {0} cartes parmi 3.":"Choose {0} cards out of 3.",
+"Choisis 1 carte parmi 3.":"Choose 1 card out of 3.",
+"<h2 class=\"pw\">Récompense</h2><p>{0} Touche une carte pour la retourner, puis touche-la encore pour la prendre. Chaque carte prise rejoint ta collection pour toujours.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continuer</button>":"<h2 class=\"pw\">Reward</h2><p>{0} Tap a card to flip it, then tap it again to take it. Every card you take joins your collection for good.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continue</button>",
+"Carte offerte":"Reward card",
+"Encore <b>{0}</b> cartes à choisir.":"<b>{0}</b> cards left to choose.",
+"Encore <b>1</b> carte à choisir.":"<b>1</b> card left to choose.",
+"Cartes ajoutées à ta collection.":"Cards added to your collection.",
+"<div class=\"gbox r-{0}\"><p>Prendre <b>{1}</b> ?</p><p class=\"g-sub\">{2}{3}</p><div class=\"g-btns\"><button type=\"button\" class=\"go\" data-a=\"gyes\" data-v=\"{4}\">Prendre</button><button type=\"button\" class=\"skip\" data-a=\"gno\">Annuler</button></div></div>":"<div class=\"gbox r-{0}\"><p>Take <b>{1}</b>?</p><p class=\"g-sub\">{2}{3}</p><div class=\"g-btns\"><button type=\"button\" class=\"go\" data-a=\"gyes\" data-v=\"{4}\">Take</button><button type=\"button\" class=\"skip\" data-a=\"gno\">Cancel</button></div></div>",
+" · les autres cartes seront perdues":" · the other cards will be lost"
 };

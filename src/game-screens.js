@@ -79,8 +79,31 @@ function victory(){G.won=1;try{ach('win');if((G.menace||0)>=5)ach('m5');if((G.me
   <p><b>${G.kills}</b> zombies éliminés.${alive.length?_t` Survivants : ${alive.join(', ')}.`:''}</p>${pts?_t`<p>+<b>${pts}</b> points de survie (total : ${META.points}).</p>`:''}${META.wins===1&&!G.daily?_t`<p class="tipin">${ii('spark')} <b>Dos de carte doré</b> et <b>maison fortifiée</b> débloqués pour ta première victoire (modifiables dans les Options).</p>`:''}${unl?_t`<p class="tipin">${ii('unlock')} <b>Mutation ${m+1} débloquée</b> : ${Z.MENACES[m+1].n}. Choisis-la en préparant ta prochaine partie.</p>`:''}${cardUnl?_t`<p class="tipin">${ii('card')} <b>Carte de victoire</b> : ${Z.U[cardUnl].n} rejoint ta collection. Ajoute-la à ton deck.</p><div class="vcard">${cardFace(cardUnl,{base:1})}</div>`:''}${relUnl?_t`<p class="tipin">${ii('gift')} <b>Nouvelle relique débloquée</b> : ${Z.RELICS[relUnl].n} (${Z.RELICS[relUnl].d}). Tu pourras la trouver en partie.</p>`:''}${relStart?_t`<p class="tipin">${ii('pack')} <b>Relique de départ</b> : ${Z.RELICS[relStart].n} rejoint ta réserve. Choisis-la avant ta prochaine partie.</p>`:''}
   <button type="button" class="go" data-a="win-leave">Partir avec les secours</button><button type="button" class="skip" data-a="win-stay">Rester : une nuit de plus (mode infini, pour le score)</button>
   <p class="ver">Si tu restes, ta victoire est déjà acquise : la horde grandit chaque nuit, jusqu’à ce qu’elle gagne.</p>`)}
-function leaveWin(){clearSave();logRun(1);const nights=G.night;let pts=0;if(!G.daily){pts=Z.runPoints(nights,G.kills);META.points=(META.points||0)+pts;META.best=Math.max(META.best,nights);META.total+=nights;META.runs++;saveMeta(META)}
- show(_t`<img class="heli away" src="assets/ui/heli.webp?v=121" alt=""><h2 class="ok">Victoire</h2><p>L’hélicoptère décolle. Derrière toi, la horde envahit la clairière… mais tu es parti.</p><div class="big">${plural(nights,_t('nuit survécue'),_t('nuits survécues'))}</div>${pts?_t`<p>+<b>${pts}</b> points de survie pour ces ${nights} nuits (total : ${META.points}).</p>`:''}${detBtn()}<button type="button" class="go" data-a="title">Accueil</button>`);keepEnd()}
+function leaveWin(){clearSave();logRun(1);const nights=G.night;let pts=0;if(!G.daily){pts=Z.runPoints(nights,G.kills);META.points=(META.points||0)+pts;META.best=Math.max(META.best,nights);META.total+=nights;META.runs++;saveMeta(META)}giftStart(nights);
+ show(_t`<img class="heli away" src="assets/ui/heli.webp?v=121" alt=""><h2 class="ok">Victoire</h2><p>L’hélicoptère décolle. Derrière toi, la horde envahit la clairière… mais tu es parti.</p><div class="big">${plural(nights,_t('nuit survécue'),_t('nuits survécues'))}</div>${pts?_t`<p>+<b>${pts}</b> points de survie pour ces ${nights} nuits (total : ${META.points}).</p>`:''}${detBtn()}<button type="button" class="go" data-a="title">Accueil</button>`);keepEnd();if(META.gift)giftScreen()}
+// v150 : cartes offertes en fin de partie (règle : Z.giftCount, Z.giftOffer). Le tirage est enregistré tout de suite
+// (META.gift) : fermer le jeu ne permet pas de retirer d'autres cartes, l'écran revient au prochain passage par l'accueil.
+function giftStart(nights){if(G.daily||TEST)return;const n=Z.giftCount(nights);if(!n)return;const c=Z.giftOffer(META.cards);if(!c.length)return;
+ META.gift={c,n:Math.min(n,c.length),got:[],up:[]};saveMeta(META)}
+const GIFT_RN={com:_t('Commune'),rare:_t('Rare'),epic:_t('Épique'),leg:_t('Légendaire')};
+function giftLeft(){const g=META.gift;return g?g.n-g.got.length:0}
+function giftScreen(){const g=META.gift;if(!g)return;
+ const msg=g.n>=g.c.length?_t('Les 3 cartes sont pour toi.'):g.n>1?_t`Choisis ${g.n} cartes parmi 3.`:_t('Choisis 1 carte parmi 3.');
+ show(_t`<h2 class="pw">Récompense</h2><p>${msg} Touche une carte pour la retourner, puis touche-la encore pour la prendre. Chaque carte prise rejoint ta collection pour toujours.</p>
+  <div class="gifts">${g.c.map((t,i)=>`<button type="button" class="gift r-${Z.RAR[t]||'com'}${g.up.includes(i)?' up':''}${g.got.includes(i)?' got':''}" data-a="gift" data-v="${i}" aria-label="${_t('Carte offerte')} ${i+1}"><span class="g-in"><span class="g-back"></span><span class="g-face">${cardFace(t,{base:1})}<span class="g-rar">${GIFT_RN[Z.RAR[t]||'com']}</span><span class="g-ok">✓</span></span></span></button>`).join('')}</div>
+  <p class="g-left"></p><button type="button" class="go" data-a="gdone" hidden>Continuer</button>`);giftSync()}
+function giftSync(){const g=META.gift;if(!g)return;const left=giftLeft(),el=panel.querySelector('.g-left'),b=panel.querySelector('[data-a=gdone]');
+ panel.querySelectorAll('.gift').forEach((e,i)=>{e.classList.toggle('up',g.up.includes(i));e.classList.toggle('got',g.got.includes(i));e.classList.toggle('off',!left&&!g.got.includes(i))});
+ if(el)el.innerHTML=left?(left>1?_t`Encore <b>${left}</b> cartes à choisir.`:_t('Encore <b>1</b> carte à choisir.')):_t('Cartes ajoutées à ta collection.');if(b)b.hidden=!!left}
+function giftTap(v){const g=META.gift,i=+v;if(!g||!g.c[i]||g.got.includes(i))return;
+ if(!g.up.includes(i)){g.up.push(i);saveMeta(META);SFX.play('card');giftSync();return}
+ if(!giftLeft())return;const t=g.c[i];
+ const box=document.createElement('div');box.className='gconf';
+ box.innerHTML=_t`<div class="gbox r-${Z.RAR[t]||'com'}"><p>Prendre <b>${Z.U[t].n}</b> ?</p><p class="g-sub">${GIFT_RN[Z.RAR[t]||'com']}${giftLeft()>1?'':_t(' · les autres cartes seront perdues')}</p><div class="g-btns"><button type="button" class="go" data-a="gyes" data-v="${i}">Prendre</button><button type="button" class="skip" data-a="gno">Annuler</button></div></div>`;
+ panel.appendChild(box);SFX.play('ui')}
+function giftTake(v){const g=META.gift,i=+v;panel.querySelectorAll('.gconf').forEach(e=>e.remove());if(!g||!g.c[i]||g.got.includes(i)||!giftLeft())return;
+ g.got.push(i);const t=g.c[i];if(!META.cards.includes(t))META.cards.push(t);saveMeta(META);SFX.play('dawn');vib(40);giftSync();try{achCheck()}catch(e){}}
+function giftDone(){META.gift=null;saveMeta(META);if(S.endHtml)show(S.endHtml);else title()}
 function statsScreen(){const h=META.hist||[],pl=Object.entries(META.played||{}).filter(([t])=>Z.U[t]).sort((a,b)=>b[1]-a[1]).slice(0,6),avg=h.length?Math.round(h.reduce((a,x)=>a+x.n,0)/h.length*10)/10:0;
  const tile=(v,l)=>`<div class="stile"><b>${v}</b><span>${l}</span></div>`;
  show(_t`<h2 class="pw">Statistiques</h2><div class="stiles">${tile(META.best||0,_t('record de nuits'))}${tile(META.wins||0,_t('victoires'))}${tile(META.menaceWon>=0?META.menaceWon:'—',_t('Mutation vaincue'))}${tile(META.runs||0,_t('parties'))}${tile(META.total||0,_t('nuits au total'))}${tile(META.kills||0,_t('zombies éliminés'))}</div>
@@ -94,11 +117,11 @@ function end(){
  clearSave();const nights=G.night-1;
  const before=Z.unlocks(META),newRec=nights>META.best&&nights>0;
  const legs=G.daily?[]:Z.legacies(G);if(legs.length){META.legacy=[...(META.legacy||[]),...legs.map(f=>({name:f.name,t:f.t,kills:f.kills}))].sort((a,b)=>b.kills-a.kills).slice(0,3)}
- let pts=0;if(!G.daily){pts=Z.runPoints(nights,G.kills);META.points=(META.points||0)+pts;META.best=Math.max(META.best,nights);META.total+=nights;META.runs++;saveMeta(META)}
+ let pts=0;if(!G.daily){pts=Z.runPoints(nights,G.kills);META.points=(META.points||0)+pts;META.best=Math.max(META.best,nights);META.total+=nights;META.runs++;saveMeta(META)}giftStart(nights);
  const best=META.best,after=Z.unlocks(META);
  const fresh=[...after.chars.filter(k=>!before.chars.includes(k)).map(k=>_t('Personnage : ')+Z.CHARS[k].n),...after.places.filter(k=>!before.places.includes(k)).map(k=>_t('Lieu : ')+Z.PLACES[k].n),];
  const dailyTxt=G.daily?dailyEnd(nights):'';
- show(_t`<i class="bigstamp ko">Tombé</i><h2 class="ko">L’abri est tombé</h2><p>La horde est entrée pendant la nuit <b>${G.night}</b>.</p><div class="big">${plural(nights,_t('nuit survécue'),_t('nuits survécues'))}</div><p><b>${G.kills}</b> zombies éliminés. Record : <b>${plural(best,_t('nuit'),_t('nuits'))}</b>${newRec?_t(' (nouveau record !)'):''}.</p>${dailyTxt}${legs.length?_t`<p>${ii('medal')} <b>Héritage :</b> ${legs.map(f=>_t`${f.name} (${Z.U[f.t].n}, ${f.kills} zombies)`).join(', ')} ${legs.length>1?_t('laissent'):_t('laisse')} un souvenir pour ta prochaine partie : le premier ${legs.length>1?_t('survivant du même métier'):Z.U[legs[0].t].n} posé aura +1 dégât et +2 PV.</p>`:''}${pts?_t`<p>+<b>${pts}</b> points de survie (total : ${META.points}). Débloque de nouvelles cartes dans la <b>Collection</b>.</p>`:''}${fresh.length?_t`<h3>Débloqué !</h3><ul>${fresh.map(f=>`<li><b>${f}</b></li>`).join('')}</ul>`:''}<h3>Mémorial</h3>${memorialHtml()}<button type="button" class="go" data-a="new">Rejouer</button>${detBtn()}<button type="button" class="skip" data-a="coll">Collection</button><button type="button" class="skip" data-a="title">Accueil</button>`);keepEnd();
+ show(_t`<i class="bigstamp ko">Tombé</i><h2 class="ko">L’abri est tombé</h2><p>La horde est entrée pendant la nuit <b>${G.night}</b>.</p><div class="big">${plural(nights,_t('nuit survécue'),_t('nuits survécues'))}</div><p><b>${G.kills}</b> zombies éliminés. Record : <b>${plural(best,_t('nuit'),_t('nuits'))}</b>${newRec?_t(' (nouveau record !)'):''}.</p>${dailyTxt}${legs.length?_t`<p>${ii('medal')} <b>Héritage :</b> ${legs.map(f=>_t`${f.name} (${Z.U[f.t].n}, ${f.kills} zombies)`).join(', ')} ${legs.length>1?_t('laissent'):_t('laisse')} un souvenir pour ta prochaine partie : le premier ${legs.length>1?_t('survivant du même métier'):Z.U[legs[0].t].n} posé aura +1 dégât et +2 PV.</p>`:''}${pts?_t`<p>+<b>${pts}</b> points de survie (total : ${META.points}). Débloque de nouvelles cartes dans la <b>Collection</b>.</p>`:''}${fresh.length?_t`<h3>Débloqué !</h3><ul>${fresh.map(f=>`<li><b>${f}</b></li>`).join('')}</ul>`:''}<h3>Mémorial</h3>${memorialHtml()}<button type="button" class="go" data-a="new">Rejouer</button>${detBtn()}<button type="button" class="skip" data-a="coll">Collection</button><button type="button" class="skip" data-a="title">Accueil</button>`);keepEnd();if(META.gift)giftScreen();
 }
 const CATN={wall:_t('Défenses'),post:_t('Postes de soutien'),shoot:_t('Tireurs'),melee:_t('Corps à corps'),help:_t('Soutien'),trap:_t('Pièges'),item:_t('Objets'),react:_t('Réactions')};
 const deckHtml=()=>Object.keys(CATN).map(c=>`<h3>${CATN[c]}</h3><div class="deck">${Z.KEYS.filter(t=>Z.U[t].cat===c).map(t=>_t`<div class="dk" style="--cc:${cc(t)}">${art(t)}<span><b>${Z.U[t].n}</b>${rarTag(t)}<em class="ce">${Z.cost(t)} énergie</em> · ${Z.U[t].d}${famLine(t)}</span></div>`).join('')}</div>`).join('');
@@ -278,6 +301,7 @@ const ACT={
  coll:()=>{if(!seen('coll')){META.hints=META.hints||{};META.hints.coll=1;saveMeta(META)}collectionScreen()},
  mdet:()=>detScreen(),
  achs:()=>achScreen(),
+ gift:giftTap,gyes:giftTake,gno:()=>panel.querySelectorAll('.gconf').forEach(e=>e.remove()),gdone:giftDone,
  mback:()=>{if(S.endHtml)show(S.endHtml);else title()},
  evo:()=>evoScreen(),
  unlock:v=>{if(Z.U[v].vic!=null)return;const pr=Z.CARD_PRICE[Z.RAR[v]||'com'];if(!META.cards.includes(v)&&META.points>=pr){META.points-=pr;META.cards.push(v);saveMeta(META);SFX.play('dawn');achCheck()}collectionScreen(1)},

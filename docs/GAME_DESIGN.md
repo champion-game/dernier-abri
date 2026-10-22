@@ -217,7 +217,7 @@ C'est un moment rare : environ 1 aube sur 4, à partir de la nuit 3. Après le t
 
 ## La collection et les decks
 
-- **Collection** (permanente) : les types de cartes débloqués. On commence avec 22 cartes de base. Chaque partie rapporte des **points de survie** : 10 par nuit survécue, plus 1 tous les 4 zombies. On débloque une carte pour toujours : commune 15 points, rare 35, épique 70. Les parties du défi quotidien ne rapportent pas de points.
+- **Collection** (permanente) : les types de cartes débloqués. On commence avec 22 cartes de base. Chaque partie rapporte des **points de survie** : 10 par nuit survécue, plus 1 tous les 4 zombies. On débloque une carte pour toujours : commune 20 points, rare 45, épique 90, chef légendaire 130 (v150 ; avant : 15 / 35 / 70 / 100). **Cartes offertes (v150)** : en fin de partie (hors défi du jour), 3 cartes face cachée tirées parmi les cartes achetables pas encore débloquées ; on en garde 1 à partir de 5 nuits survécues, 2 à partir de 10, les 3 à partir de 20 (`Z.giftCount`, `Z.giftOffer`). Voir v150. Les parties du défi quotidien ne rapportent pas de points.
 - **Decks** : 3 emplacements sauvegardés. Un deck compte 20 à 30 cartes, avec au maximum 3 exemplaires d'une commune, 2 d'une rare, 1 d'une épique. Chaque emplacement commence avec le deck de départ (20 cartes équilibrées).
 - **Pendant la partie** : on pioche dans son deck. Une unité posée quitte la pioche ; quand elle est détruite, qu'un piège se déclenche ou qu'elle est remplacée, sa carte revient dans la défausse et peut être repiochée. Les objets et les réactions vont dans la défausse après usage. Les unités offertes par le jeu (lieu, événements, pneus en feu) ne sont pas des cartes et ne reviennent pas.
 - Les cartes gagnées à l'aube et au troc sont des **renforts temporaires** : elles ne valent que pour la partie en cours, et ne sont proposées que parmi les cartes de la collection.
@@ -861,3 +861,9 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 - Accueil : textes dans des bandeaux de papier ; crédits et version en petit texte clair, sans bandeau.
 
 **v148** : image d’ambiance en deux formats : `keyart-portrait.webp` (841 × 1870) sur les écrans en hauteur (téléphone), `keyart.webp` (2000 × 1125 depuis la v149) sur les écrans en largeur ; voile sombre allégé.
+
+**v150** : cartes offertes en fin de partie, et prix des cartes relevés d’environ 30 %.
+- Après une défaite ou un départ en hélicoptère (pas au défi du jour) : 5 nuits survécues ou plus → 1 carte à choisir parmi 3 ; 10 ou plus → 2 parmi 3 ; 20 ou plus → les 3. Tirage parmi les cartes achetables pas encore débloquées (jamais les cartes de victoire), moins de 3 si presque tout est débloqué.
+- Écran « Récompense » : les 3 cartes arrivent face cachée (dos de carte, sans halo) ; on touche pour retourner (animation 3D), le halo dit la rareté (commune vert, rare bleu, épique violet, légendaire orange) ; on retouche pour prendre, avec une fenêtre de confirmation.
+- Le tirage est enregistré dès la fin de partie (`META.gift`) : fermer le jeu ne permet pas de retirer, l’écran revient au prochain passage par l’accueil.
+- Prix : commune 20, rare 45, épique 90, chef 130 (total pour tout acheter : environ 5 600 points au lieu de 4 300).

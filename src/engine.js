@@ -609,7 +609,13 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
     La collection : les types de cartes débloqués, pour toujours. On en débloque avec les points de survie gagnés en fin de partie.
     Le deck : préparé avant la partie, 20 à 30 cartes, avec un nombre limité d'exemplaires selon la rareté. */
  const DECK_MIN=20,DECK_MAX=30,COPY_MAX={com:3,rare:2,epic:1,leg:1};
- const CARD_PRICE={com:15,rare:35,epic:70,leg:100};
+ const CARD_PRICE={com:20,rare:45,epic:90,leg:130};// v150 : +30 % environ, car chaque partie offre aussi des cartes
+ /* v150 : cartes offertes en fin de partie (hors défi du jour). 5 nuits survécues ou plus : 1 carte à choisir parmi 3 ;
+    10 ou plus : 2 parmi 3 ; 20 ou plus : les 3. Tirées parmi les cartes achetables pas encore débloquées. */
+ const giftCount=n=>n>=20?3:n>=10?2:n>=5?1:0;
+ function giftOffer(cards,r){const own=new Set(cards&&cards.length?cards:STARTER_CARDS),R=r||Math.random;
+  const pool=KEYS.filter(k=>!own.has(k)&&U[k].vic==null&&CARD_PRICE[RAR[k]]),out=[];
+  while(out.length<3&&pool.length)out.push(pool.splice(Math.floor(R()*pool.length),1)[0]);return out}
  const STARTER_CARDS='bar car fen sand gun snp kid axe dog cop med lamp trap fire mine wire spike food rep grenade shot patch'.split(' ');
  const STARTER_DECK=['bar','bar','bar','fen','car','gun','gun','gun','snp','axe','axe','dog','med','trap','trap','mine','food','rep','grenade','grenade'];
  const copyMax=t=>COPY_MAX[RAR[t]||'com'];
@@ -1035,7 +1041,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;st.kills++;st.scrap+=killScrap(st,ZT[z.k].boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!ZT[z.k].boss});if(ZT[z.k].brood)broodDeath(st,z,ev)}
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
- return{BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
+ return{BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
   DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;
