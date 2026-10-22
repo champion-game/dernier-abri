@@ -32,6 +32,12 @@ check('cartes offertes : 0/1/2/3 selon les nuits',()=>eq([4,5,9,10,19,20,30].map
 check('cartes offertes : 3 cartes achetables, distinctes, pas encore débloquées',()=>{for(let i=0;i<50;i++){const o=Z.giftOffer(Z.STARTER_CARDS,rng(i+1));eq(o.length,3);ok(new Set(o).size===3,'doublon');
  for(const k of o){ok(!Z.STARTER_CARDS.includes(k),k+' déjà débloquée');ok(Z.U[k].vic==null,k+' carte de victoire');ok(Z.CARD_PRICE[Z.RAR[k]],k+' sans prix')}}});
 check('cartes offertes : moins de 3 quand presque tout est débloqué',()=>{const all=Z.KEYS.filter(k=>Z.U[k].vic==null&&Z.CARD_PRICE[Z.RAR[k]]);eq(Z.giftOffer(all.slice(1),rng(3)),[all[0]]);eq(Z.giftOffer(all,rng(3)),[])});
+check('démo : 2 personnages, 2 lieux, ni épique, ni légendaire, ni chef (offertes, boutique, collection)',()=>{Z.setDemo(1);try{
+ const all=Z.KEYS.filter(k=>Z.U[k].vic==null),u=Z.unlocks({best:99,total:99,cards:all});
+ eq(u.chars,['surv','cop']);eq(u.places,['bois','ferme']);ok(u.pool.length>20,'collection vide');
+ const bad=k=>['epic','leg'].includes(Z.RAR[k])||Z.U[k].chief;ok(!u.pool.some(bad),'carte interdite dans la collection');
+ for(let i=0;i<30;i++){ok(!Z.giftOffer(Z.STARTER_CARDS,rng(i+1)).some(bad),'carte interdite offerte');ok(!Z.storeOffer(fresh(),[],rng(i+1)).some(o=>bad(o.t||o)),'carte interdite en boutique')}
+ eq(Z.DEMO_N,10)}finally{Z.setDemo(0)}ok(Z.unlocks({best:99,total:99}).chars.length===4,'démo restée active')});
 check('les 4 routes sont au bord, hors forêt',()=>Z.ROADS.forEach(i=>ok(Z.isEdge(i)&&!Z.isForest(i))));
 check('reliques : 22, dont 6 de victoire, tirées seulement si débloquées',()=>{eq(Object.keys(Z.RELICS).length,22);eq(Z.VICTORY_RELICS.length,6);const st=fresh();for(let k=0;k<40;k++)Z.relicChoices(st,rng(k),5).forEach(r=>ok(Z.RELICS[r].lock==null,r+' verrouillée'));st.relicPool=['serum'];ok([...Array(60).keys()].some(k=>Z.relicChoices(st,rng(k),3).includes('serum')))});
 check('reliques : effets (insigne, plan, recettes, pacte, sifflet, coffre, cartouches)',()=>{const st=fresh();const c0=Z.unitCap(st);Z.addRelic(st,'insigne');eq(Z.unitCap(st),c0+1);

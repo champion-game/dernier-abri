@@ -520,6 +520,16 @@ Comme dans *Balatro*, les systèmes avancés tournent dès le départ, mais leur
 - **Évolutions** : déjà secrètes, révélées à la découverte.
 - Option **« Tout afficher dès le départ »** pour les habitués (et pour le test navigateur).
 
+## La démo publique (v153)
+
+Version gratuite sur une page itch.io publique (plus tard : démo Steam pour le Next Fest), pour donner envie et récolter des listes de souhaits. Le jeu complet reste sur une page itch.io privée pour les amis testeurs.
+
+- Un seul code : `DEMO_BUILD` (src/game.js) passe à vrai seulement dans la copie envoyée sur la page de la démo (`.github/workflows/itch.yml`). « ?demo » dans l'adresse l'active pour essayer. Règles dans le moteur : `Z.setDemo`, `Z.demoOk`.
+- **10 nuits**, jusqu'au Colosse : après la nuit 10, écran « Fin de la démo » (score, points, cartes offertes, ce que contient le jeu complet, bouton liste de souhaits Steam dès que `STEAM_URL` est rempli).
+- Ouvert : le Survivant et la Policière, la Maison des bois et la Ferme, les cartes communes et rares (collection, aube, troc, boutique, cartes offertes), reliques, événements, succès.
+- Fermé (cadenas « Dans le jeu complet ») : la Station-service et le Centre commercial, le Fermier et l'Infirmière, les cartes épiques et légendaires et les chefs de faction. Les nuits 11 à 30, la victoire, les Mutations et le mode infini n'existent pas dans la démo. Le défi du jour est retiré.
+- Mode test gardé (décision d'Amine, pour faire tester l'équilibrage), mais limité aux nuits 1 à 10 et aux cartes de la démo. La version complète garde le mode test sans limite.
+
 ## Le mode test (v130)
 
 Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit la nuit de départ (1 à 60), Survivant et Maison des bois, deck de départ, énergie illimitée (99 par jour), 999 ferraille, toutes les cartes proposées à l'aube et au troc. Pendant le jour, « + Carte (test) » ouvre la liste de toutes les cartes (avec recherche) pour en mettre n'importe laquelle en main (8 au plus). Rien n'est enregistré : ni record, ni points, ni succès, ni bulles vues, ni sauvegarde de partie ; la partie en cours normale reste intacte.

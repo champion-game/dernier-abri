@@ -915,3 +915,6 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
 .dgot{font-size:14px;opacity:.9}
 .dhorde{margin-top:10px;text-align:left}.dhorde summary{cursor:pointer;color:var(--accent,#f2b33d)}
 .dsc{font-size:13px;opacity:.75}
+
+/* démo (v153) : étiquette sous le logo */
+#panel p.demob,p.demob{width:max-content!important;max-width:none!important;margin:-4px auto 8px!important;padding:3px 16px!important;border:0!important;border-radius:6px;background:var(--blood)!important;color:#fff!important;font-family:"Special Elite",serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 2px 6px #0008}

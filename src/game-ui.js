@@ -304,6 +304,7 @@ async function night(){
  const rewardCard=null;
  S.dawn={kills:G.kills-kills0,scrap:G.scrap-scrap0,heal:dawnInfo.heal,mut,rewardCard,relicReward:dawnInfo.relic,tier:dawnInfo.tier,hero:hero?{name:hero.name,t:hero.t,nk:hero.nk}:null,fallen};save();render();
  achNight(G.kills-kills0);
+ if(DEMO&&G.night>=Z.DEMO_N&&!G.won)return demoEnd();
  if(G.night===Z.WIN_NIGHT&&!G.won)return victory();
  dawn();
 }

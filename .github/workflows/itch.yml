@@ -1,8 +1,10 @@
 # Envoie automatiquement le jeu sur itch.io à chaque mise en ligne sur main (outil officiel butler).
-# Réglages à faire une fois dans GitHub (Settings du dépôt) :
-#  - Secrets and variables → Actions → Secrets : BUTLER_API_KEY = clé API itch.io (itch.io → Settings → API keys)
-#  - Secrets and variables → Actions → Variables : ITCH_GAME = utilisateur/projet (ex. amine/barricard)
-# Tant que ces deux réglages manquent, l'envoi est simplement sauté (pas d'erreur).
+# Deux pages : le jeu complet (privé, pour les amis) et la démo publique (10 nuits, DEMO_BUILD=true dans src/game.js).
+# Réglages à faire une fois dans GitHub (Settings du dépôt → Secrets and variables → Actions) :
+#  - Secrets   : BUTLER_API_KEY = clé API itch.io (itch.io → Settings → API keys)
+#  - Variables : ITCH_GAME = pseudo/projet du jeu complet (ex. amine/barricard)
+#                ITCH_DEMO = pseudo/projet de la démo (ex. amine/barricard-demo)
+# Une page dont la variable manque est simplement sautée (pas d'erreur).
 name: Envoi itch.io
 on:
   push:
@@ -17,26 +19,37 @@ jobs:
     env:
       BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
       ITCH_GAME: ${{ vars.ITCH_GAME }}
+      ITCH_DEMO: ${{ vars.ITCH_DEMO }}
     steps:
       - name: Réglages présents ?
         id: ok
         run: |
-          if [ -n "$BUTLER_API_KEY" ] && [ -n "$ITCH_GAME" ]; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "Réglages itch.io absents : envoi sauté."; fi
+          if [ -n "$BUTLER_API_KEY" ] && { [ -n "$ITCH_GAME" ] || [ -n "$ITCH_DEMO" ]; }; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "Réglages itch.io absents : envoi sauté."; fi
       - uses: actions/checkout@v4
         if: steps.ok.outputs.go == '1'
-      - name: Préparer le jeu (seulement les fichiers utiles, code sans commentaires)
+      - name: Préparer le jeu complet et la démo (fichiers utiles, code sans commentaires)
         if: steps.ok.outputs.go == '1'
         run: |
           mkdir -p build
           cp -r index.html sw.js version.txt manifest.webmanifest src assets build/
           rm -rf build/assets/extras
           find build -name '*.md' -delete
+          cp -r build build-demo
+          grep -q 'var DEMO_BUILD=false;' build-demo/src/game.js
+          sed -i 's/var DEMO_BUILD=false;/var DEMO_BUILD=true;/' build-demo/src/game.js
           npm i -s --no-save terser@5 csso-cli@4
-          for f in build/src/*.js build/sw.js; do npx terser "$f" -c -m --comments false -o "$f"; done
-          npx csso build/src/style.css -o build/src/style.css
-      - name: Envoyer sur itch.io
+          for d in build build-demo; do
+            for f in $d/src/*.js $d/sw.js; do npx terser "$f" -c -m --comments false -o "$f"; done
+            npx csso $d/src/style.css -o $d/src/style.css
+          done
+      - name: Télécharger butler
         if: steps.ok.outputs.go == '1'
         run: |
           curl -sSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
           unzip -q butler.zip -d butler && chmod +x butler/butler
-          ./butler/butler push build "$ITCH_GAME:html" --userversion "$(cat version.txt)"
+      - name: Envoyer le jeu complet
+        if: steps.ok.outputs.go == '1' && env.ITCH_GAME != ''
+        run: ./butler/butler push build "$ITCH_GAME:html" --userversion "$(cat version.txt)"
+      - name: Envoyer la démo
+        if: steps.ok.outputs.go == '1' && env.ITCH_DEMO != ''
+        run: ./butler/butler push build-demo "$ITCH_DEMO:html" --userversion "$(cat version.txt)-demo"

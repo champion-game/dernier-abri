@@ -197,7 +197,12 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v152 · 22 oct.';
+const VERSION='v153 · 22 oct.';
+/* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
+   (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
+var DEMO_BUILD=false;
+const DEMO=DEMO_BUILD||/[?&]demo\b/.test(location.search);try{Z.setDemo(DEMO)}catch(e){}
+const STEAM_URL='';// page Steam (liste de souhaits) : à remplir quand elle est en ligne, le bouton apparaît alors
 /* mise à jour automatique : version.txt (à la racine) contient le numéro de la dernière version publiée.
    Si la page chargée est plus ancienne (cache du site ou du téléphone), on la recharge avec une adresse neuve,
    ce qui contourne les deux caches. Une seule tentative par version, pour ne jamais boucler. */

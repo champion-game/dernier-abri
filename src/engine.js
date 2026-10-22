@@ -602,9 +602,14 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   places:{bois:0,ferme:5,station:8,mall:12},
   cards:{}
  };
+ /* démo publique (v153) : réglage activé seulement dans la version démo envoyée sur itch.io (Z.setDemo).
+    Elle s'arrête après la nuit DEMO_N (le Colosse) ; seuls 2 personnages et 2 lieux, et pas de carte épique, légendaire ni de chef. */
+ let DEMO=0;const DEMO_N=10,DEMO_CHARS=['surv','cop'],DEMO_PLACES=['bois','ferme'];
+ const setDemo=v=>{DEMO=v?1:0},isDemo=()=>!!DEMO;
+ const demoOk=t=>!DEMO||!!U[t]&&RAR[t]!=='epic'&&RAR[t]!=='leg'&&!U[t].chief;
  function unlocks(meta){const m=meta||{},b=m.best||0,t=m.total||0;
-  return{chars:Object.keys(UNLOCK.chars).filter(k=>t>=UNLOCK.chars[k]),places:Object.keys(UNLOCK.places).filter(k=>b>=UNLOCK.places[k]),
-   pool:(m.cards&&m.cards.length?m.cards:STARTER_CARDS).filter(k=>U[k])}}
+  return{chars:Object.keys(UNLOCK.chars).filter(k=>t>=UNLOCK.chars[k]&&(!DEMO||DEMO_CHARS.includes(k))),places:Object.keys(UNLOCK.places).filter(k=>b>=UNLOCK.places[k]&&(!DEMO||DEMO_PLACES.includes(k))),
+   pool:(m.cards&&m.cards.length?m.cards:STARTER_CARDS).filter(k=>U[k]&&demoOk(k))}}
  /* ---------- collection et deck (entre les parties) ----------
     La collection : les types de cartes débloqués, pour toujours. On en débloque avec les points de survie gagnés en fin de partie.
     Le deck : préparé avant la partie, 20 à 30 cartes, avec un nombre limité d'exemplaires selon la rareté. */
@@ -614,7 +619,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
     10 ou plus : 2 parmi 3 ; 20 ou plus : les 3. Tirées parmi les cartes achetables pas encore débloquées. */
  const giftCount=n=>n>=20?3:n>=10?2:n>=5?1:0;
  function giftOffer(cards,r){const own=new Set(cards&&cards.length?cards:STARTER_CARDS),R=r||Math.random;
-  const pool=KEYS.filter(k=>!own.has(k)&&U[k].vic==null&&CARD_PRICE[RAR[k]]),out=[];
+  const pool=KEYS.filter(k=>!own.has(k)&&U[k].vic==null&&CARD_PRICE[RAR[k]]&&demoOk(k)),out=[];
   while(out.length<3&&pool.length)out.push(pool.splice(Math.floor(R()*pool.length),1)[0]);return out}
  const STARTER_CARDS='bar car fen sand gun snp kid axe dog cop med lamp trap fire mine wire spike food rep grenade shot patch'.split(' ');
  const STARTER_DECK=['bar','bar','bar','fen','car','gun','gun','gun','snp','axe','axe','dog','med','trap','trap','mine','food','rep','grenade','grenade'];
@@ -709,7 +714,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  // absents du deck, chacun achetable une fois, plus des munitions anti-Colosse (AMMO_MAX au plus en ta possession)
  const STORE_N=5,AMMO_COST=20,STORE_PRICE={com:8,rare:14,epic:22,leg:30};
  const storePrice=t=>STORE_PRICE[RAR[t]||'com'];
- function storeOffer(st,deckTypes,rnd=Math.random){const pool=KEYS.filter(t=>U[t]&&(U[t].cat==='item'||U[t].cat==='react')&&!U[t].antiboss&&!U[t].chief&&U[t].vic==null&&!(deckTypes||[]).includes(t));
+ function storeOffer(st,deckTypes,rnd=Math.random){const pool=KEYS.filter(t=>U[t]&&(U[t].cat==='item'||U[t].cat==='react')&&!U[t].antiboss&&!U[t].chief&&U[t].vic==null&&demoOk(t)&&!(deckTypes||[]).includes(t));
   return shuffle(pool.slice(),rnd).slice(0,STORE_N+(hasR(st,'coffre')?1:0))}
  function buyStore(st,t){const c=t==='shell'?AMMO_COST:storePrice(t);if(st.scrap<c)return false;st.scrap-=c;return true}
  function pay(st,k){const c=shopCost(st,k);if(st.scrap<c)return false;st.scrap-=c;if(k==='heal')st.shelter=Math.min(maxS(st),st.shelter+3);return true}
@@ -1060,6 +1065,6 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
  return{DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
-  DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
+  DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;
