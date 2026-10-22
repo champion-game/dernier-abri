@@ -868,7 +868,8 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
  box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 6px 10px rgba(0,0,0,.55)}
 
 /* v147 : image d'ambiance derrière les menus hors partie (accueil et ses écrans), nouveau logo Barricard */
-#ov.home{background:linear-gradient(rgba(15,10,6,.35),rgba(15,10,6,.55)),#1a1f33 url(../assets/ui/keyart.webp) center 40%/cover no-repeat;backdrop-filter:none}
+#ov.home{background:linear-gradient(rgba(15,10,6,.2),rgba(15,10,6,.45)),#1a1f33 url(../assets/ui/keyart.webp) center 40%/cover no-repeat;backdrop-filter:none}
+@media (max-aspect-ratio:3/4){#ov.home{background-image:linear-gradient(rgba(15,10,6,.2),rgba(15,10,6,.45)),url(../assets/ui/keyart-portrait.webp);background-position:center 30%}}
 #panel.ttl{background:none;box-shadow:none;border:0;outline:0}
 .panel.ttl .logo{width:min(100%,420px);margin:0 auto 8px}
 .panel.ttl p{color:#2b1a0c;background:rgba(239,227,198,.92);border-radius:8px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,.6)}
