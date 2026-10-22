@@ -58,7 +58,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - La boucle d'affichage ne doit jamais s'arrêter sur une erreur : chaque élément est dessiné dans un bloc protégé. Évite les API de canvas récentes sans solution de secours (exemple : `roundRect`, déjà remplacé si absent).
 - Mets à jour `docs/GAME_DESIGN.md` quand une décision de conception change.
 - Fais des commits petits, avec un message clair en français.
-- Après chaque mise en ligne, donne toujours à Amine le lien pour tester la dernière version : https://champion-game.github.io/dernier-abri/ (publié depuis `main`).
+- Après chaque mise en ligne, donne toujours à Amine le lien direct vers la nouvelle version, avec son numéro pour contourner le cache : `https://champion-game.github.io/dernier-abri/?v=NNN` (NNN = numéro de `version.txt`, ex. `?v=151`). Publié depuis `main`.
 - Travaille et pousse toujours directement sur `main`, sans pull request (décision d'Amine) : c'est `main` qui est en ligne. Si la session impose une autre branche, fusionne-la dans `main` à chaque mise en ligne.
 - Avant chaque mise en ligne, lance `node tools/test.js` et corrige tout ce qui échoue :
   - `tools/test-engine.js` (Node, ~3 s) : intégrité des cartes et zombies, pose de chaque carte, règles clés, et 300 nuits aléatoires (jusqu’à la nuit 60, avec mutations et événements) qui ne doivent jamais planter, produire de valeurs absurdes, laisser un zombie dans la forêt ou dépasser 2 s ;
