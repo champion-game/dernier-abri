@@ -9,7 +9,7 @@ function dailyBest(day){try{const d=JSON.parse(localStorage.getItem('abri-defi')
 let DLY=null; // tirage en cours : {day, plan, picks}
 // la horde du jour : une carte par type de zombie, avec le nombre
 // nombre réel de chaque type (pleine lune, mutation et lieu compris)
-const hordeHtml=p=>{const w=Z.waveList(Z.dailyState(p,[],()=>.5));return `<div class="horde">${Z.ZK.filter(k=>w[k]>0).map(k=>`<div class="hz">${zombieFace(k)}<b class="hn">×${w[k]}</b></div>`).join('')}</div>`};
+const hordeHtml=p=>{const w=Z.waveList(Z.dailyState(p,[],()=>.5));return `<div class="dzs">${Z.ZK.filter(k=>w[k]>0).map(k=>`<div class="dzc">${zombieFace(k)}<b class="dzn">×${w[k]}</b></div>`).join('')}</div>`};
 const dailyRules=p=>{const e=Z.EVENTS.find(x=>x.id===p.event)||Z.EVENTS[0];return `<ul class="dmods">${p.event!=='calme'?`<li><b>${e.n}</b> : ${e.d}</li>`:''}${p.mut?_t`<li>Mutation <b>${Z.MUTS[p.mut].n}</b> : ${Z.MUTS[p.mut].d}</li>`:''}<li>${_t('Personnage')} : <b>${Z.CHARS[p.ch].n}</b> · ${_t('Lieu')} : <b>${Z.PLACES[p.pl].n}</b></li></ul>`};
 function dailyScreen(){const day=today(),p=dailyPlan(day),b=dailyBest(day);
  show(_t`<h2 class="pw">Défi du jour</h2><p>Une seule nuit contre <b>la horde du jour</b>, aussi forte qu’une nuit ${p.night}. Tout le monde affronte la même horde et tire les mêmes cartes.</p>

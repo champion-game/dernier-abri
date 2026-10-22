@@ -908,9 +908,9 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:none}
 @media (prefers-reduced-motion:reduce){.gift,.gift .g-back,.gift .g-in,.gift.up .g-face{animation:none!important}}
 /* défi du jour (v151) : la horde du jour, le tirage et le score */
-.horde{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;width:100%;max-width:520px;margin:10px auto}
-.hz{position:relative}
-.hn{position:absolute;top:-6px;right:-4px;background:#8a1c12;color:#fff;border-radius:999px;padding:1px 7px;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+.dzs{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;width:100%;max-width:520px;margin:10px auto}
+.dzc{position:relative}
+.dzn{position:absolute;top:-6px;right:-4px;background:#8a1c12;color:#fff;border-radius:999px;padding:1px 7px;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,.5)}
 .dmods{text-align:left;margin:6px 0;padding-left:18px}
 .dgot{font-size:14px;opacity:.9}
 .dhorde{margin-top:10px;text-align:left}.dhorde summary{cursor:pointer;color:var(--accent,#f2b33d)}
