@@ -248,7 +248,70 @@ function buildGround(B){const g=ground.getContext('2d');g.setTransform(2,0,0,2,0
  PJ={cx:M,cy:M,H:620};trees.sort(B.flora==='desert'?(a,b)=>Math.hypot(b[0]-M,b[1]-M)-Math.hypot(a[0]-M,a[1]-M):(a,b)=>a[1]-b[1]).forEach(([x,y,s])=>ringItem(g,B,x,y,s,r,1))}
  if(B.flora==='snowpine')snowman(g,T*.55,L-T*.5);
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<12;k++){const x=r()*L,y=r()*L;if(!inRing(x,y)||onRoad(x,y,8))continue;r()<.6?rockDeco(g,x,y,4+r()*4,r):logDeco(g,x,y,20+r()*12,6,r()*3)}
+ try{boardEdge(g,B,r)}catch(e){}
 }
+/* v162 : contour du plateau. Clôture ouverte aux 4 routes (le joueur voit par où entrent les zombies),
+   matière selon le terrain, puis cadre en planches clouées en relief (style barricade). Décor seulement. */
+const FRAME_W=17,FRAME_H=7;
+function boardEdge(g,B,r){const M=L/2,GAP=27,a=T,b=L-T;
+ const segs=[];[[a,a,b,a,0],[a,b,b,b,0],[a,a,a,b,1],[b,a,b,b,1]].forEach(([x1,y1,x2,y2,v])=>{if(!v)segs.push([x1,y1,M-GAP,y2],[M+GAP,y1,x2,y2]);else segs.push([x1,y1,x2,M-GAP],[x1,M+GAP,x2,y2])});
+ const along=(s,step,f)=>{const n=Math.max(1,Math.round(Math.hypot(s[2]-s[0],s[3]-s[1])/step));for(let i=0;i<=n;i++)f(s[0]+(s[2]-s[0])*i/n,s[1]+(s[3]-s[1])*i/n,i,n)};
+ const ln=(x1,y1,x2,y2,c,w)=>{g.strokeStyle=c;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke()};
+ const box=(x,y,s,c1,c2,c3)=>{g.fillStyle='rgba(0,0,0,.35)';g.fillRect(x-s/2+2,y-s/2+3,s,s);g.fillStyle=c1;g.fillRect(x-s/2-1,y-s/2-1,s+2,s+2);g.fillStyle=c2;g.fillRect(x-s/2,y-s/2,s,s);g.fillStyle=c3;g.fillRect(x-s/2,y-s/2,s,s*.4)};
+ const gates=[[M-GAP,a,0,-1],[M+GAP,a,0,-1],[M-GAP,b,0,1],[M+GAP,b,0,1],[a,M-GAP,-1,0],[a,M+GAP,-1,0],[b,M-GAP,1,0],[b,M+GAP,1,0]];
+ const cone=(x,y)=>{g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.arc(x+2,y+3,5,0,7);g.fill();[[5.5,'#1a1a1a'],[4.6,'#ff7a1a'],[2.8,'#fff'],[1.4,'#ff7a1a']].forEach(([rr,c])=>{g.fillStyle=c;g.beginPath();g.arc(x,y,rr,0,7);g.fill()})};
+ g.save();g.lineCap='round';const F=B.flora;
+ if(F==='leaf'){// piquets et lisses en bois, portails ouverts vers la forêt
+  segs.forEach(s=>{ln(s[0]+2,s[1]+3,s[2]+2,s[3]+3,'rgba(0,0,0,.3)',8);ln(s[0],s[1],s[2],s[3],'#3a2412',8);ln(s[0],s[1],s[2],s[3],'#9a6a3a',5.5);ln(s[0],s[1]-1.2,s[2],s[3]-1.2,'#c99a62',1.6)});
+  segs.forEach(s=>along(s,18,(x,y)=>box(x,y,9,'#2a1608','#7a4e28','#b07a46')));
+  gates.forEach(([x,y,ox,oy],k)=>{const sg=k%2?1:-1,ex=x+ox*14-(oy?sg:0)*6,ey=y+oy*14-(ox?sg:0)*6;ln(x+2,y+3,ex+2,ey+3,'rgba(0,0,0,.3)',5);ln(x,y,ex,ey,'#3a2412',5);ln(x,y,ex,ey,'#a87440',3);box(x,y,12,'#2a1608','#6a4020','#a8743e')})}
+ else if(F==='snowpine'){// grillage, poteaux coiffés de neige
+  segs.forEach(s=>{ln(s[0]+2,s[1]+3,s[2]+2,s[3]+3,'rgba(30,45,70,.3)',6);ln(s[0],s[1],s[2],s[3],'#2c333b',6);g.save();g.setLineDash([2,2]);ln(s[0],s[1],s[2],s[3],'#8a949e',4);g.restore();ln(s[0],s[1]-1.5,s[2],s[3]-1.5,'rgba(255,255,255,.75)',1.2)});
+  segs.forEach(s=>along(s,22,(x,y)=>{box(x,y,7,'#22282e','#5a646e','#9aa4ae');g.fillStyle='#fff';g.beginPath();g.ellipse(x,y-1,4.5,3,0,0,7);g.fill()}));gates.forEach(([x,y])=>{box(x,y,10,'#22282e','#5a646e','#fff');g.fillStyle='#fff';g.beginPath();g.ellipse(x,y-1,5.5,3.5,0,0,7);g.fill()})}
+ else if(F==='desert'){// barbelés sur piquets
+  segs.forEach(s=>{const v=s[0]===s[2];for(const d of[-2.5,2.5]){const ox=v?d:0,oy=v?0:d;ln(s[0]+ox+1,s[1]+oy+2,s[2]+ox+1,s[3]+oy+2,'rgba(60,30,10,.35)',1.6);ln(s[0]+ox,s[1]+oy,s[2]+ox,s[3]+oy,'#2e2a26',1.6);
+   along(s,5,(x,y)=>{ln(x+ox-2,y+oy-2,x+ox+2,y+oy+2,'#1e1a16',1);ln(x+ox-2,y+oy+2,x+ox+2,y+oy-2,'#1e1a16',1)})}});
+  segs.forEach(s=>along(s,26,(x,y)=>box(x,y,7,'#2a1608','#6a4a28','#9a7a4e')));gates.forEach(([x,y])=>box(x,y,10,'#2a1608','#5a3a20','#9a7a4e'))}
+ else if(F==='urban'){// barrières de chantier, cônes aux routes
+  segs.forEach(s=>along(s,26,(x,y,i,n)=>{if(i<n){const nx=s[0]+(s[2]-s[0])*(i+1)/n,ny=s[1]+(s[3]-s[1])*(i+1)/n;ln(x+2,y+3,nx+2,ny+3,'rgba(0,0,0,.35)',4);ln(x,y,nx,ny,'#2a2e33',4);g.save();g.setLineDash([1.5,1.5]);ln(x,y,nx,ny,'#c8ced4',2.4);g.restore()}
+   g.fillStyle='#222';g.fillRect(x-4,y-3,8,6);g.fillStyle='#8a8f94';g.fillRect(x-3.5,y-2.5,7,5);g.fillStyle='#a8adb2';g.fillRect(x-3.5,y-2.5,7,2)}));
+  gates.forEach(([x,y,ox,oy])=>cone(x+ox*9,y+oy*9))}
+ else{// muret de pierres sèches
+  segs.forEach(s=>along(s,6.5,(x,y)=>{const rx=3.2+r()*1.6,ry=2.6+r()*1.4,c=['#8a8c86','#a2a49c','#74766f'][Math.floor(r()*3)],ro=r();g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x+1.5,y+2.5,rx,ry,0,0,7);g.fill();g.fillStyle='#3c3d39';g.beginPath();g.ellipse(x,y,rx+1,ry+1,ro,0,7);g.fill();g.fillStyle=c;g.beginPath();g.ellipse(x,y,rx,ry,ro,0,7);g.fill();g.fillStyle='rgba(255,255,255,.3)';g.beginPath();g.ellipse(x-1,y-1,rx*.5,ry*.4,0,0,7);g.fill()}))}
+ g.restore();g.save();boardFrame(g,r);g.restore()}
+function boardFrame(g,r){const w=FRAME_W,h=FRAME_H,o=w+h;
+ // ombre du cadre sur le plateau (lumière en haut à gauche)
+ const sh=(a,b,c,d,x,y,ww,hh,k)=>{const gr=g.createLinearGradient(a,b,c,d);gr.addColorStop(0,`rgba(10,5,0,${k})`);gr.addColorStop(1,'rgba(10,5,0,0)');g.fillStyle=gr;g.fillRect(x,y,ww,hh)};
+ sh(0,o,0,o+18,o,o,L-2*o,18,.55);sh(o,0,o+16,0,o,o,16,L-2*o,.5);sh(0,L-o,0,L-o-7,o,L-o-7,L-2*o,7,.3);sh(L-o,0,L-o-7,0,L-o-7,o,7,L-2*o,.3);
+ // épaisseur du bois : faces intérieures, sombres côté haut et gauche
+ const P={n:[[w,w],[L-w,w],[L-w-h,w+h],[w+h,w+h],'#4a2c14',1],w:[[w,w],[w,L-w],[w+h,L-w-h],[w+h,w+h],'#5a361a',0],s:[[w,L-w],[L-w,L-w],[L-w-h,L-w-h],[w+h,L-w-h],'#a87444',1],e:[[L-w,w],[L-w,L-w],[L-w-h,L-w-h],[L-w-h,w+h],'#8e5e34',0]};
+ for(const k in P){const q=P[k];g.beginPath();for(let i=0;i<4;i++)i?g.lineTo(...q[i]):g.moveTo(...q[i]);g.closePath();g.fillStyle=q[4];g.fill();g.save();g.clip();g.strokeStyle='rgba(40,20,5,.35)';g.lineWidth=.6;
+  for(let i=0;i<5;i++){const t=r()*h;g.beginPath();if(q[5]){const y=k==='n'?w+t:L-w-t;g.moveTo(0,y);g.lineTo(L,y)}else{const x=k==='w'?w+t:L-w-t;g.moveTo(x,0);g.lineTo(x,L)}g.stroke()}g.restore();g.strokeStyle='#24140a';g.lineWidth=1;g.stroke()}
+ const plank=(x,y,pw,ph,hor,lift)=>{const c=['#a8743f','#9a6838','#b4824c','#8e5e32'][Math.floor(r()*4)];lift=lift||0;
+  g.fillStyle='rgba(0,0,0,.45)';g.fillRect(x+2+lift,y+3+lift,pw,ph);g.fillStyle='#5a361a';g.fillRect(x+1,y+2,pw,ph);
+  g.fillStyle='#24140a';g.fillRect(x-1,y-1,pw+2,ph+2);g.fillStyle=c;g.fillRect(x,y,pw,ph);
+  const gr=hor?g.createLinearGradient(0,y,0,y+ph):g.createLinearGradient(x,0,x+pw,0);gr.addColorStop(0,'rgba(255,230,180,.35)');gr.addColorStop(.25,'rgba(255,230,180,0)');gr.addColorStop(.8,'rgba(30,15,0,0)');gr.addColorStop(1,'rgba(30,15,0,.35)');g.fillStyle=gr;g.fillRect(x,y,pw,ph);
+  g.strokeStyle='rgba(60,30,10,.45)';g.lineWidth=.7;for(let k=0;k<5;k++){g.beginPath();if(hor){const yy=y+2+r()*(ph-4);g.moveTo(x,yy);g.bezierCurveTo(x+pw*.3,yy+r()*2-1,x+pw*.7,yy+r()*2-1,x+pw,yy)}else{const xx=x+2+r()*(pw-4);g.moveTo(xx,y);g.bezierCurveTo(xx+r()*2-1,y+ph*.3,xx+r()*2-1,y+ph*.7,xx,y+ph)}g.stroke()}
+  for(let k=0;k<2;k++){const kx=x+3+r()*(pw-6),ky=y+3+r()*(ph-6),a=hor?0:1.57;g.fillStyle='rgba(50,25,8,.55)';g.beginPath();g.ellipse(kx,ky,2,1.3,a,0,7);g.fill();g.strokeStyle='rgba(50,25,8,.35)';g.beginPath();g.ellipse(kx,ky,3.4,2.2,a,0,7);g.stroke()}};
+ const nail=(x,y)=>{g.fillStyle='rgba(0,0,0,.4)';g.beginPath();g.arc(x+.8,y+1,1.9,0,7);g.fill();g.fillStyle='#1a1a1a';g.beginPath();g.arc(x,y,1.9,0,7);g.fill();g.fillStyle='#a8aeb4';g.beginPath();g.arc(x-.4,y-.4,1.2,0,7);g.fill();g.fillStyle='rgba(140,60,20,.5)';g.beginPath();g.arc(x+1.4,y+1.6,1.6,0,7);g.fill()};
+ const half=L/2;[0,L-w].forEach(x=>{plank(x,w-2,w,half-w+4,false);plank(x,half+1,w,half-w,false)});
+ [0,L-w].forEach(y=>{plank(-3,y,half+6,w,true);plank(half-2,y,half+5,w,true)});
+ for(let t=24;t<L-20;t+=46){nail(t,w*.3);nail(t+4,w*.72);nail(t,L-w*.3);nail(t+4,L-w*.72);nail(w*.3,t);nail(w*.72,t+4);nail(L-w*.3,t);nail(L-w*.72,t+4)}
+ // planches en travers dans les coins
+ [[w,w,1],[L-w,w,-1],[w,L-w,-1],[L-w,L-w,1]].forEach(([x,y,s])=>{g.save();g.translate(x,y);g.rotate(s*Math.PI/4);plank(-26,-6,52,12,true,3);nail(-18,0);nail(18,0);g.restore()})}
+/* la nuit : brume qui monte de la forêt, et des yeux qui brillent près des routes d'où viendront les zombies */
+let RFOG=null;
+function ringFog(){if(RFOG)return RFOG;const c=document.createElement('canvas');c.width=c.height=L/2;const g=c.getContext('2d'),r=rng(31);g.scale(.5,.5);
+ for(let k=0;k<90;k++){let x=r()*L,y=r()*L;const s=Math.floor(r()*4),d=r()*T*1.15;if(s===0)y=d;else if(s===1)y=L-d;else if(s===2)x=d;else x=L-d;const rr=18+r()*24,gr=g.createRadialGradient(x,y,0,x,y,rr);gr.addColorStop(0,'rgba(170,190,215,.3)');gr.addColorStop(1,'rgba(170,190,215,0)');g.fillStyle=gr;g.fillRect(x-rr,y-rr,rr*2,rr*2)}
+ return RFOG=c}
+function drawEdgeNight(now){if(nightAmt<.05)return;ctx.save();
+ const dx=reduce?0:Math.sin(now/2600)*5,dy=reduce?0:Math.cos(now/3100)*4;ctx.globalAlpha=nightAmt*.75;ctx.drawImage(ringFog(),dx,dy,L,L);
+ if(S.busy&&G.pending&&G.pending.length){const seen=new Set();let n=0;const max=OPT.eco?4:8;
+  for(const p of G.pending){if(seen.has(p.pos))continue;seen.add(p.pos);const c=tc(p.pos),v=c.x<T||c.x>L-T,out=v?Math.sign(c.x-L/2):Math.sign(c.y-L/2);
+   for(let j=0;j<2&&n<max;j++,n++){const h=(p.pos*7+j*13)%10/10,along=(j?1:-1)*(26+h*22),d=30+h*24,e0=out>0?L-d:d,x=v?e0:c.x+along,y=v?c.y+along:e0;
+    const bl=Math.sin(now/(600+h*500)+p.pos+j*2);if(bl>.88)continue;ctx.globalAlpha=nightAmt*(.6+.4*Math.max(0,bl));
+    for(const e of[-3.5,3.5]){const ex=v?x:x+e,ey=v?y+e:y;circ(ex,ey,4.5,'rgba(255,90,20,.35)');circ(ex,ey,2.3,'#ffb21a')}}}}
+ ctx.restore()}
 setBiome('foret');
 const decal=document.createElement('canvas');decal.width=decal.height=L*2;const gx=decal.getContext('2d');gx.scale(2,2);
 function clearDecals(){gx.clearRect(0,0,L,L)}
@@ -900,6 +963,7 @@ function frameInner(now){
  safe(()=>drawFog(now));
  safe(()=>drawSky(now));
  drawDark(now);
+ safe(()=>drawEdgeNight(now));
  safe(()=>drawGlow(now));
  safe(()=>drawAmbient(now));
  if(nightAmt>.05){ctx.save();ctx.shadowColor='#ff2a2a';ctx.shadowBlur=6;for(const[x,y,nx,ny,sz,al]of EYES){ctx.globalAlpha=al*nightAmt;circ(x+nx*2*sz,y+ny*2*sz,1.3*sz,'#ff4a3a');circ(x-nx*2*sz,y-ny*2*sz,1.3*sz,'#ff4a3a')}ctx.restore()}
