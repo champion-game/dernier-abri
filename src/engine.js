@@ -860,13 +860,12 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  /* ---------- la nuit ---------- */
  // nuits de pression : toutes les 5 nuits, +15 % de zombies pour la nuit (v132 : calculé sur le total, avant on arrondissait type par type et le pic montait à +40 %)
  const pressure=n=>n%5===0,PRESSURE=.15;
- /* tutoriel guidé (v163) : à la toute première partie (st.tuto), les nuits 1 à 4 sont calmes et réglées d'avance :
-    la horde n'arrive que par la route du nord, en petit nombre, sans événement. La nuit 5 (nuit rouge) vient des 4 routes,
-    avec une horde allégée (sans Blindé, Cracheur ni Rampant) : le joueur la défend seul, sans guide. */
- const TUTO_N=5,TUTO_W=[{walk:2},{walk:3},{walk:4},{walk:4,run:1},{walk:6,run:2,zdog:1,fat:1,sap:1}];
+ /* tutoriel guidé (v163, revu en v164) : à la toute première partie (st.tuto), les nuits 1 à 4 sont calmes et réglées d'avance
+    (petite horde fixe, par les 4 routes) ; la nuit 5 est une vraie nuit rouge, mais sans événement. */
+ const TUTO_N=5,TUTO_W=[{walk:2},{walk:3},{walk:3},{walk:4}];
  const tutoOn=st=>!!(st&&st.tuto&&st.night<=TUTO_N);
  function waveList(st){const e=st.event.id,w={};
-  if(tutoOn(st)){for(const k of ZK)w[k]=TUTO_W[st.night-1][k]||0;return w}
+  if(tutoOn(st)&&TUTO_W[st.night-1]){for(const k of ZK)w[k]=TUTO_W[st.night-1][k]||0;return w}
   for(const k of ZK){let v=st.fixedW?(st.fixedW[k]||0):waveCount(k,st.night);if(!ZT[k].boss){if(e==='lune')v*=1.5;v=Math.round(v*(1+.15*mc(st,'nombre'))*(respite(st.night,st)?.7:1)*((PLACES[st.place]||{}).count||1)*((TIERS[st.tier]||TIERS.base).count)*(hasR(st,'appat')?1.15:1))}w[k]=v}
   if(pressure(st.night)){const ks=ZK.filter(k=>!ZT[k].boss&&w[k]>0),p=men(st,8)?.4:PRESSURE,tot=ks.reduce((a,k)=>a+w[k],0);let extra=Math.round(tot*p);
    // le surplus se répartit selon la part de chaque type (plus grands restes d'abord)
@@ -887,7 +886,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  function startNight(st,rnd){st.mtN={};st.mtT=0;st.mtR=st.mtR||{};st._su=null;st._zk=null;const w=waveList(st),list=[],big=bigNight(st,w);st.grid.forEach(u=>{if(u){u.nk=0;u.lu=0}});st.noise=null;st.alarmT=0;
   for(const k of ZK)if(!ZT[k].boss)for(let j=0;j<w[k];j++)list.push(k);
   shuffle(list,rnd);
-  const ps=(PLACES[st.place]||{}).sides,edges=tutoOn(st)&&st.night<TUTO_N?EDGES.filter(i=>sideOf(i)===0):st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;
+  const ps=(PLACES[st.place]||{}).sides,edges=st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;
   const per=Math.ceil(list.length/WAVES_N)||1;st.waves=big?WAVES_N:0;st.freeMove=0;st.wave=1;st.wtick=0;
   st.pending=list.map((k,j)=>{const wv=big?1+Math.floor(j/per):1,jj=big?j-(wv-1)*per:j;return{k,wave:wv,at:1+Math.floor(jj*1.3),pos:edges[Math.floor(rnd()*edges.length)]}});
   const bl=[];const L=leadBoss(st.night);if(L&&w[L])for(let j=0;j<w[L];j++)bl.push(L);BOSSES.forEach(k=>{if(k!==L)for(let j=0;j<(w[k]||0);j++)bl.push(k)});

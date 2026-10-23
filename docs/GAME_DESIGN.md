@@ -544,18 +544,29 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 
 ## Le tutoriel
 
-**Tutoriel guidé (v163, idée d’Amine)** : la toute première partie (et « Rejouer la première nuit guidée » dans les règles) suit 4 journées guidées, puis la nuit rouge sans aide. Une bulle dit quoi faire, la carte à toucher et les cases visées brillent ; pendant ces 4 jours, seule la carte demandée se joue et seules les cases qui brillent l’acceptent (le plan reste intact). Un lien « Passer le tutoriel » dans la bulle rend la partie normale.
+**Tutoriel guidé (v163, revu en v164 avec Amine)** : la toute première partie (et « Rejouer la première nuit guidée » dans les règles) suit 4 journées guidées, puis la nuit rouge sans aide. Une bulle dit quoi faire, la carte à toucher et les cases visées brillent ; pendant ces 4 jours, seule l’action demandée est possible et seules les cases qui brillent l’acceptent (le plan reste intact). Les cartes de construction s’utilisent en entier (4 cases). Un lien « Passer le tutoriel » dans la bulle rend la partie normale.
+
+Idée : la maison devient un fortin à une seule porte, au nord. La horde arrive par les 4 routes et fait le tour jusqu’à la porte.
 
 | Jour | Ce que fait le joueur | Ce qu’il apprend |
 |---|---|---|
-| 1 | Café (+2 énergies), Bûcheron au milieu du passage de la route du nord (2ᵉ rangée), Barricade de chaque côté de l’entrée | énergie, DPS au corps à corps, fermer un passage ; les zombies doivent frapper le Bûcheron |
-| 2 | Trousse de secours sur le Bûcheron blessé, Bûcheron décalé d’une case (déplacement gratuit), Policier à sa place face au passage | soin, déplacement, Tank (provocation, recul), bonus du DPS à côté d’un Tank |
-| 3 | Tireur derrière le Policier, Barbelés dans le passage | DPS à distance à couvert, piège qui ralentit |
-| 4 | Infirmière derrière le Policier, Matériel lourd sur le Policier | Soin, Escouade (annonce « Escouade ! »), équipement |
-| 5 | Libre : « nuit rouge, la horde arrive par les 4 routes » | jouer seul |
+| 1 | Bûcheron au nord de la maison ; Barricade sur 4 cases : ouest, est et sud de la maison, et devant le Bûcheron | DPS au corps à corps, murs ; les zombies doivent frapper le Bûcheron (blessé à chaque fois) |
+| 2 | Trousse de secours sur le Bûcheron ; Bûcheron décalé à gauche, barricade de devant déplacée à droite de la porte ; Policier dans la porte | soin, déplacement gratuit, Tank (provocation, recul), bonus du DPS à côté d’un Tank |
+| 3 | Policier avancé d’une case ; Matériel lourd sur lui ; Tireur juste derrière lui ; Barbelés sur les 4 routes (à la sortie de la forêt) | première ligne, équipement, DPS à distance à couvert, piège sur chaque chemin |
+| 4 | Barricade de droite avancée (elle protège le Tireur) ; Tireur décalé à droite ; Infirmière derrière le Policier | Soin, Escouade (annonce « Escouade ! ») |
+| 5 | Libre : vraie nuit rouge | jouer seul |
 
-- Le deck du tutoriel est le deck de départ plus Café, Trousse de secours, Policier, Barbelés et Matériel lourd ; les cartes du jour arrivent toujours en main. À l’aube des nuits 1 à 3, la carte conseillée (Policier, Tireur, Infirmière) fait partie des 3 propositions et brille, avec une phrase qui explique la nuit passée.
-- Règles du moteur (`Z.tutoOn`) : nuits 1 à 4 calmes, par la route du nord seulement, horde fixe (2, 3, 4 Rôdeurs, puis 4 Rôdeurs et 1 Coureur) ; nuit 5 par les 4 routes, horde allégée (6 Rôdeurs, 2 Coureurs, 1 Chien, 1 Gonflé, 1 Sapeur). Pas d’événement de l’aube pendant le tutoriel, et pas de trait « +PV » pour les survivants (le Bûcheron doit être blessé la nuit 1). Un test du moteur vérifie ce scénario sur 40 parties.
+```
+Jour 4 (M maison, # barricade) :
+. . P # .
+. B I T .
+. # M # .
+. . # . .
+```
+
+- Le deck du tutoriel est le deck de départ plus Trousse de secours, Policier, Barbelés et Matériel lourd. Chaque jour, la main a le nombre normal de cartes : les cartes du jour y remplacent des cartes au hasard. À l’aube des nuits 1 à 3, la carte conseillée (Policier, Tireur, Infirmière) fait partie des 3 propositions et brille, avec une phrase qui explique la nuit passée.
+- Règles du moteur (`Z.tutoOn`) : nuits 1 à 4 calmes, par les 4 routes, horde fixe (2, 3, 3, puis 4 Rôdeurs) ; nuit 5 = vraie nuit rouge, sans événement. Pas d’événement de l’aube pendant le tutoriel, et pas de trait « +PV » pour les survivants (le Bûcheron doit être blessé la nuit 1).
+- Simulation (100 parties) : Bûcheron blessé la nuit 1 à chaque fois, une unité du tutoriel tombe dans 3 % des parties, escouade formée dans 98 %, maison tombée à la nuit rouge dans 2 %. Le Matériel lourd est au jour 3 (et non 4) : sans lui, le Policier avancé mourait 1 fois sur 5. Un test du moteur vérifie ce scénario sur 40 parties.
 - Hors tutoriel aussi, la première escouade formée dans une partie est annoncée en grand (« Escouade ! +1 dégât (ou +1 soin) »).
 
 ## Le son
