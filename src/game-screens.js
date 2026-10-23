@@ -148,6 +148,8 @@ function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
   <label><span>Effets sonores <b>${pc(OPT.sfx)} %</b></span><input type="range" min="0" max="100" step="5" value="${pc(OPT.sfx)}" data-o="sfx"></label>
   <label><span>Musique et ambiance <b>${pc(OPT.mus)} %</b></span><input type="range" min="0" max="100" step="5" value="${pc(OPT.mus)}" data-o="mus"></label>
   <label>Vitesse de la nuit au départ<select data-o="speed">${[1,2,4].map(v=>`<option value="${v}" ${OPT.speed==v?'selected':''}>× ${v}</option>`).join('')}</select></label>
+  ${!$('#fs').hidden?_t`<label class="chk"><input type="checkbox" data-o="fs" ${document.fullscreenElement||document.webkitFullscreenElement?'checked':''}> Plein écran</label>`:''}
+  ${matchMedia('(pointer: fine)').matches?_t`<label>Curseur de la souris<select data-o="cur">${[['a','Survivant'],['b','Rouille'],['c','Zombie'],['sys','Système']].map(([v,n])=>`<option value="${v}" ${(OPT.cur||'a')===v?'selected':''}>${_t(n)}</option>`).join('')}</select></label>`:''}
   <label class="chk"><input type="checkbox" data-o="shake" ${OPT.shake?'checked':''}> Secousses de l’écran</label>
   ${navigator.vibrate?_t`<label class="chk"><input type="checkbox" data-o="vib" ${OPT.vib?'checked':''}> Vibrations du téléphone</label>`:''}
   ${(typeof META!=='undefined'&&META.wins>0)?_t`<label>Dos des cartes<select data-o="back"><option value="" ${OPT.back!=='gold'?'selected':''}>Classique</option><option value="gold" ${OPT.back==='gold'?'selected':''}>Doré (victoire)</option></select></label><label>Abri<select data-o="shelter"><option value="" ${OPT.shelter!=='fort'?'selected':''}>Maison</option><option value="fort" ${OPT.shelter==='fort'?'selected':''}>Maison fortifiée (victoire)</option></select></label>`:''}
@@ -356,9 +358,10 @@ const ACT={
 panel.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f==='q'){CF.q=e.target.value;cfApply()}});
 panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f;if(!f||f==='q')return;CF[f]=e.target.value;(panel.querySelector('[data-a=dkreset]')?deckEditor:collectionScreen)(true)});
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
+['fullscreenchange','webkitfullscreenchange'].forEach(n=>document.addEventListener(n,()=>{const c=panel.querySelector('[data-o=fs]');if(c)c.checked=!!(document.fullscreenElement||document.webkitFullscreenElement)}));
 panel.addEventListener('input',e=>{const el=e.target.closest('[data-o]');if(!el)return;const k=el.dataset.o;
  if(k==='sfx'||k==='mus'){OPT[k]=+el.value/100;const b=el.parentElement.querySelector('b');if(b)b.textContent=el.value+(LANG==='fr'?' %':'%')}
- else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'||k==='cb'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang'){OPT.lang=el.value;saveOpt();location.reload();return}else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
+ else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'||k==='cb'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang'){OPT.lang=el.value;saveOpt();location.reload();return}else if(k==='fs'){toggleFs(el.checked);return}else if(k==='cur')OPT.cur=el.value;else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
  saveOpt();applyOpt();if(k==='sfx')SFX.play('ui')});
 $('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else{const g=guideStep();if(g&&!g.go)return;night()}});
 // tutoriel : « Passer le tutoriel » dans la bulle

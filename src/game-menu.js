@@ -84,7 +84,7 @@ addEventListener('click',e=>{if(!zoomEl.contains(e.target)&&(!zoomEl.hidden||per
 // clic droit sur la carte : annule la sélection ; sur une unité, affiche sa fiche
 cv.addEventListener('contextmenu',e=>{e.preventDefault();if(!ov.hidden)return;const i=cellAt(e);S.sel=null;S.bsel=null;S.drag=null;S.moveFrom=null;S.inspect=i!=null&&i>=0&&G.grid[i]?i:null;render()});
 // v139 : raccourcis clavier (ordinateur)
-const KEYS_HELP=[[_t('Espace'),_t('Affronter la nuit · changer la vitesse · vague suivante')],[_t('1 à 9'),_t('Choisir une carte de la main')],[_t('Échap'),_t('Annuler la sélection · pause et menu')],[_t('Ctrl + Z'),_t('Annuler la dernière action du jour')],['M',_t('Couper ou remettre le son')],['D',_t('Tableau des combats')],[_t('Clic droit'),_t('Grande carte (sur n’importe quelle carte) · annuler la sélection (plateau)')]];
+const KEYS_HELP=[[_t('Espace'),_t('Affronter la nuit · changer la vitesse · vague suivante')],[_t('1 à 9'),_t('Choisir une carte de la main')],[_t('Échap'),_t('Annuler la sélection · pause et menu')],[_t('Ctrl + Z'),_t('Annuler la dernière action du jour')],['M',_t('Couper ou remettre le son')],['F',_t('Plein écran')],['D',_t('Tableau des combats')],[_t('Clic droit'),_t('Grande carte (sur n’importe quelle carte) · annuler la sélection (plateau)')]];
 addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName))return;if(e.altKey||e.metaKey)return;
  const k=e.key,open=!ov.hidden;
  if(!zoomEl.hidden){if(k==='Escape'||k===' '){e.preventDefault();zoomClose()}return}
@@ -93,6 +93,7 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if((e.ctrlKey&&(k==='z'||k==='Z'))){if(!open){e.preventDefault();doUndo()}return}
  if(e.ctrlKey)return;
  if(k==='m'||k==='M'){muteBtn.click();return}
+ if(k==='f'||k==='F'){toggleFs();return}
  if(open)return;
  if(k===' '||k==='Enter'){e.preventDefault();const g=$('#go');if(!g.disabled&&!g.hidden)g.click();return}
  if(k==='d'||k==='D'){$('#mtb').click();return}

@@ -154,12 +154,12 @@ function updatePreview(){const land=LANDTALL.matches;if(!WIDE.matches&&!land)ret
 $('#hand').addEventListener('pointerover',e=>{const b=e.target.closest('.card');if(!b||e.pointerType!=='mouse')return;S.hover=b.dataset.b!==undefined?(G.bench[+b.dataset.b]||{}).t:b.dataset.u!==undefined?S.used[+b.dataset.u]:S.hand[+b.dataset.k];updatePreview()});
 $('#hand').addEventListener('pointerleave',()=>{if(S.hover){S.hover=null;updatePreview()}});
 $('#hand').addEventListener('pointerdown',e=>{const b=e.target.closest('.card');if(b)LASTRECT=b.getBoundingClientRect();if(!b||b.disabled||S.busy||b.dataset.b!==undefined)return;HD={b,x:e.clientX,y:e.clientY,on:false,g:null}});
-addEventListener('pointermove',e=>{if(!HD)return;if(!HD.on&&Math.hypot(e.clientX-HD.x,e.clientY-HD.y)>12){HD.on=true;HD.g=HD.b.cloneNode(true);HD.g.classList.add('ghost');document.body.appendChild(HD.g);
+addEventListener('pointermove',e=>{if(!HD)return;if(!HD.on&&Math.hypot(e.clientX-HD.x,e.clientY-HD.y)>12){HD.on=true;HD.g=HD.b.cloneNode(true);HD.g.classList.add('ghost');document.body.appendChild(HD.g);document.documentElement.classList.add('dragging');
   const k=HD.b.dataset.u!==undefined?-1-(+HD.b.dataset.u):+HD.b.dataset.k;S.sel=k;S.moveFrom=null;S.inspect=null;render()}
  if(HD.on){HD.g.style.left=e.clientX+'px';HD.g.style.top=e.clientY+'px'}});
-addEventListener('pointerup',e=>{if(!HD)return;const d=HD;HD=null;if(!d.on)return;d.g.remove();const r=cv.getBoundingClientRect();
+addEventListener('pointerup',e=>{document.documentElement.classList.remove('dragging');if(!HD)return;const d=HD;HD=null;if(!d.on)return;d.g.remove();const r=cv.getBoundingClientRect();
  if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)tapCell(cellAt(e));else render()});
-addEventListener('pointercancel',()=>{if(HD&&HD.g)HD.g.remove();HD=null});
+addEventListener('pointercancel',()=>{document.documentElement.classList.remove('dragging');if(HD&&HD.g)HD.g.remove();HD=null});
 $('#round').addEventListener('click',()=>{if(!S.busy&&ov.hidden)runInfo()});
 $('#event').addEventListener('click',()=>{if(S.busy||!ov.hidden)return;const w=Z.waveList(G),fz=Z.frenzy(G),dm=Z.dmgBonus(G.night);SFX.play('ui');
  show(_t`<h2 class="pw">Nuit ${G.night}</h2>${G.event.p?`<p class="poem">${G.event.p}</p>`:''}<p><b>${G.event.n}</b> : ${G.event.d}.</p>${Z.pressure(G.night)?_t`<p>${ii('drop')} <b>Nuit rouge</b> : 15 % de zombies en plus, puis une mutation instable et une relique à l’aube.</p>`:''}${Z.respite(G.night,G)?_t`<p>${ii('moon')} <b>Nuit de répit</b> : 30 % de zombies en moins.</p>`:''}${Z.bigNight(G,w)?_t`<p>${ii('skull')} <b>Nuit de boss : ${bossName(G.night)}</b>. La horde arrive en 2 vagues, le boss dans la seconde. ${Z.ZT[Z.leadBoss(G.night)||'boss'].info.replace(/^[^:]*: /,'')}.</p>`:''}${fz?_t`<p>${ii('drop')} <b>Frénésie meurtrière</b>  : +${fz} % de PV pour tous les zombies (+10 % de plus chaque nuit).</p>`:''}
@@ -174,6 +174,12 @@ cv.addEventListener('pointerdown',e=>{const t=lineCard(),i=cellAt(e);if(!t||selC
 cv.addEventListener('pointermove',e=>{if(!S.drag)return;const t=lineCard();if(!t){S.drag=null;return}const c=Z.lineCells(G,t,S.drag.a,cellAt(e),selReuse());if(c.length!==S.drag.cells.length){S.drag.cells=c;SFX.play('ui')}});
 cv.addEventListener('pointerup',e=>{if(!S.drag)return;const cells=S.drag.cells;S.drag=null;if(cells.length>1){S.skipClick=true;placeLineUI(cells)}});
 cv.addEventListener('pointercancel',()=>{S.drag=null});
+// curseur de la souris sur le plateau : clic possible, pose interdite, glisser
+function curAt(i){if(!G||S.dawnWait)return'';if(S.drag)return'g';
+ if(S.busy){if(S.sel!==null&&S.sel>=0&&Z.U[S.hand[S.sel]].react)return'c';if(!(S.pause&&S.sel===null))return''}
+ if(S.bsel!=null)return'c';if(S.sel===null)return S.moveFrom!==null||G.grid[i]?'c':'';
+ const t=selCard();return t&&selCost()<=(G.energy??0)&&Z.canPlace(G,t,i)?'c':'i'}
+cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;let k='';try{k=curAt(cellAt(e))}catch(x){}if(cv.dataset.cu!==k)cv.dataset.cu=k});
 // une carte de construction posée pour la 1ʳᵉ fois passe de la main aux cartes « Encore » et reste choisie
 function useBuild(t){if(S.sel>=0){S.hand.splice(S.sel,1);S.used.push(t);S.sel=-S.used.length}}
 // carte à tracer dont toutes les cases sont posées : elle quitte la main (défausse)

@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v164 · 23 oct.';
+const VERSION='v165 · 23 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -214,9 +214,16 @@ const STEAM_URL='';// page Steam (liste de souhaits) : à remplir quand elle est
 try{if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}catch(e){}
 // slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
-const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',lang:LANG};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
+const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',cur:'a',lang:LANG};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
-function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang}
+function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang;applyCur()}
+// curseurs PC (souris seulement) : a Survivant, b Rouille, c Zombie, sys = curseur du système. Point actif [x,y] de chaque image 32 px.
+const CUR_HS={a:{n:[1,1],c:[12,0],i:[1,2],g:[16,16]},b:{n:[1,1],c:[13,0],i:[1,1],g:[16,16]},c:{n:[1,1],c:[11,0],i:[1,1],g:[16,16]}};
+function applyCur(){try{const r=document.documentElement,s=OPT.cur||'a',on=CUR_HS[s]&&matchMedia('(pointer: fine)').matches;r.classList.toggle('cur',!!on);if(!on)return;
+ const N={n:'normal',c:'clic',i:'interdit',g:'glisser'},F={n:'default',c:'pointer',i:'not-allowed',g:'grabbing'};
+ for(const k in N){const h=CUR_HS[s][k];r.style.setProperty('--cu-'+k,`url("${new URL(`assets/cursors/${s}-${N[k]}.png`,location.href).href}") ${h[0]} ${h[1]}, ${F[k]}`)}}catch(e){}}
+// plein écran (option et touche F) : passe par le bouton #fs (game-menu.js)
+function toggleFs(on){const b=document.getElementById('fs'),cur=!!(document.fullscreenElement||document.webkitFullscreenElement);if(b&&!b.hidden&&(on===undefined||on!==cur))b.click()}
 const TICK=650;let SPEED=1,slowT=0;const tickMs=()=>TICK/SPEED*(performance.now()<slowT?3:1);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));

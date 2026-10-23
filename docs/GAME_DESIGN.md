@@ -913,3 +913,5 @@ Jour 4 (M maison, # barricade) :
 - Écran « Récompense » : les 3 cartes arrivent face cachée (dos de carte, sans halo) ; on touche pour retourner (animation 3D), le halo dit la rareté (commune vert, rare bleu, épique violet, légendaire orange) ; on retouche pour prendre, avec une fenêtre de confirmation.
 - Le tirage est enregistré dès la fin de partie (`META.gift`) : fermer le jeu ne permet pas de retirer, l’écran revient au prochain passage par l’accueil.
 - Prix : commune 20, rare 45, épique 90, chef 130 (total pour tout acheter : environ 5 600 points au lieu de 4 300).
+
+**v165** : curseurs PC. Avec une souris, le jeu affiche ses propres curseurs (32 px, `assets/cursors/`) : normal, clic possible, pose interdite (carte sélectionnée qui ne peut pas aller sur cette case) et glisser. Trois styles au choix dans les options (Survivant par défaut, Rouille, Zombie) ou le curseur du système. Options : case « Plein écran » (même effet que le bouton du haut) et touche F.
