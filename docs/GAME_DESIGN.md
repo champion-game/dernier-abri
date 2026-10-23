@@ -493,6 +493,7 @@ L'équilibrage est vérifié par simulation (`node tools/simulate.js`). Un bot p
 
 - Vue de dessus, ambiance forêt la nuit, maison au toit rouge au centre.
 - Le jour : carte lisible, emplacements visibles quand une carte est sélectionnée.
+- **Plateau lumineux** (v157, inspiré d’une maquette d’Amine) : herbe claire en damier avec un léger relief par case, routes de terre beige bordées d’herbe, forêt de feuillus en relief (ombres, rochers, troncs couchés) qui projette son ombre sur le bord du terrain, fleurs et cailloux discrets loin du centre des cases pour ne pas gêner la lecture. Tout reste dessiné en code.
 - La nuit : obscurité avec des sources de lumière (maison, projecteurs, flammes, tirs). Les zombies ont des yeux rouges lumineux pour rester visibles.
 - Retours visuels : traînées de balles, éclairs de tir, coups de hache, explosions, taches de sang qui restent au sol, tremblement d'écran quand la maison est touchée.
 - Unités sur un cercle de couleur selon leur rôle : bois (défense), jaune (tireur), rouge-orangé (corps à corps), bleu (soutien), rouge (piège), violet clair (objet).
