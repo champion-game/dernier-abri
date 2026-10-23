@@ -3,170 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Barricard – test des boutons</title>
+<title>Barricard – planches clouées</title>
 <style>
 @font-face{font-family:'Special Elite';src:url(assets/fonts/special-elite.woff2) format('woff2')}
 @font-face{font-family:'Atkinson Hyperlegible';font-weight:400;src:url(assets/fonts/atkinson-400.woff2) format('woff2')}
 @font-face{font-family:'Atkinson Hyperlegible';font-weight:700;src:url(assets/fonts/atkinson-700.woff2) format('woff2')}
-:root{--bg:#0d0f0c;--panel:#161a14;--line:#2b3326;--ink:#ebe7da;--muted:#8f9684;--lantern:#f2b33d;--blood:#e5484d;
- --f-disp:'Special Elite','Courier New',monospace;--f-body:'Atkinson Hyperlegible',system-ui,sans-serif}
+:root{--bg:#0d0f0c;--panel:#161a14;--line:#2b3326;--ink:#ebe7da;--muted:#8f9684;--lantern:#f2b33d;
+ --f-disp:'Special Elite','Courier New',monospace;--f-body:'Atkinson Hyperlegible',system-ui,sans-serif;
+ --wood:url(assets/ui/wood.webp);--nail:url(assets/ui/nail.png)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 var(--f-body)}
 main{max-width:460px;margin:0 auto;padding:16px}
 h1{font-family:var(--f-disp);color:var(--lantern);font-size:22px;margin:4px 0}
 p.intro{color:var(--muted);margin:0 0 16px}
-section{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+section{margin-bottom:22px}
 h2{font-family:var(--f-disp);font-size:18px;margin:0 0 2px}
 h2 b{color:var(--lantern);font-weight:400}
-section>p{color:var(--muted);margin:0 0 14px;font-size:13px}
-.row{display:flex;gap:10px;margin-top:12px}
-.row>*{flex:1}
+section>p{color:var(--muted);margin:0 0 10px;font-size:13px}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;-webkit-tap-highlight-color:transparent}
-button span{display:flex;align-items:center;justify-content:center;gap:8px}
-button svg{width:20px;height:20px;flex:none}
-.big{width:100%}
-.big span{font-size:19px}
-.lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 -6px}
-.lbl:first-of-type{margin-top:0}
-@keyframes breathe{0%,100%{filter:drop-shadow(0 0 0 rgba(242,179,61,0))}50%{filter:drop-shadow(0 0 10px rgba(242,179,61,.7))}}
+svg{width:18px;height:18px;flex:none}
+
+/* Maquette : un bout d'accueil + un bout d'écran de jeu */
+.home{border-radius:12px 12px 0 0;padding:14px 14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;
+ background:linear-gradient(rgba(15,10,6,.35),rgba(15,10,6,.6)),url(assets/ui/keyart-portrait.webp) center 78%/cover}
+.home .p{grid-column:1/-1}
+.game{border-radius:0 0 12px 12px;padding:10px 12px 14px;display:flex;flex-direction:column;gap:10px;
+ background:linear-gradient(rgba(25,12,5,.5),rgba(25,12,5,.5)),var(--wood) 0 0/512px 384px,#3e2614;border-top:3px solid #2a170b}
+.tb{display:flex;gap:8px;align-items:center}
+.tb .day{margin-left:auto;font-family:var(--f-disp);color:var(--lantern);font-size:16px}
+
+.p,.s,.i{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .06s,box-shadow .06s,filter .06s}
+.p{padding:14px 18px;font-family:var(--f-disp);font-size:19px;letter-spacing:.03em}
+.s{padding:10px 12px;font-size:15px}
+.i{width:36px;height:32px}
+.p:active,.s:active,.i:active{transform:translateY(3px)}
+@keyframes breathe{0%,100%{filter:drop-shadow(0 0 0 rgba(242,179,61,0))}50%{filter:drop-shadow(0 0 10px rgba(242,179,61,.65))}}
 .glow{animation:breathe 2.4s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.glow{animation:none}}
 
-/* 1. Planche clouée */
-.w1{position:relative;padding:13px 18px;font-family:var(--f-disp);font-size:16px;color:#2a1707;
- border-radius:7px 11px 6px 10px/10px 6px 11px 7px;
- background:
-  radial-gradient(circle at 9px 9px,#d9d2c4 0 2px,#5a5248 2.5px 3.2px,transparent 3.6px),
-  radial-gradient(circle at calc(100% - 9px) 9px,#d9d2c4 0 2px,#5a5248 2.5px 3.2px,transparent 3.6px),
-  radial-gradient(circle at 9px calc(100% - 9px),#d9d2c4 0 2px,#5a5248 2.5px 3.2px,transparent 3.6px),
-  radial-gradient(circle at calc(100% - 9px) calc(100% - 9px),#d9d2c4 0 2px,#5a5248 2.5px 3.2px,transparent 3.6px),
-  repeating-linear-gradient(178deg,rgba(60,30,8,.0) 0 5px,rgba(60,30,8,.18) 5px 6px,rgba(60,30,8,0) 6px 11px),
-  linear-gradient(#d8a564,#b9803f);
- box-shadow:inset 0 1px 0 rgba(255,230,190,.5),inset 0 -2px 0 rgba(70,35,10,.35),0 4px 0 #4a2a10,0 6px 10px rgba(0,0,0,.45);
- text-shadow:0 1px 0 rgba(255,225,180,.45);transition:transform .06s,box-shadow .06s}
-.w1:active{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,230,190,.5),inset 0 -2px 0 rgba(70,35,10,.35),0 1px 0 #4a2a10,0 2px 4px rgba(0,0,0,.45)}
-.w1.sec{color:#e9c99a;text-shadow:none;background:
-  radial-gradient(circle at 9px 50%,#bdb5a6 0 2px,transparent 2.6px),
-  radial-gradient(circle at calc(100% - 9px) 50%,#bdb5a6 0 2px,transparent 2.6px),
-  repeating-linear-gradient(178deg,rgba(0,0,0,0) 0 5px,rgba(0,0,0,.25) 5px 6px,rgba(0,0,0,0) 6px 11px),
-  linear-gradient(#5a3a1e,#43290f);box-shadow:inset 0 0 0 2px #8a5a2e,0 4px 0 #24150a,0 6px 10px rgba(0,0,0,.45)}
-.w1.sec:active{box-shadow:inset 0 0 0 2px #8a5a2e,0 1px 0 #24150a}
-.w1.low{background:none;box-shadow:none;color:#d8a564;text-shadow:none;text-decoration:underline wavy rgba(216,165,100,.5);text-underline-offset:5px;padding:10px}
+/* clous : 4 coins pour le principal, 2 côtés pour le secondaire, 1 pour les icônes */
+.n4{--nails:var(--nail) left 7px top 7px/12px 12px no-repeat,var(--nail) right 7px top 7px/12px 12px no-repeat,var(--nail) left 7px bottom 7px/12px 12px no-repeat,var(--nail) right 7px bottom 7px/12px 12px no-repeat}
+.n2{--nails:var(--nail) left 6px center/10px 10px no-repeat,var(--nail) right 6px center/10px 10px no-repeat}
+.n1{--nails:var(--nail) center 3px/8px 8px no-repeat}
+.n0{--nails:linear-gradient(transparent,transparent)}
 
-/* 2. Ruban adhésif */
-.w2{position:relative;padding:13px 18px;font-family:var(--f-disp);font-size:16px;color:#1d1a14;
- background:linear-gradient(170deg,#efe4c6,#d9caa3);border-radius:2px 5px 3px 6px;transform:rotate(-1deg);
- box-shadow:2px 3px 0 rgba(0,0,0,.55);transition:transform .06s,box-shadow .06s}
-.w2::before{content:"";position:absolute;top:-8px;left:-10px;width:44px;height:16px;transform:rotate(-32deg);
- background:rgba(190,195,185,.72);box-shadow:0 1px 2px rgba(0,0,0,.3);
- clip-path:polygon(0 8%,8% 0,16% 10%,24% 0,100% 0,100% 100%,0 100%)}
-.w2::after{content:"";position:absolute;bottom:-7px;right:-9px;width:40px;height:15px;transform:rotate(-28deg);
- background:rgba(190,195,185,.72);clip-path:polygon(0 0,100% 0,92% 100%,84% 88%,76% 100%,0 100%)}
-.w2:active{transform:rotate(-1deg) translate(2px,3px);box-shadow:0 0 0 rgba(0,0,0,.55)}
-.w2.prim{background:linear-gradient(170deg,#f6c95a,#e0a028)}
-.w2.prim span{text-decoration:underline 2px rgba(40,20,0,.5);text-underline-offset:4px}
-.w2.sec{background:rgba(239,228,198,.06);color:#efe4c6;border:2px dashed #b9ac8a;box-shadow:none;transform:rotate(.8deg)}
-.w2.sec::after{display:none}
-.w2.sec:active{transform:rotate(.8deg) translate(1px,2px)}
-.w2.low{background:none;box-shadow:none;transform:none;color:#d9caa3;text-decoration:underline;text-underline-offset:4px;padding:10px}
-.w2.low::before,.w2.low::after{display:none}
+/* A. Planche claire */
+.va .p,.va .s,.va .i{color:#2a1707;text-shadow:0 1px 0 rgba(255,225,180,.5);border-radius:6px 10px 5px 9px/9px 5px 10px 6px;
+ background:var(--nails),linear-gradient(rgba(240,190,120,.55),rgba(200,140,70,.5)),var(--wood) 0 0/512px 384px,#b9803f;
+ box-shadow:inset 0 1px 0 rgba(255,230,190,.55),inset 0 -2px 0 rgba(70,35,10,.4),0 4px 0 #4a2a10,0 6px 10px rgba(0,0,0,.5)}
+.va .s{color:#2a1707}
+.va :active{box-shadow:inset 0 1px 0 rgba(255,230,190,.55),0 1px 0 #4a2a10,0 2px 4px rgba(0,0,0,.5)!important}
 
-/* 3. Plaque de métal */
-.w3{position:relative;padding:4px;border-radius:6px;font-family:var(--f-disp);font-size:16px;
- background:repeating-linear-gradient(-45deg,#f2b33d 0 9px,#1c1b18 9px 18px);
- box-shadow:0 4px 0 #111,0 6px 10px rgba(0,0,0,.5);transition:transform .06s,box-shadow .06s}
-.w3 span{padding:10px 18px;border-radius:3px;color:#f1ede2;text-shadow:0 -1px 0 #000;
- background:
-  radial-gradient(circle at 7px 7px,#c9c9c4 0 1.6px,#3a3a38 2.2px,transparent 2.8px),
-  radial-gradient(circle at calc(100% - 7px) 7px,#c9c9c4 0 1.6px,#3a3a38 2.2px,transparent 2.8px),
-  radial-gradient(circle at 7px calc(100% - 7px),#c9c9c4 0 1.6px,#3a3a38 2.2px,transparent 2.8px),
-  radial-gradient(circle at calc(100% - 7px) calc(100% - 7px),#c9c9c4 0 1.6px,#3a3a38 2.2px,transparent 2.8px),
-  radial-gradient(ellipse at 80% 90%,rgba(150,70,20,.55),transparent 45%),
-  radial-gradient(ellipse at 10% 20%,rgba(130,60,20,.4),transparent 35%),
-  linear-gradient(#7d817f,#4f5352);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.5)}
-.w3:active{transform:translateY(3px);box-shadow:0 1px 0 #111}
-.w3.sec{background:#2c2e2c;padding:3px}
-.w3.sec span{background:
-  radial-gradient(circle at 7px 50%,#a9a9a4 0 1.6px,transparent 2.4px),
-  radial-gradient(circle at calc(100% - 7px) 50%,#a9a9a4 0 1.6px,transparent 2.4px),
-  linear-gradient(#4a4e4d,#363a39);color:#cfd3cf}
-.w3.low{background:none;box-shadow:none;padding:10px}
-.w3.low span{background:none;box-shadow:none;padding:0;color:#a9b3bd;text-decoration:underline dashed;text-underline-offset:4px}
+/* B. Planche sombre (comme le cadre du plateau), texte lanterne */
+.vb .p,.vb .s,.vb .i{color:var(--lantern);text-shadow:0 2px 0 #1a0d04;border-radius:5px 8px 4px 7px/7px 4px 8px 5px;
+ background:var(--nails),linear-gradient(rgba(30,14,4,.35),rgba(30,14,4,.55)),var(--wood) 0 -128px/512px 384px,#5e3b20;
+ box-shadow:inset 0 0 0 2px rgba(242,179,61,.0),inset 0 1px 0 rgba(255,200,140,.25),inset 0 -2px 0 rgba(0,0,0,.45),0 4px 0 #1e1006,0 6px 10px rgba(0,0,0,.55)}
+.vb .p{box-shadow:inset 0 0 0 2px #c58a2a,inset 0 1px 0 rgba(255,200,140,.25),0 4px 0 #1e1006,0 6px 10px rgba(0,0,0,.55)}
+.vb .s{color:#f1dfb8}
+.vb .i{color:#e8dcc2}
+.vb :active{box-shadow:inset 0 0 0 2px #c58a2a,0 1px 0 #1e1006!important}
 
-/* 4. Tampon */
-.w4{position:relative;padding:11px 18px;font-family:var(--f-disp);font-size:16px;text-transform:uppercase;letter-spacing:.12em;
- color:var(--blood);border:3px solid currentColor;border-radius:4px;transform:rotate(-2deg);
- box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px currentColor;
- text-shadow:.5px .5px 0 rgba(229,72,77,.5),-.5px 0 1px rgba(229,72,77,.4);
- -webkit-mask:repeating-radial-gradient(circle at 30% 40%,#000 0 2px,rgba(0,0,0,.82) 2px 3px);
- mask:repeating-radial-gradient(circle at 30% 40%,#000 0 2px,rgba(0,0,0,.82) 2px 3px);transition:transform .08s}
-.w4:active{transform:rotate(-2deg) scale(.95)}
-.w4.prim{color:#1d1404;background:var(--lantern);border-color:var(--lantern);box-shadow:inset 0 0 0 3px var(--lantern),inset 0 0 0 4px #1d1404;text-shadow:none}
-.w4.sec{color:var(--lantern);border-style:dashed;box-shadow:none;transform:rotate(1.5deg);text-shadow:none}
-.w4.sec:active{transform:rotate(1.5deg) scale(.95)}
-.w4.low{border:0;box-shadow:none;transform:none;color:var(--muted);letter-spacing:.06em;text-decoration:underline;text-underline-offset:4px;padding:10px;-webkit-mask:none;mask:none}
+/* C. Planche peinte en jaune, peinture écaillée */
+.vc .p,.vc .s,.vc .i{color:#2a1a05;border-radius:5px 9px 4px 8px/8px 4px 9px 5px;
+ background:var(--nails),
+  radial-gradient(ellipse 22px 7px at 88% 82%,rgba(94,59,32,.9) 60%,transparent 64%),
+  radial-gradient(ellipse 12px 5px at 14% 22%,rgba(94,59,32,.85) 60%,transparent 64%),
+  radial-gradient(ellipse 8px 4px at 62% 12%,rgba(94,59,32,.75) 60%,transparent 64%),
+  linear-gradient(rgba(242,184,62,.86),rgba(222,156,38,.9)),var(--wood) 0 0/512px 384px,#b9803f;
+ box-shadow:inset 0 1px 0 rgba(255,240,190,.55),inset 0 -2px 0 rgba(110,60,10,.4),0 4px 0 #5a3410,0 6px 10px rgba(0,0,0,.5)}
+.vc .s,.vc .i{background:var(--nails),
+  radial-gradient(ellipse 10px 4px at 80% 78%,rgba(94,59,32,.8) 60%,transparent 64%),
+  linear-gradient(rgba(230,214,177,.88),rgba(210,190,150,.9)),var(--wood) 0 0/512px 384px,#b9803f;color:#2b1a0c}
+.vc :active{box-shadow:inset 0 1px 0 rgba(255,240,190,.55),0 1px 0 #5a3410!important}
+
+/* D. Deux lattes clouées */
+.vd .p,.vd .s,.vd .i{color:#2a1707;text-shadow:0 1px 0 rgba(255,225,180,.45);border-radius:4px;
+ background:var(--nails),
+  linear-gradient(transparent calc(50% - 1px),#3a200c calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)) left top/20% 100% no-repeat,linear-gradient(transparent calc(50% - 1px),#3a200c calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)) right top/20% 100% no-repeat,
+  linear-gradient(rgba(240,190,120,.5),rgba(190,130,60,.5) 50%,rgba(230,180,110,.5) 50%,rgba(185,125,55,.55)),
+  var(--wood) 0 0/512px 384px,#b9803f;
+ box-shadow:inset 0 1px 0 rgba(255,230,190,.5),inset 0 -2px 0 rgba(70,35,10,.4),0 4px 0 #4a2a10,0 6px 10px rgba(0,0,0,.5)}
+.vd .p{padding:18px;clip-path:polygon(0 3%,3% 0,97% 2%,100% 0,99% 50%,100% 100%,2% 98%,0 100%)}
+.vd .p::after{content:"";position:absolute;left:12%;right:12%;top:50%;height:14px;margin-top:-7px;transform:rotate(-3deg);z-index:-1}
+.vd .s,.vd .i{background:var(--nails),linear-gradient(rgba(240,190,120,.5),rgba(190,130,60,.55)),var(--wood) 0 0/512px 384px,#b9803f}
+.vd :active{box-shadow:inset 0 1px 0 rgba(255,230,190,.5),0 1px 0 #4a2a10!important}
+
+/* E. Pochoir peint sur planche sombre */
+.ve .p,.ve .s,.ve .i{border-radius:4px 7px 3px 6px;
+ background:var(--nails),linear-gradient(rgba(30,14,4,.25),rgba(30,14,4,.5)),var(--wood) 0 -200px/512px 384px,#5e3b20;
+ box-shadow:inset 0 1px 0 rgba(255,200,140,.2),inset 0 -2px 0 rgba(0,0,0,.45),0 4px 0 #1e1006,0 6px 10px rgba(0,0,0,.55)}
+.ve .p{color:#f2b33d;text-transform:uppercase;letter-spacing:.14em;font-size:18px;
+ text-shadow:1px 0 0 rgba(242,179,61,.5),0 0 1px #f2b33d,0 2px 0 rgba(0,0,0,.6)}
+.ve .p::before{content:"";position:absolute;inset:6px 22px;border:2px dashed rgba(242,179,61,.55);border-radius:3px;pointer-events:none}
+.ve .s{color:#efe3c6;text-transform:uppercase;letter-spacing:.08em;font-family:var(--f-disp);font-size:14px}
+.ve .i{color:#efe3c6}
+.ve :active{box-shadow:0 1px 0 #1e1006!important}
 
 /* Actuel */
-.cur{border-radius:10px;padding:14px;background:var(--lantern);color:#1d1404;font-family:var(--f-disp);font-size:18px}
-.cur.sec{background:var(--line);color:var(--ink);padding:10px}
+.vz .p{border-radius:10px;background:var(--lantern);color:#1d1404}
+.vz .s{border-radius:8px;background:#efe3c6;color:#2b1a0c}
+.vz .i{border:1px solid var(--line);border-radius:8px;color:var(--muted)}
+.vz .p:active,.vz .s:active,.vz .i:active{transform:none}
 </style>
 </head>
 <body>
 <main>
-<h1>Test des boutons</h1>
-<p class="intro">Appuie sur les boutons pour sentir l’effet d’enfoncement et le clic. Le bouton principal « respire » doucement.</p>
+<h1>Planches clouées</h1>
+<p class="intro">5 variantes, posées sur un bout d’accueil et sur la barre du bas du jeu. Elles utilisent la vraie texture bois et le vrai clou du cadre du plateau. Appuie pour sentir l’enfoncement.</p>
 
 <svg width="0" height="0" style="position:absolute">
  <symbol id="skull" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C7 2 3.5 5.6 3.5 10.2c0 2.6 1.2 4.5 3 5.6V19c0 .8.7 1.5 1.5 1.5h1v-2h1.5v2h3v-2H15v2h1c.8 0 1.5-.7 1.5-1.5v-3.2c1.8-1.1 3-3 3-5.6C20.5 5.6 17 2 12 2Zm-3.5 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></symbol>
- <symbol id="arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15m-6-6 6 6-6 6"/></symbol>
- <symbol id="deck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="7" y="3" width="12" height="16" rx="2"/><path d="M5 6.5v12A2.5 2.5 0 0 0 7.5 21H15"/></g></symbol>
+ <symbol id="moon" viewBox="0 0 24 24"><path fill="currentColor" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
+ <symbol id="pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
+ <symbol id="snd" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6"/></symbol>
+ <symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></symbol>
 </svg>
 
-<section>
- <h2><b>1.</b> Planche clouée</h2>
- <p>Bois, clous, s’enfonce au toucher. Mon conseil : colle au nom Barricard.</p>
- <div class="lbl">Principal</div>
- <div class="row"><button class="w1 big glow"><span><svg><use href="#skull"/></svg>Combattre</span></button></div>
- <div class="lbl">Secondaire · discret</div>
- <div class="row"><button class="w1 sec"><span><svg><use href="#deck"/></svg>Mon deck</span></button><button class="w1 low"><span>Passer</span></button></div>
-</section>
+<template id="mock">
+ <div class="home">
+  <button class="p n4 glow"><svg><use href="#skull"/></svg>Jouer</button>
+  <button class="s n2">Règles</button>
+  <button class="s n2">Défi du jour</button>
+  <button class="s n2">Bestiaire</button>
+  <button class="s n2"><svg><use href="#gear"/></svg>Options</button>
+ </div>
+ <div class="game">
+  <div class="tb"><button class="i n1"><svg><use href="#pause"/></svg></button><button class="i n1"><svg><use href="#snd"/></svg></button><span class="day">Jour 1</span></div>
+  <button class="p n4 glow"><svg><use href="#moon"/></svg>Affronter la nuit</button>
+ </div>
+</template>
 
-<section>
- <h2><b>2.</b> Ruban adhésif</h2>
- <p>Papier scotché à la va-vite, comme un mot sur une porte.</p>
- <div class="lbl">Principal</div>
- <div class="row"><button class="w2 prim big glow"><span><svg><use href="#skull"/></svg>Combattre</span></button></div>
- <div class="lbl">Secondaire · discret</div>
- <div class="row"><button class="w2 sec"><span><svg><use href="#deck"/></svg>Mon deck</span></button><button class="w2 low"><span>Passer</span></button></div>
-</section>
+<section class="va"><h2><b>A.</b> Planche claire</h2><p>Bois clair, texte sombre. Celle de la page précédente, avec la vraie texture.</p><div class="m"></div></section>
+<section class="vb"><h2><b>B.</b> Planche sombre</h2><p>Même bois que le cadre du plateau, texte jaune lanterne. La plus fondue dans le jeu.</p><div class="m"></div></section>
+<section class="vc"><h2><b>C.</b> Planche peinte</h2><p>Garde le jaune actuel, mais peint sur du bois et écaillé. Le changement le plus doux.</p><div class="m"></div></section>
+<section class="vd"><h2><b>D.</b> Deux lattes</h2><p>Le bouton principal est fait de deux planches clouées, bords un peu coupés à la scie.</p><div class="m"></div></section>
+<section class="ve"><h2><b>E.</b> Pochoir</h2><p>Bois sombre, texte peint au pochoir en majuscules, cadre pointillé.</p><div class="m"></div></section>
+<section class="vz"><h2>Actuel</h2><p>Pour comparer.</p><div class="m"></div></section>
 
-<section>
- <h2><b>3.</b> Plaque de métal</h2>
- <p>Métal rouillé, rivets, bandes de chantier sur le principal.</p>
- <div class="lbl">Principal</div>
- <div class="row"><button class="w3 big glow"><span><svg><use href="#skull"/></svg>Combattre</span></button></div>
- <div class="lbl">Secondaire · discret</div>
- <div class="row"><button class="w3 sec"><span><svg><use href="#deck"/></svg>Mon deck</span></button><button class="w3 low"><span>Passer</span></button></div>
-</section>
-
-<section>
- <h2><b>4.</b> Tampon</h2>
- <p>Lettres de tampon un peu baveuses, penché. Le plus sobre.</p>
- <div class="lbl">Principal</div>
- <div class="row"><button class="w4 prim big glow"><span><svg><use href="#skull"/></svg>Combattre</span></button></div>
- <div class="lbl">Secondaire · discret</div>
- <div class="row"><button class="w4 sec"><span><svg><use href="#deck"/></svg>Mon deck</span></button><button class="w4 low"><span>Passer</span></button></div>
-</section>
-
-<section>
- <h2>Actuel</h2>
- <p>Pour comparer.</p>
- <div class="row"><button class="cur big"><span>Combattre</span></button></div>
- <div class="row"><button class="cur sec"><span>Mon deck</span></button><button class="cur sec"><span>Passer</span></button></div>
-</section>
 </main>
 <script>
-// Petit « toc » au toucher, comme dans le jeu
+const t=document.getElementById('mock');
+document.querySelectorAll('.m').forEach(m=>m.appendChild(t.content.cloneNode(true)));
 let ac;
 document.addEventListener('pointerdown',e=>{
  if(!e.target.closest('button'))return;
