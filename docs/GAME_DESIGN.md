@@ -311,6 +311,7 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 ## Habillage des menus (v141)
 
 - **Panneaux en bois** (option A choisie par Amine) : planches, grain, clous aux coins, texte clair. Les petites fiches posées dessus (reliques, règles, statistiques) restent en papier.
+- **Boutons en planche clouée, texte au pochoir** (v155, style E choisi par Amine) : bois sombre ; bouton principal à 4 clous, texte jaune en majuscules et cadre pointillé ; secondaire à 2 clous, texte crème ; icônes à 1 clou. Un bouton désactivé a le bois terne, la planche enfoncée et le texte effacé ; un bouton verrouillé (contenu du jeu complet dans la démo) a une latte clouée en travers, derrière le texte pour qu’il reste lisible.
 - **Boutons en relief** : bombés avec une épaisseur dessous, ils s’enfoncent au clic. Un choix sélectionné reste enfoncé et devient doré (pas de coche). Un choix bloqué est plat et creux.
 - **Pas d’emoji** : uniquement les symboles dessinés du jeu.
 - **Collection** : halo vert autour des cartes acquises, halo noir et carte grisée pour celles pas encore acquises.

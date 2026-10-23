@@ -922,3 +922,38 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
 /* v154 : tout ce qui est verrouillé reste lisible, simplement grisé (demande d'Amine) */
 .panel .tab:disabled,.tab:disabled{opacity:.85;background:linear-gradient(#f0dcb0,#d4b37a);color:#5a4630;box-shadow:0 3px 0 #2a170b;filter:grayscale(.8) brightness(.8)}
 .panel .char:disabled,.char:disabled{opacity:.85;background:linear-gradient(#f0dcb0,#d4b37a);color:#5a4630;filter:grayscale(.8) brightness(.8)}
+
+/* ===== v155 : boutons en planche clouée, texte au pochoir (style E choisi par Amine) =====
+   principal (.go) : 4 clous, texte jaune en majuscules, cadre pointillé
+   secondaire (.skip, vitesse) : 2 clous, texte crème ; icônes (.mute) : 1 clou
+   grisé 1 (désactivé) : bois terne, planche enfoncée, texte effacé
+   grisé 2 (verrouillé, .lockb) : une latte clouée en travers, derrière le texte */
+.go,.skip,.mute{--nl:url(../assets/ui/nail.png);--wd:linear-gradient(rgba(30,14,4,.25),rgba(30,14,4,.5)),url(../assets/ui/wood.webp) 0 -200px/512px 384px,#5e3b20;
+ --sh:inset 0 1px 0 rgba(255,200,140,.2),inset 0 -2px 0 rgba(0,0,0,.45),0 4px 0 #1e1006,0 6px 10px rgba(0,0,0,.55)}
+.go,.panel .go{--pl:var(--nl) left 7px top 7px/12px 12px no-repeat,var(--nl) right 7px top 7px/12px 12px no-repeat,var(--nl) left 7px bottom 7px/12px 12px no-repeat,var(--nl) right 7px bottom 7px/12px 12px no-repeat,var(--wd)}
+.skip,.panel .skip,.go.speed,.panel .go.speed{--pl:var(--nl) left 6px center/10px 10px no-repeat,var(--nl) right 6px center/10px 10px no-repeat,var(--wd)}
+.go,.panel .go,.skip,.panel .skip{position:relative;isolation:isolate;border:0;border-radius:4px 7px 3px 6px;background:var(--pl);box-shadow:var(--sh);
+ font-family:var(--f-disp);text-transform:uppercase;transform:none;transition:transform .06s,box-shadow .06s,filter .1s}
+.go,.panel .go{color:#f2b33d;letter-spacing:.12em;text-shadow:1px 0 0 rgba(242,179,61,.5),0 0 1px #f2b33d,0 2px 0 rgba(0,0,0,.6);padding-inline:26px}
+.go:not(.speed)::before{content:"";position:absolute;inset:6px 22px;border:2px dashed rgba(242,179,61,.55);border-radius:3px;pointer-events:none}
+.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip{color:#efe3c6;letter-spacing:.05em;text-shadow:0 2px 0 rgba(0,0,0,.55);padding-inline:20px}
+.bgrid .skip{padding-inline:18px}
+.panel .evob{color:#e2c6ff}
+.go:not(:disabled):active,.panel .go:not(:disabled):active,.skip:not(:disabled):active,.panel .skip:not(:disabled):active{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,200,140,.2),0 1px 0 #1e1006,0 2px 4px rgba(0,0,0,.5)}
+/* grisé 1 */
+.go:disabled,.panel .go:disabled,.skip:disabled,.panel .skip:disabled{opacity:1;cursor:default;background:var(--pl);transform:translateY(3px);filter:grayscale(.85) brightness(.7);
+ box-shadow:inset 0 2px 4px rgba(0,0,0,.6),0 1px 0 #1e1006;color:rgba(239,227,198,.45);text-shadow:none}
+.go:not(.speed):disabled,.panel .go:not(.speed):disabled{color:rgba(242,179,61,.45)}
+.go:disabled::before{border-color:rgba(242,179,61,.18)}
+/* grisé 2 */
+.skip.lockb:disabled,.panel button.skip.lockb:disabled{opacity:1;overflow:hidden;transform:none;filter:saturate(.5) brightness(.8);box-shadow:var(--sh);color:rgba(239,227,198,.8);text-shadow:0 2px 0 rgba(0,0,0,.6)}
+.skip.lockb:disabled::after{content:"";position:absolute;z-index:-1;left:-10%;right:-10%;top:50%;height:13px;margin-top:-6px;transform:rotate(-7deg);
+ background:var(--nl) 22% center/9px 9px no-repeat,var(--nl) 78% center/9px 9px no-repeat,linear-gradient(rgba(210,160,100,.45),rgba(150,95,45,.5)),url(../assets/ui/wood.webp) 0 0/512px 384px,#8a5a2e;box-shadow:0 2px 3px rgba(0,0,0,.6)}
+/* icônes du haut */
+.mute{border:0;border-radius:4px 6px 3px 5px;color:#efe3c6;background:var(--nl) center 2px/7px 7px no-repeat,var(--wd);
+ box-shadow:inset 0 1px 0 rgba(255,200,140,.2),0 3px 0 #1e1006,0 4px 6px rgba(0,0,0,.5);transition:transform .06s,box-shadow .06s}
+.mute svg{margin-top:3px}
+.mute:not(:disabled):active{transform:translateY(2px);box-shadow:0 1px 0 #1e1006}
+.mute:disabled{filter:grayscale(.85) brightness(.7);box-shadow:inset 0 2px 4px rgba(0,0,0,.6);cursor:default}
+/* v155 : icône des bulles d’aide à taille de texte (elle couvrait l’écran) */
+.hint .ic{width:18px;height:18px;vertical-align:-4px;color:#f2c23d}
