@@ -696,9 +696,11 @@ function drawWires(){const W=i=>!!(G.grid[i]&&G.grid[i].t==='wire'),seen=new Set
   g.forEach(k=>{const ls=nb(k);let corner=ls.length!==2;if(!corner){const[r0,c0]=Z.rc(k),[r1,c1]=Z.rc(ls[0]),[r2,c2]=Z.rc(ls[1]);corner=(r1-r0)!==(r0-r2)||(c1-c0)!==(c0-c2)}if(corner){const p=tc(k);wirePost(p.x,p.y)}})})}
 // pendant la pause de la nuit du Colosse : sa route en rouge (il fonce tout droit de sa route vers l'abri)
 // première nuit guidée : la case à toucher pulse en doré
-function drawGuide(now){const g=guideStep();if(!g||g.cell==null||G.grid[g.cell])return;const p=tc(g.cell),k=.5+.5*Math.sin(now/220);
- ctx.save();ctx.strokeStyle=`rgba(255,210,90,${.55+.45*k})`;ctx.lineWidth=4;ctx.shadowColor='#ffd25a';ctx.shadowBlur=12+10*k;ctx.strokeRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);
- ctx.fillStyle=`rgba(255,210,90,${.12+.12*k})`;ctx.fillRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);ctx.restore()}
+// tutoriel : les cases à toucher brillent (g.on : la case porte déjà l'unité visée, ex. soin ou équipement)
+function drawGuide(now){const g=guideStep();if(!g||!g.cells)return;const k=.5+.5*Math.sin(now/220);
+ for(const i of g.cells){if(G.grid[i]&&!g.on)continue;const p=tc(i);
+  ctx.save();ctx.strokeStyle=`rgba(255,210,90,${.55+.45*k})`;ctx.lineWidth=4;ctx.shadowColor='#ffd25a';ctx.shadowBlur=12+10*k;ctx.strokeRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);
+  if(!G.grid[i]&&i!==Z.C){ctx.fillStyle=`rgba(255,210,90,${.12+.12*k})`;ctx.fillRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8)}ctx.restore()}}
 function drawBossRoute(now){if(!S.pause||!G.pending)return;const bp=G.pending.filter(p=>(Z.ZT[p.k]||{}).boss),ps=[...new Set(bp.map(p=>p.pos))];if(!ps.length)return;
  const k=.55+.35*Math.sin(now/220);ctx.save();ctx.lineCap='round';
  ps.forEach(pos=>{const a=tc(pos),b=CEN,ang=Math.atan2(b.y-a.y,b.x-a.x),ex=b.x-Math.cos(ang)*T*.75,ey=b.y-Math.sin(ang)*T*.75;

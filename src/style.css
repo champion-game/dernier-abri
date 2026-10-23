@@ -534,6 +534,8 @@ ul.rules .ink{width:1.1em;height:1.1em}
 @keyframes guidep{0%,100%{filter:drop-shadow(0 0 3px rgba(255,210,90,.6))}50%{filter:drop-shadow(0 0 12px rgba(255,210,90,1))}}
 .hand .card.guide{animation:guidep 1.1s ease-in-out infinite;transform:translateY(-6px)}
 .go.guide{animation:guidep 1.1s ease-in-out infinite}
+.pick.guide{outline:3px solid #ffd25a;outline-offset:2px;animation:guidep 1.1s ease-in-out infinite}
+.tip .tskip{display:block;margin:6px auto 0;background:none;border:0;color:var(--muted);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:4px 8px}
 @media (prefers-reduced-motion:reduce){.hand .card.guide,.go.guide{animation:none;outline:3px solid #ffd25a}}
 
 /* v115 : mode économie (petits téléphones) : pas de flous ni d'ombres portées calculées, pas d'animations décoratives */

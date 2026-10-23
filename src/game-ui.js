@@ -98,10 +98,10 @@ function render(){
  const hand=$('#hand'),nH=S.hand.length+new Set(S.used||[]).size;hand.style.setProperty('--n',Math.max(4,Math.min(WIDE.matches?9:5,nH)));
  // en largeur sur grand écran : autant de colonnes que la largeur du panneau le permet (cartes de 100 à 118 px)
  if(LANDTALL.matches&&innerHeight>=640){const cols=Math.max(3,Math.min(Math.max(nH,4),Math.floor((hand.clientWidth+6)/106)));hand.style.gridTemplateColumns=`repeat(${cols},minmax(0,118px))`}else hand.style.gridTemplateColumns='';
- const gcard=(guideStep()||{}).card;hand.innerHTML=S.hand.map((t,k)=>`<button type="button" class="card${S.sel===k?' sel':''}${gcard===t&&S.hand.indexOf(t)===k?' guide':''}" data-k="${k}" ${(S.busy?!Z.U[t].react:Z.U[t].react)||!Z.canPay(G,t)?'disabled':''}>${cardFace(t,{mini:1,v:Z.U[t].react&&!S.busy?_t('Nuit'):''})}</button>`).join('')
+ const gst=guideStep()||{},gcard=gst.card,glock=t=>!!guideStep()&&gst.lock!==t;hand.innerHTML=S.hand.map((t,k)=>`<button type="button" class="card${S.sel===k?' sel':''}${gcard===t&&S.hand.indexOf(t)===k?' guide':''}" data-k="${k}" ${(S.busy?!Z.U[t].react:Z.U[t].react)||!Z.canPay(G,t)||glock(t)?'disabled':''}>${cardFace(t,{mini:1,v:Z.U[t].react&&!S.busy?_t('Nuit'):''})}</button>`).join('')
   +[...new Set(S.used||[])].map(t=>{const k=S.used.indexOf(t),n=S.used.filter(x=>x===t).length,on=S.sel!==null&&S.sel<0&&S.used[-1-S.sel]===t;
    const tr=Z.isTrace(t),ch=tr?Z.charges(G,t,true):0;
-   return `<button type="button" class="card reuse${on?' sel':''}" data-u="${k}" ${S.busy||Z.buildCost(G,t,true)>(G.energy??0)||(tr&&!ch)?'disabled':''}>${cardFace(t,{mini:1,cost:Z.buildCost(G,t,true),tag:tr?_t`Encore ${ch} case${ch>1?'s':''}`:_t('Encore')+(n>1?' ×'+n:'')})}</button>`}).join('')
+   return `<button type="button" class="card reuse${on?' sel':''}${gcard===t?' guide':''}" data-u="${k}" ${S.busy||Z.buildCost(G,t,true)>(G.energy??0)||(tr&&!ch)||glock(t)?'disabled':''}>${cardFace(t,{mini:1,cost:Z.buildCost(G,t,true),tag:tr?_t`Encore ${ch} case${ch>1?'s':''}`:_t('Encore')+(n>1?' ×'+n:'')})}</button>`}).join('')
   ;try{pilesHtml();animPiles()}catch(e){}
  const fc=Z.famCounts(G),fl=Z.famLevels(G);const nU=Z.unitCount(G),cap=Z.unitCap(G);$('#fams').innerHTML=_t`<span class="fam cap${nU>=cap?' full':''}" title="Unités sur le terrain (murs et pièges illimités)">${ink('cap')} ${nU}/${cap}</span>`+Object.keys(Z.FAM).filter(f=>fc[f]&&seen('fam1')).map(f=>`<span class="fam l${fl[f]}" title="${Z.FAM[f].n}">${ink(f)} ${fc[f]}${fl[f]?' '+'★'.repeat(fl[f]):'/'+Z.FAM[f].lv[0]}</span>`).join('')+tagsHtml();
  const info=$('#info');info.className='info';
@@ -119,10 +119,10 @@ function render(){
  if(canUndo())info.insertAdjacentHTML('beforeend',_t` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`);
  // bouton de tir : un seul élément, mis à jour sans être recréé (sinon le toucher peut se perdre pendant la nuit)
  updatePreview();checkHints();
- const tip=$('#tip'),gs=guideStep();if(gs&&ov.hidden){tip.hidden=false;tip.textContent=gs.txt}else if(TUTO<4&&ov.hidden&&(S.busy?TUTO===3:TUTO<3)&&!GUIDE){tip.hidden=false;tip.textContent=TIPS[TUTO]}else tip.hidden=true;
+ const tip=$('#tip'),gs=guideStep(),tt=tutoTip();if(tt&&ov.hidden){tip.hidden=false;const sk=gs?_t('Passer le tutoriel'):'';if(tip.dataset.t!==tt+sk){tip.dataset.t=tt+sk;tip.textContent=tt;if(sk)tip.insertAdjacentHTML('beforeend',` <button type="button" class="tskip" data-a="tskip">${sk}</button>`)}}else if(TUTO<4&&ov.hidden&&(S.busy?TUTO===3:TUTO<3)&&!tutoDay()){tip.hidden=false;tip.dataset.t='';tip.textContent=TIPS[TUTO]}else tip.hidden=true;
  $('#go').classList.toggle('guide',!!(gs&&gs.go&&ov.hidden));
  $('#info').hidden=!!(gs&&ov.hidden);
- const go=$('#go');go.disabled=false;go.textContent=S.pause?_t`Lancer la vague ${S.pause+1} sur ${G.waves}`:S.busy?_t`Vitesse ×${SPEED} (toucher pour changer)`:_t('Affronter la nuit');go.classList.toggle('speed',S.busy&&!S.pause);
+ const go=$('#go');go.disabled=!!S.dawnWait;go.textContent=S.pause?_t`Lancer la vague ${S.pause+1} sur ${G.waves}`:S.busy?_t`Vitesse ×${SPEED} (toucher pour changer)`:_t('Affronter la nuit');go.classList.toggle('speed',S.busy&&!S.pause);
 }
 $('#hand').addEventListener('click',e=>{const b=e.target.closest('.card');if(!b||b.disabled)return;SFX.play('ui');LASTRECT=b.getBoundingClientRect();
  if(b.dataset.b!==undefined){const k=+b.dataset.b;S.bsel=S.bsel===k?null:k;S.sel=null;S.moveFrom=null;S.inspect=null;render();return}S.bsel=null;
@@ -180,7 +180,7 @@ function useBuild(t){if(S.sel>=0){S.hand.splice(S.sel,1);S.used.push(t);S.sel=-S
 function spentTrace(t){if(!Z.isTrace(t)||Z.charges(G,t,true)>0)return;const n=S.used.filter(x=>x===t).length;S.used=S.used.filter(x=>x!==t);for(let k=0;k<n;k++)S.discard.push(t);S.sel=null}
 // statistiques : nombre de fois où chaque carte est jouée (toutes parties confondues)
 function countPlay(t){if(G.daily)return;const c=META.played||(META.played={});c[t]=(c[t]||0)+1;saveMeta(META)}
-function placeLineUI(cells){const t=selCard(),re=selReuse();if(Z.lineCost(G,t,cells.length,re)>G.energy)return;if(!re)countPlay(t);tuto(1);useBuild(t);Z.placeLine(G,t,cells,R,re);spentTrace(t);syncBoard();S.moveFrom=null;S.inspect=null;
+function placeLineUI(cells){const t=selCard(),re=selReuse(),gd=guideStep();if(gd&&!cells.every(i=>guideOk(gd,i)))return;if(Z.lineCost(G,t,cells.length,re)>G.energy)return;if(!re)countPlay(t);tuto(1);useBuild(t);Z.placeLine(G,t,cells,R,re);spentTrace(t);syncBoard();S.moveFrom=null;S.inspect=null;
  cells.forEach(j=>{facing[j]=null;const p=tc(j);addFX({type:'ring',x:p.x,y:p.y,r:30,c:'#f2b33d',dur:350})});const q=tc(cells[cells.length-1]);floatTxt(q.x,q.y-14,_t`${cells.length} cases`+(Z.charges(G,t,true)>0?_t` · encore ${Z.charges(G,t,true)}`:''),'#f2b33d');SFX.play('place');save();render()}
 // fiche d'une unité : prénom, métier, trait, victimes, PV
 function unitLine(u){const tr=Z.TRAITS[u.trait],D=Z.U[u.t],lv=(u.lvA||0)+(u.lvD||0),k=u.kills||0,i=G.grid.indexOf(u),ro=Z.roleOf(u.t);
@@ -243,12 +243,17 @@ function doUndo(){if(!canUndo())return;const u=UNDO.pop();try{const g=JSON.parse
   RS=u.rs;Object.assign(S,s2,{sel:null,moveFrom:null,inspect:null,bsel:null});if(u.t&&META.played&&META.played[u.t]>0){META.played[u.t]--;saveMeta(META)}
   S.board=G.grid.filter(Boolean).concat(G.bench||[]);POS=new Map();G.grid.forEach((x,j)=>{if(x)POS.set(x,j)});DISC0=-1;facing.fill(null);
   SFX.play('ui');save()}catch(e){UNDO=[]}render()}
+// la première escouade de la partie (Tank, Soin et DPS côte à côte) : grosse annonce, une seule fois
+function squadFx(){if(!G||G.sqDone||S.busy)return;const j=G.grid.findIndex((u,k)=>u&&Z.squad(G,k));if(j<0)return;G.sqDone=1;const p=tc(j);
+ floatTxt(p.x,p.y-30,_t('Escouade ! +1 dégât (ou +1 soin)'),'#ffd25a',20);addFX({type:'ring',x:p.x,y:p.y,r:70,c:'#ffd25a',dur:700});SFX.play('lvl');vib(60);save()}
 function tapCell(i){
+ if(S.dawnWait)return;// fin de nuit, l'aube arrive : plus rien ne se pose
+ const gd=guideStep();if(gd&&!guideOk(gd,i))return;
  if(S.busy&&!(S.pause&&S.sel===null)){if(S.sel!==null&&S.sel>=0&&Z.U[S.hand[S.sel]].react)playReact(S.sel,i);return}
  if(S.bsel!=null&&!S.busy){const k=S.bsel;S.bsel=null;snapUndo();const mg=Z.placeBench(G,k,i);if(!mg)UNDO.pop();if(mg){facing[i]=null;syncBoard();mergeFx(mg);S.inspect=typeof mg==='object'?i:null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#9ee08a',dur:350});SFX.play('place');save()}render();return}
  if(S.sel===null){
   // déplacement d'une carte posée : on la touche, puis on touche une case libre
-  if(S.moveFrom!==null){const a=S.moveFrom;S.moveFrom=null;S.inspect=null;if(!S.busy)snapUndo();const mv=Z.move(G,a,i);if(!mv&&!S.busy)UNDO.pop();if(mv){facing[i]=facing[a];facing[a]=null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#7cc7ff',dur:350});syncBoard();mergeFx(mv);if(typeof mv==='object')S.inspect=i;if(!S.busy)save()}render();return}
+  if(S.moveFrom!==null){const a=S.moveFrom;S.moveFrom=null;S.inspect=null;if(!S.busy)snapUndo();const mv=Z.move(G,a,i);if(!mv&&!S.busy)UNDO.pop();if(mv){facing[i]=facing[a];facing[a]=null;const p=tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#7cc7ff',dur:350});syncBoard();mergeFx(mv);if(typeof mv==='object')S.inspect=i;if(!S.busy)save()}render();squadFx();return}
   S.inspect=null;if(G.grid[i])S.moveFrom=i;render();
   return}
  const t=selCard(),D=Z.U[t],re=selReuse(),build=Z.isTrace(t);
@@ -263,7 +268,7 @@ function tapCell(i){
  if(t==='kit')floatTxt(p.x,p.y,_t('Soigné'),'#9fd86b');
  if(t==='coffee')floatTxt(CEN.x,CEN.y,_t('+2 énergie'),'#f2b33d');
  if(t==='flare')floatTxt(CEN.x,CEN.y,_t('Fusée !'),'#ff8a5a');
- mergeFx(mg);save();render();achCheck();
+ mergeFx(mg);save();render();achCheck();squadFx();
  if(G.drawNow||D.peek)UNDO=[];
  if(G.drawNow){const n=G.drawNow;G.drawNow=0;drawCards(Math.min(n,Math.max(0,Z.HAND_MAX-S.hand.length)));floatTxt(CEN.x,CEN.y-30,_t('Largage : +')+n+_t(' cartes'),'#9ee08a');save();render()}
  if(D.peek)peekScreen();
@@ -280,11 +285,11 @@ function wavePause(n){return new Promise(res=>{S.pause=n;S.moveFrom=null;S.inspe
  floatTxt(CEN.x,CEN.y-40,_t`Vague ${n} repoussée !`,'#9fd86b',18);render()})}
 function resumeWave(){if(!S.pause)return;S.pause=0;S.moveFrom=null;S.inspect=null;Z.nextWave(G);const f=S.resume;S.resume=null;vib([150,80,150]);floatTxt(CEN.x,CEN.y-40,_t`Vague ${G.wave} sur ${G.waves} : ${bossName(G.night)} arrive !`,'#ff6b6b',18);SFX.play('roar');render();f&&f()}
 async function night(){
- if(S.busy)return;S.busy=true;SPEED=OPT.speed||1;S.sel=null;S.drag=null;S.discard.push(...S.used);S.used=[];
+ if(S.busy||S.dawnWait)return;S.busy=true;SPEED=OPT.speed||1;S.sel=null;S.drag=null;S.discard.push(...S.used);S.used=[];
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
  UNDO=[];
- if(GUIDE){GUIDE=false;if(TUTO<3){TUTO=3;try{localStorage.setItem('abri-tuto',3)}catch(e){}}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;nightBanner();Z.startNight(G,R);render();
+ if(tutoDay()===Z.TUTO_N){TUTO=5;try{localStorage.setItem('abri-tuto',5)}catch(e){}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;nightBanner();Z.startNight(G,R);render();
  // v125 : météo sonore (pluie, orage) et corne de la nuit rouge
  try{SFX.setWeather(G.event.id==='pluie'?'amb-rain':G.event.id==='coupure'?'amb-storm':null);if(Z.pressure(G.night))setTimeout(()=>SFX.play('horn'),300)}catch(e){}
  await nwait(900);if(run!==RUN)return;
@@ -300,7 +305,7 @@ async function night(){
  }while(!r.done);
  await nwait(700);if(run!==RUN)return;
  try{SFX.setWeather(null)}catch(e){}
- const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;dawnT=performance.now();KC.on=0;S.busy=false;render();await nwait(DAWN);if(run!==RUN)return;
+ const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;dawnT=performance.now();KC.on=0;S.busy=false;S.dawnWait=1;render();await nwait(DAWN);S.dawnWait=0;if(run!==RUN)return;
  if(G.oneNight)return dailyOver();
  if(G.shelter<=0)return end();
  const mut=Z.mutNight(G.night)?Z.mutate(G,R):null;

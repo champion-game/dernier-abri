@@ -79,6 +79,15 @@ check('pneus : 3 cases par carte',()=>eq(Z.chargesOf('tire'),3));
 check('niveaux : 20, 45, 75, 110',()=>eq([1,2,3,4].map(Z.lvKills),[20,45,75,110]));
 check('mutations plafonnées (Carapace 3, Pas pressés 2)',()=>{const st=fresh();const r=rng(11);for(let k=0;k<200;k++)Z.mutate(st,r);ok(Z.mc(st,'carapace')<=3&&Z.mc(st,'frenesie')<=2)});
 check('PV zombies : par paliers réguliers, pas d’explosion',()=>{const a=Z.hpMult(20)-Z.hpMult(10),b=Z.hpMult(100)-Z.hpMult(90);ok(Math.abs(a-b)<1e-9,'croissance non linéaire')});
+// tutoriel guidé (v163) : la disposition demandée au joueur doit marcher à tous les coups
+check('tutoriel : nuits 1 à 4 par le nord seulement, horde fixe, sans événement',()=>{const st=Z.newState('surv','bois',rng(3));st.tuto=1;
+ for(let n=1;n<=4;n++){st.night=n;Z.newDay(st,rng(n));st.night=n;eq(st.event.id,'calme');Z.startNight(st,rng(n));const w=Z.TUTO_W[n-1];eq(st.pending.length,Object.values(w).reduce((a,b)=>a+b,0));ok(st.pending.every(p=>p.pos===4),'route du nord')}
+ st.night=5;Z.startNight(st,rng(5));ok(new Set(st.pending.map(p=>p.pos)).size>1,'nuit 5 : plusieurs routes');st.tuto=0;st.night=1;Z.startNight(st,rng(1));ok(st.pending.length>0)});
+check('tutoriel : le Bûcheron est blessé la nuit 1, la maison tient jusqu’à la nuit 5',()=>{for(let sd=1;sd<=40;sd++){const R=rng(sd),st=Z.newState('surv','bois',R);st.tuto=1;
+ const P=(t,i)=>Z.place(st,t,i,R,true),run=()=>{Z.startNight(st,R);for(let k=0;k<3000&&!Z.step(st).done;k++);Z.endNight(st);Z.newDay(st,R)};
+ P('axe',22);P('bar',12);P('bar',14);run();const ax=st.grid[22];ok(ax&&ax.t==='axe'&&ax.hp<Z.maxHp(st,ax),'Bûcheron blessé (graine '+sd+')');ok(st.shelter===Z.maxS(st),'maison intacte');
+ P('kit',22);ok(Z.move(st,22,21),'déplacement');P('cop',22);run();P('gun',31);P('wire',13);run();P('med',30);P('gear',22);ok([21,22,30,31].every(i=>Z.squad(st,i)),'escouade');run();
+ run();ok(st.shelter>0,'nuit rouge tenue (graine '+sd+')')}});
 check('curée : les Tanks l’ignorent (v132)',()=>{const st=fresh();st.night=3;const T=6*9+4;Z.place(st,'v_apc',T,rng(1),true);Z.startNight(st,rng(1));st.pending=[];
  st.z=[7*9+3,7*9+4,7*9+5].map((p,i)=>({id:i+1,k:'walk',pos:p,hp:50,max:50,cd:0,style:0}));const u=st.grid[T],h0=u.hp;Z.step(st);ok(h0-u.hp<=3,'perte '+(h0-u.hp))});
 check('plafond de l’Agent anti-émeute : jamais plus de 2 PV par coup, même avec les bonus (v133)',()=>{const d0=Z.ZT.walk.dmg;try{Z.ZT.walk.dmg=6;const st=fresh();st.night=3;const T=6*9+4;Z.place(st,'riot',T,rng(1),true);Z.startNight(st,rng(1));st.pending=[];

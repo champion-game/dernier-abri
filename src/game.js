@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v162 · 23 oct.';
+const VERSION='v163 · 23 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -291,30 +291,65 @@ let META=loadMeta();
 // tutoriel de la première partie : une bulle d'aide par étape (0 à 4 ; 5 = terminé)
 let TUTO=5;try{TUTO=+(localStorage.getItem('abri-tuto')??(META.runs||META.best?5:0))}catch(e){}
 function tuto(n){if(TUTO===n){TUTO=n+1;try{localStorage.setItem('abri-tuto',TUTO)}catch(e){}}}
-/* première nuit guidée (v112) : à la toute première partie, le jeu montre quoi toucher, étape par étape :
-   le Tireur, sa case au-dessus de la maison, la Barricade, sa case sur la route du sud, puis « Affronter la nuit ».
-   GUIDE est vrai tant que la première journée guidée n'est pas finie ; ensuite les bulles habituelles prennent le relais. */
-let GUIDE=false;const GUIDE_CELLS={gun:31,bar:58};
-function guideStep(){if(!GUIDE||!G||G.night!==1||S.busy)return null;const has=t=>G.grid.some(u=>u&&u.t===t),sel=selCard();
- if(!has('gun'))return sel==='gun'?{n:1,cell:GUIDE_CELLS.gun,txt:_t('Pose-le juste au-dessus de la maison : touche la case qui brille.')}:{n:0,card:'gun',txt:_t('Les zombies sortent de la forêt par les 4 routes et marchent vers ta maison. Pour te défendre, touche le Tireur en bas de l’écran (il coûte 2 énergies).')};
- if(!has('bar'))return sel==='bar'?{n:3,cell:GUIDE_CELLS.bar,txt:_t('Pose-la sur la route du sud pour la fermer : touche la case qui brille.')}:{n:2,card:'bar',txt:_t('Bien ! Ton tireur tirera tout seul sur les zombies à sa portée. Maintenant, touche la Barricade.')};
- return{n:4,go:1,txt:_t('Ton énergie est dépensée pour aujourd’hui. Touche « Affronter la nuit » : tes survivants se défendront tout seuls.')}}
-// au lancement de la toute première partie : le Tireur et la Barricade sont dans la main
-function guideStart(){GUIDE=false;if(TUTO!==0)return;const need=['gun','bar'];if(!need.every(t=>S.hand.includes(t)||S.draw.includes(t)))return;
- need.forEach(t=>{if(S.hand.includes(t))return;S.draw.splice(S.draw.lastIndexOf(t),1);if(S.hand.length>=Z.drawCount(G)){const k=S.hand.findIndex(x=>!need.includes(x));if(k>=0)S.draw.unshift(...S.hand.splice(k,1))}S.hand.push(t)});
- const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b));GUIDE=true}
+/* tutoriel guidé (v163) : la toute première partie (G.tuto) suit 4 journées guidées, puis une nuit rouge sans aide.
+   Jour 1 : Café, Bûcheron au milieu du passage de la route du nord, Barricade de chaque côté : les zombies doivent le frapper.
+   Jour 2 : Trousse de secours sur le Bûcheron blessé, Bûcheron décalé d'une case, Policier (Tank) à sa place, face au passage.
+   Jour 3 : Tireur derrière le Policier, Barbelés dans le passage. Jour 4 : Infirmière derrière le Policier (Escouade), Matériel lourd sur lui.
+   Jour 5 : nuit rouge, sans guide. Les nuits du tutoriel (nord seulement, horde fixe) sont réglées dans le moteur (Z.tutoOn).
+   Pendant les jours guidés, seule la carte demandée se joue et seules les cases qui brillent l'acceptent. */
+const TUTO_DECK=[...Z.STARTER_DECK,'coffee','kit','cop','wire','gear'];
+const TUTO_HAND=[[],['coffee','axe','bar'],['kit','cop'],['gun','wire'],['med','gear']];// cartes garanties en main chaque jour
+const TUTO_PICK=[null,'cop','gun','med'];// carte conseillée à l'aube des nuits 1 à 3
+const tutoDay=()=>G&&G.tuto&&!G.test&&!G.daily&&G.night<=Z.TUTO_N?G.night:0;
+const posOf=t=>G.grid.findIndex(u=>u&&u.t===t);
+function guideStep(){const d=tutoDay();if(!d||d>4||S.busy||S.pause||S.dawnWait)return null;
+ const at=(i,t)=>!!G.grid[i]&&G.grid[i].t===t,inH=t=>S.hand.includes(t)||(S.used||[]).includes(t),sel=selCard();
+ const ask=(t,cells,pick,put,on)=>sel===t?{lock:t,cells,on,txt:put}:{lock:t,card:t,txt:pick};
+ const go=txt=>({go:1,txt});
+ if(d===1){
+  if(inH('coffee'))return ask('coffee',[Z.C],_t('Chaque jour, tu as 4 énergies pour jouer tes cartes. Touche le Café : il est gratuit et donne +2 énergies.'),_t('Touche ta maison pour boire le Café.'),1);
+  if(!at(22,'axe')&&inH('axe'))return ask('axe',[22],_t('Cette nuit, les zombies viendront par la route du nord (en haut). Touche le Bûcheron : il frappe fort au corps à corps.'),_t('Pose-le sur la case qui brille, au milieu du passage.'));
+  const b=[12,14].filter(i=>!at(i,'bar'));
+  if(b.length&&inH('bar'))return ask('bar',b,_t('Ferme les côtés avec la Barricade : les zombies devront passer par ton Bûcheron. Touche la Barricade.'),b.length>1?_t('Pose-la sur une des 2 cases qui brillent.'):_t('Touche l’autre case : la Barricade reste en main toute la journée, chaque case en plus coûte 1 énergie.'));
+  return go(_t('Le passage est prêt. Touche « Affronter la nuit » : tes survivants se défendent tout seuls.'))}
+ if(d===2){const ax=posOf('axe'),u=G.grid[ax];
+  if(u&&inH('kit')&&u.hp<Z.maxHp(G,u))return ask('kit',[ax],_t`Les zombies ont frappé ton Bûcheron : il lui reste ${u.hp} PV sur ${Z.maxHp(G,u)}. Touche la Trousse de secours.`,_t('Touche le Bûcheron pour le soigner.'),1);
+  if(ax===22&&!at(21,'axe'))return S.moveFrom===22?{from:22,cells:[21],txt:_t('Touche la case qui brille, juste à gauche.')}:{from:22,cells:[22],on:1,txt:_t('Le Bûcheron ne tiendra pas seul. Décale-le d’une case pour laisser sa place à un Tank : touche-le (déplacer est gratuit le jour).')};
+  if(!at(22,'cop')&&inH('cop'))return ask('cop',[22],_t('Touche le Policier : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.'),_t('Pose-le face au passage, à côté du Bûcheron : à côté d’un Tank, un DPS fait +1 dégât.'));
+  return go(_t('Le Policier encaisse, le Bûcheron frappe. Touche « Affronter la nuit ».'))}
+ if(d===3){
+  if(!at(31,'gun')&&inH('gun'))return ask('gun',[31],_t('Touche le Tireur : un DPS à distance, il tire à 2 cases.'),_t('Pose-le derrière le Policier, à l’abri : il touchera les zombies dans le passage.'));
+  if(!at(13,'wire')&&inH('wire'))return ask('wire',[13],_t('Touche les Barbelés : un piège qui blesse et ralentit chaque zombie qui passe.'),_t('Pose-les dans le passage, devant le Policier.'));
+  return go(_t('Les zombies seront ralentis sous les tirs. Touche « Affronter la nuit ».'))}
+ const cp=posOf('cop'),c=G.grid[cp];
+ if(!at(30,'med')&&inH('med'))return ask('med',[30],_t('Touche l’Infirmière : elle soigne à 2 cases, et deux fois plus un Tank.'),_t('Pose-la derrière le Policier.'));
+ if(c&&inH('gear')&&!(c.eq||[]).includes('gear'))return ask('gear',[cp],_t('Touche le Matériel lourd : +4 PV, et un Tank équipé bloque 1 coup sur 2.'),_t('Touche le Policier pour l’équiper.'),1);
+ return go(_t('Ton escouade est prête. Demain soir, c’est la nuit rouge. Touche « Affronter la nuit ».'))}
+// pendant le tutoriel : une case peut-elle être touchée ? (le reste est bloqué pour garder le plan intact)
+function guideOk(g,i){if(g.go)return false;if(g.from!=null)return S.sel===null&&(S.moveFrom===g.from?g.cells.includes(i):i===g.from);return selCard()===g.lock&&g.cells.includes(i)}
+const TUTO_NIGHT=[null,_t('Les zombies arrivent par le nord : ils doivent passer par ton Bûcheron. Le bouton du bas accélère la nuit.'),_t('Le Policier attire les zombies et les repousse ; le Bûcheron frappe à côté de lui.'),_t('Les Barbelés ralentissent les zombies pendant que le Tireur les abat.'),_t('Escouade : Tank, Soin et DPS côte à côte gagnent chacun +1 dégât (ou +1 soin).'),_t('Nuit rouge : la horde arrive par les 4 routes !')];
+const TUTO_DAWN=[null,_t('Ton Bûcheron a tenu le passage, mais il est blessé. Prends le Policier : demain, il encaissera à sa place.'),_t('Le Policier a pris les coups à la place du Bûcheron. Prends le Tireur : il tirera de derrière.'),_t('Prends l’Infirmière : avec le Policier et tes DPS, elle formera une escouade.'),_t('Ton escouade a tenu. Demain soir, c’est la nuit rouge : la horde viendra par les 4 routes.'),_t('Tutoriel terminé : tu sais tout l’essentiel. À toi de jouer !')];
+function tutoTip(){const d=tutoDay();if(!d||S.dawnWait)return null;if(S.busy)return TUTO_NIGHT[d];if(d===Z.TUTO_N)return _t('Ce soir, nuit rouge : la horde arrive par les 4 routes. À toi de jouer : protège les autres côtés de la maison avec tes cartes.');const g=guideStep();return g&&g.txt}
+// le début de chaque journée guidée : les cartes du jour sont dans la main, en premier
+function tutoHand(){const d=tutoDay(),need=TUTO_HAND[d];if(!need||!need.length)return;
+ for(const t of need){if(S.hand.includes(t))continue;let k=S.draw.lastIndexOf(t);if(k>=0)S.draw.splice(k,1);else{k=S.discard.lastIndexOf(t);if(k<0)continue;S.discard.splice(k,1)}
+  if(S.hand.length>=Z.HAND_MAX){const j=S.hand.findIndex(x=>!need.includes(x));if(j>=0)S.draw.unshift(...S.hand.splice(j,1))}S.hand.push(t)}
+ const rk=t=>need.includes(t)?need.indexOf(t):9;S.hand.sort((a,b)=>rk(a)-rk(b))}
+// l'aube des nuits 1 à 3 : la carte conseillée fait partie des 3 propositions
+function tutoPicks(){const t=G&&G.tuto&&!G.test?TUTO_PICK[G.night]:null;if(!t||!S.draw.includes(t))return null;return[t,...shuffle([...new Set(S.draw)].filter(x=>x!==t)).slice(0,2)]}
+function tutoEnd(){G.tuto=0;TUTO=5;try{localStorage.setItem('abri-tuto',5)}catch(e){}}
 const TIPS=[_t('Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.'),_t('Touche une case en pointillés jaunes pour la poser.'),_t('Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».'),_t('Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.')];
-function newGame(ch,pl,daily,deck,plan){onTitle=false;endTest();try{UNDO=[]}catch(e){}
+function newGame(ch,pl,daily,deck,plan){onTitle=false;endTest();try{UNDO=[]}catch(e){}const tut=TUTO===0&&!daily&&!plan;
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
- G=plan?Z.dailyState(plan,deck,R):Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;
+ G=plan?Z.dailyState(plan,deck,R):Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;if(tut)G.tuto=1;
  G.biome=BIOMES[daily?RS%BIOMES.length:Math.floor(Math.random()*BIOMES.length)];setBiome(G.biome);// terrain purement graphique
- S={draw:shuffle([...(deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
+ S={draw:shuffle([...(tut?TUTO_DECK:deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
  V.clear();FX.length=0;PT.length=0;facing.fill(null);clearDecals();POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
- if(plan){S.hand=S.draw.splice(0)}else fillHand();if(!daily)guideStart();else GUIDE=false;
+ if(plan){S.hand=S.draw.splice(0)}else fillHand();
 }
 // la carte choisie à l'aube arrive d'office dans la main, le reste est pioché
 // la main se garde d'un jour à l'autre : on la complète jusqu'au nombre de cartes du jour (au moins 1 nouvelle), sans dépasser HAND_MAX
-function fillHand(){if(S.next){S.hand.push(S.next);S.next=null}drawCards(Math.min(Z.HAND_MAX-S.hand.length,Math.max(1,Z.drawCount(G)-S.hand.length)))}
+function fillHand(){if(S.next){S.hand.push(S.next);S.next=null}drawCards(Math.min(Z.HAND_MAX-S.hand.length,Math.max(1,Z.drawCount(G)-S.hand.length)));tutoHand()}
 function drawCards(n){for(let k=0;k<n;k++){if(!S.draw.length&&S.discard.length){S.draw=shuffle(S.discard);S.discard=[];S.reshuf=1}if(!S.draw.length)break;S.hand.push(S.draw.pop());S.newDraw=(S.newDraw||0)+1}}
 // le deck de la partie : pioche, défausse, main, et les unités posées (qui reviennent dans la défausse quand elles tombent)
 const pileList=()=>[...S.draw,...S.discard,...S.hand,...(S.used||[])];
@@ -373,7 +408,7 @@ function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&
 function clearSave(){if(TEST)return;try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function resume(d){onTitle=false;try{UNDO=[]}catch(e){}
  newGame(d.g.char,d.g.place);
- Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});Z.touch(G);setBiome(G.biome);
+ Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});if(!d.g.tuto)G.tuto=0;Z.touch(G);setBiome(G.biome);
  RS=d.g.rs||RS;Object.assign(S,d.s,{sel:null,busy:false});if(G.ammo>0){for(let k=0;k<G.ammo;k++)S.hand.push('shell');G.ammo=0}S.used=S.used||[];G.bench=G.bench||[];S.bsel=null;S.board=G.grid.filter(Boolean).concat(G.bench);POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
  hide();render();
  if(S.phase)dawnStep(S.phase,S.picks);

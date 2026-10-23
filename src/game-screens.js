@@ -25,10 +25,10 @@ function dawnStep(ph,picks){
  if(ph==='event'){S.picks=picks;save();const E=Z.DAWN[picks[0]];
   return show(`<h2 class="pw">${E.n}</h2>${dawnTxt()}<p>${E.d}</p><div class="relics">${E.ch.map((c,k)=>`<button type="button" class="relic evc" data-a="evc" data-v="${k}" ${c.ok&&!c.ok(G)?'disabled':''}><span><b>${c.n}</b>${c.d}</span></button>`).join('')}</div>`)}
  // la carte de demain : 3 cartes au choix tirées de ta pioche et de ta défausse (jamais de carte hors du deck)
- if(ph==='draft'){S.picks=picks||shuffle([...new Set(S.draw)]).slice(0,3);if(!S.picks.length)return dawnStep('shop');save();
+ if(ph==='draft'){S.picks=picks||tutoPicks()||shuffle([...new Set(S.draw)]).slice(0,3);if(!S.picks.length)return dawnStep('shop');save();
   return show(_t`<h2 class="ok">Nuit ${G.night} survécue</h2>${dawnTxt()}<p>Choisis une carte de <b>ta pioche</b> que tu auras <b>en main demain</b>.</p>
-   ${TUTO===3?(tuto(3),_t`<p class="tipin">${ii('bulb')} À chaque aube, tu choisis une carte de ta pioche : elle arrive dans ta main dès demain. Ensuite viendra le troc, où tu dépenses ta ferraille.</p>`):''}
-   <div class="picks">${S.picks.map(t=>pickBtn(t,'draft',t)).join('')}</div>
+   ${tutoDay()?`<p class="tipin">${ii('bulb')} ${TUTO_DAWN[G.night]}${G.night===1?_t(' À chaque aube, tu choisis une carte de ta pioche : elle arrive dans ta main dès demain. Ensuite viendra le troc, où tu dépenses ta ferraille.'):''}</p>`:TUTO===3?(tuto(3),_t`<p class="tipin">${ii('bulb')} À chaque aube, tu choisis une carte de ta pioche : elle arrive dans ta main dès demain. Ensuite viendra le troc, où tu dépenses ta ferraille.</p>`):''}
+   <div class="picks">${S.picks.map(t=>pickBtn(t,'draft',t).replace('class="pick"',tutoDay()&&t===TUTO_PICK[G.night]?'class="pick guide"':'class="pick"')).join('')}</div>
    <button type="button" class="skip" data-a="draft" data-v="">Ne rien prendre</button>`)}
  if(ph==='night')return nightScreen(picks);
  S.picks=null;save();shopScreen();
@@ -278,7 +278,7 @@ const ACT={
   <label class="chk"><input type="checkbox" id="tprog" ${TEST_P?'checked':''}> Progression simulée : les reliques et la mutation de la horde d’une vraie partie, et des survivants avec des niveaux (1 niveau toutes les 6 nuits)</label>
   <button type="button" class="go" data-a="teststart">Lancer</button><button type="button" class="skip" data-a="title">Accueil</button>`)},
  teststart:()=>{const el=document.getElementById('tnight');TEST_N=Math.max(1,Math.min(DEMO?Z.DEMO_N:60,Math.round(+(el&&el.value)||1)));const pc=document.getElementById('tprog');TEST_P=!pc||pc.checked;
-  newGame('surv','bois',null,Z.STARTER_DECK);TEST=true;GUIDE=false;G.test=1;G.night=TEST_N;if(TEST_P)Z.testProgress(G,TEST_N,R);G.energy=99;G.scrap=999;G.pool=Z.KEYS.filter(t=>!Z.U[t].evo&&Z.demoOk(t));onTitle=false;hide();render()},
+  newGame('surv','bois',null,Z.STARTER_DECK);TEST=true;G.tuto=0;G.test=1;G.night=TEST_N;if(TEST_P)Z.testProgress(G,TEST_N,R);G.energy=99;G.scrap=999;G.pool=Z.KEYS.filter(t=>!Z.U[t].evo&&Z.demoOk(t));onTitle=false;hide();render()},
  tcards:()=>{if(!TEST||S.busy)return;const full=S.hand.length>=Z.HAND_MAX;
   show(_t`<h2 class="pw">Ajouter une carte</h2><p>Main : <b>${S.hand.length}/${Z.HAND_MAX}</b>${full?_t(' · <span class="bad">main pleine : joue une carte d’abord</span>'):''}</p><input type="search" class="tq" placeholder="Chercher une carte" aria-label="Chercher une carte" oninput="const q=this.value.toLowerCase();this.parentElement.querySelectorAll('[data-a=tadd]').forEach(b=>b.hidden=q&&!b.dataset.n.includes(q))">`
    +Object.keys(CATL).map(c=>{const ks=Z.KEYS.filter(t=>Z.U[t].cat===c&&Z.demoOk(t));return ks.length?`<h3>${CATL[c]}</h3><div class="cgrid tgrid">${ks.map(t=>`<button type="button" class="citem in" data-a="tadd" data-v="${t}" data-n="${Z.U[t].n.toLowerCase()}" ${full?'disabled':''}>${cardFace(t,{mini:1})}</button>`).join('')}</div>`:''}).join('')
@@ -294,7 +294,7 @@ const ACT={
  closeov:()=>{hide();render()},
  bpick:v=>{S.bsel=+v;S.sel=null;S.moveFrom=null;S.inspect=null;hide();render()},
  artstyle:()=>{ART_STYLE=ART_STYLE==='cartoon'?'real':'cartoon';try{localStorage.setItem('abri-style',ART_STYLE)}catch(e){}title()},
- new:()=>{endTest();if(novice()){PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';return ACT.start()}prepScreen()},
+ new:()=>{endTest();if(novice()||TUTO===0){PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';return ACT.start()}prepScreen()},
  prepdeck:v=>{META.slot=+v;saveMeta(META);prepScreen()},
  prepch:v=>{PREP.ch=v;prepScreen()},
  preppl:v=>{PREP.pl=v;prepScreen()},
@@ -322,7 +322,7 @@ const ACT={
  rules:()=>show(_t`<h2 class="pw">Règles du jeu</h2>${rulesHtml()}<button type="button" class="skip" data-a="retuto">Rejouer la première nuit guidée</button><button type="button" class="go" data-a="title">Retour</button>`),
  stats:()=>statsScreen(),
  rgo:v=>{const e=document.getElementById('r-'+v);if(e)e.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})},
- retuto:()=>{TUTO=0;try{localStorage.setItem('abri-tuto','0')}catch(e){}ACT.new()},
+ retuto:()=>{TUTO=0;try{localStorage.setItem('abri-tuto','0')}catch(e){}endTest();PREP.ch='surv';PREP.pl='bois';PREP.menace=0;PREP.relic='';ACT.start()},
  deck:()=>show(_t`<h2 class="pw">Le bestiaire</h2><p>Les zombies de la horde et leurs mutations. Tes cartes sont dans la Collection.</p>${zedHtml()}<h2 class="pw">Les mutations instables</h2><p>Une seule à la fois, elle change toutes les 5 nuits.</p><div class="deck">${Object.values(Z.MUTS).map(m=>`<div class="dk" style="--cc:var(--blood)">${svg('mut')}<span><b>${m.n}</b>${m.d}</span></div>`).join('')}</div><button type="button" class="go" data-a="title">Retour</button>`),
  dawn:()=>dawn(),
  lvl:v=>{const i=S.picks&&S.picks[0];if(i!=null&&Z.levelUp(G,i,v==='atk'?'atk':'def')){const p=tc(i);floatTxt(p.x,p.y-20,v==='atk'?_t('+1 dégât'):_t('+3 PV'),'#9fd86b',15);addFX({type:'ring',x:p.x,y:p.y,r:44,c:'#9fd86b',dur:500})}S.phase=null;save();render();dawn()},
@@ -360,7 +360,9 @@ panel.addEventListener('input',e=>{const el=e.target.closest('[data-o]');if(!el)
  if(k==='sfx'||k==='mus'){OPT[k]=+el.value/100;const b=el.parentElement.querySelector('b');if(b)b.textContent=el.value+(LANG==='fr'?' %':'%')}
  else if(k==='speed')OPT.speed=+el.value;else if(k==='shake'||k==='text'||k==='eco'||k==='vib'||k==='all'||k==='cb'){OPT[k]=el.checked?1:0;if(k==='vib'&&OPT.vib)vib(60)}else if(k==='lang'){OPT.lang=el.value;saveOpt();location.reload();return}else if(k==='back')OPT.back=el.value;else if(k==='shelter')OPT.shelter=el.value;
  saveOpt();applyOpt();if(k==='sfx')SFX.play('ui')});
-$('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else night()});
+$('#go').addEventListener('click',()=>{if(S.pause)resumeWave();else if(S.busy){SPEED=SPEED===1?2:SPEED===2?4:1;render()}else{const g=guideStep();if(g&&!g.go)return;night()}});
+// tutoriel : « Passer le tutoriel » dans la bulle
+$('#tip').addEventListener('click',e=>{if(!e.target.closest('[data-a=tskip]')||!G)return;tutoEnd();S.sel=null;S.moveFrom=null;save();render()});
 
 function nextUnlockTxt(){const u=Z.unlocks(META),nx=[];
  for(const k in Z.UNLOCK.chars)if(!u.chars.includes(k)&&(!DEMO||Z.DEMO_CHARS.includes(k)))nx.push([Z.UNLOCK.chars[k]-META.total,_t`${Z.CHARS[k].n} dans ${Z.UNLOCK.chars[k]-META.total} nuits au total`]);

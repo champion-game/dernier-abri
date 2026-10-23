@@ -544,7 +544,19 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 
 ## Le tutoriel
 
-À la toute première partie, une bulle jaune guide les premiers gestes : choisir une carte, la poser, l'énergie, la nuit et l'accélération, puis le choix de la carte à l'aube. Elle ne revient plus ensuite.
+**Tutoriel guidé (v163, idée d’Amine)** : la toute première partie (et « Rejouer la première nuit guidée » dans les règles) suit 4 journées guidées, puis la nuit rouge sans aide. Une bulle dit quoi faire, la carte à toucher et les cases visées brillent ; pendant ces 4 jours, seule la carte demandée se joue et seules les cases qui brillent l’acceptent (le plan reste intact). Un lien « Passer le tutoriel » dans la bulle rend la partie normale.
+
+| Jour | Ce que fait le joueur | Ce qu’il apprend |
+|---|---|---|
+| 1 | Café (+2 énergies), Bûcheron au milieu du passage de la route du nord (2ᵉ rangée), Barricade de chaque côté de l’entrée | énergie, DPS au corps à corps, fermer un passage ; les zombies doivent frapper le Bûcheron |
+| 2 | Trousse de secours sur le Bûcheron blessé, Bûcheron décalé d’une case (déplacement gratuit), Policier à sa place face au passage | soin, déplacement, Tank (provocation, recul), bonus du DPS à côté d’un Tank |
+| 3 | Tireur derrière le Policier, Barbelés dans le passage | DPS à distance à couvert, piège qui ralentit |
+| 4 | Infirmière derrière le Policier, Matériel lourd sur le Policier | Soin, Escouade (annonce « Escouade ! »), équipement |
+| 5 | Libre : « nuit rouge, la horde arrive par les 4 routes » | jouer seul |
+
+- Le deck du tutoriel est le deck de départ plus Café, Trousse de secours, Policier, Barbelés et Matériel lourd ; les cartes du jour arrivent toujours en main. À l’aube des nuits 1 à 3, la carte conseillée (Policier, Tireur, Infirmière) fait partie des 3 propositions et brille, avec une phrase qui explique la nuit passée.
+- Règles du moteur (`Z.tutoOn`) : nuits 1 à 4 calmes, par la route du nord seulement, horde fixe (2, 3, 4 Rôdeurs, puis 4 Rôdeurs et 1 Coureur) ; nuit 5 par les 4 routes, horde allégée (6 Rôdeurs, 2 Coureurs, 1 Chien, 1 Gonflé, 1 Sapeur). Pas d’événement de l’aube pendant le tutoriel, et pas de trait « +PV » pour les survivants (le Bûcheron doit être blessé la nuit 1). Un test du moteur vérifie ce scénario sur 40 parties.
+- Hors tutoriel aussi, la première escouade formée dans une partie est annoncée en grand (« Escouade ! +1 dégât (ou +1 soin) »).
 
 ## Le son
 
