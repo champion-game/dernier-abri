@@ -957,3 +957,9 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
 .mute:disabled{filter:grayscale(.85) brightness(.7);box-shadow:inset 0 2px 4px rgba(0,0,0,.6);cursor:default}
 /* v155 : icône des bulles d’aide à taille de texte (elle couvrait l’écran) */
 .hint .ic{width:18px;height:18px;vertical-align:-4px;color:#f2c23d}
+/* v161 : abri touché (barre qui tremble, bord de l’écran qui rougit) */
+.shel.hit{animation:shelhit .38s ease-out}
+.shel.hit .shel-bar i{filter:brightness(1.8)}
+@keyframes shelhit{0%,100%{transform:none}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+#hurtV{position:fixed;inset:0;pointer-events:none;z-index:45;box-shadow:inset 0 0 70px 14px rgba(229,72,77,.55);opacity:0;transition:opacity .45s ease-out}
+#hurtV.on{opacity:1;transition:none}

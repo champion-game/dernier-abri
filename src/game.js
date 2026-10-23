@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v160 · 23 oct.';
+const VERSION='v161 · 23 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -339,7 +339,9 @@ let POS=new Map();const FLYSRC=[];let LASTRECT=null,DISC0=-1;
 function cellRect(i){const r=cv.getBoundingClientRect(),c=r.width/Z.N;return{left:r.left+(i%Z.N)*c,top:r.top+Math.floor(i/Z.N)*c,width:c,height:c}}
 function fly(t,a,b,delay,back,done){if(reduce||!a||!b){done&&done();return}const g=document.createElement('div');g.className='flyc'+(back?' back':'');if(!back&&t)g.innerHTML=cardFace(t,{mini:1});document.body.appendChild(g);
  const W=56,H=75,x0=a.left+a.width/2-W/2,y0=a.top+a.height/2-H/2,x1=b.left+b.width/2-W/2,y1=b.top+b.height/2-H/2;
- const an=g.animate([{transform:`translate(${x0}px,${y0}px) scale(.85)`,opacity:.95},{transform:`translate(${x1}px,${y1}px) scale(1)`,opacity:1}],{duration:340,delay,easing:'cubic-bezier(.3,.7,.3,1)',fill:'both'});
+ // v161 : la carte décrit un arc en tournant (éventail), au lieu d’une ligne droite
+ const r0=x1>x0?-22:22,xm=(x0+x1)/2,ym=Math.min(y0,y1)-28;
+ const an=g.animate([{transform:`translate(${x0}px,${y0}px) rotate(${r0}deg) scale(.8)`,opacity:.9},{transform:`translate(${xm}px,${ym}px) rotate(${-r0*.35}deg) scale(1.08)`,opacity:1,offset:.55},{transform:`translate(${x1}px,${y1}px) rotate(0deg) scale(1)`,opacity:1}],{duration:400,delay,easing:'cubic-bezier(.3,.6,.4,1)',fill:'both'});
  an.onfinish=()=>{g.remove();done&&done()};an.oncancel=an.onfinish}
 function animPiles(){const pd=$('#pDraw'),px=$('#pDisc');if(!pd||!px)return;
  // un écran (accueil, aube…) couvre le plateau : on garde les animations pour quand il se ferme
