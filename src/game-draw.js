@@ -492,7 +492,7 @@ function drawFloats(now){ctx.textAlign='center';
   ctx.globalAlpha=1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(f.txt,f.x+1,f.y-18-p*18+1);ctx.fillStyle=f.c;ctx.fillText(f.txt,f.x,f.y-18-p*18);ctx.globalAlpha=1}}
 
 function lights(now){
- const ls=[{x:CEN.x,y:CEN.y,r:T*2.1}];
+ const ls=[{x:CEN.x,y:CEN.y,r:T*(2.1+(reduce?0:.05*Math.sin(now/110)*Math.sin(now/43)))}];
  const pow=powered();
  G.grid.forEach((u,i)=>{if(!u)return;const p=tc(i);
   if(u.t==='lamp'&&pow){const d=Math.atan2(p.y-CEN.y,p.x-CEN.x);ls.push({x:p.x+Math.cos(d)*40,y:p.y+Math.sin(d)*40,r:T*1.5});ls.push({x:p.x,y:p.y,r:T*.8})}
@@ -508,6 +508,31 @@ function lights(now){
 // réutilise un même disque dégradé préparé une fois, au lieu d'un dégradé recalculé par lumière et par image
 const LIGHT=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);
  g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(.55,'rgba(0,0,0,.7)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return c})();
+// v156 : ambiance de nuit animée (décor seulement, hors des règles) : brume qui dérive, lucioles dans la forêt, chauves-souris
+const FOG=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),g=x.createRadialGradient(32,32,0,32,32,32);
+ g.addColorStop(0,'rgba(190,205,225,1)');g.addColorStop(1,'rgba(190,205,225,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return c})();
+const FLY=(()=>{const r=rng(77),a=[];for(let k=0;k<16;k++){const s=Math.floor(r()*4),u=r()*L,d=r()*T*.85;a.push({x:s===0?u:s===1?u:s===2?d:L-d,y:s===0?d:s===1?L-d:s===2?u:u,ph:r()*7,sp:.6+r()*.8})}return a})();
+const BATS=[];let batNext=0;
+function drawFog(now){if(nightAmt<.05)return;const n=OPT.eco?3:6;ctx.save();
+ for(let k=0;k<n;k++){const w=L*.75,sp=reduce?0:.006+k*.0017,x=((k*L*.37+now*sp)%(L+w))-w/2,y=L*(.12+k*.15)+Math.sin(now/5000+k)*12;
+  ctx.globalAlpha=.07*nightAmt;ctx.drawImage(FOG,x-w/2,y-w*.16,w,w*.32)}ctx.restore()}
+function drawAmbient(now){if(nightAmt<.05)return;ctx.save();
+ // lucioles : de petits points verts qui clignotent et flottent dans la forêt
+ ctx.globalCompositeOperation='lighter';const nf=OPT.eco?6:FLY.length;
+ for(let k=0;k<nf;k++){const f=FLY[k],t=now/1000*f.sp,b=Math.max(0,Math.sin(t*1.6+f.ph));if(b<.05)continue;
+  const x=f.x+(reduce?0:Math.sin(t+f.ph)*9),y=f.y+(reduce?0:Math.cos(t*.8+f.ph*2)*7),a=b*b*nightAmt;
+  ctx.globalAlpha=a*.25;circ(x,y,4.5,'#d8f56a');ctx.globalAlpha=a;circ(x,y,1.4,'#f4ffb0')}
+ ctx.globalCompositeOperation='source-over';
+ // chauves-souris : un petit groupe traverse le ciel de temps en temps, ailes battantes
+ if(!reduce){if(now>=batNext){batNext=now+(BATS.length?7000:2500)+Math.random()*9000;const n=1+Math.floor(Math.random()*3),a=Math.random()*7,
+   x0=CEN.x+Math.cos(a)*L*.75,y0=CEN.y+Math.sin(a)*L*.75,x1=CEN.x-Math.cos(a+(Math.random()-.5))*L*.75,y1=CEN.y-Math.sin(a+(Math.random()-.5))*L*.75;
+   for(let k=0;k<n;k++)BATS.push({x0:x0+(Math.random()-.5)*40,y0:y0+(Math.random()-.5)*40,x1:x1+(Math.random()-.5)*40,y1:y1+(Math.random()-.5)*40,t0:now+k*220,dur:3600+Math.random()*1400,ph:Math.random()*7,c:(Math.random()-.5)*90})}
+  for(let k=BATS.length-1;k>=0;k--){const b=BATS[k],p=(now-b.t0)/b.dur;if(p>=1){BATS.splice(k,1);continue}if(p<0)continue;
+   const dx=b.x1-b.x0,dy=b.y1-b.y0,d=Math.hypot(dx,dy)||1,bend=Math.sin(p*Math.PI)*b.c,x=b.x0+dx*p-dy/d*bend+Math.sin(now/260+b.ph)*4,y=b.y0+dy*p+dx/d*bend+Math.cos(now/200+b.ph)*3,
+    fl=Math.sin(now/55+b.ph);ctx.globalAlpha=.85*nightAmt*Math.min(1,Math.sin(p*Math.PI)*4);ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(dy,dx)+Math.PI/2);
+   ctx.fillStyle='#0b0a10';ctx.strokeStyle='rgba(150,160,190,.35)';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(0,-2.5);
+   ctx.quadraticCurveTo(-5,-3-fl*3,-10,fl*4);ctx.quadraticCurveTo(-5,1,0,2.5);ctx.quadraticCurveTo(5,1,10,fl*4);ctx.quadraticCurveTo(5,-3-fl*3,0,-2.5);ctx.fill();ctx.stroke();ctx.restore()}}
+ ctx.restore()}
 function drawDark(now){
  if(nightAmt<.01)return;const k=dark.width/L;
  dctx.setTransform(1,0,0,1,0,0);dctx.globalCompositeOperation='source-over';dctx.clearRect(0,0,dark.width,dark.height);
@@ -515,7 +540,7 @@ function drawDark(now){
  dctx.setTransform(k,0,0,k,0,0);dctx.globalCompositeOperation='destination-out';
  for(const l of lights(now))dctx.drawImage(LIGHT,l.x-l.r,l.y-l.r,2*l.r,2*l.r);
  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(dark,0,0,cv.width,cv.height);ctx.restore();
- ctx.save();ctx.globalCompositeOperation='lighter';const r=T*1.6,g=ctx.createRadialGradient(CEN.x,CEN.y,0,CEN.x,CEN.y,r);g.addColorStop(0,`rgba(255,170,60,${.12*nightAmt})`);g.addColorStop(1,'rgba(255,170,60,0)');ctx.fillStyle=g;ctx.fillRect(CEN.x-r,CEN.y-r,2*r,2*r);ctx.restore();
+ ctx.save();ctx.globalCompositeOperation='lighter';const r=T*1.6,g=ctx.createRadialGradient(CEN.x,CEN.y,0,CEN.x,CEN.y,r);g.addColorStop(0,`rgba(255,170,60,${.12*nightAmt*(reduce?1:1+.25*Math.sin(now/90)*Math.sin(now/37))})`);g.addColorStop(1,'rgba(255,170,60,0)');ctx.fillStyle=g;ctx.fillRect(CEN.x-r,CEN.y-r,2*r,2*r);ctx.restore();
 }
 function frame(now){
  requestAnimationFrame(frame);
@@ -574,7 +599,9 @@ function frameInner(now){
   ctx.strokeStyle='rgba(229,72,77,.6)';ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.strokeRect(p.x-r,p.y-r,2*r,2*r);ctx.setLineDash([]);ctx.fillStyle='rgba(229,72,77,.06)';ctx.fillRect(p.x-r,p.y-r,2*r,2*r)});
  G.grid.forEach((u,i)=>{if(u&&Z.U[u.t].block&&!ramp.has(i))safe(()=>drawUnit(i,u,now))});
  drawFX(now);
+ safe(()=>drawFog(now));
  drawDark(now);
+ safe(()=>drawAmbient(now));
  if(nightAmt>.05){ctx.save();ctx.shadowColor='#ff2a2a';ctx.shadowBlur=6;for(const[x,y,nx,ny,sz,al]of EYES){ctx.globalAlpha=al*nightAmt;circ(x+nx*2*sz,y+ny*2*sz,1.3*sz,'#ff4a3a');circ(x-nx*2*sz,y-ny*2*sz,1.3*sz,'#ff4a3a')}ctx.restore()}
  drawBars();
  ctx.save();ctx.font='bold 10px "Atkinson Hyperlegible",system-ui,sans-serif';ctx.textAlign='center';for(const[x,y,n]of LABELS){const w=ctx.measureText(n).width+8;ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(x-w/2+1,y-9,w,13);ctx.fillStyle='#efe3c6';ctx.fillRect(x-w/2,y-10,w,13);ctx.strokeStyle='rgba(90,70,40,.8)';ctx.lineWidth=.8;ctx.strokeRect(x-w/2+.5,y-9.5,w-1,12);ctx.fillStyle='#2b1a0c';ctx.fillText(n,x,y)}ctx.restore();
