@@ -99,6 +99,27 @@ svg{width:18px;height:18px;flex:none}
 .ve .i{color:#efe3c6}
 .ve :active{box-shadow:0 1px 0 #1e1006!important}
 
+
+/* Grisés du style E */
+.dis{display:flex;flex-direction:column;gap:10px;border-radius:12px;padding:12px}
+.dis .lbl{font-size:11px;color:#c9b48e;text-transform:uppercase;letter-spacing:.08em;margin:4px 0 -4px}
+.dis .row{display:flex;gap:10px}.dis .row>*{flex:1}
+/* 1. peinture effacée : bois terne, planche enfoncée, texte à peine visible */
+.ve .off1{cursor:default;transform:translateY(3px);filter:grayscale(.85) brightness(.7);box-shadow:inset 0 2px 4px rgba(0,0,0,.6),0 1px 0 #1e1006!important}
+.ve .off1.p{color:rgba(242,179,61,.45);text-shadow:none}.ve .off1.p::before{border-color:rgba(242,179,61,.18)}
+.ve .off1.s{color:rgba(239,227,198,.4)}
+/* 2. condamnée : une latte clouée en travers */
+.ve .off2{cursor:default;filter:saturate(.5) brightness(.8);overflow:hidden}
+.ve .off2::after{content:"";position:absolute;left:-10%;right:-10%;top:50%;height:13px;margin-top:-6px;transform:rotate(-7deg);
+ background:var(--nail) 24% center/9px 9px no-repeat,var(--nail) 76% center/9px 9px no-repeat,linear-gradient(rgba(210,160,100,.45),rgba(150,95,45,.5)),var(--wood) 0 0/512px 384px;
+ box-shadow:0 2px 3px rgba(0,0,0,.6)}
+.ve .off2.p{color:rgba(242,179,61,.7)}
+/* 3. verrouillé : cadenas à la place de l'icône */
+.ve .off3{cursor:default;filter:grayscale(.85) brightness(.7);transform:translateY(3px);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)!important}
+.ve .off3.p{color:rgba(242,179,61,.55)}.ve .off3.p::before{border-color:rgba(242,179,61,.2)}
+.ve .off3.s{color:rgba(239,227,198,.5)}
+.ve [class*=off]:active{transform:translateY(3px)}
+
 /* Actuel */
 .vz .p{border-radius:10px;background:var(--lantern);color:#1d1404}
 .vz .s{border-radius:8px;background:#efe3c6;color:#2b1a0c}
@@ -113,6 +134,7 @@ svg{width:18px;height:18px;flex:none}
 
 <svg width="0" height="0" style="position:absolute">
  <symbol id="skull" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C7 2 3.5 5.6 3.5 10.2c0 2.6 1.2 4.5 3 5.6V19c0 .8.7 1.5 1.5 1.5h1v-2h1.5v2h3v-2H15v2h1c.8 0 1.5-.7 1.5-1.5v-3.2c1.8-1.1 3-3 3-5.6C20.5 5.6 17 2 12 2Zm-3.5 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></symbol>
+ <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2.4" d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
  <symbol id="moon" viewBox="0 0 24 24"><path fill="currentColor" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></symbol>
  <symbol id="pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
  <symbol id="snd" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6"/></symbol>
@@ -133,6 +155,22 @@ svg{width:18px;height:18px;flex:none}
  </div>
 </template>
 
+
+<section class="ve"><h2><b>E.</b> Les boutons grisés</h2><p>Trois façons de montrer qu’on ne peut pas appuyer. Ils ne s’enfoncent pas et ne font pas de bruit.</p>
+<div class="dis game">
+ <div class="lbl">Normal</div>
+ <button class="p n4"><svg><use href="#moon"/></svg>Affronter la nuit</button>
+ <div class="lbl">1. Peinture effacée (pas maintenant)</div>
+ <button class="p n4 off1"><svg><use href="#moon"/></svg>Affronter la nuit</button>
+ <div class="row"><button class="s n2 off1">Relancer · 2</button><button class="s n2">Passer</button></div>
+ <div class="lbl">2. Planche condamnée</div>
+ <button class="p n4 off2"><svg><use href="#moon"/></svg>Affronter la nuit</button>
+ <div class="row"><button class="s n2 off2">Relancer · 2</button><button class="s n2">Passer</button></div>
+ <div class="lbl">3. Verrouillé (pas encore débloqué)</div>
+ <button class="p n4 off3"><svg><use href="#lock"/></svg>Mutation 1</button>
+ <div class="row"><button class="s n2 off3"><svg><use href="#lock"/></svg>Le flic</button><button class="s n2">Options</button></div>
+</div></section>
+
 <section class="va"><h2><b>A.</b> Planche claire</h2><p>Bois clair, texte sombre. Celle de la page précédente, avec la vraie texture.</p><div class="m"></div></section>
 <section class="vb"><h2><b>B.</b> Planche sombre</h2><p>Même bois que le cadre du plateau, texte jaune lanterne. La plus fondue dans le jeu.</p><div class="m"></div></section>
 <section class="vc"><h2><b>C.</b> Planche peinte</h2><p>Garde le jaune actuel, mais peint sur du bois et écaillé. Le changement le plus doux.</p><div class="m"></div></section>
@@ -146,7 +184,7 @@ const t=document.getElementById('mock');
 document.querySelectorAll('.m').forEach(m=>m.appendChild(t.content.cloneNode(true)));
 let ac;
 document.addEventListener('pointerdown',e=>{
- if(!e.target.closest('button'))return;
+ const b=e.target.closest('button');if(!b||/off/.test(b.className))return;
  try{
   ac=ac||new (window.AudioContext||window.webkitAudioContext)();
   const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();
