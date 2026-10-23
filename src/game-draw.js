@@ -70,11 +70,56 @@ function barrel(g,x,y,s,r,k){k=k||1;const c=['#8a3a1a','#2a5a8a','#4a6a2a'][Math
 function rubble(g,x,y,s,r,k){k=k||1;for(let i=0;i<7;i++){const px=x+(r()-.5)*s*1.4,py=y+(r()-.5)*s,q=s*(.2+r()*.25);g.fillStyle='rgba(0,0,0,.35)';g.fillRect(px-q+2*k,py-q+2*k,2*q,2*q*.7);g.fillStyle=['#8a8c8e','#6a6c6e','#9a7a5a','#aaaaa8'][Math.floor(r()*4)];g.save();g.translate(px,py);g.rotate(r()*3);g.fillRect(-q,-q*.7,2*q,1.4*q);g.restore()}}
 function deadTree(g,x,y,s,r,k){k=k||1;g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.ellipse(x+s*.3,y+s*.35,s*.7,s*.5,0,0,7);g.fill();deadBush(g,x,y,s,r,k,'#3e2c1c');g.fillStyle='#4a3420';g.beginPath();g.arc(x,y,s*.14,0,7);g.fill()}
 // un élément de la couronne extérieure selon le terrain (null : laisser le sol visible)
+// v159 : décors en plus par terrain (toits d'immeubles, trottoirs, flaques, champignons, congères…), toujours hors du centre des cases
+function roofDeco(g,x,y,w,h,r,k){k=k||1;const c=[['#55575c','#6a6c72'],['#6a4c3c','#80604c'],['#3e5656','#527070'],['#5c5444','#746a56'],['#4a4a5a','#5e5e70']][Math.floor(r()*5)];
+ g.fillStyle='rgba(0,0,0,.45)';g.fillRect(x+4*k,y+5*k,w,h);g.fillStyle='#121314';g.fillRect(x-1.3*k,y-1.3*k,w+2.6*k,h+2.6*k);g.fillStyle=c[1];g.fillRect(x,y,w,h);
+ g.fillStyle=c[0];g.fillRect(x+3*k,y+3*k,w-6*k,h-6*k);g.fillStyle='rgba(255,255,255,.12)';g.fillRect(x,y,w,1.5*k);g.fillRect(x,y,1.5*k,h);
+ g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=.8*k;for(let i=x+10*k;i<x+w-4*k;i+=10*k){g.beginPath();g.moveTo(i,y+3*k);g.lineTo(i,y+h-3*k);g.stroke()}
+ const n=1+Math.floor(r()*3);for(let i=0;i<n;i++){const bw=(6+r()*5)*k,bh=(5+r()*4)*k,bx=x+4*k+r()*Math.max(1,w-bw-8*k),by=y+4*k+r()*Math.max(1,h-bh-8*k);
+  g.fillStyle='rgba(0,0,0,.35)';g.fillRect(bx+1.5*k,by+2*k,bw,bh);g.fillStyle='#1a1a1a';g.fillRect(bx-.8*k,by-.8*k,bw+1.6*k,bh+1.6*k);g.fillStyle='#a8acb0';g.fillRect(bx,by,bw,bh);g.fillStyle='#6a6e72';g.beginPath();g.arc(bx+bw/2,by+bh/2,Math.min(bw,bh)*.32,0,7);g.fill()}
+ if(r()<.5){const vx=x+w*(.2+r()*.6),vy=y+h*(.2+r()*.6);g.fillStyle='#1a1a1a';g.beginPath();g.arc(vx,vy,3.2*k,0,7);g.fill();g.fillStyle='#8a8e92';g.beginPath();g.arc(vx,vy,2.2*k,0,7);g.fill()}
+ if(r()<.35){const hx=x+w*(.25+r()*.5),hy=y+h*(.25+r()*.5),hr=(4+r()*4)*k;g.fillStyle='rgba(30,20,10,.5)';g.beginPath();g.arc(hx,hy,hr*1.5,0,7);g.fill();g.fillStyle='#0c0a08';g.beginPath();for(let i=0;i<9;i++){const a=i/9*6.28,d=hr*(.6+r()*.5);g.lineTo(hx+Math.cos(a)*d,hy+Math.sin(a)*d)}g.fill()}}
+function lampPost(g,x,y,a,k){k=k||1;g.fillStyle='rgba(0,0,0,.35)';g.beginPath();g.arc(x+1.5*k,y+2*k,2.6*k,0,7);g.fill();g.strokeStyle='#202224';g.lineWidth=1.6*k;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*9*k,y+Math.sin(a)*9*k);g.stroke();
+ g.fillStyle='#202224';g.beginPath();g.arc(x,y,2.2*k,0,7);g.fill();g.fillStyle='#f0e6b0';g.beginPath();g.ellipse(x+Math.cos(a)*9*k,y+Math.sin(a)*9*k,2.4*k,1.6*k,a,0,7);g.fill()}
+function puddle(g,x,y,s,r,ice){g.fillStyle=ice?'rgba(170,210,240,.7)':'rgba(40,50,70,.45)';g.beginPath();g.ellipse(x,y,s,s*.6,r()*3,0,7);g.fill();g.fillStyle=ice?'rgba(255,255,255,.8)':'rgba(170,200,230,.35)';g.beginPath();g.ellipse(x-s*.3,y-s*.15,s*.4,s*.12,-.3,0,7);g.fill()}
+function manhole(g,x,y){g.fillStyle='#1c1c1e';g.beginPath();g.arc(x,y,6.2,0,7);g.fill();g.fillStyle='#55575a';g.beginPath();g.arc(x,y,5,0,7);g.fill();g.strokeStyle='#3a3c3e';g.lineWidth=.8;for(let i=-3;i<=3;i+=2){g.beginPath();g.moveTo(x-4,y+i);g.lineTo(x+4,y+i);g.stroke()}}
+function mushroom(g,x,y,r){for(let i=0;i<3;i++){const px=x+(r()-.5)*7,py=y+(r()-.5)*5,s=1.6+r()*1.4;g.fillStyle='rgba(20,30,10,.35)';g.beginPath();g.arc(px+.7,py+.9,s,0,7);g.fill();g.fillStyle='#b8341e';g.beginPath();g.arc(px,py,s,0,7);g.fill();g.fillStyle='#fff';g.fillRect(px-.6,py-.6,1,1)}}
+function tumbleweed(g,x,y,s,r){g.strokeStyle='#8a6a3a';g.lineWidth=.8;for(let i=0;i<10;i++){g.beginPath();g.arc(x+(r()-.5)*s*.5,y+(r()-.5)*s*.5,s*(.4+r()*.5),r()*6,r()*6+2);g.stroke()}}
+function skull(g,x,y){g.fillStyle='rgba(80,50,20,.3)';g.beginPath();g.ellipse(x+1,y+1.5,4,3,0,0,7);g.fill();g.fillStyle='#efe6d0';g.beginPath();g.ellipse(x,y,3.6,3,0,0,7);g.fill();g.fillRect(x-2,y+1.5,4,2.4);g.fillStyle='#3a2a1a';g.fillRect(x-2,y-.8,1.4,1.4);g.fillRect(x+.6,y-.8,1.4,1.4);
+ g.strokeStyle='#efe6d0';g.lineWidth=1.3;g.beginPath();g.moveTo(x-9,y+5);g.lineTo(x-4,y+7);g.moveTo(x+5,y+6);g.lineTo(x+10,y+4);g.stroke()}
+function pumpkin(g,x,y,s){g.fillStyle='rgba(40,20,5,.35)';g.beginPath();g.ellipse(x+1,y+1.5,s*1.2,s,0,0,7);g.fill();g.fillStyle='#5a2a08';g.beginPath();g.ellipse(x,y,s*1.2+1,s+1,0,0,7);g.fill();g.fillStyle='#e07a1c';g.beginPath();g.ellipse(x,y,s*1.2,s,0,0,7);g.fill();
+ g.strokeStyle='#b0560e';g.lineWidth=.8;g.beginPath();g.ellipse(x,y,s*.5,s,0,0,7);g.stroke();g.fillStyle='#f4a040';g.beginPath();g.ellipse(x-s*.5,y-s*.4,s*.3,s*.2,0,0,7);g.fill();g.fillStyle='#3a5a1a';g.fillRect(x-.8,y-s-1.5,1.6,2.5)}
+function hayBale(g,x,y,s,r){g.save();g.translate(x,y);g.rotate(r()*3);g.fillStyle='rgba(40,25,5,.4)';g.fillRect(-s+2,-s*.6+3,2*s,1.2*s);g.fillStyle='#4a3410';g.fillRect(-s-1,-s*.6-1,2*s+2,1.2*s+2);g.fillStyle='#d8b450';g.fillRect(-s,-s*.6,2*s,1.2*s);
+ g.strokeStyle='#a8843a';g.lineWidth=.7;for(let i=-s+2;i<s;i+=2.5){g.beginPath();g.moveTo(i,-s*.6);g.lineTo(i+1,s*.6);g.stroke()}g.fillStyle='#7a5a20';g.fillRect(-s*.45,-s*.6,1.2,1.2*s);g.fillRect(s*.35,-s*.6,1.2,1.2*s);g.restore()}
+function snowdrift(g,x,y,s,r){g.fillStyle='rgba(70,95,140,.18)';g.beginPath();g.ellipse(x+2,y+3,s*1.2,s*.55,0,0,7);g.fill();g.fillStyle='#f8fbff';g.beginPath();g.ellipse(x,y,s*1.2,s*.5,r()*.4-.2,0,7);g.fill();g.fillStyle='#ffffff';g.beginPath();g.ellipse(x-s*.3,y-s*.15,s*.6,s*.2,0,0,7);g.fill()}
+function snowman(g,x,y){g.fillStyle='rgba(40,60,110,.3)';g.beginPath();g.ellipse(x+3,y+4,9,6,0,0,7);g.fill();[[0,2,7],[0,-6,5]].forEach(([dx,dy,s])=>{g.fillStyle='#8a9ab0';g.beginPath();g.arc(x+dx,y+dy,s+1,0,7);g.fill();g.fillStyle='#fdfeff';g.beginPath();g.arc(x+dx,y+dy,s,0,7);g.fill()});
+ g.fillStyle='#e8782a';g.beginPath();g.moveTo(x,y-6);g.lineTo(x+5,y-5);g.lineTo(x,y-5);g.fill();g.fillStyle='#222';g.fillRect(x-2,y-8,1.2,1.2);g.fillRect(x+1,y-8,1.2,1.2);g.fillStyle='#b8342a';g.fillRect(x-5,y-2,10,2)}
+function boulderBig(g,x,y,s,r,snowcap){rockDeco(g,x,y,s,r,['#7a7c78','#a4a69e','#5a5c58']);rockDeco(g,x+s*.7,y+s*.3,s*.6,r,['#84867f','#acaea6','#62645f']);if(snowcap){g.fillStyle='#f4f8fc';g.beginPath();g.ellipse(x-s*.2,y-s*.3,s*.6,s*.3,-.3,0,7);g.fill()}}
+// ville : immeubles serrés le long des bords, trottoir et lampadaires côté terrain, passages piétons à l'entrée des routes
+function buildCity(g,r,M,RW,k,W,H,cx,cy){k=k||1;W=W||L;H=H||L;cx=cx==null?M:cx;cy=cy==null?M:cy;const gap=(RW/2+10*k);
+ const blocks=[];for(let y=-20*k;y<H;y+=(46+r()*10)*k){for(let x=-20*k;x<W;){const w=(34+r()*30)*k;blocks.push([x,y,w,(40+r()*8)*k]);x+=w+(r()<.3?10*k:3*k)}}
+ return blocks.filter(([x,y,w,h])=>!(x<cx+gap&&x+w>cx-gap)&&!(y<cy+gap&&y+h>cy-gap))}
+function cityRing(g,r,M,RW){const D=T-12;
+ // immeubles dans la couronne
+ const ringOK=(x,y,w,h)=>(y+h<=D||y>=L-D||x+w<=D||x>=L-D)&&!(x<M+RW/2+8&&x+w>M-RW/2-8)&&!(y<M+RW/2+8&&y+h>M-RW/2-8);
+ const gs=M-RW/2-8,ge=M+RW/2+8,place=(horiz,lo,hi,fix0,fix1)=>{const dep=fix1-fix0;for(let p=lo;p<hi;){if(p>=gs&&p<ge){p=ge+2;continue}let b=Math.min(p+26+r()*30,hi);if(p<gs&&b>gs)b=gs-2;
+   if(b-p>=8)horiz?roofDeco(g,p,fix0,b-p,dep,r):roofDeco(g,fix0,p,dep,b-p,r);p=b+(r()<.35?8:3)}};
+ place(true,-4,L+4,-4,D-2);place(true,-4,L+4,L-D+2,L+4);place(false,D+2,L-D-2,-4,D-2);place(false,D+2,L-D-2,L-D+2,L+4);
+ // trottoir le long du terrain
+ g.fillStyle='#8e8f8c';[[T-11,T-11,L-2*T+22,10],[T-11,L-T+1,L-2*T+22,10],[T-11,T-1,10,L-2*T+2],[L-T+1,T-1,10,L-2*T+2]].forEach(([x,y,w,h])=>g.fillRect(x,y,w,h));
+ g.strokeStyle='rgba(40,40,40,.35)';g.lineWidth=.7;for(let i=T-11;i<L-T+11;i+=9){g.beginPath();g.moveTo(i,T-11);g.lineTo(i,T-1);g.moveTo(i,L-T+1);g.lineTo(i,L-T+11);g.moveTo(T-11,i);g.lineTo(T-1,i);g.moveTo(L-T+1,i);g.lineTo(L-T+11,i);g.stroke()}
+ g.strokeStyle='#c4c5c2';g.lineWidth=1.2;g.strokeRect(T-1.5,T-1.5,L-2*T+3,L-2*T+3);
+ // lampadaires et poubelles sur le trottoir (jamais devant les routes)
+ for(let i=T+12;i<L-T;i+=T*1.5){if(Math.abs(i-M)<RW)continue;lampPost(g,i,T-6,Math.PI/2);lampPost(g,i,L-T+6,-Math.PI/2);lampPost(g,T-6,i,0);lampPost(g,L-T+6,i,Math.PI)}
+ // passages piétons à l'entrée des routes
+ g.fillStyle='rgba(235,235,225,.8)';for(let i=-RW/2+4;i<RW/2-3;i+=6){g.fillRect(M+i,T-14,3.4,12);g.fillRect(M+i,L-T+2,3.4,12);g.fillRect(T-14,M+i,12,3.4);g.fillRect(L-T+2,M+i,12,3.4)}
+ // voitures abandonnées et gravats dans les ruelles
+ for(let k=0;k<10;k++){const x=r()*L,y=r()*L;const inR=x<D||y<D||x>L-D||y>L-D;if(!inR||Math.abs(x-M)<RW/2+8||Math.abs(y-M)<RW/2+8)continue;r()<.5?rubble(g,x,y,7,r):barrel(g,x,y,3.5,r)}}
 function ringItem(g,B,x,y,s,r,k){const f=B.flora,v=r();
  if(f==='leaf')return leafTree(g,x,y,s,r,k,B.tc);
- if(f==='pine'){if(v<.72)return pineTree(g,x,y,s,r,k,false);if(v<.95)return rockDeco(g,x,y,s*.55,r);return}
- if(f==='snowpine'){if(v<.85)return pineTree(g,x,y,s,r,k,true);return rockDeco(g,x,y,s*.4,r,['#9aa2ac','#f4f8fc','#7a828c'])}
- if(f==='desert'){if(v<.16)return cactus(g,x,y,s*.9,r,k);if(v<.34)return deadBush(g,x,y,s*.6,r,k);if(v<.5)return rockDeco(g,x,y,s*.6,r,['#b0704a','#d49a6a','#8a5236']);return}
+ if(f==='pine'){if(v<.66)return pineTree(g,x,y,s,r,k,false);if(v<.8)return boulderBig(g,x,y,s*.6,r,r()<.4);if(v<.95)return rockDeco(g,x,y,s*.55,r);return}
+ if(f==='snowpine'){if(v<.12)return snowdrift(g,x,y,s*.7,r);if(v<.85)return pineTree(g,x,y,s,r,k,true);return rockDeco(g,x,y,s*.4,r,['#9aa2ac','#f4f8fc','#7a828c'])}
+ if(f==='desert'){if(v<.16)return cactus(g,x,y,s*.9,r,k);if(v<.34)return deadBush(g,x,y,s*.6,r,k);if(v<.5)return rockDeco(g,x,y,s*.6,r,['#b0704a','#d49a6a','#8a5236']);if(v<.6)return tumbleweed(g,x,y,s*.45,r);return}
  if(f==='urban'){if(v<.12)return carWreck(g,x,y,s*.9,r,k);if(v<.27)return concreteBlock(g,x,y,s*.7,r,k);if(v<.37)return barrel(g,x,y,s*.35,r,k);if(v<.57)return rubble(g,x,y,s*.8,r,k);if(v<.65)return deadTree(g,x,y,s*.8,r,k);return}}
 function dirtRoad(g,x1,y1,x2,y2,w,r,k,R){k=k||1;R=R||BIO.foret.road;const len=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/len,uy=(y2-y1)/len,st=3*k;
  const pass=(c,rad,j)=>{g.fillStyle=c;for(let d=0;d<=len;d+=st){const o=(r()-.5)*j;g.beginPath();g.arc(x1+ux*d-uy*o,y1+uy*d+ux*o,rad*(.9+r()*.2),0,7);g.fill()}};
@@ -96,7 +141,8 @@ function drawWoods(force){const w=$('#woods');if(!w)return;const W=w.clientWidth
  const off=(x,y,m)=>Math.abs(y-cy)<20*k+m||Math.abs(x-cx)<20*k+m,step=20*k,tr=[];
  if(B.flora==='leaf'||B.flora==='pine')for(let n=0;n<W*H/(step*step*6);n++){const x=r()*W,y=r()*H;if(!off(x,y,8*k))r()<.5?rockDeco(g,x,y,(4+r()*4)*k,r):logDeco(g,x,y,(20+r()*12)*k,6*k,r()*3)}
  for(let y=-step;y<H+step;y+=step)for(let x=-step;x<W+step;x+=step){const px=x+(r()-.5)*step,py=y+(r()-.5)*step,sz=(12+r()*12)*k;if(off(px,py,sz*.7))continue;if(r()<.85)tr.push([px,py,sz])}
- tr.sort((a,b)=>a[1]-b[1]).forEach(([x,y,sz])=>ringItem(g,B,x,y,sz,r,k));
+ if(B.flora==='urban'){buildCity(g,r,0,40*k,k,W,H,cx,cy).forEach(([x,y,bw,bh])=>{const mr=m.left-o.left,mt=m.top-o.top;if(x+bw>mr-12*k&&x<mr+m.width+12*k&&y+bh>mt-12*k&&y<mt+m.height+12*k)return;roofDeco(g,x,y,bw,bh,r,k)})}
+ else tr.sort((a,b)=>a[1]-b[1]).forEach(([x,y,sz])=>ringItem(g,B,x,y,sz,r,k));
  g.fillStyle='rgba(8,14,6,.18)';g.fillRect(0,0,W,H)}
 addEventListener('resize',()=>setTimeout(drawWoods,60));
 /* ground, pre-rendered once per terrain */
@@ -135,14 +181,31 @@ function buildGround(B){const g=ground.getContext('2d');g.setTransform(2,0,0,2,0
  const rockC=B.flora==='desert'?['#b0704a','#d49a6a','#8a5236']:B.deco==='snow'?['#9aa2ac','#f4f8fc','#7a828c']:null;
  for(let k=0;k<(B.deco==='mountain'?34:16);k++){const x=r()*L,y=r()*L;if(free(x,y))rockDeco(g,x,y,2+r()*(B.deco==='mountain'?3.5:2),r,rockC)}
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<7;k++){const x=r()*L,y=r()*L;if(!free(x,y))continue;g.save();g.translate(x,y);g.rotate(r()*3);g.fillStyle='#2b1c10';g.fillRect(-9.5,-2.5,19,5);g.fillStyle='#8a6640';g.fillRect(-8.5,-1.5,17,3);g.fillStyle='#a37b4d';g.fillRect(-8.5,-1.5,17,1);g.restore()}
+ // v159 : décors en plus selon le terrain
+ const corners=[];for(let rr=2;rr<Z.N-1;rr++)for(let c=2;c<Z.N-1;c++){const x=c*T,y=rr*T;if(!onRoad(x,y,6))corners.push([x,y])}
+ const pick=()=>corners.splice(Math.floor(r()*corners.length),1)[0]||[T*2,T*2],spot=()=>{for(let i=0;i<20;i++){const x=r()*L,y=r()*L;if(free(x,y))return[x,y]}return null};
+ const D=B.deco;
+ if(D==='urban'){const cells=[];for(let rr=1;rr<Z.N-1;rr++)for(let c=1;c<Z.N-1;c++)if(rr!==MIDN&&c!==MIDN)cells.push([c,rr]);
+  for(let i=0;i<9;i++){const [c,rr]=cells.splice(Math.floor(r()*cells.length),1)[0],x=c*T,y=rr*T;g.strokeStyle='rgba(235,235,220,.55)';g.lineWidth=2;g.beginPath();
+   if(r()<.5){g.moveTo(x+6,y+5);g.lineTo(x+6,y+T-5);g.moveTo(x+T-6,y+5);g.lineTo(x+T-6,y+T-5)}else{g.moveTo(x+5,y+6);g.lineTo(x+T-5,y+6);g.moveTo(x+5,y+T-6);g.lineTo(x+T-5,y+T-6)}g.stroke()}
+  for(let i=0;i<5;i++){const [x,y]=pick();manhole(g,x,y)}
+  for(let i=0;i<9;i++){const q=spot();if(q)puddle(g,q[0],q[1],5+r()*5,r)}
+  for(let i=0;i<14;i++){const q=spot();if(!q)continue;const[x,y]=q;g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x+1,y+1.5,4,3,0,0,7);g.fill();g.fillStyle=r()<.5?'#1e1e22':'#3a4a2a';g.beginPath();g.ellipse(x,y,3.6,2.8,0,0,7);g.fill();g.fillStyle='rgba(255,255,255,.2)';g.beginPath();g.arc(x-1,y-1,1,0,7);g.fill()}
+  for(let i=0;i<20;i++){const q=spot();if(!q)continue;g.fillStyle='rgba(220,240,255,.8)';g.fillRect(q[0],q[1],1.2,1.2);g.fillRect(q[0]+3,q[1]+1,1,1)}}
+ if(D==='flowers'){for(let i=0;i<8;i++){const q=spot();if(q)mushroom(g,q[0],q[1],r)}for(let i=0;i<4;i++){const q=spot();if(q)puddle(g,q[0],q[1],5+r()*3,r)}}
+ if(D==='leaves'){for(let i=0;i<5;i++){const [x,y]=pick();pumpkin(g,x+(r()-.5)*8,y+(r()-.5)*8,4+r()*2)}for(let i=0;i<2;i++){const [x,y]=pick();hayBale(g,x,y,7,r)}for(let i=0;i<6;i++){const q=spot();if(q)mushroom(g,q[0],q[1],r)}}
+ if(D==='snow'){for(let i=0;i<6;i++){const [x,y]=pick();puddle(g,x,y,7+r()*5,r,true)}for(let i=0;i<8;i++){const q=spot();if(q)snowdrift(g,q[0],q[1],4+r()*3,r)}}
+ if(D==='desert'){for(let i=0;i<3;i++){const [x,y]=pick();skull(g,x,y)}for(let i=0;i<6;i++){const q=spot();if(q)tumbleweed(g,q[0],q[1],5+r()*2,r)}}
+ if(D==='mountain'){for(let i=0;i<5;i++){const [x,y]=pick();rockDeco(g,x,y,4+r()*2,r)}for(let i=0;i<60;i++){const q=spot();if(q){g.fillStyle=r()<.5?'#8a8c86':'#6a6c66';g.fillRect(q[0],q[1],1.6,1.2)}}}
  // ombre de la couronne sur le bord du terrain (profondeur)
  const sh=(x0,y0,x1,y1,x,y,w,h)=>{const gr=g.createLinearGradient(x0,y0,x1,y1);gr.addColorStop(0,`rgba(${B.shadow},.42)`);gr.addColorStop(1,`rgba(${B.shadow},0)`);g.fillStyle=gr;g.fillRect(x,y,w,h)};
  sh(0,T,0,T+16,T,T,L-2*T,16);sh(0,L-T,0,L-T-12,T,L-T-12,L-2*T,12);sh(T,0,T+14,0,T,T,14,L-2*T);sh(L-T,0,L-T-14,0,L-T-14,T,14,L-2*T);
  const inRing=(x,y)=>x<T*.95||y<T*.95||x>L-T*.95||y>L-T*.95;
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<22;k++){const x=r()*L,y=r()*L;if(!inRing(x,y)||onRoad(x,y,8))continue;r()<.5?rockDeco(g,x,y,4+r()*4,r):logDeco(g,x,y,22+r()*14,7,r()*3)}
- const trees=[],st=17;for(let y=-st/2;y<L+st;y+=st)for(let x=-st/2;x<L+st;x+=st){const px=x+(r()-.5)*st,py=y+(r()-.5)*st,sz=11+r()*11;
+ if(B.flora==='urban')cityRing(g,r,M,RW);else{const trees=[],st=17;for(let y=-st/2;y<L+st;y+=st)for(let x=-st/2;x<L+st;x+=st){const px=x+(r()-.5)*st,py=y+(r()-.5)*st,sz=11+r()*11;
   if(!(px<T*.9||py<T*.9||px>L-T*.9||py>L-T*.9)||onRoad(px,py,sz*.7)||r()<.12)continue;trees.push([px,py,sz])}
- trees.sort((a,b)=>a[1]-b[1]).forEach(([x,y,s])=>ringItem(g,B,x,y,s,r,1));
+ trees.sort((a,b)=>a[1]-b[1]).forEach(([x,y,s])=>ringItem(g,B,x,y,s,r,1))}
+ if(B.flora==='snowpine')snowman(g,T*.55,L-T*.5);
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<12;k++){const x=r()*L,y=r()*L;if(!inRing(x,y)||onRoad(x,y,8))continue;r()<.6?rockDeco(g,x,y,4+r()*4,r):logDeco(g,x,y,20+r()*12,6,r()*3)}
 }
 setBiome('foret');
