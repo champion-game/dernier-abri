@@ -71,8 +71,8 @@ function rubble(g,x,y,s,r,k){k=k||1;for(let i=0;i<7;i++){const px=x+(r()-.5)*s*1
 function deadTree(g,x,y,s,r,k){k=k||1;g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.ellipse(x+s*.3,y+s*.35,s*.7,s*.5,0,0,7);g.fill();deadBush(g,x,y,s,r,k,'#3e2c1c');g.fillStyle='#4a3420';g.beginPath();g.arc(x,y,s*.14,0,7);g.fill()}
 // un élément de la couronne extérieure selon le terrain (null : laisser le sol visible)
 // v159 : décors en plus par terrain (toits d'immeubles, trottoirs, flaques, champignons, congères…), toujours hors du centre des cases
-function roofDeco(g,x,y,w,h,r,k){k=k||1;const c=[['#55575c','#6a6c72'],['#6a4c3c','#80604c'],['#3e5656','#527070'],['#5c5444','#746a56'],['#4a4a5a','#5e5e70']][Math.floor(r()*5)];
- g.fillStyle='rgba(0,0,0,.45)';g.fillRect(x+4*k,y+5*k,w,h);g.fillStyle='#121314';g.fillRect(x-1.3*k,y-1.3*k,w+2.6*k,h+2.6*k);g.fillStyle=c[1];g.fillRect(x,y,w,h);
+function roofDeco(g,x,y,w,h,r,k,top){k=k||1;const c=[['#55575c','#6a6c72'],['#6a4c3c','#80604c'],['#3e5656','#527070'],['#5c5444','#746a56'],['#4a4a5a','#5e5e70']][Math.floor(r()*5)];
+ if(!top){g.fillStyle='rgba(0,0,0,.45)';g.fillRect(x+4*k,y+5*k,w,h)}g.fillStyle='#121314';g.fillRect(x-1.3*k,y-1.3*k,w+2.6*k,h+2.6*k);g.fillStyle=c[1];g.fillRect(x,y,w,h);
  g.fillStyle=c[0];g.fillRect(x+3*k,y+3*k,w-6*k,h-6*k);g.fillStyle='rgba(255,255,255,.12)';g.fillRect(x,y,w,1.5*k);g.fillRect(x,y,1.5*k,h);
  g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=.8*k;for(let i=x+10*k;i<x+w-4*k;i+=10*k){g.beginPath();g.moveTo(i,y+3*k);g.lineTo(i,y+h-3*k);g.stroke()}
  const n=1+Math.floor(r()*3);for(let i=0;i<n;i++){const bw=(6+r()*5)*k,bh=(5+r()*4)*k,bx=x+4*k+r()*Math.max(1,w-bw-8*k),by=y+4*k+r()*Math.max(1,h-bh-8*k);
@@ -103,8 +103,9 @@ function cityRing(g,r,M,RW){const D=T-12;
  // immeubles dans la couronne
  const ringOK=(x,y,w,h)=>(y+h<=D||y>=L-D||x+w<=D||x>=L-D)&&!(x<M+RW/2+8&&x+w>M-RW/2-8)&&!(y<M+RW/2+8&&y+h>M-RW/2-8);
  const gs=M-RW/2-8,ge=M+RW/2+8,place=(horiz,lo,hi,fix0,fix1)=>{const dep=fix1-fix0;for(let p=lo;p<hi;){if(p>=gs&&p<ge){p=ge+2;continue}let b=Math.min(p+26+r()*30,hi);if(p<gs&&b>gs)b=gs-2;
-   if(b-p>=8)horiz?roofDeco(g,p,fix0,b-p,dep,r):roofDeco(g,fix0,p,dep,b-p,r);p=b+(r()<.35?8:3)}};
- place(true,-4,L+4,-4,D-2);place(true,-4,L+4,L-D+2,L+4);place(false,D+2,L-D-2,-4,D-2);place(false,D+2,L-D-2,L-D+2,L+4);
+   if(b-p>=8)BL.push(horiz?[p,fix0,b-p,dep]:[fix0,p,dep,b-p]);p=b+(r()<.35?8:3)}};
+ const BL=[];place(true,-4,L+4,-4,D-6);place(true,-4,L+4,L-D+6,L+4);place(false,D+2,L-D-2,-4,D-6);place(false,D+2,L-D-2,L-D+6,L+4);
+ PJ={cx:M,cy:M,H:620};BL.sort((a,b)=>Math.hypot(b[0]+b[2]/2-M,b[1]+b[3]/2-M)-Math.hypot(a[0]+a[2]/2-M,a[1]+a[3]/2-M)).forEach(([x,y,w,h])=>building3d(g,x,y,w,h,28+r()*34,r));
  // trottoir le long du terrain
  g.fillStyle='#8e8f8c';[[T-11,T-11,L-2*T+22,10],[T-11,L-T+1,L-2*T+22,10],[T-11,T-1,10,L-2*T+2],[L-T+1,T-1,10,L-2*T+2]].forEach(([x,y,w,h])=>g.fillRect(x,y,w,h));
  g.strokeStyle='rgba(40,40,40,.35)';g.lineWidth=.7;for(let i=T-11;i<L-T+11;i+=9){g.beginPath();g.moveTo(i,T-11);g.lineTo(i,T-1);g.moveTo(i,L-T+1);g.lineTo(i,L-T+11);g.moveTo(T-11,i);g.lineTo(T-1,i);g.moveTo(L-T+1,i);g.lineTo(L-T+11,i);g.stroke()}
@@ -115,11 +116,51 @@ function cityRing(g,r,M,RW){const D=T-12;
  g.fillStyle='rgba(235,235,225,.8)';for(let i=-RW/2+4;i<RW/2-3;i+=6){g.fillRect(M+i,T-14,3.4,12);g.fillRect(M+i,L-T+2,3.4,12);g.fillRect(T-14,M+i,12,3.4);g.fillRect(L-T+2,M+i,12,3.4)}
  // voitures abandonnées et gravats dans les ruelles
  for(let k=0;k<10;k++){const x=r()*L,y=r()*L;const inR=x<D||y<D||x>L-D||y>L-D;if(!inR||Math.abs(x-M)<RW/2+8||Math.abs(y-M)<RW/2+8)continue;r()<.5?rubble(g,x,y,7,r):barrel(g,x,y,3.5,r)}}
+// v159 : relief (fausse 3D) des immeubles, cactus et rochers : caméra au-dessus de la maison, on voit les faces tournées vers le centre
+let PJ={cx:L/2,cy:L/2,H:620};
+function proj(x,y,z){const s=PJ.H/(PJ.H-z);return[PJ.cx+(x-PJ.cx)*s,PJ.cy+(y-PJ.cy)*s]}
+function poly(g,pts,c){g.fillStyle=c;g.beginPath();pts.forEach(([a,b],i)=>i?g.lineTo(a,b):g.moveTo(a,b));g.closePath();g.fill()}
+const LIT=(nx,ny)=>.78+.22*(-nx*.7-ny*.7);// lumière venue du haut à gauche
+function tone(c,f){const n=parseInt(c.slice(1),16),q=v=>Math.max(0,Math.min(255,Math.round(v*f)));return`rgb(${q(n>>16)},${q(n>>8&255)},${q(n&255)})`}
+function building3d(g,x,y,w,h,z,r,k){k=k||1;const wall=['#8a8478','#7a6a5a','#6a7a7a','#8a7a64','#76768a','#9a8a7a'][Math.floor(r()*6)];
+ const c=[[x,y],[x+w,y],[x+w,y+h],[x,y+h]],t=c.map(([a,b])=>proj(a,b,z));
+ // ombre portée vers le bas à droite
+ const sx=z*.45,sy=z*.55;g.fillStyle='rgba(0,0,0,.38)';g.beginPath();g.moveTo(x,y);g.lineTo(x+w,y);g.lineTo(x+w+sx,y+sy);g.lineTo(x+w+sx,y+h+sy);g.lineTo(x+sx,y+h+sy);g.lineTo(x,y+h);g.closePath();g.fill();
+ const N=[[0,-1],[1,0],[0,1],[-1,0]];
+ for(let i=0;i<4;i++){const j=(i+1)%4,[nx,ny]=N[i],mx=(c[i][0]+c[j][0])/2,my=(c[i][1]+c[j][1])/2;if(nx*(PJ.cx-mx)+ny*(PJ.cy-my)<=0)continue;
+  const q=[c[i],c[j],t[j],t[i]];poly(g,q,'#141516');const f=LIT(nx,ny);poly(g,[[q[0][0]+(nx?0:.6*k),q[0][1]+(ny?0:.6*k)],q[1],q[2],q[3]],tone(wall,f));
+  // étages et fenêtres
+  const L2=(a,b,u)=>[a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u],P=(u,v)=>L2(L2(c[i],c[j],u),L2(t[i],t[j],u),v);
+  const cols=Math.max(1,Math.floor(Math.hypot(c[j][0]-c[i][0],c[j][1]-c[i][1])/(9*k))),fl=Math.max(1,Math.round(z/(14*k)));
+  for(let a=0;a<cols;a++)for(let b=0;b<fl;b++){const u0=(a+.25)/cols,u1=(a+.75)/cols,v0=(b+.3)/fl,v1=(b+.75)/fl,rv=r();
+   poly(g,[P(u0,v0),P(u1,v0),P(u1,v1),P(u0,v1)],rv<.12?'#0a0a0c':rv<.2?'#e8c86a':tone('#3a4a5c',f*(.9+r()*.3)))}
+  g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=.6*k;for(let b=1;b<fl;b++){const a1=P(0,b/fl),a2=P(1,b/fl);g.beginPath();g.moveTo(a1[0],a1[1]);g.lineTo(a2[0],a2[1]);g.stroke()}}
+ const rx=Math.min(t[0][0],t[2][0]),ry=Math.min(t[0][1],t[2][1]);roofDeco(g,rx,ry,Math.abs(t[2][0]-t[0][0]),Math.abs(t[2][1]-t[0][1]),r,k,true)}
+function cactus3d(g,x,y,s,r,k){k=k||1;const z=s*2.1,wd=s*.42;
+ g.strokeStyle='rgba(90,50,20,.34)';g.lineCap='round';g.lineWidth=wd;g.beginPath();g.moveTo(x,y);g.lineTo(x+z*.5,y+z*.6);g.stroke();
+ const px=1,py=0,side=r()<.5?1:-1;
+ const limb=(pts,w)=>{const P=pts.map(([a,b,h])=>{const q=proj(a,b,h*.3);return[q[0],q[1]-h*.8]});const st=(c,lw)=>{g.strokeStyle=c;g.lineWidth=lw;g.beginPath();P.forEach(([a,b],i)=>i?g.lineTo(a,b):g.moveTo(a,b));g.stroke()};
+  st('#12280c',w+2.4*k);st('#3f7a2e',w);g.save();g.translate(-w*.22,-w*.22);st('#6aa84a',w*.45);g.restore();st('rgba(20,50,10,.35)',w*.12);return P};
+ // bras gauche et droit puis le tronc
+ limb([[x+px*side*s*.15,y+py*side*s*.15,z*.35],[x+px*side*s*.6,y+py*side*s*.6,z*.42],[x+px*side*s*.6,y+py*side*s*.6,z*.75]],wd*.7);
+ if(r()<.7)limb([[x-px*side*s*.15,y-py*side*s*.15,z*.5],[x-px*side*s*.5,y-py*side*s*.5,z*.55],[x-px*side*s*.5,y-py*side*s*.5,z*.85]],wd*.62);
+ const P=limb([[x,y,0],[x,y,z]],wd);const[tx,ty]=P[1];g.fillStyle='#f4d0e0';if(r()<.4){g.beginPath();g.arc(tx,ty,wd*.3,0,7);g.fill()}}
+function rock3d(g,x,y,s,r,c,k){k=k||1;c=c||['#b0704a','#d49a6a','#8a5236'];const n=6+Math.floor(r()*3),z=s*(.6+r()*.5),base=[];
+ for(let i=0;i<n;i++){const a=i/n*6.283+r()*.4,d=s*(.75+r()*.35);base.push([x+Math.cos(a)*d,y+Math.sin(a)*d*.85])}
+ const top=base.map(([a,b])=>proj(x+(a-x)*.72,y+(b-y)*.72,z));
+ g.fillStyle='rgba(90,50,20,.34)';g.beginPath();base.forEach(([a,b],i)=>{const q=[a+z*.5,b+z*.6];i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.closePath();g.fill();poly(g,base,'rgba(90,50,20,.3)');
+ poly(g,base,'#2a1a10');
+ for(let i=0;i<n;i++){const j=(i+1)%n,ex=base[j][0]-base[i][0],ey=base[j][1]-base[i][1],el=Math.hypot(ex,ey)||1,nx=ey/el,ny=-ex/el,mx=(base[i][0]+base[j][0])/2,my=(base[i][1]+base[j][1])/2;
+  const out=nx*(mx-x)+ny*(my-y)>0?1:-1;if(out*(nx*(PJ.cx-mx)+ny*(PJ.cy-my))<=0&&nx*(top[i][0]-base[i][0])*out+ny*(top[i][1]-base[i][1])*out<=0)continue;
+  poly(g,[base[i],base[j],top[j],top[i]],tone(c[2],LIT(nx*out,ny*out)*1.1))}
+ g.strokeStyle='rgba(40,20,10,.35)';g.lineWidth=.7*k;for(let i=0;i<n;i+=2){g.beginPath();g.moveTo(base[i][0],base[i][1]);g.lineTo(top[i][0],top[i][1]);g.stroke()}
+ poly(g,top,'#2a1a10');const tc=top.map(([a,b])=>[a,b]);poly(g,tc.map(([a,b])=>{const cx=tc.reduce((s,p)=>s+p[0],0)/n,cy=tc.reduce((s,p)=>s+p[1],0)/n;return[cx+(a-cx)*.93,cy+(b-cy)*.93]}),c[0]);
+ const cx=tc.reduce((s,p)=>s+p[0],0)/n,cy=tc.reduce((s,p)=>s+p[1],0)/n;g.fillStyle=c[1];g.beginPath();g.ellipse(cx-s*.2,cy-s*.2,s*.35,s*.2,-.5,0,7);g.fill()}
 function ringItem(g,B,x,y,s,r,k){const f=B.flora,v=r();
  if(f==='leaf')return leafTree(g,x,y,s,r,k,B.tc);
  if(f==='pine'){if(v<.66)return pineTree(g,x,y,s,r,k,false);if(v<.8)return boulderBig(g,x,y,s*.6,r,r()<.4);if(v<.95)return rockDeco(g,x,y,s*.55,r);return}
  if(f==='snowpine'){if(v<.12)return snowdrift(g,x,y,s*.7,r);if(v<.85)return pineTree(g,x,y,s,r,k,true);return rockDeco(g,x,y,s*.4,r,['#9aa2ac','#f4f8fc','#7a828c'])}
- if(f==='desert'){if(v<.16)return cactus(g,x,y,s*.9,r,k);if(v<.34)return deadBush(g,x,y,s*.6,r,k);if(v<.5)return rockDeco(g,x,y,s*.6,r,['#b0704a','#d49a6a','#8a5236']);if(v<.6)return tumbleweed(g,x,y,s*.45,r);return}
+ if(f==='desert'){if(v<.16)return cactus3d(g,x,y,s*.8,r,k);if(v<.34)return deadBush(g,x,y,s*.6,r,k);if(v<.5)return rock3d(g,x,y,s*.75,r,null,k);if(v<.6)return tumbleweed(g,x,y,s*.45,r);return}
  if(f==='urban'){if(v<.12)return carWreck(g,x,y,s*.9,r,k);if(v<.27)return concreteBlock(g,x,y,s*.7,r,k);if(v<.37)return barrel(g,x,y,s*.35,r,k);if(v<.57)return rubble(g,x,y,s*.8,r,k);if(v<.65)return deadTree(g,x,y,s*.8,r,k);return}}
 function dirtRoad(g,x1,y1,x2,y2,w,r,k,R){k=k||1;R=R||BIO.foret.road;const len=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/len,uy=(y2-y1)/len,st=3*k;
  const pass=(c,rad,j)=>{g.fillStyle=c;for(let d=0;d<=len;d+=st){const o=(r()-.5)*j;g.beginPath();g.arc(x1+ux*d-uy*o,y1+uy*d+ux*o,rad*(.9+r()*.2),0,7);g.fill()}};
@@ -141,8 +182,8 @@ function drawWoods(force){const w=$('#woods');if(!w)return;const W=w.clientWidth
  const off=(x,y,m)=>Math.abs(y-cy)<20*k+m||Math.abs(x-cx)<20*k+m,step=20*k,tr=[];
  if(B.flora==='leaf'||B.flora==='pine')for(let n=0;n<W*H/(step*step*6);n++){const x=r()*W,y=r()*H;if(!off(x,y,8*k))r()<.5?rockDeco(g,x,y,(4+r()*4)*k,r):logDeco(g,x,y,(20+r()*12)*k,6*k,r()*3)}
  for(let y=-step;y<H+step;y+=step)for(let x=-step;x<W+step;x+=step){const px=x+(r()-.5)*step,py=y+(r()-.5)*step,sz=(12+r()*12)*k;if(off(px,py,sz*.7))continue;if(r()<.85)tr.push([px,py,sz])}
- if(B.flora==='urban'){buildCity(g,r,0,40*k,k,W,H,cx,cy).forEach(([x,y,bw,bh])=>{const mr=m.left-o.left,mt=m.top-o.top;if(x+bw>mr-12*k&&x<mr+m.width+12*k&&y+bh>mt-12*k&&y<mt+m.height+12*k)return;roofDeco(g,x,y,bw,bh,r,k)})}
- else tr.sort((a,b)=>a[1]-b[1]).forEach(([x,y,sz])=>ringItem(g,B,x,y,sz,r,k));
+ if(B.flora==='urban'){PJ={cx,cy,H:620*k};buildCity(g,r,0,40*k,k,W,H,cx,cy).forEach(([x,y,bw,bh])=>{const mr=m.left-o.left,mt=m.top-o.top;if(x+bw>mr-12*k&&x<mr+m.width+12*k&&y+bh>mt-12*k&&y<mt+m.height+12*k)return;building3d(g,x,y,bw,bh,(28+r()*34)*k,r,k)})}
+ else{PJ={cx,cy,H:620*k};if(B.flora==='desert')tr.sort((a,b)=>Math.hypot(b[0]-cx,b[1]-cy)-Math.hypot(a[0]-cx,a[1]-cy));else tr.sort((a,b)=>a[1]-b[1]);tr.forEach(([x,y,sz])=>ringItem(g,B,x,y,sz,r,k))}
  g.fillStyle='rgba(8,14,6,.18)';g.fillRect(0,0,W,H)}
 addEventListener('resize',()=>setTimeout(drawWoods,60));
 /* ground, pre-rendered once per terrain */
@@ -204,7 +245,7 @@ function buildGround(B){const g=ground.getContext('2d');g.setTransform(2,0,0,2,0
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<22;k++){const x=r()*L,y=r()*L;if(!inRing(x,y)||onRoad(x,y,8))continue;r()<.5?rockDeco(g,x,y,4+r()*4,r):logDeco(g,x,y,22+r()*14,7,r()*3)}
  if(B.flora==='urban')cityRing(g,r,M,RW);else{const trees=[],st=17;for(let y=-st/2;y<L+st;y+=st)for(let x=-st/2;x<L+st;x+=st){const px=x+(r()-.5)*st,py=y+(r()-.5)*st,sz=11+r()*11;
   if(!(px<T*.9||py<T*.9||px>L-T*.9||py>L-T*.9)||onRoad(px,py,sz*.7)||r()<.12)continue;trees.push([px,py,sz])}
- trees.sort((a,b)=>a[1]-b[1]).forEach(([x,y,s])=>ringItem(g,B,x,y,s,r,1))}
+ PJ={cx:M,cy:M,H:620};trees.sort(B.flora==='desert'?(a,b)=>Math.hypot(b[0]-M,b[1]-M)-Math.hypot(a[0]-M,a[1]-M):(a,b)=>a[1]-b[1]).forEach(([x,y,s])=>ringItem(g,B,x,y,s,r,1))}
  if(B.flora==='snowpine')snowman(g,T*.55,L-T*.5);
  if(B.flora==='leaf'||B.flora==='pine')for(let k=0;k<12;k++){const x=r()*L,y=r()*L;if(!inRing(x,y)||onRoad(x,y,8))continue;r()<.6?rockDeco(g,x,y,4+r()*4,r):logDeco(g,x,y,20+r()*12,6,r()*3)}
 }
