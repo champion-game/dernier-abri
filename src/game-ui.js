@@ -14,12 +14,13 @@ function playEvents(ev,types,now){
   if(dead.length>=5)ach('carnage')}
  const SND={v_hmg:'mg',v_sniper:'snp',v_rdog:'bark',v_apc:'melee',sap:'boom',rocket:'cannon',doc:'shot',nailer:'mg',ranger:'snp',chief_comm:'shot',chief_tech:'mg',amb:'melee',orderly:'melee',chief_care:'melee',nightsnp:'snp',heavyflame:'flame',fortin:'shot',autogun:'mg',slaughter:'melee',gang:'shot',saint:'melee',tracker:'bow',k9squad:'bark',swat:'snp',vigile:'shot',hunter:'bow',sentry:'mg',turret:'mg',mortar:'cannon',tesla:'hit',bunker:'shot',riot:'melee',k9:'bark',dogs:'bark',pitch:'melee',gun:'shot',kid:'shot',snp:'snp',sht:'sht',mg:'mg',xbow:'bow',flame:'flame',axe:'melee',dog:'bark',cop:'melee',butch:'melee',monk:'melee'};
  for(const e of ev){
+  try{if(e.k==='bite'||e.k==='spit'){if(e.i!=null)ouchT[e.i]=now;const zv=V.get(e.zid);if(zv&&e.k==='bite')zv.atk=now}}catch(x){}
   try{if(e.k==='hit'){const sd=SND[types[e.src]]||'hit';SFX.play(sd,sd==='bark'?.7:undefined)}else if(e.k==='bite'||e.k==='spit')SFX.play(e.i===Z.C?'shelter':'bite');
    else if(e.k==='boom')SFX.play('boom');else if(e.k==='lost')SFX.play(e.name?'death':'lost',.3);else if(e.k==='ko')SFX.play('lost',.3);else if(e.k==='molo')SFX.play('flame');else if(e.k==='howl')SFX.play('groan',.2)}catch(x){}
   if(e.k==='hit'){const v=V.get(e.zid);const tp=v?(v.dying?{x:v.dx,y:v.dy}:zpos(v,now)):tc(e.i);if(v)v.flash=now;
    {const dm=parseInt(e.txt.replace('−',''))||0;floatTxt(tp.x,tp.y,e.txt,dm>=10?'#ff9a2e':dm>=4?'#ffd25a':'#ffffff',dm>=10?23:dm>=4?17:13);if(dm>=10)shake(now,3)}burst(tp.x,tp.y,'rgba(140,20,24,.9)',4,.06,2);splat(tp.x,tp.y,false);
    const t=types[e.src],sp=tc(e.src);
-   if(t)facing[e.src]=Math.atan2(tp.y-sp.y,tp.x-sp.x);
+   if(t){facing[e.src]=Math.atan2(tp.y-sp.y,tp.x-sp.x);atkT[e.src]=now}
    const key=e.src+':'+e.zid;
    if(['gun','snp','mg','kid','swat','vigile','sentry','turret','bunker','chief_police','chief_mil','hunter','nightsnp','autogun','gang','fortin','doc','nailer','ranger','chief_comm','chief_tech'].includes(t)){const big=t==='snp'||t==='nightsnp',a=facing[e.src],mx=sp.x+Math.cos(a)*(big?26:18),my=sp.y+Math.sin(a)*(big?26:18);
     addFX({type:'tracer',x1:mx,y1:my,x2:tp.x,y2:tp.y,c:big?'#fff4c8':'#ffd27a',w:big?1.6:1.2,dur:big?260:160});

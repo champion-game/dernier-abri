@@ -255,7 +255,7 @@ function clearDecals(){gx.clearRect(0,0,L,L)}
 function splat(x,y,big){const n=big?9:3;for(let k=0;k<n;k++){const a=Math.random()*7,d=Math.random()*(big?12:7);gx.fillStyle=Math.random()<.5?'rgba(110,14,18,.55)':'rgba(70,90,30,.45)';gx.beginPath();gx.arc(x+Math.cos(a)*d,y+Math.sin(a)*d,1+Math.random()*(big?4:2),0,7);gx.fill()}}
 
 /* ---------- live visual state ---------- */
-const V=new Map(),FX=[],PT=[],facing=Array(Z.N*Z.N).fill(null);
+const V=new Map(),FX=[],PT=[],facing=Array(Z.N*Z.N).fill(null),atkT=Array(Z.N*Z.N).fill(0),ouchT=Array(Z.N*Z.N).fill(0);
 let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
 // tremblement de l'écran : k = force ; une secousse plus forte remplace une plus faible
 // v128 : vibrations du téléphone (Android ; l'iPhone ne les permet pas dans le navigateur), au plus une toutes les 250 ms
@@ -416,6 +416,13 @@ function socle(x,y,R,face,rim,kind){const sq=kind!=='round',th=kind==='flat'?1.5
  ctx.save();ctx.fillStyle='rgba(0,0,0,.42)';path(th+3,R+.5);ctx.fill();ctx.fillStyle='#4a3622';path(th,R);ctx.fill();ctx.fillStyle=face;path(0,R);ctx.fill();
  ctx.lineWidth=3.5;ctx.strokeStyle=rim;path(0,R-2.6);ctx.stroke();ctx.lineWidth=1.2;ctx.strokeStyle='rgba(40,26,12,.75)';path(0,R);ctx.stroke();ctx.restore()}
 const pieceKind=(t,D)=>Z.isUnit(t)?'round':D.cat==='post'||(D.cat==='wall'&&D.block&&!PLAIN.has(t))?'square':null;
+// animation des pièces (sur l’image fixe) : respiration, recul au tir, secousse quand elles sont mordues
+function unitAnim(i,u,now){
+ const live=Z.isUnit(u.t),ta=now-atkT[i],th=now-ouchT[i];
+ if(live){const b=Math.sin(now/650+i*1.7);ctx.scale(1+.018*b,1-.018*b)}
+ if(ta<160&&facing[i]!=null){const k=1-ta/160,d=2.6*k;ctx.translate(-Math.cos(facing[i])*d,-Math.sin(facing[i])*d);ctx.scale(1+.06*k,1+.06*k)}
+ if(th<240){const k=1-th/240;ctx.translate(Math.sin(th/18)*2.4*k,0);ctx.scale(1-.07*k,1+.05*k)}
+}
 function drawUnit(i,u,now){
  const p0=tc(i),D0=Z.stat(G,u.t),cc=CATC[D0.cat];
  // jeu de plateau : socle commun (rond, carré ou plat selon la nature de la pièce)
@@ -423,7 +430,9 @@ function drawUnit(i,u,now){
   else if(D0.cat!=='trap'){ctx.save();ctx.globalAlpha=D0.block?.16:.1;circ(p0.x,p0.y,26,cc);ctx.restore()}}
  // version dorée (fusion) ou évolution : un anneau qui pulse
  if(u.gold||D0.evo){ctx.save();ctx.strokeStyle=u.gold?'#f2c23d':'#c58cff';ctx.lineWidth=3;ctx.globalAlpha=.55+.3*Math.sin(now/300);ctx.beginPath();ctx.arc(p0.x,p0.y,28,0,7);ctx.stroke();ctx.restore()}
- ctx.save();ctx.translate(p0.x,p0.y);const sc=1.45+.12*Math.min(3,u.gold||0);ctx.scale(sc,sc);ctx.translate(-p0.x,-p0.y);
+ ctx.save();ctx.translate(p0.x,p0.y);const sc=1.45+.12*Math.min(3,u.gold||0);ctx.scale(sc,sc);
+ try{unitAnim(i,u,now)}catch(e){}
+ ctx.translate(-p0.x,-p0.y);
  drawUnitInner(i,u,now);ctx.restore();
  if(D0.up)safeTxt(p0.x+19,p0.y-17,'+','#f2b33d');
  if(u.gold)safeTxt(p0.x-19,p0.y-17,u.gold>1?u.gold+'★':'★','#f2c23d');else if(D0.evo)safeTxt(p0.x-19,p0.y-17,'✦','#c58cff');
@@ -620,6 +629,13 @@ function drawShelter(now){
 const ZL={walk:{sz:1,skin:'#8fa070',cloth:'#4a4a42'},run:{sz:.92,skin:'#a7b062',cloth:'#5a4836',lean:1},fat:{sz:1.35,skin:'#9c8aa8',cloth:'#4b3b4f',fat:1},
  zdog:{sz:.85,skin:'#6d7a4a',cloth:'#4a3b2a',dog:1},crawl:{sz:.85,skin:'#7f9c96',cloth:'#3a4646',low:1},spit:{sz:1,skin:'#b4c85a',cloth:'#4a5a22',spit:1},
  armor:{sz:1.08,skin:'#8fa070',cloth:'#2e3640',helm:'#6e7780',vest:1},howl:{sz:1,skin:'#c4a0b4',cloth:'#5a3a4a',howl:1},sap:{sz:1.05,skin:'#9aa86a',cloth:'#4a4030',sap:1},boss:{sz:2.2,skin:'#8a5a52',cloth:'#2e2020',boss:1},mere:{sz:2.1,skin:'#b89a8a',cloth:'#3a2a2a',boss:1},zero:{sz:1.75,skin:'#c07060',cloth:'#2a1a1a',boss:1}};
+function zAnim(v,now,a,moving){
+ if(v.dying){const k=clamp((now-v.dying)/500,0,1);ctx.scale(1-.3*k,1-.3*k);return}
+ const ph=now/(Z.ZT[v.k].spd===1?90:200)+v.id;
+ if(moving){const b=Math.abs(Math.sin(ph));ctx.scale(1+.05*b,1-.04*b)}else{const b=Math.sin(now/500+v.id);ctx.scale(1+.02*b,1+.02*b)}
+ const tb=now-(v.atk||-1e9);if(tb<220){const k=Math.sin(tb/220*Math.PI),d=5*k;ctx.translate(Math.cos(a)*d,Math.sin(a)*d);ctx.scale(1+.08*k,1+.08*k)}
+ const tf=now-(v.flash||-1e9);if(tf<150){const k=1-tf/150;ctx.translate(-Math.cos(a)*3*k,-Math.sin(a)*3*k);ctx.scale(1-.1*k,1+.08*k)}
+}
 function drawZombie(v,now){
  const p=v.dying?{x:v.dx,y:v.dy}:zpos(v,now),k=v.k;let alpha=clamp((now-v.born)/350,0,1);
  if(v.dying){alpha=1-clamp((now-v.dying)/500,0,1);if(alpha<=0)return false}
@@ -631,7 +647,9 @@ function drawZombie(v,now){
  // Patient Zéro : cercle pointillé sur la zone où la horde accélère (2 cases)
  if((Z.ZT[k]||{}).haste&&!v.dying){ctx.save();ctx.strokeStyle='rgba(255,58,106,.45)';ctx.lineWidth=2;ctx.setLineDash([7,6]);ctx.lineDashOffset=-now/60;ctx.beginPath();ctx.arc(0,0,T*Z.ZT[k].haste+T*.5,0,7);ctx.stroke();ctx.restore()}
  const isB=!!(Z.ZT[k]||{}).boss;socle(0,1,11.5*sz,isB?'#6e1410':'#4a1512',isB?'#ff5a3a':'#b8302a','round');
- const zk='z_'+k,[zim,zd]=sprK(zk),zup=zim&&zd[0]==='up';ctx.rotate(zup?wob*.6+(v.dying?.6:0):a+wob);ctx.scale(sz,sz);
+ const zk='z_'+k,[zim,zd]=sprK(zk),zup=zim&&zd[0]==='up';
+ try{zAnim(v,now,a,moving)}catch(e){}
+ ctx.rotate(zup?wob*.6+(v.dying?.6:0):a+wob);ctx.scale(sz,sz);
  if(v.dying&&!zup)ctx.rotate(.6);
  if(zim){if(zup&&Math.cos(a)<-.1)ctx.scale(-1,1);drawSpr(zk,0,0,0,0)}
  else if(Lk.dog){dogShape(skin,skin,cloth,now,70);circ(10,-2,1,'#d7262e');circ(10,2,1,'#d7262e');ell(-4,1,2.5,1.6,'#6a1418')}
