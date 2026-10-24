@@ -323,6 +323,9 @@ let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
 // tremblement de l'écran : k = force ; une secousse plus forte remplace une plus faible
 // v128 : vibrations du téléphone (Android ; l'iPhone ne les permet pas dans le navigateur), au plus une toutes les 250 ms
 let vibT=0;function vib(p){if(!OPT.vib||!navigator.vibrate)return;const n=performance.now();if(n-vibT<250)return;vibT=n;try{navigator.vibrate(p)}catch(e){}}
+// v166 : zoom de caméra bref sur un point (mur qui cède, massacre) ; coupé avec les secousses ou si le système demande moins d'animations
+let zoomFX=null,wallSlowT=0,CAM=[1,0,0,1,0,0],CAMZ=[1,0,0,1,0,0];const NB={};
+function camZoom(now,x,y,k,dur){if(!OPT.shake||reduce)return;if(zoomFX&&now-zoomFX.t0<zoomFX.dur&&zoomFX.k>k)return;zoomFX={t0:now,x,y,k,dur}}
 function shake(now,k){if(!OPT.shake)return;if(now-shakeT>200||k>=shakeK){shakeT=now;shakeK=k}}
 // compteur de victimes de la nuit (affiché en haut à gauche)
 const KC={n:0,t:0,on:0};
@@ -701,6 +704,13 @@ function drawGuide(now){const g=guideStep();if(!g||!g.cells)return;const k=.5+.5
  for(const i of g.cells){if(G.grid[i]&&!g.on)continue;const p=tc(i);
   ctx.save();ctx.strokeStyle=`rgba(255,210,90,${.55+.45*k})`;ctx.lineWidth=4;ctx.shadowColor='#ffd25a';ctx.shadowBlur=12+10*k;ctx.strokeRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);
   if(!G.grid[i]&&i!==Z.C){ctx.fillStyle=`rgba(255,210,90,${.12+.12*k})`;ctx.fillRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8)}ctx.restore()}}
+// v166 : couloirs de mort : les cases du chemin probable des zombies couvertes par au moins 2 unités, teintées en rouge (plus fort avec plus d'unités)
+let KZ={sig:'',z:{}};
+function drawKillZones(now){const sig=G.grid.map(u=>u?u.t:'').join()+'|'+G.place+'|'+G.side+'|'+(G.relics||[]).length;if(sig!==KZ.sig){KZ={sig,z:Z.killZones(G)}}
+ const night=S.busy,k=night?.55:.8+.2*Math.sin(now/500);ctx.save();
+ for(const j in KZ.z){const n=KZ.z[j],p=tc(+j),a=(n>=4?.6:n===3?.48:.32)*k;ctx.fillStyle=`rgba(214,40,36,${a})`;ctx.fillRect(p.x-T/2+2,p.y-T/2+2,T-4,T-4);if(!night){ctx.strokeStyle=`rgba(255,80,70,${a+.15})`;ctx.lineWidth=1.5;ctx.strokeRect(p.x-T/2+3,p.y-T/2+3,T-6,T-6)}
+  if(!night&&n>=3){ctx.strokeStyle=`rgba(255,235,225,${.8*k})`;ctx.lineWidth=1.4;const r=T*.13;ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.moveTo(p.x-r*1.7,p.y);ctx.lineTo(p.x+r*1.7,p.y);ctx.moveTo(p.x,p.y-r*1.7);ctx.lineTo(p.x,p.y+r*1.7);ctx.stroke()}}
+ ctx.restore()}
 function drawBossRoute(now){if(!S.pause||!G.pending)return;const bp=G.pending.filter(p=>(Z.ZT[p.k]||{}).boss),ps=[...new Set(bp.map(p=>p.pos))];if(!ps.length)return;
  const k=.55+.35*Math.sin(now/220);ctx.save();ctx.lineCap='round';
  ps.forEach(pos=>{const a=tc(pos),b=CEN,ang=Math.atan2(b.y-a.y,b.x-a.x),ex=b.x-Math.cos(ang)*T*.75,ey=b.y-Math.sin(ang)*T*.75;
@@ -828,7 +838,7 @@ function drawSky(now){const day=1-nightAmt,t=reduce?0:now;ctx.save();
   for(let k=0;k<(OPT.eco?2:4);k++){const x=L*(.05+k*.24)+Math.sin(t/4200+k*2)*10,w=18+k%2*16,g=ctx.createLinearGradient(x-w,0,x+w,0);
    g.addColorStop(0,'rgba(255,240,180,0)');g.addColorStop(.5,`rgba(255,240,180,${(.08+.035*Math.sin(t/2600+k))*day})`);g.addColorStop(1,'rgba(255,240,180,0)');
    ctx.globalAlpha=1;ctx.fillStyle=g;ctx.fillRect(x-w,-L,2*w,L*3)}
-  ctx.setTransform(SC,0,0,SC,0,0);ctx.globalCompositeOperation='source-over';
+  ctx.setTransform(...CAM);ctx.globalCompositeOperation='source-over';
   // ombres de nuages qui glissent lentement sur le plateau
   for(let k=0;k<(OPT.eco?1:3);k++){const w=L*(.55+k*.15),h=w*.62,x=((k*L*.7+t*(.006+k*.002))%(L+w*1.4))-w*.7,y=L*(.15+k*.33)+Math.sin(t/9000+k)*20;
    ctx.globalAlpha=.3*day;ctx.drawImage(GLW.cloud,x-w/2,y-h/2,w,h)}}
@@ -899,7 +909,7 @@ function drawDark(now){
  dctx.fillRect(0,0,dark.width,dark.height);
  dctx.setTransform(k,0,0,k,0,0);dctx.globalCompositeOperation='destination-out';
  for(const l of lights(now))dctx.drawImage(LIGHT,l.x-l.r,l.y-l.r,2*l.r,2*l.r);
- ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(dark,0,0,cv.width,cv.height);ctx.restore();
+ ctx.save();ctx.setTransform(...CAMZ);ctx.drawImage(dark,0,0,cv.width,cv.height);ctx.restore();
  ctx.save();ctx.globalCompositeOperation='lighter';const r=T*1.6,g=ctx.createRadialGradient(CEN.x,CEN.y,0,CEN.x,CEN.y,r);g.addColorStop(0,`rgba(255,170,60,${.12*nightAmt*(reduce?1:1+.25*Math.sin(now/90)*Math.sin(now/37))})`);g.addColorStop(1,'rgba(255,170,60,0)');ctx.fillStyle=g;ctx.fillRect(CEN.x-r,CEN.y-r,2*r,2*r);ctx.restore();
  if(dawn)try{const sx=L+T*.4,sy=L*(.85-.5*dq),R=L*.95,a=.5*Math.sin(dq*Math.PI),sg=ctx.createRadialGradient(sx,sy,0,sx,sy,R);sg.addColorStop(0,`rgba(255,214,140,${a})`);sg.addColorStop(.35,`rgba(255,150,70,${a*.5})`);sg.addColorStop(1,'rgba(255,120,60,0)');
   ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle=sg;ctx.fillRect(0,0,L,L);ctx.restore()}catch(e){}
@@ -931,7 +941,8 @@ function frameInner(now){
  const dt=Math.min(50,now-last);last=now;fit();try{titleDeco(now)}catch(e){}
  nightAmt+=(nightTarget-nightAmt)*Math.min(1,dt/450);{const dq=(now-dawnT)/DAWN;if(dq>=0&&dq<1&&nightTarget===0)nightAmt=Math.max(nightAmt,1-dq)}SFX.night(nightAmt);
  let sx=0,sy=0;if(now-shakeT<260&&!reduce){const k=(1-(now-shakeT)/260)*shakeK;sx=(Math.random()-.5)*k;sy=(Math.random()-.5)*k}
- ctx.setTransform(SC,0,0,SC,sx*SC,sy*SC);
+ {let zm=1,ox=0,oy=0;if(zoomFX){const q=(now-zoomFX.t0)/zoomFX.dur;if(q>=1||q<0)zoomFX=null;else{const e=q<.15?q/.15:q>.55?(1-q)/.45:1;zm=1+zoomFX.k*e*e*(3-2*e);ox=zoomFX.x*(1-zm);oy=zoomFX.y*(1-zm)}}
+ CAM=[SC*zm,0,0,SC*zm,(sx+ox)*SC,(sy+oy)*SC];CAMZ=[zm,0,0,zm,ox*SC,oy*SC];ctx.setTransform(...CAM)}
  BARS=[];EYES=[];LABELS=[];
  ctx.drawImage(ground,0,0,L,L);try{drawPlace(now)}catch(e){}ctx.drawImage(decal,0,0,L,L);
  if(!S.busy&&S.drag){const t=selCard();ctx.fillStyle='rgba(242,179,61,.28)';ctx.strokeStyle='#f2b33d';ctx.lineWidth=2;S.drag.cells.forEach(j=>{const p=tc(j);ctx.fillRect(p.x-T/2+3,p.y-T/2+3,T-6,T-6);ctx.strokeRect(p.x-T/2+3,p.y-T/2+3,T-6,T-6)});
@@ -946,6 +957,7 @@ function frameInner(now){
  }
  const safe=f=>{ctx.save();try{f()}catch(e){}ctx.restore()};
  try{trackBoard(now)}catch(e){}
+ safe(()=>drawKillZones(now));
  safe(()=>drawShelter(now));
  safe(()=>drawBossRoute(now));
  safe(()=>drawGuide(now));

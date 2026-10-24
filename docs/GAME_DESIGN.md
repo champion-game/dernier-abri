@@ -291,7 +291,7 @@ Un survivant nommé qui tombe après 100 victimes ou plus laisse un souvenir (3 
 
 ## Le retour visuel
 
-Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Triple ! » ou « Carnage ×N » quand 3 zombies ou plus meurent d'un coup, gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), ralenti à la mort du Colosse, chiffres de l'aube qui défilent.
+Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Doublé », « Triplé », « Carnage ×N » ou « MASSACRE ×N » quand une même attaque tue plusieurs zombies dans le tour (v166 : compté par attaque, plus par tour), gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), ralenti à la mort du Colosse, chiffres de l'aube qui défilent.
 
 ## Confort et objectifs (v128)
 
@@ -915,3 +915,8 @@ Jour 4 (M maison, # barricade) :
 - Prix : commune 20, rare 45, épique 90, chef 130 (total pour tout acheter : environ 5 600 points au lieu de 4 300).
 
 **v165** : curseurs PC. Avec une souris, le jeu affiche ses propres curseurs (32 px, `assets/cursors/`) : normal, clic possible, pose interdite (carte sélectionnée qui ne peut pas aller sur cette case) et glisser. Trois styles au choix dans les options (Survivant par défaut, Rouille, Zombie) ou le curseur du système. Options : case « Plein écran » (même effet que le bouton du haut) et touche F.
+
+**v166 : la nuit plus spectaculaire** (affichage seulement, règles inchangées)
+- Mur qui cède : éclats de son matériau, secousse, et au plus une fois toutes les 12 s un ralenti d'environ 1 s avec un zoom sur la brèche et « LE MUR CÈDE ! ».
+- Multi-éliminations : comptées par attaque (une même unité, un même piège ou une même réaction), plus par tour. 2 = Doublé, 3 = Triplé, 4-5 = Carnage ×N, 6 et plus = MASSACRE ×N avec un petit ralenti et zoom. Elles récompensent le placement (zombies entassés dans un couloir), pas le nombre total de zombies.
+- Couloirs de mort : le jour, les cases du chemin probable des zombies couvertes par au moins 2 unités qui attaquent sont teintées en rouge (plus foncé à 3 et 4+, avec une cible dès 3) ; la nuit, la teinte reste discrète. Calcul dans le moteur (`Z.killZones`), sans effet sur les règles.

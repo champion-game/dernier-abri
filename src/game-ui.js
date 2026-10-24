@@ -3,9 +3,17 @@
 /* ---------- combat events → visuals ---------- */
 function playEvents(ev,types,now){
  const shots=new Set(),dead=ev.filter(e=>e.k==='die');
- // victimes : compteur, « Carnage » si au moins 3 morts d'un coup, ralenti à la mort du Colosse
+ // victimes : compteur ; v166 : multi-éliminations par attaque (une même source tue plusieurs zombies dans le tour), ralenti à la mort du Colosse
  if(dead.length){KC.n+=dead.length;KC.t=now;
-  if(dead.length>=3){const ps=dead.map(e=>tc(e.i)),cx=ps.reduce((a,p)=>a+p.x,0)/ps.length,cy=ps.reduce((a,p)=>a+p.y,0)/ps.length;floatTxt(cx,cy-10,dead.length>=5?_t`Carnage ×${dead.length} !`:_t`Triple !${dead.length>3?' ×'+dead.length:''}`,'#ff9a2e',17);shake(now,4)}
+  try{const by={},src={};for(const e of ev){if(e.k==='hit'&&e.zid!=null)src[e.zid]=e.src>=0?e.src:'r';else if(e.k==='shot'&&e.zid!=null)src[e.zid]='r'}
+   dead.forEach(e=>{const k=src[e.zid];if(k==null)return;(by[k]=by[k]||[]).push(e)});
+   for(const k in by){const g=by[k],n=g.length;if(n<2)continue;const ps=g.map(e=>{const v=V.get(e.zid);return v?zpos(v,now):tc(e.i)}),cx=ps.reduce((a,p)=>a+p.x,0)/n,cy=ps.reduce((a,p)=>a+p.y,0)/n;
+    if(n===2)floatTxt(cx,cy-14,_t('Doublé !'),'#ffd25a',15);
+    else if(n===3){floatTxt(cx,cy-14,_t('Triplé !'),'#ff9a2e',18);shake(now,4)}
+    else if(n<6){floatTxt(cx,cy-14,_t`Carnage ×${n} !`,'#ff7a2e',21);shake(now,6);addFX({type:'ring',x:cx,y:cy,r:60,c:'#ff9a2e',dur:420})}
+    else{floatTxt(cx,cy-14,_t`MASSACRE ×${n} !`,'#e5484d',24);shake(now,9);addFX({type:'ring',x:cx,y:cy,r:90,c:'#e5484d',dur:600});slowT=Math.max(slowT,now+700);camZoom(now,cx,cy,.08,1000)}
+    if(n>=3){const kk=typeof k==='string'?-1:+k;if(kk>=0)addFX({type:'ring',x:tc(kk).x,y:tc(kk).y,r:30,c:'#ffd25a',dur:350})}
+    NB.multi=Math.max(NB.multi||0,n)}}catch(x){}
   try{SFX.play('zdie',.22)}catch(x){}
   dead.forEach(e=>{const v=V.get(e.zid),p=v?zpos(v,now):tc(e.i);burst(p.x,p.y,'#d8d0b8',5,.07,1.6);burst(p.x,p.y,'rgba(140,20,24,.9)',9,.1,2.4);addFX({type:'ring',x:p.x,y:p.y,r:26,c:'rgba(229,72,77,.8)',dur:260});
    // gros zombies : éclair et secousse à leur mort
@@ -45,7 +53,11 @@ function playEvents(ev,types,now){
    else{if(v){v.lunge=now;v.lx=p.x;v.ly=p.y}floatTxt(p.x,p.y,e.txt,'#ff6b6b');const wc={wood:'#a07a4a',stake:'#8a6238',stone:'#a8a498',metal:'#a9b3b8',steel:'#7d868d',sand:'#c9ab73',tire:'#333',rust:'#9a4a2c',stripe:'#e8e0d0',electric:'#9fe8ff'}[WMAT[types[e.i]]||(Z.U[types[e.i]]&&Z.U[types[e.i]].block?'stone':'wood')];burst(p.x,p.y,wc,Z.U[types[e.i]]&&Z.U[types[e.i]].block?10:5,.09,2.4)}}
   if(e.k==='ko'||e.k==='lost')vib(e.name?[70,50,70]:30);
   if(e.k==='ko'){const p=tc(e.i);burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2);floatTxt(p.x,p.y-12,_t('Blessé : en réserve'),'#ffb35c',13)}
-  if(e.k==='lost'){const p=tc(e.i);burst(p.x,p.y,'#8a6a45',16,.12,3);burst(p.x,p.y,'rgba(140,20,24,.9)',6,.08,2);splat(p.x,p.y,true)}
+  if(e.k==='lost'){const p=tc(e.i);burst(p.x,p.y,'#8a6a45',16,.12,3);burst(p.x,p.y,'rgba(140,20,24,.9)',6,.08,2);splat(p.x,p.y,true)
+   // v166 : un mur qui cède : éclats de son matériau, secousse, et (au plus une fois toutes les 12 s) ralenti et zoom sur la brèche
+   if((Z.U[types[e.i]]||{}).cat==='wall'){const wc={wood:'#a07a4a',stake:'#8a6238',stone:'#a8a498',metal:'#a9b3b8',steel:'#7d868d',sand:'#c9ab73',tire:'#333',rust:'#9a4a2c',stripe:'#e8e0d0',electric:'#9fe8ff'}[WMAT[types[e.i]]||'wood'];
+    burst(p.x,p.y,wc,26,.22,3.5);burst(p.x,p.y,'#3a3a3a',10,.1,4);addFX({type:'flash',x:p.x,y:p.y,r:34,c:'rgba(255,220,170,.7)',dur:260});addFX({type:'ring',x:p.x,y:p.y,r:56,c:wc,dur:420});shake(now,10);vib([40,30,60]);try{SFX.play('boom',.5)}catch(x){}
+    if(now>wallSlowT){wallSlowT=now+12000;slowT=Math.max(slowT,now+1200);camZoom(now,p.x,p.y,.16,1500);floatTxt(p.x,p.y-20,_t('LE MUR CÈDE !'),'#e5484d',18)}}}
   if(e.k==='spit'){const v=V.get(e.zid),p=tc(e.i),f=v?zpos(v,now):tc(e.from);addFX({type:'tracer',x1:f.x,y1:f.y,x2:p.x,y2:p.y,c:'#c6e83a',w:3,dur:220});burst(p.x,p.y,'#b7d83a',6,.06,2);floatTxt(p.x,p.y,e.txt,'#c6e83a');if(e.i===Z.C){shake(now,5);hurtT=now;shelHit()}}
   if(e.k==='smoke'){const p=tc(e.i);for(let k=0;k<26;k++)PT.push({x:p.x+(Math.random()-.5)*90,y:p.y+(Math.random()-.5)*90,vx:(Math.random()-.5)*.01,vy:-.008,t0:now,dur:1800,c:'rgba(190,200,190,.35)',r:8+Math.random()*8,light:0})}
   if(e.k==='eat'){const p=tc(e.i);floatTxt(p.x,p.y,_t('miam'),'#ff9a9a');burst(p.x,p.y,'rgba(140,20,24,.9)',4,.04,2)}

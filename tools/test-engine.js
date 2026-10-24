@@ -227,6 +227,8 @@ for(let g=0;g<NIGHTS;g++){const r=rng(1000+g);
   maxZ=Math.max(maxZ,st.spawned||0);const ms=Date.now()-t0;worst=Math.max(worst,ms);if(ms>2000)slow++;
   ok(fin(st.shelter),'PV abri '+st.shelter);st.grid.forEach(u=>{if(u&&Z.U[u.t].block)ok(fin(u.hp),u.t+' PV '+u.hp)});
   Z.endNight(st)})}
+check('couloirs de mort : case du chemin couverte par 2 tireurs',()=>{const st=fresh();ok(!Object.keys(Z.killZones(st)).length,'aucune zone sans unité');
+ st.grid[21]={t:'gun',hp:3};st.grid[23]={t:'gun',hp:3};const k=Z.killZones(st);ok(k[22]>=2,'case 22 couverte');ok(!k[21]&&!k[23],'pas sur les unités');ok(!Object.keys(k).some(j=>Z.isEdge(+j)),'pas dans la forêt')});
 check('aucune nuit de plus de 2 s',()=>ok(slow===0,slow+' nuit(s) lente(s), pire '+worst+' ms'));
 
 /* ---------- défi du jour (v151) : une nuit, horde tirée au sort, 8 cartes « 1 parmi 3 » ---------- */
