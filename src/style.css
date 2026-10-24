@@ -871,6 +871,7 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 
 /* v147 : image d'ambiance derrière les menus hors partie (accueil et ses écrans), nouveau logo Barricard */
 #ov.home{background:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),#1a1f33 url(../assets/ui/fond.webp) center 60%/cover no-repeat;backdrop-filter:none}
+#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),var(--fond,url(../assets/ui/fond.webp))}
 /* v168 : en hauteur, sans phrase d'accroche ; le logo monte dans le ciel et le menu commence sous la palissade des survivants (à 74 % de la largeur dans l'image) */
 @media (max-aspect-ratio:3/4){#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),url(../assets/ui/fond-portrait2.webp);background-position:center top}.panel.ttl .logo+p:not(.demob){display:none}}
 @media (max-aspect-ratio:3/4) and (max-width:560px){#ov .panel.ttl{align-self:flex-start;margin-top:0;padding-top:4px}#ov .panel.ttl .logo{width:min(100%,300px);margin-bottom:max(8px,calc(76.5vw - 163px))}}

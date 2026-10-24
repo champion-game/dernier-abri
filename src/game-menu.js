@@ -150,3 +150,8 @@ const fsBtn=$('#fs'),DE=document.documentElement,fsReq=DE.requestFullscreen||DE.
 if(fsReq&&!standalone){fsBtn.hidden=false;fsBtn.addEventListener('click',()=>{try{const on=document.fullscreenElement||document.webkitFullscreenElement;
  if(on)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else{const r=fsReq.call(DE,{navigationUI:'hide'});if(r&&r.catch)r.catch(()=>{})}}catch(e){}})}
 
+
+// v169 : image d'accueil sur écran en largeur, tirée au hasard à chaque démarrage (poids : 1 = normale). « fond-zombies » (zombies en vedette) est l'easter egg : environ 1 démarrage sur 25.
+const FONDS=[['fond.webp',1],['fond-2.webp',1],['fond-3.webp',1],['fond-4.webp',1],['fond-5.webp',1],['fond-6.webp',1],['fond-zombies.webp',.25]];
+try{let r=Math.random()*FONDS.reduce((s,f)=>s+f[1],0),f=FONDS[0][0];for(const [n,w] of FONDS){if((r-=w)<0){f=n;break}}
+ DE.style.setProperty('--fond',`url("${new URL('assets/ui/'+f,document.baseURI).href}")`)}catch(e){}
