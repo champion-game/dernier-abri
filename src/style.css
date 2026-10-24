@@ -312,7 +312,7 @@ button.ammo[hidden]{display:none}
 .side>*{order:2}.side:first-child>*{order:0}.app>.map{order:1}
 @media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){
  html,body{height:100%;overflow:hidden}
- .app{max-width:none;height:100vh;height:100dvh;min-height:0;display:grid;--sw:440px;--pad:max(16px,env(safe-area-inset-left,0px));--gap:18px;--vh:calc(100dvh - 20px);--map:min(var(--vh),calc(100vw - var(--sw) - var(--gap) - 2*var(--pad)));grid-template-columns:var(--map) minmax(var(--sw),min(620px,calc(100vw - var(--map) - var(--gap) - 2*var(--pad))));grid-template-rows:auto minmax(0,1fr);justify-content:center;column-gap:var(--gap);row-gap:8px;padding-block:10px}
+ .app{max-width:none;height:100vh;height:100dvh;min-height:0;display:grid;--sw:440px;--pad:max(16px,env(safe-area-inset-left,0px));--gap:18px;--vh:calc(100dvh - 20px);--map:min(var(--vh),calc(100vw - var(--sw) - var(--gap) - 2*var(--pad)));grid-template-columns:minmax(var(--map),1fr) minmax(var(--sw),min(900px,calc(100vw - var(--map) - var(--gap) - 2*var(--pad))));grid-template-rows:auto minmax(0,1fr);justify-content:center;column-gap:var(--gap);row-gap:8px;padding-block:10px}
  .app>.map{grid-column:1;grid-row:1/3;width:var(--map);height:auto;max-width:none;margin:0;align-self:center}
  .side{display:flex;flex-direction:column;gap:8px;grid-column:2;min-width:0}
  .side>*{order:0}
