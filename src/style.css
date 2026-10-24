@@ -1147,3 +1147,25 @@ html.eco .dangerv,html.eco .rf-rays{display:none}
 .fiche-w .fpr.b{left:4%;top:7%;width:30px;height:38px;transform:rotate(-40deg);opacity:.45}
 .panel .go.fshare{flex:none}
 html.eco .fiche-w{filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+
+/* v174 : accueil animé (brume qui dérive au pied de la palissade, braises qui montent, logo qui se balance comme un panneau, bouton principal qui luit). Tout en CSS (transform/opacity) : coupé en Mode économie et si l'appareil demande moins d'animations. */
+#ov.home{overflow:hidden}
+#ov.home>.panel{position:relative;z-index:1}
+#ov.home::before,#ov.home::after{content:"";position:absolute;pointer-events:none;z-index:0}
+#ov.home::before{left:-50%;width:200%;bottom:-4%;height:38%;opacity:.55;
+  background:radial-gradient(ellipse 22% 42% at 12% 70%,rgba(205,215,230,.45),transparent 70%),radial-gradient(ellipse 18% 36% at 34% 82%,rgba(190,200,220,.38),transparent 70%),radial-gradient(ellipse 24% 46% at 58% 72%,rgba(210,218,232,.42),transparent 70%),radial-gradient(ellipse 20% 38% at 82% 80%,rgba(195,205,225,.38),transparent 70%);
+  animation:hmFog 46s linear infinite alternate}
+#ov.home::after{left:0;right:0;top:0;height:calc(100% + 420px);
+  background:radial-gradient(circle,rgba(255,190,90,.95) 0 1.4px,rgba(255,120,30,.35) 2.4px,transparent 3.4px) 40px 60px/300px 420px,radial-gradient(circle,rgba(255,210,120,.9) 0 1px,rgba(255,130,40,.3) 2px,transparent 3px) 190px 250px/300px 420px,radial-gradient(circle,rgba(255,170,70,.85) 0 1.2px,rgba(255,110,20,.3) 2.2px,transparent 3.2px) 120px 360px/300px 420px,radial-gradient(circle,rgba(255,220,140,.8) 0 .9px,transparent 2.4px) 260px 140px/300px 420px,radial-gradient(circle,rgba(255,180,80,.9) 0 1.3px,rgba(255,110,20,.3) 2.3px,transparent 3.3px) 80px 200px/300px 420px,radial-gradient(circle,rgba(255,200,110,.85) 0 1px,transparent 2.6px) 220px 20px/300px 420px,radial-gradient(circle,rgba(255,160,60,.9) 0 1.5px,rgba(255,100,20,.3) 2.5px,transparent 3.5px) 10px 310px/300px 420px;
+  background-repeat:repeat;mix-blend-mode:screen;animation:hmEmb 16s linear infinite,hmFlick 2.6s ease-in-out infinite alternate}
+@keyframes hmFog{from{transform:translateX(0)}to{transform:translateX(25%)}}
+@keyframes hmEmb{from{transform:translate3d(0,0,0)}to{transform:translate3d(-30px,-420px,0)}}
+@keyframes hmFlick{from{opacity:.35}to{opacity:.8}}
+.panel.ttl .logo{transform-origin:50% 0;animation:hmLogoIn .9s cubic-bezier(.3,1.5,.5,1) both,hmSwing 7s ease-in-out .9s infinite}
+@keyframes hmLogoIn{0%{opacity:0;transform:translateY(-40px) rotate(-4deg)}60%{opacity:1}100%{transform:none}}
+@keyframes hmSwing{0%,100%{transform:rotate(0)}25%{transform:rotate(1.1deg)}75%{transform:rotate(-1.1deg)}}
+.panel.ttl>button.go:first-of-type:not(:active),.panel.ttl .pfoot button.go:first-of-type:not(:active){animation:hmGlow 2.8s ease-in-out infinite}
+@keyframes hmGlow{0%,100%{box-shadow:var(--sh),0 0 0 rgba(255,170,60,0)}50%{box-shadow:var(--sh),0 0 20px rgba(255,170,60,.7)}}
+html.eco #ov.home::before,html.eco #ov.home::after{display:none}
+html.eco .panel.ttl .logo,html.eco .panel.ttl button.go{animation:none}
+@media (prefers-reduced-motion:reduce){#ov.home::before,#ov.home::after{display:none}.panel.ttl .logo,.panel.ttl button.go{animation:none!important}}
