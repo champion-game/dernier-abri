@@ -153,5 +153,20 @@ if(fsReq&&!standalone){fsBtn.hidden=false;fsBtn.addEventListener('click',()=>{tr
 
 // v169 : image d'accueil sur écran en largeur, tirée au hasard à chaque démarrage (poids : 1 = normale). « fond-zombies » (zombies en vedette) est l'easter egg : environ 1 démarrage sur 25.
 const FONDS=[['fond.webp',1],['fond-2.webp',1],['fond-3.webp',1],['fond-4.webp',1],['fond-5.webp',1],['fond-6.webp',1],['fond-zombies.webp',.25]];
-try{let r=Math.random()*FONDS.reduce((s,f)=>s+f[1],0),f=FONDS[0][0];for(const [n,w] of FONDS){if((r-=w)<0){f=n;break}}
+let FOND_F='fond.webp';
+try{let r=Math.random()*FONDS.reduce((s,f)=>s+f[1],0),f=FONDS[0][0];for(const [n,w] of FONDS){if((r-=w)<0){f=n;break}}FOND_F=f;
  DE.style.setProperty('--fond',`url("${new URL('assets/ui/'+f,document.baseURI).href}")`)}catch(e){}
+
+// v175 : lueurs de l'accueil posées sur l'image de fond (lune qui rayonne, étoiles qui scintillent, ville en feu qui vacille).
+// Lune et étoiles repérées automatiquement dans chaque image (en % de l'image, rayon de la lune en % de sa largeur) ; flammes placées à la main sur les bords.
+const HGLOW={"fond":{"m":[88.25,14.58,2.84],"s":[[71.2,8.5],[70.0,19.6],[28.8,4.4],[17.1,8.9],[81.3,1.1],[21.7,8.0],[27.8,16.3],[25.2,2.5],[47.1,8.0]]},"fond-2":{"m":[88.37,14.43,2.78],"s":[[70.0,19.6],[71.2,8.5],[47.1,8.0],[21.7,8.0],[25.2,2.5],[81.3,1.1],[17.4,4.1],[77.1,13.7],[27.8,16.3],[45.6,2.3],[28.8,4.4],[32.2,8.7]]},"fond-3":{"m":[88.37,14.43,2.78],"s":[[70.0,19.6],[17.4,4.1],[71.2,8.5],[24.8,26.0],[77.1,13.7],[47.1,8.0],[25.2,2.5],[28.8,4.4],[81.3,1.1],[45.6,2.3],[32.3,8.7],[64.8,8.0],[27.8,16.3]]},"fond-4":{"m":[88.18,14.55,2.84],"s":[[70.0,19.6],[47.1,8.0],[17.4,4.1],[71.2,8.5],[77.1,13.7],[81.3,1.1],[28.8,4.4],[25.2,2.5],[64.8,8.0],[45.6,2.3],[21.7,8.0],[27.8,16.3],[75.1,7.7]]},"fond-5":{"m":[88.21,14.59,2.84],"s":[[71.2,8.5],[21.7,8.0],[17.1,8.9],[47.1,8.0],[27.8,16.3],[76.3,15.4],[28.8,4.4],[70.0,19.6],[81.3,1.1],[45.6,2.3],[25.2,2.5],[64.8,8.0]]},"fond-6":{"m":[88.37,14.46,2.78],"s":[[70.0,19.6],[17.4,4.1],[71.2,8.5],[45.6,2.3],[21.7,8.0],[81.6,26.0],[47.1,8.0],[28.8,4.4],[27.8,16.3],[25.1,7.3],[81.3,1.1],[76.3,15.4]]},"fond-zombies":{"m":[88.17,14.51,2.81],"s":[[21.7,8.0],[68.9,20.0],[25.2,2.5],[81.3,1.1],[17.1,8.9],[71.2,8.5],[77.1,13.8],[45.6,2.3],[32.2,8.7],[27.8,16.3],[28.8,4.4],[47.1,8.0],[64.8,8.0]]},"fond-portrait2":{"m":[90.42,10.0,4.93],"s":[[10.3,4.8],[75.5,8.8],[21.5,2.0],[71.2,4.4],[32.9,4.7],[91.0,0.5],[72.3,1.7],[66.7,1.4],[29.2,10.9],[17.5,4.1],[62.9,6.9],[86.2,1.9],[28.3,2.0],[23.7,9.9],[79.2,3.9],[47.4,4.3],[31.3,2.8],[80.6,2.2],[30.3,7.1],[16.9,1.4]]}},HFIRE={l:[[1.5,40,5],[2.5,52,6],[98.5,44,5],[97.5,54,6]],p:[[3,21,9],[6,24.5,7],[97,23,9],[95,26.5,7]]};
+function hglowFit(){try{const ov=document.getElementById('ov');if(!ov)return;let g=document.getElementById('hglow');
+ const por=matchMedia('(max-aspect-ratio:3/4)').matches,k=por?'fond-portrait2':FOND_F.replace('.webp',''),d=HGLOW[k];if(!d)return;
+ if(!g||g.dataset.k!==k){if(g)g.remove();g=document.createElement('div');g.id='hglow';g.dataset.k=k;g.setAttribute('aria-hidden','true');
+  const m=d.m;let h=`<i class="hg-moon" style="left:${m[0]}%;top:${m[1]}%;--r:${m[2]}"></i>`;
+  d.s.forEach((s,i)=>{h+=`<i class="hg-star" style="left:${s[0]}%;top:${s[1]}%;animation-delay:-${(i*1.37)%5}s;animation-duration:${2.4+(i*0.73)%2.6}s"></i>`});
+  (por?HFIRE.p:HFIRE.l).forEach((f,i)=>{h+=`<i class="hg-fire" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i*.41}s;animation-duration:${1.1+i*.23}s"></i>`});
+  g.innerHTML=h;ov.insertBefore(g,ov.firstChild)}
+ const W=ov.clientWidth,H=ov.clientHeight,iw=por?841:1672,ih=por?1870:941,sc=Math.max(W/iw,H/ih),w=iw*sc,hh=ih*sc;
+ g.style.cssText=`width:${w}px;height:${hh}px;left:${(W-w)/2}px;top:${por?0:(H-hh)*.6}px;--w:${w/100}px`}catch(e){}}
+addEventListener('resize',hglowFit);hglowFit();

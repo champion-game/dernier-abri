@@ -1151,13 +1151,13 @@ html.eco .fiche-w{filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
 /* v174 : accueil animé (brume qui dérive au pied de la palissade, braises qui montent, logo qui se balance comme un panneau, bouton principal qui luit). Tout en CSS (transform/opacity) : coupé en Mode économie et si l'appareil demande moins d'animations. */
 #ov.home{overflow:hidden}
 #ov.home>.panel{position:relative;z-index:1}
-#ov.home::before,#ov.home::after{content:"";position:absolute;pointer-events:none;z-index:0}
-#ov.home::before{left:-50%;width:200%;bottom:-4%;height:38%;opacity:.55;
+#ov.hm::before,#ov.hm::after{content:"";position:absolute;pointer-events:none;z-index:0}
+#ov.hm::before{left:-50%;width:200%;bottom:-4%;height:38%;opacity:.55;
   background:radial-gradient(ellipse 22% 42% at 12% 70%,rgba(205,215,230,.45),transparent 70%),radial-gradient(ellipse 18% 36% at 34% 82%,rgba(190,200,220,.38),transparent 70%),radial-gradient(ellipse 24% 46% at 58% 72%,rgba(210,218,232,.42),transparent 70%),radial-gradient(ellipse 20% 38% at 82% 80%,rgba(195,205,225,.38),transparent 70%);
   animation:hmFog 46s linear infinite alternate}
-#ov.home::after{left:0;right:0;top:0;height:calc(100% + 420px);
+#ov.hm::after{left:0;right:0;top:0;height:calc(100% + 420px);
   background:radial-gradient(circle,rgba(255,190,90,.95) 0 1.4px,rgba(255,120,30,.35) 2.4px,transparent 3.4px) 40px 60px/300px 420px,radial-gradient(circle,rgba(255,210,120,.9) 0 1px,rgba(255,130,40,.3) 2px,transparent 3px) 190px 250px/300px 420px,radial-gradient(circle,rgba(255,170,70,.85) 0 1.2px,rgba(255,110,20,.3) 2.2px,transparent 3.2px) 120px 360px/300px 420px,radial-gradient(circle,rgba(255,220,140,.8) 0 .9px,transparent 2.4px) 260px 140px/300px 420px,radial-gradient(circle,rgba(255,180,80,.9) 0 1.3px,rgba(255,110,20,.3) 2.3px,transparent 3.3px) 80px 200px/300px 420px,radial-gradient(circle,rgba(255,200,110,.85) 0 1px,transparent 2.6px) 220px 20px/300px 420px,radial-gradient(circle,rgba(255,160,60,.9) 0 1.5px,rgba(255,100,20,.3) 2.5px,transparent 3.5px) 10px 310px/300px 420px;
-  background-repeat:repeat;mix-blend-mode:screen;animation:hmEmb 16s linear infinite,hmFlick 2.6s ease-in-out infinite alternate}
+  background-repeat:repeat;animation:hmEmb 16s linear infinite,hmFlick 2.6s ease-in-out infinite alternate}
 @keyframes hmFog{from{transform:translateX(0)}to{transform:translateX(25%)}}
 @keyframes hmEmb{from{transform:translate3d(0,0,0)}to{transform:translate3d(-30px,-420px,0)}}
 @keyframes hmFlick{from{opacity:.35}to{opacity:.8}}
@@ -1166,6 +1166,19 @@ html.eco .fiche-w{filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
 @keyframes hmSwing{0%,100%{transform:rotate(0)}25%{transform:rotate(1.1deg)}75%{transform:rotate(-1.1deg)}}
 .panel.ttl>button.go:first-of-type:not(:active),.panel.ttl .pfoot button.go:first-of-type:not(:active){animation:hmGlow 2.8s ease-in-out infinite}
 @keyframes hmGlow{0%,100%{box-shadow:var(--sh),0 0 0 rgba(255,170,60,0)}50%{box-shadow:var(--sh),0 0 20px rgba(255,170,60,.7)}}
-html.eco #ov.home::before,html.eco #ov.home::after{display:none}
+html.eco #ov.hm::before,html.eco #ov.hm::after{display:none}
 html.eco .panel.ttl .logo,html.eco .panel.ttl button.go{animation:none}
-@media (prefers-reduced-motion:reduce){#ov.home::before,#ov.home::after{display:none}.panel.ttl .logo,.panel.ttl button.go{animation:none!important}}
+@media (prefers-reduced-motion:reduce){#ov.hm::before,#ov.hm::after{display:none}.panel.ttl .logo,.panel.ttl button.go{animation:none!important}}
+
+/* v175 : lueurs posées sur l'image d'accueil (#hglow suit le cadrage « cover » de l'image, voir hglowFit dans game-menu.js) */
+#hglow{position:absolute;pointer-events:none;z-index:0;display:none}
+#ov.hm #hglow{display:block}
+#hglow i{position:absolute;display:block;border-radius:50%;transform:translate(-50%,-50%)}
+#hglow .hg-moon{width:calc(var(--r)*var(--w)*8);height:calc(var(--r)*var(--w)*8);background:radial-gradient(circle,rgba(225,238,255,.6) 0 11%,rgba(175,210,255,.32) 20%,rgba(130,170,255,.14) 38%,transparent 68%);animation:hgMoon 7s ease-in-out infinite}
+#hglow .hg-star{width:18px;height:18px;background:radial-gradient(circle,#fff 0 1.3px,rgba(200,222,255,.75) 2.2px,rgba(150,190,255,.25) 4px,transparent 9px),linear-gradient(transparent 8.5px,rgba(220,235,255,.7) 8.5px 9.5px,transparent 9.5px),linear-gradient(90deg,transparent 8.5px,rgba(220,235,255,.7) 8.5px 9.5px,transparent 9.5px);animation:hgStar 3s ease-in-out infinite}
+#hglow .hg-fire{width:calc(var(--r)*var(--w)*2);height:calc(var(--r)*var(--w)*2);background:radial-gradient(circle,rgba(255,170,60,.6) 0,rgba(255,110,30,.3) 38%,rgba(255,70,10,.1) 58%,transparent 72%);animation:hgFire 1.4s ease-in-out infinite}
+@keyframes hgMoon{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.07)}}
+@keyframes hgStar{0%,100%{opacity:.15;transform:translate(-50%,-50%) scale(.45) rotate(0)}50%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(20deg)}}
+@keyframes hgFire{0%{opacity:.6;transform:translate(-50%,-50%) scale(.95)}20%{opacity:1;transform:translate(-50%,-52%) scale(1.06)}35%{opacity:.7}55%{opacity:.95;transform:translate(-50%,-49%) scale(1.02)}75%{opacity:.55;transform:translate(-50%,-51%) scale(.93)}100%{opacity:.6;transform:translate(-50%,-50%) scale(.95)}}
+html.eco #hglow{display:none!important}
+@media (prefers-reduced-motion:reduce){#hglow i{animation:none!important}}
