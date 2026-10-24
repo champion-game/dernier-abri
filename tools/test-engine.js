@@ -177,6 +177,8 @@ check('Assassin : exécute un zombie ordinaire toutes les 4 attaques, jamais le 
  const b={id:2,k:'boss',pos:2*9+4,hp:999,max:999,cd:99,style:0};st.z=[b];for(let k=0;k<4;k++)Z.step(st);ok(b.hp>900,'Colosse exécuté')});
 check('Électricien : plus de coupure de courant',()=>{const st=fresh();st.event=Z.EVENTS.find(e=>e.id==='coupure');st.grid[2*9+4]={t:'genmech',hp:4};st.grid[3*9+4]={t:'tesla',hp:4};
  Z.startNight(st,rng(1));st.pending=[];const z={id:1,k:'fat',pos:4*9+3,hp:99,max:99,cd:99,style:0};st.z=[z];Z.step(st);Z.step(st);ok(z.hp<99,'la Tesla ne tire pas')});
+check('Journal : chaque nuit note ses zombies tués, PV du panneau Horde = PV réels',()=>{const st=fresh(),R=rng(3);st.grid[3*9+4]={t:'gun',hp:3};Z.startNight(st,R);for(let k=0;k<3000&&!Z.step(st).done;k++);
+ const z=st.z[0];Z.endNight(st);const h=st.hist[st.night-1];ok(h&&h.k>=0&&h.k===st.kills,'hist '+JSON.stringify(h));ok(!z||z.max===Z.zMaxHp(st,z.k),'PV');ok(Array.isArray(Z.newcomers(st)))});
 check('Infirmière de campagne : soigne la réserve à l’aube',()=>{const st=fresh();st.grid[2*9+4]={t:'fieldnurse',hp:3};st.bench=[{t:'gun',hp:1}];Z.endNight(st);eq(st.bench[0].hp,3)});
 
 check('Tableau des combats : dégâts, zombies tués, encaissés, soins et morts comptés',()=>{const st=fresh();st.grid[3*9+4]={t:'gun',hp:3,name:'Léa'};st.grid[3*9+3]={t:'pharma',hp:4};

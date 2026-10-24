@@ -340,6 +340,30 @@ async function night(){
 // v179 : sur grand écran PC, la fiche de nuit et les piles passent sur le tapis vert de gauche (le CSS place ce tapis)
 function feltLayout(){try{const f=$('#felt'),fp=$('#fpiles'),m=document.querySelector('.mat'),t=$('#table'),h=$('#hand'),pd=$('#pDraw').parentNode,pc=$('#pDisc').parentNode;
  const on=innerWidth-innerHeight>=790&&innerHeight>=640&&matchMedia('(orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px)').matches;document.documentElement.classList.toggle('felton',on);
- if(on&&m.parentNode!==f){f.insertBefore(m,fp);fp.append(pd,pc)}
+ if(on&&m.parentNode!==f){f.insertBefore(m,f.firstChild);fp.append(pd,pc)}
  else if(!on&&m.parentNode===f){document.querySelector('.side').appendChild(m);t.insertBefore(pd,h);t.appendChild(pc)}}catch(e){}}
-addEventListener('resize',feltLayout);feltLayout();
+addEventListener('resize',()=>{feltLayout();const b=$('#ftabs');if(b)b._h=null;feltTabs()});feltLayout();
+// v180 : onglets du tapis vert (grand écran PC) : Pioche, Horde, Journal. Le joueur choisit, le choix est retenu.
+const FT_COL={post:'#9ee08a',wall:'#c9a27a',shoot:'#f2b33d',melee:'#ff7a59',help:'#7cc7ff',trap:'#e5484d',item:'#d6c2ff',react:'#f0a0d0'},FT_ORD=['wall','post','shoot','melee','help','trap','item','react'];
+function ftPioche(){const cat=t=>(Z.U[t]||{}).cat||'item',left={},tot={};S.draw.forEach(t=>left[t]=(left[t]||0)+1);[...S.draw,...S.hand,...S.discard].forEach(t=>tot[t]=1);
+ const ks=Object.keys(tot).filter(t=>Z.U[t]).sort((a,b)=>FT_ORD.indexOf(cat(a))-FT_ORD.indexOf(cat(b))||cardName(a).localeCompare(cardName(b))),cs={};S.draw.forEach(t=>{const c=cat(t);cs[c]=(cs[c]||0)+1});
+ const bar=FT_ORD.filter(c=>cs[c]).map(c=>`<i style="flex:${cs[c]};background:${FT_COL[c]}" title="${CATN[c]} : ${cs[c]}"></i>`).join('');
+ return `<h4>${_t('Ta pioche')} <small>${plural(S.draw.length,_t('carte'),_t('cartes'))}</small></h4><div class="ft-bar">${bar}</div><div class="ft-l">${ks.map(t=>{const n=left[t]||0;return `<div class="ft-c${n?'':' out'}" title="${cardName(t)}"><i class="ft-d" style="background:${FT_COL[cat(t)]}"></i><span class="ft-a" style="background-image:url('${artUrl(t)}')"></span><span class="ft-n">${cardName(t)}</span><b>${n}</b></div>`}).join('')}</div>`}
+function ftHorde(){const w=Z.waveList(G),ks=Z.ZK.filter(k=>w[k]);let n=0,hp=0;
+ const rows=ks.map(k=>{const h=Z.zMaxHp(G,k);n+=w[k];hp+=h*w[k];return `<div class="ft-z" title="${Z.ZT[k].info}"><i class="ft-zi" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></i><div class="ft-zt"><b>${Z.ZT[k].n}</b><p>${Z.ZT[k].info}</p><div class="ft-zs"><span>${h} ${_t('PV')}</span><span>${plural(Z.ZT[k].dmg+Z.dmgBonus(G.night),_t('dégât'),_t('dégâts'))}</span></div></div><span class="ft-zn">×${w[k]}</span></div>`}).join('');
+ const nx=Z.newcomers(G);
+ return `<h4>${_t('Horde de cette nuit')} <small>${_t`Nuit ${G.night}`}</small></h4><div class="ft-l">${rows}</div><div class="ft-tot"><span>${plural(n,_t('zombie'),_t('zombies'))}</span><span>${_t`Total : ${hp} PV`}</span></div>${nx.length?`<div class="ft-nx">${_t`Nuit ${G.night+1} :`} ${nx.map(k=>`<i style="background-image:url('assets/sprites_cartoon/z_${k}.webp')" title="${Z.ZT[k].n}"></i>`).join('')} ${_t('nouveaux')}</div>`:''}`}
+function ftJournal(){const R=Object.values(G.mtR||{}),dmg=Math.round(R.reduce((a,r)=>a+(r.dmg||0),0)),dead=(G.mtD||[]).filter(d=>!d.ko).length,held=Math.max(0,G.night-1);
+ const h=(G.hist||[]).map((x,i)=>({n:i+1,k:x?x.k:0})).slice(-8),mx=Math.max(1,...h.map(x=>x.k));
+ const chart=h.length?`<div class="ft-ch">${h.map(x=>`<i style="height:${Math.max(4,Math.round(x.k/mx*100))}%"><em>${x.k}</em></i>`).join('')}</div><div class="ft-chl">${h.map(x=>`<span>${_t`N${x.n}`}</span>`).join('')}</div>`:`<p class="ft-e">${_t('Le graphique apparaîtra après la première nuit.')}</p>`;
+ const N=Object.values(G.mtN||{}).filter(r=>Z.U[r.t]),best=N.slice().sort((a,b)=>b.dmg-a.dmg)[0],hit=N.slice().sort((a,b)=>b.tak-a.tak)[0];
+ const card=(r,cls,txt)=>`<div class="ft-mvp${cls}"><i style="background-image:url('${artUrl(r.t)}')"></i><div><b>${r.name||cardName(r.t)}</b><p>${txt}</p></div></div>`;
+ const last=G.night>1||S.busy;
+ return `<h4>${_t('Journal de survie')} <small>${_t`Nuit ${G.night} / ${Z.WIN_NIGHT}`}</small></h4><div class="ft-sg"><div><b>${G.kills||0}</b><span>${_t('zombies tués')}</span></div><div><b>${held}</b><span>${_t('nuits tenues')}</span></div><div><b>${dmg}</b><span>${_t('dégâts infligés')}</span></div><div><b>${dead}</b><span>${_t('survivants perdus')}</span></div></div>
+ <h5>${_t('Zombies tués par nuit')}</h5>${chart}${last&&(best&&best.dmg>0||hit&&hit.tak>0)?`<h5>${S.busy?_t('Cette nuit'):_t('Nuit dernière')}</h5>${best&&best.dmg>0?card(best,'',_t`Meilleure carte : ${Math.round(best.dmg)} dégâts, ${plural(best.kills,_t('zombie tué'),_t('zombies tués'))}`):''}${hit&&hit.tak>0?card(hit,' hit',_t`La plus frappée : ${Math.round(hit.tak)} dégâts encaissés`):''}`:''}`}
+let ftTab=(()=>{try{return localStorage.getItem('abri-ftab')||'p'}catch(e){return'p'}})();
+function feltTabs(){try{const f=$('#felt');if(!f||!document.documentElement.classList.contains('felton')||typeof G==='undefined'||!G||!S.draw)return;let b=$('#ftabs');
+ if(!b){b=document.createElement('div');b.id='ftabs';b.className='ftabs';f.insertBefore(b,$('#fpiles'));b.addEventListener('click',e=>{const t=e.target.closest('[data-ft]');if(!t)return;ftTab=t.dataset.ft;try{localStorage.setItem('abri-ftab',ftTab)}catch(e){}SFX.play('ui');feltTabs()})}
+ const T=[['p','pack',_t('Pioche')],['h','skull',_t('Horde')],['j','chart',_t('Journal')]];
+ const H=`<div class="ft-tabs" role="tablist">${T.map(([k,ic,n])=>`<button type="button" role="tab" data-ft="${k}" aria-selected="${ftTab===k}" class="${ftTab===k?'on':''}">${ii(ic)}${n}</button>`).join('')}</div><div class="ft-body ft-${ftTab}">${ftTab==='h'?ftHorde():ftTab==='j'?ftJournal():ftPioche()}</div>`;if(H===b._h)return;const sc=b.querySelector('.ft-l'),y=sc&&b._t===ftTab?sc.scrollTop:0;b.innerHTML=b._h=H;b._t=ftTab;
+ const l=b.querySelector('.ft-l');if(l)l.scrollTop=y;if(l&&l.scrollHeight>l.clientHeight+2)l.classList.add('dense')}catch(e){}}

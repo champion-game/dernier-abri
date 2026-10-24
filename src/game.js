@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v179 · 24 oct.';
+const VERSION='v180 · 24 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -411,7 +411,7 @@ const backHtml=n=>`<span class="pb"><b>${n}</b></span>`;
 function pilesHtml(){const pd=$('#pDraw'),px=$('#pDisc'),pr=$('#pRes');if(!pd)return;
  pd.innerHTML=_t`${backHtml(S.draw.length)}<em>Pioche</em>`;pd.disabled=S.busy;
  const top=S.discard[S.discard.length-1];px.innerHTML=(top?`<span class="pt" style="background-image:url('${artUrl(top)}')"></span>`:'<span class="pt empty"></span>')+_t`<b class="pn">${S.discard.length}</b><em>Défausse</em>`;px.disabled=S.busy;
- const b=G.bench||[];pr.hidden=!b.length;if(b.length){pr.innerHTML=_t`<span class="pt${b[0].gold?' gold':''}" style="background-image:url('${artUrl(b[0].t)}')">${b[0].gold?`<i class="pstars">${'★'.repeat(b[0].gold)}</i>`:''}</span><b class="pn">${b.length}</b><em>Réserve</em>`;pr.disabled=S.busy;pr.classList.toggle('sel',S.bsel!=null)}}
+ const b=G.bench||[];pr.hidden=!b.length;if(b.length){pr.innerHTML=_t`<span class="pt${b[0].gold?' gold':''}" style="background-image:url('${artUrl(b[0].t)}')">${b[0].gold?`<i class="pstars">${'★'.repeat(b[0].gold)}</i>`:''}</span><b class="pn">${b.length}</b><em>Réserve</em>`;pr.disabled=S.busy;pr.classList.toggle('sel',S.bsel!=null)}try{feltTabs()}catch(e){}}
 // voir le contenu d'un tas
 const pileView=(ts,ordered)=>{if(!ts.length)return _t('<p>Vide.</p>');if(ordered)return `<div class="plist">${ts.map(t=>`<div class="pl"><span class="pt" style="background-image:url('${artUrl(t)}')"></span>${cardName(t)}</div>`).join('')}</div>`;
  const c={};ts.forEach(t=>c[t]=(c[t]||0)+1);return `<div class="plist">${Object.keys(c).sort((a,b)=>cardName(a).localeCompare(cardName(b))).map(t=>`<div class="pl"><span class="pt" style="background-image:url('${artUrl(t)}')"></span>${cardName(t)}${c[t]>1?` <b>×${c[t]}</b>`:''}</div>`).join('')}</div>`};

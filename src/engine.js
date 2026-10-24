@@ -882,13 +882,17 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const ZHP=1; // ancien bonus de PV des zombies, désormais intégré aux PV de base (v64)
  // la Mère libère 2 rampants en mourant (sauf dans la forêt)
  function broodDeath(st,z,ev){if(isEdge(z.pos))return;for(let k=0;k<2;k++)spawn(st,'crawl',z.pos);ev.push({i:z.pos,k:'howl'})}
- function spawn(st,k,pos){const T=ZT[k],hp=Math.ceil(T.hp*hpMult(st.night,st)*(men(st,1)?1.1:1)*(1+.15*mc(st,'peau'))*((PLACES[st.place]||{}).hp||1));const z={id:++st.zid,k,pos,hp,max:hp,cd:zspd(st,k),style:st.zid%3};st.z.push(z);st.spawned=(st.spawned||0)+1;return z}
+ // PV d'un zombie de ce type cette nuit (frénésie, mutations, lieu) : sert au moteur et au panneau « Horde »
+ function zMaxHp(st,k){return Math.ceil(ZT[k].hp*hpMult(st.night,st)*(men(st,1)?1.1:1)*(1+.15*mc(st,'peau'))*((PLACES[st.place]||{}).hp||1))}
+ // zombies absents cette nuit qui apparaissent la nuit suivante (hors défi du jour)
+ function newcomers(st){if(st.daily||st.fixedW)return[];const n=st.night;return ZK.filter(k=>waveCount(k,n+1)>0&&!(waveCount(k,n)>0))}
+ function spawn(st,k,pos){const hp=zMaxHp(st,k);const z={id:++st.zid,k,pos,hp,max:hp,cd:zspd(st,k),style:st.zid%3};st.z.push(z);st.spawned=(st.spawned||0)+1;return z}
   // nuit du Colosse : la horde arrive en 2 vagues (le Colosse dans la 2ᵉ), avec une pause entre les deux où l'on déplace librement ses unités.
  // Toutes les autres nuits arrivent d'un seul tenant.
  const WAVES_N=2;
  function bigNight(st,w){w=w||waveList(st);return BOSSES.some(k=>w[k]>0)}
  function nextWave(st){st.wave=(st.wave||1)+1;st.wtick=0;st.freeMove=0}
- function startNight(st,rnd){st.mtN={};st.mtT=0;st.mtR=st.mtR||{};st._su=null;st._zk=null;const w=waveList(st),list=[],big=bigNight(st,w);st.grid.forEach(u=>{if(u){u.nk=0;u.lu=0}});st.noise=null;st.alarmT=0;
+ function startNight(st,rnd){st.k0=st.kills||0;st.mtN={};st.mtT=0;st.mtR=st.mtR||{};st._su=null;st._zk=null;const w=waveList(st),list=[],big=bigNight(st,w);st.grid.forEach(u=>{if(u){u.nk=0;u.lu=0}});st.noise=null;st.alarmT=0;
   for(const k of ZK)if(!ZT[k].boss)for(let j=0;j<w[k];j++)list.push(k);
   shuffle(list,rnd);
   const ps=(PLACES[st.place]||{}).sides,edges=st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;
@@ -1036,7 +1040,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   return{ev,done};
  }
  // l'aube : l'essence s'éteint, les soins et la ferraille de l'aube s'appliquent
- function endNight(st){st.grid.forEach((u,i)=>{if(u&&u.t==='fire')st.grid[i]=null;else if(u&&u.trait==='coriace'&&u.hp>0)u.hp=Math.min(maxHp(st,u),u.hp+1)});st.z=[];st.side=-1;
+ function endNight(st){// historique pour le Journal : zombies tués et dégâts infligés de chaque nuit
+  try{const d=Object.values(st.mtN||{}).reduce((a,r)=>a+(r.dmg||0),0);(st.hist=st.hist||[])[st.night-1]={k:Math.max(0,(st.kills||0)-(st.k0||0)),d:Math.round(d)}}catch(e){}
+  st.grid.forEach((u,i)=>{if(u&&u.t==='fire')st.grid[i]=null;else if(u&&u.trait==='coriace'&&u.hp>0)u.hp=Math.min(maxHp(st,u),u.hp+1)});st.z=[];st.side=-1;
   if(st.shelter<=0)return{heal:0,scrap:0};
   const fl=famLevels(st),T=TIERS[st.tier]||TIERS.base;
   const mutual=allies(st).includes('mutual');if(mutual)st.grid.forEach(u=>{if(u&&U[u.t].block)u.hp=Math.min(maxHp(st,u),u.hp+1)});
@@ -1074,7 +1080,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;st.kills++;st.scrap+=killScrap(st,ZT[z.k].boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!ZT[z.k].boss});if(ZT[z.k].brood)broodDeath(st,z,ev)}
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
- return{TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
+ return{zMaxHp,newcomers,TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
   DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;

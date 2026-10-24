@@ -927,6 +927,12 @@ Jour 4 (M maison, # barricade) :
 
 **v169** : en largeur (PC), l’image d’accueil est tirée au hasard à chaque démarrage parmi 6 (`fond.webp`, `fond-2.webp` à `fond-6.webp`, survivants différents). Easter egg : `fond-zombies.webp` (zombies sur la palissade, survivants en bas), environ 1 démarrage sur 25 (poids dans `FONDS`, `game-menu.js`).
 
+**v180** : grand écran PC (tapis vert à gauche), l’espace vide sous la piste des nuits devient un panneau à 3 onglets ; le joueur choisit, le choix est retenu (`abri-ftab`).
+- **Pioche** : une ligne par sorte de carte (couleur du type, nom, illustration, exemplaires restants), barre de répartition par type ; les cartes absentes de la pioche (main, défausse) sont grisées. Lignes plus fines quand la liste ne tient pas, puis défilement.
+- **Horde** : chaque zombie de la nuit avec son nombre, ses PV réels (frénésie, mutations, lieu : `Z.zMaxHp`), ses dégâts et son effet ; total de PV ; zombies nouveaux la nuit suivante en ombre (`Z.newcomers`).
+- **Journal** : zombies tués, nuits tenues, dégâts infligés, survivants perdus ; graphique des zombies tués par nuit (`st.hist`, noté à chaque `endNight`) ; meilleure carte et carte la plus frappée de la nuit précédente (tableau des combats).
+- Les piles (pioche, réserve, défausse) passent côte à côte en bas du tapis.
+
 **v150** : cartes offertes en fin de partie, et prix des cartes relevés d’environ 30 %.
 - Après une défaite ou un départ en hélicoptère (pas au défi du jour) : 5 nuits survécues ou plus → 1 carte à choisir parmi 3 ; 10 ou plus → 2 parmi 3 ; 20 ou plus → les 3. Tirage parmi les cartes achetables pas encore débloquées (jamais les cartes de victoire), moins de 3 si presque tout est débloqué.
 - Écran « Récompense » : les 3 cartes arrivent face cachée (dos de carte, sans halo) ; on touche pour retourner (animation 3D), le halo dit la rareté (commune vert, rare bleu, épique violet, légendaire orange) ; on retouche pour prendre, avec une fenêtre de confirmation.
