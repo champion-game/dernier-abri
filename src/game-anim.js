@@ -196,11 +196,6 @@ panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(SCR0=
  const el=[...panel.querySelectorAll('h2+p b')].find(x=>/^\d+/.test(x.textContent));if(el){const rest=el.textContent.replace(/^\d+/,'');const st=performance.now(),dur=Math.min(700,(from-to)*45);
   const f=now=>{const q=Math.min(1,(now-st)/dur);el.textContent=Math.round(from-(from-to)*q)+rest;if(q<1)requestAnimationFrame(f);else aAnim(el,[{color:'#e5484d',transform:'scale(1.2)'},{transform:'none'}],{duration:300})};requestAnimationFrame(f)}
  if(b&&b.dataset.a==='store-buy'&&b.dataset.v){const it=b.closest('.citem'),cf=it&&it.querySelector('.cf'),h=$('#hand');if(cf&&h)fly(b.dataset.v,cf.getBoundingClientRect(),h.getBoundingClientRect(),0,0,null,{s1:.6,dur:450});try{SFX.play('coin')}catch(x){}}});
-// 38 : accueil : des cartes flottent doucement derrière le menu
-function titleFloat(){try{if(!onTitle||ov.querySelector('.tfloat'))return;const f=document.createElement('div');f.className='tfloat';
- for(let k=0;k<7;k++){const c=aEl('tfc','',f);c.style.left=(4+k*14+Math.random()*6)+'%';c.style.animationDelay=(-k*3.1-Math.random()*3)+'s';c.style.animationDuration=(18+Math.random()*8)+'s';c.style.setProperty('--rz',((Math.random()-.5)*50).toFixed(0)+'deg')}
- ov.insertBefore(f,ov.firstChild)}catch(e){}}
-const _title=title;title=function(){_title();titleFloat()};titleFloat();
 // 39 : mutation choisie : le chiffre se fissure, lueur verte toxique
 const _prepmen=ACT.prepmen;ACT.prepmen=v=>{_prepmen(v);if(!+v||!AOK())return;const t=panel.querySelector('.menace .tab.on');if(!t)return;t.classList.add('mcrack');
  aEl('crk','<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0 L17 11 L23 16 L15 25 L21 30 L18 40 M23 16 L32 12 M15 25 L6 27"/></svg>',t);try{SFX.play('crack')}catch(e){}};

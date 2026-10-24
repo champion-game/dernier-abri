@@ -301,7 +301,7 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - Plateau : une unité au corps à corps fait un pas vers sa cible puis revient, un tireur recule plus net ; fusion avec éclairs dorés et étoile qui tombe sur l’unité ; passage de niveau avec colonne de lumière et « N2 » qui grossit puis se pose ; le nom d’un survivant qui rejoint l’abri s’écrit à la machine ; une unité à moins de 35 % de ses PV respire plus lentement avec une lueur rouge.
 - Nuit : à l’arrivée du boss, bandeau à son nom qui traverse l’écran et court ralenti ; le dernier zombie de la nuit tombe au ralenti avec zoom (« Dernier ! ») ; abri à 30 % de PV ou moins : la barre bat comme un cœur et les bords de l’écran pulsent en rouge.
 - Économie : chaque point d’énergie dépensé s’éteint en flash, la jauge se rallume une à une au lever du jour ; des pièces de ferraille volent des zombies tués vers le compteur ; la relique choisie tourne en 3D au centre puis file se ranger ; au troc et à la boutique, la ferraille descend chiffre par chiffre et la carte achetée vole vers la main.
-- Menus : cartes qui flottent derrière l’accueil ; la mutation choisie se fissure avec une lueur verte ; un succès tombe du haut et rebondit, avec un son de cloche ; les compteurs de l’aube et les points de fin de partie montent par paliers avec un petit tremblement.
+- Menus (les cartes flottantes derrière l’accueil ont été essayées puis retirées à la demande d’Amine) : la mutation choisie se fissure avec une lueur verte ; un succès tombe du haut et rebondit, avec un son de cloche ; les compteurs de l’aube et les points de fin de partie montent par paliers avec un petit tremblement.
 
 ## Confort et objectifs (v128)
 
