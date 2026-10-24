@@ -34,6 +34,7 @@ jobs:
           cp -r index.html sw.js version.txt manifest.webmanifest src assets build/
           rm -rf build/assets/extras
           find build -name '*.md' -delete
+          sed -i -E "s/\?v=([0-9]+)/?v=\1-${GITHUB_RUN_NUMBER}/g" build/index.html
           cp -r build build-demo
           grep -q 'var DEMO_BUILD=false;' build-demo/src/game.js
           sed -i 's/var DEMO_BUILD=false;/var DEMO_BUILD=true;/' build-demo/src/game.js
