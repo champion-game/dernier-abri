@@ -27,7 +27,7 @@ jobs:
           if [ -n "$BUTLER_API_KEY" ] && { [ -n "$ITCH_GAME" ] || [ -n "$ITCH_DEMO" ]; }; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "Réglages itch.io absents : envoi sauté."; fi
       - uses: actions/checkout@v4
         if: steps.ok.outputs.go == '1'
-      - name: Préparer le jeu complet et la démo (fichiers utiles, code sans commentaires)
+      - name: Préparer le jeu complet et la démo (fichiers utiles, JS sans commentaires ; CSS laissé tel quel : csso cassait l’affichage)
         if: steps.ok.outputs.go == '1'
         run: |
           mkdir -p build
@@ -37,10 +37,9 @@ jobs:
           cp -r build build-demo
           grep -q 'var DEMO_BUILD=false;' build-demo/src/game.js
           sed -i 's/var DEMO_BUILD=false;/var DEMO_BUILD=true;/' build-demo/src/game.js
-          npm i -s --no-save terser@5 csso-cli@4
+          npm i -s --no-save terser@5
           for d in build build-demo; do
             for f in $d/src/*.js $d/sw.js; do npx terser "$f" -c -m --comments false -o "$f"; done
-            npx csso $d/src/style.css -o $d/src/style.css
           done
       - name: Télécharger butler
         if: steps.ok.outputs.go == '1'
