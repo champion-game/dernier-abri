@@ -1014,7 +1014,7 @@ html.goldback .flyc .fl-b,html.goldback .lcard,html.goldback .gp-card,html.goldb
 .pk-fl{position:absolute;inset:-12%;z-index:6;pointer-events:none;border-radius:50%;background:radial-gradient(circle,var(--rc) 0,transparent 62%);mix-blend-mode:screen;animation:pkfl .7s ease-out both}
 @keyframes pkfl{0%{opacity:.95;transform:scale(.5)}100%{opacity:0;transform:scale(1.35)}}
 /* collection : pièces, cadenas, éclat et tampon « Obtenue » */
-.coin{position:fixed;left:-8px;top:-8px;width:16px;height:16px;z-index:75;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c23d 45%,#a06a00);border:1px solid #7a4a00;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.coin:not(.tok){position:fixed;left:-8px;top:-8px;width:16px;height:16px;z-index:75;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c23d 45%,#a06a00);border:1px solid #7a4a00;box-shadow:0 1px 3px rgba(0,0,0,.5)}
 .citem.unl .cf{filter:grayscale(1) brightness(.5)!important}
 .citem.unl2 .cf{animation:ucolor .7s ease-out}
 @keyframes ucolor{0%{filter:grayscale(1) brightness(2.2)}100%{filter:none}}
