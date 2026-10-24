@@ -14,8 +14,11 @@ const RARC={com:'#efe9da',rare:'#4fa3ff',epic:'#b06bff',leg:'#ffb02e'};
 function handFx(hand){const cs=[...hand.querySelectorAll('.card')],n=cs.length,now=performance.now();
  hand.style.setProperty('--ph',-(now%1600)+'ms');hand.style.setProperty('--ph2',-(now%7000)+'ms');
  const cols=(getComputedStyle(hand).gridTemplateColumns||'').split(' ').filter(Boolean).length||n,fan=n>1&&n<=cols&&!LANDTALL.matches,mid=(n-1)/2;
+ // la main est redessinée à chaque tick de la nuit : on place l'éventail sans transition, sinon les cartes repartent de 0° et bougent
+ cs.forEach(c=>c.style.transition='none');
  cs.forEach((c,k)=>{const d=k-mid;c.style.setProperty('--fr',fan?(d*Math.min(3,10/n)).toFixed(2)+'deg':'0deg');c.style.setProperty('--fy',fan?(d*d*Math.min(2.2,7/n)).toFixed(1)+'px':'0px');
-  c.classList.toggle('play',!c.disabled&&!S.dawnWait)})}
+  c.classList.toggle('play',!c.disabled&&!S.dawnWait)});
+ void hand.offsetWidth;cs.forEach(c=>c.style.transition='')}
 // au doigt : la carte touchée se lève tout de suite (comme le survol à la souris)
 $('#hand').addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;const b=e.target.closest('.card');if(b&&!b.disabled)b.classList.add('lift')});
 ['pointerup','pointercancel'].forEach(n=>addEventListener(n,()=>document.querySelectorAll('#hand .card.lift').forEach(c=>c.classList.remove('lift'))));
