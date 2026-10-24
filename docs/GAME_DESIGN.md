@@ -910,6 +910,8 @@ Jour 4 (M maison, # barricade) :
 
 **v167** : nouvelle image d’ambiance (palissade, survivants et zombies, milieu vide pour le menu) : `fond.webp` (1672 × 941) en largeur, `fond-portrait.webp` (841 × 1870) en hauteur, survivants en haut. En hauteur, la phrase d’accroche de l’accueil est retirée pour que le logo se pose sur la palissade.
 
+**v168** : en hauteur, `fond-portrait2.webp` : survivants sur une palissade au tiers de l’écran. Sur téléphone, le logo (plus petit) monte dans le ciel et le menu commence juste sous la palissade, pour que les survivants restent visibles.
+
 **v150** : cartes offertes en fin de partie, et prix des cartes relevés d’environ 30 %.
 - Après une défaite ou un départ en hélicoptère (pas au défi du jour) : 5 nuits survécues ou plus → 1 carte à choisir parmi 3 ; 10 ou plus → 2 parmi 3 ; 20 ou plus → les 3. Tirage parmi les cartes achetables pas encore débloquées (jamais les cartes de victoire), moins de 3 si presque tout est débloqué.
 - Écran « Récompense » : les 3 cartes arrivent face cachée (dos de carte, sans halo) ; on touche pour retourner (animation 3D), le halo dit la rareté (commune vert, rare bleu, épique violet, légendaire orange) ; on retouche pour prendre, avec une fenêtre de confirmation.
