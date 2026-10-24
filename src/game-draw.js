@@ -319,7 +319,7 @@ function splat(x,y,big){const n=big?9:3;for(let k=0;k<n;k++){const a=Math.random
 
 /* ---------- live visual state ---------- */
 const V=new Map(),FX=[],PT=[],facing=Array(Z.N*Z.N).fill(null),atkT=Array(Z.N*Z.N).fill(0),ouchT=Array(Z.N*Z.N).fill(0);
-const SLAM={},UHIT={};let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
+const SLAM={},UHIT={},DEADP=[];let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
 // tremblement de l'écran : k = force ; une secousse plus forte remplace une plus faible
 // v128 : vibrations du téléphone (Android ; l'iPhone ne les permet pas dans le navigateur), au plus une toutes les 250 ms
 let vibT=0;function vib(p){if(!OPT.vib||!navigator.vibrate)return;const n=performance.now();if(n-vibT<250)return;vibT=n;try{navigator.vibrate(p)}catch(e){}}
@@ -501,7 +501,7 @@ function trackBoard(now){
    else if(TRK.t[i]!==u.t){bornT[i]=now;TRK.dust.push({i,t:now+170})}}
   if(u){if(TRK.t[i]&&TRK.t[i]!==u.t&&u===pu)popT[i]=now;
    if((u.gold||0)>(u===pu||TRK.t[i]===u.t?TRK.gold[i]:u.gold||0)){popT[i]=now;const p=tc(i);burst(p.x,p.y,'#ffe7a0',14,.1,2.2);burst(p.x,p.y,'#f2c23d',10,.07,3)}
-   if(lvOf(u)>TRK.lv[i]&&(u===pu||TRK.t[i]===u.t)){lvT[i]=now;const p=tc(i);floatTxt(p.x,p.y-26,'▲','#9fd86b',18);addFX({type:'ring',x:p.x,y:p.y,r:36,c:'#9fd86b',dur:420})}}
+   if(lvOf(u)>TRK.lv[i]&&(u===pu||TRK.t[i]===u.t)){lvT[i]=now;const p=tc(i);floatTxt(p.x,p.y-26,'▲','#9fd86b',18);try{lvFx(i,lvOf(u))}catch(e){}addFX({type:'ring',x:p.x,y:p.y,r:36,c:'#9fd86b',dur:420})}}
  }
  for(let i=0;i<n;i++){const u=g[i];TRK.u[i]=u;TRK.t[i]=u&&u.t;TRK.gold[i]=u&&u.gold||0;TRK.lv[i]=lvOf(u)}
  for(let k=TRK.dust.length-1;k>=0;k--){const d=TRK.dust[k];if(now<d.t)continue;TRK.dust.splice(k,1);if(!g[d.i])continue;const p=tc(d.i);
@@ -524,8 +524,10 @@ function unitAnim(i,u,now,sc){
  const tp=now-popT[i];if(tp<480){const k=Math.sin(tp/480*Math.PI)*(1-tp/960)*.45;ctx.scale(1+k,1+k)}
  const tl=now-lvT[i];if(tl<420){const k=Math.sin(tl/420*Math.PI);ctx.translate(0,-9*k);ctx.scale(1+.08*k,1+.08*k)}
  if(trap){if(ta<260){const k=1-ta/260;ctx.scale(1+.3*k,1-.15*k)}return}
- if(live){const b=Math.sin(now/650+i*1.7);ctx.scale(1+.018*b,1-.018*b)}
- if(ta<160&&facing[i]!=null){const k=1-ta/160,d=2.6*k;ctx.translate(-Math.cos(facing[i])*d,-Math.sin(facing[i])*d);ctx.scale(1+.06*k,1+.06*k)}
+ if(live){const low=u.hp/Math.max(1,Z.maxHp(G,u))<.35,b=Math.sin(now/(low?1150:650)+i*1.7),a=low?.035:.018;ctx.scale(1+a*b,1-a*b)}
+ // v170+ : attaque façon Hearthstone : le corps à corps fait un pas vers sa cible puis revient, le tireur recule plus net
+ if(facing[i]!=null){const mel=((Z.U[u.t]||{}).rng||1)<=1;if(mel&&ta<230){const k=Math.sin(ta/230*Math.PI),d=7*k/sc*1.45;ctx.translate(Math.cos(facing[i])*d,Math.sin(facing[i])*d);ctx.scale(1+.08*k,1+.08*k)}
+  else if(!mel&&ta<170){const k=1-ta/170,d=3.6*k;ctx.translate(-Math.cos(facing[i])*d,-Math.sin(facing[i])*d);ctx.scale(1+.06*k,1+.06*k)}}
  if(th<240){const k=1-th/240;ctx.translate(Math.sin(th/18)*2.4*k,0);ctx.scale(1-.07*k,1+.05*k)}
 }
 function drawUnit(i,u,now){
@@ -537,11 +539,12 @@ function drawUnit(i,u,now){
  // version dorée (fusion) ou évolution : un anneau qui pulse
  if(u.gold||D0.evo){ctx.save();ctx.strokeStyle=u.gold?'#f2c23d':'#c58cff';ctx.lineWidth=3;ctx.globalAlpha=.55+.3*Math.sin(now/300);ctx.beginPath();ctx.arc(p0.x,p0.y,28,0,7);ctx.stroke();ctx.restore()}
  // v170 : carte qui vient d'être posée (elle tombe et s'écrase) et défense qui vient d'être frappée (tremble et blanchit)
- const ht=now-(UHIT[i]||-1e9),hit=ht<240;
+ const ht=now-(UHIT[i]||-1e9),hit=ht<240,mx0=Math.max(1,Z.maxHp(G,u));
  ctx.save();ctx.translate(p0.x+(hit?Math.sin(ht*.12)*3*(1-ht/240):0),p0.y);const sc=(1.45+.12*Math.min(3,u.gold||0))*sk;ctx.scale(sc,sc);
  try{unitAnim(i,u,now,sc)}catch(e){}
  ctx.translate(-p0.x,-p0.y);
  drawUnitInner(i,u,now);ctx.restore();
+ if(Z.isUnit(u.t)&&!D0.block&&u.hp/mx0<.35){ctx.save();ctx.globalAlpha=.16+.1*Math.sin(now/1150*2+i);ctx.globalCompositeOperation='multiply';circ(p0.x,p0.y,21,'#e5484d');ctx.restore()}
  if(hit){ctx.save();ctx.globalAlpha=.55*(1-ht/240);ctx.globalCompositeOperation='lighter';circ(p0.x,p0.y,22,'#fff');ctx.restore()}
  if(D0.block){const f=u.hp/Z.maxHp(G,u);if(f<.4)try{cracks(p0.x,p0.y,i,f)}catch(e){}}
  if(D0.up)safeTxt(p0.x+19,p0.y-17,'+','#f2b33d');
@@ -813,6 +816,7 @@ function drawFX(now){
   if(f.type==='fly'){const e=p*p,x=f.x1+(f.x2-f.x1)*e,y=f.y1+(f.y2-f.y1)*e;ctx.globalAlpha=1;if(!drawSpr(f.k,x,y,0,0,1.45*(1-.5*p)))circ(x,y,12*(1-.5*p),CATC[(Z.U[f.k]||{}).cat]||'#f2c23d')}
   if(f.type==='gone'){ctx.save();ctx.globalAlpha=1-p;ctx.translate(f.x,f.y);ctx.rotate(p*.9);ctx.translate(0,p*8);if(!drawSpr(f.k,0,0,0,0,1.45*(1-.3*p)))circ(0,0,12*(1-p),'rgba(200,190,160,.8)');ctx.restore()}
   if(f.type==='shards')try{const g=.0009,dt=now-f.t0;ctx.globalAlpha=Math.min(1,(1-p)*1.6);for(const q of f.s){const x=f.x+q.vx*dt,y=f.y+q.vy*dt+g*dt*dt;ctx.save();ctx.translate(x,y);ctx.rotate(q.a+q.va*dt);ctx.fillStyle=q.c;ctx.beginPath();ctx.moveTo(-q.r,-q.r*.6);ctx.lineTo(q.r,-q.r*.3);ctx.lineTo(q.r*.2,q.r*.8);ctx.closePath();ctx.fill();ctx.restore()}}catch(e){}
+  if(f.type==='fn')try{ctx.save();f.fn(p,now);ctx.restore()}catch(e){}
   if(f.type==='ring'&&p>0){ctx.strokeStyle=f.c;ctx.lineWidth=3*(1-p);ctx.beginPath();ctx.arc(f.x,f.y,f.r*p,0,7);ctx.stroke()}
   ctx.globalAlpha=1}
  for(let k=PT.length-1;k>=0;k--){const q=PT[k],p=Math.max(0,(now-q.t0)/q.dur);if(p>=1){PT.splice(k,1);continue}const dt=now-q.t0;
@@ -823,7 +827,8 @@ function floatTxt(x,y,txt,c,sz){floats.push({x,y,txt,c,sz:sz||13,t0:performance.
 function drawFloats(now){ctx.textAlign='center';
  for(let k=floats.length-1;k>=0;k--){const f=floats[k],p=(now-f.t0)/(f.sz>13?1400:700);if(p>=1){floats.splice(k,1);continue}
   ctx.font=`bold ${f.sz}px "Atkinson Hyperlegible",system-ui,sans-serif`;
-  ctx.globalAlpha=1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(f.txt,f.x+1,f.y-18-p*18+1);ctx.fillStyle=f.c;ctx.fillText(f.txt,f.x,f.y-18-p*18);ctx.globalAlpha=1}}
+  const tx=f.tw?f.txt.slice(0,Math.ceil(f.txt.length*Math.min(1,(now-f.t0)/f.tw))):f.txt,yy=f.tw?f.y-18-Math.max(0,p-.5)*24:f.y-18-p*18;
+  ctx.globalAlpha=f.tw?Math.min(1,(1-p)*2.5):1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(tx,f.x+1,yy+1);ctx.fillStyle=f.c;ctx.fillText(tx,f.x,yy);ctx.globalAlpha=1}}
 
 // v158 : jeux de lumière (décor seulement, hors des règles) : le jour, soleil chaud, rayons qui filtrent des arbres et ombres de nuages ;
 // au crépuscule et à l'aube, lumière dorée rasante ; la nuit, clair de lune bleuté et halos colorés autour des lumières

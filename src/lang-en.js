@@ -1393,4 +1393,5 @@ I18N.en={
 "Se joue le jour":"Played by day",
 "Pas assez d’énergie":"Not enough energy",
 "Obtenue":"Unlocked",
+"Dernier !":"Last one!",
 };

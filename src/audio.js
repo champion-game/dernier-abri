@@ -85,6 +85,9 @@ const SFX=(()=>{
   shuffle:t=>{for(let k=0;k<7;k++)noise(t+k*.045,.035,{f:2600+k*120,q:1.2,vol:.14})},
   whoosh:t=>{noise(t,.25,{f:400,f2:2400,q:1,vol:.18,attack:.06})},
   pack:t=>{noise(t,.5,{f:5000,f2:600,type:'lowpass',vol:.45,attack:.005});[523,659,784].forEach((f,k)=>tone(t+.05+k*.07,.5,{f,vol:.1,type:'triangle'}))},
+  tick:t=>{noise(t,.018,{f:3200,q:2,vol:.12})},
+  bell:t=>{[1047,1319,1568].forEach((f,k)=>{tone(t+k*.05,1.1,{f,vol:.08,type:'sine'});tone(t+k*.05,.6,{f:f*2.76,vol:.025,type:'sine'})})},
+  crack:t=>{noise(t,.06,{f:2400,q:3,vol:.3});noise(t+.05,.09,{f:900,q:2,vol:.25});tone(t,.4,{f:90,f2:60,vol:.12,type:'sawtooth',attack:.02})},
   rare:t=>{[392,523,659,784,1047].forEach((f,k)=>tone(t+k*.07,.7,{f,vol:.11,type:'triangle'}));noise(t+.3,.6,{f:7000,q:3,vol:.09})}
  };
  // v115 : nombre de sons joués en même temps plafonné (10, ou 5 en mode économie) : au-delà, on n'entend plus rien de plus,

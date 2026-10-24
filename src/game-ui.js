@@ -4,7 +4,7 @@
 function playEvents(ev,types,now){
  const shots=new Set(),dead=ev.filter(e=>e.k==='die');
  // victimes : compteur ; v166 : multi-éliminations par attaque (une même source tue plusieurs zombies dans le tour), ralenti à la mort du Colosse
- if(dead.length){KC.n+=dead.length;KC.t=now;
+ if(dead.length){KC.n+=dead.length;KC.t=now;try{dead.forEach(e=>{const v=V.get(e.zid);DEADP.push(v?(v.dying?{x:v.dx,y:v.dy}:zpos(v,now)):tc(e.i))});if(DEADP.length>30)DEADP.splice(0,DEADP.length-30)}catch(x){}
   try{const by={},src={};for(const e of ev){if(e.k==='hit'&&e.zid!=null)src[e.zid]=e.src>=0?e.src:'r';else if(e.k==='shot'&&e.zid!=null)src[e.zid]='r'}
    dead.forEach(e=>{const k=src[e.zid];if(k==null)return;(by[k]=by[k]||[]).push(e)});
    for(const k in by){const g=by[k],n=g.length;if(n<2)continue;const ps=g.map(e=>{const v=V.get(e.zid);return v?zpos(v,now):tc(e.i)}),cx=ps.reduce((a,p)=>a+p.x,0)/n,cy=ps.reduce((a,p)=>a+p.y,0)/n;
@@ -135,6 +135,7 @@ function render(){
  $('#go').classList.toggle('guide',!!(gs&&gs.go&&ov.hidden));
  $('#info').hidden=!!(gs&&ov.hidden);
  const go=$('#go');go.disabled=!!S.dawnWait;go.textContent=S.pause?_t`Lancer la vague ${S.pause+1} sur ${G.waves}`:S.busy?_t`Vitesse ×${SPEED} (toucher pour changer)`:_t('Affronter la nuit');go.classList.toggle('speed',S.busy&&!S.pause);
+ try{if(typeof renderFx==='function')renderFx()}catch(e){}
 }
 $('#hand').addEventListener('click',e=>{const b=e.target.closest('.card');if(!b||b.disabled)return;SFX.play('ui');LASTRECT=b.getBoundingClientRect();
  if(b.dataset.b!==undefined){const k=+b.dataset.b;S.bsel=S.bsel===k?null:k;S.sel=null;S.moveFrom=null;S.inspect=null;render();return}S.bsel=null;
@@ -277,7 +278,7 @@ function tapCell(i){
  const t=selCard(),D=Z.U[t],re=selReuse(),build=Z.isTrace(t);
  if(selCost()>(G.energy??0)||!Z.canPlace(G,t,i)){try{refuseFx(i)}catch(e){}return}
  snapUndo(re?null:t);tuto(1);if(!re)countPlay(t);if(build)useBuild(t);else S.hand.splice(S.sel,1);const mg=Z.place(G,t,i,R,false,{reuse:re});try{placeFx(t,i,D)}catch(e){}spentTrace(t);if(!D.instant)facing[i]=null;if(D.instant)S.discard.push(t);syncBoard();if(!build)S.sel=null;S.moveFrom=null;S.inspect=mg?i:null;
- if(!mg&&G.grid[i]&&G.grid[i].name){const q=tc(i);floatTxt(q.x,q.y-14,_t`${G.grid[i].name} rejoint l’abri`,'#f2b33d')}
+ if(!mg&&G.grid[i]&&G.grid[i].name){const q=tc(i);floatTxt(q.x,q.y-14,_t`${G.grid[i].name} rejoint l’abri`,'#f2b33d',14);try{typeFx()}catch(e){}}
  if(!mg&&G.grid[i]&&G.grid[i].leg){const q=tc(i);floatTxt(q.x,q.y+14,_t`Souvenir de ${G.grid[i].leg} : +1 dégât, +2 PV`,'#f2c23d',14);addFX({type:'ring',x:q.x,y:q.y,r:50,c:'#f2c23d',dur:600})}
  const p=D.instant&&!D.onUnit?CEN:tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#f2b33d',dur:350});SFX.play(D.cat==='shoot'?'cock':'place');
  const St=Z.stat(G,t);
