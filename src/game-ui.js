@@ -337,3 +337,9 @@ async function night(){
  if(G.night===Z.WIN_NIGHT&&!G.won)return victory();
  dawn();
 }
+// v179 : sur grand écran PC, la fiche de nuit et les piles passent sur le tapis vert de gauche (le CSS place ce tapis)
+function feltLayout(){try{const f=$('#felt'),fp=$('#fpiles'),m=document.querySelector('.mat'),t=$('#table'),h=$('#hand'),pd=$('#pDraw').parentNode,pc=$('#pDisc').parentNode;
+ const on=innerWidth-innerHeight>=790&&innerHeight>=640&&matchMedia('(orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px)').matches;document.documentElement.classList.toggle('felton',on);
+ if(on&&m.parentNode!==f){f.insertBefore(m,fp);fp.append(pd,pc)}
+ else if(!on&&m.parentNode===f){document.querySelector('.side').appendChild(m);t.insertBefore(pd,h);t.appendChild(pc)}}catch(e){}}
+addEventListener('resize',feltLayout);feltLayout();
