@@ -50,10 +50,10 @@ function playEvents(ev,types,now){
   if(e.k==='boom'){const p=tc(e.i);addFX({type:'flash',x:p.x,y:p.y,r:46,c:'rgba(255,160,60,.9)',dur:380,light:T*2.2});addFX({type:'ring',x:p.x,y:p.y,r:70,c:'#ffb35c',dur:420});burst(p.x,p.y,'#ff9a2e',22,.2,3);burst(p.x,p.y,'#3a3a3a',14,.12,4);shake(now,8);crater(p.x,p.y,20)}
   if(e.k==='bite'){const v=V.get(e.zid),p=tc(e.i);
    if(e.i===Z.C){shake(now,8);hurtT=now;shelHit();vib(45);if(v){if((Z.ZT[v.k]||{}).boss){v.lunge=now;v.lx=p.x;v.ly=p.y}else v.bit=1}floatTxt(p.x,p.y-8,e.txt,'#ff6b6b');burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2)}
-   else{if(v){v.lunge=now;v.lx=p.x;v.ly=p.y}floatTxt(p.x,p.y,e.txt,'#ff6b6b');const wc={wood:'#a07a4a',stake:'#8a6238',stone:'#a8a498',metal:'#a9b3b8',steel:'#7d868d',sand:'#c9ab73',tire:'#333',rust:'#9a4a2c',stripe:'#e8e0d0',electric:'#9fe8ff'}[WMAT[types[e.i]]||(Z.U[types[e.i]]&&Z.U[types[e.i]].block?'stone':'wood')];burst(p.x,p.y,wc,Z.U[types[e.i]]&&Z.U[types[e.i]].block?10:5,.09,2.4)}}
+   else{if(v){v.lunge=now;v.lx=p.x;v.ly=p.y}UHIT[e.i]=now;floatTxt(p.x,p.y,e.txt,'#ff6b6b',15);const wc={wood:'#a07a4a',stake:'#8a6238',stone:'#a8a498',metal:'#a9b3b8',steel:'#7d868d',sand:'#c9ab73',tire:'#333',rust:'#9a4a2c',stripe:'#e8e0d0',electric:'#9fe8ff'}[WMAT[types[e.i]]||(Z.U[types[e.i]]&&Z.U[types[e.i]].block?'stone':'wood')];burst(p.x,p.y,wc,Z.U[types[e.i]]&&Z.U[types[e.i]].block?10:5,.09,2.4)}}
   if(e.k==='ko'||e.k==='lost')vib(e.name?[70,50,70]:30);
   if(e.k==='ko'){const p=tc(e.i);burst(p.x,p.y,'rgba(140,20,24,.9)',8,.08,2);floatTxt(p.x,p.y-12,_t('Blessé : en réserve'),'#ffb35c',13)}
-  if(e.k==='lost'){const p=tc(e.i);burst(p.x,p.y,'#8a6a45',16,.12,3);burst(p.x,p.y,'rgba(140,20,24,.9)',6,.08,2);splat(p.x,p.y,true)
+  if(e.k==='lost'){const p=tc(e.i);try{shardsFx(p.x,p.y,types[e.i])}catch(x){}burst(p.x,p.y,'#8a6a45',16,.12,3);burst(p.x,p.y,'rgba(140,20,24,.9)',6,.08,2);splat(p.x,p.y,true)
    // v166 : un mur qui cède : éclats de son matériau, secousse, et (au plus une fois toutes les 12 s) ralenti et zoom sur la brèche
    if((Z.U[types[e.i]]||{}).cat==='wall'){const wc={wood:'#a07a4a',stake:'#8a6238',stone:'#a8a498',metal:'#a9b3b8',steel:'#7d868d',sand:'#c9ab73',tire:'#333',rust:'#9a4a2c',stripe:'#e8e0d0',electric:'#9fe8ff'}[WMAT[types[e.i]]||'wood'];
     burst(p.x,p.y,wc,26,.22,3.5);burst(p.x,p.y,'#3a3a3a',10,.1,4);addFX({type:'flash',x:p.x,y:p.y,r:34,c:'rgba(255,220,170,.7)',dur:260});addFX({type:'ring',x:p.x,y:p.y,r:56,c:wc,dur:420});shake(now,10);vib([40,30,60]);try{SFX.play('boom',.5)}catch(x){}
@@ -114,7 +114,7 @@ function render(){
   +[...new Set(S.used||[])].map(t=>{const k=S.used.indexOf(t),n=S.used.filter(x=>x===t).length,on=S.sel!==null&&S.sel<0&&S.used[-1-S.sel]===t;
    const tr=Z.isTrace(t),ch=tr?Z.charges(G,t,true):0;
    return `<button type="button" class="card reuse${on?' sel':''}${gcard===t?' guide':''}" data-u="${k}" ${S.busy||Z.buildCost(G,t,true)>(G.energy??0)||(tr&&!ch)||glock(t)?'disabled':''}>${cardFace(t,{mini:1,cost:Z.buildCost(G,t,true),tag:tr?_t`Encore ${ch} case${ch>1?'s':''}`:_t('Encore')+(n>1?' ×'+n:'')})}</button>`}).join('')
-  ;try{pilesHtml();animPiles()}catch(e){}
+  ;try{if(typeof handFx==='function')handFx(hand)}catch(e){}try{pilesHtml();animPiles()}catch(e){}
  const fc=Z.famCounts(G),fl=Z.famLevels(G);const nU=Z.unitCount(G),cap=Z.unitCap(G);$('#fams').innerHTML=_t`<span class="fam cap${nU>=cap?' full':''}" title="Unités sur le terrain (murs et pièges illimités)">${ink('cap')} ${nU}/${cap}</span>`+Object.keys(Z.FAM).filter(f=>fc[f]&&seen('fam1')).map(f=>`<span class="fam l${fl[f]}" title="${Z.FAM[f].n}">${ink(f)} ${fc[f]}${fl[f]?' '+'★'.repeat(fl[f]):'/'+Z.FAM[f].lv[0]}</span>`).join('')+tagsHtml();
  const info=$('#info');info.className='info';
  if(S.busy&&S.sel!==null&&S.sel>=0){const t=S.hand[S.sel];info.innerHTML=`<b>${cardName(t)}</b> : ${Z.U[t].d}. `+(Z.U[t].react==='unit'?_t('Touche une unité blessée.'):_t('Touche une case de la carte.'))}
@@ -170,7 +170,7 @@ addEventListener('pointermove',e=>{if(!HD)return;if(!HD.on&&Math.hypot(e.clientX
   const k=HD.b.dataset.u!==undefined?-1-(+HD.b.dataset.u):+HD.b.dataset.k;S.sel=k;S.moveFrom=null;S.inspect=null;render()}
  if(HD.on){HD.g.style.left=e.clientX+'px';HD.g.style.top=e.clientY+'px'}});
 addEventListener('pointerup',e=>{document.documentElement.classList.remove('dragging');if(!HD)return;const d=HD;HD=null;if(!d.on)return;d.g.remove();const r=cv.getBoundingClientRect();
- if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)tapCell(cellAt(e));else render()});
+ if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){LASTRECT={left:e.clientX-36,top:e.clientY-48,width:72,height:96};tapCell(cellAt(e))}else render()});
 addEventListener('pointercancel',()=>{document.documentElement.classList.remove('dragging');if(HD&&HD.g)HD.g.remove();HD=null});
 $('#round').addEventListener('click',()=>{if(!S.busy&&ov.hidden)runInfo()});
 $('#event').addEventListener('click',()=>{if(S.busy||!ov.hidden)return;const w=Z.waveList(G),fz=Z.frenzy(G),dm=Z.dmgBonus(G.night);SFX.play('ui');
@@ -275,8 +275,8 @@ function tapCell(i){
   S.inspect=null;if(G.grid[i])S.moveFrom=i;render();
   return}
  const t=selCard(),D=Z.U[t],re=selReuse(),build=Z.isTrace(t);
- if(selCost()>(G.energy??0)||!Z.canPlace(G,t,i))return;
- snapUndo(re?null:t);tuto(1);if(!re)countPlay(t);if(build)useBuild(t);else S.hand.splice(S.sel,1);const mg=Z.place(G,t,i,R,false,{reuse:re});spentTrace(t);if(!D.instant)facing[i]=null;if(D.instant)S.discard.push(t);syncBoard();if(!build)S.sel=null;S.moveFrom=null;S.inspect=mg?i:null;
+ if(selCost()>(G.energy??0)||!Z.canPlace(G,t,i)){try{refuseFx(i)}catch(e){}return}
+ snapUndo(re?null:t);tuto(1);if(!re)countPlay(t);if(build)useBuild(t);else S.hand.splice(S.sel,1);const mg=Z.place(G,t,i,R,false,{reuse:re});try{placeFx(t,i,D)}catch(e){}spentTrace(t);if(!D.instant)facing[i]=null;if(D.instant)S.discard.push(t);syncBoard();if(!build)S.sel=null;S.moveFrom=null;S.inspect=mg?i:null;
  if(!mg&&G.grid[i]&&G.grid[i].name){const q=tc(i);floatTxt(q.x,q.y-14,_t`${G.grid[i].name} rejoint l’abri`,'#f2b33d')}
  if(!mg&&G.grid[i]&&G.grid[i].leg){const q=tc(i);floatTxt(q.x,q.y+14,_t`Souvenir de ${G.grid[i].leg} : +1 dégât, +2 PV`,'#f2c23d',14);addFX({type:'ring',x:q.x,y:q.y,r:50,c:'#f2c23d',dur:600})}
  const p=D.instant&&!D.onUnit?CEN:tc(i);addFX({type:'ring',x:p.x,y:p.y,r:34,c:'#f2b33d',dur:350});SFX.play(D.cat==='shoot'?'cock':'place');
@@ -303,7 +303,7 @@ function wavePause(n){return new Promise(res=>{S.pause=n;S.moveFrom=null;S.inspe
  floatTxt(CEN.x,CEN.y-40,_t`Vague ${n} repoussée !`,'#9fd86b',18);render()})}
 function resumeWave(){if(!S.pause)return;S.pause=0;S.moveFrom=null;S.inspect=null;Z.nextWave(G);const f=S.resume;S.resume=null;vib([150,80,150]);floatTxt(CEN.x,CEN.y-40,_t`Vague ${G.wave} sur ${G.waves} : ${bossName(G.night)} arrive !`,'#ff6b6b',18);SFX.play('roar');render();f&&f()}
 async function night(){
- if(S.busy||S.dawnWait)return;S.busy=true;SPEED=OPT.speed||1;S.sel=null;S.drag=null;S.discard.push(...S.used);S.used=[];
+ if(S.busy||S.dawnWait)return;S.busy=true;SPEED=OPT.speed||1;S.sel=null;S.drag=null;{const bn=S.used.length&&typeof burnFx==='function'&&burnFx();S.discard.push(...S.used);if(bn)DISC0=S.discard.length}S.used=[];
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
  UNDO=[];

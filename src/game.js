@@ -197,7 +197,7 @@ function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=ca
 const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v169 · 24 oct.';
+const VERSION='v170 · 24 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -387,20 +387,23 @@ for(const u of S.board||[])if(!live.has(u)&&!u.absorbed){
   if(u.line&&!u.gen){const heir=[...live].find(v=>v.line===u.line);if(heir){delete heir.gen;continue}}
   const cs=cardsOf(u),j=POS.get(u);if(j!=null)cs.forEach(()=>FLYSRC.push(cellRect(j)));S.discard.push(...cs)}S.board=[...live];POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)})}
 // table de jeu : animations des cartes entre la pioche, la main et la défausse
-let POS=new Map();const FLYSRC=[];let LASTRECT=null,DISC0=-1;
+let POS=new Map();const FLYSRC=[];let LASTRECT=null,DISC0=-1,HOLDT=0;
 function cellRect(i){const r=cv.getBoundingClientRect(),c=r.width/Z.N;return{left:r.left+(i%Z.N)*c,top:r.top+Math.floor(i/Z.N)*c,width:c,height:c}}
-function fly(t,a,b,delay,back,done){if(reduce||!a||!b){done&&done();return}const g=document.createElement('div');g.className='flyc'+(back?' back':'');if(!back&&t)g.innerHTML=cardFace(t,{mini:1});document.body.appendChild(g);
+function fly(t,a,b,delay,back,done,o){o=o||{};if(reduce||!a||!b){done&&done();return}const g=document.createElement('div');g.className='flyc'+(back?' back':'')+(o.flip?' flip':'');if(!back&&t)g.innerHTML=o.flip?`<span class="fl-in"><span class="fl-b"></span><span class="fl-f">${cardFace(t,{mini:1})}</span></span>`:cardFace(t,{mini:1});document.body.appendChild(g);
  const W=56,H=75,x0=a.left+a.width/2-W/2,y0=a.top+a.height/2-H/2,x1=b.left+b.width/2-W/2,y1=b.top+b.height/2-H/2;
  // v161 : la carte décrit un arc en tournant (éventail), au lieu d’une ligne droite
  const r0=x1>x0?-22:22,xm=(x0+x1)/2,ym=Math.min(y0,y1)-28;
- const an=g.animate([{transform:`translate(${x0}px,${y0}px) rotate(${r0}deg) scale(.8)`,opacity:.9},{transform:`translate(${xm}px,${ym}px) rotate(${-r0*.35}deg) scale(1.08)`,opacity:1,offset:.55},{transform:`translate(${x1}px,${y1}px) rotate(0deg) scale(1)`,opacity:1}],{duration:400,delay,easing:'cubic-bezier(.3,.6,.4,1)',fill:'both'});
+ const s1=o.s1||1,dur=o.dur||400;
+ const an=g.animate([{transform:`translate(${x0}px,${y0}px) rotate(${r0}deg) scale(${o.s0||.8})`,opacity:.9},{transform:`translate(${xm}px,${ym}px) rotate(${-r0*.35}deg) scale(${Math.max(s1,1.08)})`,opacity:1,offset:.55},{transform:`translate(${x1}px,${y1}px) rotate(0deg) scale(${s1})`,opacity:1}],{duration:dur,delay,easing:'cubic-bezier(.3,.6,.4,1)',fill:'both'});
+ // v170 : la carte piochée arrive face cachée et se retourne en vol
+ if(o.flip&&g.firstChild)g.firstChild.animate([{transform:'perspective(300px) rotateY(180deg)'},{transform:'perspective(300px) rotateY(180deg)',offset:.3},{transform:'perspective(300px) rotateY(0deg)'}],{duration:dur,delay,easing:'ease-out',fill:'both'});
  an.onfinish=()=>{g.remove();done&&done()};an.oncancel=an.onfinish}
 function animPiles(){const pd=$('#pDraw'),px=$('#pDisc');if(!pd||!px)return;
  // un écran (accueil, aube…) couvre le plateau : on garde les animations pour quand il se ferme
  {const o=document.getElementById('ov');if(o&&!o.hidden)return}const rd=pd.getBoundingClientRect(),rx=px.getBoundingClientRect();
  if(S.reshuf){S.reshuf=0;for(let k=0;k<5;k++)fly(null,rx,rd,k*60,1);px.classList.add('pulse');setTimeout(()=>px.classList.remove('pulse'),600)}
  if(S.newDraw){const n=S.newDraw;S.newDraw=0;const cs=[...document.querySelectorAll('#hand .card[data-k]')].slice(-n);
-  cs.forEach((c,k)=>{c.style.visibility='hidden';fly(S.hand[+c.dataset.k],rd,c.getBoundingClientRect(),120+k*110,0,()=>{c.style.visibility=''})});if(n)setTimeout(()=>SFX.play('card'),120)}
+  const hd=Math.max(0,HOLDT-performance.now());cs.forEach((c,k)=>{c.style.visibility='hidden';fly(S.hand[+c.dataset.k],rd,c.getBoundingClientRect(),120+k*110+hd,0,()=>{c.style.visibility='';try{c.animate([{transform:'scale(1.12)'},{transform:'none'}],{duration:220,easing:'cubic-bezier(.3,1.6,.5,1)'})}catch(e){}},{flip:1})});if(n)setTimeout(()=>SFX.play('card'),120)}
  const n=S.discard.length;if(DISC0<0||n<DISC0)DISC0=n;
  if(n>DISC0){const h=$('#hand').getBoundingClientRect();S.discard.slice(DISC0).slice(-5).forEach((t,k)=>fly(t,FLYSRC.shift()||LASTRECT||h,rx,k*90));DISC0=n}
  FLYSRC.length=0;LASTRECT=null}

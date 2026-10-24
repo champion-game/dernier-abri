@@ -77,7 +77,15 @@ const SFX=(()=>{
   fuse:t=>{[330,440,554,660,880].forEach((f,k)=>tone(t+k*.06,.35,{f,vol:.13,type:'triangle'}));noise(t+.25,.4,{f:5000,q:2,vol:.08})},
   evo:t=>{[262,330,392].forEach(f=>{tone(t,1.1,{f,f2:f*2,vol:.09,type:'sawtooth',attack:.3});tone(t,1.1,{f:f*1.01,f2:f*2.02,vol:.07,type:'triangle',attack:.3})});noise(t+.8,.6,{f:6000,q:3,vol:.1})},
   lvl:t=>{[523,659,784,1047].forEach((f,k)=>tone(t+k*.09,.4,{f,vol:.13,type:'square'}))},
-  death:t=>{[330,262,196].forEach((f,k)=>tone(t+k*.25,.5,{f,vol:.12,type:'triangle'}))}
+  death:t=>{[330,262,196].forEach((f,k)=>tone(t+k*.25,.5,{f,vol:.12,type:'triangle'}))},
+  // v170 : sons des animations de cartes
+  no:t=>{tone(t,.09,{f:180,f2:150,vol:.14,type:'square'});tone(t+.1,.12,{f:150,f2:120,vol:.14,type:'square'})},
+  thud:t=>{tone(t,.16,{f:95,f2:38,vol:.45,type:'triangle'});noise(t,.12,{f:420,type:'lowpass',vol:.3})},
+  coin:t=>{tone(t,.09,{f:1320,vol:.08,type:'square'});tone(t+.06,.16,{f:1760,vol:.07,type:'square'})},
+  shuffle:t=>{for(let k=0;k<7;k++)noise(t+k*.045,.035,{f:2600+k*120,q:1.2,vol:.14})},
+  whoosh:t=>{noise(t,.25,{f:400,f2:2400,q:1,vol:.18,attack:.06})},
+  pack:t=>{noise(t,.5,{f:5000,f2:600,type:'lowpass',vol:.45,attack:.005});[523,659,784].forEach((f,k)=>tone(t+.05+k*.07,.5,{f,vol:.1,type:'triangle'}))},
+  rare:t=>{[392,523,659,784,1047].forEach((f,k)=>tone(t+k*.07,.7,{f,vol:.11,type:'triangle'}));noise(t+.3,.6,{f:7000,q:3,vol:.09})}
  };
  // v115 : nombre de sons joués en même temps plafonné (10, ou 5 en mode économie) : au-delà, on n'entend plus rien de plus,
  // mais chaque son coûte du calcul, surtout sur un petit téléphone pendant les grosses nuits

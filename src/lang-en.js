@@ -1389,4 +1389,8 @@ I18N.en={
 "Ton Bûcheron a tenu la porte, mais il est blessé. Prends le Policier : demain, il encaissera à sa place.":"Your Lumberjack held the door, but he's hurt. Take the Cop: tomorrow he'll take the hits instead.",
 "Ton escouade a tenu. Demain soir, c’est la nuit rouge : plus de zombies, et plus de guide.":"Your squad held. Tomorrow night is the red night: more zombies, and no more guide.",
 "Ce soir, nuit rouge : la horde est plus nombreuse. À toi de jouer : renforce ta défense avec tes cartes.":"Tonight is the red night: the horde is bigger. Your turn: strengthen your defense with your cards.",
+"Se joue la nuit":"Played at night",
+"Se joue le jour":"Played by day",
+"Pas assez d’énergie":"Not enough energy",
+"Obtenue":"Unlocked",
 };

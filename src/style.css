@@ -976,3 +976,89 @@ html.cur :is(button,select):disabled{cursor:var(--cu-i)!important}
 html.cur :is(input[type=text],input[type=search],textarea){cursor:text!important}
 html.cur canvas[data-cu=c]{cursor:var(--cu-c)!important}html.cur canvas[data-cu=i]{cursor:var(--cu-i)!important}html.cur canvas[data-cu=g]{cursor:var(--cu-g)!important}
 html.cur.dragging,html.cur.dragging *{cursor:var(--cu-g)!important}
+/* ---------- v170 : animations de cartes (game-anim.js) ---------- */
+/* main en éventail : rotate et translate restent séparés de transform (sélection, survol) */
+.hand .card{position:relative;rotate:var(--fr,0deg);translate:0 var(--fy,0px);transition:transform .24s cubic-bezier(.3,1.5,.5,1),rotate .24s,translate .24s}
+.hand .card.sel,.hand .card.lift{rotate:0deg;translate:0 0;z-index:3}
+.hand .card.lift:not(:disabled){transform:translateY(-12px) scale(1.12);z-index:4}
+@media (hover:hover){.hand .card:not(:disabled):hover{transform:translateY(-14px) scale(1.15);rotate:0deg;translate:0 0;z-index:4}.hand .card.sel:hover{transform:translateY(-14px) scale(1.15)}}
+/* carte jouable : liseré vert qui pulse (en phase d'un dessin à l'autre grâce à --ph) */
+.hand .card.play::before{content:'';position:absolute;inset:-1px;border-radius:9%/7%;pointer-events:none;box-shadow:0 0 0 2px rgba(130,235,110,.9),0 0 10px 3px rgba(110,220,90,.65);animation:hglow 1.6s ease-in-out infinite;animation-delay:var(--ph,0s)}
+.hand .card.sel::before{display:none}
+@keyframes hglow{50%{opacity:.4}}
+/* refus : bulle au-dessus de la carte */
+.nobub{position:fixed;z-index:80;pointer-events:none;transform:translate(-50%,-100%);background:#7a1c1c;color:#fff;font-size:13px;font-weight:700;padding:5px 10px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,.5);white-space:nowrap;animation:nobub 1.3s ease-out both}
+@keyframes nobub{0%{opacity:0;transform:translate(-50%,-75%)}12%{opacity:1;transform:translate(-50%,-100%)}80%{opacity:1}100%{opacity:0}}
+/* pioche : la carte se retourne en vol */
+.flyc .fl-in{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d}
+.flyc .fl-b,.flyc .fl-f{position:absolute;inset:0;display:block;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.flyc .fl-b{transform:rotateY(180deg);border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat}
+html.goldback .flyc .fl-b,html.goldback .lcard,html.goldback .gp-card,html.goldback .pk-bk{filter:sepia(.55) saturate(2.2) hue-rotate(-8deg) brightness(1.06)}
+/* reflet qui passe sur les cartes rares, épiques et légendaires (main, grande carte, choix, récompense) */
+:is(.hand,.zoomc,.pick,.g-face) .cf:is(.r-rare,.r-epic,.r-leg)::before{content:'';position:absolute;inset:2% 4%;z-index:4;pointer-events:none;border-radius:5%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%) no-repeat;background-size:280% 100%;background-position:170% 0;animation:sheen 7s linear infinite;animation-delay:var(--ph2,0s)}
+:is(.hand,.zoomc,.pick,.g-face) .cf.r-rare::before{opacity:.5}
+@keyframes sheen{0%{background-position:170% 0}14%,100%{background-position:-70% 0}}
+/* grande carte : penche sous le doigt, reflet qui suit */
+.zoomc{position:relative;transition:transform .12s ease-out;will-change:transform}
+.zsh{position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:6%;opacity:0;transition:opacity .2s;background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.4),transparent 48%);mix-blend-mode:overlay}
+.zoomc.tilt .zsh{opacity:1}
+/* fin du jour : la carte brûle depuis les bords */
+@property --b{syntax:'<percentage>';inherits:false;initial-value:130%}
+.burnc{position:fixed;z-index:60;pointer-events:none;-webkit-mask-image:radial-gradient(circle at 50% 55%,#000 calc(var(--b) - 22%),transparent var(--b));mask-image:radial-gradient(circle at 50% 55%,#000 calc(var(--b) - 22%),transparent var(--b));animation:burn .8s ease-in both}
+.burnc .cf{width:100%}
+@keyframes burn{0%{--b:130%;filter:none}30%{--b:110%;filter:sepia(.8) saturate(2.5) brightness(1.15) drop-shadow(0 0 8px #ff7a1a)}100%{--b:0%;opacity:.6;filter:sepia(1) brightness(.35) drop-shadow(0 0 10px #ff5a00);transform:translateY(-10px) scale(.94)}}
+.ember{position:absolute;bottom:35%;width:5px;height:5px;border-radius:50%;background:#ffb347;box-shadow:0 0 6px 2px #ff7a1a;animation:ember .6s ease-out both}
+@keyframes ember{0%{opacity:0;transform:none}20%{opacity:1}100%{opacity:0;transform:translate(6px,-46px) scale(.4)}}
+/* aube : cartes au choix face cachée, éclat de la couleur de la rareté */
+.pk-bk{position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat}
+.pk-fl{position:absolute;inset:-12%;z-index:6;pointer-events:none;border-radius:50%;background:radial-gradient(circle,var(--rc) 0,transparent 62%);mix-blend-mode:screen;animation:pkfl .7s ease-out both}
+@keyframes pkfl{0%{opacity:.95;transform:scale(.5)}100%{opacity:0;transform:scale(1.35)}}
+/* collection : pièces, cadenas, éclat et tampon « Obtenue » */
+.coin{position:fixed;left:-8px;top:-8px;width:16px;height:16px;z-index:75;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c23d 45%,#a06a00);border:1px solid #7a4a00;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.citem.unl .cf{filter:grayscale(1) brightness(.5)!important}
+.citem.unl2 .cf{animation:ucolor .7s ease-out}
+@keyframes ucolor{0%{filter:grayscale(1) brightness(2.2)}100%{filter:none}}
+.ulock{position:absolute;left:50%;top:26%;z-index:6;width:44px;height:44px;margin-left:-22px;display:grid;place-items:center;pointer-events:none;border-radius:50%;background:rgba(20,14,8,.8);animation:ushake .5s ease-in-out both}
+.ulock svg{width:26px;height:26px;stroke:#f2c23d}
+.citem.unl2 .ulock{animation:upop .45s ease-in forwards}
+@keyframes ushake{0%,100%{transform:none}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-10deg) scale(1.1)}80%{transform:rotate(8deg) scale(1.15)}}
+@keyframes upop{0%{transform:scale(1.15)}100%{opacity:0;transform:translateY(-60px) rotate(30deg) scale(1.4)}}
+.uburst{position:absolute;inset:-12%;z-index:5;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(255,236,150,.95) 0,rgba(242,194,61,.6) 30%,transparent 65%);animation:pkfl .7s ease-out both}
+.ustamp{position:absolute;left:0;right:0;top:34%;margin:auto;width:max-content;z-index:7;pointer-events:none;font-family:'Special Elite',serif;font-size:19px;text-transform:uppercase;letter-spacing:1px;color:#2f7a22;border:3px solid #2f7a22;border-radius:6px;padding:2px 10px;background:rgba(250,245,230,.9);animation:stampin .3s cubic-bezier(.2,1.4,.4,1) both,ufade .3s 1.15s forwards}
+@keyframes ufade{to{opacity:0}}
+/* deck complet : liseré doré */
+.panel p.dkok{border-radius:8px;animation:dkok 1.4s ease-out}
+@keyframes dkok{0%{box-shadow:0 0 0 0 rgba(242,194,61,0);background:transparent}20%{box-shadow:0 0 0 2px #f2c23d,0 0 18px 4px rgba(242,194,61,.7);background:rgba(242,194,61,.15)}100%{box-shadow:0 0 0 0 rgba(242,194,61,0);background:transparent}}
+/* lancement : le deck est battu au centre de l'écran */
+.launch{position:fixed;inset:0;z-index:70;pointer-events:none;background:rgba(10,7,4,.45)}
+.lcard{position:absolute;left:50%;top:50%;width:92px;aspect-ratio:1086/1448;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat;box-shadow:0 4px 12px rgba(0,0,0,.6);transform:translate(-50%,-50%)}
+/* récompense : paquet qui tremble puis explose */
+.gifts{position:relative}
+.gifts.wait .gift{opacity:0;animation:none;pointer-events:none}
+.gpack{position:absolute;left:50%;top:50%;z-index:5;width:34%;aspect-ratio:1086/1448;transform:translate(-50%,-50%);cursor:pointer;animation:pshake 1.1s ease-in both}
+.gp-card{position:absolute;inset:0;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat;box-shadow:0 0 0 3px #f2c23d,0 6px 16px rgba(0,0,0,.6)}
+.gp-glow{position:absolute;inset:-35%;border-radius:50%;background:radial-gradient(circle,rgba(255,240,180,.9),rgba(242,194,61,.4) 35%,transparent 65%);animation:pglow 1.1s ease-in both}
+.gpack.boom{animation:pboom .45s ease-out forwards;pointer-events:none}
+@keyframes pshake{0%{transform:translate(-50%,-50%) scale(.8);opacity:0}10%{transform:translate(-50%,-50%) rotate(-2deg);opacity:1}20%{transform:translate(-50%,-50%) rotate(2deg)}30%{transform:translate(-50%,-50%) rotate(-3deg)}40%{transform:translate(-50%,-50%) rotate(3deg)}50%{transform:translate(-50%,-50%) rotate(-4deg) scale(1.02)}60%{transform:translate(-50%,-50%) rotate(5deg) scale(1.03)}70%{transform:translate(-50%,-50%) rotate(-6deg) scale(1.05)}80%{transform:translate(-50%,-50%) rotate(7deg) scale(1.06)}90%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1.1)}}
+@keyframes pglow{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1.1)}}
+@keyframes pboom{0%{transform:translate(-50%,-50%) scale(1.1);filter:brightness(1)}40%{filter:brightness(3)}100%{transform:translate(-50%,-50%) scale(1.8);opacity:0;filter:brightness(4)}}
+/* carte face cachée : sa lueur annonce la rareté (blanc, bleu, violet, doré) */
+.gift{position:relative;z-index:0}.gift.r-com{--bc:#f2ecd9}
+.gift:not(.up) .g-back{box-shadow:0 4px 10px rgba(0,0,0,.55),0 0 14px 4px var(--bc,var(--gc))}
+.gift.r-leg{--gc:#ffb02e}
+.gift.charge .g-back{animation:gcharge .42s ease-in both}
+@keyframes gcharge{0%{transform:none;box-shadow:0 0 14px 4px var(--gc)}25%{transform:translateX(-3px) rotate(-2deg)}50%{transform:translateX(4px) rotate(2deg)}75%{transform:translateX(-5px) rotate(-3deg) scale(1.04)}100%{transform:scale(1.08);box-shadow:0 0 34px 14px var(--gc)}}
+.grays{position:absolute;inset:-28%;z-index:-1;pointer-events:none;border-radius:50%;background:repeating-conic-gradient(from 0deg,var(--rc) 0 7deg,transparent 7deg 22deg);-webkit-mask-image:radial-gradient(circle,#000 20%,transparent 68%);mask-image:radial-gradient(circle,#000 20%,transparent 68%);animation:grays 1.1s ease-out both}
+@keyframes grays{0%{opacity:0;transform:scale(.4) rotate(0)}25%{opacity:.95}100%{opacity:0;transform:scale(1.25) rotate(50deg)}}
+/* boutons : ils s'enfoncent puis rebondissent */
+.go,.skip,.tab,.recall{transition:transform .32s cubic-bezier(.3,2,.5,1)}
+.go:not(:disabled):active,.skip:not(:disabled):active,.tab:not(:disabled):active,.recall:active{transition-duration:.05s}
+.tab:not(:disabled):active,.recall:active{transform:scale(.94)}
+/* changement d'écran : glissement un peu plus marqué */
+.panel.pin>*{animation:pin2 .3s cubic-bezier(.2,.9,.3,1) both}
+@keyframes pin2{from{opacity:0;transform:translateY(12px)}}
+/* Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle */
+html.eco .hand .card.play::before{animation:none}
+html.eco .cf::before,html.eco .zsh,html.eco .grays{display:none}
+html.eco .gpack,html.eco .gp-glow{animation-duration:.6s}
+@media (prefers-reduced-motion:reduce){.hand .card.play::before{animation:none}.cf::before,.zsh{display:none}.hand .card{transition:none}}

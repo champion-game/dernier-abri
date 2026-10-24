@@ -265,7 +265,7 @@ for(let d=0;d<40;d++){const p=Z.dailyPlan(rng(900+d)),p2=Z.dailyPlan(rng(900+d))
  const ctx={I18N:{},console};vm.createContext(ctx);
  vm.runInContext(fs.readFileSync(path.join(ROOT,'src/lang-en.js'),'utf8'),ctx);
  const EN=ctx.I18N.en||{};const ph=s=>new Set(s.match(/\{\d+\}/g)||[]);
- for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js']){
+ for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js','game-anim.js']){
   const ks=keysOf(fs.readFileSync(path.join(ROOT,'src',f),'utf8'));
   const miss=ks.filter(k=>EN[k]==null);
   check(`traduction : ${f} (${ks.length} textes) tous traduits`,()=>ok(!miss.length,miss.length+' sans traduction : '+miss.slice(0,process.env.ALLMISS?99:3).map(k=>JSON.stringify(k).slice(0,process.env.ALLMISS?2000:90)).join(' | ')));

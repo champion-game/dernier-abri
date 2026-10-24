@@ -319,7 +319,7 @@ function splat(x,y,big){const n=big?9:3;for(let k=0;k<n;k++){const a=Math.random
 
 /* ---------- live visual state ---------- */
 const V=new Map(),FX=[],PT=[],facing=Array(Z.N*Z.N).fill(null),atkT=Array(Z.N*Z.N).fill(0),ouchT=Array(Z.N*Z.N).fill(0);
-let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
+const SLAM={},UHIT={};let nightAmt=0,nightTarget=0,shakeT=0,shakeK=5,hurtT=0,last=performance.now();
 // tremblement de l'écran : k = force ; une secousse plus forte remplace une plus faible
 // v128 : vibrations du téléphone (Android ; l'iPhone ne les permet pas dans le navigateur), au plus une toutes les 250 ms
 let vibT=0;function vib(p){if(!OPT.vib||!navigator.vibrate)return;const n=performance.now();if(n-vibT<250)return;vibT=n;try{navigator.vibrate(p)}catch(e){}}
@@ -529,16 +529,20 @@ function unitAnim(i,u,now,sc){
  if(th<240){const k=1-th/240;ctx.translate(Math.sin(th/18)*2.4*k,0);ctx.scale(1-.07*k,1+.05*k)}
 }
 function drawUnit(i,u,now){
+ const sl=SLAM[i];let sk=1;if(sl){const q=(now-sl)/170;if(q<0)return;if(q<1)sk=1+.85*(1-q)*(1-q);else delete SLAM[i]}
  const p0=tc(i),D0=Z.stat(G,u.t),cc=CATC[D0.cat];
  // jeu de plateau : socle commun (rond, carré ou plat selon la nature de la pièce)
  {const kd=pieceKind(u.t,D0);if(kd)socle(p0.x,p0.y,kd==='round'?25:24,'#d8c7a0',cc,kd);
   else if(D0.cat!=='trap'){ctx.save();ctx.globalAlpha=D0.block?.16:.1;circ(p0.x,p0.y,26,cc);ctx.restore()}}
  // version dorée (fusion) ou évolution : un anneau qui pulse
  if(u.gold||D0.evo){ctx.save();ctx.strokeStyle=u.gold?'#f2c23d':'#c58cff';ctx.lineWidth=3;ctx.globalAlpha=.55+.3*Math.sin(now/300);ctx.beginPath();ctx.arc(p0.x,p0.y,28,0,7);ctx.stroke();ctx.restore()}
- ctx.save();ctx.translate(p0.x,p0.y);const sc=1.45+.12*Math.min(3,u.gold||0);ctx.scale(sc,sc);
+ // v170 : carte qui vient d'être posée (elle tombe et s'écrase) et défense qui vient d'être frappée (tremble et blanchit)
+ const ht=now-(UHIT[i]||-1e9),hit=ht<240;
+ ctx.save();ctx.translate(p0.x+(hit?Math.sin(ht*.12)*3*(1-ht/240):0),p0.y);const sc=(1.45+.12*Math.min(3,u.gold||0))*sk;ctx.scale(sc,sc);
  try{unitAnim(i,u,now,sc)}catch(e){}
  ctx.translate(-p0.x,-p0.y);
  drawUnitInner(i,u,now);ctx.restore();
+ if(hit){ctx.save();ctx.globalAlpha=.55*(1-ht/240);ctx.globalCompositeOperation='lighter';circ(p0.x,p0.y,22,'#fff');ctx.restore()}
  if(D0.block){const f=u.hp/Z.maxHp(G,u);if(f<.4)try{cracks(p0.x,p0.y,i,f)}catch(e){}}
  if(D0.up)safeTxt(p0.x+19,p0.y-17,'+','#f2b33d');
  if(u.gold)safeTxt(p0.x-19,p0.y-17,u.gold>1?u.gold+'★':'★','#f2c23d');else if(D0.evo)safeTxt(p0.x-19,p0.y-17,'✦','#c58cff');
@@ -808,6 +812,7 @@ function drawFX(now){
   if(f.type==='swing'){ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,18,f.a-1+p*1.6,f.a-.4+p*1.6);ctx.stroke()}
   if(f.type==='fly'){const e=p*p,x=f.x1+(f.x2-f.x1)*e,y=f.y1+(f.y2-f.y1)*e;ctx.globalAlpha=1;if(!drawSpr(f.k,x,y,0,0,1.45*(1-.5*p)))circ(x,y,12*(1-.5*p),CATC[(Z.U[f.k]||{}).cat]||'#f2c23d')}
   if(f.type==='gone'){ctx.save();ctx.globalAlpha=1-p;ctx.translate(f.x,f.y);ctx.rotate(p*.9);ctx.translate(0,p*8);if(!drawSpr(f.k,0,0,0,0,1.45*(1-.3*p)))circ(0,0,12*(1-p),'rgba(200,190,160,.8)');ctx.restore()}
+  if(f.type==='shards')try{const g=.0009,dt=now-f.t0;ctx.globalAlpha=Math.min(1,(1-p)*1.6);for(const q of f.s){const x=f.x+q.vx*dt,y=f.y+q.vy*dt+g*dt*dt;ctx.save();ctx.translate(x,y);ctx.rotate(q.a+q.va*dt);ctx.fillStyle=q.c;ctx.beginPath();ctx.moveTo(-q.r,-q.r*.6);ctx.lineTo(q.r,-q.r*.3);ctx.lineTo(q.r*.2,q.r*.8);ctx.closePath();ctx.fill();ctx.restore()}}catch(e){}
   if(f.type==='ring'&&p>0){ctx.strokeStyle=f.c;ctx.lineWidth=3*(1-p);ctx.beginPath();ctx.arc(f.x,f.y,f.r*p,0,7);ctx.stroke()}
   ctx.globalAlpha=1}
  for(let k=PT.length-1;k>=0;k--){const q=PT[k],p=Math.max(0,(now-q.t0)/q.dur);if(p>=1){PT.splice(k,1);continue}const dt=now-q.t0;

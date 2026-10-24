@@ -31,6 +31,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-ui.js` : fiche, main, plateau, déroulé de la nuit ;
   - `game-screens.js` : aube, options, collection, decks, préparation, actions des boutons (`ACT`) ;
   - `game-menu.js` : défi du jour, tableau des combats, menu pause, raccourcis clavier, accueil et démarrage.
+  - `game-anim.js` : animations de cartes inspirées de Hearthstone (main, pose, aube, collection, decks, récompense) ; chargé en dernier, il enveloppe quelques fonctions des autres fichiers.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
 - `assets/fonts/` : les polices, intégrées au jeu (plus de Google Fonts).
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
