@@ -27,7 +27,7 @@ jobs:
           if [ -n "$BUTLER_API_KEY" ] && { [ -n "$ITCH_GAME" ] || [ -n "$ITCH_DEMO" ]; }; then echo "go=1" >> "$GITHUB_OUTPUT"; else echo "Réglages itch.io absents : envoi sauté."; fi
       - uses: actions/checkout@v4
         if: steps.ok.outputs.go == '1'
-      - name: Préparer le jeu complet et la démo (fichiers utiles, JS sans commentaires ; CSS laissé tel quel : csso cassait l’affichage)
+      - name: Préparer le jeu complet et la démo (fichiers utiles, JS sans commentaires, CSS non compressé car csso cassait l’affichage)
         if: steps.ok.outputs.go == '1'
         run: |
           mkdir -p build
