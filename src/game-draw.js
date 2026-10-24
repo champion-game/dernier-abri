@@ -827,8 +827,10 @@ function floatTxt(x,y,txt,c,sz){floats.push({x,y,txt,c,sz:sz||13,t0:performance.
 function drawFloats(now){ctx.textAlign='center';
  for(let k=floats.length-1;k>=0;k--){const f=floats[k],p=(now-f.t0)/(f.sz>13?1400:700);if(p>=1){floats.splice(k,1);continue}
   ctx.font=`bold ${f.sz}px "Atkinson Hyperlegible",system-ui,sans-serif`;
-  const tx=f.tw?f.txt.slice(0,Math.ceil(f.txt.length*Math.min(1,(now-f.t0)/f.tw))):f.txt,yy=f.tw?f.y-18-Math.max(0,p-.5)*24:f.y-18-p*18;
-  ctx.globalAlpha=f.tw?Math.min(1,(1-p)*2.5):1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(tx,f.x+1,yy+1);ctx.fillStyle=f.c;ctx.fillText(tx,f.x,yy);ctx.globalAlpha=1}}
+  const tx=f.txt,yy=f.tw?f.y-18-Math.max(0,p-.5)*24:f.y-18-p*18;let cl=0;
+  // machine à écrire : le texte entier est dessiné, découvert de gauche à droite (jamais de mot coupé dans le texte)
+  if(f.tw){const q=Math.min(1,(now-f.t0)/f.tw);if(q<1){const w=ctx.measureText(tx).width;ctx.save();ctx.beginPath();ctx.rect(f.x-w/2-2,yy-f.sz-4,(w+4)*q,f.sz+10);ctx.clip();cl=1}}
+  ctx.globalAlpha=f.tw?Math.min(1,(1-p)*2.5):1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(tx,f.x+1,yy+1);ctx.fillStyle=f.c;ctx.fillText(tx,f.x,yy);ctx.globalAlpha=1;if(cl)ctx.restore()}}
 
 // v158 : jeux de lumière (décor seulement, hors des règles) : le jour, soleil chaud, rayons qui filtrent des arbres et ombres de nuages ;
 // au crépuscule et à l'aube, lumière dorée rasante ; la nuit, clair de lune bleuté et halos colorés autour des lumières
