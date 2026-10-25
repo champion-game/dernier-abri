@@ -76,7 +76,7 @@ async function run(vp,label,lang='fr'){
    // rappel d'une unité dans la réserve, puis remise en jeu gratuite
    if(n===2){const u=await p.evaluate(()=>G.grid.findIndex((v,j)=>Z.canRecall(G,j)));if(u>=0){await p.mouse.click(...at(u));await click('#info [data-a=recall]');
     if(await p.evaluate(()=>G.bench.length)!==1)problems.push(`${label} : le rappel d’une unité ne marche pas`);else{await shot('05b-reserve');await click('#pRes');
-     const c=await p.evaluate(()=>[...Array(81).keys()].find(j=>Z.canPlaceBench(G,0,j)));if(c!=null){await p.mouse.click(...at(c));if(await p.evaluate(()=>G.bench.length))problems.push(`${label} : l’unité de la réserve ne se repose pas`)}}}}});
+     const c=await p.evaluate(()=>[...Array(81).keys()].filter(j=>Z.canPlaceBench(G,0,j)).sort((a,b)=>Math.hypot(a%9-4,(a/9|0)-4)-Math.hypot(b%9-4,(b/9|0)-4))[0]);/* case la plus proche du centre : une bulle de conseil peut couvrir le haut du plateau */if(c!=null){await p.mouse.click(...at(c));if(await p.evaluate(()=>G.bench.length))problems.push(`${label} : l’unité de la réserve ne se repose pas`)}}}}});
   // nuit en accéléré, avec une réaction si possible
   await step(`nuit ${n}`,async()=>{await p.evaluate(()=>{G.maxS=G.shelter=200});await click('#go');await p.evaluate(()=>{SPEED=16});
    let t=0;while(await p.evaluate(()=>S.busy)&&t<300){await p.waitForTimeout(200);t++;

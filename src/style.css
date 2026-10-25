@@ -786,7 +786,7 @@ button.citem{background:none;border:0;padding:0;cursor:pointer;font:inherit;colo
 .panel .go:not(:disabled):active{transform:translateY(3px);box-shadow:0 0 0 #6b3d0c,inset 0 3px 6px rgba(80,40,0,.5)}
 .panel .go:disabled{filter:grayscale(.7) brightness(.7);transform:none;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
 @media (hover:hover){.panel .skip:not(:disabled):hover,.panel .tab:not(:disabled):not(.on):hover,.panel button.char:not(:disabled):hover,.panel button.relic:hover,.panel button.shopi:not(:disabled):hover,.panel .go:not(:disabled):hover,.panel .dk .qty button:not(:disabled):hover{filter:brightness(1.08)}}
-/* collection : halo vert = carte acquise, halo noir = pas encore acquise */
+/* collection : halo de rareté = carte acquise (règle v186 en fin de fichier), halo noir = pas encore acquise */
 .citem.in .cf{filter:drop-shadow(0 0 3px rgba(150,230,100,.95)) drop-shadow(0 0 9px rgba(120,210,80,.75))}
 .citem.s-far .cf,.citem.s-vic .cf,.citem.locked .cf{filter:grayscale(1) brightness(.5) drop-shadow(0 0 6px rgba(0,0,0,.95)) drop-shadow(0 0 2px #000)}
 .citem.s-buy .cf{filter:grayscale(.3) brightness(.8) drop-shadow(0 0 6px rgba(0,0,0,.95)) drop-shadow(0 0 2px #000);animation:none}
@@ -1243,40 +1243,35 @@ html.eco #hglow{display:none!important}
 @keyframes edMist{0%,100%{transform:translateX(-5%)}50%{transform:translateX(5%)}}
 @keyframes edDrip{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.15)}}
 /* Dorée */
-.cf.ed-dor{filter:drop-shadow(0 0 1.5cqw rgba(255,195,60,.95)) drop-shadow(0 0 4cqw rgba(255,160,20,.45))}
 .cf.ed-dor .cf-ed{box-shadow:inset 0 0 0 1cqw #fff0a0,inset 0 0 0 2.4cqw #d9a024,inset 0 0 0 3cqw #8a5a08}
 .cf.ed-dor .cf-art{filter:sepia(.4) saturate(1.6) hue-rotate(-8deg) brightness(1.08)}
 .cf.ed-dor .cf-ed::before{background:linear-gradient(115deg,transparent 35%,rgba(255,255,225,.85) 46%,rgba(255,215,90,.35) 52%,transparent 62%) 160% 0/260% 100% no-repeat;mix-blend-mode:screen;animation:edShine 3.6s ease-in-out infinite}
 .cf.ed-dor .cf-ed::after{background:radial-gradient(circle at 10% 14%,#fff 0 1.1cqw,transparent 1.7cqw),radial-gradient(circle at 88% 10%,#fff6c8 0 .9cqw,transparent 1.5cqw),radial-gradient(circle at 92% 70%,#fff 0 1.1cqw,transparent 1.8cqw),radial-gradient(circle at 8% 80%,#fff6c8 0 .9cqw,transparent 1.5cqw);animation:edTwinkle 1.8s ease-in-out infinite}
 .ed-dor .cf-edb{background:linear-gradient(#fff0a0,#d4911a);color:#3b2400;box-shadow:0 0 2.5cqw #f5b733}
 /* Blindée */
-.cf.ed-arm{filter:drop-shadow(0 1cqw 1.6cqw rgba(0,0,0,.7))}
 .cf.ed-arm .cf-ed{box-shadow:inset 0 0 0 .8cqw #f2f5f7,inset 0 0 0 2.6cqw #8b959e,inset 0 0 0 3.2cqw #3a4248;
  background:radial-gradient(circle at 4.5% 3.5%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw),radial-gradient(circle at 95.5% 3.5%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw),radial-gradient(circle at 4.5% 96.5%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw),radial-gradient(circle at 95.5% 96.5%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw),radial-gradient(circle at 50% 1.6%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw),radial-gradient(circle at 50% 98.4%,#fff 0 .8cqw,#8a939b 1.5cqw,#2f363b 2.2cqw,transparent 2.4cqw)}
 .cf.ed-arm .cf-art{filter:saturate(.72) contrast(1.08)}
 .cf.ed-arm .cf-ed::before{background:linear-gradient(150deg,transparent 30%,rgba(255,255,255,.55) 30.5%,transparent 31.3%),linear-gradient(25deg,transparent 60%,rgba(255,255,255,.45) 60.4%,transparent 61%),linear-gradient(160deg,rgba(210,225,235,.22),transparent 50%)}
 .ed-arm .cf-edb{background:linear-gradient(#eef2f5,#6f7982);color:#151a1e;box-shadow:0 .6cqw 1.2cqw rgba(0,0,0,.6)}
 /* Fantôme */
-.cf.ed-fan{opacity:.88;filter:drop-shadow(0 0 2.4cqw rgba(120,230,255,.9)) drop-shadow(0 0 5cqw rgba(160,120,255,.5))}
+.cf.ed-fan{opacity:.88}
 .cf.ed-fan .cf-ed{box-shadow:inset 0 0 0 1.2cqw rgba(170,240,255,.75),inset 0 0 0 2.6cqw rgba(120,110,240,.55)}
 .cf.ed-fan .cf-art{filter:grayscale(.5) hue-rotate(160deg) saturate(1.7) brightness(1.2)}
 .cf.ed-fan .cf-ed::before{top:30%;height:28%;left:0;right:0;background:radial-gradient(ellipse 40% 55% at 20% 70%,rgba(200,248,255,.6),transparent 70%),radial-gradient(ellipse 45% 60% at 60% 80%,rgba(175,155,255,.55),transparent 70%),radial-gradient(ellipse 35% 50% at 90% 60%,rgba(200,248,255,.5),transparent 70%);animation:edMist 5s ease-in-out infinite}
 .ed-fan .cf-edb{background:linear-gradient(#c8f6ff,#7a6cf0);color:#120a33;box-shadow:0 0 3cqw #7fe3ff}
 /* Holographique */
-.cf.ed-holo{filter:drop-shadow(0 0 2.4cqw rgba(160,120,255,.75))}
 .cf.ed-holo .cf-ed{box-shadow:inset 0 0 0 1cqw #ff7a95,inset 0 0 0 1.8cqw #ffe27a,inset 0 0 0 2.6cqw #7dffb0,inset 0 0 0 3.4cqw #7ad9ff;animation:edHue 4s linear infinite}
 .cf.ed-holo .cf-ed::before{background:linear-gradient(125deg,rgba(255,0,90,.5),rgba(255,220,0,.45) 20%,rgba(0,255,140,.45) 40%,rgba(0,190,255,.5) 60%,rgba(150,0,255,.5) 80%,rgba(255,0,90,.45)) 0 0/250% 250%;mix-blend-mode:color-dodge;opacity:.55;animation:edShine 5s linear infinite}
 .cf.ed-holo .cf-ed::after{background:repeating-linear-gradient(45deg,rgba(255,255,255,.16) 0 .6cqw,transparent .6cqw 2cqw);mix-blend-mode:overlay}
 .ed-holo .cf-edb{background:linear-gradient(90deg,#ff7a95,#ffe27a,#7dffb0,#7ad9ff,#b98aff);color:#1a1030}
 /* Ensanglantée */
-.cf.ed-sang{filter:drop-shadow(0 0 2.4cqw rgba(200,20,10,.7))}
 .cf.ed-sang .cf-ed{box-shadow:inset 0 0 0 1cqw #c0261a,inset 0 0 0 2.6cqw #5a0805}
 .cf.ed-sang .cf-art{filter:saturate(1.2) contrast(1.1) sepia(.2) hue-rotate(-15deg)}
 .cf.ed-sang .cf-ed::before{background:radial-gradient(circle at 80% 22%,rgba(150,8,4,.85) 0 7cqw,transparent 7.5cqw),radial-gradient(circle at 67% 12%,rgba(150,8,4,.85) 0 2cqw,transparent 2.4cqw),radial-gradient(circle at 93% 36%,rgba(150,8,4,.85) 0 1.6cqw,transparent 2cqw),radial-gradient(circle at 8% 78%,rgba(150,8,4,.8) 0 4cqw,transparent 4.5cqw),radial-gradient(circle at 18% 88%,rgba(150,8,4,.8) 0 1.4cqw,transparent 1.8cqw);mix-blend-mode:multiply}
 .cf.ed-sang .cf-ed::after{top:0;height:30%;left:0;right:0;transform-origin:top;border-radius:0;background:linear-gradient(#8a0905,#b3120a) 20% 0/2.4cqw 60% no-repeat,linear-gradient(#8a0905,#b3120a) 36% 0/2cqw 90% no-repeat,linear-gradient(#8a0905,#b3120a) 64% 0/2.4cqw 45% no-repeat,linear-gradient(#8a0905,#b3120a) 82% 0/1.8cqw 75% no-repeat;animation:edDrip 3s ease-in-out infinite}
 .ed-sang .cf-edb{background:linear-gradient(#c0261a,#5a0805);color:#ffe2dc;box-shadow:0 0 2.5cqw rgba(220,30,20,.8)}
 html.eco .cf.ed .cf-ed,html.eco .cf.ed .cf-ed::before,html.eco .cf.ed .cf-ed::after{animation:none!important}
-html.eco .cf.ed{filter:none}
 .edl{padding:0 .4em;border-radius:.6em}
 .edl.ed-dor{background:#f5c542;color:#3b2400}.edl.ed-arm{background:#b8c1c9;color:#151a1e}.edl.ed-fan{background:#a8ecff;color:#120a33}.edl.ed-holo{background:linear-gradient(90deg,#ff7a95,#ffe27a,#7dffb0,#7ad9ff);color:#1a1030}.edl.ed-sang{background:#b3120a;color:#ffe2dc}
 
@@ -1291,3 +1286,12 @@ html.eco .gift.got .g-face .g-ok{animation:none;transform:translateX(-50%) rotat
 /* v185 : plus de rareté écrite sous les cartes offertes : le halo suffit ; une carte spéciale prend le halo de son édition */
 .gift.ged-dor{--gc:#ffd24a}.gift.ged-arm{--gc:#c9d3db}.gift.ged-fan{--gc:#7fe3ff}.gift.ged-sang{--gc:#e0281a}
 .gift.ged-holo{--gc:#c58cff}
+/* v186 : un seul code de halo partout : la couleur de la rareté (commune verte, rare bleue, épique violette, légendaire orange),
+   ou celle de l'édition pour une carte spéciale. Les états gardent leur propre rendu : carte verrouillée grisée, carte choisie dans la main dorée. */
+.cf{--hc:transparent}.cf.r-com{--hc:#5fd068}.cf.r-rare{--hc:#4fa3ff}.cf.r-epic{--hc:#b06bff}.cf.r-leg{--hc:#ffb02e}
+.cf.ed-dor{--hc:#ffd24a}.cf.ed-arm{--hc:#c9d3db}.cf.ed-fan{--hc:#7fe3ff}.cf.ed-holo{--hc:#c58cff}.cf.ed-sang{--hc:#e0281a}
+.cf,.cf.ed,.citem.in .cf{filter:drop-shadow(0 0 3px var(--hc)) drop-shadow(0 0 7px var(--hc)) drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.cf.zomb{filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.citem.out .cf{filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));opacity:.72}
+.gift .g-face .cf,.gift .g-face .cf.ed{filter:none}
+html.eco .cf,html.eco .cf.ed,html.eco .citem.in .cf{filter:none}
