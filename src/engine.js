@@ -505,7 +505,7 @@ function testProgress(st,N,rnd=Math.random){st.night=N;let k=0;for(let n=1;n<N;n
  if(N>5)mutate(st,rnd);st.testLv=Math.floor(N/6);return k}
 function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(MUTS).filter(m=>m!==cur);const m=pool[Math.floor(rnd()*pool.length)];st.muts=[m];return m}
  const zspd=(st,k)=>{const s=ZT[k].spd;return s>1&&!ZT[k].boss?Math.max(1,s-mc(st,'frenesie')):s};
- const CUREE_MAX=2;
+ const CUREE_MAX=2,RUSH_MAX=40;
  const zdmg=(st,k)=>ZT[k].dmg+((k==='walk'||k==='run')?mc(st,'enrage'):0)+dmgBonus(st.night||1);
  // dégâts réels d'un coup (v131, décision d'Amine) : la frénésie ne touche plus les dégâts, seulement les PV
  // le Colosse frappe une défense ou une unité : 10 dégâts à la nuit 10, +2 toutes les 10 nuits (il ne tue plus d'un coup, v85)
@@ -920,7 +920,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const k of ZK)if(!ZT[k].boss)for(let j=0;j<w[k];j++)list.push(k);
   shuffle(list,rnd);
   const ps=(PLACES[st.place]||{}).sides,edges=st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;
-  const per=Math.ceil(list.length/WAVES_N)||1;st.waves=big?WAVES_N:0;st.freeMove=0;st.wave=1;st.wtick=0;
+  const per=Math.ceil(list.length/WAVES_N)||1;st.waves=big?WAVES_N:0;st.freeMove=0;st.wave=1;st.wtick=0;st.rush=0;
   st.pending=list.map((k,j)=>{const wv=big?1+Math.floor(j/per):1,jj=big?j-(wv-1)*per:j;return{k,wave:wv,at:1+Math.floor(jj*1.3),pos:edges[Math.floor(rnd()*edges.length)]}});
   const bl=[];const L=leadBoss(st.night);if(L&&w[L])for(let j=0;j<w[L];j++)bl.push(L);BOSSES.forEach(k=>{if(k!==L)for(let j=0;j<(w[k]||0);j++)bl.push(k)});
   bl.forEach((k,j)=>st.pending.push({k,wave:big?WAVES_N:1,at:10+j*12,pos:edges[Math.floor(rnd()*edges.length)]}));
@@ -936,7 +936,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   const su=st._su||(src>=0?st.grid[src]:null);if(su&&was>0){mtr(st,su,'dmg',Math.min(d,was));if(z.hp<=0)mtr(st,su,'kills',1)}return was>0&&z.hp<=0}
  function explode(st,i,d,ev){st.z.filter(o=>o.hp>0&&cheb(o.pos,i)<=1).forEach(o=>hit(st,o,d,ev,i,1));ev.push({i,k:'boom'})}
  // la cible d'un zombie : le leurre (Sirène, Épouvantail) ou le Tank le plus proche à portée de provocation, sinon l'abri
- function lureTarget(st,p){if(st.noise&&st.noise.until>=st.tick)return st.noise.i;let best=C,bd=99;for(let j=0;j<st.grid.length;j++){const u=st.grid[j];if(!u)continue;const r=U[u.t].lure||(roleOf(u.t)==='tank'?TAUNT:0);if(!r)continue;const d=cheb(p,j);if(d<=r&&d<bd){bd=d;best=j}}return best}
+ function lureTarget(st,p){if(st.rush)return C;if(st.noise&&st.noise.until>=st.tick)return st.noise.i;let best=C,bd=99;for(let j=0;j<st.grid.length;j++){const u=st.grid[j];if(!u)continue;const r=U[u.t].lure||(roleOf(u.t)==='tank'?TAUNT:0);if(!r)continue;const d=cheb(p,j);if(d<=r&&d<bd){bd=d;best=j}}return best}
  const nbRoles=(st,i)=>{const r=new Set();for(const j of around(i)){const v=st.grid[j];if(v)r.add(roleOf(v.t))}return r};
  function squad(st,i){const u=st.grid[i];if(!u)return false;const me=roleOf(u.t);if(!me)return false;const r=nbRoles(st,i);r.add(me);return r.has('tank')&&r.has('heal')&&r.has('dps')}
  function attack(st,i,u,D,rng,dmg,ev){
@@ -1036,7 +1036,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   // Patient Zéro : les zombies proches avancent 50 % plus vite ; la Mère pond des rampants
   const hasters=alive().filter(z=>ZT[z.k].haste&&!isEdge(z.pos));
   for(const z of alive())if(ZT[z.k].brood&&!isEdge(z.pos)&&(z.kids||0)<6&&st.tick%ZT[z.k].brood===0){z.kids=(z.kids||0)+1;const c=spawn(st,'crawl',z.pos);c.cd=2;ev.push({i:z.pos,k:'howl'})}
-  for(const z of st.z){if(z.hp<=0)continue;z.cd--;if(z.cd>0)continue;const T=ZT[z.k];z.cd=zspd(st,z.k);if(hasters.length&&!T.boss&&hasters.some(h=>cheb(h.pos,z.pos)<=ZT[h.k].haste))z.cd=Math.max(1,Math.floor(z.cd*2/3));
+  for(const z of st.z){if(z.hp<=0)continue;z.cd--;if(z.cd>0)continue;const T=ZT[z.k];z.cd=zspd(st,z.k);if(st.rush)z.cd=Math.max(1,Math.ceil(z.cd/2));if(hasters.length&&!T.boss&&hasters.some(h=>cheb(h.pos,z.pos)<=ZT[h.k].haste))z.cd=Math.max(1,Math.floor(z.cd*2/3));
    const tgt=lureTarget(st,z.pos);
    let n=T.boss?moves(z.pos,tgt,z.style)[0]:pathStep(st,z.pos,tgt,zmode(T),z.style);
    if(n===C){if(!z.reach){z.reach=1;st.reached=(st.reached||0)+1}const dm=T.sap?3:zhit(st,z);if(dm>0&&st._breach!==st.tick){st._breach=st.tick;st.z.forEach(o=>{if(o!==z&&o.hp>0)o.cd=Math.min(o.cd,1)});ev.push({i:C,k:'breach'})}if(T.sap)ev.push({i:C,k:'boom'});mtr(st,{t:'x_shelter'},'tak',dm);st.shelter-=dm;ev.push({i:C,txt:'−'+dm,k:'bite',zid:z.id});if(!T.boss){z.hp=0;z.bit=1}continue}
@@ -1056,7 +1056,12 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    if(T.sap)sapBlast(st,z.pos,ev)}}st._zk=null;
   st.z=st.z.filter(z=>z.hp>0);
   const boss=st.z.some(z=>ZT[z.k].boss)||st.pending.some(p=>ZT[p.k].boss);
-  const done=(!st.pending.length&&!st.z.length)||st.shelter<=0||st.wtick>(st.cap||90)+(boss?110:0);
+  // v182 : ruée de l'aube. Le temps est écoulé et des zombies restent : ils ignorent les tanks et les leurres, vont 2× plus vite et foncent sur l'abri.
+  // Après RUSH_MAX tours, ceux qui restent mordent l'abri et la nuit se termine (évite de gagner en bloquant la horde sans la tuer).
+  const late=st.wtick>(st.cap||90)+(boss?110:0);
+  if(late&&!st.rush&&st.shelter>0&&st.z.length){st.rush=st.tick;st.pending=[];ev.push({i:C,k:'rush'})}
+  if(st.rush&&st.tick-st.rush>=RUSH_MAX&&st.z.length&&st.shelter>0){for(const z of st.z){const dm=zhit(st,z);if(dm>0){mtr(st,{t:'x_shelter'},'tak',dm);st.shelter-=dm;ev.push({i:C,txt:'−'+dm,k:'bite',zid:z.id})}}st.z=[]}
+  const done=(!st.pending.length&&!st.z.length)||st.shelter<=0||(late&&!st.z.length);
   // fin d'une vague : pause (le joueur déplace librement ses unités et peut jouer ses réactions avant la suivante)
   if(!done&&st.waves&&!st.z.length&&!st.pending.some(p=>(p.wave||1)===st.wave)){st.freeMove=1;return{ev,done:false,pause:st.wave}}
   // vague bloquée (ex. un cracheur qui crache sur un mur réparé sans que personne ne puisse l'atteindre) : la vague suivante arrive quand même, sans pause
@@ -1066,7 +1071,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  // l'aube : l'essence s'éteint, les soins et la ferraille de l'aube s'appliquent
  function endNight(st){// historique pour le Journal : zombies tués et dégâts infligés de chaque nuit
   try{const d=Object.values(st.mtN||{}).reduce((a,r)=>a+(r.dmg||0),0);(st.hist=st.hist||[])[st.night-1]={k:Math.max(0,(st.kills||0)-(st.k0||0)),d:Math.round(d)}}catch(e){}
-  st.grid.forEach((u,i)=>{if(u&&u.t==='fire')st.grid[i]=null;else if(u&&u.trait==='coriace'&&u.hp>0)u.hp=Math.min(maxHp(st,u),u.hp+1)});st.z=[];st.side=-1;
+  st.grid.forEach((u,i)=>{if(u&&u.t==='fire')st.grid[i]=null;else if(u&&u.trait==='coriace'&&u.hp>0)u.hp=Math.min(maxHp(st,u),u.hp+1)});st.z=[];st.side=-1;st.rush=0;
   if(st.shelter<=0)return{heal:0,scrap:0};
   // v181 : nuits d'affilée survécues sur le terrain (Blindée à 20)
   st.grid.forEach(u=>{if(u&&isUnit(u.t)&&!U[u.t].evo){u.nts=(u.nts||0)+1;if(u.nts>=ED_GOAL.arm&&edOk(u.t,'arm')){const a=st.edArm=st.edArm||[];if(!a.includes(u.t))a.push(u.t)}}});
@@ -1107,6 +1112,6 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
  return{edKill,EDS,ED_IDS,ED_MAX,FAN_MAX,ED_GOAL,baseOf,edOf,ck,edOk,edCards,fanN,zMaxHp,newcomers,TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
-  DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
+  RUSH_MAX,DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;

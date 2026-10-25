@@ -944,6 +944,8 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 
 **v169** : en largeur (PC), l’image d’accueil est tirée au hasard à chaque démarrage parmi 6 (`fond.webp`, `fond-2.webp` à `fond-6.webp`, survivants différents). Easter egg : `fond-zombies.webp` (zombies sur la palissade, survivants en bas), environ 1 démarrage sur 25 (poids dans `FONDS`, `game-menu.js`).
 
+**v187** (demande d’Amine) : **ruée de l’aube**. Avant, quand le temps de la nuit s’écoulait, les zombies restants disparaissaient : 2 tanks et 2 soigneurs avec peu de dégâts tenaient la horde jusqu’à la fin sans la tuer. Désormais, à la fin du temps, les zombies restants ignorent la provocation des tanks et les leurres, vont 2× plus vite et foncent sur l’abri ; les zombies pas encore arrivés ne viennent plus. Après 40 tours de ruée (`Z.RUSH_MAX`), ceux qui restent mordent l’abri et la nuit se termine. Il faut donc assez de dégâts pour finir la horde.
+
 **v186** : un seul code de halo pour toutes les cartes (main, collection, decks, aube, boutique, récompense) : couleur de la rareté (commune verte, rare bleue, épique violette, légendaire orange) ou de l’édition pour une carte spéciale. Collection : une carte acquise a son halo de rareté (avant : vert), une carte pas encore acquise reste grisée. Éditeur de deck : les cartes hors du deck sont atténuées, sans halo.
 
 **v185** : récompense : tampon « Choisie » sur fond transparent, encre usée et double cadre ; plus de rareté écrite sous les cartes, le halo de rareté suffit ; une carte spéciale a le halo de son édition.
