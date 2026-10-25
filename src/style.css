@@ -1279,5 +1279,3 @@ html.eco .cf.ed .cf-ed,html.eco .cf.ed .cf-ed::before,html.eco .cf.ed .cf-ed::af
 html.eco .cf.ed{filter:none}
 .edl{padding:0 .4em;border-radius:.6em}
 .edl.ed-dor{background:#f5c542;color:#3b2400}.edl.ed-arm{background:#b8c1c9;color:#151a1e}.edl.ed-fan{background:#a8ecff;color:#120a33}.edl.ed-holo{background:linear-gradient(90deg,#ff7a95,#ffe27a,#7dffb0,#7ad9ff);color:#1a1030}.edl.ed-sang{background:#b3120a;color:#ffe2dc}
-/* v181 : carte spéciale tirée en fin de partie : seule sur sa ligne, centrée, sous les 3 cartes offertes */
-.gift.sp{grid-column:1/-1;justify-self:center;width:calc((100% - 20px)/3);margin-top:18px}

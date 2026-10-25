@@ -1,6 +1,11 @@
 // Dictionnaire anglais (v146) : clé = texte français exact, valeur = traduction. {0}, {1}… = trous remplis par le jeu.
 // Une clé absente garde le français. Le test (tools/test-engine.js) vérifie que chaque texte du jeu a sa traduction.
 I18N.en={
+"Une carte pour toi.":"A card for you.",
+"Les {0} cartes sont pour toi.":"All {0} cards are yours.",
+"Choisis {0} cartes parmi {1}.":"Choose {0} cards out of {1}.",
+"Choisis 1 carte parmi {0}.":"Choose 1 card out of {0}.",
+"Touche Continuer pour les ajouter à ta collection.":"Tap Continue to add them to your collection.",
 " Et une carte spéciale en bonus !":" And a bonus special card!",
 "Une carte spéciale pour toi !":"A special card for you!",
 "Carte spéciale":"Special card",
@@ -1321,7 +1326,7 @@ I18N.en={
 "Les 3 cartes sont pour toi.":"All 3 cards are yours.",
 "Choisis {0} cartes parmi 3.":"Choose {0} cards out of 3.",
 "Choisis 1 carte parmi 3.":"Choose 1 card out of 3.",
-"<h2 class=\"pw\">Récompense</h2><p>{0} Touche une carte pour la retourner, puis touche-la encore pour la prendre. Chaque carte prise rejoint ta collection pour toujours.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continuer</button>":"<h2 class=\"pw\">Reward</h2><p>{0} Tap a card to flip it, then tap it again to take it. Every card you take joins your collection for good.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continue</button>",
+"<h2 class=\"pw\">Récompense</h2><p>{0} Touche une carte pour la retourner, puis touche-la encore pour la valider (encore une fois pour annuler). Les cartes validées rejoignent ta collection pour toujours.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continuer</button>":"<h2 class=\"pw\">Reward</h2><p>{0} Tap a card to flip it, then tap it again to select it (once more to cancel). Selected cards join your collection for good.</p>\n  <div class=\"gifts\">{1}</div>\n  <p class=\"g-left\"></p><button type=\"button\" class=\"go\" data-a=\"gdone\" hidden>Continue</button>",
 "Carte offerte":"Reward card",
 "Encore <b>{0}</b> cartes à choisir.":"<b>{0}</b> cards left to choose.",
 "Encore <b>1</b> carte à choisir.":"<b>1</b> card left to choose.",

@@ -94,28 +94,23 @@ function demoEnd(){clearSave();logRun(2);const nights=G.night;let pts=0;if(!G.da
 function giftStart(nights){if(G.daily||TEST)return;const n=Z.giftCount(nights);if(!n)return;const c=Z.giftOffer(META.cards);if(!c.length)return;
  META.gift={c,n:Math.min(n,c.length),got:[],up:[]};saveMeta(META)}
 const GIFT_RN={com:_t('Commune'),rare:_t('Rare'),epic:_t('Épique'),leg:_t('Légendaire')};
-function giftLeft(){const g=META.gift;return g?g.n-g.got.filter(i=>i!==g.ed).length:0}
-// v181 : la carte spéciale tirée en fin de partie (g.ed) est offerte en plus du choix ; il faut la prendre avant de continuer
-const giftSp=()=>{const g=META.gift;return!!g&&g.ed!=null&&!g.got.includes(g.ed)};
+function giftLeft(){const g=META.gift;return g?g.n-g.got.length:0}
 function giftScreen(){const g=META.gift;if(!g)return;
- const nc=g.c.length-(g.ed!=null?1:0),sp=g.ed!=null?(nc?_t(' Et une carte spéciale en bonus !'):_t('Une carte spéciale pour toi !')):'';
- const msg=(!nc?'':g.n>=nc?_t('Les 3 cartes sont pour toi.'):g.n>1?_t`Choisis ${g.n} cartes parmi 3.`:_t('Choisis 1 carte parmi 3.'))+sp;
- show(_t`<h2 class="pw">Récompense</h2><p>${msg} Touche une carte pour la retourner, puis touche-la encore pour la prendre. Chaque carte prise rejoint ta collection pour toujours.</p>
-  <div class="gifts">${g.c.map((t,i)=>`<button type="button" class="gift r-${i===g.ed?'leg sp':Z.RAR[t]||'com'}${g.up.includes(i)?' up':''}${g.got.includes(i)?' got':''}" data-a="gift" data-v="${i}" aria-label="${_t('Carte offerte')} ${i+1}"><span class="g-in"><span class="g-back"></span><span class="g-face">${cardFace(t,{base:1})}<span class="g-rar">${i===g.ed?_t('Carte spéciale'):GIFT_RN[Z.RAR[t]||'com']}</span><span class="g-ok">✓</span></span></span></button>`).join('')}</div>
+ const nc=g.c.length,msg=nc<2?_t('Une carte pour toi.'):g.n>=nc?_t`Les ${nc} cartes sont pour toi.`:g.n>1?_t`Choisis ${g.n} cartes parmi ${nc}.`:_t`Choisis 1 carte parmi ${nc}.`;
+ show(_t`<h2 class="pw">Récompense</h2><p>${msg} Touche une carte pour la retourner, puis touche-la encore pour la valider (encore une fois pour annuler). Les cartes validées rejoignent ta collection pour toujours.</p>
+  <div class="gifts">${g.c.map((t,i)=>`<button type="button" class="gift r-${i===g.ed?'leg':Z.RAR[t]||'com'}${g.up.includes(i)?' up':''}${g.got.includes(i)?' got':''}" data-a="gift" data-v="${i}" aria-label="${_t('Carte offerte')} ${i+1}"><span class="g-in"><span class="g-back"></span><span class="g-face">${cardFace(t,{base:1})}<span class="g-rar">${i===g.ed?_t('Carte spéciale'):GIFT_RN[Z.RAR[t]||'com']}</span><span class="g-ok">✓</span></span></span></button>`).join('')}</div>
   <p class="g-left"></p><button type="button" class="go" data-a="gdone" hidden>Continuer</button>`);giftSync()}
 function giftSync(){const g=META.gift;if(!g)return;const left=giftLeft(),el=panel.querySelector('.g-left'),b=panel.querySelector('[data-a=gdone]');
- panel.querySelectorAll('.gift').forEach((e,i)=>{e.classList.toggle('up',g.up.includes(i));e.classList.toggle('got',g.got.includes(i));e.classList.toggle('off',!left&&!g.got.includes(i)&&i!==g.ed)});
- if(el)el.innerHTML=left?(left>1?_t`Encore <b>${left}</b> cartes à choisir.`:_t('Encore <b>1</b> carte à choisir.')):giftSp()?_t('Touche ta carte spéciale pour la prendre.'):_t('Cartes ajoutées à ta collection.');if(b)b.hidden=!!left||giftSp()}
-function giftTap(v){const g=META.gift,i=+v;if(!g||!g.c[i]||g.got.includes(i))return;
+ panel.querySelectorAll('.gift').forEach((e,i)=>{e.classList.toggle('up',g.up.includes(i));e.classList.toggle('got',g.got.includes(i));e.classList.toggle('off',!left&&!g.got.includes(i))});
+ if(el)el.innerHTML=left?(left>1?_t`Encore <b>${left}</b> cartes à choisir.`:_t('Encore <b>1</b> carte à choisir.')):_t('Touche Continuer pour les ajouter à ta collection.');if(b)b.hidden=!!left}
+// v182 : toucher une carte retournée la valide (tampon vert), la toucher encore annule ; pas de fenêtre de confirmation.
+// Les cartes validées rejoignent la collection quand le joueur continue (la carte spéciale via edGain).
+function giftTap(v){const g=META.gift,i=+v;if(!g||!g.c[i])return;
  if(!g.up.includes(i)){g.up.push(i);saveMeta(META);SFX.play('card');giftSync();return}
- if(i===g.ed){giftTake(v);return}
- if(!giftLeft())return;const t=g.c[i];
- const box=document.createElement('div');box.className='gconf';
- box.innerHTML=_t`<div class="gbox r-${Z.RAR[t]||'com'}"><p>Prendre <b>${Z.U[t].n}</b> ?</p><p class="g-sub">${GIFT_RN[Z.RAR[t]||'com']}${giftLeft()>1?'':_t(' · les autres cartes seront perdues')}</p><div class="g-btns"><button type="button" class="go" data-a="gyes" data-v="${i}">Prendre</button><button type="button" class="skip" data-a="gno">Annuler</button></div></div>`;
- panel.appendChild(box);SFX.play('ui')}
-function giftTake(v){const g=META.gift,i=+v;panel.querySelectorAll('.gconf').forEach(e=>e.remove());if(!g||!g.c[i]||g.got.includes(i)||(i!==g.ed&&!giftLeft()))return;
- g.got.push(i);const t=g.c[i];if(i===g.ed)edGain(t);else if(!META.cards.includes(t))META.cards.push(t);saveMeta(META);SFX.play('dawn');vib(40);giftSync();try{achCheck()}catch(e){}}
-function giftDone(){META.gift=null;saveMeta(META);if(S.endHtml)show(S.endHtml);else title()}
+ const k=g.got.indexOf(i);if(k>=0){g.got.splice(k,1);SFX.play('ui')}else{if(!giftLeft())return;g.got.push(i);SFX.play('dawn');vib(40)}saveMeta(META);giftSync()}
+function giftTake(v){giftTap(v)}
+function giftDone(){const g=META.gift;if(g&&giftLeft()>0)return;if(g)g.got.forEach(i=>{const t=g.c[i];if(!t)return;if(i===g.ed||Z.edOf(t))edGain(t);else if(!META.cards.includes(t))META.cards.push(t)});
+ META.gift=null;saveMeta(META);try{achCheck()}catch(e){}if(S.endHtml)show(S.endHtml);else title()}
 function statsScreen(){const h=META.hist||[],pl=Object.entries(META.played||{}).filter(([t])=>Z.U[t]).sort((a,b)=>b[1]-a[1]).slice(0,6),avg=h.length?Math.round(h.reduce((a,x)=>a+x.n,0)/h.length*10)/10:0;
  const tile=(v,l)=>`<div class="stile"><b>${v}</b><span>${l}</span></div>`;
  show(_t`<h2 class="pw">Statistiques</h2><div class="stiles">${tile(META.best||0,_t('record de nuits'))}${tile(META.wins||0,_t('victoires'))}${tile(META.menaceWon>=0?META.menaceWon:'—',_t('Mutation vaincue'))}${tile(META.runs||0,_t('parties'))}${tile(META.total||0,_t('nuits au total'))}${tile(META.kills||0,_t('zombies éliminés'))}</div>

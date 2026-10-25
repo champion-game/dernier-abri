@@ -613,7 +613,7 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 | Fantôme | ne compte pas dans la limite d’unités (2 au plus) | toutes les unités | tirage en fin de partie |
 | Holographique | +1 ferraille par zombie tué | unités qui attaquent | tirage en fin de partie |
 
-- **Tirage en fin de partie** : 1 % de chance par nuit survécue (30 % pour une victoire), sur une unité jouée pendant la partie, Fantôme ou Holographique au hasard. Garantie après 10 parties sans tirage gagnant. La carte tirée apparaît sur l’écran de récompense, sous les 3 cartes offertes (v182) : elle est donnée en plus du choix, et il faut la toucher pour la prendre avant de continuer.
+- **Tirage en fin de partie** : 1 % de chance par nuit survécue (30 % pour une victoire), sur une unité jouée pendant la partie, Fantôme ou Holographique au hasard. Garantie après 10 parties sans tirage gagnant. La carte tirée prend la place d’une des 3 cartes de l’écran de récompense (v183) : elle fait partie du choix.
 - **Deck** : 1 exemplaire d’une carte spéciale, une seule spéciale par carte (Boucher Dorée ou Boucher Fantôme, pas les deux), 5 spéciales au plus. Elle compte dans la limite d’exemplaires de sa carte (rare ×2 : 1 Boucher Dorée + 1 Boucher).
 - **En partie** : posée, l’unité garde son édition (pion avec halo ou anneau). Fusion et évolution gardent l’édition ; quand l’unité tombe, la carte spéciale revient dans la défausse. Pas de spéciales ni de progression en défi du jour, en démo et en mode test (les spéciales y redeviennent des cartes normales).
 - Technique : la carte s’écrit `type~éd` (`butch~dor`, `arm`, `fan`, `holo`, `sang`) ; ces cartes existent dans `Z.U` sans apparaître dans les listes. Sur le terrain, l’unité garde son type et porte `u.ed`. Sauvegarde : `META.eds` (gagnées), `META.edp` (progression), `META.edMiss`.
@@ -943,6 +943,8 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 **v168** : en hauteur, `fond-portrait2.webp` : survivants sur une palissade au tiers de l’écran. Sur téléphone, le logo (plus petit) monte dans le ciel et le menu commence juste sous la palissade, pour que les survivants restent visibles.
 
 **v169** : en largeur (PC), l’image d’accueil est tirée au hasard à chaque démarrage parmi 6 (`fond.webp`, `fond-2.webp` à `fond-6.webp`, survivants différents). Easter egg : `fond-zombies.webp` (zombies sur la palissade, survivants en bas), environ 1 démarrage sur 25 (poids dans `FONDS`, `game-menu.js`).
+
+**v183** : écran de récompense : la carte spéciale tirée fait partie des 3 cartes ; toucher une carte retournée la valide (tampon vert), la toucher encore annule, plus de fenêtre de confirmation ; les cartes validées sont ajoutées en touchant Continuer.
 
 **v182** : la Fantôme ou l’Holographique tirée en fin de partie s’affiche sur l’écran de récompense, avec les 3 cartes offertes.
 

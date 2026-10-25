@@ -197,7 +197,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v182 · 25 oct.';
+const VERSION='v183 · 25 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -291,12 +291,12 @@ function edCommit(ok){if(!G)return;if(edOn()){const P=META.edp=META.edp||{},K=P.
   if(ok){for(const t in G.edKO||{}){O[t]=(O[t]||0)+G.edKO[t];ch=1;if(O[t]>=Z.ED_GOAL.sang&&Z.edOk(t,'sang'))edGain(t+'~sang')}(G.edArm||[]).forEach(t=>{if(edGain(t+'~arm'))ch=1})}
   if(ch)saveMeta(META)}G.edK={};G.edKO={};G.edArm=[]}
 // fin de partie : 1 % de chance par nuit survécue d'obtenir une Fantôme ou une Holographique, sur une unité jouée ; garantie après 10 parties sans.
-// La carte tirée s'ajoute à l'écran de récompense (META.gift.ed), en plus des cartes offertes ; elle est gagnée quand le joueur la prend.
+// La carte tirée prend la place d'une des 3 cartes de l'écran de récompense (META.gift.ed) ; elle est gagnée si le joueur la choisit.
 function edDrop(nights){if(!edOn()||!G)return null;const E=META.eds=META.eds||[];
  const pool=(G.pl||[]).flatMap(b=>['fan','holo'].filter(e=>Z.edOk(b,e)&&!E.includes(b+'~'+e)).map(e=>b+'~'+e));
  if(!pool.length)return null;const miss=META.edMiss||0;
  if(miss<10&&Math.random()>=Math.min(1,Math.max(0,nights)*.01)){META.edMiss=miss+1;saveMeta(META);return null}
- const t=pool[Math.floor(Math.random()*pool.length)];META.edMiss=0;const g=META.gift||(META.gift={c:[],n:0,got:[],up:[]});if(g.ed==null){g.c.push(t);g.ed=g.c.length-1}saveMeta(META);return t}
+ const t=pool[Math.floor(Math.random()*pool.length)];META.edMiss=0;const g=META.gift||(META.gift={c:[],n:1,got:[],up:[]});if(g.ed==null){const k=g.c.length>=3?Math.floor(Math.random()*g.c.length):g.c.length;g.c[k]=t;g.ed=k;g.n=Math.max(1,Math.min(g.n,g.c.length))}saveMeta(META);return t}
 // vérifications à l'aube, à la fin d'une partie, et après une pose
 function achCheck(){try{if(!G)return;const n=G.won?G.night:G.night-(S.busy?0:0);
  const nights=G.shelter>0?G.night:G.night-1;if(nights>=5)ach('n5');if(nights>=10)ach('n10');if(nights>=20)ach('n20');if(G.won&&nights>=40)ach('n40');
