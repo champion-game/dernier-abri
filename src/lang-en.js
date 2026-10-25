@@ -979,6 +979,7 @@ I18N.en={
 "Bloqué":"Blocked",
 "Increvable !":"Unkillable!",
 "BRÈCHE ! La horde accélère":"BREACH! The horde speeds up",
+"RUÉE DE L’AUBE ! Ils foncent sur l’abri":"DAWN RUSH! They charge the shelter",
 "<i class=\"stamp boss\">Boss final</i>":"<i class=\"stamp boss\">Final boss</i>",
 "<i class=\"stamp red\">Nuit rouge</i>":"<i class=\"stamp red\">Red night</i>",
 "<i class=\"stamp calm\">Répit</i>":"<i class=\"stamp calm\">Respite</i>",

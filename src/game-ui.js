@@ -66,6 +66,7 @@ function playEvents(ev,types,now){
   if(e.k==='block'){const p=tc(e.i);floatTxt(p.x,p.y-6,_t('Bloqué'),'#7cc7ff');addFX({type:'ring',x:p.x,y:p.y,r:26,c:'#7cc7ff',dur:220});try{SFX.play('hit')}catch(x){}}
   if(e.k==='saved'){const p=tc(e.i);floatTxt(p.x,p.y-10,_t('Increvable !'),'#f2b33d');addFX({type:'ring',x:p.x,y:p.y,r:40,c:'#f2b33d',dur:400})}
   if(e.k==='air'){shake(now,10);const c=tc(e.i);addFX({type:'ring',x:c.x,y:c.y,r:T*2.5,c:'#ffb35c',dur:500});for(let k=0;k<6;k++){const x=c.x+(Math.random()-.5)*T*4,y=c.y+(Math.random()-.5)*T*4;addFX({type:'flash',x,y,r:30,c:'rgba(255,170,60,.8)',dur:400,light:T*1.5})}SFX.play('boom')}
+  if(e.k==='rush'){shake(now,8);floatTxt(CEN.x,CEN.y-60,_t('RUÉE DE L’AUBE ! Ils foncent sur l’abri'),'#ff7a3d',16);try{SFX.play('howl')}catch(x){}}
   if(e.k==='breach'){shake(now,6);floatTxt(CEN.x,CEN.y-46,_t('BRÈCHE ! La horde accélère'),'#e5484d',15)}
   if(e.k==='shot'){const v=V.get(e.zid),tp=v?zpos(v,now):CEN;addFX({type:'tracer',x1:CEN.x,y1:CEN.y-10,x2:tp.x,y2:tp.y,c:'#fff4c8',w:2,dur:260});addFX({type:'flash',x:CEN.x,y:CEN.y-10,r:8,c:'#ffe08a',dur:120,light:T})}
   if(e.k==='heal'){const p=tc(e.i);for(let k=0;k<3;k++)PT.push({x:p.x+(Math.random()-.5)*20,y:p.y,vx:0,vy:-.03,t0:now,dur:500,c:'#7ee08a',r:2.5,light:0})}

@@ -197,7 +197,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v181 · 25 oct.';
+const VERSION='v182 · 25 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
