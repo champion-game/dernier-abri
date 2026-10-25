@@ -139,7 +139,7 @@ const _giftScreen=giftScreen;giftScreen=function(){_giftScreen();const g=META.gi
 function revealFx(i,r){const el=panel.querySelectorAll('.gift')[i];if(!el)return;const f=aEl('grays','',el);f.style.setProperty('--rc',RARC[r]);setTimeout(()=>f.remove(),1100);
  if(r==='epic'||r==='leg'){aAnim(panel,[{transform:'none'},{transform:'translate(-5px,2px)'},{transform:'translate(4px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'none'}],{duration:300});try{SFX.play('rare')}catch(e){}vib(r==='leg'?[60,40,90]:60)}}
 let GBUSY=0;const _gift=ACT.gift;ACT.gift=v=>{const g=META.gift,i=+v,t=g&&g.c[i];const flip=t&&!g.up.includes(i)&&!g.got.includes(i);if(!flip||!AOK())return _gift(v);if(GBUSY)return;
- const r=Z.RAR[t]||'com',big=r==='epic'||r==='leg';const el=panel.querySelectorAll('.gift')[i];
+ const r=i===g.ed?'leg':Z.RAR[t]||'com',big=r==='epic'||r==='leg';const el=panel.querySelectorAll('.gift')[i];
  // épique ou légendaire : la carte tremble et sa lueur monte avant de se retourner (le suspense)
  if(big&&el){GBUSY=1;el.classList.add('charge');setTimeout(()=>{GBUSY=0;el.classList.remove('charge');_gift(v);setTimeout(()=>revealFx(i,r),260)},420);return}
  _gift(v);setTimeout(()=>revealFx(i,r),260)};

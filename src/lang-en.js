@@ -1,6 +1,10 @@
 // Dictionnaire anglais (v146) : clé = texte français exact, valeur = traduction. {0}, {1}… = trous remplis par le jeu.
 // Une clé absente garde le français. Le test (tools/test-engine.js) vérifie que chaque texte du jeu a sa traduction.
 I18N.en={
+" Et une carte spéciale en bonus !":" And a bonus special card!",
+"Une carte spéciale pour toi !":"A special card for you!",
+"Carte spéciale":"Special card",
+"Touche ta carte spéciale pour la prendre.":"Tap your special card to take it.",
 "Dorée":"Golden",
 "Blindée":"Armored",
 "+50 % de PV":"+50% HP",
