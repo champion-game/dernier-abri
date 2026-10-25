@@ -1281,9 +1281,13 @@ html.eco .cf.ed{filter:none}
 .edl.ed-dor{background:#f5c542;color:#3b2400}.edl.ed-arm{background:#b8c1c9;color:#151a1e}.edl.ed-fan{background:#a8ecff;color:#120a33}.edl.ed-holo{background:linear-gradient(90deg,#ff7a95,#ffe27a,#7dffb0,#7ad9ff);color:#1a1030}.edl.ed-sang{background:#b3120a;color:#ffe2dc}
 
 /* v184 : carte choisie à la récompense : un tampon à l'encre sur l'illustration (remplace la pastille verte) */
-.gift .g-face .g-ok{top:24%;left:50%;right:auto;width:auto;height:auto;border-radius:6px;background:rgba(236,244,222,.9);color:#1f7a33;border:3px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 0 0 2px rgba(236,244,222,.9),inset 0 0 0 3.5px currentColor;
+.gift .g-face .g-ok{top:24%;left:50%;right:auto;width:auto;height:auto;border-radius:6px;background:transparent;color:#3fd060;border:3px solid currentColor;box-shadow:0 0 3px rgba(0,0,0,.8),inset 0 0 3px rgba(0,0,0,.8);
  font:400 clamp(13px,4.2vw,22px)/1 var(--f-disp);text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;white-space:nowrap;z-index:7;
- transform:translateX(-50%) rotate(-12deg) scale(0);opacity:0;transition:none;text-shadow:0 0 1px currentColor}
+ transform:translateX(-50%) rotate(-12deg) scale(0);opacity:0;transition:none;text-shadow:0 0 2px rgba(0,0,0,.85),0 1px 0 rgba(0,0,0,.7);outline:2px solid currentColor;outline-offset:3px;border-radius:4px 7px 5px 8px;
+ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='70'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 2.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='70'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 2.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");-webkit-mask-size:140px 70px;mask-size:140px 70px}
 .gift.got .g-face .g-ok{animation:gstamp .32s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes gstamp{0%{transform:translateX(-50%) rotate(-12deg) scale(2.4);opacity:0}100%{transform:translateX(-50%) rotate(-12deg) scale(1);opacity:1}}
 html.eco .gift.got .g-face .g-ok{animation:none;transform:translateX(-50%) rotate(-12deg) scale(1);opacity:1}
+/* v185 : plus de rareté écrite sous les cartes offertes : le halo suffit ; une carte spéciale prend le halo de son édition */
+.gift.ged-dor{--gc:#ffd24a}.gift.ged-arm{--gc:#c9d3db}.gift.ged-fan{--gc:#7fe3ff}.gift.ged-sang{--gc:#e0281a}
+.gift.ged-holo{--gc:#c58cff}
