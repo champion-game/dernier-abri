@@ -332,7 +332,7 @@ function tuto(n){if(TUTO===n){TUTO=n+1;try{localStorage.setItem('abri-tuto',TUTO
 const TUTO_DECK=[...Z.STARTER_DECK,'kit','cop','wire','gear'];
 const TUTO_HAND=[[],['axe','bar'],['kit','cop'],['gear','gun','wire'],['med']];// cartes garanties en main chaque jour
 const TUTO_PICK=[null,'cop','gun','med'];// carte conseillée à l'aube des nuits 1 à 3
-const TUTO_ROADS=[13,37,43,67];// la 1ʳᵉ case de chaque route, à la sortie de la forêt
+const T9=i=>{const o=(Z.N-9)/2;return (Math.floor(i/9)+o)*Z.N+i%9+o},TUTO_ROADS=[Z.N+(Z.N-1)/2,(Z.N-1)/2*Z.N+1,(Z.N-1)/2*Z.N+Z.N-2,(Z.N-2)*Z.N+(Z.N-1)/2];// la 1ʳᵉ case de chaque route, à la sortie de la forêt
 const tutoDay=()=>G&&G.tuto&&!G.test&&!G.daily&&G.night<=Z.TUTO_N?G.night:0;
 const posOf=t=>G.grid.findIndex(u=>u&&u.t===t);
 function guideStep(){const d=tutoDay();if(!d||d>4||S.busy||S.pause||S.dawnWait)return null;
@@ -342,28 +342,28 @@ function guideStep(){const d=tutoDay();if(!d||d>4||S.busy||S.pause||S.dawnWait)r
  const mv=(a,b,t,pick)=>at(a,t)&&!G.grid[b]?(S.moveFrom===a?{from:a,cells:[b],txt:_t('Touche la case qui brille.')}:{from:a,cells:[a],on:1,txt:pick}):null;
  const go=txt=>({go:1,txt});let m;
  if(d===1){
-  if(!at(31,'axe')&&inH('axe'))return ask('axe',[31],_t('Cette nuit, les zombies viendront par les 4 routes. Touche le Bûcheron : il frappe fort au corps à corps.'),_t('Pose-le juste au nord de ta maison.'));
-  const b=[39,41,49,22].filter(i=>!at(i,'bar'));
+  if(!at(T9(31),'axe')&&inH('axe'))return ask('axe',[T9(31)],_t('Cette nuit, les zombies viendront par les 4 routes. Touche le Bûcheron : il frappe fort au corps à corps.'),_t('Pose-le juste au nord de ta maison.'));
+  const b=[T9(39),T9(41),T9(49),T9(22)].filter(i=>!at(i,'bar'));
   if(b.length&&inH('bar'))return ask('bar',b,_t('Touche la Barricade : une carte couvre 4 cases.'),b.length===4?_t('Ferme les 3 autres côtés de la maison et protège le Bûcheron : pose la Barricade sur les 4 cases qui brillent.'):b.length>1?_t`Encore ${b.length} cases : touche les cases qui brillent.`:_t('Encore 1 case : touche la case qui brille.'));
   return go(_t('La maison n’a plus qu’une porte, gardée par ton Bûcheron : les zombies devront passer par lui. Touche « Affronter la nuit ».'))}
  if(d===2){const ax=posOf('axe'),u=G.grid[ax];
   if(u&&inH('kit')&&u.hp<Z.maxHp(G,u))return ask('kit',[ax],_t`Les zombies ont frappé ton Bûcheron : il lui reste ${u.hp} PV sur ${Z.maxHp(G,u)}. Touche la Trousse de secours.`,_t('Touche le Bûcheron pour le soigner.'),1);
-  if(!G.grid[31]||at(31,'axe')){
-   if(m=mv(31,30,'axe',_t('Le Bûcheron ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).')))return m;
-   if(m=mv(22,32,'bar',_t('Touche la barricade de devant pour la déplacer à droite de la porte.')))return m}
-  if(!at(31,'cop')&&inH('cop'))return ask('cop',[31],_t('Touche le Policier : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.'),_t('Pose-le dans la porte, à côté du Bûcheron : à côté d’un Tank, un DPS fait +1 dégât.'));
+  if(!G.grid[T9(31)]||at(T9(31),'axe')){
+   if(m=mv(T9(31),T9(30),'axe',_t('Le Bûcheron ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).')))return m;
+   if(m=mv(T9(22),T9(32),'bar',_t('Touche la barricade de devant pour la déplacer à droite de la porte.')))return m}
+  if(!at(T9(31),'cop')&&inH('cop'))return ask('cop',[T9(31)],_t('Touche le Policier : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.'),_t('Pose-le dans la porte, à côté du Bûcheron : à côté d’un Tank, un DPS fait +1 dégât.'));
   return go(_t('Le Policier encaisse, le Bûcheron frappe. Touche « Affronter la nuit ».'))}
  if(d===3){
-  if(m=mv(31,22,'cop',_t('Le Policier part en première ligne : touche-le pour l’avancer d’une case.')))return m;
+  if(m=mv(T9(31),T9(22),'cop',_t('Le Policier part en première ligne : touche-le pour l’avancer d’une case.')))return m;
   const cp=posOf('cop'),c=G.grid[cp];
   if(c&&inH('gear')&&!(c.eq||[]).includes('gear'))return ask('gear',[cp],_t('Devant, il va prendre des coups. Touche le Matériel lourd : +4 PV, et un Tank équipé bloque 1 coup sur 2.'),_t('Touche le Policier pour l’équiper.'),1);
-  if(!at(31,'gun')&&!G.grid[31]&&inH('gun'))return ask('gun',[31],_t('Touche le Tireur : un DPS à distance, il tire à 2 cases.'),_t('Pose-le juste derrière le Policier, à l’abri.'));
+  if(!at(T9(31),'gun')&&!G.grid[T9(31)]&&inH('gun'))return ask('gun',[T9(31)],_t('Touche le Tireur : un DPS à distance, il tire à 2 cases.'),_t('Pose-le juste derrière le Policier, à l’abri.'));
   const w=TUTO_ROADS.filter(i=>!at(i,'wire'));
   if(w.length&&inH('wire'))return ask('wire',w,_t('Touche les Barbelés : un piège qui blesse et ralentit chaque zombie qui passe, sur 4 cases.'),_t('Pose-les sur les 4 routes, à la sortie de la forêt : chaque zombie sera touché dès son arrivée.'));
   return go(_t('Les zombies seront ralentis dès les routes, puis abattus. Touche « Affronter la nuit ».'))}
- if(m=mv(32,23,'bar',_t('Le Tireur va passer à droite : touche d’abord la barricade de droite pour l’avancer, elle le protégera.')))return m;
- if(m=mv(31,32,'gun',_t('Touche le Tireur pour le décaler à droite : la place derrière le Policier sera libre.')))return m;
- if(!at(31,'med')&&!G.grid[31]&&inH('med'))return ask('med',[31],_t('Touche l’Infirmière : elle soigne à 2 cases, et deux fois plus un Tank.'),_t('Pose-la derrière le Policier.'));
+ if(m=mv(T9(32),T9(23),'bar',_t('Le Tireur va passer à droite : touche d’abord la barricade de droite pour l’avancer, elle le protégera.')))return m;
+ if(m=mv(T9(31),T9(32),'gun',_t('Touche le Tireur pour le décaler à droite : la place derrière le Policier sera libre.')))return m;
+ if(!at(T9(31),'med')&&!G.grid[T9(31)]&&inH('med'))return ask('med',[T9(31)],_t('Touche l’Infirmière : elle soigne à 2 cases, et deux fois plus un Tank.'),_t('Pose-la derrière le Policier.'));
  return go(_t('Ton escouade est prête. Demain soir, c’est la nuit rouge. Touche « Affronter la nuit ».'))}
 // pendant le tutoriel : une case peut-elle être touchée ? (le reste est bloqué pour garder le plan intact)
 function guideOk(g,i){if(g.go)return false;if(g.from!=null)return S.sel===null&&(S.moveFrom===g.from?g.cells.includes(i):i===g.from);return selCard()===g.lock&&g.cells.includes(i)}

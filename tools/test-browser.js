@@ -6,6 +6,7 @@
 const path=require('path'),fs=require('fs'),{execSync}=require('child_process');
 let pw;try{pw=require('playwright')}catch(e){pw=require(path.join(execSync('npm root -g').toString().trim(),'playwright'))}
 const ROOT=path.join(__dirname,'..'),OUT=path.join(__dirname,'test-out');fs.mkdirSync(OUT,{recursive:true});
+const GN=require(path.join(__dirname,'../src/engine.js')).N;
 const URL='file://'+path.join(ROOT,'index.html'),NIGHTS=+process.env.NIGHTS||5;
 const exe=fs.existsSync('/opt/pw-browsers/chromium')?'/opt/pw-browsers/chromium':undefined;
 const problems=[];let shots=0;
@@ -43,7 +44,7 @@ async function run(vp,label,lang='fr'){
  await step('défi du jour',async()=>{await click('[data-a=daily]');await p.waitForTimeout(300);await shot('03c-defi');await overflow('défi du jour');await click('[data-a=daily-go]');
   for(let k=0;k<8;k++){if(!await click('.picks .pick'))break}await p.waitForTimeout(300);await overflow('défi : plateau');
   const g=await p.evaluate(()=>({one:G.oneNight,hand:S.hand.length,cap:Z.unitCap(G)}));if(!g.one||g.hand!==8)problems.push(`${label} : le défi ne démarre pas avec 8 cartes en main (${JSON.stringify(g)})`);
-  await p.evaluate(()=>{for(const t of [...S.hand]){const D=Z.U[t];if(D.react)continue;const c=[...Array(81).keys()].filter(i=>(D.equip||D.onUnit||D.instant||!G.grid[i])&&Z.canPlace(G,t,i)).sort((a,b)=>Z.manh(a,Z.C)-Z.manh(b,Z.C))[0];if(c==null)continue;Z.place(G,t,c,R);S.hand.splice(S.hand.indexOf(t),1)}syncBoard();render();OPT.speed=4});
+  await p.evaluate(()=>{for(const t of [...S.hand]){const D=Z.U[t];if(D.react)continue;const c=[...Array(Z.N*Z.N).keys()].filter(i=>(D.equip||D.onUnit||D.instant||!G.grid[i])&&Z.canPlace(G,t,i)).sort((a,b)=>Z.manh(a,Z.C)-Z.manh(b,Z.C))[0];if(c==null)continue;Z.place(G,t,c,R);S.hand.splice(S.hand.indexOf(t),1)}syncBoard();render();OPT.speed=4});
   await click('#go');const t0=Date.now();let done=false;while(Date.now()-t0<90000){await p.waitForTimeout(800);if(await p.evaluate(()=>S.pause))await click('#go');if(await p.$('[data-a=daily] , .bigstamp')&&await p.evaluate(()=>!G.oneNight||!!document.querySelector('#ov:not([hidden]) .bigstamp'))){done=true;break}}
   if(!done)problems.push(`${label} : la nuit du défi ne se termine pas`);else{await shot('03d-defi-fin');await overflow('fin du défi')}await click('[data-a=title]');
   // le succès « Défi relevé » s'affiche en haut de l'écran : on le ferme pour ne pas gêner la suite
@@ -57,17 +58,17 @@ async function run(vp,label,lang='fr'){
   if(!vis)problems.push(`${label} : le tableau des combats ne s’ouvre pas`);await click('[data-mt="t:dead"]');await shot('05c-details');await overflow('tableau des combats');
   await click('[data-mt="t:dmg"]');if(!vis)return;await click('#mtb');if(await p.evaluate(()=>!document.querySelector('#meter').hidden))problems.push(`${label} : le tableau des combats ne se ferme pas`)});
  await step('annuler une pose',async()=>{const st=()=>p.evaluate(()=>JSON.stringify([S.hand,G.energy,G.grid.map(u=>u&&u.t)]));const s0=await st();
-  const t=await p.evaluate(()=>{for(let k=0;k<S.hand.length;k++){const t=S.hand[k];if(Z.U[t].instant||Z.U[t].react)continue;const cs=[...Array(81).keys()].filter(j=>Z.canPlace(G,t,j));if(cs.length&&Z.cost(t)<=G.energy){S.sel=k;tapCell(cs[0]);return t}}return null});
+  const t=await p.evaluate(()=>{for(let k=0;k<S.hand.length;k++){const t=S.hand[k];if(Z.U[t].instant||Z.U[t].react)continue;const cs=[...Array(Z.N*Z.N).keys()].filter(j=>Z.canPlace(G,t,j));if(cs.length&&Z.cost(t)<=G.energy){S.sel=k;tapCell(cs[0]);return t}}return null});
   if(!t)return;await p.evaluate(()=>document.querySelectorAll('.hint').forEach(e=>e.remove()));
   if(!(await click('[data-a=undo]')))problems.push(`${label} : pas de bouton Annuler après une pose`);else if(await st()!==s0)problems.push(`${label} : Annuler ne remet pas la main, l’énergie et le plateau comme avant`)});
- const box=await p.$eval('#map',e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width}});const cs=box.w/9;
- const at=i=>[box.x+(i%9+.5)*cs,box.y+(Math.floor(i/9)+.5)*cs];
+ const box=await p.$eval('#map',e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width}});const cs=box.w/GN;
+ const at=i=>[box.x+(i%GN+.5)*cs,box.y+(Math.floor(i/GN)+.5)*cs];
  let reached=0;
  for(let n=1;n<=NIGHTS;n++){
   // jour : poser les cartes de la main tant qu'il y a de l'énergie (les réactions restent pour la nuit)
   await step(`jour ${n}`,async()=>{for(let k=0;k<10;k++){
     const pick=await p.evaluate(()=>{for(let i=0;i<S.hand.length;i++){const t=S.hand[i],D=Z.U[t];if(D.react)continue;if(Z.costOf(G,t)>G.energy)continue;
-      const cells=D.onUnit?G.grid.map((u,j)=>j).filter(j=>Z.canPlace(G,t,j)):D.instant?[Z.C]:[...Array(81).keys()].filter(j=>Z.canPlace(G,t,j));
+      const cells=D.onUnit?G.grid.map((u,j)=>j).filter(j=>Z.canPlace(G,t,j)):D.instant?[Z.C]:[...Array(Z.N*Z.N).keys()].filter(j=>Z.canPlace(G,t,j));
       if(cells.length)return{i,cell:cells[Math.floor(Math.random()*cells.length)]}}return null});
     if(!pick)break;await click(`.card[data-k="${pick.i}"]`);await p.mouse.click(...at(pick.cell));await p.waitForTimeout(120);
     if(await p.evaluate(()=>S.sel!==null&&S.sel<0))await p.evaluate(()=>{S.sel=null;render()})}
@@ -76,7 +77,7 @@ async function run(vp,label,lang='fr'){
    // rappel d'une unité dans la réserve, puis remise en jeu gratuite
    if(n===2){const u=await p.evaluate(()=>G.grid.findIndex((v,j)=>Z.canRecall(G,j)));if(u>=0){await p.mouse.click(...at(u));await click('#info [data-a=recall]');
     if(await p.evaluate(()=>G.bench.length)!==1)problems.push(`${label} : le rappel d’une unité ne marche pas`);else{await shot('05b-reserve');await click('#pRes');
-     const c=await p.evaluate(()=>[...Array(81).keys()].filter(j=>Z.canPlaceBench(G,0,j)).sort((a,b)=>Math.hypot(a%9-4,(a/9|0)-4)-Math.hypot(b%9-4,(b/9|0)-4))[0]);/* case la plus proche du centre : une bulle de conseil peut couvrir le haut du plateau */if(c!=null){await p.mouse.click(...at(c));if(await p.evaluate(()=>G.bench.length))problems.push(`${label} : l’unité de la réserve ne se repose pas`)}}}}});
+     const c=await p.evaluate(()=>[...Array(Z.N*Z.N).keys()].filter(j=>Z.canPlaceBench(G,0,j)).sort((a,b)=>Math.hypot(a%Z.N-Z.MID,(a/Z.N|0)-Z.MID)-Math.hypot(b%Z.N-Z.MID,(b/Z.N|0)-Z.MID))[0]);/* case la plus proche du centre : une bulle de conseil peut couvrir le haut du plateau */if(c!=null){await p.mouse.click(...at(c));if(await p.evaluate(()=>G.bench.length))problems.push(`${label} : l’unité de la réserve ne se repose pas`)}}}}});
   // nuit en accéléré, avec une réaction si possible
   await step(`nuit ${n}`,async()=>{await p.evaluate(()=>{G.maxS=G.shelter=200});await click('#go');await p.evaluate(()=>{SPEED=16});
    let t=0;while(await p.evaluate(()=>S.busy)&&t<300){await p.waitForTimeout(200);t++;

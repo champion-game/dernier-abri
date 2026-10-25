@@ -3,7 +3,7 @@ const Z=(()=>{
  // traduction : _t vient de src/i18n.js dans le navigateur ; dans Node (tests), le texte français est gardé tel quel
  const _t=typeof globalThis!=='undefined'&&typeof globalThis._t==='function'?globalThis._t:(s,...a)=>typeof s==='string'?s:s.reduce((r,q,i)=>r+(i?a[i-1]:'')+q,'');
  // carte de 9×9 cases : l'anneau extérieur est la forêt d'où vient la horde, l'abri est au centre
- const N=9,C=(N*N-1)/2,MID=(N-1)/2,MAXS=10;let HPS=0,HPS2=.12;
+ const N=11,C=(N*N-1)/2,MID=(N-1)/2,MAXS=10;let HPS=0,HPS2=.12;
  // frénésie meurtrière (v114, demande d'Amine) : +10 % dès la nuit 5, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %…).
  // Elle s'applique aux PV ET aux dégâts des zombies (les fractions de dégât s'accumulent coup après coup : 1,5 = un coup sur deux à 2).
  const HP_FROM=5,HP_STEP=.1;
