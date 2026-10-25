@@ -212,6 +212,26 @@ check('Patient Zéro : les zombies proches avancent plus vite',()=>{const run=wi
   let t=0;while(w.pos!==3*9+4&&t<20){Z.step(st);t++}return t};
  ok(run(1)<run(0),'pas plus rapide')});
 
+/* ---------- éditions spéciales (v181) ---------- */
+check('éditions : cartes spéciales cachées des listes, seulement sur les unités',()=>{ok(Z.U['butch~dor']&&Z.U['butch~sang']&&Z.U['med~arm']&&Z.U['med~fan'],'variante manquante');
+ ok(!Z.U['med~dor']&&!Z.U['med~holo']&&!Z.U['bar~arm']&&!Z.U['trap~fan'],'édition sur une carte non permise');ok(!Object.keys(Z.U).some(t=>t.includes('~')),'variante visible');
+ ok(!Z.KEYS.some(t=>t.includes('~')),'variante tirable');eq(Z.cost('butch~dor'),Z.cost('butch'));eq(Z.RAR['butch~dor'],Z.RAR['butch']);eq(Z.famOf('butch~dor'),Z.famOf('butch'));eq(Z.roleOf('monk~arm'),Z.roleOf('monk'))});
+check('éditions : Dorée +1 dégât, Blindée +50 % PV, la carte revient avec son édition',()=>{const st=fresh();Z.place(st,'gun~dor',2*9+4,rng(1));const u=st.grid[2*9+4];eq(u.t,'gun');eq(u.ed,'dor');
+ eq(Z.stat(null,'gun~dor').dmg,Z.U.gun.dmg+1);eq(Z.ck(u),'gun~dor');Z.place(st,'axe~arm',2*9+6,rng(1));const a=st.grid[2*9+6];a.trait=null;eq(Z.maxHp(st,a),Math.ceil(Z.U.axe.hp*1.5))});
+check('éditions : 2 Fantômes hors limite, pas 3',()=>{const st=fresh();for(let k=0;k<Z.unitCap(st);k++)Z.place(st,['gun','axe','med','snp','cook','monk','kid'][k],2*9+1+k,rng(1));
+ ok(!Z.canPlace(st,'dog',6*9+4),'limite non atteinte');ok(Z.canPlace(st,'dog~fan',6*9+4),'Fantôme refusé');Z.place(st,'dog~fan',6*9+4,rng(1));Z.place(st,'cop~fan',6*9+2,rng(1));
+ ok(!Z.canPlace(st,'xbow~fan',6*9+6),'3ᵉ Fantôme accepté')});
+check('éditions : fusion garde l’édition et rend la carte spéciale',()=>{const st=fresh();Z.place(st,'gun~holo',2*9+2,rng(1));Z.place(st,'gun',2*9+4,rng(1));Z.place(st,'gun',6*9+4,rng(1));
+ const u=st.grid.find(v=>v&&v.gold);ok(u&&u.ed==='holo','édition perdue');eq(Z.ck(u),'gun~holo')});
+check('éditions : Holo +1 ferraille, Ensanglantée +1 PV, victimes comptées par type',()=>{const st=fresh();Z.place(st,'butch~sang',2*9+4,rng(1));const u=st.grid[2*9+4];u.hp=1;
+ Z.edKill(st,u);eq(st.edK.butch,1);ok(u.hp>=2,'pas de soin');const h={t:'gun',ed:'holo',hp:3};const s0=st.scrap;Z.edKill(st,h);eq(st.scrap,s0+1)});
+check('éditions : convalescence comptée, nuits d’affilée (Blindée à 20)',()=>{const st=fresh();Z.place(st,'gun',2*9+4,rng(1));const u=st.grid[2*9+4];u.nts=19;Z.endNight(st);ok((st.edArm||[]).includes('gun'),'Blindée non gagnée');
+ const v=st.grid[2*9+4];Z.startNight(st,rng(1));st.pending=[];st.z=[];st.putrid=0;v.hp=-1;st.muts=['putride'];st.z=[{id:1,k:'walk',pos:3*9+4,hp:0,max:5,cd:9,style:0}];Z.step(st);eq((st.edKO||{}).gun,1);eq(v.nts,0)});
+check('éditions : deck (limite partagée, 1 spéciale par carte, 5 au plus)',()=>{const base=Z.STARTER_DECK.filter(t=>t!=='gun').concat(['snp','food','rep']);const own=null;
+ ok(/exemplaire/.test(Z.deckError(base.concat(['gun','gun','gun','gun~dor']),own)),'4 tireurs acceptés');ok(/une seule/.test(Z.deckError(base.concat(['gun~dor','gun~arm']),own)),'2 spéciales du même type');
+ ok(/au maximum/.test(Z.deckError(base.concat(['gun~dor','axe~dor','dog~dor','cop~arm','kid~dor','monk~arm']),own)),'6 spéciales acceptées');
+ eq(Z.deckError(base.concat(['gun~dor','gun']),own),'')});
+
 /* ---------- 4. nuits aléatoires ---------- */
 const PLACE=PLAY.filter(t=>!Z.U[t].react&&!Z.U[t].instant&&!Z.U[t].onUnit);
 const NIGHTS=+process.env.NIGHTS||300;let maxZ=0,slow=0,worst=0;

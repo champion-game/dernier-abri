@@ -601,6 +601,23 @@ Jour 4 (M maison, # barricade) :
 - Zombies : une silhouette commune, chaque type a sa taille, sa peau, ses vêtements et un détail reconnaissable (casque du blindé, pustules du gonflé, os du Colosse…).
 - Décision : un pack Kenney a été essayé puis retiré (style trop « cartoon »). Aucun pack du marché ne couvre 16 survivants, 9 zombies, défenses, pièges et décors dans un même style. Pour la sortie Steam, un artiste pourra tout redessiner en partant de ce style.
 
+## Les cartes spéciales (v181)
+
+Des versions rares des unités, à collectionner (comme les cartes dorées de Hearthstone). Une carte spéciale est une carte à part dans la collection, rangée juste après sa carte normale (Boucher, Boucher Dorée…). Elle reste cachée tant qu’elle n’est pas gagnée. Seules les unités (tireurs, corps à corps, soutien) en ont.
+
+| Édition | Effet | Cartes | Comment l’obtenir |
+|---|---|---|---|
+| Dorée | +1 dégât | unités qui attaquent | 500 zombies tués par ce type de carte, toutes parties confondues |
+| Blindée | +50 % de PV | toutes les unités | une unité de ce type survit 20 nuits d’affilée sur le terrain (une blessure remet le compte à zéro) |
+| Ensanglantée | récupère 1 PV par zombie tué (2 pour le Boucher, qui s’ajoute à son effet) | unités qui attaquent | 20 passages en convalescence, toutes parties confondues (la nuit de la défaite ne compte pas) |
+| Fantôme | ne compte pas dans la limite d’unités (2 au plus) | toutes les unités | tirage en fin de partie |
+| Holographique | +1 ferraille par zombie tué | unités qui attaquent | tirage en fin de partie |
+
+- **Tirage en fin de partie** : 1 % de chance par nuit survécue (30 % pour une victoire), sur une unité jouée pendant la partie, Fantôme ou Holographique au hasard. Garantie après 10 parties sans tirage gagnant.
+- **Deck** : 1 exemplaire d’une carte spéciale, une seule spéciale par carte (Boucher Dorée ou Boucher Fantôme, pas les deux), 5 spéciales au plus. Elle compte dans la limite d’exemplaires de sa carte (rare ×2 : 1 Boucher Dorée + 1 Boucher).
+- **En partie** : posée, l’unité garde son édition (pion avec halo ou anneau). Fusion et évolution gardent l’édition ; quand l’unité tombe, la carte spéciale revient dans la défausse. Pas de spéciales ni de progression en défi du jour, en démo et en mode test (les spéciales y redeviennent des cartes normales).
+- Technique : la carte s’écrit `type~éd` (`butch~dor`, `arm`, `fan`, `holo`, `sang`) ; ces cartes existent dans `Z.U` sans apparaître dans les listes. Sur le terrain, l’unité garde son type et porte `u.ed`. Sauvegarde : `META.eds` (gagnées), `META.edp` (progression), `META.edMiss`.
+
 ## L'historique des décisions
 
 - Premier concept « Blackout » (garder une ville alimentée en électricité) : abandonné, jugé pas assez intéressant.
@@ -926,6 +943,8 @@ Jour 4 (M maison, # barricade) :
 **v168** : en hauteur, `fond-portrait2.webp` : survivants sur une palissade au tiers de l’écran. Sur téléphone, le logo (plus petit) monte dans le ciel et le menu commence juste sous la palissade, pour que les survivants restent visibles.
 
 **v169** : en largeur (PC), l’image d’accueil est tirée au hasard à chaque démarrage parmi 6 (`fond.webp`, `fond-2.webp` à `fond-6.webp`, survivants différents). Easter egg : `fond-zombies.webp` (zombies sur la palissade, survivants en bas), environ 1 démarrage sur 25 (poids dans `FONDS`, `game-menu.js`).
+
+**v181** : cartes spéciales (éditions Dorée, Blindée, Ensanglantée, Fantôme, Holographique), à collectionner ; voir « Les cartes spéciales ».
 
 **v180** : grand écran PC (tapis vert à gauche), l’espace vide sous la piste des nuits devient un panneau à 3 onglets ; le joueur choisit, le choix est retenu (`abri-ftab`).
 - **Pioche** : une ligne par sorte de carte (couleur du type, nom, illustration, exemplaires restants), barre de répartition par type ; les cartes absentes de la pioche (main, défausse) sont grisées. Lignes plus fines quand la liste ne tient pas, puis défilement.

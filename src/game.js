@@ -181,23 +181,23 @@ const P2D={};const glyph=(k,x,y,sz,col,lw)=>{const p=P2D[k]||(P2D[k]=new Path2D(
 function seen(k){try{return !!(OPT.all||(META.hints&&META.hints[k]))}catch(e){return true}}
 function novice(){try{return !OPT.all&&!META.runs}catch(e){return false}}
 const ink=k=>`<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
-function cardFace(t,o={}){const U0=Z.U[t],D=o.base?U0:Z.stat(G,t),r=rar(t),st=cardStats(D),f=Z.famOf(t),ro=Z.roleOf(t),u=artUrl(t),cost=o.cost??(o.base?Z.cost(t):Z.costOf(G,t));
+function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?Z.stat(null,t):U0):Z.stat(G,t),r=rar(t),st=cardStats(D),f=Z.famOf(t),ro=Z.roleOf(t),u=artUrl(B),cost=o.cost??(o.base?Z.cost(t):Z.costOf(G,t));
  const atk=st.atk!=null?_t`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`:st.heal?_t`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`:'';
  const hp=st.hp?`<span class="cf-hp" title="PV"><b>${st.hp}</b></span>`:'';
  // texte de la carte : pour un chef, la faction est déjà indiquée par le pictogramme, on raccourcit
  const txt=U0.chief?U0.d.replace(/^Che(?:f|ffe) d[^:]*: /,'').replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/,_t('. Faction : +1 palier')):U0.d;
  // faction et rôle : pictogrammes à l'encre en bas de la carte, entre les dégâts et les PV (rôle en couleur : tank / soin / DPS)
  const marks=(f&&seen('fam1')?`<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>`:'')+(ro?`<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>`:'');
- return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}">${o.gold?_t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
-  <span class="cf-art"${u?` style="background-image:url('${u}')"`:''}>${u?'':svg(t)}</span><span class="cf-vig"></span>${u&&popUrl(t)?`<span class="cf-pop" style="background-image:url('${popUrl(t)}')"></span>`:''}
+ return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}${E?' ed ed-'+E:''}">${o.gold?_t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
+  <span class="cf-art"${u?` style="background-image:url('${u}')"`:''}>${u?'':svg(B)}</span><span class="cf-vig"></span>${u&&popUrl(B)?`<span class="cf-pop" style="background-image:url('${popUrl(B)}')"></span>`:''}${E?`<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>`:''}
   ${r!=='com'?`<span class="cf-rar" title="${Z.RARITY[r].n}"></span>`:''}<span class="cf-cost">${cost}</span>
   <span class="cf-name">${D.n}</span>
-  ${o.mini?(atk||hp?'':`<span class="cf-v">${o.v||(U0.react?_t('Nuit'):U0.v)}</span>`)+(o.tag?`<span class="cf-tag">${o.tag}</span>`:''):`<span class="cf-rule"></span><span class="cf-txt${txt.length>80?' xlong':txt.length>55?' long':''}"><span>${txt}${D.rng>1&&!/portée/i.test(U0.d)?_t`. <b>Portée ${D.rng}</b>`:''}</span></span>`}
+  ${o.mini?(atk||hp?'':`<span class="cf-v">${o.v||(U0.react?_t('Nuit'):U0.v)}</span>`)+(o.tag?`<span class="cf-tag">${o.tag}</span>`:''):`<span class="cf-rule"></span><span class="cf-txt${txt.length>80?' xlong':txt.length>55?' long':''}"><span>${txt}${D.rng>1&&!/portée/i.test(U0.d)?_t`. <b>Portée ${D.rng}</b>`:''}${E?`. <b class="cf-edt">${Z.EDS[E].d}</b>`:''}</span></span>`}
   <span class="cf-foot">${atk||'<span></span>'}<span class="cf-marks">${marks}${o.mini?'':`<em>${CATL[U0.cat]||''}</em>`}</span>${hp||'<span></span>'}</span></span>`}
-const art=t=>{const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
+const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v180 · 24 oct.';
+const VERSION='v181 · 25 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -248,7 +248,7 @@ const capF=t=>t.charAt(0).toUpperCase()+t.slice(1);
 let S,G;
 /* ---------- progression entre les parties (localStorage) ---------- */
 function loadMeta(){let m={};try{m=JSON.parse(localStorage.getItem('abri-meta'))||{}}catch(e){}
- if(m.cards)m.cards=m.cards.filter(t=>Z.U[t]);if(m.decks)for(const k in m.decks)if(Array.isArray(m.decks[k]))m.decks[k]=m.decks[k].filter(t=>Z.U[t]);
+ if(m.cards)m.cards=m.cards.filter(t=>Z.U[t]);if(m.eds)m.eds=m.eds.filter(t=>Z.U[t]&&Z.edOf(t));if(m.decks)for(const k in m.decks)if(Array.isArray(m.decks[k]))m.decks[k]=m.decks[k].filter(t=>Z.U[t]);
  if(!m.best){try{m.best=+localStorage.getItem('abri-best-nuits')||0}catch(e){}}m.best=m.best||0;m.total=m.total||m.best||0;m.runs=m.runs||0;return m}
 var TEST=false,TEST_N=1,TEST_P=true;// mode test : rien n'est enregistré (record, points, succès, sauvegarde)
 function endTest(){if(!TEST)return;TEST=false;META=loadMeta()}
@@ -272,8 +272,30 @@ const ACHQ=[];let achEl=null,achT=0;
 function ach(id){try{META.ach=META.ach||{};if(META.ach[id])return;const a=ACH.find(x=>x[0]===id);if(!a)return;META.ach[id]=Date.now();saveMeta(META);ACHQ.push(a);showAch()}catch(e){}}
 function showAch(){if(achEl&&!achEl.hidden)return;const a=ACHQ.shift();if(!a)return;
  if(!achEl){achEl=document.createElement('div');achEl.className='achtoast';achEl.setAttribute('role','status');document.body.appendChild(achEl);achEl.addEventListener('click',()=>{achEl.hidden=true;clearTimeout(achT);setTimeout(showAch,200)})}
- achEl.innerHTML=_t`<span class="ach-ic">${ii(a[1])}</span><span><small>Succès débloqué</small><b>${a[2]}</b><em>${a[3]}</em></span>`;achEl.hidden=false;try{SFX.play('relic',.5)}catch(e){}vib(80);
+ achEl.innerHTML=_t`<span class="ach-ic">${ii(a[1])}</span><span><small>${a[4]||_t('Succès débloqué')}</small><b>${a[2]}</b><em>${a[3]}</em></span>`;achEl.hidden=false;try{SFX.play('relic',.5)}catch(e){}vib(80);
  clearTimeout(achT);achT=setTimeout(()=>{achEl.hidden=true;setTimeout(showAch,300)},3800)}
+/* v181 : cartes spéciales (éditions). META.eds : spéciales gagnées (« butch~dor »…) ; META.edp : progression (victimes, convalescences) ;
+   META.edMiss : parties finies sans spéciale tirée (garantie à 10). Pas de spéciale ni de progression en défi du jour, en démo ni en mode test. */
+const ownAll=()=>META.cards.concat(META.eds||[]);
+// liste avec, juste après chaque carte, ses spéciales gagnées (les autres restent cachées)
+const withEds=ts=>ts.flatMap(t=>[t,...Z.edCards(t).filter(v=>(META.eds||[]).includes(v))]);
+// une carte peut-elle entrer dans le deck ? (limite partagée avec ses spéciales, 1 spéciale par carte, ED_MAX spéciales)
+function deckCanAdd(d,v){if(d.length>=Z.DECK_MAX||!ownAll().includes(v))return false;const b=Z.baseOf(v);if(d.filter(t=>Z.baseOf(t)===b).length>=Z.copyMax(b))return false;
+ if(Z.edOf(v)&&(d.some(t=>Z.edOf(t)&&Z.baseOf(t)===b)||d.filter(t=>Z.edOf(t)).length>=Z.ED_MAX))return false;return true}
+const edName=t=>{const b=Z.baseOf(t),e=Z.edOf(t);return e?Z.U[b].n+' · '+Z.EDS[e].n:Z.U[t].n};
+const edOn=()=>!(G&&(G.daily||G.oneNight))&&!(Z.isDemo&&Z.isDemo())&&!TEST;
+function edGain(t){const E=META.eds=META.eds||[];if(!Z.U[t]||E.includes(t))return false;E.push(t);ACHQ.push([t,'trophy',edName(t),Z.EDS[Z.edOf(t)].d,_t('Carte spéciale gagnée')]);showAch();return true}
+// à l'aube (ok = nuit survécue) : les victimes comptent toujours, les convalescences et les nuits d'affilée seulement si la nuit est tenue
+function edCommit(ok){if(!G)return;if(edOn()){const P=META.edp=META.edp||{},K=P.k=P.k||{},O=P.ko=P.ko||{};let ch=0;
+  for(const t in G.edK||{}){K[t]=(K[t]||0)+G.edK[t];ch=1;if(K[t]>=Z.ED_GOAL.dor&&Z.edOk(t,'dor'))edGain(t+'~dor')}
+  if(ok){for(const t in G.edKO||{}){O[t]=(O[t]||0)+G.edKO[t];ch=1;if(O[t]>=Z.ED_GOAL.sang&&Z.edOk(t,'sang'))edGain(t+'~sang')}(G.edArm||[]).forEach(t=>{if(edGain(t+'~arm'))ch=1})}
+  if(ch)saveMeta(META)}G.edK={};G.edKO={};G.edArm=[]}
+// fin de partie : 1 % de chance par nuit survécue d'obtenir une Fantôme ou une Holographique, sur une unité jouée ; garantie après 10 parties sans
+function edDrop(nights){if(!edOn()||!G)return null;const E=META.eds=META.eds||[];
+ const pool=(G.pl||[]).flatMap(b=>['fan','holo'].filter(e=>Z.edOk(b,e)&&!E.includes(b+'~'+e)).map(e=>b+'~'+e));
+ if(!pool.length)return null;const miss=META.edMiss||0;
+ if(miss<10&&Math.random()>=Math.min(1,Math.max(0,nights)*.01)){META.edMiss=miss+1;saveMeta(META);return null}
+ const t=pool[Math.floor(Math.random()*pool.length)];META.edMiss=0;edGain(t);saveMeta(META);return t}
 // vérifications à l'aube, à la fin d'une partie, et après une pose
 function achCheck(){try{if(!G)return;const n=G.won?G.night:G.night-(S.busy?0:0);
  const nights=G.shelter>0?G.night:G.night-1;if(nights>=5)ach('n5');if(nights>=10)ach('n10');if(nights>=20)ach('n20');if(G.won&&nights>=40)ach('n40');
@@ -360,7 +382,7 @@ function newGame(ch,pl,daily,deck,plan){onTitle=false;endTest();try{UNDO=[]}catc
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=plan?Z.dailyState(plan,deck,R):Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;if(tut)G.tuto=1;
  G.biome=BIOMES[daily?RS%BIOMES.length:Math.floor(Math.random()*BIOMES.length)];setBiome(G.biome);// terrain purement graphique
- S={draw:shuffle([...(tut?TUTO_DECK:deck||META.decks[META.slot]||Z.STARTER_DECK)]),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
+ S={draw:shuffle([...(tut?TUTO_DECK:deck||META.decks[META.slot]||Z.STARTER_DECK)].map(t=>edOn()&&(META.eds||[]).includes(t)?t:Z.baseOf(t))),board:G.grid.filter(Boolean),discard:[],bsel:null,hand:[],used:[],sel:null,moveFrom:null,inspect:null,busy:false,next:null,phase:null,picks:null,dawn:null};
  V.clear();FX.length=0;PT.length=0;facing.fill(null);clearDecals();POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;
  if(plan){S.hand=S.draw.splice(0)}else fillHand();
 }
@@ -375,7 +397,7 @@ const selCard=()=>S.sel===null?null:S.sel>=0?S.hand[S.sel]:(S.used||[])[-1-S.sel
 const selReuse=()=>S.sel!==null&&S.sel<0;
 const selCost=()=>{const t=selCard();return t?Z.buildCost(G,t,selReuse()):0};
 // les cartes d'une unité posée : une évolution porte ses 2 cartes d'origine (u.src), une unité offerte (gen) aucune
-const cardsOf=u=>u.src||(u.gen?[]:[u.t]);
+const cardsOf=u=>u.src||(u.gen?[]:[Z.ck(u)]);
 const deckList=()=>[...pileList(),...(S.board||[]).flatMap(cardsOf)];
 // une unité posée qui a disparu de la carte (détruite, piège déclenché, fusionnée…) : sa carte revient dans la défausse.
 // Une unité absorbée par une évolution ne revient pas : ses cartes reviendront quand l'évolution tombera.

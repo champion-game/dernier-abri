@@ -198,13 +198,13 @@ function useBuild(t){if(S.sel>=0){S.hand.splice(S.sel,1);S.used.push(t);S.sel=-S
 // carte à tracer dont toutes les cases sont posées : elle quitte la main (défausse)
 function spentTrace(t){if(!Z.isTrace(t)||Z.charges(G,t,true)>0)return;const n=S.used.filter(x=>x===t).length;S.used=S.used.filter(x=>x!==t);for(let k=0;k<n;k++)S.discard.push(t);S.sel=null}
 // statistiques : nombre de fois où chaque carte est jouée (toutes parties confondues)
-function countPlay(t){if(G.daily)return;const c=META.played||(META.played={});c[t]=(c[t]||0)+1;saveMeta(META)}
+function countPlay(t){const b=Z.baseOf(t);if(Z.isUnit(b)){const p=G.pl=G.pl||[];if(!p.includes(b))p.push(b)}if(G.daily)return;const c=META.played||(META.played={});c[b]=(c[b]||0)+1;saveMeta(META)}
 function placeLineUI(cells){const t=selCard(),re=selReuse(),gd=guideStep();if(gd&&!cells.every(i=>guideOk(gd,i)))return;if(Z.lineCost(G,t,cells.length,re)>G.energy)return;if(!re)countPlay(t);tuto(1);useBuild(t);Z.placeLine(G,t,cells,R,re);spentTrace(t);syncBoard();S.moveFrom=null;S.inspect=null;
  cells.forEach(j=>{facing[j]=null;const p=tc(j);addFX({type:'ring',x:p.x,y:p.y,r:30,c:'#f2b33d',dur:350})});const q=tc(cells[cells.length-1]);floatTxt(q.x,q.y-14,_t`${cells.length} cases`+(Z.charges(G,t,true)>0?_t` · encore ${Z.charges(G,t,true)}`:''),'#f2b33d');SFX.play('place');save();render()}
 // fiche d'une unité : prénom, métier, trait, victimes, PV
 function unitLine(u){const tr=Z.TRAITS[u.trait],D=Z.U[u.t],lv=(u.lvA||0)+(u.lvD||0),k=u.kills||0,i=G.grid.indexOf(u),ro=Z.roleOf(u.t);
  const rl=ro?` · ${ink(ro)} <b>${Z.ROLES[ro].n}</b>`+(ro==='tank'?_t` (provoque à ${Z.TAUNT} cases, bloque 1 coup sur 3)`:'')+(Z.squad(G,i)?_t(' · <b>escouade</b> (+1)'):''):'';
- return (u.name?`<b>${u.name}</b>, ${cardName(u.t)}`:`<b>${cardName(u.t)}</b>`)+rl+(u.gold?_t` <b class="gold">${stars(u)} doré</b>`:'')+(D.evo?_t(' <b class="evo">✦ évolution</b>'):'')
+ return (u.name?`<b>${u.name}</b>, ${cardName(u.t)}`:`<b>${cardName(u.t)}</b>`)+rl+(u.gold?_t` <b class="gold">${stars(u)} doré</b>`:'')+(D.evo?_t(' <b class="evo">✦ évolution</b>'):'')+(u.ed&&Z.EDS[u.ed]?` · <b class="edl ed-${u.ed}">${Z.EDS[u.ed].n}</b> (${Z.EDS[u.ed].d})`:'')
   +(tr?` · <b>${tr.n}</b> (${tr.d})`:'')+(D.dmg?` · ${plural(k,_t('zombie tué'),_t('zombies tués'))}`+(seen('lvl')?_t`, niveau suivant à ${Z.lvKills(Z.lvOf(k)+1)}`:''):'')
   +(lv?_t` · niveau ${lv} (+${u.lvA||0} dégât, +${(u.lvD||0)*3} PV)`:'')+(u.leg?_t` · porte le souvenir de <b>${u.leg}</b> (+1 dégât, +2 PV)`:'')
   +(g=>g.length>1?_t` · <b>rempart de ${g.length} murs</b> : ${g.reduce((a,k)=>a+G.grid[k].hp,0)}/${g.reduce((a,k)=>a+Z.maxHp(G,G.grid[k]),0)} PV en commun`:'')(Z.wallGroup(G,G.grid.indexOf(u)))+(u.scar?_t(' · <b>cicatrice</b> : la prochaine chute sera fatale'):'')+(Z.eqOf(u).length?_t` · équipé : ${Z.eqOf(u).map(t=>ii(EQIC[t]||'pack')+' '+Z.U[t].n).join(', ')}`:'')+_t` · ${u.hp}/${Z.maxHp(G,u)} PV.`}
@@ -324,7 +324,7 @@ async function night(){
  }while(!r.done);
  await nwait(700);if(run!==RUN)return;
  try{SFX.setWeather(null)}catch(e){}
- const dawnInfo=Z.endNight(G);syncBoard();nightTarget=0;dawnT=performance.now();KC.on=0;S.busy=false;S.dawnWait=1;render();await nwait(DAWN);S.dawnWait=0;if(run!==RUN)return;
+ const dawnInfo=Z.endNight(G);try{edCommit(G.shelter>0)}catch(e){}syncBoard();nightTarget=0;dawnT=performance.now();KC.on=0;S.busy=false;S.dawnWait=1;render();await nwait(DAWN);S.dawnWait=0;if(run!==RUN)return;
  if(G.oneNight)return dailyOver();
  if(G.shelter<=0)return end();
  const mut=Z.mutNight(G.night)?Z.mutate(G,R):null;
