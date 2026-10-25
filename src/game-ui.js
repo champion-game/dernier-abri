@@ -78,7 +78,7 @@ function playEvents(ev,types,now){
 function ficheHtml(){const w=Z.waveList(G),fz=Z.frenzy(G),dm=Z.dmgBonus(G.night),boss=Z.bigNight(G,w);
  const fin=G.night===Z.WIN_NIGHT&&!G.won;const stamp=S.busy?'':fin?_t('<i class="stamp boss">Boss final</i>'):boss?`<i class="stamp boss">${ZN[Z.leadBoss(G.night)||'boss'][0]}</i>`:Z.pressure(G.night)?_t('<i class="stamp red">Nuit rouge</i>'):Z.respite(G.night,G)?_t('<i class="stamp calm">Répit</i>'):'';
  const toks=S.busy?'':Z.ZK.filter(k=>w[k]).map(k=>`<span class="ztk" title="${plural(w[k],...ZN[k])}"><span class="ztk-i" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></span><b>${w[k]}</b></span>`).join('');
- const fzt=fz&&!S.busy?_t`<span class="ztk fz" title="Frénésie meurtrière : +${fz} % de PV"><span class="ztk-i">${ii('drop','zw')}</span><b>+${fz}%</b></span>`:'';
+ const fzt=fz&&!S.busy?_t`<span class="ztk fz" title="Frénésie meurtrière : +${fz} % de PV et de dégâts"><span class="ztk-i">${ii('drop','zw')}</span><b>+${fz}%</b></span>`:'';
  return `<div class="fiche-top"><b title="${G.event.n}">${G.night===Z.WIN_NIGHT&&!G.won?_t('Dernière nuit : les secours arrivent à l’aube.'):G.event.p||G.event.n}</b>${G.side>=0?_t`<span class="poem">Fusée : ils viendront ${[_t('du nord'),_t('du sud'),_t('de l’ouest'),_t('de l’est')][G.side]}</span>`:''}</div>${toks||fzt?`<div class="ztoks">${toks}${fzt}</div>`:''}${stamp}`}
 function trackHtml(){const a=Math.floor((G.night-1)/10)*10+1,mut=G.muts&&G.muts[0],soon=Z.mutNight(G.night),cells=[];
  for(let n=a;n<a+10;n++){const cls=(n%10===0?' boss':n%5===0?' red':Z.respite(n,G)?' calm':'')+(n<G.night?' past':'')+(n===G.night?' now':'');
@@ -225,7 +225,7 @@ const HINTS={
  pause:_t('⏸️ <b>Pause entre les vagues.</b> Le boss arrivera par la route en rouge. Déplace tes cartes sur son chemin, puis relance.'),
  mere:ii('skull')+_t(' <b>La Mère attaque ce soir.</b> Elle pond un rampant tous les 4 tours, et en libère 2 en mourant. Les rampants passent sous les murs : garde des tireurs près de l’abri.'),
  zero:ii('skull')+_t(' <b>Le Patient Zéro, boss final.</b> Plus fragile que le Colosse mais plus rapide : les zombies autour de lui accélèrent. Abats-le vite, les munitions anti-Colosse marchent aussi sur lui.'),
- respite:ii('moon')+_t(' <b>Nuit de répit.</b> 30 % de zombies en moins après le boss… mais la frénésie meurtrière, elle, ne s’arrête pas : chaque nuit, +10 % de PV.'),
+ respite:ii('moon')+_t(' <b>Nuit de répit.</b> 30 % de zombies en moins après le boss… mais la frénésie meurtrière, elle, ne s’arrête pas : chaque nuit, +10 % de PV et de dégâts.'),
  mut:svg('mut')+_t(' <b>Mutation instable.</b> La horde a un affixe pendant 5 nuits (voir l’icône en haut). Puis une autre mutation instable le remplace.')
 };
 const HQ=[];let hintEl=null,hintT=0;
@@ -351,7 +351,7 @@ function ftPioche(){const cat=t=>(Z.U[t]||{}).cat||'item',left={},tot={};S.draw.
  const bar=FT_ORD.filter(c=>cs[c]).map(c=>`<i style="flex:${cs[c]};background:${FT_COL[c]}" title="${CATN[c]} : ${cs[c]}"></i>`).join('');
  return `<h4>${_t('Ta pioche')} <small>${plural(S.draw.length,_t('carte'),_t('cartes'))}</small></h4><div class="ft-bar">${bar}</div><div class="ft-l">${ks.map(t=>{const n=left[t]||0;return `<div class="ft-c${n?'':' out'}" title="${cardName(t)}"><i class="ft-d" style="background:${FT_COL[cat(t)]}"></i><span class="ft-a" style="background-image:url('${artUrl(t)}')"></span><span class="ft-n">${cardName(t)}</span><b>${n}</b></div>`}).join('')}</div>`}
 function ftHorde(){const w=Z.waveList(G),ks=Z.ZK.filter(k=>w[k]);let n=0,hp=0;
- const rows=ks.map(k=>{const h=Z.zMaxHp(G,k);n+=w[k];hp+=h*w[k];return `<div class="ft-z" title="${Z.ZT[k].info}"><i class="ft-zi" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></i><div class="ft-zt"><b>${Z.ZT[k].n}</b><p>${Z.ZT[k].info}</p><div class="ft-zs"><span>${h} ${_t('PV')}</span><span>${plural(Z.ZT[k].dmg+Z.dmgBonus(G.night),_t('dégât'),_t('dégâts'))}</span></div></div><span class="ft-zn">×${w[k]}</span></div>`}).join('');
+ const rows=ks.map(k=>{const h=Z.zMaxHp(G,k);n+=w[k];hp+=h*w[k];return `<div class="ft-z" title="${Z.ZT[k].info}"><i class="ft-zi" style="background-image:url('assets/sprites_cartoon/z_${k}.webp')"></i><div class="ft-zt"><b>${Z.ZT[k].n}</b><p>${Z.ZT[k].info}</p><div class="ft-zs"><span>${h} ${_t('PV')}</span><span>${(d=>(LANG==='fr'?String(d).replace('.',','):String(d))+' '+(d>=2||(LANG!=='fr'&&d!==1)?_t('dégâts'):_t('dégât')))(Z.zDmgAvg(G,k))}</span></div></div><span class="ft-zn">×${w[k]}</span></div>`}).join('');
  const nx=Z.newcomers(G);
  return `<h4>${_t('Horde de cette nuit')} <small>${_t`Nuit ${G.night}`}</small></h4><div class="ft-l">${rows}</div><div class="ft-tot"><span>${plural(n,_t('zombie'),_t('zombies'))}</span><span>${_t`Total : ${hp} PV`}</span></div>${nx.length?`<div class="ft-nx">${_t`Nuit ${G.night+1} :`} ${nx.map(k=>`<i style="background-image:url('assets/sprites_cartoon/z_${k}.webp')" title="${Z.ZT[k].n}"></i>`).join('')} ${_t('nouveaux')}</div>`:''}`}
 function ftJournal(){const R=Object.values(G.mtR||{}),dmg=Math.round(R.reduce((a,r)=>a+(r.dmg||0),0)),dead=(G.mtD||[]).filter(d=>!d.ko).length,held=Math.max(0,G.night-1);

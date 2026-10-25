@@ -5,7 +5,7 @@ const Z=(()=>{
  // carte de 9×9 cases : l'anneau extérieur est la forêt d'où vient la horde, l'abri est au centre
  const N=11,C=(N*N-1)/2,MID=(N-1)/2,MAXS=10;let HPS=0,HPS2=.12;
  // frénésie meurtrière (v114, demande d'Amine) : +10 % dès la nuit 5, puis +10 % de plus chaque nuit (nuit 10 : +60 %, nuit 15 : +110 %…).
- // Elle s'applique aux PV ET aux dégâts des zombies (les fractions de dégât s'accumulent coup après coup : 1,5 = un coup sur deux à 2).
+ // Elle s'applique aux PV ET aux dégâts des zombies (v188 ; les fractions de dégât s'accumulent coup après coup : 1,5 = un coup sur deux à 2).
  const HP_FROM=5,HP_STEP=.1;
  // niveaux de Menace (v116) : st.menace de 0 à 10 ; men(st,k) vaut vrai si la Menace k est active (elles se cumulent)
  const men=(st,k)=>((st&&st.menace)||0)>=k;
@@ -507,10 +507,13 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  const zspd=(st,k)=>{const s=ZT[k].spd;return s>1&&!ZT[k].boss?Math.max(1,s-mc(st,'frenesie')):s};
  const CUREE_MAX=2,RUSH_MAX=40;
  const zdmg=(st,k)=>ZT[k].dmg+((k==='walk'||k==='run')?mc(st,'enrage'):0)+dmgBonus(st.night||1);
- // dégâts réels d'un coup (v131, décision d'Amine) : la frénésie ne touche plus les dégâts, seulement les PV
+ // dégâts réels d'un coup (v188, décision d'Amine) : la frénésie multiplie aussi les dégâts, comme les PV (+10 % par niveau).
+ // Les fractions s'accumulent coup après coup pour chaque zombie (1 dégât à +50 % : un coup sur deux à 2).
+ const fzHit=(st,z,d)=>{if(d<=0)return d;const m=frenzyMult(st);if(m<=1)return d;const x=d*m+(z.fa||0),w=Math.floor(x+1e-9);z.fa=x-w;return w};
+ const zDmgAvg=(st,k)=>ZT[k].boss?bossHit(st):Math.round(zdmg(st,k)*frenzyMult(st)*10)/10;// le Colosse garde ses dégâts fixes (+2 toutes les 10 nuits) : sinon il raserait un mur d'un coup
  // le Colosse frappe une défense ou une unité : 10 dégâts à la nuit 10, +2 toutes les 10 nuits (il ne tue plus d'un coup, v85)
  const bossHit=st=>10+2*Math.max(0,Math.floor((st.night||10)/10)-1);
- function zhit(st,z){return zdmg(st,z.k)}
+ function zhit(st,z){return fzHit(st,z,zdmg(st,z.k))}
  const CHARS={
   surv:{n:_t('Le survivant'),d:_t('Aucun bonus. Idéal pour apprendre.'),deck:['bar','bar','car','gun','gun','axe','trap','food','grenade'],relic:null},
   cop:{n:_t('La policière'),d:_t('Commence avec la Lunette de visée : tes tireurs ont +1 portée.'),deck:['bar','fen','gun','gun','snp','cop','lamp','food','grenade'],relic:'lunette'},
@@ -1112,6 +1115,6 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
  return{edKill,EDS,ED_IDS,ED_MAX,FAN_MAX,ED_GOAL,baseOf,edOf,ck,edOk,edCards,fanN,zMaxHp,newcomers,TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
-  RUSH_MAX,DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
+  RUSH_MAX,DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,fzHit,zDmgAvg,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;

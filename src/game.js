@@ -197,7 +197,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v187 · 25 oct.';
+const VERSION='v188 · 25 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -444,9 +444,9 @@ $('#pRes').addEventListener('click',()=>{if(S.busy)return;SFX.play('ui');const b
  show(_t`<h2 class="pw">Réserve</h2><p>Tes unités rappelées. Choisis-en une, puis touche une case en vert pour la reposer gratuitement.</p><div class="picks">${b.map((u,k)=>`<button type="button" class="pick" data-a="bpick" data-v="${k}" ${u.koUntil?'disabled':''}>${cardFace(u.t,{mini:1,cost:0,gold:u.gold,tag:u.koUntil?_t`Blessé · jour ${u.koUntil+1}`:(u.name||'')})}</button>`).join('')}</div><button type="button" class="skip" data-a="closeov">Fermer</button>`)});
 
 /* ---------- sauvegarde (localStorage, marche aussi dans Electron/Tauri) ---------- */
-const SAVE_KEY='abri-save',SAVE_V=3; // v3 : carte 9×9 (les anciennes sauvegardes en 7×7 sont ignorées)
+const SAVE_KEY='abri-save',SAVE_V=4; // v4 : carte 11×11 ; une sauvegarde v3 (9×9) est recentrée sur la nouvelle carte
 function save(){if(TEST)return;try{G.rs=RS;const g={...G,event:G.event.id,z:[],pending:[],tick:0};localStorage.setItem(SAVE_KEY,JSON.stringify({v:SAVE_V,g,s:{draw:S.draw,discard:S.discard,hand:S.hand,used:S.used,next:S.next,phase:S.phase,picks:S.picks,store:S.store}}))}catch(e){}}
-function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
+function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===3&&d.g&&Array.isArray(d.g.grid)&&d.g.grid.length===81){const g=Array(Z.N*Z.N).fill(null);d.g.grid.forEach((u,i)=>{if(u)g[T9(i)]=u});d.g.grid=g;d.v=SAVE_V}if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
   if(Array.isArray(d.g.grid))d.g.grid=d.g.grid.map(u=>u&&Z.U[u.t]?u:null);if(Array.isArray(d.g.bench))d.g.bench=d.g.bench.filter(u=>u&&Z.U[u.t]);return d}}catch(e){}return null}
 function clearSave(){if(TEST)return;try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
 function resume(d){onTitle=false;try{UNDO=[]}catch(e){}
