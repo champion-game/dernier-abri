@@ -32,10 +32,10 @@ Score : nombre de nuits survécues, avec un record sauvegardé (et le nombre de 
 
 ## La carte
 
-- Grille de 9 × 9 cases (7 × 7 avant la v32).
-- L'anneau extérieur (32 cases) est la forêt : les zombies y apparaissent, le joueur ne peut rien y poser.
+- Grille de 11 × 11 cases depuis la v188, soit 9 × 9 cases jouables (9 × 9 de la v32 à la v187, 7 × 7 avant). Les portées n’ont pas été revues pour ce passage : à confirmer en jeu. Une sauvegarde en 9 × 9 est recentrée sur la nouvelle carte.
+- L'anneau extérieur (40 cases) est la forêt : les zombies y apparaissent, le joueur ne peut rien y poser.
 - La case centrale est la maison : 10 PV maximum.
-- Les 48 cases intérieures restantes sont les emplacements du joueur.
+- Les 80 cases intérieures restantes sont les emplacements du joueur.
 - **Murs tracés en ligne** : Barricade, Épave, Clôture, Sacs de sable, Mur de pneus, Barrage de police et Mur modulaire se tracent en glissant sur 1 à 4 cases en ligne droite. La 1ʳᵉ case coûte le prix de la carte, chaque case en plus 1 énergie. Une seule carte pour tout le mur. Les murs ne fusionnent plus (un mur tracé fusionnerait sur lui-même), et l'évolution Fortin demande désormais Épave + Bunker.
 - **Cartes de construction** (tous les murs et tous les pièges) : après la 1ʳᵉ pose, la carte reste en main toute la journée (marquée « Encore ») et se repose par clic ou par tracé. Réutiliser un mur coûte 1 énergie par case, un piège son prix normal. Le soir, la carte part à la défausse ; les constructions restent sur la carte et ne rendent plus de carte en tombant. La défausse n'est remélangée que quand la pioche est vide.
 - **Glisser-déposer** : toute carte de la main peut être glissée jusqu'à sa case (en plus du choix puis clic).
