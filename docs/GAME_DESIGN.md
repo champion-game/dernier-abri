@@ -944,6 +944,8 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 
 **v169** : en largeur (PC), l’image d’accueil est tirée au hasard à chaque démarrage parmi 6 (`fond.webp`, `fond-2.webp` à `fond-6.webp`, survivants différents). Easter egg : `fond-zombies.webp` (zombies sur la palissade, survivants en bas), environ 1 démarrage sur 25 (poids dans `FONDS`, `game-menu.js`).
 
+**v184** : récompense : une carte choisie reçoit un tampon « Choisie » à l’encre verte (au lieu de la pastille ✓) ; sous la carte spéciale, sa vraie rareté (l’édition est déjà écrite en haut de la carte).
+
 **v183** : écran de récompense : la carte spéciale tirée fait partie des 3 cartes ; toucher une carte retournée la valide (tampon vert), la toucher encore annule, plus de fenêtre de confirmation ; les cartes validées sont ajoutées en touchant Continuer.
 
 **v182** : la Fantôme ou l’Holographique tirée en fin de partie s’affiche sur l’écran de récompense, avec les 3 cartes offertes.

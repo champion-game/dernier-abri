@@ -1,6 +1,7 @@
 // Dictionnaire anglais (v146) : clé = texte français exact, valeur = traduction. {0}, {1}… = trous remplis par le jeu.
 // Une clé absente garde le français. Le test (tools/test-engine.js) vérifie que chaque texte du jeu a sa traduction.
 I18N.en={
+"Choisie":"Chosen",
 "Une carte pour toi.":"A card for you.",
 "Les {0} cartes sont pour toi.":"All {0} cards are yours.",
 "Choisis {0} cartes parmi {1}.":"Choose {0} cards out of {1}.",

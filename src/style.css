@@ -1279,3 +1279,11 @@ html.eco .cf.ed .cf-ed,html.eco .cf.ed .cf-ed::before,html.eco .cf.ed .cf-ed::af
 html.eco .cf.ed{filter:none}
 .edl{padding:0 .4em;border-radius:.6em}
 .edl.ed-dor{background:#f5c542;color:#3b2400}.edl.ed-arm{background:#b8c1c9;color:#151a1e}.edl.ed-fan{background:#a8ecff;color:#120a33}.edl.ed-holo{background:linear-gradient(90deg,#ff7a95,#ffe27a,#7dffb0,#7ad9ff);color:#1a1030}.edl.ed-sang{background:#b3120a;color:#ffe2dc}
+
+/* v184 : carte choisie à la récompense : un tampon à l'encre sur l'illustration (remplace la pastille verte) */
+.gift .g-face .g-ok{top:24%;left:50%;right:auto;width:auto;height:auto;border-radius:6px;background:rgba(236,244,222,.9);color:#1f7a33;border:3px solid currentColor;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 0 0 2px rgba(236,244,222,.9),inset 0 0 0 3.5px currentColor;
+ font:400 clamp(13px,4.2vw,22px)/1 var(--f-disp);text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;white-space:nowrap;z-index:7;
+ transform:translateX(-50%) rotate(-12deg) scale(0);opacity:0;transition:none;text-shadow:0 0 1px currentColor}
+.gift.got .g-face .g-ok{animation:gstamp .32s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes gstamp{0%{transform:translateX(-50%) rotate(-12deg) scale(2.4);opacity:0}100%{transform:translateX(-50%) rotate(-12deg) scale(1);opacity:1}}
+html.eco .gift.got .g-face .g-ok{animation:none;transform:translateX(-50%) rotate(-12deg) scale(1);opacity:1}
