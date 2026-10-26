@@ -564,7 +564,7 @@ Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit 
 
 ## Le tutoriel
 
-**Tutoriel guidé (v163, revu en v164 avec Amine)** : la toute première partie (et « Rejouer la première nuit guidée » dans les règles) suit 4 journées guidées, puis la nuit rouge sans aide. Une bulle dit quoi faire, la carte à toucher et les cases visées brillent ; pendant ces 4 jours, seule l’action demandée est possible et seules les cases qui brillent l’acceptent (le plan reste intact). Les cartes de construction s’utilisent en entier (4 cases). Un lien « Passer le tutoriel » dans la bulle rend la partie normale.
+**Tutoriel guidé (v163, revu en v164 avec Amine)** : la toute première partie (et « Rejouer la première nuit guidée » dans les règles) suit 4 journées guidées, puis la nuit rouge sans aide. Une bulle dit quoi faire, la carte à toucher et les cases visées brillent ; pendant ces 4 jours, seule l’action demandée est possible et seules les cases qui brillent l’acceptent (le plan reste intact). Les cartes de construction s’utilisent en entier (4 cases). Un lien « Passer le tutoriel » dans la bulle rend la partie normale. Depuis la v190, une main dessinée montre chaque geste : elle glisse de la carte (ou de l’unité à déplacer) vers la case visée le long d’un pointillé doré, puis la touche ; à l’étape de la nuit, elle tapote « Affronter la nuit ».
 
 Idée : la maison devient un fortin à une seule porte, au nord. La horde arrive par les 4 routes et fait le tour jusqu’à la porte.
 
