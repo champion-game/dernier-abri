@@ -552,6 +552,7 @@ function drawUnit(i,u,now){
  if(u.gold)safeTxt(p0.x-19,p0.y-17,u.gold>1?u.gold+'★':'★','#f2c23d');else if(D0.evo)safeTxt(p0.x-19,p0.y-17,'✦','#c58cff');
  const lv=(u.lvA||0)+(u.lvD||0);if(lv){ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(p0.x+11,p0.y+14,18,12);ctx.fillStyle='#9fd86b';ctx.font='bold 9px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(_t('N')+lv,p0.x+20,p0.y+23)}
  const eq=Z.eqOf(u);if(eq.length){ctx.font='10px system-ui,sans-serif';ctx.textAlign='center';eq.slice(0,4).forEach((t,k)=>{const ex=p0.x-25,ey=p0.y-8+k*13;circ(ex,ey,6.8,'rgba(10,10,10,.8)');glyph(EQIC[t]||'pack',ex,ey,9,'#fff',2.6)})}
+ try{dmgBadge(i,p0,D0,now)}catch(e){}
  const mx=Z.maxHp(G,u);if(D0.block)hpBar(p0.x,p0.y-31,u.hp/mx,u.hp/mx>.4?HPC().ok:HPC().low);
  if(u.name&&nightAmt<.5)LABELS.push([p0.x,p0.y+33,u.name.replace(/^(Le |La |L’)/,'')+(u.gold?' '+stars(u):'')]);
 }
@@ -826,12 +827,12 @@ function drawFX(now){
 const floats=[];
 function floatTxt(x,y,txt,c,sz){floats.push({x,y,txt,c,sz:sz||13,t0:performance.now()})}
 function drawFloats(now){ctx.textAlign='center';
- for(let k=floats.length-1;k>=0;k--){const f=floats[k],p=(now-f.t0)/(f.sz>13?1400:700);if(p>=1){floats.splice(k,1);continue}
-  ctx.font=`bold ${f.sz}px "Atkinson Hyperlegible",system-ui,sans-serif`;
+ for(let k=floats.length-1;k>=0;k--){const f=floats[k],p=(now-f.t0)/(f.dur||(f.sz>13?1400:700));if(p>=1){floats.splice(k,1);continue}if(p<0)continue;
+  ctx.font=`bold ${f.sz}px "Atkinson Hyperlegible",system-ui,sans-serif`;if(!f.cx){const w=ctx.measureText(f.txt).width/2+(f.bg?8:4);f.x=Math.max(w,Math.min(L-w,f.x));f.cx=1}
   const tx=f.txt,yy=f.tw?f.y-18-Math.max(0,p-.5)*24:f.y-18-p*18;let cl=0;
   // machine à écrire : le texte entier est dessiné, découvert de gauche à droite (jamais de mot coupé dans le texte)
   if(f.tw){const q=Math.min(1,(now-f.t0)/f.tw);if(q<1){const w=ctx.measureText(tx).width;ctx.save();ctx.beginPath();ctx.rect(f.x-w/2-2,yy-f.sz-4,(w+4)*q,f.sz+10);ctx.clip();cl=1}}
-  ctx.globalAlpha=f.tw?Math.min(1,(1-p)*2.5):1-p;ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(tx,f.x+1,yy+1);ctx.fillStyle=f.c;ctx.fillText(tx,f.x,yy);ctx.globalAlpha=1;if(cl)ctx.restore()}}
+  ctx.globalAlpha=f.tw?Math.min(1,(1-p)*2.5):1-p;if(f.bg){const w=ctx.measureText(tx).width+12;ctx.fillStyle='rgba(16,11,6,.82)';ctx.fillRect(f.x-w/2,yy-f.sz+1,w,f.sz+6);ctx.strokeStyle=f.c;ctx.lineWidth=1;ctx.strokeRect(f.x-w/2,yy-f.sz+1,w,f.sz+6)}ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillText(tx,f.x+1,yy+1);ctx.fillStyle=f.c;ctx.fillText(tx,f.x,yy);ctx.globalAlpha=1;if(cl)ctx.restore()}}
 
 // v158 : jeux de lumière (décor seulement, hors des règles) : le jour, soleil chaud, rayons qui filtrent des arbres et ombres de nuages ;
 // au crépuscule et à l'aube, lumière dorée rasante ; la nuit, clair de lune bleuté et halos colorés autour des lumières
@@ -996,6 +997,7 @@ function frameInner(now){
  if(nightAmt>.05){ctx.save();ctx.shadowColor='#ff2a2a';ctx.shadowBlur=6;for(const[x,y,nx,ny,sz,al]of EYES){ctx.globalAlpha=al*nightAmt;circ(x+nx*2*sz,y+ny*2*sz,1.3*sz,'#ff4a3a');circ(x-nx*2*sz,y-ny*2*sz,1.3*sz,'#ff4a3a')}ctx.restore()}
  drawBars();
  ctx.save();ctx.font='bold 10px "Atkinson Hyperlegible",system-ui,sans-serif';ctx.textAlign='center';for(const[x,y,n]of LABELS){const w=ctx.measureText(n).width+8;ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(x-w/2+1,y-9,w,13);ctx.fillStyle='#efe3c6';ctx.fillRect(x-w/2,y-10,w,13);ctx.strokeStyle='rgba(90,70,40,.8)';ctx.lineWidth=.8;ctx.strokeRect(x-w/2+.5,y-9.5,w-1,12);ctx.fillStyle='#2b1a0c';ctx.fillText(n,x,y)}ctx.restore();
+ safe(()=>dmgLinks(now));safe(()=>placeHints(now));
  drawFloats(now);
  if(KC.on&&KC.n){ctx.save();const q=clamp((now-KC.t)/300,0,1),k=1+.5*(1-q);ctx.translate(30,22);ctx.scale(k,k);ctx.font='bold 16px "Special Elite",system-ui,sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillText(KC.n,9,6);ctx.fillStyle=q<1?'#ffd25a':'#ebe7da';ctx.fillText(KC.n,8,5);glyph('skull',-12,0,14,q<1?'#ffd25a':'#ebe7da',2.2);ctx.restore()}
  if(now-hurtT<400){ctx.save();ctx.setTransform(1,0,0,1,0,0);const g=ctx.createRadialGradient(cv.width/2,cv.height/2,cv.width*.3,cv.width/2,cv.height/2,cv.width*.75);g.addColorStop(0,'rgba(229,72,77,0)');g.addColorStop(1,`rgba(229,72,77,${.45*(1-(now-hurtT)/400)})`);ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);ctx.restore()}
@@ -1015,3 +1017,32 @@ function edAura(x,y,e,now,i){const eco=OPT&&OPT.eco,t=eco?0:now,pl=.5+.5*Math.si
  else if(e==='holo'){const n=12,o=t/1400;for(let k=0;k<n;k++){ctx.strokeStyle='hsl('+Math.round(k*360/n)+',95%,62%)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,29,o+k*2*Math.PI/n,o+(k+1)*2*Math.PI/n+.02);ctx.stroke()}glow('rgba(190,140,255,A)',36,.3+.15*pl)}
  else if(e==='sang'){glow('rgba(220,20,10,A)',42,.6+.2*pl);ring('#5a0805',2,35);ring('#d0281a',3,32);for(let k=0;k<4;k++){const a=Math.PI*(.15+k*.23),dx=x+Math.cos(a)*33,dy=y+Math.sin(a)*33,h=4+3*Math.abs(Math.sin(t/800+k));ctx.fillStyle='#a10c07';ctx.fillRect(dx-1.2,dy,2.4,h);ctx.beginPath();ctx.arc(dx,dy+h,1.8,0,7);ctx.fill()}}
  ctx.restore()}
+/* v189 : bonus de dégâts lisibles sur la carte */
+// cache des dégâts de chaque case (recalculé au plus 4 fois par seconde)
+let DMGC={t:-1e9,m:new Map()};
+function dmgCached(i,now){if(now-DMGC.t>250||now<DMGC.t)DMGC={t:now,m:new Map()};if(!DMGC.m.has(i))DMGC.m.set(i,dmgInfo(i));return DMGC.m.get(i)}
+// petite étiquette arrondie (texte coloré sur fond sombre)
+function bTag(x,y,txt,c,fs){ctx.font=`bold ${fs||11}px system-ui,sans-serif`;const w=ctx.measureText(txt).width+9,h=(fs||11)+4;ctx.beginPath();ctx.arc(x-w/2+h/2,y,h/2,Math.PI/2,Math.PI*1.5);ctx.arc(x+w/2-h/2,y,h/2,-Math.PI/2,Math.PI/2);ctx.closePath();
+ ctx.fillStyle='rgba(16,11,6,.9)';ctx.fill();ctx.strokeStyle=c;ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=c;ctx.textAlign='center';ctx.fillText(txt,x,y+(fs||11)*.36)}
+// pastille ⚔ sous chaque unité qui attaque : blanche sans bonus, dorée avec bonus
+function dmgBadge(i,p,D,now){if(!D.dmg||!D.rng)return;const di=dmgCached(i,now);if(!di)return;const up=di.bonus>0,x=p.x-19,y=p.y+20,txt=String(di.total);
+ ctx.font='bold 10px system-ui,sans-serif';const w=ctx.measureText(txt).width+17;ctx.fillStyle='rgba(10,8,5,.85)';ctx.fillRect(x-w/2,y-6.5,w,13);
+ ctx.strokeStyle=up?'#f2c23d':'rgba(255,255,255,.3)';ctx.lineWidth=up?1.6:1;ctx.strokeRect(x-w/2,y-6.5,w,13);
+ glyph('sword',x-w/2+6.5,y,9,up?'#ffd25a':'#ddd',2.6);ctx.fillStyle=up?'#ffd25a':'#fff';ctx.textAlign='center';ctx.fillText(txt,x+5,y+3.6)}
+// unité touchée (le jour) : un trait coloré relie chaque source de bonus à l'unité, avec son « +1 »
+function dmgLinks(now){const k=S.inspect??S.moveFrom;if(k==null||S.busy||!G.grid[k])return;const di=dmgCached(k,now);if(!di)return;const q=tc(k),pu=.5+.5*Math.sin(now/220);
+ const arrow=(p,c)=>{const dx=q.x-p.x,dy=q.y-p.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d,a0=T*.3,a1=d-T*.28-pu*T*.06;if(a1<=a0)return;
+  const ax=p.x+ux*a0,ay=p.y+uy*a0,bx=p.x+ux*a1,by=p.y+uy*a1,h=7,w=5;ctx.lineCap='round';ctx.lineJoin='round';
+  for(const[col,lw]of[['rgba(0,0,0,.75)',6],[c,3]]){ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx-ux*h*.6,by-uy*h*.6);ctx.stroke();
+   ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(bx+ux*(lw>3?2:0),by+uy*(lw>3?2:0));ctx.lineTo(bx-ux*h-uy*(w+(lw>3?1.5:0)),by-uy*h+ux*(w+(lw>3?1.5:0)));ctx.lineTo(bx-ux*h+uy*(w+(lw>3?1.5:0)),by-uy*h-ux*(w+(lw>3?1.5:0)));ctx.closePath();ctx.fill()}};
+ di.P.forEach(pt=>{const c=BONC[pt.k]||'#fff',n=pt.from.length,per=n&&pt.v%n===0?pt.v/n:0;pt.from.forEach((j,m)=>{const p=tc(j);
+  ctx.save();ctx.strokeStyle=c;ctx.globalAlpha=.6+.35*pu;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(p.x,p.y,T*.46,0,7);ctx.stroke();ctx.globalAlpha=1;arrow(p,c);ctx.restore();
+  if(per||m===0)bTag(p.x,p.y-T*.44,'+'+(per||pt.v)+' ⚔',c)})})}
+// carte choisie dans la main : chaque case où la poser fait gagner des dégâts affiche « +N ⚔ » (total gagné par toutes les unités)
+let PGC={k:'',m:new Map()};
+function placeGain(t){const key=t+'|'+G.grid.map(u=>u?u.t+(u.lvA||0):'').join(',')+'|'+(G.relics||[]).join()+'|'+G.night;if(PGC.k===key)return PGC.m;const m=new Map();PGC={k:key,m};
+ const D=Z.stat(G,t);if(!D||D.instant||D.react||D.onUnit||D.equip||Z.isTrace(t))return m;const tt=Z.baseOf(t),ed=Z.edOf(t);
+ const tot=()=>{const fl=Z.famLevels(G);let s=0;G.grid.forEach((u,j)=>{if(u&&Z.U[u.t]&&Z.stat(G,u.t).dmg)Z.dmgParts(G,j,fl).forEach(p=>{if(POSK.includes(p.k))s+=p.v})});return s};
+ const s0=tot();for(const i of Z.INNER){if(G.grid[i]||!Z.canPlace(G,t,i))continue;G.grid[i]=ed?{t:tt,hp:1,ed}:{t:tt,hp:1};try{const g=tot()-s0;if(g>0)m.set(i,g)}catch(e){}finally{G.grid[i]=null}}return m}
+function placeHints(now){if(S.busy)return;const t=selCard();if(!t||S.moveFrom!=null)return;placeGain(t).forEach((g,i)=>{const p=tc(i);bTag(p.x,p.y,'+'+g+' ⚔','#ffd25a',12)})}
+

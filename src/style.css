@@ -1295,3 +1295,22 @@ html.eco .gift.got .g-face .g-ok{animation:none;transform:translateX(-50%) rotat
 .citem.out .cf{filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));opacity:.72}
 .gift .g-face .cf,.gift .g-face .cf.ed{filter:none}
 html.eco .cf,html.eco .cf.ed,html.eco .citem.in .cf{filter:none}
+/* v189 : fiche d'unité en pastilles (PV, dégâts, portée, victimes) et détail des bonus de dégâts */
+.uf{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:2px}
+.uf-r{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:3px 5px}
+.uf .chip{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.18);color:var(--ink);font-weight:700;white-space:nowrap;line-height:1.35}
+.uf .chip .ink{width:13px;height:13px}
+.uf .chip small{font-size:10px;opacity:.8}
+.uf .chip.hp .ink{color:#e5484d}
+.uf .chip.atk.up{border-color:#f2c23d;color:#ffd25a;box-shadow:0 0 6px rgba(242,194,61,.35)}
+.uf .chip.heal{color:#9fd86b}
+.uf .chip.lv{color:#9fd86b}
+.uf i.bar{display:inline-block;width:26px;height:5px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden}
+.uf i.bar>i{display:block;height:100%;background:#9fd86b}
+.uf-b{gap:3px}
+.uf-b>.ink{width:14px;height:14px;color:#ffd25a}
+.uf .bp{display:inline-block;padding:0 6px;border-radius:999px;border:1px solid var(--c,#fff);color:var(--c,#fff);background:rgba(0,0,0,.35);font-size:12px;font-weight:700;white-space:nowrap;line-height:1.4}
+.uf .bp.base{--c:#e9dcc6}
+.uf .eqs{color:#ffd25a}
+.uf-x{font-size:12px}
+html.bigtext .uf .bp{font-size:14px}

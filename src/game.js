@@ -173,7 +173,7 @@ const GLY={skull:'M12 3a7 7 0 0 0-7 7v3l2 2v4h10v-4l2-2v-3a7 7 0 0 0-7-7z M7.5 1
  vest:'M8 3l4 3 4-3 3 3v15H5V6z M12 6v15 M8 12h2 M14 12h2',binoc:'M6 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M18 14a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z M3 17V8l3-4h3v10 M21 17V8l-3-4h-3v10 M9 11h6',
  medkit:'M4 8h16v12H4z M9 8V5h6v3 M12 11v6 M9 14h6',torch:'M8 3h8l-2 6v12h-4V9z M8 3l-.5-1 M12 12v3',pills:'M5 13l8-8a4 4 0 0 1 6 6l-8 8a4 4 0 0 1-6-6z M9 9l6 6',
  tape:'M12 5a7 7 0 1 0 0 14a7 7 0 1 0 0-14z M12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z M19 12h3v4',keys:'M8 9a4 4 0 1 0 0 8a4 4 0 1 0 0-8z M12 13h9 M18 13v3 M21 13v2',
- heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11',undo:'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3'};
+ heart:'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',sword:'M4 20l9-9M13 11l2-6 4-1-1 4-6 2zM6 14l4 4',chart:'M4 20h16M7 20v-6M12 20V8M17 20v-11',undo:'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3'};
 const ii=(k,cls)=>`<svg class="ink${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
 const P2D={};const glyph=(k,x,y,sz,col,lw)=>{const p=P2D[k]||(P2D[k]=new Path2D(GLY[k]));ctx.save();ctx.translate(x-sz/2,y-sz/2);ctx.scale(sz/24,sz/24);ctx.lineWidth=(lw||2.2);ctx.lineCap=ctx.lineJoin='round';ctx.strokeStyle=col;ctx.stroke(p);ctx.restore()};
 /* révélation progressive (v129) : factions, niveaux et menus restent cachés tant que le joueur ne les a pas rencontrés.
@@ -197,7 +197,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v188 · 25 oct.';
+const VERSION='v189 · 26 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;

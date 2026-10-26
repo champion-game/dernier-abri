@@ -942,6 +942,35 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  function lureTarget(st,p){if(st.rush)return C;if(st.noise&&st.noise.until>=st.tick)return st.noise.i;let best=C,bd=99;for(let j=0;j<st.grid.length;j++){const u=st.grid[j];if(!u)continue;const r=U[u.t].lure||(roleOf(u.t)==='tank'?TAUNT:0);if(!r)continue;const d=cheb(p,j);if(d<=r&&d<bd){bd=d;best=j}}return best}
  const nbRoles=(st,i)=>{const r=new Set();for(const j of around(i)){const v=st.grid[j];if(v)r.add(roleOf(v.t))}return r};
  function squad(st,i){const u=st.grid[i];if(!u)return false;const me=roleOf(u.t);if(!me)return false;const r=nbRoles(st,i);r.add(me);return r.has('tank')&&r.has('heal')&&r.has('dps')}
+ // v189 : détail des bonus de dégâts d'une unité posée en i. La nuit, le calcul des dégâts utilise cette même liste :
+ // ce que le joueur voit est exactement ce qui est appliqué. s:1 = déjà compris dans stat().dmg (amélioration, reliques).
+ // Chaque bonus : k (famille, pour la couleur), v (valeur), n (nom affiché), from (cases qui le donnent, pour tracer un lien).
+ function dmgParts(st,i,fl,pow){const u=st.grid[i],P=[];if(!u||!U[u.t])return P;const b=U[u.t],D=stat(st,u.t);if(!D.dmg)return P;
+  if(!fl)fl=famLevels(st);if(pow==null)pow=power(st);const F=famOf(u.t),R=st.relics||[],T=TRAITS[u.trait]||{};
+  const add=(k,v,n,from,s)=>{if(v)P.push({k,v,n,from:from||[],s:s?1:0})},cells=f=>around(i).filter(j=>st.grid[j]&&f(st.grid[j]));
+  if(st.upg&&st.upg[u.t]&&b.dmg)add('upg',1,_t('Carte améliorée'),0,1);
+  if(R.includes('rage')&&b.cat==='melee')add('relic',1,RELICS.rage.n,0,1);
+  if(R.includes('sifflet')&&DOGS.includes(u.t)&&b.dmg)add('relic',1,RELICS.sifflet.n,0,1);
+  add('lvl',u.lvA||0,(u.lvA||0)>1?_t`Niveau ×${u.lvA}`:_t('Niveau'));
+  add('gold',u.gold||0,_t('Version dorée'));
+  if(hasEq(u,'tape'))add('eq',u.gold||0,U.tape.n);
+  add('trait',T.dmgB||0,T.n);
+  if(u.trait==='aguerri'&&(u.kills||0)>=10)add('trait',1,T.n);
+  if(u.leg)add('gold',1,_t('Légendaire'));
+  if(u.ed==='dor')add('gold',1,_t('Édition dorée'));
+  if(pow){const L=cells(v=>v.t==='lamp');if(L.length)add('lamp',lampB(st,i,pow),U.lamp.n,L)}
+  if(D.cat==='shoot'){const rd=st.grid.map((v,j)=>v&&v.t==='v_radio'&&j!==i&&cheb(j,i)<=2?j:-1).filter(j=>j>=0);if(rd.length)add('radio',1,U.v_radio.n,rd)}
+  add('sol',sol(st,i,u),_t('Bonus'));
+  if(fl.mil&&F==='mil')add('fam',1,FAM.mil.n);
+  if(D.cat==='melee'&&fl.farm)add('fam',1,FAM.farm.n);
+  if(fl.tech&&F==='tech')add('fam',1,FAM.tech.n);
+  if(fl.care&&F==='care')add('fam',1,FAM.care.n);
+  if(D.cat==='melee'&&ally(st,'hunt'))add('fam',1,_t('Alliance'));
+  if(squad(st,i))add('squad',1,_t('Escouade'),cells(v=>!!roleOf(v.t)&&roleOf(v.t)!==roleOf(u.t)));
+  if(F&&fl[F]>=2)add('fam',1,_t`Équipe complète (${FAM[F].n})`);
+  if(DOGS.includes(u.t)){const H=cells(v=>U[v.t].dogBoost);if(H.length)add('dog',1,U[st.grid[H[0]].t].n,H)}
+  if(D.cat==='shoot'&&st.alarmT>=st.tick)add('alarm',1,_t('Alerte'));
+  return P}
  function attack(st,i,u,D,rng,dmg,ev){
   const inR=()=>st.z.filter(z=>z.hp>0&&!isEdge(z.pos)&&inRange(z.pos,i,rng));
   const got=k=>{if(k){u.kills=(u.kills||0)+1;u.nk=(u.nk||0)+1;edKill(st,u);if(hasEq(u,'bandage'))cure(st,u,1,u);
@@ -1021,7 +1050,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    if(D.rng&&st.tick%D.every===0&&!(D.jam&&st.tick%D.jam===0)&&!(D.needPow&&!pow)){
     const reps=1+(around(i).some(j=>{const L=st.grid[j]&&U[st.grid[j].t];return L&&L.lead&&st.tick%(L.chief?3:2)===0})?1:0)+(st.rushT>0?1:0);
     const F=famOf(u.t),rng=Math.max(1,D.rng-(e==='brume'&&D.cat==='shoot'?1:0)+(D.cat==='shoot'&&ally(st,'martial')?1:0)+((TRAITS[u.trait]||{}).rngB||0)+(fl.police>=2&&F==='police'?1:0)+(fl.comm&&F==='comm'&&D.rng>1?1:0)+(D.rng>1&&hasEq(u,'binoc')?1:0)+(D.cat==='shoot'&&D.rng>1&&nearPost(st,i,'tower')?1:0)+(e==='brume'&&D.cat==='shoot'&&hasEq(u,'torch')?1:0)),
-     dmg=D.dmg+lampB(st,i,pow)+(D.cat==='shoot'&&st.grid.some((v,j)=>v&&v.t==='v_radio'&&j!==i&&cheb(j,i)<=2)?1:0)+unitDmg(u)+sol(st,i,u)+(fl.mil&&F==='mil'?1:0)+(D.cat==='melee'&&fl.farm?1:0)+(fl.tech&&F==='tech'?1:0)+(fl.care&&F==='care'?1:0)+(D.cat==='melee'&&ally(st,'hunt')?1:0)+(squad(st,i)?1:0)+(F&&fl[F]>=2?1:0)+(DOGS.includes(u.t)&&around(i).some(j=>st.grid[j]&&U[st.grid[j].t].dogBoost)?1:0)+(D.cat==='shoot'&&st.alarmT>=st.tick?1:0);
+     dmg=D.dmg+dmgParts(st,i,fl,pow).reduce((a,p)=>a+(p.s?0:p.v),0);
     // v136 : les tirs lents (Sniper…) reçoivent leurs bonus fixes multipliés par leur intervalle, pour ne pas perdre la moitié des bonus
     const bon=dmg-D.dmg,dmgF=D.every>1&&bon>0?D.dmg+bon*D.every:dmg;
     for(let r=0;r<reps;r++)attack(st,i,u,D,rng,dmgF,ev)}
@@ -1114,7 +1143,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;st.kills++;st.scrap+=killScrap(st,ZT[z.k].boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!ZT[z.k].boss});if(ZT[z.k].brood)broodDeath(st,z,ev)}
   st._su=null;st.z=st.z.filter(z=>z.hp>0);return ev}
  function runNight(st,rnd){startNight(st,rnd);let r;do{r=step(st);if(r.pause)nextWave(st)}while(!r.done)}
- return{edKill,EDS,ED_IDS,ED_MAX,FAN_MAX,ED_GOAL,baseOf,edOf,ck,edOk,edCards,fanN,zMaxHp,newcomers,TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
+ return{dmgParts,unitDmg,edKill,EDS,ED_IDS,ED_MAX,FAN_MAX,ED_GOAL,baseOf,edOf,ck,edOk,edCards,fanN,zMaxHp,newcomers,TUTO_N,TUTO_W,tutoOn,DAILY,dailyPlan,dailyState,dailyScore,BOSSES,leadBoss,bossOf,inRange,manh,SAP_WALL,ROLES,roleOf,TAUNT,squad,nbRoles,lureTarget,pathStep,field,killZones,N,C,MID,LINE,LINE_MAX,TRACE,CHARGES,chargesOf,isTrace,charges,isBuild,buildCost,lineCost,lineCells,placeLine,MAXS,maxS,PLACES,UNLOCK,unlocks,costOf,DECK_MIN,DECK_MAX,COPY_MAX,CARD_PRICE,giftCount,giftOffer,STARTER_CARDS,STARTER_DECK,copyMax,runPoints,deckError,U,KEYS,ZT,ZK,EVENTS,RELICS,relicNight,MUTS,mutNight,mutate,zspd,mc,CHARS,SHOP,shopCost,RARITY,RAR,waveCount,SIDES,UPGRADABLE,get HPS(){return HPS},set HPS(v){HPS=v},hpMult,get WAVES(){return WAVES},set WAVES(v){WAVES=v},get GROW(){return GROW},set GROW(v){GROW=v},
   RUSH_MAX,DAWN,dawnEvent,resolveDawn,CUREE_MAX,VICTORY_CARDS,VICTORY_RELICS,relicOpen,ammoMax,hasR,MENACES,MENACE_MAX,applyMenace,setDemo,isDemo,demoOk,DEMO_N,DEMO_CHARS,DEMO_PLACES,WIN_NIGHT,winPoints,killScrap,EV_CHANCE,EV_GAP,STORE_N,AMMO_COST,STORE_PRICE,storePrice,storeOffer,buyStore,rc,isEdge,isForest,ROADS,INNER,EDGES,around,cheb,newState,newDay,waveList,stat,upgDesc,upgrade,addRelic,relicChoices,draftChoices,shuffle,pay,touch,canPlace,place,startNight,step,endNight,runNight,drawCount,FAM,CHIEF,famOf,famCounts,famLevels,TIERS,nightOffers,nightChoice,canReact,react,TRAITS,named,maxHp,sol,ALLY,ALLY_MIN,allies,wallGroup,LEGACY_KILLS,legacies,bigNight,nextWave,WAVES_N,AMMO_MAX,AMMO_DMG,bossAlive,fireAmmo,ZHP,EVO,EVO_KEYS,merge,frenzy,frenzyMult,zhit,testProgress,FRENZY,FRENZY_FROM,dmgBonus,pressure,PRESSURE,lvKills,lvOf,ammoDmg,LVL,lvPending,lvReady,levelUp,ENERGY,HAND_MAX,cost,canPay,canMove,move,bossHit,frenzyLv,fzHit,zDmgAvg,respite,eqOf,hasEq,isUnit,unitCap,unitCount,capFull,canRecall,recall,canPlaceBench,placeBench,famLevel};
 })();
 if(typeof module!=='undefined')module.exports=Z;

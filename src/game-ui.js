@@ -202,13 +202,46 @@ function spentTrace(t){if(!Z.isTrace(t)||Z.charges(G,t,true)>0)return;const n=S.
 function countPlay(t){const b=Z.baseOf(t);if(Z.isUnit(b)){const p=G.pl=G.pl||[];if(!p.includes(b))p.push(b)}if(G.daily)return;const c=META.played||(META.played={});c[b]=(c[b]||0)+1;saveMeta(META)}
 function placeLineUI(cells){const t=selCard(),re=selReuse(),gd=guideStep();if(gd&&!cells.every(i=>guideOk(gd,i)))return;if(Z.lineCost(G,t,cells.length,re)>G.energy)return;if(!re)countPlay(t);tuto(1);useBuild(t);Z.placeLine(G,t,cells,R,re);spentTrace(t);syncBoard();S.moveFrom=null;S.inspect=null;
  cells.forEach(j=>{facing[j]=null;const p=tc(j);addFX({type:'ring',x:p.x,y:p.y,r:30,c:'#f2b33d',dur:350})});const q=tc(cells[cells.length-1]);floatTxt(q.x,q.y-14,_t`${cells.length} cases`+(Z.charges(G,t,true)>0?_t` · encore ${Z.charges(G,t,true)}`:''),'#f2b33d');SFX.play('place');save();render()}
-// fiche d'une unité : prénom, métier, trait, victimes, PV
-function unitLine(u){const tr=Z.TRAITS[u.trait],D=Z.U[u.t],lv=(u.lvA||0)+(u.lvD||0),k=u.kills||0,i=G.grid.indexOf(u),ro=Z.roleOf(u.t);
- const rl=ro?` · ${ink(ro)} <b>${Z.ROLES[ro].n}</b>`+(ro==='tank'?_t` (provoque à ${Z.TAUNT} cases, bloque 1 coup sur 3)`:'')+(Z.squad(G,i)?_t(' · <b>escouade</b> (+1)'):''):'';
- return (u.name?`<b>${u.name}</b>, ${cardName(u.t)}`:`<b>${cardName(u.t)}</b>`)+rl+(u.gold?_t` <b class="gold">${stars(u)} doré</b>`:'')+(D.evo?_t(' <b class="evo">✦ évolution</b>'):'')+(u.ed&&Z.EDS[u.ed]?` · <b class="edl ed-${u.ed}">${Z.EDS[u.ed].n}</b> (${Z.EDS[u.ed].d})`:'')
-  +(tr?` · <b>${tr.n}</b> (${tr.d})`:'')+(D.dmg?` · ${plural(k,_t('zombie tué'),_t('zombies tués'))}`+(seen('lvl')?_t`, niveau suivant à ${Z.lvKills(Z.lvOf(k)+1)}`:''):'')
-  +(lv?_t` · niveau ${lv} (+${u.lvA||0} dégât, +${(u.lvD||0)*3} PV)`:'')+(u.leg?_t` · porte le souvenir de <b>${u.leg}</b> (+1 dégât, +2 PV)`:'')
-  +(g=>g.length>1?_t` · <b>rempart de ${g.length} murs</b> : ${g.reduce((a,k)=>a+G.grid[k].hp,0)}/${g.reduce((a,k)=>a+Z.maxHp(G,G.grid[k]),0)} PV en commun`:'')(Z.wallGroup(G,G.grid.indexOf(u)))+(u.scar?_t(' · <b>cicatrice</b> : la prochaine chute sera fatale'):'')+(Z.eqOf(u).length?_t` · équipé : ${Z.eqOf(u).map(t=>ii(EQIC[t]||'pack')+' '+Z.U[t].n).join(', ')}`:'')+_t` · ${u.hp}/${Z.maxHp(G,u)} PV.`}
+/* v189 : bonus de dégâts lisibles. Chaque famille de bonus a sa couleur, la même partout :
+   pastille ⚔ sur la carte, liens vers la source quand on touche une unité, fiche, message à la pose. */
+const BONC={lamp:'#ffd84a',radio:'#6cc3ff',squad:'#ffb02e',dog:'#d9a66b',fam:'#c58cff',lvl:'#9fd86b',gold:'#f2c23d',trait:'#ff9a7a',eq:'#8fd3c7',upg:'#f2b33d',relic:'#e58cff',alarm:'#ff6b6b',sol:'#cccccc'};
+// bonus qui dépendent de la place sur la carte (ceux qu'une pose ou un déplacement fait gagner ou perdre)
+const POSK=['lamp','radio','squad','dog','fam','sol'];
+// dégâts d'une unité : base, bonus détaillés, total par attaque (les tirs lents comptent leurs bonus fixes × leur intervalle)
+function dmgInfo(i){const u=G.grid[i];if(!u||!Z.U[u.t])return null;const D=Z.stat(G,u.t);if(!D.dmg)return null;
+ const P=Z.dmgParts(G,i).filter(p=>S.busy||p.k!=='alarm'),bon=P.reduce((a,p)=>a+(p.s?0:p.v),0),sv=P.reduce((a,p)=>a+(p.s?p.v:0),0),sl=D.every>1&&bon>0?D.every:1;
+ return{P,base:D.dmg-sv,bonus:bon+sv,total:D.dmg+bon*sl,slow:sl,hits:D.hits||1}}
+const bpill=(p,v)=>`<span class="bp" style="--c:${BONC[p.k]||'#fff'}">${v>0?'+':'−'}${Math.abs(v)} ${p.n}</span>`;
+// photo des bonus de chaque unité, avant une pose ou un déplacement
+function dmgSnap(){const m=new Map();G.grid.forEach((u,j)=>{if(u&&Z.U[u.t]&&Z.stat(G,u.t).dmg)m.set(u,Z.dmgParts(G,j))});return m}
+// après une pose ou un déplacement : « Bonus +1 Projecteur · +1 Escouade » sur chaque unité qui gagne (ou perd) un bonus
+function bonusMsg(before){if(!before)return;try{DMGC.t=-1e9;PGC.k=''}catch(e){}
+ G.grid.forEach((u,j)=>{if(!u||!Z.U[u.t]||!Z.stat(G,u.t).dmg)return;const now=Z.dmgParts(G,j).filter(p=>!p.s&&p.k!=='alarm'),old=before.get(u),q=tc(j);
+  const sum=L=>{const m={};L.forEach(p=>{const k=p.k+'|'+p.n;m[k]=m[k]||{k:p.k,n:p.n,v:0};m[k].v+=p.v});return m};
+  const A=sum(now.filter(p=>old||p.n!==_t('Légendaire'))),B=old?sum(old.filter(p=>!p.s&&p.k!=='alarm')):{},up=[],dn=[];
+  for(const k in A){const d=A[k].v-(B[k]?B[k].v:0);if(d>0)up.push(`+${d} ${A[k].n}`)}
+  for(const k in B){const d=B[k].v-(A[k]?A[k].v:0);if(d>0)dn.push(`−${d} ${B[k].n}`)}
+  const f=(txt,c,dy,dl)=>floats.push({x:q.x,y:q.y+dy,txt,c,sz:14,tw:300,bg:1,dur:2400,t0:performance.now()+dl});
+  if(up.length)f(_t('Bonus ')+up.join(' · '),'#ffd25a',-34,old?0:450);
+  if(dn.length)f(dn.join(' · '),'#c9b8a6',up.length?-14:-34,old?0:450);
+  if(up.length){addFX({type:'ring',x:q.x,y:q.y,r:30,c:'#ffd25a',dur:500})}})}
+// fiche d'une unité, en pastilles : PV, dégâts, portée, victimes, puis le détail des bonus de dégâts
+function unitLine(u){const tr=Z.TRAITS[u.trait],D=Z.U[u.t],St=Z.stat(G,u.t),lv=(u.lvA||0)+(u.lvD||0),k=u.kills||0,i=G.grid.indexOf(u),ro=Z.roleOf(u.t),mx=Z.maxHp(G,u);
+ const chip=(c,h,t)=>`<span class="chip ${c}"${t?` title="${t}"`:''}>${h}</span>`,bar=(f,c)=>`<i class="bar"><i style="width:${Math.round(Math.max(0,Math.min(1,f))*100)}%${c?';background:'+c:''}"></i></i>`;
+ const di=i>=0?dmgInfo(i):St.dmg?{P:[],base:St.dmg,bonus:0,total:St.dmg+Z.unitDmg(u),slow:1,hits:St.hits||1}:null;
+ const head=(u.name?`<b>${u.name}</b> ${cardName(u.t)}`:`<b>${cardName(u.t)}</b>`)+(ro?` ${ink(ro)}<b>${Z.ROLES[ro].n}</b>`:'')+(u.gold?_t` <b class="gold">${stars(u)} doré</b>`:'')+(D.evo?_t(' <b class="evo">✦ évolution</b>'):'')+(u.ed&&Z.EDS[u.ed]?` <b class="edl ed-${u.ed}">${Z.EDS[u.ed].n}</b>`:'');
+ const r1=[chip('hp',ii('heart')+` ${u.hp}/${mx}`+bar(u.hp/mx,u.hp/mx>.4?'':'#e5484d'),_t('Points de vie'))];
+ if(di)r1.push(chip('atk'+(di.bonus>0?' up':''),ink('atk')+` ${di.total}`+(di.hits>1?`<small>×${di.hits}</small>`:''),_t('Dégâts par attaque')));
+ if(St.heal||St.mech)r1.push(chip('heal','✚ '+(St.heal||St.mech),St.heal?_t('Soin'):_t('Réparation')));
+ if(St.rng>1||St.hrng>1)r1.push(chip('rng',ii('binoc')+' '+(St.hrng>1?St.hrng:St.rng),_t('Portée')));
+ if(D.dmg){const nx=Z.lvKills(Z.lvOf(k)+1),pv=Z.lvKills(Z.lvOf(k));r1.push(chip('kill',ii('skull')+` ${k}`+(seen('lvl')?bar((k-pv)/Math.max(1,nx-pv),'#9fd86b'):''),seen('lvl')?_t`${k} zombies tués · niveau suivant à ${nx}`:_t('Zombies tués')))}
+ if(lv)r1.push(chip('lv',_t('N')+lv,_t`niveau ${lv} (+${u.lvA||0} dégât, +${(u.lvD||0)*3} PV)`));
+ let r2='';if(di&&di.bonus>0)r2=`<div class="uf-r uf-b">${ink('atk')}<b class="eqs">${di.total} =</b><span class="bp base">${di.base}</span>`+di.P.map(p=>bpill(p,p.v)).join('')+(di.slow>1?`<span class="bp base">${_t`bonus ×${di.slow} (tir lent)`}</span>`:'')+`</div>`;
+ const x=[];if(ro==='tank')x.push(_t`provoque à ${Z.TAUNT} cases, bloque 1 coup sur 3`);if(ro&&!St.dmg&&Z.squad(G,i))x.push(_t('<b>escouade</b> (+1 soin)'));
+ if(tr&&!tr.dmgB&&tr.n)x.push(`<b>${tr.n}</b> (${tr.d})`);if(u.leg)x.push(_t`souvenir de <b>${u.leg}</b> (+2 PV)`);
+ const g=Z.wallGroup(G,i);if(g.length>1)x.push(_t`<b>rempart de ${g.length} murs</b> : ${g.reduce((a,k)=>a+G.grid[k].hp,0)}/${g.reduce((a,k)=>a+Z.maxHp(G,G.grid[k]),0)} PV en commun`);
+ if(u.scar)x.push(_t('<b>cicatrice</b> : la prochaine chute sera fatale'));if(Z.eqOf(u).length)x.push(Z.eqOf(u).map(t=>ii(EQIC[t]||'pack')+' '+Z.U[t].n).join(', '));
+ return `<div class="uf"><div class="uf-r">${head}</div><div class="uf-r">${r1.join('')}</div>${r2}${x.length?`<div class="uf-x">${x.join(' · ')}</div>`:''}</div>`}
 /* conseils au bon moment : une bulle, une seule fois par joueur, la première fois qu'une situation se présente */
 const HINTS={
  fuse:ii('star')+_t(' <b>Fusion !</b> 3 unités identiques deviennent une nouvelle carte avec une étoile de plus : plus de PV, +1 dégât, 2 places libérées, et les 3 cartes repartent dans ta défausse.'),
@@ -368,3 +401,5 @@ function feltTabs(){try{const f=$('#felt');if(!f||!document.documentElement.clas
  const T=[['p','pack',_t('Pioche')],['h','skull',_t('Horde')],['j','chart',_t('Journal')]];
  const H=`<div class="ft-tabs" role="tablist">${T.map(([k,ic,n])=>`<button type="button" role="tab" data-ft="${k}" aria-selected="${ftTab===k}" class="${ftTab===k?'on':''}">${ii(ic)}${n}</button>`).join('')}</div><div class="ft-body ft-${ftTab}">${ftTab==='h'?ftHorde():ftTab==='j'?ftJournal():ftPioche()}</div>`;if(H===b._h)return;const sc=b.querySelector('.ft-l'),y=sc&&b._t===ftTab?sc.scrollTop:0;b.innerHTML=b._h=H;b._t=ftTab;
  const l=b.querySelector('.ft-l');if(l)l.scrollTop=y;if(l&&l.scrollHeight>l.clientHeight+2)l.classList.add('dense')}catch(e){}}
+// v189 : après chaque pose ou déplacement, un message montre les bonus de dégâts gagnés ou perdus
+{const t0=tapCell;tapCell=function(i){let b=null;try{b=dmgSnap()}catch(e){}const r=t0.apply(this,arguments);try{bonusMsg(b)}catch(e){}return r}}
