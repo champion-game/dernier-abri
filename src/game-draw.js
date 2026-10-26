@@ -713,6 +713,29 @@ function drawGuide(now){const g=guideStep();if(!g||!g.cells)return;const k=.5+.5
  for(const i of g.cells){if(G.grid[i]&&!g.on)continue;const p=tc(i);
   ctx.save();ctx.strokeStyle=`rgba(255,210,90,${.55+.45*k})`;ctx.lineWidth=4;ctx.shadowColor='#ffd25a';ctx.shadowBlur=12+10*k;ctx.strokeRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8);
   if(!G.grid[i]&&i!==Z.C){ctx.fillStyle=`rgba(255,210,90,${.12+.12*k})`;ctx.fillRect(p.x-T/2+4,p.y-T/2+4,T-8,T-8)}ctx.restore()}}
+/* tutoriel : une main dessinée montre le geste à faire : elle glisse de la carte (ou de l'unité) vers la case visée, puis la touche */
+const GH=(()=>{const d=document.createElement('div');d.className='ghand';d.setAttribute('aria-hidden','true');
+ d.innerHTML='<svg class="gtrail"><path/></svg><i class="gring"></i><svg class="gfing" viewBox="0 0 40 50"><path d="M15 3c2.6 0 4.4 2 4.4 4.6v14l2.2-.4c2.3-.4 4 .6 4.6 2.4l2.3-.2c2.2-.1 3.8 1.1 4.3 3l1.6.1c2.6.2 4.2 2.2 4 4.8l-.8 8.2C37 45 33 48.5 28 48.5h-7.4c-3.8 0-6.6-1.6-8.6-4.6L4.2 32.1c-1.4-2.1-.9-4.6 1-5.8 1.8-1.1 4-.6 5.4 1l.1.1V7.6C10.7 5 12.4 3 15 3z" fill="#fff" stroke="#1d1a17" stroke-width="2.4" stroke-linejoin="round"/><path d="M19.4 21.6v7M26.2 24v5.5M32.8 27.2v4" stroke="#1d1a17" stroke-width="2" stroke-linecap="round"/></svg>';
+ document.body.appendChild(d);return d})();
+function guideHand(now){const g=G&&!onTitle&&ov.hidden&&!S.pause?guideStep():null;
+ const r=cv.getBoundingClientRect(),cell=i=>{const p=tc(i);return{x:r.left+p.x/L*r.width,y:r.top+p.y/L*r.height}},mid=el=>{if(!el)return null;const b=el.getBoundingClientRect();return b.width?{x:b.left+b.width/2,y:b.top+b.height*.4}:null};
+ let a=null,b=null;
+ if(g&&g.go)b=mid($('#go'));
+ else if(g&&g.from!=null){if(S.moveFrom===g.from)a=cell(g.from),b=cell(g.cells[0]);else b=cell(g.from)}
+ else if(g&&g.card){a=mid($('#hand .card.guide'));if(g.to&&g.to.length)b=cell(g.to[0])}
+ else if(g&&g.cells){a=mid($('#hand .card.sel'))||mid($('#hand .card.reuse.sel'));const c=g.cells.find(i=>!G.grid[i]||g.on);if(c!=null)b=cell(c)}
+ if(!b&&a)b=a,a=null;
+ if(!b){if(GH.style.display!=='none')GH.style.display='none';return}
+ GH.style.display='';const P=1900,t=(now%P)/P,ring=GH.querySelector('.gring'),f=GH.querySelector('.gfing'),tr=GH.querySelector('.gtrail'),pa=tr.firstChild;
+ let x=b.x,y=b.y,press=0,op=1,tap=0;
+ if(a){const cx=(a.x+b.x)/2+(b.y-a.y)*.18,cy=Math.min(a.y,b.y)-Math.abs(a.x-b.x)*.15-30;
+  const k=t<.18?0:t<.72?(t-.18)/.54:1,e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+  x=(1-e)*(1-e)*a.x+2*(1-e)*e*cx+e*e*b.x;y=(1-e)*(1-e)*a.y+2*(1-e)*e*cy+e*e*b.y;
+  press=t<.18?Math.sin(t/.18*Math.PI):t>.72&&t<.9?Math.sin((t-.72)/.18*Math.PI):0;tap=t>.72?(t-.72)/.28:0;op=t>.92?1-(t-.92)/.08:t<.04?t/.04:1;
+  pa.setAttribute('d',`M${a.x} ${a.y}Q${cx} ${cy} ${b.x} ${b.y}`);pa.style.strokeDashoffset=(-now/30)%28;tr.style.display=''}
+ else{press=t<.3?Math.sin(t/.3*Math.PI):t>.4&&t<.7?Math.sin((t-.4)/.3*Math.PI):0;tap=t>.4?(t-.4)/.6:0;tr.style.display='none'}
+ f.style.transform=`translate(${x-15}px,${y-3}px) scale(${1-.14*press}) rotate(-12deg)`;f.style.opacity=op;
+ ring.style.transform=`translate(${b.x}px,${b.y}px) scale(${.4+1.4*tap})`;ring.style.opacity=tap?(1-tap)*.9:0}
 // v166 : couloirs de mort : les cases du chemin probable des zombies couvertes par au moins 2 unités, teintées en rouge (plus fort avec plus d'unités)
 let KZ={sig:'',z:{}};
 function drawKillZones(now){const sig=G.grid.map(u=>u?u.t:'').join()+'|'+G.place+'|'+G.side+'|'+(G.relics||[]).length;if(sig!==KZ.sig){KZ={sig,z:Z.killZones(G)}}
@@ -931,6 +954,7 @@ function drawDark(now){
 function frame(now){
  requestAnimationFrame(frame);
  try{frameInner(now)}catch(e){ctx.restore&&ctx.setTransform(1,0,0,1,0,0);if(!frame.err){frame.err=1;console.error(e)}}
+ try{guideHand(now)}catch(e){}
 }
 // décor propre à chaque lieu, par-dessus le sol commun
 function drawPlace(now){const pl=G.place;

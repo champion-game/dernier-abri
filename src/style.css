@@ -1314,3 +1314,6 @@ html.eco .cf,html.eco .cf.ed,html.eco .citem.in .cf{filter:none}
 .uf .eqs{color:#ffd25a}
 .uf-x{font-size:12px}
 html.bigtext .uf .bp{font-size:14px}
+
+/* tutoriel : main qui montre le geste */
+.ghand{position:fixed;inset:0;pointer-events:none;z-index:60}.ghand svg.gtrail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.ghand .gtrail path{fill:none;stroke:#ffd25a;stroke-width:4;stroke-dasharray:14 14;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(0,0,0,.7))}.ghand .gfing{position:absolute;left:0;top:0;width:40px;height:50px;transform-origin:15px 3px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ghand .gring{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border:4px solid #ffd25a;border-radius:50%;opacity:0}

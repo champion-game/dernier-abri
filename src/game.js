@@ -337,7 +337,7 @@ const tutoDay=()=>G&&G.tuto&&!G.test&&!G.daily&&G.night<=Z.TUTO_N?G.night:0;
 const posOf=t=>G.grid.findIndex(u=>u&&u.t===t);
 function guideStep(){const d=tutoDay();if(!d||d>4||S.busy||S.pause||S.dawnWait)return null;
  const at=(i,t)=>!!G.grid[i]&&G.grid[i].t===t,inH=t=>S.hand.includes(t)||(S.used||[]).includes(t),sel=selCard();
- const ask=(t,cells,pick,put,on)=>sel===t?{lock:t,cells,on,txt:put}:{lock:t,card:t,txt:pick};
+ const ask=(t,cells,pick,put,on)=>sel===t?{lock:t,cells,on,txt:put}:{lock:t,card:t,to:cells,txt:pick};
  // déplacement guidé : toucher l'unité, puis la case qui brille
  const mv=(a,b,t,pick)=>at(a,t)&&!G.grid[b]?(S.moveFrom===a?{from:a,cells:[b],txt:_t('Touche la case qui brille.')}:{from:a,cells:[a],on:1,txt:pick}):null;
  const go=txt=>({go:1,txt});let m;
