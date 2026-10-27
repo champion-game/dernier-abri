@@ -1317,3 +1317,19 @@ html.bigtext .uf .bp{font-size:14px}
 
 /* tutoriel : main qui montre le geste */
 .ghand{position:fixed;inset:0;pointer-events:none;z-index:60}.ghand svg.gtrail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.ghand .gtrail path{fill:none;stroke:#ffd25a;stroke-width:4;stroke-dasharray:14 14;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(0,0,0,.7))}.ghand .gfing{position:absolute;left:0;top:0;width:40px;height:50px;transform-origin:15px 3px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ghand .gring{position:absolute;left:-22px;top:-22px;width:44px;height:44px;border:4px solid #ffd25a;border-radius:50%;opacity:0}
+
+/* v191 : bouton des trous, bouton de la nuit vivant, nuit rouge, maison touchée */
+.holes.on{color:#ffb39a;border-color:#ffb39a}
+.go.ready:not(:disabled){animation:goready 1.6s ease-in-out infinite}
+@keyframes goready{0%,100%{box-shadow:var(--sh),0 0 0 rgba(255,190,80,0)}50%{box-shadow:var(--sh),0 0 18px 4px rgba(255,190,80,.75);filter:brightness(1.12)}}
+.go.idle:not(.guide){filter:saturate(.75) brightness(.9)}
+.redsky{position:fixed;inset:0;z-index:8;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,rgba(120,0,0,.15),rgba(150,10,10,.55) 70%,rgba(60,0,0,.8));mix-blend-mode:multiply;animation:redsky 2.5s ease-in-out both}
+@keyframes redsky{0%{opacity:0}25%{opacity:1}60%{opacity:.85;background-color:rgba(10,0,0,.25)}100%{opacity:0}}
+.nightban.cine{animation-duration:2.4s}
+.nightban.cine em{font-style:normal;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#ff8a78;text-shadow:0 0 10px rgba(255,40,30,.8)}
+.nightban.cine b{min-height:1.15em}
+.hurtv{position:fixed;inset:0;z-index:19;pointer-events:none;opacity:0;box-shadow:inset 0 0 70px 22px rgba(220,20,20,.75)}
+.hurtv.on{animation:hurtv .55s ease-out}
+@keyframes hurtv{0%{opacity:1}100%{opacity:0}}
+html.eco .redsky{display:none}
+@media (prefers-reduced-motion:reduce){.go.ready{animation:none}.redsky{display:none}.hurtv.on{animation-duration:.3s}}

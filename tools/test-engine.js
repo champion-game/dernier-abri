@@ -254,6 +254,8 @@ for(let g=0;g<NIGHTS;g++){const r=rng(1000+g);
   Z.endNight(st)})}
 check('couloirs de mort : case du chemin couverte par 2 tireurs',()=>{const st=fresh();ok(!Object.keys(Z.killZones(st)).length,'aucune zone sans unité');
  st.grid[T9(21)]={t:'gun',hp:3};st.grid[T9(23)]={t:'gun',hp:3};const k=Z.killZones(st);ok(k[T9(22)]>=2,'case 22 couverte');ok(!k[T9(21)]&&!k[T9(23)],'pas sur les unités');ok(!Object.keys(k).some(j=>Z.isEdge(+j)),'pas dans la forêt')});
+check('trous de défense : sans unité, tout le chemin est à découvert ; un tireur couvre ses voisins',()=>{const st=fresh();const h=Z.killZones(st,0);ok(Object.keys(h).length>0,'chemin trouvé');ok(Object.values(h).every(n=>n===0),'rien de couvert');
+ st.grid[T9(21)]={t:'gun',hp:3};const k=Z.killZones(st,0);ok(k[T9(22)]===1,'case 22 couverte une fois');ok(!Object.keys(k).some(j=>Z.isEdge(+j)),'pas dans la forêt')});
 check('aucune nuit de plus de 2 s',()=>ok(slow===0,slow+' nuit(s) lente(s), pire '+worst+' ms'));
 
 /* ---------- défi du jour (v151) : une nuit, horde tirée au sort, 8 cartes « 1 parmi 3 » ---------- */
@@ -290,7 +292,7 @@ for(let d=0;d<40;d++){const p=Z.dailyPlan(rng(900+d)),p2=Z.dailyPlan(rng(900+d))
  const ctx={I18N:{},console};vm.createContext(ctx);
  vm.runInContext(fs.readFileSync(path.join(ROOT,'src/lang-en.js'),'utf8'),ctx);
  const EN=ctx.I18N.en||{};const ph=s=>new Set(s.match(/\{\d+\}/g)||[]);
- for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js','game-anim.js','game-fiche.js']){
+ for(const f of ['engine.js','game.js','game-draw.js','game-ui.js','game-screens.js','game-menu.js','game-anim.js','game-fiche.js','game-fx2.js']){
   const ks=keysOf(fs.readFileSync(path.join(ROOT,'src',f),'utf8'));
   const miss=ks.filter(k=>EN[k]==null);
   check(`traduction : ${f} (${ks.length} textes) tous traduits`,()=>ok(!miss.length,miss.length+' sans traduction : '+miss.slice(0,process.env.ALLMISS?99:3).map(k=>JSON.stringify(k).slice(0,process.env.ALLMISS?2000:90)).join(' | ')));

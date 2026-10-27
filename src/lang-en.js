@@ -1491,4 +1491,6 @@ I18N.en={
 "souvenir de <b>{0}</b> (+2 PV)":"in memory of <b>{0}</b> (+2 HP)",
 "<b>rempart de {0} murs</b> : {1}/{2} PV en commun":"<b>rampart of {0} walls</b>: {1}/{2} shared HP",
 "<b>cicatrice</b> : la prochaine chute sera fatale":"<b>scar</b>: the next fall will be fatal",
+"Zones non couvertes":"Uncovered areas",
+"Nuit rouge":"Red night",
 };

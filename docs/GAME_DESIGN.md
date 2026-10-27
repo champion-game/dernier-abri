@@ -983,3 +983,12 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 - Mur qui cède : éclats de son matériau, secousse, et au plus une fois toutes les 12 s un ralenti d'environ 1 s avec un zoom sur la brèche et « LE MUR CÈDE ! ».
 - Multi-éliminations : comptées par attaque (une même unité, un même piège ou une même réaction), plus par tour. 2 = Doublé, 3 = Triplé, 4-5 = Carnage ×N, 6 et plus = MASSACRE ×N avec un petit ralenti et zoom. Elles récompensent le placement (zombies entassés dans un couloir), pas le nombre total de zombies.
 - Couloirs de mort : le jour, les cases du chemin probable des zombies couvertes par au moins 2 unités qui attaquent sont teintées en rouge (plus foncé à 3 et 4+, avec une cible dès 3) ; la nuit, la teinte reste discrète. Calcul dans le moteur (`Z.killZones`), sans effet sur les règles.
+
+**v191 : interface et animations** (affichage seulement, règles inchangées ; tout est réduit en Mode économie)
+- Avant → après : une carte choisie montre sur chaque unité qu’elle améliore ce qui change (équipement, soin : ⚔ et ♥ avant → après ; fusion : ★★ sur les unités absorbées ; évolution : ✦ et le nom sur le partenaire).
+- Zones non couvertes : un bouton en haut (cadre avec un rond) colore en rouge, le jour, les cases du chemin des zombies qu’aucune unité qui attaque n’atteint. Le choix est gardé.
+- Bouton de la nuit : il brille et pulse quand plus aucune carte de la main n’est payable, et reste un peu terne tant qu’il reste de quoi jouer.
+- Nuit rouge : petite cinématique (ciel rouge, caméra qui avance, « NUIT ROUGE » et le titre tapé à la machine, rugissement lointain).
+- Gros zombie abattu (Gonflé, Blindé) : ralenti court et zoom à l’endroit, au plus une fois toutes les 5 s ; boss : zoom en plus du ralenti existant.
+- Maison touchée : les bords de l’écran s’allument en rouge un court instant.
+- Aube : un rayon de soleil balaie la carte en diagonale ; les zombies encore debout restent figés et partent en fumée quand il les touche.

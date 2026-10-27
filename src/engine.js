@@ -594,10 +594,11 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(const j of cand){if(isForest(j)||!diagOK(p,j,bc))continue;const v=1+bc[j]+D[j];if(v<bv-1e-9){bv=v;best=j}}
   return best<0?pref[0]:best}
  // v166 : couloirs de mort (affichage seulement) : les cases du chemin probable des zombies couvertes par au moins 2 unités qui attaquent
- function killZones(st){const sv=st._df,path=new Set(),ps=(PLACES[st.place]||{}).sides,edges=st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;st._df={};
+ // min : nombre d'unités minimum qui couvrent une case pour qu'elle soit retenue (0 : toutes les cases du chemin, pour repérer les trous)
+ function killZones(st,min=2){const sv=st._df,path=new Set(),ps=(PLACES[st.place]||{}).sides,edges=st.side>=0?EDGES.filter(i=>sideOf(i)===st.side):ps?EDGES.filter(i=>ps.includes(sideOf(i))&&!(ps.indexOf(0)<0&&rc(i)[0]===0)):EDGES;st._df={};
   try{for(const r of edges){let p=r;for(let k=0;k<N*N&&p!==C&&p>=0;k++){const u=st.grid[p];if(!isEdge(p)&&!(u&&U[u.t].block))path.add(p);const n=pathStep(st,p,C,'',0);if(n===p)break;p=n}}}finally{st._df=sv||{}}
   const atk=[];st.grid.forEach((u,i)=>{if(!u||!U[u.t]||U[u.t].cat==='wall'||U[u.t].cat==='trap')return;const D=stat(st,u.t);if(D.dmg>0)atk.push([i,D.rng||1])});
-  const out={};for(const j of path){let n=0;for(const[i,r]of atk)if(i!==j&&inRange(j,i,r))n++;if(n>=2)out[j]=n}return out}
+  const out={};for(const j of path){let n=0;for(const[i,r]of atk)if(i!==j&&inRange(j,i,r))n++;if(n>=min)out[j]=n}return out}
  // un pas en s'éloignant de la maison (recul)
  // (jamais dans la forêt : contre la lisière, le zombie reste sur place)
  function back(p){let[r,c]=rc(p);const dr=r-MID,dc=c-MID;if(Math.abs(dr)>=Math.abs(dc))r+=Math.sign(dr);else c+=Math.sign(dc);const b=idx(Math.max(0,Math.min(N-1,r)),Math.max(0,Math.min(N-1,c)));return isForest(b)?p:b}
