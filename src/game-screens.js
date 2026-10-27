@@ -3,7 +3,7 @@
 /* ---------- l'aube : relique, carte pour demain, boutique ---------- */
 const pickBtn=(t,a,v)=>`<button type="button" class="pick" data-a="${a}" data-v="${v}">${cardFace(t)}</button>`;
 function dawn(){
- const d=S.dawn;if(d&&!d.chimed){d.chimed=1;SFX.play('dawn')}
+ const d=S.dawn;if(d&&!d.chimed){d.chimed=1;musEnd=false;SFX.sting('dawn')}
  if(d&&d.mut&&!d.mutShown){d.mutShown=1;SFX.play('mutate');
   return show(_t`<h2 class="ko">Mutation instable</h2>${dawnTxt()}<div class="relics"><div class="relic mutx">${svg('mut')}<span><b>${Z.MUTS[d.mut].n}</b>${Z.MUTS[d.mut].d}</span></div></div><p>Elle remplace la précédente pendant 5 nuits, puis une autre mutation instable prendra sa place.</p><button type="button" class="go" data-a="dawn">Continuer</button>`)}
  // une unité a atteint 20, 40, 60… zombies tués : choix de son amélioration
@@ -74,7 +74,7 @@ function victory(){G.won=1;try{ach('win');if((G.menace||0)>=5)ach('m5');if((G.me
   if(avail.length){relStart=avail[Math.floor(Math.random()*avail.length)];META.startPool=[...(META.startPool||[]),relStart]}}
  if(!G.daily&&!META.wins){OPT.back='gold';OPT.shelter='fort';saveOpt();applyOpt()}
  if(!G.daily){META.wins=(META.wins||0)+1;META.menaceWon=Math.max(META.menaceWon??-1,m);META.menace=Math.max(META.menace||0,Math.min(Z.MENACE_MAX,m+1));META.points=(META.points||0)+pts;saveMeta(META)}
- save();SFX.play('heli');setTimeout(()=>SFX.play('relic'),900);const alive=G.grid.filter(u=>u&&u.name).map(u=>u.name);
+ save();musEnd=true;SFX.play('heli');SFX.sting('victory');setTimeout(()=>SFX.play('relic'),900);const alive=G.grid.filter(u=>u&&u.name).map(u=>u.name);
  show(_t`<img class="heli" src="assets/ui/heli.webp?v=121" alt=""><h2 class="ok">Les secours sont là !</h2><p>À l’aube de la nuit ${Z.WIN_NIGHT}, un hélicoptère se pose devant l’abri. Tu as tenu.</p><i class="bigstamp ok">Victoire${m?` · M${m}`:''}</i>
   <p><b>${G.kills}</b> zombies éliminés.${alive.length?_t` Survivants : ${alive.join(', ')}.`:''}</p>${pts?_t`<p>+<b>${pts}</b> points de survie (total : ${META.points}).</p>`:''}${META.wins===1&&!G.daily?_t`<p class="tipin">${ii('spark')} <b>Dos de carte doré</b> et <b>maison fortifiée</b> débloqués pour ta première victoire (modifiables dans les Options).</p>`:''}${unl?_t`<p class="tipin">${ii('unlock')} <b>Mutation ${m+1} débloquée</b> : ${Z.MENACES[m+1].n}. Choisis-la en préparant ta prochaine partie.</p>`:''}${cardUnl?_t`<p class="tipin">${ii('card')} <b>Carte de victoire</b> : ${Z.U[cardUnl].n} rejoint ta collection. Ajoute-la à ton deck.</p><div class="vcard">${cardFace(cardUnl,{base:1})}</div>`:''}${relUnl?_t`<p class="tipin">${ii('gift')} <b>Nouvelle relique débloquée</b> : ${Z.RELICS[relUnl].n} (${Z.RELICS[relUnl].d}). Tu pourras la trouver en partie.</p>`:''}${relStart?_t`<p class="tipin">${ii('pack')} <b>Relique de départ</b> : ${Z.RELICS[relStart].n} rejoint ta réserve. Choisis-la avant ta prochaine partie.</p>`:''}
   <button type="button" class="go" data-a="win-leave">Partir avec les secours</button><button type="button" class="skip" data-a="win-stay">Rester : une nuit de plus (mode infini, pour le score)</button>
@@ -120,7 +120,7 @@ function statsScreen(){const h=META.hist||[],pl=Object.entries(META.played||{}).
 // historique des parties (les 20 dernières) et victimes au total
 function logRun(win){if(G.daily)return;META.kills=(META.kills||0)+G.kills;(META.hist=META.hist||[]).unshift({n:win?G.night:G.night-1,w:win===1?1:0,m:G.menace||0,k:G.kills,ch:G.char,pl:G.place,d:Date.now()});META.hist=META.hist.slice(0,20);saveMeta(META)}
 function end(){
- SFX.play('death');vib([300,120,300]);achCheck();if(G.daily)ach('daily');if(!G.won)logRun(0);else logRun(1);
+ SFX.play('death');musEnd=true;SFX.sting('defeat');vib([300,120,300]);achCheck();if(G.daily)ach('daily');if(!G.won)logRun(0);else logRun(1);
  clearSave();const nights=G.night-1;
  const before=Z.unlocks(META),newRec=nights>META.best&&nights>0;
  const legs=G.daily?[]:Z.legacies(G);if(legs.length){META.legacy=[...(META.legacy||[]),...legs.map(f=>({name:f.name,t:f.t,kills:f.kills}))].sort((a,b)=>b.kills-a.kills).slice(0,3)}
@@ -140,7 +140,7 @@ function zombieFace(k){const z=Z.ZT[k],hp=Math.round(z.hp*(z.boss?1:Z.ZHP));
 const zedHtml=()=>`<div class="cgrid">${Z.ZK.map(k=>`<div class="citem">${zombieFace(k)}</div>`).join('')}</div>`;
 const memorialHtml=()=>(G.fallen||[]).length?`<div class="deck">${G.fallen.map(f=>_t`<div class="dk" style="--cc:var(--muted)">${svg(f.t)}<span><b>${ii('cross')} ${f.name}</b>${Z.U[f.t].n} · ${Z.TRAITS[f.trait]?Z.TRAITS[f.trait].n+' · ':''}${plural(f.kills,_t('zombie'),_t('zombies'))} · tombé la nuit ${f.night}</span></div>`).join('')}</div>`:`<p>${G.shelter>0?_t('Personne n’est tombé. Pour l’instant.'):_t('Aucun survivant n’est tombé au combat.')}</p>`;
 // écran d'options : volumes, vitesse de nuit, secousses, taille du texte, langue
-let optBack=null,onTitle=false;
+let optBack=null,onTitle=false,musEnd=false;
 function optionsScreen(back){if(back)optBack=back;const pc=v=>Math.round(v*100);
  show(_t`<h2 class="pw">Options</h2><div class="opts">
   <label>Langue<select data-o="lang"><option value="fr" ${OPT.lang==='fr'?'selected':''}>Français</option><option value="en" ${OPT.lang==='en'?'selected':''}>English</option></select></label>

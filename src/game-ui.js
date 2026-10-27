@@ -342,7 +342,7 @@ async function night(){
  S.moveFrom=null;S.inspect=null;save();
  const scrap0=G.scrap,kills0=G.kills;
  UNDO=[];
- if(tutoDay()===Z.TUTO_N){TUTO=5;try{localStorage.setItem('abri-tuto',5)}catch(e){}}tuto(2);nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;nightBanner();Z.startNight(G,R);render();
+ if(tutoDay()===Z.TUTO_N){TUTO=5;try{localStorage.setItem('abri-tuto',5)}catch(e){}}tuto(2);musEnd=false;nightTarget=1;KC.n=0;KC.on=1;const run=++RUN;nightBanner();Z.startNight(G,R);render();
  // v125 : météo sonore (pluie, orage) et corne de la nuit rouge
  try{SFX.setWeather(G.event.id==='pluie'?'amb-rain':G.event.id==='coupure'?'amb-storm':null);if(Z.pressure(G.night))setTimeout(()=>SFX.play('horn'),300)}catch(e){}
  await nwait(900);if(run!==RUN)return;

@@ -1,5 +1,5 @@
 // Sons du jeu : générés en code avec Web Audio, plus des grognements de zombies enregistrés (assets/sounds, licence CC0, voir CREDITS.md).
-// Expose l'objet global SFX : SFX.play('shot'), SFX.night(0..1) (ambiance et musique de nuit), SFX.toggle().
+// Expose l'objet global SFX : SFX.play('shot'), SFX.night(0..1) (ambiance de nuit), SFX.music('day') (musique en boucle), SFX.sting('dawn'), SFX.toggle().
 // Tout est protégé : si l'audio n'est pas disponible, le jeu continue sans son.
 const SFX=(()=>{
  let ac=null,master=null,sfxG=null,musG=null,BUS=null,noiseBuf=null,amb=null,muted=false,VOL={sfx:1,mus:1};
@@ -15,7 +15,7 @@ const SFX=(()=>{
   }catch(e){ac=null}
   return ac}
  // le navigateur n'autorise le son qu'après un geste du joueur
- const unlock=()=>{if(init()){loadAll();if(ac.state==='suspended')ac.resume().catch(()=>{})}};
+ const unlock=()=>{if(init()){loadAll();if(ac.state==='suspended')ac.resume().catch(()=>{});primeMusic()}};
  ['pointerdown','touchstart','keydown'].forEach(ev=>addEventListener(ev,unlock,{passive:true}));
  // sons enregistrés (assets/sounds, CC0 : voir CREDITS.md), chargés au premier geste du joueur.
  // Lecture par Web Audio (léger, même avec beaucoup de tirs) ; si le chargement échoue (fichier ouvert en local), lecteur audio classique ;
@@ -136,14 +136,45 @@ const SFX=(()=>{
     [55,82.4,110,130.8].forEach((f,i)=>{const o=ac.createOscillator();o.type=i%2?'triangle':'sawtooth';o.frequency.value=f*(1+(i-1.5)*.002);
      const og=ac.createGain();og.gain.value=i===0?.35:.18;const l=ac.createOscillator();l.frequency.value=.05+i*.03;const lg=ac.createGain();lg.gain.value=og.gain.value*.6;l.connect(lg);lg.connect(og.gain);
      o.connect(og);og.connect(fl);o.start();l.start()});music={g}}
-   music.g.gain.setTargetAtTime(.07*k,ac.currentTime,.8);
+   const real=mReal();music.g.gain.setTargetAtTime(real?0:.07*k,ac.currentTime,.8);
    const t=ac.currentTime;if(k<.6){nextEvt=t+3;nextNote=t+2;return}
    if(t>nextEvt){const r=Math.random(),e=r<.32?'owl':r<.55?'wolf':r<.9?'groan':'crack';BUS=musG;try{if(!(e==='owl'&&sample('owl',.35+Math.random()*.25)))AMB[e](t+.05)}finally{BUS=null}nextEvt=t+4+Math.random()*7}
-   if(t>nextNote){BUS=musG;try{const f=SCALE[Math.floor(Math.random()*SCALE.length)];note(t+.05,f,.035);if(Math.random()<.4)note(t+.9,SCALE[Math.floor(Math.random()*SCALE.length)],.025)}finally{BUS=null}nextNote=t+3.5+Math.random()*4}
+   if(t>nextNote&&!real){BUS=musG;try{const f=SCALE[Math.floor(Math.random()*SCALE.length)];note(t+.05,f,.035);if(Math.random()<.4)note(t+.9,SCALE[Math.floor(Math.random()*SCALE.length)],.025)}finally{BUS=null}nextNote=t+3.5+Math.random()*4}
   }catch(e){}}
+ // v192 : vraies musiques (ElevenLabs, voir CREDITS.md) : menu, jour, nuit, boss en boucle ; aube, défaite, victoire jouées une fois.
+ // Lues en streaming par 3 lecteurs audio réutilisés (léger en mémoire ; chaque morceau ne se télécharge que quand il joue),
+ // branchés sur le bus « Musique et ambiance ». Deux lecteurs se relaient pour les boucles (fondu enchaîné), le 3ᵉ joue les morceaux courts.
+ // [volume, durée du fondu de boucle en s]
+ const MT={menu:[.5,4],day:[.45,2.5],night:[.55,4],boss:[.5,2.5],dawn:[.9],defeat:[.8],victory:[.65]};
+ const MP=[];let mWant=null,mCur=null,mI=0,loopG=null,duckT=null;
+ const mUrl=n=>'assets/sounds/music-'+n+'.mp3';
+ function players(){if(MP.length)return MP;
+  for(let k=0;k<3;k++){const a=new Audio();a.preload='none';const P={a,g:null,v:0,n:null};
+   if(location.protocol!=='file:'&&ac.createMediaElementSource)try{if(!loopG){loopG=ac.createGain();loopG.connect(musG)}const s=ac.createMediaElementSource(a);P.g=ac.createGain();P.g.gain.value=0;s.connect(P.g);P.g.connect(k<2?loopG:musG)}catch(e){P.g=null}
+   if(!P.g)a.volume=0;MP.push(P)}return MP}
+ function mVol(P,v,tc){P.v=v;try{if(P.g)P.g.gain.setTargetAtTime(v,ac.currentTime,tc);else P.a.volume=Math.max(0,Math.min(1,v*VOL.mus))}catch(e){}}
+ function mStart(P,n,tc){clearTimeout(P.st);try{if(P.n!==n){P.n=n;P.a.src=mUrl(n)}else P.a.currentTime=0;const pr=P.a.play();if(pr&&pr.catch)pr.catch(()=>{})}catch(e){}mVol(P,MT[n][0],tc)}
+ function mStop(P,tc){mVol(P,0,tc);clearTimeout(P.st);P.st=setTimeout(()=>{if(!P.v)try{P.a.pause()}catch(e){}},tc*4000+200)}
+ // appelé à chaque image : morceau voulu (ou null pour le silence)
+ function mTick(){
+  if(!ac||!primed||document.hidden)return;const L=players();
+  if(mWant!==mCur){if(mCur)mStop(L[mI],.6);mCur=mWant;if(mCur){mStop(L[mI],.6);mI^=1;mStart(L[mI],mCur,.8)}}
+  if(!mCur)return;const P=L[mI],a=P.a,X=MT[mCur][1];
+  if(a.duration&&a.currentTime>a.duration-X){mStop(P,X/4);mI^=1;mStart(L[mI],mCur,X/4)}
+  else if(a.paused&&!a.ended&&a.readyState>=2)try{const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{})}catch(e){}}
+ const mReal=()=>!!(mCur&&MP[mI]&&MP[mI].a.readyState>=2);
+ // iPhone : un lecteur ne peut jouer que s’il a été lancé une fois pendant un toucher du joueur, d’où ce lancement-arrêt au premier geste
+ let primed=false;function primeMusic(){if(primed)return;primed=true;try{players().forEach((P,k)=>{try{P.n=k?'dawn':'menu';P.a.src=mUrl(P.n);const pr=P.a.play(),off=()=>{if(!P.v)try{P.a.pause()}catch(e){}};if(pr&&pr.then)pr.then(off,()=>{});else off()}catch(e){}})}catch(e){}}
+ function setMusic(n){if(muted)n=null;mWant=n;try{mTick()}catch(e){}}
+ // morceau joué une fois ; la boucle en cours baisse pendant ce temps
+ function sting(n){if(muted||!init()||!primed||!MT[n])return;try{const P=players()[2];mStart(P,n,.05);
+   if(loopG){loopG.gain.setTargetAtTime(.2,ac.currentTime,.3);clearTimeout(duckT);duckT=setTimeout(()=>{try{loopG.gain.setTargetAtTime(1,ac.currentTime,1.2)}catch(e){}},Math.max(2,(P.a.duration||9)-1.5)*1000)}}catch(e){}}
+ // jeu en arrière-plan (téléphone verrouillé, autre onglet) : on coupe tout
+ document.addEventListener('visibilitychange',()=>{try{if(!ac)return;if(document.hidden){MP.forEach(P=>{try{P.a.pause()}catch(e){}});ac.suspend().catch(()=>{})}
+  else if(!muted){ac.resume().catch(()=>{});if(mCur&&MP[mI]){const a=MP[mI].a;try{const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{})}catch(e){}}}}catch(e){}});
  function toggle(){muted=!muted;for(const f in bed)if(bed[f].a){try{muted?bed[f].a.pause():bed[f].a.play()}catch(e){}}try{localStorage.setItem('abri-mute',muted?'1':'0')}catch(e){}
-  if(init()){master.gain.setTargetAtTime(muted?0:.55,ac.currentTime,.05);if(!muted)unlock()}return muted}
+  if(init()){master.gain.setTargetAtTime(muted?0:.55,ac.currentTime,.05);if(!muted)unlock()}if(muted)setMusic(null);return muted}
  // volumes des options (0 à 1)
- function setVol(sfx,mus){VOL.sfx=sfx;VOL.mus=mus;if(sfxG){sfxG.gain.setTargetAtTime(sfx,ac.currentTime,.05);musG.gain.setTargetAtTime(mus,ac.currentTime,.05)}}
- return{play,night,toggle,setVol,setWeather:w=>{weather=w},setMaxVoices:n=>{maxVoices=n},get muted(){return muted}};
+ function setVol(sfx,mus){VOL.sfx=sfx;VOL.mus=mus;if(sfxG){sfxG.gain.setTargetAtTime(sfx,ac.currentTime,.05);musG.gain.setTargetAtTime(mus,ac.currentTime,.05)}MP.forEach(P=>{if(!P.g)mVol(P,P.v)})}
+ return{play,night,music:setMusic,sting,toggle,setVol,setWeather:w=>{weather=w},setMaxVoices:n=>{maxVoices=n},get muted(){return muted}};
 })();

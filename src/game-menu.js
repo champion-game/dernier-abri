@@ -28,7 +28,7 @@ function dailyStart(){const d=DLY;DLY=null;newGame(d.plan.ch,d.plan.pl,d.day,d.p
 function dailyOver(){const won=G.shelter>0,sc=Z.dailyScore(G,won),day=G.daily,tot=Object.values(G.fixedW||{}).reduce((a,b)=>a+b,0);let prev=null;
  try{const d=JSON.parse(localStorage.getItem('abri-defi'))||{};prev=d[day]??null;if(prev===null||sc>prev){d[day]=sc;localStorage.setItem('abri-defi',JSON.stringify(d))}}catch(e){}
  try{ach('daily');achCheck()}catch(e){}clearSave();
- if(won){SFX.play('dawn');vib([100,60,100])}else{SFX.play('death');vib([300,120,300])}
+ musEnd=true;if(won){SFX.sting('dawn');vib([100,60,100])}else{SFX.play('death');SFX.sting('defeat');vib([300,120,300])}
  show(_t`<i class="bigstamp ${won?'ok':'ko'}">${won?_t('Tenu'):_t('Tombé')}</i><h2 class="${won?'ok':'ko'}">${won?_t('L’abri a tenu !'):_t('L’abri est tombé')}</h2>
   <div class="big">${_t`Score : ${sc}`}</div>
   <p><b>${G.kills}</b> zombies éliminés${won?_t`, <b>${Math.max(0,G.shelter)}</b> PV d’abri restants`:''}.</p>
@@ -100,7 +100,7 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
 // v147 : logo du jeu (illustration d’Amine)
 const LOGO='<img src="assets/ui/barricard.webp" alt="Barricard" width="840" height="420">';
-function title(){endTest();if(META.gift){S.endHtml=null;giftScreen();return}onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1>${DEMO?_t`<p class="demob">Démo</p><p>Tiens <b>${Z.DEMO_N} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>${wishBtn()}`:_t`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>`}${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
+function title(){endTest();musEnd=false;if(META.gift){S.endHtml=null;giftScreen();return}onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1>${DEMO?_t`<p class="demob">Démo</p><p>Tiens <b>${Z.DEMO_N} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>${wishBtn()}`:_t`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>`}${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?_t`<p>Ton record : <b>${plural(META.best,_t('nuit survécue'),_t('nuits survécues'))}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,_t('partie'),_t('parties'))}.</p>`:''}${nextUnlockTxt()}
 ${(d=>d?_t`<button type="button" class="go" data-a="load">Continuer · ${d.s.phase?_t('Aube'):_t('Jour')} ${d.g.night}</button><button type="button" class="skip" data-a="new">Nouvelle partie</button>`:_t('<button type="button" class="go" data-a="new">Jouer</button>'))(loadSave())}

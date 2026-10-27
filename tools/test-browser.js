@@ -18,7 +18,8 @@ async function run(vp,label,lang='fr'){
   window.__txt=new Set();const f=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(t,...a){if(window.__txt.size<3000)window.__txt.add(String(t));return f.call(this,t,...a)}},lang);
  const p=await ctx.newPage();const errs=[];
  p.on('pageerror',e=>errs.push('erreur JS : '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push('console : '+m.text())});
- p.on('requestfailed',r=>errs.push('fichier manquant : '+r.url().replace('file://'+ROOT,'')));
+ // un téléchargement interrompu (rechargement de la page pendant qu’un son charge) n’est pas un fichier manquant
+ p.on('requestfailed',r=>{const f=r.failure();if(f&&/ERR_ABORTED/.test(f.errorText))return;errs.push('fichier manquant : '+r.url().replace('file://'+ROOT,''))});
  // en anglais : tout texte visible qui ressemble à du français est signalé
  const FRW=/(^|[^\p{L}])(le|la|les|des|du|une|tes|ton|ta|tu|et|abri|ferraille|dégâts?|nuits?|cartes?|jour|pioche|défausse|aube|vague|énergies?|zombies? éliminés?|choisis|touche)(?![\p{L}])|[éèêàùçôîû’]/iu;
  const NAMES=/La Sonothèque|Léa|Inès|Chloé|Théo|Zoé|Médor|Français|Sonothèque|Pokémon|Barricard/g;

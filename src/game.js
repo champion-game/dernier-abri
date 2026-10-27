@@ -197,7 +197,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v191 · 27 oct.';
+const VERSION='v192 · 27 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -379,7 +379,7 @@ function tutoHand(){const d=tutoDay(),need=TUTO_HAND[d];if(!need||!need.length)r
 function tutoPicks(){const t=G&&G.tuto&&!G.test?TUTO_PICK[G.night]:null;if(!t||!S.draw.includes(t))return null;return[t,...shuffle([...new Set(S.draw)].filter(x=>x!==t)).slice(0,2)]}
 function tutoEnd(){G.tuto=0;TUTO=5;try{localStorage.setItem('abri-tuto',5)}catch(e){}}
 const TIPS=[_t('Touche une carte en bas pour la choisir. Le chiffre jaune est son coût en énergie.'),_t('Touche une case en pointillés jaunes pour la poser.'),_t('Bien ! Les points jaunes sous la carte sont ton énergie. Pose d’autres cartes, puis touche « Affronter la nuit ».'),_t('Tes survivants se défendent tout seuls. Touche le bouton du bas pour accélérer.')];
-function newGame(ch,pl,daily,deck,plan){onTitle=false;endTest();try{UNDO=[]}catch(e){}const tut=TUTO===0&&!daily&&!plan;
+function newGame(ch,pl,daily,deck,plan){onTitle=false;musEnd=false;endTest();try{UNDO=[]}catch(e){}const tut=TUTO===0&&!daily&&!plan;
  RS=daily?seedFrom('abri-'+daily):1+Math.floor(Math.random()*2147483645);
  G=plan?Z.dailyState(plan,deck,R):Z.newState(ch,pl,R,daily?Z.KEYS.slice():Z.unlocks(META).pool);if(daily)G.daily=daily;if(tut)G.tuto=1;
  G.biome=BIOMES[daily?RS%BIOMES.length:Math.floor(Math.random()*BIOMES.length)];setBiome(G.biome);// terrain purement graphique
@@ -449,7 +449,7 @@ function save(){if(TEST)return;try{G.rs=RS;const g={...G,event:G.event.id,z:[],p
 function loadSave(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY));if(d&&d.v===3&&d.g&&Array.isArray(d.g.grid)&&d.g.grid.length===81){const g=Array(Z.N*Z.N).fill(null);d.g.grid.forEach((u,i)=>{if(u)g[T9(i)]=u});d.g.grid=g;d.v=SAVE_V}if(d&&d.v===SAVE_V&&d.g&&d.s){['draw','discard','hand','used'].forEach(k=>{if(Array.isArray(d.s[k]))d.s[k]=d.s[k].filter(t=>Z.U[t])});if(d.s.next&&!Z.U[d.s.next])d.s.next=null;
   if(Array.isArray(d.g.grid))d.g.grid=d.g.grid.map(u=>u&&Z.U[u.t]?u:null);if(Array.isArray(d.g.bench))d.g.bench=d.g.bench.filter(u=>u&&Z.U[u.t]);return d}}catch(e){}return null}
 function clearSave(){if(TEST)return;try{localStorage.removeItem(SAVE_KEY)}catch(e){}}
-function resume(d){onTitle=false;try{UNDO=[]}catch(e){}
+function resume(d){onTitle=false;musEnd=false;try{UNDO=[]}catch(e){}
  newGame(d.g.char,d.g.place);
  Object.assign(G,d.g,{event:Z.EVENTS.find(e=>e.id===d.g.event)||Z.EVENTS[0]});if(!d.g.tuto)G.tuto=0;Z.touch(G);setBiome(G.biome);
  RS=d.g.rs||RS;Object.assign(S,d.s,{sel:null,busy:false});if(G.ammo>0){for(let k=0;k<G.ammo;k++)S.hand.push('shell');G.ammo=0}S.used=S.used||[];G.bench=G.bench||[];S.bsel=null;S.board=G.grid.filter(Boolean).concat(G.bench);POS=new Map();G.grid.forEach((u,j)=>{if(u)POS.set(u,j)});DISC0=-1;

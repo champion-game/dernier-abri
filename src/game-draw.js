@@ -978,6 +978,8 @@ function titleDeco(now){
 function frameInner(now){
  const dt=Math.min(50,now-last);last=now;fit();try{titleDeco(now)}catch(e){}
  nightAmt+=(nightTarget-nightAmt)*Math.min(1,dt/450);{const dq=(now-dawnT)/DAWN;if(dq>=0&&dq<1&&nightTarget===0)nightAmt=Math.max(nightAmt,1-dq)}SFX.night(nightAmt);
+ // v192 : musique selon l’écran (menu, jour, nuit, boss ou nuit rouge) ; silence sur l’écran de fin
+ try{SFX.music(musEnd?null:onTitle||!G?'menu':S.busy?(Z.leadBoss(G.night)||Z.pressure(G.night)||G.tier==='blood'?'boss':'night'):'day')}catch(e){}
  let sx=0,sy=0;if(now-shakeT<260&&!reduce){const k=(1-(now-shakeT)/260)*shakeK;sx=(Math.random()-.5)*k;sy=(Math.random()-.5)*k}
  {let zm=1,ox=0,oy=0;if(zoomFX){const q=(now-zoomFX.t0)/zoomFX.dur;if(q>=1||q<0)zoomFX=null;else{const e=q<.15?q/.15:q>.55?(1-q)/.45:1;zm=1+zoomFX.k*e*e*(3-2*e);ox=zoomFX.x*(1-zm);oy=zoomFX.y*(1-zm)}}
  CAM=[SC*zm,0,0,SC*zm,(sx+ox)*SC,(sy+oy)*SC];CAMZ=[zm,0,0,zm,ox*SC,oy*SC];ctx.setTransform(...CAM)}
