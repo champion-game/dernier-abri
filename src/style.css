@@ -1447,3 +1447,55 @@ html.artx button.round{font-family:var(--ax-head);font-weight:600;text-transform
 html.artx button.round span{color:#5a4a36}
 html.artx .shel-bar{background:#0c0b0a;border-color:#3b362f}
 html.artx .go:not(.speed){text-transform:uppercase}
+/* v197 : écran de jeu d'après la 2e maquette d'Amine */
+/* téléphone en hauteur : grande étiquette « JOUR n » posée à gauche de la fiche de nuit */
+@media (orientation:portrait){
+ html.artx:not(.felton) .app{position:relative}
+ html.artx:not(.felton) .top{min-height:34px}
+ html.artx:not(.felton) button.round{position:absolute;z-index:3;left:calc(max(16px,env(safe-area-inset-left,0px)) + 7px);top:57px;width:68px;min-height:80px;padding:6px 2px 5px;
+  display:block;white-space:normal;text-align:center;font-size:42px;line-height:.95;word-spacing:100px;transform:rotate(-3deg);
+  background:var(--ax-noise),radial-gradient(120% 120% at 50% 40%,transparent 55%,rgba(90,60,25,.4)),linear-gradient(var(--ax-paper),var(--ax-paper2));box-shadow:0 3px 0 #000,0 5px 10px rgba(0,0,0,.6)}
+ html.artx:not(.felton) button.round::first-line{font-size:17px;letter-spacing:.1em}
+ html.artx:not(.felton) button.round .mtag{display:block;margin-top:2px;font-size:11px;word-spacing:normal}
+ html.artx:not(.felton) .event{padding-left:86px;min-height:96px}
+}
+/* piste des nuits : cases sombres, nuit rouge en rouge sang, nuit en cours en parchemin */
+html.artx .tc{background:linear-gradient(#77726a,#5f5b54);color:#efe5cc;font-family:var(--ax-head);font-weight:600;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.5),inset 0 -2px 0 rgba(0,0,0,.25)}
+html.artx .tc.calm{background:linear-gradient(#5f6c47,#4b5737);color:#e6ecd2}
+html.artx .tc.red{background:linear-gradient(#c22a20,var(--ax-red2));color:#fbefd8}
+html.artx .tc.boss{background:linear-gradient(#3a0f0c,#220807);color:#ffd9d0}
+html.artx .tc.now{background:var(--ax-noise),linear-gradient(var(--ax-paper),var(--ax-paper2));color:var(--ax-text);outline:2px solid #e8b52a}
+html.artx .tc.past{opacity:.5}
+html.artx .track{padding:3px;background:#0e0d0b;border:1.5px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #3b362f}
+/* pastilles (survivants, menaces, ferraille) : parchemin à bord noir */
+html.artx .fam{background:var(--ax-noise),linear-gradient(var(--ax-paper),var(--ax-paper2));color:var(--ax-text);border:1.5px solid var(--ax-black);border-radius:5px;font-weight:700;box-shadow:0 2px 0 #000}
+html.artx :is(.fam.l1,.fam.l2,.fam.ally){border-color:#c9961f;box-shadow:0 0 0 1px #e8b52a,0 2px 0 #000;color:var(--ax-text)}
+html.artx .fam.cap.full{color:#a8231c;border-color:#a8231c}
+html.artx .fam svg{stroke:currentColor}
+/* énergie : cases jaunes dans une barre sombre ; Annuler : bouton sombre à bord vert */
+html.artx .info .nrg{padding:4px 6px;background:#0e0d0b;border:1.5px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #3b362f}
+html.artx .nrg i{border-radius:1px;background:#2c2925}
+html.artx .nrg i.on{background:linear-gradient(#ffd23a,#e8a812);box-shadow:inset 0 -2px 0 #9a6a0c}
+html.artx .info .recall{background:linear-gradient(#26302a,#171d19);border:1.5px solid #5f8a5a;color:#e6efd9;border-radius:5px;box-shadow:0 2px 0 #000;font-weight:700}
+/* zombies de la horde : jetons ronds à liseré, chiffre sur pastille claire */
+html.artx .ztoks{border-radius:5px}
+/* v197 : boutons en métal usé (demande d'Amine) : acier brossé, rayures, rouille et rivets ; principal = tôle peinte en rouge, écaillée */
+html.artx{
+ --ax-rivet:radial-gradient(circle at 40% 35%,#f4f1ea 0,#a9a397 35%,#4a463f 65%,transparent 72%);
+ --ax-rivets:var(--ax-rivet) left 5px top 5px/7px 7px no-repeat,var(--ax-rivet) right 5px top 5px/7px 7px no-repeat,var(--ax-rivet) left 5px bottom 5px/7px 7px no-repeat,var(--ax-rivet) right 5px bottom 5px/7px 7px no-repeat;
+ --ax-scratch:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='80'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M12 18l40 6M90 60l52-10M160 22l30 3M30 66l22-3M200 58l28 6M118 12l14 4' stroke='%23fff' stroke-opacity='.28' stroke-width='.8'/%3E%3Cpath d='M70 30l26 2M176 44l38-8M8 44l18 2' stroke='%23000' stroke-opacity='.3' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+ --ax-brush:repeating-linear-gradient(180deg,rgba(255,255,255,.07) 0 1px,rgba(0,0,0,.05) 1px 2px,transparent 2px 3px);
+ --ax-rust:radial-gradient(40% 70% at 0% 100%,rgba(120,60,20,.55),transparent 70%),radial-gradient(30% 60% at 100% 0%,rgba(110,55,18,.45),transparent 70%),radial-gradient(18% 40% at 72% 100%,rgba(90,45,15,.4),transparent 70%)}
+html.artx :is(.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip){
+ --pl:var(--ax-rivets),var(--ax-scratch) center/240px 80px,var(--ax-rust),var(--ax-noise),var(--ax-brush),linear-gradient(#c9c3b6,#a39d90 48%,#8a857a 52%,#9d978a);
+ color:#1a1814;text-shadow:0 1px 0 rgba(255,255,255,.45);padding-inline:22px}
+html.artx :is(.go,.panel .go):not(.speed){
+ --pl:var(--ax-rivets),var(--ax-scratch) center/240px 80px,radial-gradient(22% 55% at 6% 90%,#6d6a62 0 40%,transparent 46%),radial-gradient(14% 40% at 93% 12%,#5d5a53 0 38%,transparent 45%),var(--ax-noise),linear-gradient(#cf3326,var(--ax-red) 50%,var(--ax-red2));
+ padding-inline:28px}
+html.artx :is(.go,.skip,.mute){--sh:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.25),0 3px 0 #000,0 5px 9px rgba(0,0,0,.6)}
+html.artx .go:not(.speed)::before{inset:3px 14px;border:0;border-top:1px solid rgba(255,230,210,.25);border-bottom:1px solid rgba(0,0,0,.3)}
+/* onglets et icônes : métal sombre bruni, le choisi en tôle rouge */
+html.artx :is(.panel .tab,.panel button.char,.panel .rchip,.panel .dk .qty button,.mute){background:var(--ax-scratch) center/240px 80px,var(--ax-noise),var(--ax-brush),linear-gradient(#3b3833,#2a2724 50%,#201e1b);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px #4f4a42,0 3px 0 #000}
+html.artx .mute{background:var(--ax-rivet) center 2px/6px 6px no-repeat,var(--ax-scratch) center/240px 80px,var(--ax-noise),var(--ax-brush),linear-gradient(#3b3833,#2a2724 50%,#201e1b)}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on){background:var(--ax-scratch) center/240px 80px,var(--ax-noise),linear-gradient(#cf3326,var(--ax-red) 55%,var(--ax-red2))}
