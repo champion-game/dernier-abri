@@ -373,9 +373,11 @@ async function night(){
 }
 // v179 : sur grand écran PC, la fiche de nuit et les piles passent sur le tapis vert de gauche (le CSS place ce tapis)
 function feltLayout(){try{const f=$('#felt'),fp=$('#fpiles'),m=document.querySelector('.mat'),t=$('#table'),h=$('#hand'),pd=$('#pDraw').parentNode,pc=$('#pDisc').parentNode;
- const on=innerWidth-innerHeight>=790&&innerHeight>=640&&matchMedia('(orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px)').matches;document.documentElement.classList.toggle('felton',on);
- if(on&&m.parentNode!==f){f.insertBefore(m,f.firstChild);fp.append(pd,pc)}
- else if(!on&&m.parentNode===f){document.querySelector('.side').appendChild(m);t.insertBefore(pd,h);t.appendChild(pc)}}catch(e){}}
+ const ax0=document.documentElement.classList.contains('artx'),on=(ax0?innerWidth>=1000&&innerHeight>=600:innerWidth-innerHeight>=790&&innerHeight>=640)&&matchMedia('(orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px)').matches;document.documentElement.classList.toggle('felton',on);
+ // style artiste : la pioche et la défausse restent de chaque côté de la main
+ const ax=document.documentElement.classList.contains('artx');
+ if(on&&m.parentNode!==f)f.insertBefore(m,f.firstChild);else if(!on&&m.parentNode===f)document.querySelector('.side').appendChild(m);
+ if(on&&!ax){if(pd.parentNode!==fp)fp.append(pd,pc)}else if(pd.parentNode===fp){t.insertBefore(pd,h);t.appendChild(pc)}}catch(e){}}
 addEventListener('resize',()=>{feltLayout();const b=$('#ftabs');if(b)b._h=null;feltTabs()});feltLayout();
 // v180 : onglets du tapis vert (grand écran PC) : Pioche, Horde, Journal. Le joueur choisit, le choix est retenu.
 const FT_COL={post:'#9ee08a',wall:'#c9a27a',shoot:'#f2b33d',melee:'#ff7a59',help:'#7cc7ff',trap:'#e5484d',item:'#d6c2ff',react:'#f0a0d0'},FT_ORD=['wall','post','shoot','melee','help','trap','item','react'];

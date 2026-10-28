@@ -1494,4 +1494,6 @@ I18N.en={
 "Zones non couvertes":"Uncovered areas",
 "Nuit rouge":"Red night",
 "Images de l’artiste (essai, visible seulement sur le site de test) : {0} prêtes":"Artist images (trial, only visible on the test site): {0} ready",
+"Nuit rouge demain":"Red night tomorrow",
+"Nuit rouge dans {0}":"Red night in {0}",
 };

@@ -166,6 +166,8 @@
  "sprites": [],
  "relics": [],
  "ui": [
-  "cadre.webp"
+  "bandeau.webp",
+  "cadre.webp",
+  "plateau.webp"
  ]
 }

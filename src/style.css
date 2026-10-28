@@ -1561,3 +1561,93 @@ html.artx #go:not(.speed){padding-bottom:16px;--pl:var(--ax-rv4),var(--ax-hands)
  --sh:inset 0 0 0 3px #1b1916,inset 0 0 0 5px #4a453e,inset 0 0 0 6px #000,inset 0 2px 0 7px rgba(255,200,180,.18),inset 0 0 28px rgba(40,0,0,.7),0 0 0 2px #000,0 6px 0 #000,0 12px 18px rgba(0,0,0,.75)}
 html.artx #go:not(.speed):not(:disabled):active{transform:rotate(-1.2deg) translateY(4px)}
 html.artx #go.speed{transform:none}
+
+/* ===== v200 : refonte du jeu (maquettes validées par Amine), style artiste seulement (html.artx) ===== */
+/* cadre de carte d'Amine (assets/art/ui/cadre.webp, 1024 × 1536, fenêtre et extérieur transparents) :
+   coût dans le rond du haut, nom dans le bandeau du haut, texte sur le parchemin, dégâts dans le rond rouge, PV dans le rond blanc */
+.artx .cf-art,.artx .cf-vig{left:6.8%;right:6.7%;top:12.6%;bottom:29.8%;height:auto;border-radius:2.5cqw}
+.artx .cf-art{background-position:center 22%}
+.artx .cf-vig{box-shadow:inset 0 0 5cqw rgba(0,0,0,.55)}
+.artx .cf-cost,.artx .cf.mini .cf-cost{left:13.5%;top:9%;color:#1b1712;text-shadow:none;font-family:'Oswald','Arial Narrow',sans-serif;font-weight:600}
+.artx .cf-cost{font-size:12cqw}.artx .cf.mini .cf-cost{font-size:22cqw}
+.artx .cf-name{top:5.9%;left:26%;right:9%;height:6.2%;display:flex;align-items:center;justify-content:center;color:#1b1712;line-height:1}
+.artx .cf-rar{top:69.6%}
+.artx .cf-rule{display:none}
+.artx .cf-txt{top:72.6%;bottom:17%;left:11%;right:11%;color:#2a1c0e}
+.artx .cf-foot{left:1.6%;right:1.6%;top:84%;height:13%}
+.artx .cf-atk,.artx .cf-hp{width:18.6cqw;font:600 10cqw/1 'Oswald','Arial Narrow',sans-serif}
+.artx .cf-atk{color:#fff3e6;text-shadow:0 0 1cqw #4a0906,0 .4cqw .5cqw #000}
+.artx .cf-hp{color:#1b1712;text-shadow:none}
+.artx .cf-hp .ink,.artx .cf-hp svg{display:none}
+.artx .cf.mini .cf-name{top:5.2%;left:24%;right:6%;height:7.4%;font-size:10.5cqw}
+.artx .cf.mini .cf-v{top:73%}
+.artx .cf.mini .cf-atk,.artx .cf.mini .cf-hp{font-size:17cqw}
+.artx .cf-name{font:600 8.6cqw/1 'Oswald','Arial Narrow',sans-serif;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding-top:1.4cqw;text-align:center}
+.artx .cf.mini .cf-name{font-size:12.5cqw;padding-top:1.6cqw}
+/* ---- PC (html.felton) : bandeau en haut, colonne d'infos à gauche, plateau au centre, fiche et bouton à droite, main en bas ---- */
+html.artx.felton body{background:#16120f}
+html.artx.felton body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:linear-gradient(rgba(10,7,5,0) 0,rgba(10,7,5,.15) 90px,#16120f 118px),var(--ui-bandeau,none) center 58%/100vw auto no-repeat;height:120px}
+html.artx.felton .app{--bh:96px;--hh:172px;--pw:300px;--rw:330px;--gap:10px;--map:min(calc(100dvh - var(--bh) - var(--hh) - 3*var(--gap) - 12px),calc(100vw - var(--pw) - var(--rw) - 2*var(--gap) - 2*var(--pad)));
+ grid-template-columns:var(--pw) var(--map) minmax(var(--rw),1fr)!important;grid-template-rows:var(--bh) auto auto minmax(0,1fr) auto var(--hh)!important;
+ column-gap:var(--gap);row-gap:0;padding-block:6px;justify-content:center;align-content:start}
+html.artx.felton .woods{display:none!important}
+html.artx.felton .side:first-child{grid-column:1/-1;grid-row:1;align-self:stretch}
+html.artx.felton .felt{grid-column:1;grid-row:2/6;height:var(--map);margin-top:var(--gap)}
+html.artx.felton .app>.map{grid-column:2;grid-row:2/6;align-self:start;margin:var(--gap) 0 0;width:var(--map)}
+html.artx.felton .side2{display:contents}
+html.artx.felton .side2>.tip{grid-column:3;grid-row:2;margin:var(--gap) 0 6px}
+html.artx.felton .side2>.meter{grid-column:3;grid-row:3;margin:0 0 6px}
+html.artx.felton .side2>.info{grid-column:3;grid-row:4;align-self:start;margin:var(--gap) 0 0;max-height:calc(var(--map) - 120px);overflow:auto}
+html.artx.felton .axbig{grid-column:3;grid-row:2/5;align-self:start;justify-self:center;margin-top:var(--gap);width:min(230px,calc(var(--map) * .44));z-index:6;pointer-events:none;filter:drop-shadow(0 14px 18px rgba(0,0,0,.8))}
+html.artx.felton .axbig .cf{width:100%}
+html.artx.felton .side2>.go{grid-column:3;grid-row:5;align-self:end;margin:0;min-height:96px}
+html.artx.felton .side2>.table{grid-column:1/-1;grid-row:6;margin-top:var(--gap);height:calc(var(--hh) - var(--gap));grid-template-columns:96px minmax(0,1fr) 96px}
+.axbig[hidden]{display:none}
+/* bandeau : étiquette du jour à gauche, icônes et abri à droite */
+html.artx.felton .top{height:100%;align-items:flex-start;padding-top:4px}
+html.artx.felton .top .brand{display:none}
+html.artx.felton button.round{order:-1;margin-right:auto;position:relative;width:88px;min-height:84px;padding:6px 2px 5px;white-space:normal;text-align:center;font-size:38px;line-height:.95;word-spacing:100px;transform:rotate(-2deg)}
+html.artx.felton button.round::first-line{font-size:15px;letter-spacing:.12em}
+html.artx button.round .axn{display:block;margin-top:3px;font:700 10.5px/1.1 var(--f-body);word-spacing:normal;letter-spacing:0;text-transform:none;color:#7a1a10}
+html.artx.felton .top .mute{width:40px;height:40px}
+html.artx.felton .top .shel{min-width:150px;padding:6px 9px;background:rgba(14,12,10,.82);border:1.5px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #3b362f}
+/* cadres en métal fin et foncé : colonnes, plateau, main */
+html.artx :is(.felt,.table,.info,.event,.meter){border:2px solid #000!important;border-radius:4px!important;background:var(--ax-noise),linear-gradient(#1c1a17,#131110)!important;
+ box-shadow:inset 0 0 0 2px #3a3631,inset 0 0 0 3px #000,inset 0 1px 0 3px rgba(255,255,255,.05),0 8px 16px rgba(0,0,0,.7)!important}
+html.artx .app>.map{border-radius:3px;box-shadow:0 0 0 2px #3a3631,0 0 0 3px #000,0 0 0 4px #24211d,0 10px 22px rgba(0,0,0,.75)!important}
+html.artx.felton .info{padding:10px 12px;text-align:left}
+/* pioche à droite de la main, défausse à gauche */
+html.artx .table>.piles:first-child{order:3}html.artx .table>.hand{order:2}html.artx .table>.piles:last-child{order:1}
+html.artx.felton .side2 .hand{grid-template-columns:repeat(var(--n,5),minmax(0,100px));align-self:center}
+html.artx.felton .fpiles{display:none}
+html.artx.felton .felt{gap:10px;padding:10px}
+html.artx.felton button.round{width:100px}
+html.artx .ftabs{background:rgba(0,0,0,.3)!important;border:1.5px solid #000!important;border-radius:4px!important}
+html.artx .ft-tabs button{font-family:var(--ax-head);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#b3a890;background:linear-gradient(#2c2925,#1c1a17)}
+html.artx .ft-tabs button.on{color:#fbefd8;background:linear-gradient(#c0352a,#8a1c14);box-shadow:none}
+html.artx :is(.ft-c,.ft-z,.ft-sg div,.ft-mvp){background:rgba(0,0,0,.35);border-color:#3b362f}
+html.artx .ft-body h4{font-family:var(--ax-head);font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#f1e7cf}
+html.artx :is(.ft-body h4 small,.ft-zt p,.ft-e,.ft-sg span,.ft-chl){color:#b3a890}
+html.artx .ft-zn{font-family:var(--ax-head);color:#e8c27a}
+html.artx.felton .app{--hh:186px}
+html.artx.felton .side2>.table{padding-block:12px}
+/* ---- téléphone en hauteur : bandeau en fond du haut, bouton carré « Affronter la nuit » à droite de la fiche (la main garde toute la largeur) ---- */
+@media (orientation:portrait){
+ html.artx:not(.felton) body::before{content:"";position:absolute;left:0;right:0;top:0;height:150px;z-index:-1;pointer-events:none;
+  background:linear-gradient(rgba(10,7,5,0) 40%,#0e0d0b),var(--ui-bandeau,none) 30% 60%/auto 330px no-repeat}
+ html.artx:not(.felton) .app{gap:6px}
+ html.artx:not(.felton) .event{min-height:100px}
+ html.artx:not(.felton) button.round{font-size:34px;min-height:0;padding:5px 2px 4px}
+ html.artx:not(.felton) button.round .axn{font-size:9.5px}
+ html.artx:not(.felton) .app>.map{margin-top:2px;margin-bottom:2px}
+ html.artx:not(.felton) .side2{order:2;display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:6px;align-items:stretch}
+ html.artx:not(.felton) .side2>*{grid-column:1/-1}
+ html.artx:not(.felton) .side2>.info{grid-column:1;grid-row:3;margin:0;padding:6px 8px;font-size:12px}
+ html.artx:not(.felton) .side2>#go{grid-column:2;grid-row:3;min-height:92px;padding:6px 4px 22px;white-space:normal;word-spacing:100px;font-size:19px;line-height:1;letter-spacing:.02em}
+ html.artx:not(.felton) .side2>#go.speed{word-spacing:normal;font-size:14px}
+ html.artx:not(.felton) .side2>.table{grid-row:4}
+}
+/* bouton de vitesse (nuit) : plaque d'acier lisible */
+html.artx #go.speed{background:var(--ax-rv2),var(--ax-brush2) 0 0/400px 200px,linear-gradient(#bab4a8 0,#9a9488 12%,#857f74 50%,#767066 51%,#827c71 88%,#544f47 100%)!important;background-blend-mode:normal,normal,soft-light,normal!important;
+ color:#1c1a17!important;text-shadow:0 1px 0 rgba(255,255,255,.4)!important;filter:none!important;opacity:1!important;font-family:var(--ax-head);font-weight:600;letter-spacing:.06em}

@@ -4,11 +4,12 @@
 const fs=require('fs'),path=require('path');
 const ROOT=path.join(__dirname,'..','assets'),ART=path.join(ROOT,'art');
 const OLD={cards:'cards_cartoon',sprites:'sprites_cartoon',relics:'relics',ui:'ui'};
+const NEW_UI=new Set(['bandeau.webp','plateau.webp']);// images propres au style artiste (rien à remplacer)
 const IMG=/\.(webp|png|jpg|jpeg|svg)$/i;
 function build(){const L={},warn=[];
  for(const d in OLD){const dir=path.join(ART,d);L[d]=fs.existsSync(dir)?fs.readdirSync(dir).filter(f=>IMG.test(f)).sort():[];
   const old=new Set(fs.readdirSync(path.join(ROOT,OLD[d])));
-  L[d].forEach(f=>{if(!old.has(f))warn.push(`${d}/${f} : aucune image actuelle « assets/${OLD[d]}/${f} »`)})}
+  L[d].forEach(f=>{if(!old.has(f)&&!(d==='ui'&&NEW_UI.has(f)))warn.push(`${d}/${f} : aucune image actuelle « assets/${OLD[d]}/${f} »`)})}
  return{L,warn}}
 const{L,warn}=build(),file=path.join(ART,'liste.json'),txt=JSON.stringify(L,null,1)+'\n';
 if(require.main===module){

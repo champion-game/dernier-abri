@@ -33,6 +33,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-menu.js` : défi du jour, tableau des combats, menu pause, raccourcis clavier, accueil et démarrage.
   - `game-anim.js` : animations de cartes inspirées de Hearthstone (main, pose, aube, collection, decks, récompense) ; chargé en dernier, il enveloppe quelques fonctions des autres fichiers.
   - `game-fiche.js` : fiche de fin de partie (rapport de survie) et son image à partager ; chargé après `game-anim.js`.
+  - `game-artx.js` : refonte du style artiste (plateau dessiné, grande carte au survol, « Nuit rouge dans N ») ; chargé tout à la fin.
   - `game-fx2.js` : troisième série d’effets (avant → après, zones non couvertes, bouton de la nuit, nuit rouge, gros coups, maison touchée, aube) ; chargé en dernier.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
 - `assets/art/` : les images de l’artiste en essai (même nom que l’image remplacée, puis `node tools/art-liste.js`), visibles via Options → « Images de l’artiste » sur le site GitHub seulement (voir `docs/GAME_DESIGN.md`, « Le style artiste »).
