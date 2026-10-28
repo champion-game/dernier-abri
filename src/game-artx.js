@@ -143,3 +143,6 @@ function axPaint(){try{const d=$('#axPlat');if(!d||d.hidden||!axOn()||!axSky)ret
   p.globalCompositeOperation='destination-in';p.drawImage(AX.plat,0,0,w,h);p.restore()}}
 }catch(e){}}
 {let raf=()=>{axPaint();requestAnimationFrame(raf)};requestAnimationFrame(raf)}
+// v212 : cartes en illustrations cartoon dans le style artiste (choix d'Amine) : les illustrations de l'artiste restent dans assets/art/cards, inutilisées
+{const a3=applyArt;applyArt=function(){try{ART_NEW.cards=[]}catch(e){}return a3.apply(this,arguments)}}
+try{ART_NEW.cards=[];if(typeof render==='function'&&typeof G!=='undefined'&&G)render()}catch(e){}
