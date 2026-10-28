@@ -236,7 +236,8 @@ const norm=x=>x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 let CB=null,CNEW=[];// CB : classeur affiché {all, item, deck} ; CNEW : cartes gagnées depuis la dernière visite (« Nouveau » le temps de la visite)
 const cfPer=()=>innerWidth>=900?10:innerWidth>=700?8:9;// 5 × 2 sur ordinateur, 4 × 2 sur tablette, 3 × 3 sur téléphone
 function cfOpen(){CF.page=0;if(!META.seenC)META.seenC=ownAll().slice();CNEW=ownAll().filter(t=>!META.seenC.includes(t));if(CNEW.length){META.seenC=META.seenC.concat(CNEW);saveMeta(META)}}
-const cfRe=()=>(CB&&CB.deck?deckEditor:collectionScreen)(true);
+const ARTX=()=>document.documentElement.classList.contains('artx');
+const cfRe=()=>(panel.querySelector('[data-a=dkreset]')?deckEditor:collectionScreen)(true);
 function cfPool(base,k){const eds=META.eds||[];return k===''?base:k==='-'?base.filter(t=>!Z.famOf(t)):k==='*'?eds.slice():base.filter(t=>Z.famOf(t)===k)}
 function cfList(pool){let ts=pool.filter(t=>!CF.role||(CF.role.startsWith('c:')?Z.U[t].cat===CF.role.slice(2):Z.roleOf(t)===CF.role));
  const ck=Object.keys(CATN),by={cat:t=>ck.indexOf(Z.U[t].cat),cost:t=>Z.cost(t),rar:t=>-RORD[Z.RAR[t]||'com'],name:()=>0,fam:t=>Z.famOf(t)?Object.keys(Z.FAM).indexOf(Z.famOf(t)):99}[CF.sort]||(()=>0);
@@ -270,7 +271,7 @@ function cfBook(dir){const el=panel.querySelector('.cbook');if(!el||!CB)return;c
 const cfBookBox=()=>`<div class="cbook${CB.deck?' dkbook':''}">${cfBookHTML()}</div>`;
 function cfSync(){panel.querySelectorAll('select[data-f]').forEach(e=>{e.value=CF[e.dataset.f]})}
 const cNew=t=>CNEW.includes(t)?_t('<span class="cnew">Nouveau</span>'):'';
-function deckEditor(keep){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.deckError(d,ownAll()),own=ownAll();if(!keep)cfOpen();
+function deckEditor(keep){if(!ARTX())return deckEditorOld(keep);const d=META.decks[META.slot],cnt=deckCount(d),err=Z.deckError(d,ownAll()),own=ownAll();if(!keep)cfOpen();
  CB={deck:1,all:cfList(cfPool(META.cards.slice(),CF.fam)),item:t=>{const n=cnt[t]||0,mx=Z.edOf(t)?1:Z.copyMax(t),ok=deckCanAdd(d,t);
   return `<div class="citem dkc${n?' in':' out'}${ok?'':' full'}" data-a="dkp" data-v="${t}" role="button" aria-label="${_t('Ajouter')} ${Z.U[t].n}">${cNew(t)}${n?`<span class="dkn">${n}/${mx}</span>`:''}${cardFace(t,{base:1})}</div>`}};
  const u=[...new Set(d)].sort((a,b)=>Z.cost(a)-Z.cost(b)||Z.U[a].n.localeCompare(Z.U[b].n,'fr'));
@@ -281,7 +282,7 @@ function deckEditor(keep){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.d
   <p class="dkrule">${_t('Commune ×3, rare ×2, épique ×1 au maximum.')}${(META.eds||[]).length?_t` Cartes spéciales : 1 par carte, ${Z.ED_MAX} au maximum, comptées dans la limite de leur carte.`:''} ${_t('Touche une ligne pour retirer la carte.')}</p></div>
   <div class="dkbtns"><button type="button" class="go" data-a="new">${_t('Terminé')}</button><button type="button" class="skip" data-a="dkreset">${_t('Remettre le deck de départ')}</button><button type="button" class="skip" data-a="coll">${_t('Collection')}</button></div></aside>`;
  show(`<h2 class="pw">${_t`Deck ${META.slot+1}`}</h2><div class="dkwrap"><div class="dkmain">${cfBar(false)}${cfPips()}<div class="cbinder">${cfTabs(META.cards.slice(),t=>own.includes(t),1)}${cfBookBox()}</div></div>${side}</div>`,keep);cfSync()}
-function collectionScreen(keep){const own=META.cards,eds=META.eds||[],pts=META.points,price=t=>Z.CARD_PRICE[Z.RAR[t]||'com'];if(!keep)cfOpen();
+function collectionScreen(keep){if(!ARTX())return collectionScreenOld(keep);const own=META.cards,eds=META.eds||[],pts=META.points,price=t=>Z.CARD_PRICE[Z.RAR[t]||'com'];if(!keep)cfOpen();
  // trois états bien distincts : débloquée, achetable maintenant (Atelier : cadre doré et bouton), hors de portée (grisée + cadenas)
  const state=t=>own.includes(t)||eds.includes(t)?'in':Z.U[t].vic!=null?'vic':!Z.demoOk(t)?'full':pts>=price(t)?'buy':'far';
  const nIn=Z.KEYS.filter(t=>own.includes(t)).length,nBuy=Z.KEYS.filter(t=>state(t)==='buy').length,A=CF.atel;
@@ -299,6 +300,45 @@ function collectionScreen(keep){const own=META.cards,eds=META.eds||[],pts=META.p
   <div class="csum"><span class="cs-in">${_t`${nIn}/${Z.KEYS.length} débloquées`}</span><span class="cs-buy">${ii('unlock')} ${_t`${nBuy} à portée`}</span>${eds.length?`<span class="cs-in">${ii('star')} ${_t`${eds.length} spéciale(s)`}</span>`:''}</div>
   ${cfBar(true)}${cfPips()}<div class="cbinder">${cfTabs(Z.KEYS,t=>own.includes(t)||eds.includes(t),0)}${cfBookBox()}</div>
   <button type="button" class="go" data-a="new">${_t('Préparer une partie')}</button><button type="button" class="skip atelb${A?' on':nBuy?' hot':''}" data-a="atel">${A?_t('Quitter l’atelier'):`${_t('Atelier')}${nBuy?`<span class="abadge">${nBuy}</span>`:''}`}</button><button type="button" class="skip" data-a="title">${_t('Accueil')}</button>`,keep);cfSync()}
+/* ancienne collection (style actuel) : le classeur est réservé au style artiste */
+function cfBarOld(own){return _t`<div class="cfbar"><input type="search" data-f="q" placeholder="Chercher une carte…" value="${CF.q.replace(/"/g,'&quot;')}" aria-label="Chercher une carte">
+ <select data-f="sort" aria-label="Trier"><option value="cat">Par type</option><option value="cost">Par coût</option><option value="rar">Par rareté</option><option value="name">Par nom</option><option value="fam">Par faction</option></select>
+ <select data-f="role" aria-label="Rôle ou type"><option value="">Tous les rôles</option><optgroup label="Rôle"><option value="tank">Tank</option><option value="heal">Soin</option><option value="dps">DPS</option></optgroup><optgroup label="Type">${Object.keys(CATN).map(c=>`<option value="c:${c}">${CATN[c]}</option>`).join('')}</optgroup></select>
+ <select data-f="fam" aria-label="Faction"><option value="">Toutes les factions</option>${Object.keys(Z.FAM).map(f=>`<option value="${f}">${Z.FAM[f].n}</option>`).join('')}<option value="-">Sans faction</option></select>
+ ${own?_t`<select data-f="own" aria-label="Débloquées"><option value="">Toutes</option><option value="y">Débloquées</option><option value="n">À débloquer</option><option value="b">À portée</option></select>`:''}</div>`}
+function cfGrid(ts,item){
+ ts=ts.filter(t=>!CF.fam||(CF.fam==='-'?!Z.famOf(t):Z.famOf(t)===CF.fam));
+ ts=ts.filter(t=>!CF.role||(CF.role.startsWith('c:')?Z.U[t].cat===CF.role.slice(2):Z.roleOf(t)===CF.role));
+ const key=t=>`<div class="citem-w" data-t="${t}" data-n="${norm(Z.U[t].n+' '+(Z.U[t].d||''))}">${item(t)}</div>`;
+ if(CF.sort==='cat')return Object.keys(CATN).map(c=>{const g=ts.filter(t=>Z.U[t].cat===c);return g.length?`<section class="cfsec"><h3>${CATN[c]}</h3><div class="cgrid">${g.map(key).join('')}</div></section>`:''}).join('')||_t('<p>Aucune carte.</p>');
+ const by={cost:t=>Z.cost(t),rar:t=>-RORD[Z.RAR[t]||'com'],name:()=>0,fam:t=>Z.famOf(t)?Object.keys(Z.FAM).indexOf(Z.famOf(t)):99}[CF.sort];
+ const s=ts.slice().sort((a,b)=>by(a)-by(b)||Z.U[a].n.localeCompare(Z.U[b].n,'fr'));
+ return s.length?`<section class="cfsec"><div class="cgrid">${s.map(key).join('')}</div></section>`:_t('<p>Aucune carte.</p>')}
+// filtre texte sans redessiner (le champ garde le focus)
+function cfApply(){const q=norm(CF.q.trim());panel.querySelectorAll('.citem-w').forEach(e=>e.hidden=!!q&&!e.dataset.n.includes(q));
+ panel.querySelectorAll('.cfsec').forEach(s=>s.hidden=!s.querySelector('.citem-w:not([hidden])'))}
+function cfSyncOld(){panel.querySelectorAll('[data-f]').forEach(e=>{if(e.tagName==='SELECT')e.value=CF[e.dataset.f]});cfApply()}
+function deckEditorOld(keep){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.deckError(d,ownAll());
+ show(_t`<h2 class="pw">Deck ${META.slot+1}</h2><p><b>${d.length}</b> / ${Z.DECK_MAX} cartes (minimum ${Z.DECK_MIN}). ${err?`<span class="bad">${err}</span>`:_t('Prêt.')} Commune ×3, rare ×2, épique ×1 au maximum.${(META.eds||[]).length?_t` Cartes spéciales : 1 par carte, ${Z.ED_MAX} au maximum, comptées dans la limite de leur carte.`:''}</p>
+  ${cfBarOld(false)}${cfGrid(withEds(META.cards.slice()),t=>`<div class="citem${cnt[t]?' in':' out'}">${cardFace(t,{base:1})}<span class="qty"><button type="button" data-a="dkm" data-v="${t}" ${cnt[t]?'':'disabled'}>−</button><b>${cnt[t]||0}/${Z.edOf(t)?1:Z.copyMax(t)}</b><button type="button" data-a="dkp" data-v="${t}" ${deckCanAdd(d,t)?'':'disabled'}>+</button></span></div>`)}
+  <button type="button" class="go" data-a="new">Terminé</button><button type="button" class="skip" data-a="dkreset">Remettre le deck de départ</button><button type="button" class="skip" data-a="coll">Collection</button>`,keep);cfSyncOld()}
+function collectionScreenOld(keep){const own=META.cards,pts=META.points,price=t=>Z.CARD_PRICE[Z.RAR[t]||'com'];
+ // trois états bien distincts : débloquée (couleur + coche), achetable maintenant (couleur, cadre doré, bouton), hors de portée (grisée + cadenas)
+ const state=t=>own.includes(t)||(META.eds||[]).includes(t)?'in':Z.U[t].vic!=null?'vic':!Z.demoOk(t)?'full':pts>=price(t)?'buy':'far';
+ const nIn=Z.KEYS.filter(t=>own.includes(t)).length,nBuy=Z.KEYS.filter(t=>state(t)==='buy').length;
+ show(_t`<h2 class="pw">Collection</h2><p>Tu as <b>${pts}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>
+  <div class="csum"><span class="cs-in">${nIn}/${Z.KEYS.length} débloquées</span><span class="cs-buy">${ii('unlock')} ${nBuy} à portée</span>${(META.eds||[]).length?_t`<span class="cs-in">★ ${(META.eds||[]).length} spéciale(s)</span>`:''}</div>
+  <button type="button" class="skip evob" data-a="evo">✦ Évolutions secrètes · ${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length} découvertes</button>
+  ${cfBarOld(true)}${cfGrid(withEds(Z.KEYS.filter(t=>!CF.own||(CF.own==='b'?state(t)==='buy':(CF.own==='y')===own.includes(t)))),t=>{const st=state(t),pr=price(t);
+   const badge=st==='in'?'':st==='vic'?`<span class="cbadge vic">${ii('trophy')}</span>`:st==='far'||st==='full'?`<span class="cbadge lk">${ii('lock')}</span>`:'';
+   const foot=st==='in'?_t('<b class="cok">Débloquée</b>')
+    :st==='vic'?_t`<b class="vlock">${ii('trophy')} Victoire en Mutation ${Z.U[t].vic}</b>`
+    :st==='full'?_t`<b class="vlock">${ii('lock')} Jeu complet</b>`
+    :st==='buy'?_t`<button type="button" class="buy ok" data-a="unlock" data-v="${t}">${ii('unlock')} Débloquer · ${pr} pts</button>`
+    :_t`<span class="cfar"><span>${ii('lock')} ${pr} pts</span><small>il en manque ${pr-pts}</small></span>`;
+   return `<div class="citem s-${st}${st==='in'?' in':st==='buy'?'':' locked'}">${badge}${cardFace(t,{base:1})}<span class="qty">${foot}</span></div>`})}
+  <button type="button" class="go" data-a="new">Préparer une partie</button><button type="button" class="skip" data-a="title">Accueil</button>`,keep);cfSyncOld()}
+
 // page des évolutions secrètes : les cartes découvertes en grand avec leur recette, les autres en silhouette avec un indice
 function evoScreen(){const ev=META.evo||[],n=Z.EVO_KEYS.filter(k=>ev.includes(k)).length;
  show(_t`<h2 class="pw">Évolutions secrètes</h2><p>Deux cartes précises posées <b>côte à côte</b> sur le plateau se transforment en une unité unique. C’est une <b>nouvelle carte</b> : les deux cartes de la recette repartent aussitôt dans ta défausse. La carte évoluée n’entre jamais dans le deck ni la défausse : blessée, elle part en réserve ; détruite, elle disparaît. Tu en as découvert <b>${n} sur ${Z.EVO_KEYS.length}</b>.</p>
@@ -397,7 +437,7 @@ let cbSw=null,cbAt=0;panel.addEventListener('pointerdown',e=>{cbSw=e.target.clos
 panel.addEventListener('pointerup',e=>{const w=cbSw;cbSw=null;if(!w||!CB)return;const dx=e.clientX-w.x,dy=e.clientY-w.y;
  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4&&Date.now()-w.t<900){const n=panel.querySelector(`.cpg[data-v="${dx<0?1:-1}"]`);cbAt=Date.now();if(n&&!n.disabled)ACT.cpg(dx<0?1:-1)}});
 panel.addEventListener('click',e=>{if(Date.now()-cbAt<400&&e.target.closest('.cbook')){e.stopPropagation();e.preventDefault()}},true);
-panel.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f==='q'){CF.q=e.target.value;CF.page=0;cfBook()}});
+panel.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f==='q'){CF.q=e.target.value;CF.page=0;if(panel.querySelector('.cbook'))cfBook();else cfApply()}});
 panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f;if(!f||f==='q')return;CF[f]=e.target.value;CF.page=0;cfRe()});
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
 ['fullscreenchange','webkitfullscreenchange'].forEach(n=>document.addEventListener(n,()=>{const c=panel.querySelector('[data-o=fs]');if(c)c.checked=!!(document.fullscreenElement||document.webkitFullscreenElement)}));
