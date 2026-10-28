@@ -1713,3 +1713,10 @@ html.artx.felton .app{overflow:clip}
 #axPc{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}#axPlat>#axNight{z-index:1}
 html.artx.felton .app>.map{background:transparent!important}
 #axPlat>#axNight{display:none}
+/* v211 : PC — cadre en acier serré autour du plateau ; le canvas du jeu déborde jusqu'au cadre (--axp = marge / taille du plateau) */
+html.artx.felton .app>.map{width:calc(var(--map) * (1 + 2 * var(--axp,0)))!important;height:auto!important;
+ margin:calc(var(--map) * (.065 - var(--axp,0))) calc(var(--map) * (.103 - var(--axp,0))) calc(var(--map) * (.135 - var(--axp,0)))!important}
+#axFrame{position:absolute;z-index:4;pointer-events:none;box-sizing:content-box;margin:-5px;border:5px solid #6e695f;border-radius:4px;
+ box-shadow:0 0 0 2px #000,inset 0 0 0 2px #000,inset 0 0 0 4px #4a4640,inset 0 0 0 5px #000,0 10px 20px rgba(0,0,0,.7);background:none}
+#axFrame[hidden]{display:none}
+#axPlat{background:#14110e}
