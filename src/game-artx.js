@@ -95,3 +95,39 @@ function axFxDraw(){const fx=$('#axFx');if(!fx||fx.hidden)return;const px=Math.r
  g.restore();
  // nappes du bord (ringFog), au-dessus du voile comme dans la v195
  const dx=reduce?0:Math.sin(now/2600)*5,dy=reduce?0:Math.cos(now/3100)*4;g.globalAlpha=nightAmt*.75;g.drawImage(axRing(),dx-o,dy-o,W,W);g.globalAlpha=1}
+// v210 : PC — l'éclairage du jeu (drawSky : soleil, ombre, rayons, nuages, crépuscule, teinte de nuit) n'est plus dessiné sur les seules 11 × 11 cases
+// (il formait un carré) : il est peint sur l'image entière du plateau (#axPc), à pleine force sur les 9 × 9 cases jouables, puis il s'estompe
+// jusqu'au bord de l'image. Le canvas du jeu laisse voir l'image (sol transparent) et ne dessine plus drawSky dans ce mode.
+let axSky=null;try{axSky=(0,eval)('('+String(drawSky).replace(/if\(nightAmt>\.03\)\{ctx\.globalAlpha=nightAmt\*\.7;[^}]*\}/,'').replace(/^function drawSky\(now\)/,'function(now,XC,AXR,AXT)').replace(/\bctx\b/g,'XC').replace(/fillRect\(0,0,L,L\)/g,'fillRect(AXR[0],AXR[1],AXR[2],AXR[3])').replace(/setTransform\(\.\.\.CAM\)/g,'setTransform(...AXT)')+')')}catch(e){axSky=null}
+{const ds=drawSky;drawSky=function(){if(axOn()&&axSky)return;return ds.apply(this,arguments)}}
+{const fi=frameInner;frameInner=function(){if(axOn()&&axSky){try{ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height)}catch(e){}}return fi.apply(this,arguments)}}
+{const bg=buildGround;buildGround=function(){const r=bg.apply(this,arguments);try{if(axOn()&&axSky){const g=ground.getContext('2d');g.save();g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,ground.width,ground.height);g.restore()}}catch(e){}return r}}
+const AXP={t:0,B:null,M:null,key:''};
+function axPaint(){try{const d=$('#axPlat');if(!d||d.hidden||!axOn()||!axSky)return;let pc=$('#axPc');
+ if(!pc){pc=document.createElement('canvas');pc.id='axPc';d.insertBefore(pc,d.firstChild)}
+ const now=performance.now();if(now-AXP.t<(OPT.eco?100:33))return;AXP.t=now;
+ const dpr=Math.min(OPT.eco?1:1.5,devicePixelRatio||1),w=Math.round(d.offsetWidth*dpr),h=Math.round(d.offsetHeight*dpr);if(!w||!h)return;
+ if(pc.width!==w||pc.height!==h){pc.width=w;pc.height=h}
+ const sc=T/94.1,iw=1245*sc,ih=1263*sc,ox=T-200*sc,oy=T-162*sc,k=w/iw;/* coordonnées du jeu -> pixels de l'image : x' = (x - ox) * k */
+ const key=w+'x'+h;if(AXP.key!==key){AXP.key=key;AXP.B=document.createElement('canvas');AXP.B.width=w;AXP.B.height=h;const M=AXP.M=document.createElement('canvas');M.width=w;M.height=h;
+  const m=M.getContext('2d'),gx0=(T-ox)*k,gx1=(L-T-ox)*k,gy0=(T-oy)*k,gy1=(L-T-oy)*k;
+  let gr=m.createLinearGradient(0,0,w,0);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(gx0/w,'#000');gr.addColorStop(gx1/w,'#000');gr.addColorStop(1,'rgba(0,0,0,0)');m.fillStyle=gr;m.fillRect(0,0,w,h);
+  m.globalCompositeOperation='destination-in';gr=m.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(gy0/h,'#000');gr.addColorStop(gy1/h,'#000');gr.addColorStop(1,'rgba(0,0,0,0)');m.fillStyle=gr;m.fillRect(0,0,w,h)}
+ const p=pc.getContext('2d'),B=AXP.B,b=B.getContext('2d'),n=Math.min(1,Math.max(0,nightAmt));
+ p.setTransform(1,0,0,1,0,0);p.globalAlpha=1;p.globalCompositeOperation='source-over';p.clearRect(0,0,w,h);p.drawImage(AX.plat,0,0,w,h);
+ // teinte bleu lune de la nuit (drawSky) : partout, sans estompage
+ if(n>.03){p.globalAlpha=n*.7;p.globalCompositeOperation='multiply';p.fillStyle='rgb(95,120,190)';p.fillRect(0,0,w,h);p.globalAlpha=1;p.globalCompositeOperation='destination-in';p.drawImage(AX.plat,0,0,w,h);p.globalCompositeOperation='source-over'}
+ // lumière du jour et du crépuscule : pleine sur les cases, estompée jusqu'au bord de l'image
+ b.setTransform(1,0,0,1,0,0);b.globalAlpha=1;b.globalCompositeOperation='source-over';b.clearRect(0,0,w,h);b.drawImage(pc,0,0);
+ const T0=[k,0,0,k,-ox*k,-oy*k];b.setTransform(...T0);axSky(now,b,[ox,oy,iw,ih],T0);
+ b.setTransform(1,0,0,1,0,0);b.globalAlpha=1;b.globalCompositeOperation='destination-in';b.drawImage(AX.plat,0,0,w,h);b.drawImage(AXP.M,0,0);b.globalCompositeOperation='source-over';
+ p.drawImage(B,0,0);
+ // voile de la nuit et de l'aube (drawDark) hors des cases : le canvas du jeu le dessine déjà sur les cases
+ {const dq=(now-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0,cx0=(0-ox)*k,cy0=(0-oy)*k,cw=L*k;if(dawn||n>=.01){
+  p.save();p.beginPath();p.rect(0,0,w,h);p.rect(cx0+cw,cy0,-cw,cw);p.clip('evenodd');
+  if(dawn){const fx=1-dq*1.35,gr=p.createLinearGradient(cx0,0,cx0+cw,0);for(let j=0;j<=8;j++){const q=j/8;gr.addColorStop(q,`rgba(4,7,18,${.8*Math.min(1,Math.max(0,(fx+.3-q)/.3))})`)}
+   p.fillStyle=gr;p.fillRect(0,0,cx0+.5,h);p.fillRect(0,0,w,h)}
+  else{p.fillStyle=`rgba(4,7,18,${.8*n})`;p.fillRect(0,0,w,h)}
+  p.globalCompositeOperation='destination-in';p.drawImage(AX.plat,0,0,w,h);p.restore()}}
+}catch(e){}}
+{let raf=()=>{axPaint();requestAnimationFrame(raf)};requestAnimationFrame(raf)}

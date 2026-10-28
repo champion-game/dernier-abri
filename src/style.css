@@ -1710,3 +1710,6 @@ html.artx.felton .app{overflow:clip}
 /* v208 : nuit (PC) — canvas des brumes de la v195 prolongées sur la palissade (#axFx), fondu sur son bord extérieur */
 #axFx{position:absolute;z-index:2;pointer-events:none;-webkit-mask:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 91%,transparent);mask-composite:intersect}
 #axFx[hidden]{display:none}
+#axPc{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}#axPlat>#axNight{z-index:1}
+html.artx.felton .app>.map{background:transparent!important}
+#axPlat>#axNight{display:none}
