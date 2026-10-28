@@ -52,10 +52,14 @@ axHome();
 // v205 : PC — l'image du plateau entière (palissade, miradors) derrière le canvas, calée sur ses cases ;
 // le panneau de gauche commence à la hauteur du panneau « Abri » (symétrie)
 function axLay(){try{const on=AX.on()&&DE.classList.contains('felton')&&AX.plat,c=$('#map');let d=$('#axPlat');
- if(!on||!c){if(d)d.hidden=true;DE.style.removeProperty('--axlt');return}
+ if(!on||!c){if(d)d.hidden=true;['#axFog','#axSeam'].forEach(q=>{const e=$(q);if(e)e.hidden=true});DE.classList.remove('axnight');DE.style.removeProperty('--axlt');return}
  if(!d){d=document.createElement('div');d.id='axPlat';d.setAttribute('aria-hidden','true');c.parentNode.insertBefore(d,c)}
  const a=c.parentNode.getBoundingClientRect(),r=c.getBoundingClientRect(),k=r.width/L,sc=T/94.1;
  d.style.cssText=`left:${r.left-a.left+(T-200*sc)*k}px;top:${r.top-a.top+(T-162*sc)*k}px;width:${1245*sc*k}px;height:${1263*sc*k}px`;d.hidden=false;
+ let f=$('#axFog'),m=$('#axSeam');if(!f){f=document.createElement('div');f.id='axFog';f.innerHTML='<i><b></b></i>';f.setAttribute('aria-hidden','true');c.parentNode.appendChild(f);
+  m=document.createElement('div');m.id='axSeam';m.setAttribute('aria-hidden','true');c.parentNode.appendChild(m)}
+ f.style.cssText=d.style.cssText;f.hidden=false;m.style.cssText=`left:${r.left-a.left}px;top:${r.top-a.top}px;width:${r.width}px;height:${r.height}px`;m.hidden=false;
+ DE.classList.toggle('axnight',!!S.busy);
  const sh=document.querySelector('.top .shel');if(sh)DE.style.setProperty('--axlt',Math.max(0,sh.getBoundingClientRect().top-a.top-6)+'px')}catch(e){}}
 {const r4=render;render=function(){r4.apply(this,arguments);axLay()}}
 addEventListener('resize',()=>setTimeout(axLay,50));
