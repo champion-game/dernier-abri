@@ -1513,3 +1513,51 @@ html.artx :is(.panel,.event,.table,.meter,html.felton .felt){border:3px solid #3
  box-shadow:0 0 0 1px #000,inset 0 0 0 1px #000,inset 0 1px 0 1px rgba(255,255,255,.06),0 10px 24px rgba(0,0,0,.7)}
 html.artx :is(.event,.table,.meter){background:var(--ax-rivets),var(--ax-noise),#171513}
 html.artx .fams .tags{background:linear-gradient(90deg,rgba(14,13,11,0),#0e0d0b 10px)}
+
+/* ===== v199 : relief (demande d'Amine) : métal éclairé et bosselé, biseaux, texte gravé ; plus de rouille ni de traces marron =====
+   --ax-bump/--ax-brush : bruit éclairé (feDiffuseLighting) mélangé en incrustation (overlay / soft-light) pour garder la couleur */
+html.artx{--ax-scrX:none;--ax-bump:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='4' seed='5'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='3'%3E%3CfeDistantLight azimuth='235' elevation='55'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='1 0 0 0 -.32  1 0 0 0 -.32  1 0 0 0 -.32  0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23f)'/%3E%3C/svg%3E");--ax-brush2:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .9' numOctaves='3' seed='2'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='1.3'%3E%3CfeDistantLight azimuth='270' elevation='60'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='1 0 0 0 -.32  1 0 0 0 -.32  1 0 0 0 -.32  0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='400' height='200' filter='url(%23f)'/%3E%3C/svg%3E");--ax-scr2:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M20 30l60 9M150 90l70-14M200 20l40 5M40 100l30-4M250 80l35 9' stroke='%23fff' stroke-opacity='.35' stroke-width='.9'/%3E%3Cpath d='M20 31l60 9M150 91l70-14' stroke='%23000' stroke-opacity='.4' stroke-width='.9'/%3E%3Cpath d='M100 50l40 3M230 50l30-7' stroke='%23000' stroke-opacity='.3' stroke-width='1.2'/%3E%3C/g%3E%3C/svg%3E");
+ --ax-rv:radial-gradient(circle at 38% 32%,#fff 0,#d9d4ca 14%,#8d877c 38%,#3b3731 62%,rgba(0,0,0,.6) 70%,transparent 78%);
+ --ax-rv4:var(--ax-rv) left 7px top 7px/11px 11px no-repeat,var(--ax-rv) right 7px top 7px/11px 11px no-repeat,var(--ax-rv) left 7px bottom 7px/11px 11px no-repeat,var(--ax-rv) right 7px bottom 7px/11px 11px no-repeat;
+ --ax-rv2:var(--ax-rv) left 9px center/11px 11px no-repeat,var(--ax-rv) right 9px center/11px 11px no-repeat;
+ --ax-hands:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='80' viewBox='0 0 420 80'%3E%3Cg stroke='%23170403' stroke-linecap='round' fill='%23170403'%3E%3Cg transform='rotate(8 22 80)'%3E%3Cpath d='M22 82L22 60' stroke-width='9'/%3E%3Ccircle cx='22' cy='56' r='7' stroke='none'/%3E%3Cpath d='M17 52L14 41M21 50L20 38M25 50L26 39M29 53L32 44M16 59L10 55' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(-8 70 80)'%3E%3Cpath d='M70 82L70 46' stroke-width='9'/%3E%3Ccircle cx='70' cy='42' r='7' stroke='none'/%3E%3Cpath d='M65 38L62 27M69 36L68 24M73 36L74 25M77 39L80 30M64 45L58 41' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(8 128 80)'%3E%3Cpath d='M128 82L128 66' stroke-width='9'/%3E%3Ccircle cx='128' cy='62' r='7' stroke='none'/%3E%3Cpath d='M123 58L120 47M127 56L126 44M131 56L132 45M135 59L138 50M122 65L116 61' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(8 196 80)'%3E%3Cpath d='M196 82L196 50' stroke-width='9'/%3E%3Ccircle cx='196' cy='46' r='7' stroke='none'/%3E%3Cpath d='M191 42L188 31M195 40L194 28M199 40L200 29M203 43L206 34M190 49L184 45' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(-8 250 80)'%3E%3Cpath d='M250 82L250 62' stroke-width='9'/%3E%3Ccircle cx='250' cy='58' r='7' stroke='none'/%3E%3Cpath d='M245 54L242 43M249 52L248 40M253 52L254 41M257 55L260 46M244 61L238 57' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(8 312 80)'%3E%3Cpath d='M312 82L312 44' stroke-width='9'/%3E%3Ccircle cx='312' cy='40' r='7' stroke='none'/%3E%3Cpath d='M307 36L304 25M311 34L310 22M315 34L316 23M319 37L322 28M306 43L300 39' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3Cg transform='rotate(-8 372 80)'%3E%3Cpath d='M372 82L372 58' stroke-width='9'/%3E%3Ccircle cx='372' cy='54' r='7' stroke='none'/%3E%3Cpath d='M367 50L364 39M371 48L370 36M375 48L376 37M379 51L382 42M366 57L360 53' stroke-width='3.2' fill='none'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+/* panneaux et cadres : tôle épaisse bosselée, éclairée d'en haut, biseau clair en haut et sombre en bas */
+html.artx :is(.panel,.event,.table,.meter,html.felton .felt){border:2px solid #000;border-radius:5px;
+ background:var(--ax-rv4),linear-gradient(transparent,transparent),var(--ax-bump) 0 0/300px 300px,radial-gradient(120% 80% at 30% 0%,#3d3a35,#25221f 55%,#191714);
+ background-blend-mode:normal,normal,normal,normal,normal,overlay,normal;background-attachment:scroll;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.22),inset 2px 0 0 rgba(255,255,255,.08),inset 0 -3px 0 rgba(0,0,0,.65),inset -2px 0 0 rgba(0,0,0,.45),inset 0 0 0 5px rgba(0,0,0,.15),inset 0 0 36px rgba(0,0,0,.6),0 12px 22px rgba(0,0,0,.75)}
+html.artx .panel>h2:first-child{background:var(--ax-bump) 0 0/300px 300px,linear-gradient(#1a1815,#100f0d);background-blend-mode:overlay,normal;box-shadow:inset 0 -2px 0 rgba(255,255,255,.07),0 3px 0 #000,0 6px 10px rgba(0,0,0,.6)}
+html.artx .panel.scrolls .pfoot{background:var(--ax-bump) 0 0/300px 300px,linear-gradient(#24211e,#151311);background-blend-mode:overlay,normal}
+/* boutons secondaires : plaque d'acier brossé épaisse, texte gravé */
+html.artx :is(.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip){
+ --pl:var(--ax-rv2),linear-gradient(transparent,transparent),var(--ax-brush2) 0 0/400px 200px,linear-gradient(#bab4a8 0,#9a9488 12%,#857f74 50%,#767066 51%,#827c71 88%,#544f47 100%);
+ background-blend-mode:normal,normal,normal,soft-light,normal;color:#1c1a17;text-shadow:0 1px 0 rgba(255,255,255,.4),0 -1px 0 rgba(0,0,0,.5);border:0;border-radius:4px;
+ --sh:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(0,0,0,.45),inset 2px 0 0 rgba(255,255,255,.25),inset -2px 0 0 rgba(0,0,0,.25),0 0 0 2px #111,0 5px 0 #1a1815,0 6px 0 #000,0 10px 14px rgba(0,0,0,.7)}
+html.artx :is(.go,.skip):not(:disabled):active{transform:translateY(4px);box-shadow:inset 0 3px 6px rgba(0,0,0,.55),0 0 0 2px #111,0 1px 0 #000,0 3px 6px rgba(0,0,0,.7)}
+/* bouton principal : tôle peinte en rouge, bosselée */
+html.artx :is(.go,.panel .go):not(.speed){
+ --pl:var(--ax-rv2),linear-gradient(transparent,transparent),var(--ax-bump) 0 0/300px 300px,linear-gradient(#c93a2c 0,#a32419 14%,#8a1c14 55%,#6e140e 88%,#430b07 100%);
+ background-blend-mode:normal,normal,normal,overlay,normal;color:#fff3e0;text-shadow:0 -1px 0 rgba(0,0,0,.6),0 2px 3px rgba(0,0,0,.55);border:0;border-radius:4px;
+ --sh:inset 0 2px 0 rgba(255,190,170,.5),inset 0 -3px 0 rgba(0,0,0,.5),inset 2px 0 0 rgba(255,160,140,.2),inset -2px 0 0 rgba(0,0,0,.3),0 0 0 2px #111,0 5px 0 #3a0a07,0 6px 0 #000,0 10px 14px rgba(0,0,0,.7)}
+html.artx .go:not(.speed)::before{display:none}
+/* onglets : touches de métal, la choisie enfoncée et rouge */
+html.artx :is(.panel .tab,.panel button.char,.panel .rchip,.panel .dk .qty button){background:var(--ax-bump) 0 0/300px 300px,linear-gradient(#45413b,#2a2723 60%,#1e1c19);background-blend-mode:overlay,normal;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.6),0 0 0 1.5px #000,0 4px 0 #000,0 6px 8px rgba(0,0,0,.6)}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on){background:var(--ax-bump) 0 0/300px 300px,linear-gradient(#c0352a,#8a1c14 60%,#5e100b);background-blend-mode:overlay,normal;transform:translateY(2px);
+ box-shadow:inset 0 3px 6px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,180,160,.3),0 0 0 1.5px #000,0 1px 0 #000,0 0 12px rgba(230,60,40,.45)}
+html.artx .mute{background:var(--ax-rv) center 2px/6px 6px no-repeat,var(--ax-bump) 0 0/300px 300px,linear-gradient(#45413b,#2a2723 60%,#1e1c19);background-blend-mode:normal,overlay,normal;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.6),0 0 0 1.5px #000,0 3px 0 #000}
+/* champs creusés dans le métal */
+html.artx .panel :is(select,input[type=search],input[type=number],input[type=text]){box-shadow:inset 0 3px 6px rgba(0,0,0,.55),inset 0 -1px 0 rgba(255,255,255,.35),0 1px 0 rgba(255,255,255,.1)}
+html.artx .opts .chk input[type=checkbox]{box-shadow:inset 0 3px 6px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.12)}
+html.artx .opts .chk input[type=checkbox]::before{background:radial-gradient(circle at 35% 30%,#fff,#cfc8bb 45%,#7d776c);box-shadow:0 2px 3px rgba(0,0,0,.7)}
+
+/* « Affronter la nuit » : le panneau de la maquette (tôle rouge cabossée, cadre de métal noir et boulons, texte crème cerné de noir, mains de zombies qui montent) */
+html.artx #go:not(.speed){padding-bottom:16px;--pl:var(--ax-rv4),var(--ax-hands) left -20px bottom -4px/auto 88% repeat-x,linear-gradient(transparent,transparent),var(--ax-bump) 0 0/300px 300px,
+  radial-gradient(90% 120% at 50% 40%,#c8322a,#a02219 45%,#6a120c 85%,#3e0806);
+ background-blend-mode:normal,normal,normal,normal,normal,normal,overlay,normal;
+ min-height:66px;border-radius:3px;transform:rotate(-1.2deg);font-size:clamp(22px,6.4vw,30px);letter-spacing:.06em;line-height:1;color:#f6ecd6;
+ text-shadow:-2px -2px 0 #1a0504,2px -2px 0 #1a0504,-2px 2px 0 #1a0504,2px 2px 0 #1a0504,0 3px 0 #1a0504,0 5px 6px rgba(0,0,0,.6);
+ --sh:inset 0 0 0 3px #1b1916,inset 0 0 0 5px #4a453e,inset 0 0 0 6px #000,inset 0 2px 0 7px rgba(255,200,180,.18),inset 0 0 28px rgba(40,0,0,.7),0 0 0 2px #000,0 6px 0 #000,0 12px 18px rgba(0,0,0,.75)}
+html.artx #go:not(.speed):not(:disabled):active{transform:rotate(-1.2deg) translateY(4px)}
+html.artx #go.speed{transform:none}
