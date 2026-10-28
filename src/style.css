@@ -1333,3 +1333,26 @@ html.bigtext .uf .bp{font-size:14px}
 @keyframes hurtv{0%{opacity:1}100%{opacity:0}}
 html.eco .redsky{display:none}
 @media (prefers-reduced-motion:reduce){.go.ready{animation:none}.redsky{display:none}.hurtv.on{animation-duration:.3s}}
+
+/* style artiste (v194) : cadre portrait de l'artiste (assets/art/ui/cadre.webp, 1024 × 1536) ; html.artx quand il est choisi.
+   Fenêtre d'illustration en haut, coût dans la gemme du haut à gauche, dégâts dans la gemme rouge, PV dans la noire, texte sur le parchemin. */
+.artx .cf{aspect-ratio:1024/1536}
+.artx .cf-art,.artx .cf-vig{left:10.5%;right:8.3%;top:8.6%;bottom:29%;height:auto}
+.artx .cf-art{background-position:center 25%}
+.artx .cf-vig{box-shadow:inset 0 0 4cqw rgba(0,0,0,.45)}
+.artx .cf-cost,.artx .cf.mini .cf-cost{left:13.7%;top:8.8%;width:16cqw;height:16cqw;transform:translate(-50%,-50%);background:none;border:0;box-shadow:none;color:#f4ead2;text-shadow:0 0 1.2cqw #000,0 .4cqw .6cqw #000}
+.artx .cf-cost{font-size:11cqw}.artx .cf.mini .cf-cost{font-size:21cqw;width:22cqw;height:22cqw}
+.artx .cf-rar{top:70.6%}
+.artx .cf-name{top:72.4%;left:12%;right:12%;opacity:1;color:#1c120a}
+.artx .cf-rule{top:78.6%}
+.artx .cf-txt{top:78.8%;bottom:13.2%;left:16%;right:16%;line-height:1.08}
+.artx .cf-foot{left:2%;right:2.4%;top:83.7%;bottom:auto;height:11%;gap:0}
+.artx .cf-atk,.artx .cf-hp{width:19.4cqw;height:100%;flex:none;justify-content:center;background:none;box-shadow:none;border-radius:0;mix-blend-mode:normal;opacity:1;
+ color:#f4ead2;text-shadow:0 0 1.2cqw #000,0 .4cqw .6cqw #000;font:700 9cqw/1 'Special Elite',serif}
+.artx .cf-atk .ink{display:none}.artx .cf-atk.heal{color:#c9f0b0}
+.artx .cf-hp b{transform:none}
+.artx .cf-marks{align-self:center;margin-top:1cqw}
+.artx .cf.mini .cf-name{top:73%;font-size:11cqw}
+.artx .cf.mini .cf-v{top:80%}
+.artx .cf.mini .cf-atk,.artx .cf.mini .cf-hp{font-size:18cqw}
+.artx .cf.mini .cf-marks{margin-top:0;align-self:center}
