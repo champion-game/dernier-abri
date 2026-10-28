@@ -30,7 +30,7 @@ const SFX=(()=>{
   cannon:[['fx-cannon'],.5,.08],bark:[['fx-bark'],.4,.12],weather:[['amb-rain','amb-storm'],0,0],
   ui:[['ui-select_001','ui-select_002','ui-click_001'],.5,.06],place:[['ui-drop_001','ui-drop_002','ui-drop_003','ui-drop_004'],.7,.08],
   fuse:[['ui-confirmation_002'],.7,0],lvl:[['ui-confirmation_001'],.7,0],evo:[['ui-maximize_006'],.7,0],back:[['ui-back_001'],.6,.05],
-  shot:[['fx-shot1','fx-shot2','fx-shot3'],.32,.1],owl:[['amb-owl1','amb-owl2'],.5,.04],bed:[['amb-crickets','amb-insects'],0,0],card:[['ui-page'],.55,.08],cock:[['fx-cock'],.55,.05],mg:[['fx-shot3','fx-shot2'],.24,.08,1.18],snp:[['fx-snp1','fx-snp2'],.5,.05],sht:[['fx-sht1','fx-sht2','fx-sht3'],.42,.06],
+  shot:[['fx-shot1','fx-shot2','fx-shot3'],.32,.1],owl:[['amb-owl1','amb-owl2'],.5,.04],bed:[['amb-crickets','amb-insects'],0,0],card:[['ui-page'],.55,.08],page:[['ui-page'],.75,.12,.92],cock:[['fx-cock'],.55,.05],mg:[['fx-shot3','fx-shot2'],.24,.08,1.18],snp:[['fx-snp1','fx-snp2'],.5,.05],sht:[['fx-sht1','fx-sht2','fx-sht3'],.42,.06],
   boom:[['fx-boom1','fx-boom2','fx-boom3'],.7,.08],melee:[['fx-melee000','fx-melee001','fx-melee002','fx-melee-tomahawk'],.5,.1],hit:[['fx-hit000','fx-hit001','fx-hit002','fx-hit-arrow'],.28,.12],
   bite:[['fx-bite000','fx-bite001','fx-bite002'],.42,.1],shelter:[['fx-shelter000','fx-shelter001','fx-shelter002'],.6,.06],lost:[['fx-lost000','fx-lost001','fx-lost002'],.55,.06]};
  const BUF={},EL={};let loaded=false;
