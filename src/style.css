@@ -1356,3 +1356,94 @@ html.eco .redsky{display:none}
 .artx .cf.mini .cf-v{top:80%}
 .artx .cf.mini .cf-atk,.artx .cf.mini .cf-hp{font-size:18cqw}
 .artx .cf.mini .cf-marks{margin-top:0;align-self:center}
+
+/* ===== v196 : refonte de l'interface du style artiste (maquette d'Amine) — seulement sous html.artx =====
+   encre sombre et texture usée, boutons en parchemin à texte noir, bouton principal rouge sang,
+   titres en capitales condensées (Oswald), onglets sombres avec le choisi en rouge, interrupteurs rouges */
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/oswald-600-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/oswald-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+html.artx{
+ --ax-head:'Oswald','Arial Narrow',Impact,sans-serif;
+ --ax-black:#0b0a09;--ax-dark:#191714;--ax-dark2:#24211d;--ax-edge:#45403a;
+ --ax-paper:#e9dfc7;--ax-paper2:#d2c4a2;--ax-text:#1b1712;--ax-cream:#f1e7cf;--ax-red:#b8261d;--ax-red2:#8a1912;
+ --ax-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+ --ax-stain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 -.12'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23s)'/%3E%3C/svg%3E")}
+html.artx body{background:#0e0d0b}
+/* panneaux : encre sombre usée, liseré clair très fin */
+html.artx .panel{--ink:#f1e7cf;--muted:#c9bea6;--lantern:#e8c27a;--blood:#ff4a3a;--line:#000;
+ background:var(--ax-noise),var(--ax-stain),linear-gradient(#1d1b18,#151311);background-attachment:local,local,local;
+ border:2px solid var(--ax-black);border-radius:6px;box-shadow:inset 0 0 0 1px #3b362f,inset 0 0 40px rgba(0,0,0,.6),0 14px 34px rgba(0,0,0,.75);
+ scrollbar-color:#6b6256 rgba(0,0,0,.3)}
+html.artx .panel::-webkit-scrollbar-thumb{background:#6b6256}
+/* titre : bandeau sombre, capitales condensées, trait rouge à gauche */
+html.artx .panel h2{font-family:var(--ax-head);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:22px;line-height:1.15;color:var(--ax-cream);text-shadow:0 2px 0 #000;text-align:left}
+html.artx .panel>h2:first-child{margin:-18px -16px 4px;padding:13px 16px 12px 22px;position:relative;
+ background:var(--ax-noise),linear-gradient(#121110,#0c0b0a);border-bottom:2px solid #000;box-shadow:0 1px 0 #3b362f}
+html.artx .panel>h2:first-child::before{content:"";position:absolute;left:10px;top:12px;bottom:12px;width:4px;background:var(--ax-red);border-radius:1px}
+html.artx .panel h2.ok{color:#a6e07a}html.artx .panel h2.ko{color:#ff6a5a}html.artx .panel h2.pw{color:var(--ax-cream)}
+html.artx .panel h3{font-family:var(--ax-head);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:15px;color:var(--ax-cream);text-shadow:none}
+html.artx .panel p>.ink:first-child,html.artx .tipin .ink,html.artx .panel p.mwon{color:#e8c27a}
+html.artx .panel p.tipin{background:rgba(0,0,0,.35);border:1px solid #3b362f}
+html.artx .panel .big{font-family:var(--ax-head);font-weight:600;color:var(--ax-cream)}
+/* fiches de papier : parchemin crème, bord noir */
+html.artx .panel .relic,html.artx .panel .rfiche,html.artx .panel .stile,html.artx .panel .hrow,html.artx .panel .dk.ed,html.artx .panel .deck.pickable .dk,html.artx .panel .pl,html.artx .panel .csum span,html.artx .panel .achi{
+ background:var(--ax-noise),linear-gradient(var(--ax-paper),var(--ax-paper2));border-color:var(--ax-black);box-shadow:inset 0 0 12px rgba(80,60,30,.35),0 2px 4px rgba(0,0,0,.5)}
+html.artx .panel .rfiche h3{color:var(--ax-text)}
+/* boutons : parchemin, texte noir en capitales ; principal : rouge sang ; plus de bois ni de clous */
+html.artx :is(.go,.skip,.mute){--nl:none;--sh:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.22),0 3px 0 #000,0 5px 9px rgba(0,0,0,.55)}
+html.artx :is(.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip){--pl:var(--ax-noise),radial-gradient(130% 160% at 50% 0%,transparent 55%,rgba(90,60,25,.35)),linear-gradient(var(--ax-paper),var(--ax-paper2));
+ color:var(--ax-text);text-shadow:none;border:2px solid var(--ax-black);border-radius:3px;font-family:var(--ax-head);font-weight:600;letter-spacing:.06em}
+html.artx :is(.go,.panel .go):not(.speed){--pl:var(--ax-noise),radial-gradient(130% 170% at 50% 0%,transparent 50%,rgba(40,0,0,.45)),linear-gradient(#cf3326,var(--ax-red) 55%,var(--ax-red2));
+ color:#fbefd8;text-shadow:0 2px 0 rgba(0,0,0,.45);border:2px solid var(--ax-black);border-radius:3px;font-family:var(--ax-head);font-weight:600;letter-spacing:.08em}
+html.artx .go:not(.speed)::before{inset:3px;border:1px solid rgba(255,220,190,.22);border-radius:1px}
+html.artx :is(.go,.skip):not(:disabled):active{box-shadow:inset 0 2px 5px rgba(0,0,0,.45),0 1px 0 #000}
+html.artx :is(.go,.skip):disabled{color:rgba(27,23,18,.5);filter:grayscale(.9) brightness(.62)}
+html.artx :is(.go,.panel .go):not(.speed):disabled{color:rgba(251,239,216,.5)}
+html.artx :is(.skip.lockb:disabled,.panel button.skip.lockb:disabled){color:rgba(27,23,18,.7);text-shadow:none;filter:grayscale(.8) brightness(.7)}
+html.artx .skip.lockb:disabled::after{background:repeating-linear-gradient(-45deg,#1c1a17 0 8px,#2c2925 8px 16px);height:9px;margin-top:-4px;opacity:.55}
+html.artx .panel .tab:disabled .ink{stroke:currentColor}
+/* icônes du haut : carrés sombres */
+html.artx .mute{background:var(--ax-noise),linear-gradient(#2a2622,#171512);border:1.5px solid var(--ax-black);border-radius:4px;color:var(--ax-cream);
+ box-shadow:inset 0 0 0 1px #4a443b,0 3px 0 #000,0 4px 6px rgba(0,0,0,.5)}
+html.artx .mute svg{margin-top:0}
+/* onglets, choix, quantités : cases sombres ; le choisi en rouge */
+html.artx :is(.panel .tab,.panel button.char,.panel .rchip,.panel .dk .qty button){background:var(--ax-noise),linear-gradient(#2c2925,#1c1a17);color:var(--ax-cream);border:1.5px solid var(--ax-black);
+ border-radius:4px;box-shadow:inset 0 0 0 1px #4a443b,0 3px 0 #000;transform:none;--ink:#f1e7cf;--muted:#c9bea6}
+html.artx .panel .tab small{color:#b3a890}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on){background:var(--ax-noise),linear-gradient(#cf3326,var(--ax-red) 60%,var(--ax-red2));color:#fbefd8;font-weight:700;
+ box-shadow:inset 0 0 0 1px rgba(255,200,180,.35),0 0 0 1px #000,0 0 10px rgba(200,40,30,.45)}
+html.artx .panel .tab.on small{color:#f7d8c8}
+html.artx :is(.panel .tab:disabled,.tab:disabled,.panel .char:disabled,.char:disabled){background:linear-gradient(#24211d,#1a1815);color:#8a8070;filter:none;opacity:.8;box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+html.artx :is(.panel button.relic,.panel button.shopi){color:var(--ax-text);background:var(--ax-noise),linear-gradient(var(--ax-paper),var(--ax-paper2));border:1.5px solid var(--ax-black);box-shadow:0 3px 0 #000,0 5px 8px rgba(0,0,0,.45);transform:none}
+/* champs, menus déroulants, barre de filtres, étagère du bas */
+html.artx .panel :is(select,input[type=search],input[type=number],input[type=text]){background-color:var(--ax-paper);color:var(--ax-text);border:1.5px solid var(--ax-black);border-radius:4px;box-shadow:inset 0 2px 4px rgba(60,40,15,.4)}
+html.artx .panel :is(.cfbar select,.opts select){background:var(--ax-paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0h12L6 8z' fill='%231b1712'/%3E%3C/svg%3E") no-repeat right 10px center;border-radius:4px}
+html.artx .panel :is(select,input):focus{border-color:var(--ax-red);box-shadow:inset 0 2px 4px rgba(60,40,15,.4),0 0 0 2px rgba(200,40,30,.5)}
+html.artx .panel input::placeholder{color:#7d6f58}
+html.artx .panel .cfbar{background:var(--ax-noise),linear-gradient(#141210,#0f0e0c);border:1.5px solid #000;border-radius:6px;box-shadow:inset 0 0 0 1px #3b362f,0 6px 10px rgba(0,0,0,.55)}
+html.artx .panel.scrolls .pfoot{background:var(--ax-noise),linear-gradient(#171512,#0e0d0b);border-top:2px solid #000;box-shadow:inset 0 1px 0 #3b362f,0 -8px 14px rgba(0,0,0,.6)}
+/* curseurs et cases : rouge ; les cases des Options deviennent des interrupteurs */
+html.artx .panel input[type=range]{accent-color:var(--ax-red)}
+html.artx .opts .chk input[type=checkbox]{-webkit-appearance:none;appearance:none;position:relative;flex:none;width:40px;height:22px;margin:0;border-radius:11px;cursor:pointer;
+ background:#3a3630;border:1.5px solid #000;box-shadow:inset 0 2px 4px rgba(0,0,0,.6);transition:background .15s}
+html.artx .opts .chk input[type=checkbox]::before{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#d8ccb0;box-shadow:0 1px 2px rgba(0,0,0,.6);transition:transform .15s}
+html.artx .opts .chk input[type=checkbox]:checked{background:linear-gradient(#cf3326,var(--ax-red2))}
+html.artx .opts .chk input[type=checkbox]:checked::before{transform:translateX(18px);background:#fbefd8}
+html.artx .opts .chk input[type=checkbox]:focus-visible{outline:2px solid var(--ax-red);outline-offset:2px}
+/* succès et barres de progression */
+html.artx .achbar i{background:linear-gradient(#d8402f,var(--ax-red2))}
+html.artx .panel .achi.on{box-shadow:0 0 0 2px var(--ax-red),0 0 10px rgba(200,40,30,.45),0 2px 4px rgba(0,0,0,.45)}
+html.artx .panel .achi.on .ach-ic{background:radial-gradient(circle at 35% 30%,#e8574a,var(--ax-red2) 70%);color:#fbefd8}
+html.artx .overlay{background:rgba(8,7,6,.78)}
+/* écran de jeu : fiche de nuit, main, tableau et tapis PC en encre sombre (plus de feutre vert) */
+html.artx :is(.event,.table,.meter,.mat,html.felton .felt){background:var(--ax-noise),var(--ax-stain),linear-gradient(#1d1b18,#141210);border:2px solid var(--ax-black);border-radius:6px;
+ box-shadow:inset 0 0 0 1px #3b362f,inset 0 0 30px rgba(0,0,0,.55),0 6px 16px rgba(0,0,0,.65)}
+html.artx .ztoks{background:rgba(0,0,0,.4);border:1px solid #3b362f}
+html.artx .ztoks::before{background:#141210;border-color:#3b362f;font-family:var(--ax-head);font-weight:600}
+html.artx :is(.fiche-top span,.event span){color:#c9bea6}
+/* jour en cours : étiquette de parchemin, comme sur la maquette */
+html.artx button.round{font-family:var(--ax-head);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:15px;text-decoration:none;color:var(--ax-text);
+ padding:4px 10px;border:2px solid var(--ax-black);border-radius:3px;background:var(--ax-noise),linear-gradient(var(--ax-paper),var(--ax-paper2));box-shadow:0 3px 0 #000;transform:rotate(-2deg)}
+html.artx button.round span{color:#5a4a36}
+html.artx .shel-bar{background:#0c0b0a;border-color:#3b362f}
+html.artx .go:not(.speed){text-transform:uppercase}

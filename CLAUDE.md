@@ -18,7 +18,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - HTML, CSS et JavaScript sans framework ni étape de build. Ouvrir `index.html` suffit pour jouer.
 - Rendu de la carte en Canvas 2D (`src/game.js`). Tous les graphismes sont dessinés en code pour l'instant.
-- Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), fichiers dans `assets/fonts/`.
+- Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), fichiers dans `assets/fonts/`. Style artiste : Oswald (titres et boutons en capitales condensées).
 - Interface en français (langue source) et en anglais (`src/lang-en.js`).
 
 ## Structure

@@ -26,3 +26,4 @@
 # Polices
 
 - **Special Elite** (Astigmatic) et **Atkinson Hyperlegible** (Braille Institute) : licence SIL Open Font License 1.1, fichiers dans `assets/fonts/`.
+- **Oswald** (The Oswald Project Authors) : licence SIL Open Font License 1.1, `assets/fonts/oswald-600*.woff2`, titres et boutons du style artiste.
