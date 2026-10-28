@@ -1633,3 +1633,17 @@ html.artx .hand .card:not(.sel):not(:hover)::before{display:none!important}
 html.artx .hand .card:not(.sel):not(:hover) .cf{filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))!important}
 html.artx .hand .card:hover:not(.sel)::before{animation:none}
 html.artx.felton .axbig{position:fixed!important;right:calc(var(--rw) + 22px);top:140px;width:250px!important;margin:0!important}
+/* ===== v202 : fonds d'Amine à l'accueil et derrière le jeu, lueurs de l'accueil sur ce décor ===== */
+html.artx body{background:#120d0b}
+html.artx body::before,html.artx.felton body::before{content:"";position:fixed;inset:0;height:auto;z-index:-1;pointer-events:none;
+ background:linear-gradient(rgba(10,6,4,.45),rgba(10,6,4,.72)),var(--ui-fond,none) center/cover no-repeat}
+@media (orientation:portrait){html.artx:not(.felton) body::before{position:fixed;height:auto;background:linear-gradient(rgba(10,6,4,.45),rgba(10,6,4,.75)),var(--ui-fond-portrait2,none) center/cover no-repeat}}
+#axglow{position:absolute;pointer-events:none;z-index:0;display:none}
+#ov.hm #axglow{display:block}
+#axglow i{position:absolute;display:block;border-radius:50%;transform:translate(-50%,-50%)}
+#axglow .ax-sun{width:calc(var(--r)*var(--w)*2);height:calc(var(--r)*var(--w)*2);background:radial-gradient(circle,rgba(255,230,150,.55) 0 18%,rgba(255,160,70,.3) 36%,rgba(255,110,40,.12) 56%,transparent 72%);animation:axSun 6s ease-in-out infinite}
+#axglow .ax-lamp{width:calc(var(--r)*var(--w)*2);height:calc(var(--r)*var(--w)*2);background:radial-gradient(circle,rgba(255,210,120,.75) 0 12%,rgba(255,150,50,.35) 32%,rgba(255,110,30,.12) 55%,transparent 72%);animation:hgFire 1.8s ease-in-out infinite}
+@keyframes axSun{0%,100%{opacity:.65;transform:translate(-50%,-50%) scale(.96)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+html.eco #axglow{display:none!important}
+@media (prefers-reduced-motion:reduce){#axglow i{animation:none!important}}
+#axglow .ax-fire{width:calc(var(--r)*var(--w)*2);height:calc(var(--r)*var(--w)*2);background:radial-gradient(circle,rgba(255,180,70,.6) 0,rgba(255,120,30,.3) 36%,rgba(255,70,10,.1) 58%,transparent 72%);animation:hgFire 1.3s ease-in-out infinite}

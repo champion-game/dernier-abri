@@ -167,7 +167,10 @@
  "relics": [],
  "ui": [
   "bandeau.webp",
+  "barricard.webp",
   "cadre-amine.webp",
+  "fond-portrait2.webp",
+  "fond.webp",
   "plateau.webp"
  ]
 }
