@@ -47,3 +47,5 @@ function axHome(){try{if(AX.on()&&typeof FOND_F!=='undefined'){FOND_F='fond.webp
  if(AX.on())document.querySelectorAll('#panel .logo img').forEach(i=>{i.src=uiUrl('barricard.webp')});axGlow()}catch(e){}}
 {const a1=applyArt;applyArt=function(){a1.apply(this,arguments);axHome()}}
 axHome();
+// v204 : PC — nombre de cartes de la main, pour l'éventail
+{const r3=render;render=function(){r3.apply(this,arguments);try{const h=$('#hand');if(h)h.style.setProperty('--hn',Math.max(1,h.querySelectorAll('.card').length))}catch(e){}}}

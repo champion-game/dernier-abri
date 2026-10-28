@@ -1659,3 +1659,11 @@ html.artx.felton .axbig .cf{height:100%;width:auto!important;max-width:100%;max-
 html.artx.felton .side2>.table{grid-row:5!important;align-self:end}
 html.artx.felton .side2>.go{grid-row:6!important}
 html.artx.felton.axhov .side2>.info{display:none}
+/* v204 : PC — le plateau garde sa taille maximale ; sur grand écran, les panneaux prennent toute la place restante ;
+   la main est en éventail (grandes cartes qui se chevauchent, la carte survolée passe devant) ; plus de cadre autour du plateau */
+html.artx.felton .app{grid-template-columns:minmax(var(--pw),1fr) var(--map) minmax(var(--rw),1.25fr)!important;justify-content:stretch!important}
+html.artx.felton .side2 .hand{display:flex!important;justify-content:center;align-items:flex-end;padding:14px 4px 2px;width:100%;container-type:inline-size;--cw2:min(190px,34cqw)}
+html.artx.felton .side2 .hand .card{flex:none;width:var(--cw2);max-width:none;position:relative}
+html.artx.felton .side2 .hand .card+.card{margin-left:min(6px,calc((100cqw - 8px - var(--hn,5) * var(--cw2)) / max(1,var(--hn,5) - 1)))}
+html.artx.felton .side2 .hand .card:hover,html.artx.felton .side2 .hand .card.sel{z-index:5}
+html.artx .app>.map{box-shadow:none!important;border:0!important;border-radius:0!important}
