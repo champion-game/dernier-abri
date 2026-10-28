@@ -1904,3 +1904,8 @@ html.artx .ctab.on{filter:none;width:38px;transform:translateX(-4px);z-index:2;b
 html.artx .ctab.evo{color:#4a2470;background:var(--pgt),linear-gradient(90deg,rgba(60,35,10,.25),transparent 9px),#dccdf0}
 html.artx .cnewdot{top:3px;right:3px;width:7px;height:7px}
 @media (hover:hover){html.artx .ctab:not(.on):hover{filter:brightness(.95)}}
+/* v214 : lignes du deck de la même couleur crème que le papier des cartes (cadre.webp) */
+html.artx .dkrow{background:linear-gradient(#f3d8a8,#eecd98 55%,#e6c38c);border:1.5px solid #4a2e14;border-left:5px solid var(--hc);border-radius:4px;color:#3a2410}
+html.artx .dkrow.r-com{--hc:#4a2e14}
+html.artx .dkname{text-shadow:0 0 4px #eecd98,0 0 2px #eecd98}
+html.artx .dkart{-webkit-mask:linear-gradient(90deg,#0000,#000 75%);mask:linear-gradient(90deg,#0000,#000 75%)}
