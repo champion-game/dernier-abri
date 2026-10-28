@@ -1647,3 +1647,15 @@ html.artx body::before,html.artx.felton body::before{content:"";position:fixed;i
 html.eco #axglow{display:none!important}
 @media (prefers-reduced-motion:reduce){#axglow i{animation:none!important}}
 #axglow .ax-fire{width:calc(var(--r)*var(--w)*2);height:calc(var(--r)*var(--w)*2);background:radial-gradient(circle,rgba(255,180,70,.6) 0,rgba(255,120,30,.3) 36%,rgba(255,70,10,.1) 58%,transparent 72%);animation:hgFire 1.3s ease-in-out infinite}
+/* v203 : PC — panneau de droite : jour et icônes, fiche d'unité, grande carte (survolée ou choisie), puis la main en bas et le bouton de la nuit */
+html.artx.felton .app{grid-template-rows:auto auto auto minmax(0,1fr) auto auto!important}
+html.artx.felton .side2>.tip{grid-row:2!important}
+html.artx.felton .side2>.meter{grid-row:2!important}
+html.artx.felton .side2>.info{grid-row:3!important}
+html.artx.felton .axbig{position:static!important;grid-column:3;grid-row:4!important;align-self:stretch;justify-self:stretch;width:auto!important;min-height:0;margin:8px 0 0!important;
+ display:flex;justify-content:center;align-items:center;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.8))}
+html.artx.felton .axbig[hidden]{display:none}
+html.artx.felton .axbig .cf{height:100%;width:auto!important;max-width:100%;max-height:100%}
+html.artx.felton .side2>.table{grid-row:5!important;align-self:end}
+html.artx.felton .side2>.go{grid-row:6!important}
+html.artx.felton.axhov .side2>.info{display:none}

@@ -13,12 +13,16 @@ try{feltLayout()}catch(e){}if(AX.on())axPlat();
 {const r0=render;render=function(){r0.apply(this,arguments);try{const r=$('#round');if(!AX.on()||!r||!G||S.busy||G.oneNight)return;
  const cs=[...document.querySelectorAll('#horde .tc')],i=cs.findIndex(c=>c.classList.contains('now')),j=cs.findIndex((c,k)=>k>i&&c.classList.contains('red'));
  if(i>=0&&j>i&&!r.querySelector('.axn')){const n=j-i;r.insertAdjacentHTML('beforeend',`<small class="axn">${n===1?_t('Nuit rouge demain'):_t`Nuit rouge dans ${n}`}</small>`)}}catch(e){}}}
-// grande carte au survol de la main (PC, souris), dans la colonne de droite
-{let big=null;const show=k=>{try{if(!AX.on()||!DE.classList.contains('felton')||!matchMedia('(hover:hover)').matches)return;const t=S.hand[k];if(t==null)return;
-  if(!big){big=document.createElement('div');big.id='axBig';big.className='axbig';const i=$('#info');i.parentNode.insertBefore(big,i)}
-  big.innerHTML=cardFace(t);big.hidden=false}catch(e){}};
- const hide=()=>{if(big)big.hidden=true};
- const h=$('#hand');if(h){h.addEventListener('mouseover',e=>{const c=e.target.closest('.card');if(c)show(+c.dataset.k)});h.addEventListener('mouseleave',hide);h.addEventListener('click',hide)}}
+// PC : en haut du panneau de droite, la carte survolée en grand, sinon la carte choisie (la main est en bas du panneau)
+let axHov=null;
+function axBig(){try{let big=$('#axBig');const on=AX.on()&&DE.classList.contains('felton')&&G&&S.hand;
+ if(!on){if(big)big.hidden=true;return}
+ if(!big){big=document.createElement('div');big.id='axBig';big.className='axbig';big.setAttribute('aria-hidden','true');const i=$('#info');i.parentNode.insertBefore(big,i)}
+ const k=axHov!=null&&S.hand[axHov]!=null?axHov:(S.sel!=null&&S.sel>=0&&S.hand[S.sel]!=null?S.sel:null);
+ if(k==null){DE.classList.remove('axhov');big.hidden=true;big._t=null;return}
+ DE.classList.toggle('axhov',axHov!=null);const t=S.hand[k];if(big._t!==t){big.innerHTML=cardFace(t);big._t=t}big.hidden=false}catch(e){}}
+{const h=$('#hand');if(h){h.addEventListener('mouseover',e=>{const c=e.target.closest('.card');if(c&&matchMedia('(hover:hover)').matches){axHov=+c.dataset.k;axBig()}});h.addEventListener('mouseleave',()=>{axHov=null;axBig()})}}
+{const r2=render;render=function(){r2.apply(this,arguments);axBig()}}
 // v202 : fonds et logo d'Amine. L'accueil prend toujours le même fond (pas de tirage parmi les anciens fonds) et le nouveau logo ;
 // ses lueurs suivent ce décor : feu de camp qui vacille, lanternes, soleil couchant qui pulse (les braises et la brume restent celles de v174).
 const AXG={l:{w:1672,h:941,fire:[[25.3,73.5,6]],lamp:[[5.9,18.5,2.4]],sun:[77.2,39.3,5]},p:{w:941,h:1672,fire:[],lamp:[[1.9,35.3,2.2],[7.6,35.9,2.2],[13.2,70.1,3.2]],sun:[75.2,39.2,7]}};
