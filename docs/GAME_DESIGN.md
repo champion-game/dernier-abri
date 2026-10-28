@@ -556,6 +556,15 @@ Version gratuite sur une page itch.io publique (plus tard : démo Steam pour le 
 - Fermé (cadenas « Dans le jeu complet ») : la Station-service et le Centre commercial, le Fermier et l'Infirmière, les cartes épiques et légendaires et les chefs de faction. Les nuits 11 à 30, la victoire, les Mutations et le mode infini n'existent pas dans la démo. Le défi du jour reste visible sur l'accueil, avec un cadenas (décision d'Amine : montrer qu'il existe).
 - Mode test gardé (décision d'Amine, pour faire tester l'équilibrage), mais limité aux nuits 1 à 10 et aux cartes de la démo. La version complète garde le mode test sans limite.
 
+## Le style artiste (v193)
+
+Les illustrations de l’artiste remplacent les images actuelles petit à petit, sans casser le jeu.
+
+- Chaque image livrée va dans `assets/art/<cards|sprites|relics|ui>/`, **avec le même nom de fichier** que l’image qu’elle remplace (`assets/cards_cartoon/`, `assets/sprites_cartoon/`, `assets/relics/`, `assets/ui/`). Puis `node tools/art-liste.js` met à jour `assets/art/liste.json` et signale les noms qui ne remplacent rien. Le test moteur vérifie que la liste est à jour.
+- Options → case « Images de l’artiste (essai) » : bascule tout de suite d’un style à l’autre (cartes, sprites du plateau, reliques, fonds, cadre et dos des cartes, logo, maison fortifiée). Une image pas encore livrée garde l’image actuelle.
+- La case n’existe que sur le site GitHub et en local. `assets/art/` n’est pas envoyé sur itch.io (démo et jeu complet) : les joueurs gardent le style actuel.
+- Quand le style artiste sera validé : il deviendra le style par défaut, puis les anciennes images seront retirées (ou gardées en option « classique », au choix d’Amine).
+
 ## Le mode test (v130)
 
 Bouton « Mode test » sur l'accueil, pour essayer cartes et nuits : on choisit la nuit de départ (1 à 60), Survivant et Maison des bois, deck de départ, énergie illimitée (99 par jour), 999 ferraille, toutes les cartes proposées à l'aube et au troc. Pendant le jour, « + Carte (test) » ouvre la liste de toutes les cartes (avec recherche) pour en mettre n'importe laquelle en main (8 au plus). Rien n'est enregistré : ni record, ni points, ni succès, ni bulles vues, ni sauvegarde de partie ; la partie en cours normale reste intacte.

@@ -299,6 +299,8 @@ for(let d=0;d<40;d++){const p=Z.dailyPlan(rng(900+d)),p2=Z.dailyPlan(rng(900+d))
   const bad=ks.filter(k=>EN[k]!=null&&[...ph(EN[k])].some(p=>!ph(k).has(p)));
   check(`traduction : ${f} trous {0}… cohérents`,()=>ok(!bad.length,bad.slice(0,3).join(' | ')));
  }
+ // style artiste : assets/art/liste.json à jour (node tools/art-liste.js)
+ check('style artiste : liste des images à jour',()=>{const A=require('./art-liste.js'),cur=fs.readFileSync(path.join(ROOT,'assets/art/liste.json'),'utf8');ok(cur===A.txt,'lancer node tools/art-liste.js')});
  // le moteur en anglais : noms traduits et nuits sans plantage
  const g={I18N:{},console,localStorage:{getItem:()=>JSON.stringify({lang:'en'})},navigator:{language:'en'},NodeFilter:{SHOW_TEXT:4},
   document:{documentElement:{},body:{},querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null})}};

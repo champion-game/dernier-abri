@@ -33,7 +33,7 @@ function rapportHtml(d){const A=t=>artUrl(t)||'',st=fStamp(d),who=fWho(d);
  const p2=s?pol('b',_t('SURVIVANT MVP'),s.t,s.name,Z.U[s.t].n,s.hg>(s.kills||0)*2?_t`${s.hg} PV soignés`:plural(s.kills||0,_t('zombie'),_t('zombies'))):w?pol('b',_t('DÉFENSE MVP'),w.t,Z.U[w.t].n,_t`${fNum(w.tak)} dégâts encaissés`,''):'';
  return `<div class="fiche-w"><span class="tp l"></span><span class="tp r"></span><span class="tp d"></span><span class="tp f"></span><span class="dog"></span><span class="fpr"></span><span class="fpr b"></span>
  <div class="fiche" style="clip-path:polygon(${FEDGE.map(([x,y])=>x.toFixed(2)+'% '+y.toFixed(2)+'%').join(',')})">
- <div class="fh"><div><h3>${_t('RAPPORT DE SURVIE')}</h3><small>${_t`Dossier n° ${d.no}`} · ${d.date}</small></div><img src="assets/ui/barricard.webp" alt=""></div>
+ <div class="fh"><div><h3>${_t('RAPPORT DE SURVIE')}</h3><small>${_t`Dossier n° ${d.no}`} · ${d.date}</small></div><img src="${uiUrl('barricard.webp')}" alt=""></div>
  <div class="fst ${d.kind}">${st[0]}<small>${st[1]}</small></div>
  <p class="fwho">${who[0]}${who[1]?'<br>'+who[1]:''}</p>
  <div class="fnum"><div><b>${d.nights}</b><small>${d.nights>1?_t('nuits'):_t('nuit')}</small></div><div><b>${fNum(d.kills)}</b><small>${_t('zombies')}</small></div><div><b>${fNum(d.dmg)}</b><small>${_t('dégâts')}</small></div><div><b>${d.relics}</b><small>${d.relics>1?_t('reliques'):_t('relique')}</small></div></div>
@@ -58,7 +58,7 @@ function fCover(g,img,x,y,w,h,fy){if(!img){g.fillStyle='#3a2a1a';g.fillRect(x,y,
 function fFit(g,txt,max,font,size){let s=size;g.font=`${font.replace('$',s)}`;while(g.measureText(txt).width>max&&s>10){s--;g.font=font.replace('$',s)}return s}
 async function ficheCanvas(d){try{await Promise.all(["32px 'Special Elite'","700 20px 'Atkinson Hyperlegible'","400 20px 'Atkinson Hyperlegible'"].map(f=>document.fonts.load(f)))}catch(e){}
  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
- const [wood,logo,ca,cs,...dk]=await Promise.all([fImg('assets/ui/wood.webp'),fImg('assets/ui/barricard.webp'),fImg(d.card&&artUrl(d.card.t)),fImg((d.sv||d.wall)&&artUrl((d.sv||d.wall).t)),...d.deck.map(t=>fImg(artUrl(t)))]);
+ const [wood,logo,ca,cs,...dk]=await Promise.all([fImg(uiUrl('wood.webp')),fImg(uiUrl('barricard.webp')),fImg(d.card&&artUrl(d.card.t)),fImg((d.sv||d.wall)&&artUrl((d.sv||d.wall).t)),...d.deck.map(t=>fImg(artUrl(t)))]);
  // fond : bois sombre
  if(wood){const p=g.createPattern(wood,'repeat');g.fillStyle=p;g.fillRect(0,0,W,H)}else{g.fillStyle='#3a2414';g.fillRect(0,0,W,H)}
  g.fillStyle='rgba(12,8,5,.5)';g.fillRect(0,0,W,H);const vg=g.createRadialGradient(W/2,H/2,W*.3,W/2,H/2,W*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.6)');g.fillStyle=vg;g.fillRect(0,0,W,H);

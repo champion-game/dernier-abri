@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p build
           cp -r index.html sw.js version.txt manifest.webmanifest src assets build/
-          rm -rf build/assets/extras
+          rm -rf build/assets/extras build/assets/art
           find build -name '*.md' -delete
           sed -i -E "s/\?v=([0-9]+)/?v=\1-${GITHUB_RUN_NUMBER}/g" build/index.html
           cp -r build build-demo

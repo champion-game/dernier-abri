@@ -87,7 +87,7 @@ const ICON={
 // évolutions : icônes provisoires tirées des cartes d'origine
 Object.assign(ICON,{rocket:'<path d="M3 15l12-8 3 3-8 12zM15 7l3-3 2 2-3 3M6 14l-3 1 1-3"/>',ammo:'<path d="M9 3h6v4l1 2v12H8V9l1-2zM8 13h8"/>',amb:ICON.stretch,doc:ICON.pharma,orderly:ICON.med,nailer:ICON.turret,ranger:ICON.hunter,k9squad:ICON.k9,nightsnp:ICON.snp+'<path d="M2 2l3 3M22 2l-3 3"/>',heavyflame:ICON.flame,fortin:ICON.bunker,autogun:ICON.sentry,slaughter:ICON.butch,canteen:ICON.cook,gang:ICON.kid,saint:'<circle cx="12" cy="5" r="3"/><path d="M12 9v12M7 13h10"/>',tracker:ICON.xbow});
 const stars=u=>'★'.repeat(u.gold||0);
-const relicIc=r=>`<img class="relic-ic" src="assets/relics/${r}.webp" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{innerHTML:svg('relic')}))">`;
+const relicIc=r=>`<img class="relic-ic" src="${artP('relics',r+'.webp','assets/relics/'+r+'.webp')}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{innerHTML:svg('relic')}))">`;
 const svg=t=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICON[t]||ICON.relic}</svg>`;
 /* illustrations des cartes : une image sans texte par carte, dans assets/cards/<identifiant>.webp.
    Le jeu écrit lui-même le nom, le coût, les stats et le texte par-dessus (mises à jour et traduction faciles).
@@ -124,7 +124,7 @@ const SPRDC={},SPRC={},DOWN=Math.PI/2;
  ['rot',DOWN,34,'z_walk z_run z_sap z_armor z_howl z_crawl z_spit z_boss z_mere z_zero'],['rot',DOWN,40,'z_fat'],['rot',DOWN,30,'z_zdog']
 ].forEach(([m,b,z,ids])=>ids.split(' ').forEach(k=>{SPRDC[k]=[m,b,z];const im=new Image();im.onload=()=>SPRC[k]=im;im.src='assets/sprites_cartoon/'+k+'.webp'}));
 // le sprite à utiliser selon le style choisi (cartoon si disponible, sinon réaliste)
-function sprK(k){if((ART_STYLE==='cartoon'||!SPRD[k])&&SPRC[k])return[SPRC[k],SPRDC[k]];return[SPR[k],SPRD[k]]}
+function sprK(k){if(SPRN[k]&&ART_DEV&&OPT.art&&(SPRDC[k]||SPRD[k]))return[SPRN[k],SPRDC[k]||SPRD[k]];if((ART_STYLE==='cartoon'||!SPRD[k])&&SPRC[k])return[SPRC[k],SPRDC[k]];return[SPR[k],SPRD[k]]}
 function drawSpr(k,x,y,a,out,mul){const[im,d]=sprK(k);if(!im||!d)return false;const[m,b,z]=d,sz=z*(mul||1),r=im.width/im.height,w=r>=1?sz:sz*r,h=r>=1?sz/r:sz;
  ctx.save();ctx.translate(x,y);if(m==='rot')ctx.rotate(a-b);else if(m==='wall')ctx.rotate(out);else if(m==='wallh')ctx.rotate(out+Math.PI/2);else if((m==='up'||m==='flip')&&Math.cos(a)<-.1)ctx.scale(-1,1);
  ctx.drawImage(im,-w/2,-h/2,w,h);ctx.restore();return true}
@@ -141,8 +141,27 @@ const CART_FILES=('chief_police chief_mil chief_pyro chief_trap chief_farm chief
 const CART_ZOMB='walk fat sap armor zdog crawl run howl spit boss mere zero'.split(' ');
 const CART_POP=CART_FILES.slice(0,10);
 const cartoon=t=>CART_FILES.includes(t)&&(ART_STYLE==='cartoon'||!ART_FILES.includes(t));
-const popUrl=t=>popOK(t)&&CART_POP.includes(t)?'assets/cards_cartoon/'+t+'_pop.webp':'';
-const artUrl=t=>CART_FILES.includes(t)?'assets/cards_cartoon/'+t+'.webp':'';
+/* style artiste (essai, v193) : les images de l'artiste vont dans assets/art/<cards|sprites|relics|ui>/, avec le même nom de fichier que l'image actuelle.
+   assets/art/liste.json dit lesquelles existent (à refaire avec node tools/art-liste.js). La case « Images de l'artiste » des Options bascule
+   d'un style à l'autre ; elle n'existe que sur le site GitHub et en local (pas sur itch.io, où assets/art n'est pas envoyé).
+   Une image absente du dossier artiste garde l'image actuelle. */
+const ART_DEV=typeof location!=='undefined'&&/github\.io$|^localhost$|^127\./.test(location.hostname);
+let ART_NEW={cards:[],sprites:[],relics:[],ui:[]};const SPRN={};
+const artNew=(d,f)=>!!(ART_DEV&&OPT.art&&ART_NEW[d]&&ART_NEW[d].includes(f));
+const artP=(d,f,old)=>artNew(d,f)?'assets/art/'+d+'/'+f:old;
+const uiUrl=f=>artP('ui',f,'assets/ui/'+f);
+const sprUrl=k=>artP('sprites',k+'.webp','assets/sprites_cartoon/'+k+'.webp');
+const zArt=k=>artP('cards','z_'+k+'.webp','assets/cards_cartoon/z_'+k+'.webp');
+const popUrl=t=>{if(!popOK(t))return'';if(artNew('cards',t+'.webp'))return artNew('cards',t+'_pop.webp')?'assets/art/cards/'+t+'_pop.webp':'';return CART_POP.includes(t)?'assets/cards_cartoon/'+t+'_pop.webp':''};
+const artUrl=t=>artNew('cards',t+'.webp')?'assets/art/cards/'+t+'.webp':CART_FILES.includes(t)?'assets/cards_cartoon/'+t+'.webp':'';
+// applique le style choisi : fonds et cadres (variables CSS --ui-<nom>), sprites du plateau, maison fortifiée, puis redessine l'écran
+function applyArt(){try{const on=ART_DEV&&OPT.art;(ART_NEW.ui||[]).forEach(f=>{const v='--ui-'+f.replace(/\.\w+$/,'');
+  if(on)DE.style.setProperty(v,`url("${new URL('assets/art/ui/'+f,document.baseURI).href}")`);else DE.style.removeProperty(v)});
+ if(on)(ART_NEW.sprites||[]).forEach(f=>{const k=f.replace(/\.\w+$/,'');if(!SPRN[k]){SPRN[k]=0;const im=new Image();im.onload=()=>SPRN[k]=im;im.src='assets/art/sprites/'+f}});
+ if(typeof FORT!=='undefined')FORT.src=uiUrl('shelter_fort.webp');
+ if(typeof FOND_F!=='undefined')DE.style.setProperty('--fond',`url("${new URL(uiUrl(FOND_F),document.baseURI).href}")`);
+ if($('#ov.home .logo img'))$('#ov.home .logo img').src=uiUrl('barricard.webp');
+ if(typeof render==='function'&&typeof G!=='undefined'&&G)render()}catch(e){console.warn(e)}}
 /* face de carte complète (style Hearthstone) : illustration dans une fenêtre arrondie, gemme de coût, bandeau du nom,
    texte d'effet, gemmes d'attaque et de PV, faction, rôle et rareté. Tout est écrit par le jeu.
    o.mini : version de la main (sans le texte d'effet) ; o.base : stats de base (collection), sinon celles de la partie (améliorations). */
@@ -197,7 +216,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v192 · 27 oct.';
+const VERSION='v193 · 28 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;
@@ -216,6 +235,8 @@ try{if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEve
 // options du joueur (enregistrées sur l'appareil)
 const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',cur:'a',lang:LANG};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
+// style artiste : liste des images déjà livrées (site de test seulement)
+if(ART_DEV&&typeof fetch==='function')fetch('assets/art/liste.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j){ART_NEW=Object.assign({cards:[],sprites:[],relics:[],ui:[]},j);if(OPT.art)applyArt()}}).catch(()=>{});
 function applyOpt(){try{SFX.setVol(OPT.sfx,OPT.mus);SFX.setMaxVoices(OPT.eco?5:10)}catch(e){}document.documentElement.classList.toggle('bigtext',!!OPT.text);document.documentElement.classList.toggle('eco',!!OPT.eco);document.documentElement.classList.toggle('goldback',OPT.back==='gold');if(typeof fit==='function'&&cv){fit.w0=0}document.documentElement.lang=OPT.lang;applyCur()}
 // curseurs PC (souris seulement) : a Survivant, b Rouille, c Zombie, sys = curseur du système. Point actif [x,y] de chaque image 32 px.
 const CUR_HS={a:{n:[1,1],c:[12,0],i:[1,2],g:[16,16]},b:{n:[1,1],c:[13,0],i:[1,1],g:[16,16]},c:{n:[1,1],c:[11,0],i:[1,1],g:[16,16]}};

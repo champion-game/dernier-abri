@@ -99,7 +99,7 @@ addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA
  if(k==='d'||k==='D'){$('#mtb').click();return}
  if(/^[1-9]$/.test(k)){const c=$('#hand').querySelectorAll('.card')[+k-1];if(c&&!c.disabled)c.click()}});
 // v147 : logo du jeu (illustration d’Amine)
-const LOGO='<img src="assets/ui/barricard.webp" alt="Barricard" width="840" height="420">';
+const LOGO='<img src="'+uiUrl('barricard.webp')+'" alt="Barricard" width="840" height="420">';
 function title(){endTest();musEnd=false;if(META.gift){S.endHtml=null;giftScreen();return}onTitle=true;show(_t`<h1 class="logo">${LOGO}</h1>${DEMO?_t`<p class="demob">Démo</p><p>Tiens <b>${Z.DEMO_N} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>${wishBtn()}`:_t`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>`}${META.menaceWon>=0?_t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins>1?_t` · ${META.wins} victoires`:''}</p>`:''}
 
 ${META.best?_t`<p>Ton record : <b>${plural(META.best,_t('nuit survécue'),_t('nuits survécues'))}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs,_t('partie'),_t('parties'))}.</p>`:''}${nextUnlockTxt()}
@@ -155,7 +155,7 @@ if(fsReq&&!standalone){fsBtn.hidden=false;fsBtn.addEventListener('click',()=>{tr
 const FONDS=[['fond.webp',1],['fond-2.webp',1],['fond-3.webp',1],['fond-4.webp',1],['fond-5.webp',1],['fond-6.webp',1],['fond-zombies.webp',.25]];
 let FOND_F='fond.webp';
 try{let r=Math.random()*FONDS.reduce((s,f)=>s+f[1],0),f=FONDS[0][0];for(const [n,w] of FONDS){if((r-=w)<0){f=n;break}}FOND_F=f;
- DE.style.setProperty('--fond',`url("${new URL('assets/ui/'+f,document.baseURI).href}")`)}catch(e){}
+ DE.style.setProperty('--fond',`url("${new URL(uiUrl(f),document.baseURI).href}")`)}catch(e){}
 
 // v175 : lueurs de l'accueil posées sur l'image de fond (lune qui rayonne, étoiles qui scintillent, ville en feu qui vacille).
 // Lune et étoiles repérées automatiquement dans chaque image (en % de l'image, rayon de la lune en % de sa largeur) ; flammes placées à la main sur les bords.

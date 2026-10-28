@@ -11,7 +11,7 @@ const put=(req,res)=>{if(res&&res.ok&&res.type==='basic'){const c=res.clone();ca
 self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);
  if(r.method!=='GET'||u.origin!==location.origin||r.headers.has('range'))return;
  if(u.pathname.endsWith('version.txt'))return;
- const code=r.mode==='navigate'||/\.(html|js|css|webmanifest)$/.test(u.pathname)||u.pathname.endsWith('/');
+ const code=r.mode==='navigate'||/\.(html|js|css|webmanifest|json)$/.test(u.pathname)||u.pathname.endsWith('/');
  if(code){e.respondWith(fetch(r).then(res=>put(r,res)).catch(()=>caches.match(r,{ignoreSearch:true}).then(m=>m||caches.match('index.html'))));return}
  e.respondWith(caches.match(r,{ignoreSearch:true}).then(m=>{const net=fetch(r).then(res=>put(r,res)).catch(()=>m);if(m){e.waitUntil(net);return m}return net}));
 });

@@ -35,6 +35,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-fiche.js` : fiche de fin de partie (rapport de survie) et son image à partager ; chargé après `game-anim.js`.
   - `game-fx2.js` : troisième série d’effets (avant → après, zones non couvertes, bouton de la nuit, nuit rouge, gros coups, maison touchée, aube) ; chargé en dernier.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
+- `assets/art/` : les images de l’artiste en essai (même nom que l’image remplacée, puis `node tools/art-liste.js`), visibles via Options → « Images de l’artiste » sur le site GitHub seulement (voir `docs/GAME_DESIGN.md`, « Le style artiste »).
 - `assets/fonts/` : les polices, intégrées au jeu (plus de Google Fonts).
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
 - `src/i18n.js` : la traduction (`_t`, langue choisie) ; `src/lang-en.js` : le dictionnaire anglais (clé = texte français).
@@ -77,6 +78,6 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 1. Performance : v115 a allégé la nuit (obscurité mi-résolution, plafonds de sons, particules et lumières) et ajouté un Mode économie. À confirmer sur un téléphone d’entrée de gamme.
 2. Derniers sons enregistrés (arbalète, lance-flammes, mort d’un survivant, aube, musique de nuit) : fichiers CC0 fournis par Amine, intégrés comme dans `assets/sounds/` (voir `CREDITS.md`).
-3. Graphismes : le jeu est en style cartoon (illustrations et sprites générés). Avant Steam, faire retoucher ou redessiner l’ensemble par un artiste dans ce style, et déclarer l’usage d’IA sur Steam.
+3. Graphismes : le jeu est en style cartoon (illustrations et sprites générés). Un artiste va tout redessiner : ses images arrivent par lots dans `assets/art/` (v193), à tester avec la case des Options avant de devenir le style par défaut. Déclarer sur Steam l’usage d’IA qui resterait.
 4. Préparer Steam : test à l’aveugle, page Steam, démo pour le Next Fest, version Electron ou Tauri, succès, sauvegarde cloud, classement du défi quotidien.
 5. **Traduction anglaise : faite (v146).** Tout nouveau texte s’écrit en français dans `_t('…')` ou `` _t`…${x}…` `` (voir `src/i18n.js`), et sa traduction anglaise s’ajoute dans `src/lang-en.js` (clé = texte français exact). `node tools/test-engine.js` signale tout texte sans traduction.

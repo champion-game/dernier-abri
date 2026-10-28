@@ -196,7 +196,7 @@ button.ammo[hidden]{display:none}
 .cf{--ink:#2b1a0c;--blood:#6e140c;position:relative;display:block;width:100%;aspect-ratio:1086/1448;container-type:inline-size;color:var(--ink);text-align:center;
  filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));font-family:'Atkinson Hyperlegible',system-ui,sans-serif}
 .cf>*{position:absolute;z-index:3}
-.cf::after{content:'';position:absolute;inset:0;z-index:2;background:url(../assets/ui/cadre.webp) center/100% 100% no-repeat;pointer-events:none}
+.cf::after{content:'';position:absolute;inset:0;z-index:2;background:var(--ui-cadre,url(../assets/ui/cadre.webp)) center/100% 100% no-repeat;pointer-events:none}
 .cf-art{z-index:0;left:5.6%;right:5.3%;top:2.9%;height:57.8%;background:#0c0c0a center 22%/cover no-repeat;display:grid;place-items:center;color:#8a7a5c}
 .cf-vig{z-index:1;left:5.6%;right:5.3%;top:2.9%;height:57.8%;box-shadow:inset 0 0 5cqw rgba(0,0,0,.65);pointer-events:none}
 /* effet qui sort du cadre : l'illustration et le personnage détouré occupent une même « scène » plus grande que la fenêtre.
@@ -448,7 +448,7 @@ body{background:
 }
 
 /* v100 : dos des cartes d'Amine (assets/ui/dos.webp) pour la pioche et les cartes qui volent */
-.pile .pb,.flyc.back{border:0;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat}
+.pile .pb,.flyc.back{border:0;border-radius:9%/7%;background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat}
 .pile .pb{box-shadow:1px 2px 0 #c9b68c,2px 3px 0 #1e2a36,3px 4px 0 #c9b68c,4px 5px 0 #1e2a36,5px 7px 8px rgba(0,0,0,.55)}
 .pile .pb b{background:rgba(20,30,42,.88);color:#f2e1b0;border:1.5px solid #c9a35a;box-shadow:0 1px 3px rgba(0,0,0,.6)}
 
@@ -813,16 +813,16 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 
 /* ===== v142 : vraie texture de bois (raccordable, sans démarcation), clous ronds ===== */
 .panel{background:
-  url(../assets/ui/nail.png) left 6px top 6px/14px 14px no-repeat,url(../assets/ui/nail.png) right 6px top 6px/14px 14px no-repeat,
-  url(../assets/ui/nail.png) left 6px bottom 6px/14px 14px no-repeat,url(../assets/ui/nail.png) right 6px bottom 6px/14px 14px no-repeat,
-  url(../assets/ui/wood.webp) 0 0/512px 384px repeat,#5e3b20;
+  var(--ui-nail,url(../assets/ui/nail.png)) left 6px top 6px/14px 14px no-repeat,var(--ui-nail,url(../assets/ui/nail.png)) right 6px top 6px/14px 14px no-repeat,
+  var(--ui-nail,url(../assets/ui/nail.png)) left 6px bottom 6px/14px 14px no-repeat,var(--ui-nail,url(../assets/ui/nail.png)) right 6px bottom 6px/14px 14px no-repeat,
+  var(--ui-wood,url(../assets/ui/wood.webp)) 0 0/512px 384px repeat,#5e3b20;
  background-attachment:scroll,scroll,scroll,scroll,local,local}
 /* boutons toujours visibles en bas des écrans qui défilent : une étagère en bois */
 .pfoot{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px 8px}
 .pfoot .go{grid-column:1/-1}
 .pfoot .skip{margin:0}
 .panel.scrolls .pfoot{position:sticky;bottom:-16px;z-index:4;margin:2px -16px -16px;padding:12px 16px 14px;
- background:url(../assets/ui/wood.webp) 0 -128px/512px 384px repeat,#5e3b20;border-top:3px solid #2a170b;
+ background:var(--ui-wood,url(../assets/ui/wood.webp)) 0 -128px/512px 384px repeat,#5e3b20;border-top:3px solid #2a170b;
  box-shadow:inset 0 3px 0 #8c5d34,0 -8px 14px rgba(0,0,0,.55)}
 /* titres des fiches de papier (règles) en encre sombre */
 .panel .rfiche h3{color:#3a2a18;text-shadow:none}
@@ -866,14 +866,14 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 .panel button.shopi:disabled b{color:#2e2720}.panel button.shopi:disabled span{color:#4a4036}
 .panel button.shopi:disabled .cost{color:#4a4036}.panel button.shopi:disabled img,.panel button.shopi:disabled svg{opacity:.7}
 /* filtres collés en haut : fond opaque, les cartes passent dessous sans se voir */
-.panel .cfbar{top:-18px;z-index:6;margin:6px 0 4px;background:linear-gradient(rgba(25,12,5,.5),rgba(25,12,5,.5)),url(../assets/ui/wood.webp) 0 0/512px 384px,#3e2614;
+.panel .cfbar{top:-18px;z-index:6;margin:6px 0 4px;background:linear-gradient(rgba(25,12,5,.5),rgba(25,12,5,.5)),var(--ui-wood,url(../assets/ui/wood.webp)) 0 0/512px 384px,#3e2614;
  box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 6px 10px rgba(0,0,0,.55)}
 
 /* v147 : image d'ambiance derrière les menus hors partie (accueil et ses écrans), nouveau logo Barricard */
-#ov.home{background:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),#1a1f33 url(../assets/ui/fond.webp) center 60%/cover no-repeat;backdrop-filter:none}
-#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),var(--fond,url(../assets/ui/fond.webp))}
+#ov.home{background:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),#1a1f33 var(--ui-fond,url(../assets/ui/fond.webp)) center 60%/cover no-repeat;backdrop-filter:none}
+#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),var(--fond,var(--ui-fond,url(../assets/ui/fond.webp)))}
 /* v168 : en hauteur, sans phrase d'accroche ; le logo monte dans le ciel et le menu commence sous la palissade des survivants (à 74 % de la largeur dans l'image) */
-@media (max-aspect-ratio:3/4){#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),url(../assets/ui/fond-portrait2.webp);background-position:center top}.panel.ttl .logo+p:not(.demob){display:none}}
+@media (max-aspect-ratio:3/4){#ov.home{background-image:linear-gradient(rgba(15,10,6,.1),rgba(15,10,6,.35)),var(--ui-fond-portrait2,url(../assets/ui/fond-portrait2.webp));background-position:center top}.panel.ttl .logo+p:not(.demob){display:none}}
 @media (max-aspect-ratio:3/4) and (max-width:560px){#ov .panel.ttl{align-self:flex-start;margin-top:0;padding-top:4px}#ov .panel.ttl .logo{width:min(100%,300px);margin-bottom:max(8px,calc(76.5vw - 163px))}}
 #panel.ttl{background:none;box-shadow:none;border:0;outline:0}
 .panel.ttl .logo{width:min(100%,420px);margin:0 auto 8px}
@@ -890,7 +890,7 @@ html.eco .citem.in .cf{filter:none!important;outline:3px solid #8fd65a;outline-o
 .gift:not(.up) .g-back{animation:gbob 2.4s ease-in-out infinite}
 .gift:nth-child(2) .g-back{animation-delay:-.8s}.gift:nth-child(3) .g-back{animation-delay:-1.6s}
 .g-back,.g-face{position:absolute;inset:0;display:block;border-radius:9%/7%;-webkit-backface-visibility:hidden;backface-visibility:hidden}
-.g-back{background:url(../assets/ui/dos.webp) center/100% 100% no-repeat;box-shadow:0 4px 10px rgba(0,0,0,.55)}
+.g-back{background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat;box-shadow:0 4px 10px rgba(0,0,0,.55)}
 .g-face{transform:rotateY(180deg)}
 .gift.up .g-in{transform:rotateY(180deg)}
 .gift.up .g-face{box-shadow:0 0 0 2px var(--gc),0 0 16px 4px var(--gc);animation:ghalo 1.8s ease-in-out .6s infinite}
@@ -933,7 +933,7 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
    secondaire (.skip, vitesse) : 2 clous, texte crème ; icônes (.mute) : 1 clou
    grisé 1 (désactivé) : bois terne, planche enfoncée, texte effacé
    grisé 2 (verrouillé, .lockb) : une latte clouée en travers, derrière le texte */
-.go,.skip,.mute{--nl:url(../assets/ui/nail.png);--wd:linear-gradient(rgba(30,14,4,.25),rgba(30,14,4,.5)),url(../assets/ui/wood.webp) 0 -200px/512px 384px,#5e3b20;
+.go,.skip,.mute{--nl:var(--ui-nail,url(../assets/ui/nail.png));--wd:linear-gradient(rgba(30,14,4,.25),rgba(30,14,4,.5)),var(--ui-wood,url(../assets/ui/wood.webp)) 0 -200px/512px 384px,#5e3b20;
  --sh:inset 0 1px 0 rgba(255,200,140,.2),inset 0 -2px 0 rgba(0,0,0,.45),0 4px 0 #1e1006,0 6px 10px rgba(0,0,0,.55)}
 .go,.panel .go{--pl:var(--nl) left 7px top 7px/12px 12px no-repeat,var(--nl) right 7px top 7px/12px 12px no-repeat,var(--nl) left 7px bottom 7px/12px 12px no-repeat,var(--nl) right 7px bottom 7px/12px 12px no-repeat,var(--wd)}
 .skip,.panel .skip,.go.speed,.panel .go.speed{--pl:var(--nl) left 6px center/10px 10px no-repeat,var(--nl) right 6px center/10px 10px no-repeat,var(--wd)}
@@ -953,7 +953,7 @@ html.eco .gift .g-back,html.eco .gift .g-in,html.eco .gift.up .g-face{animation:
 /* grisé 2 */
 .skip.lockb:disabled,.panel button.skip.lockb:disabled{opacity:1;overflow:hidden;transform:none;filter:saturate(.5) brightness(.8);box-shadow:var(--sh);color:rgba(239,227,198,.8);text-shadow:0 2px 0 rgba(0,0,0,.6)}
 .skip.lockb:disabled::after{content:"";position:absolute;z-index:-1;left:-10%;right:-10%;top:50%;height:13px;margin-top:-6px;transform:rotate(-7deg);
- background:var(--nl) 22% center/9px 9px no-repeat,var(--nl) 78% center/9px 9px no-repeat,linear-gradient(rgba(210,160,100,.45),rgba(150,95,45,.5)),url(../assets/ui/wood.webp) 0 0/512px 384px,#8a5a2e;box-shadow:0 2px 3px rgba(0,0,0,.6)}
+ background:var(--nl) 22% center/9px 9px no-repeat,var(--nl) 78% center/9px 9px no-repeat,linear-gradient(rgba(210,160,100,.45),rgba(150,95,45,.5)),var(--ui-wood,url(../assets/ui/wood.webp)) 0 0/512px 384px,#8a5a2e;box-shadow:0 2px 3px rgba(0,0,0,.6)}
 /* icônes du haut */
 .mute{border:0;border-radius:4px 6px 3px 5px;color:#efe3c6;background:var(--nl) center 2px/7px 7px no-repeat,var(--wd);
  box-shadow:inset 0 1px 0 rgba(255,200,140,.2),0 3px 0 #1e1006,0 4px 6px rgba(0,0,0,.5);transition:transform .06s,box-shadow .06s}
@@ -992,7 +992,7 @@ html.cur.dragging,html.cur.dragging *{cursor:var(--cu-g)!important}
 /* pioche : la carte se retourne en vol */
 .flyc .fl-in{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d}
 .flyc .fl-b,.flyc .fl-f{position:absolute;inset:0;display:block;-webkit-backface-visibility:hidden;backface-visibility:hidden}
-.flyc .fl-b{transform:rotateY(180deg);border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat}
+.flyc .fl-b{transform:rotateY(180deg);border-radius:9%/7%;background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat}
 html.goldback .flyc .fl-b,html.goldback .lcard,html.goldback .gp-card,html.goldback .pk-bk{filter:sepia(.55) saturate(2.2) hue-rotate(-8deg) brightness(1.06)}
 /* reflet qui passe sur les cartes rares, épiques et légendaires (main, grande carte, choix, récompense) */
 :is(.hand,.zoomc,.pick,.g-face) .cf:is(.r-rare,.r-epic,.r-leg)::before{content:'';position:absolute;inset:2% 4%;z-index:4;pointer-events:none;border-radius:5%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%) no-repeat;background-size:280% 100%;background-position:170% 0;animation:sheen 7s linear infinite;animation-delay:var(--ph2,0s)}
@@ -1010,7 +1010,7 @@ html.goldback .flyc .fl-b,html.goldback .lcard,html.goldback .gp-card,html.goldb
 .ember{position:absolute;bottom:35%;width:5px;height:5px;border-radius:50%;background:#ffb347;box-shadow:0 0 6px 2px #ff7a1a;animation:ember .6s ease-out both}
 @keyframes ember{0%{opacity:0;transform:none}20%{opacity:1}100%{opacity:0;transform:translate(6px,-46px) scale(.4)}}
 /* aube : cartes au choix face cachée, éclat de la couleur de la rareté */
-.pk-bk{position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat}
+.pk-bk{position:absolute;inset:0;z-index:6;pointer-events:none;border-radius:9%/7%;background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat}
 .pk-fl{position:absolute;inset:-12%;z-index:6;pointer-events:none;border-radius:50%;background:radial-gradient(circle,var(--rc) 0,transparent 62%);mix-blend-mode:screen;animation:pkfl .7s ease-out both}
 @keyframes pkfl{0%{opacity:.95;transform:scale(.5)}100%{opacity:0;transform:scale(1.35)}}
 /* collection : pièces, cadenas, éclat et tampon « Obtenue » */
@@ -1031,12 +1031,12 @@ html.goldback .flyc .fl-b,html.goldback .lcard,html.goldback .gp-card,html.goldb
 @keyframes dkok{0%{box-shadow:0 0 0 0 rgba(242,194,61,0);background:transparent}20%{box-shadow:0 0 0 2px #f2c23d,0 0 18px 4px rgba(242,194,61,.7);background:rgba(242,194,61,.15)}100%{box-shadow:0 0 0 0 rgba(242,194,61,0);background:transparent}}
 /* lancement : le deck est battu au centre de l'écran */
 .launch{position:fixed;inset:0;z-index:70;pointer-events:none;background:rgba(10,7,4,.45)}
-.lcard{position:absolute;left:50%;top:50%;width:92px;aspect-ratio:1086/1448;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat;box-shadow:0 4px 12px rgba(0,0,0,.6);transform:translate(-50%,-50%)}
+.lcard{position:absolute;left:50%;top:50%;width:92px;aspect-ratio:1086/1448;border-radius:9%/7%;background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat;box-shadow:0 4px 12px rgba(0,0,0,.6);transform:translate(-50%,-50%)}
 /* récompense : paquet qui tremble puis explose */
 .gifts{position:relative}
 .gifts.wait .gift{opacity:0;animation:none;pointer-events:none}
 .gpack{position:absolute;left:50%;top:50%;z-index:5;width:34%;aspect-ratio:1086/1448;transform:translate(-50%,-50%);cursor:pointer;animation:pshake 1.1s ease-in both}
-.gp-card{position:absolute;inset:0;border-radius:9%/7%;background:url(../assets/ui/dos.webp) center/100% 100% no-repeat;box-shadow:0 0 0 3px #f2c23d,0 6px 16px rgba(0,0,0,.6)}
+.gp-card{position:absolute;inset:0;border-radius:9%/7%;background:var(--ui-dos,url(../assets/ui/dos.webp)) center/100% 100% no-repeat;box-shadow:0 0 0 3px #f2c23d,0 6px 16px rgba(0,0,0,.6)}
 .gp-glow{position:absolute;inset:-35%;border-radius:50%;background:radial-gradient(circle,rgba(255,240,180,.9),rgba(242,194,61,.4) 35%,transparent 65%);animation:pglow 1.1s ease-in both}
 .gpack.boom{animation:pboom .45s ease-out forwards;pointer-events:none}
 @keyframes pshake{0%{transform:translate(-50%,-50%) scale(.8);opacity:0}10%{transform:translate(-50%,-50%) rotate(-2deg);opacity:1}20%{transform:translate(-50%,-50%) rotate(2deg)}30%{transform:translate(-50%,-50%) rotate(-3deg)}40%{transform:translate(-50%,-50%) rotate(3deg)}50%{transform:translate(-50%,-50%) rotate(-4deg) scale(1.02)}60%{transform:translate(-50%,-50%) rotate(5deg) scale(1.03)}70%{transform:translate(-50%,-50%) rotate(-6deg) scale(1.05)}80%{transform:translate(-50%,-50%) rotate(7deg) scale(1.06)}90%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1.1)}}
