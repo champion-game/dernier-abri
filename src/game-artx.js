@@ -49,3 +49,13 @@ function axHome(){try{if(AX.on()&&typeof FOND_F!=='undefined'){FOND_F='fond.webp
 axHome();
 // v204 : PC — nombre de cartes de la main, pour l'éventail
 {const r3=render;render=function(){r3.apply(this,arguments);try{const h=$('#hand');if(h)h.style.setProperty('--hn',Math.max(1,h.querySelectorAll('.card').length))}catch(e){}}}
+// v205 : PC — l'image du plateau entière (palissade, miradors) derrière le canvas, calée sur ses cases ;
+// le panneau de gauche commence à la hauteur du panneau « Abri » (symétrie)
+function axLay(){try{const on=AX.on()&&DE.classList.contains('felton')&&AX.plat,c=$('#map');let d=$('#axPlat');
+ if(!on||!c){if(d)d.hidden=true;DE.style.removeProperty('--axlt');return}
+ if(!d){d=document.createElement('div');d.id='axPlat';d.setAttribute('aria-hidden','true');c.parentNode.insertBefore(d,c)}
+ const a=c.parentNode.getBoundingClientRect(),r=c.getBoundingClientRect(),k=r.width/L,sc=T/94.1;
+ d.style.cssText=`left:${r.left-a.left+(T-200*sc)*k}px;top:${r.top-a.top+(T-162*sc)*k}px;width:${1245*sc*k}px;height:${1263*sc*k}px`;d.hidden=false;
+ const sh=document.querySelector('.top .shel');if(sh)DE.style.setProperty('--axlt',Math.max(0,sh.getBoundingClientRect().top-a.top-6)+'px')}catch(e){}}
+{const r4=render;render=function(){r4.apply(this,arguments);axLay()}}
+addEventListener('resize',()=>setTimeout(axLay,50));

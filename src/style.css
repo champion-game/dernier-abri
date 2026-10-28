@@ -1667,3 +1667,39 @@ html.artx.felton .side2 .hand .card{flex:none;width:var(--cw2);max-width:none;po
 html.artx.felton .side2 .hand .card+.card{margin-left:min(6px,calc((100cqw - 8px - var(--hn,5) * var(--cw2)) / max(1,var(--hn,5) - 1)))}
 html.artx.felton .side2 .hand .card:hover,html.artx.felton .side2 .hand .card.sel{z-index:5}
 html.artx .app>.map{box-shadow:none!important;border:0!important;border-radius:0!important}
+
+/* ===== v205 : PC — panneau gauche en 3 blocs (nuit, onglets Pioche/Horde/Journal, défausse et pioche), liste du deck en parchemin, plateau entier visible ; bouton gris dans le format du rouge ===== */
+html.artx.felton .felt{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;gap:0!important}
+html.artx.felton .felt>.mat,html.artx.felton .felt>.ftabs,html.artx.felton .felt>.fpiles{border:2px solid #000!important;background:var(--ax-noise),linear-gradient(#1c1a17,#131110)!important;
+ box-shadow:inset 0 0 0 2px #3a3631,inset 0 0 0 3px #000,0 8px 16px rgba(0,0,0,.7)!important}
+html.artx.felton .felt>.mat{display:flex!important;flex-direction:column;gap:8px;padding:10px!important;border-radius:4px 4px 0 0!important;border-bottom:0!important}
+html.artx.felton .felt>.mat .event{background:none!important;box-shadow:none!important;border:0!important;padding:0 2px!important}
+html.artx.felton .felt>.ftabs{flex:1;border-radius:0 0 4px 4px!important;border-top:1px solid #3a3631!important;margin:0!important}
+html.artx.felton .felt>.fpiles{margin-top:10px!important;padding:14px 10px 26px!important;border-radius:4px!important;justify-content:space-around!important}
+html.artx .ft-c{height:30px!important;background:radial-gradient(120% 140% at 30% 40%,#f3e6c4 40%,#dcc495)!important;border:1.5px solid #3a2a18!important;border-radius:4px!important;
+ box-shadow:inset 0 0 0 1px #c9a35a,0 2px 0 rgba(0,0,0,.5)!important;padding-right:6px!important}
+html.artx .ft-c .ft-n{color:#2b1a0c!important;text-shadow:none!important;font-family:'Special Elite',monospace;font-size:13.5px!important}
+html.artx .ft-c .ft-a{width:46%!important;opacity:.9!important;-webkit-mask-image:linear-gradient(90deg,transparent,#000 60%)!important;mask-image:linear-gradient(90deg,transparent,#000 60%)!important;filter:sepia(.25)}
+html.artx .ft-c b{background:#2b1a0c!important;border:1.5px solid #c9a35a!important;color:#f3e6c4!important;font-family:'Oswald',sans-serif!important;font-weight:600}
+html.artx .ft-c .ft-d{width:5px!important}
+html.artx .ft-c.out{opacity:.5!important;filter:grayscale(.8)!important}
+html.artx .ft-l{gap:4px!important}
+html.artx :is(.skip,.panel .skip,.gbox .skip){
+ --pl:var(--ax-rv2),var(--ax-bump) 0 0/300px 300px,linear-gradient(#5a5650 0,#46433d 14%,#36332f 55%,#2a2824 88%,#171513 100%)!important;
+ background-blend-mode:normal,normal,overlay,normal!important;color:#f1e7cf!important;text-shadow:0 -1px 0 rgba(0,0,0,.6),0 2px 3px rgba(0,0,0,.55)!important;border:0!important;border-radius:4px!important;
+ --sh:inset 0 2px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.5),inset 2px 0 0 rgba(255,255,255,.1),inset -2px 0 0 rgba(0,0,0,.3),0 0 0 2px #111,0 5px 0 #0e0d0b,0 6px 0 #000,0 10px 14px rgba(0,0,0,.7)!important}
+html.artx.felton .felt{gap:14px!important;justify-content:flex-start}
+html.artx.felton .felt>.mat{border-radius:4px!important;border-bottom:2px solid #000!important}
+html.artx.felton .felt>.ftabs{flex:0 1 auto!important;max-height:46%;border-radius:4px!important;border-top:2px solid #000!important;margin:0!important;overflow:hidden;background:none!important;box-shadow:none!important;border:0!important}
+html.artx.felton .felt>.fpiles{margin-top:auto!important}
+html.artx .ft-tabs{display:flex;gap:4px;padding:0 6px;border:0!important;background:none!important;align-items:flex-end}
+html.artx .ft-tabs button{flex:1;padding:7px 2px 6px!important;border:2px solid #000!important;border-bottom:0!important;border-radius:7px 7px 0 0!important;
+ background:linear-gradient(#24211e,#171513)!important;color:#9a917f!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;position:relative;top:2px;font-size:12.5px!important}
+html.artx .ft-tabs button.on{background:var(--ax-noise),linear-gradient(#2a2724,#1c1a17)!important;color:#f1e7cf!important;padding-top:10px!important;z-index:2;box-shadow:inset 0 2px 0 #b8261d,inset 0 3px 0 rgba(255,255,255,.08)!important}
+html.artx .ft-tabs button.on .ink{fill:#e8574a}
+html.artx .ft-body{border:2px solid #000;border-radius:0 0 4px 4px;background:var(--ax-noise),linear-gradient(#1c1a17,#131110);box-shadow:inset 0 0 0 1px #3a3631,0 8px 16px rgba(0,0,0,.7)}
+html.artx .ft-tabs{padding:0 3px!important;gap:3px!important}html.artx .ft-tabs button{font-size:11.5px!important;letter-spacing:.04em!important;gap:3px!important;min-width:0}html.artx .ft-tabs button .ink{width:12px!important;height:12px!important}
+html.artx.felton .app{--map:min(calc((100dvh - 12px) / 1.2),calc((100vw - var(--pw) - var(--rw) - 2*var(--gap) - 16px) / 1.21))!important;grid-template-columns:minmax(var(--pw),1fr) calc(var(--map) * 1.206) minmax(var(--rw),1.25fr)!important}
+html.artx.felton .app>.map{margin:calc(var(--map) * .065) calc(var(--map) * .103) calc(var(--map) * .135)!important;align-self:start!important;position:relative;z-index:1}
+#axPlat{position:absolute;z-index:0;pointer-events:none;background:var(--ui-plateau,none) 0 0/100% 100% no-repeat;filter:drop-shadow(0 12px 20px rgba(0,0,0,.6))}#axPlat[hidden]{display:none}
+html.artx.felton .felt{margin-top:var(--axlt,0px)!important;height:auto!important}
