@@ -52,11 +52,13 @@ axHome();
 // v205 : PC — l'image du plateau entière (palissade, miradors) derrière le canvas, calée sur ses cases ;
 // le panneau de gauche commence à la hauteur du panneau « Abri » (symétrie)
 function axLay(){try{const on=AX.on()&&DE.classList.contains('felton')&&AX.plat,c=$('#map');let d=$('#axPlat');
- if(!on||!c){if(d)d.hidden=true;DE.style.removeProperty('--axlt');return}
+ if(!on||!c){if(d)d.hidden=true;{const mi=$('#axMist');if(mi)mi.hidden=true}DE.style.removeProperty('--axlt');return}
  if(!d){d=document.createElement('div');d.id='axPlat';d.setAttribute('aria-hidden','true');c.parentNode.insertBefore(d,c)}
  const a=c.parentNode.getBoundingClientRect(),r=c.getBoundingClientRect(),k=r.width/L,sc=T/94.1;
  d.style.cssText=`left:${r.left-a.left+(T-200*sc)*k}px;top:${r.top-a.top+(T-162*sc)*k}px;width:${1245*sc*k}px;height:${1263*sc*k}px`;d.hidden=false;
- if(!d.firstChild){d.innerHTML='<i id="axNight"></i>'}d._ox=(200*sc-T)*k;d._cw=r.width;
+ if(!d.firstChild){d.innerHTML='<i id="axNight"></i>'}
+ let mi=$('#axMist');if(!mi){mi=document.createElement('div');mi.id='axMist';mi.innerHTML='<i></i><i></i>';mi.setAttribute('aria-hidden','true');c.parentNode.appendChild(mi)}
+ {const w=r.width*.13;mi.style.left=(r.left-a.left-w)+'px';mi.style.top=(r.top-a.top-w)+'px';mi.style.width=mi.style.height=(r.width+2*w)+'px';mi.hidden=false}d._ox=(200*sc-T)*k;d._cw=r.width;
 
  const sh=document.querySelector('.top .shel');if(sh)DE.style.setProperty('--axlt',Math.max(0,sh.getBoundingClientRect().top-a.top-6)+'px')}catch(e){}}
 {const r4=render;render=function(){r4.apply(this,arguments);axLay()}}
@@ -66,4 +68,7 @@ addEventListener('resize',()=>setTimeout(axLay,50));
  const dq=(performance.now()-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0;
  if(dawn){const fx=1-dq*1.35,ox=d._ox||0,cw=d._cw||1,W=d.offsetWidth||1,st=[];for(let k=0;k<=12;k++){const x=k/12*W,s=(x-ox)/cw;st.push(`rgba(4,7,18,${(.8*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${x.toFixed(0)}px`)}bg=`linear-gradient(90deg,${st.join(',')})`}
  else if(nightAmt>=.01)bg=`rgba(4,7,18,${(.8*nightAmt).toFixed(3)})`;
- if(bg!==last){n.style.background=bg;last=bg}}}catch(e){}requestAnimationFrame(loop)};requestAnimationFrame(loop)}
+ if(bg!==last){n.style.background=bg;last=bg}
+ const mi=$('#axMist');if(mi){const o=nightAmt<.01?'0':(nightAmt*.75).toFixed(2);if(mi.style.opacity!==o)mi.style.opacity=o}}}catch(e){}requestAnimationFrame(loop)};requestAnimationFrame(loop)}
+// v208 : plus de nappes claires sur l'anneau du bord (elles dessinaient un carré) ; la brume de #axMist les remplace
+{const rf=ringFog;let E=null;ringFog=function(){if(AX.on()&&DE.classList.contains('felton')&&AX.plat){if(!E){E=document.createElement('canvas');E.width=E.height=2}return E}return rf.apply(this,arguments)}}

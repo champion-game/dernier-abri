@@ -1707,3 +1707,11 @@ html.artx.felton .felt{margin-top:var(--axlt,0px)!important;height:auto!importan
 /* ===== v206 : nuit (PC) — hors du canvas, l'image du plateau s'assombrit exactement comme le canvas (même voile, même tombée de la nuit, même aube qui balaie de gauche à droite : voir axNight dans game-artx.js) ===== */
 #axNight{position:absolute;inset:0;pointer-events:none;-webkit-mask:var(--ui-plateau) 0 0/100% 100% no-repeat;mask:var(--ui-plateau) 0 0/100% 100% no-repeat}
 html.artx.felton .app{overflow:clip}
+/* v208 : nuit (PC) — brume qui déborde sur la palissade et noie la limite des cases (assets/art/ui/brume.webp), opacité suivant la nuit */
+#axMist{position:absolute;z-index:2;pointer-events:none;opacity:0}
+#axMist i{position:absolute;inset:0;background:var(--ui-brume,none) 0 0/100% 100% no-repeat;animation:axMistA 26s ease-in-out infinite alternate}
+#axMist i+i{transform:rotate(180deg);animation:axMistB 33s ease-in-out infinite alternate;opacity:.8}
+@keyframes axMistA{from{translate:-1.2% -.8%;scale:1}to{translate:1.2% .8%;scale:1.03}}
+@keyframes axMistB{from{translate:1% -1%}to{translate:-1% 1%}}
+html.eco #axMist i{animation:none}@media (prefers-reduced-motion:reduce){#axMist i{animation:none}}
+#axMist[hidden]{display:none}
