@@ -57,7 +57,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 ## Règles de travail
 
-- **Règle d’or (Amine) : jamais d’emoji** dans le jeu ni l’interface. Utilise les icônes dessinées (`ii('…')`, `ink('…')` dans `src/game.js`).
+- **Règle d’or (Amine) : jamais d’emoji** dans le jeu ni l’interface. Utilise les icônes dessinées (`ii('…')`, `ink('…')` dans `src/game.js`). Symboles autorisés (choix d’Amine, v213) : ★ (fusion), ✦ (évolution), ⚔ et ♥ (dégâts, PV), ✓, ✚ (soin), ⏸ (pause).
 - Garde la séparation moteur / rendu : une règle de jeu va dans `engine.js`, jamais dans `game.js`.
 - Amine teste lui-même le gameplay et l'équilibrage sur son téléphone. Ne lance pas `node tools/simulate.js` ni `node tools/balance.js` sauf s'il le demande : contente-toi de vérifier que le jeu tourne sans erreur. Le joueur automatique joue nettement moins bien que lui.
 - Après chaque changement visible, teste le jeu en largeur téléphone et sur écran d'ordinateur, et vérifie qu'il n'y a aucune erreur dans la console.
