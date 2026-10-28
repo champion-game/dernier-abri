@@ -88,6 +88,7 @@ const KEYS_HELP=[[_t('Espace'),_t('Affronter la nuit · changer la vitesse · va
 addEventListener('keydown',e=>{const tg=e.target;if(tg&&/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName))return;if(e.altKey||e.metaKey)return;
  const k=e.key,open=!ov.hidden;
  if(!zoomEl.hidden){if(k==='Escape'||k===' '){e.preventDefault();zoomClose()}return}
+ if(open&&(k==='ArrowLeft'||k==='ArrowRight')){const b=panel.querySelector(`.cbook .cpg[data-v="${k==='ArrowLeft'?-1:1}"]`);if(b){e.preventDefault();if(!b.disabled)b.click();return}}
  if(k==='Escape'){e.preventDefault();if(open){const b=panel.querySelector('[data-a=presume],[data-a=closeov],[data-a=close],[data-a=optclose],[data-a=pmenu]');if(b)b.click();return}
   if(S.sel!==null||S.bsel!=null||S.moveFrom!==null||S.inspect!==null){S.sel=null;S.bsel=null;S.moveFrom=null;S.inspect=null;render()}else pauseMenu();return}
  if((e.ctrlKey&&(k==='z'||k==='Z'))){if(!open){e.preventDefault();doUndo()}return}

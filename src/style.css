@@ -1720,3 +1720,115 @@ html.artx.felton .app>.map{width:calc(var(--map) * (1 + 2 * var(--axp,0)))!impor
  box-shadow:0 0 0 2px #000,inset 0 0 0 2px #000,inset 0 0 0 4px #4a4640,inset 0 0 0 5px #000,0 10px 20px rgba(0,0,0,.7);background:none}
 #axFrame[hidden]{display:none}
 #axPlat{background:#14110e}
+
+/* ===== v213 : collection et decks en classeur (inspiré de Hearthstone) : intercalaires, pastilles d’énergie, pages, Atelier, tiroir du deck ===== */
+.panel:has(.cbook){max-width:780px}
+.chead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chead h2{margin:0}
+.cpts{flex:none;background:linear-gradient(#3a2414,#24150b);color:#ffd36b;border:2px solid #8c5d34;border-radius:999px;padding:4px 12px;font-family:'Special Elite',serif;font-size:15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 2px 4px rgba(0,0,0,.5);white-space:nowrap}
+.cpts b{font-size:19px}
+.cbank{margin:0;font-size:14px}
+/* intercalaires en carton */
+.ctabs{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;margin:2px -16px 0;padding:6px 16px 0;scrollbar-width:none;overscroll-behavior-x:contain;border-bottom:3px solid #2a170b}
+.ctabs::-webkit-scrollbar{display:none}
+.ctab{flex:0 0 auto;min-width:64px;position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 6px 8px;border:2px solid #6b4422;border-bottom:0;border-radius:9px 9px 0 0;
+ background:linear-gradient(#d8bd8a,#c4a26c);color:#3a2410;font:inherit;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -6px 8px -6px rgba(60,30,0,.5);transform:translateY(3px);transition:transform .12s}
+.ctab b{font-size:18px;line-height:1.1;font-weight:400}
+.ctab span{font-family:'Special Elite',serif;font-size:11.5px;line-height:1.1;white-space:nowrap}
+.ctab i{font-style:normal;font-size:10.5px;font-weight:700;opacity:.75}
+.ctab u{position:absolute;left:7px;bottom:3px;height:3px;border-radius:2px;background:#3f7d2a;max-width:calc(100% - 14px)}
+.ctab.on{background:linear-gradient(#fbf0d4,#efe1bd);transform:translateY(0);z-index:1;box-shadow:inset 0 1px 0 #fff,0 -2px 6px rgba(0,0,0,.35)}
+.ctab.evo{background:linear-gradient(#cdb6e0,#a98bc6);color:#2c1640;border-color:#4a2d66}
+.cnewdot{position:absolute;top:3px;right:4px;width:9px;height:9px;border-radius:50%;background:#d63a2c;box-shadow:0 0 0 2px #fbf0d4}
+@media (hover:hover){.ctab:not(.on):hover{transform:translateY(1px);filter:brightness(1.06)}}
+/* recherche + bouton Filtres sur une ligne ; les menus s’ouvrent dessous */
+.chead,.cbank,.ctabs,.cpips,.cbook,.dkwrap,.panel .cfbar{flex:none}
+.panel .cfbar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.panel .cfbar input{flex:1 1 140px;grid-column:auto;min-width:0}
+.cfmore{flex:0 0 auto;font:inherit;font-size:14px;font-weight:700;padding:0 12px;min-height:40px;border-radius:8px;border:2px solid #2a170b;color:#fbecc9;background:linear-gradient(#8a5a2b,#5b3a1a);box-shadow:0 2px 0 #1a0d04;cursor:pointer}
+.cfmore.act{color:#ffd36b;box-shadow:0 2px 0 #1a0d04,0 0 0 2px #e8b23a}
+.cfmore.on{background:linear-gradient(#5b3a1a,#4a2e14)}
+.cfsel{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:6px}
+.panel .cfsel select{flex:1 1 30%;min-width:0}
+/* pastilles d’énergie en laiton */
+.cpips{display:flex;justify-content:center;gap:12px;margin:2px 0 4px}
+.cpip{width:40px;height:40px;border-radius:50%;border:2px solid #2a170b;cursor:pointer;font-family:'Special Elite',serif;font-size:19px;color:#2a1708;
+ background:radial-gradient(circle at 35% 30%,#ffeab0,#e0a63a 55%,#8a5410);box-shadow:inset 0 -3px 4px rgba(80,40,0,.5),0 2px 3px rgba(0,0,0,.5);opacity:.6;transition:transform .12s,opacity .12s}
+.cpip.on{opacity:1;transform:scale(1.15);box-shadow:inset 0 -3px 4px rgba(80,40,0,.5),0 0 0 3px rgba(255,240,200,.5),0 0 14px #ffcf6b}
+@media (hover:hover){.cpip:not(.on):hover{opacity:.9}}
+/* le classeur : une page de papier réglé à anneaux */
+.cbook{position:relative;color:#2b1a0c;--ink:#2b1a0c;--muted:#5a4630;border-radius:6px 12px 12px 6px;padding:14px 10px 8px 26px;touch-action:pan-y;
+ background:repeating-linear-gradient(#0000 0 25px,rgba(120,90,40,.16) 25px 26px),linear-gradient(90deg,rgba(90,50,10,.22),rgba(0,0,0,0) 26px),#f1e3c0;
+ box-shadow:0 6px 14px rgba(0,0,0,.55),inset 0 0 0 1px rgba(90,60,20,.35)}
+.cbook::before{content:'';position:absolute;left:7px;top:16px;bottom:16px;width:11px;border-radius:4px;background:repeating-linear-gradient(#0000 0 34px,#5d564c 34px 44px);
+ -webkit-mask:repeating-linear-gradient(#0000 0 34px,#000 34px 44px);box-shadow:inset 0 1px 2px #000}
+.cpage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 9px;min-height:200px;align-content:start}
+@media (min-width:700px){.cpage{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 14px}}
+.cpage>p{grid-column:1/-1;text-align:center;color:#5a4630;margin:40px 0}
+.cpage.turnR{animation:cturnR .3s ease-out}.cpage.turnL{animation:cturnL .3s ease-out}
+@keyframes cturnR{from{transform:perspective(900px) translateX(36px) rotateY(-14deg);opacity:.2}}
+@keyframes cturnL{from{transform:perspective(900px) translateX(-36px) rotateY(14deg);opacity:.2}}
+@media (prefers-reduced-motion:reduce){.cpage.turnR,.cpage.turnL{animation:none}}
+.cpager{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-family:'Special Elite',serif;font-size:15px;color:#5b3a1a}
+.cpg{width:42px;height:34px;border-radius:8px;border:2px solid #2a170b;font-size:16px;color:#fbecc9;background:linear-gradient(#8a5a2b,#5b3a1a);box-shadow:0 2px 0 #1a0d04;cursor:pointer}
+.cpg:disabled{opacity:.3;cursor:default}
+.cbook .citem{isolation:isolate}
+.cbook .qty{font-size:12px}
+.cbook .cbadge{width:26px;height:26px;top:-7px;right:-5px}
+/* repères : « Nouveau », carte spéciale cachée derrière (coin doré) */
+.cnew{position:absolute;z-index:3;top:-9px;left:50%;transform:translateX(-50%) rotate(-4deg);background:#c8321f;color:#fff;font-family:'Special Elite',serif;font-size:11px;padding:2px 7px;border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,.5);white-space:nowrap;pointer-events:none}
+.cspec{position:absolute;z-index:-1;right:-7px;top:22%;width:14px;height:38%;border-radius:0 5px 5px 0;background:linear-gradient(135deg,#fff3b0,#d4a017 45%,#fff3b0 70%,#b8860b);box-shadow:0 0 7px #ffd700;pointer-events:none}
+/* Atelier : les cartes acquises s’éteignent, celles qu’on peut payer brillent */
+.citem.atel.in .cf{filter:grayscale(.8) brightness(.6);opacity:.55}
+.citem.atel.s-buy .cf{filter:drop-shadow(0 0 0 #e8b23a) drop-shadow(0 0 8px rgba(232,178,58,.95));animation:cbuy 1.8s ease-in-out infinite}
+.cbook:has(.atel){box-shadow:0 6px 14px rgba(0,0,0,.55),0 0 0 3px #e8b23a,0 0 22px rgba(232,178,58,.45)}
+.panel .atelb.hot{color:#ffd36b;box-shadow:0 0 0 2px #e8b23a,0 0 12px rgba(232,178,58,.6)}
+.panel .atelb.on{color:#ffd36b}
+html.eco .citem.atel.s-buy .cf{animation:none}
+/* éditeur de deck : toucher une carte l’ajoute ; le deck est un tiroir en bas (téléphone) ou une colonne à droite (ordinateur) */
+.dkc{cursor:pointer}
+.dkc.full.out{opacity:.6}
+.dkn{position:absolute;z-index:3;top:-8px;right:-6px;background:#3f7d2a;color:#fff;font-weight:700;font-size:12px;padding:2px 7px;border-radius:9px;border:2px solid #e9f5dc;box-shadow:0 2px 4px rgba(0,0,0,.5);pointer-events:none}
+.dkwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.dkmain{min-width:0;display:flex;flex-direction:column;gap:6px}
+.dkside{position:sticky;bottom:-16px;z-index:5;margin:0 -16px -16px;padding:8px 16px 14px;border-top:3px solid #2a170b;border-radius:14px 14px 0 0;
+ background:var(--ui-wood,url(../assets/ui/wood.webp)) 0 -128px/512px 384px repeat,#5e3b20;box-shadow:inset 0 3px 0 #8c5d34,0 -8px 14px rgba(0,0,0,.55)}
+.dkhd{width:100%;display:flex;align-items:center;gap:8px;padding:6px 10px;border:2px solid #2a170b;border-radius:9px;background:rgba(20,10,3,.55);color:#fbecc9;font:inherit;cursor:pointer;text-align:left}
+.dkcount{font-family:'Special Elite',serif;font-size:16px;white-space:nowrap}.dkcount b{color:#ffd36b;font-size:19px}
+.dkst{flex:1;min-width:0;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dkst.bad{color:#ff9a85}.dkst.good{color:#a6e07a}
+.dkhd i{font-style:normal;color:#ffd36b}
+.dkhd.dkok{animation:dkok 1.4s ease-out}
+.dkbody{display:none}.dkside.open .dkbody{display:block}
+.dklist{max-height:32vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:8px 0 6px;padding-right:2px}
+.dkrow{--hc:#5fd068;position:relative;flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 6px;overflow:hidden;cursor:pointer;
+ border:1px solid #1a0d04;border-left:5px solid var(--hc);border-radius:6px;background:#2e1d0f;color:#fbecc9;font:inherit;text-align:left}
+.dkrow.r-rare{--hc:#4fa3ff}.dkrow.r-epic{--hc:#b06bff}.dkrow.r-leg{--hc:#ffb02e}
+.dkcost{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:'Special Elite',serif;font-size:14px;color:#2a1708;background:radial-gradient(circle at 35% 30%,#ffeab0,#e0a63a 55%,#8a5410);border:1px solid #2a170b;z-index:1}
+.dkname{flex:1;min-width:0;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:1;text-shadow:0 1px 2px #000}
+.dkart{position:absolute;right:28px;top:0;bottom:0;width:120px;background-size:cover;background-position:center 30%;-webkit-mask:linear-gradient(90deg,#0000,#000 70%);mask:linear-gradient(90deg,#0000,#000 70%);opacity:.85}
+.dkrow b{z-index:1;color:#ffd36b;font-size:14px;margin-left:auto}
+@media (hover:hover){.dkrow:hover{filter:brightness(1.2)}}
+.dkempty{text-align:center;font-size:13px;margin:10px 0}
+.dkcurve{display:flex;align-items:flex-end;gap:10px;height:62px;padding:0 24px;margin:4px 0}
+.dkcurve span{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.dkcurve i{display:block;width:100%;min-height:2px;border-radius:3px 3px 0 0;background:linear-gradient(#ffd36b,#c8862a);box-shadow:0 0 0 1px #2a170b}
+.dkcurve b{position:absolute;top:-2px;font-size:11px;color:#fbecc9}
+.dkcurve em{font-style:normal;font-family:'Special Elite',serif;font-size:12px;color:#ffd36b}
+.dkrule{font-size:11.5px;color:#e6d2aa;margin:2px 0 0}
+.dkbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.dkbtns .go{grid-column:1/-1}.dkbtns .skip{margin:0}
+@media (min-width:900px){
+ .panel:has(.dkwrap){max-width:1120px}
+ .dkwrap{grid-template-columns:minmax(0,1fr) 300px;align-items:start}
+ .dkside{position:sticky;top:0;bottom:auto;margin:0;border:3px solid #2a170b;border-radius:12px;display:flex;flex-direction:column;max-height:calc(100dvh - 110px)}
+ .dkside .dkbody{display:flex;flex-direction:column;min-height:0;flex:1}
+ .dklist{max-height:none;flex:1;min-height:80px}
+ .dkhd{cursor:default;pointer-events:none}.dkhd i{display:none}
+}
+.abadge{display:inline-block;margin-left:6px;min-width:22px;padding:1px 6px;border-radius:999px;background:#c8321f;color:#fff;font-size:12px;line-height:1.4;letter-spacing:0;vertical-align:2px}
+.cbook .qty .buy{font-size:13px;padding:5px 8px;min-height:0;line-height:1.2;width:100%;margin:0}
+.cbook .qty .cfar{font-size:12.5px;font-weight:700;color:#5a4630;display:flex;gap:4px;align-items:center}
+.cbook .qty svg.ink{width:14px;height:14px}
+.dkbtns .skip{font-size:13px;padding-left:6px;padding-right:6px}
+.dkcurve b{position:static;line-height:1.2}
+@media (min-width:900px){.panel:has(.cbook){max-width:860px}.cpage{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 12px}.dkside .dkcurve,.dkside .dkrule,.dkside .dkbtns{flex:none}}
