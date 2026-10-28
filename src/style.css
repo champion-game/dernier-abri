@@ -1884,3 +1884,23 @@ html.artx .dkcurve em,html.artx .dkcurve b{font-family:var(--ax-head);color:var(
 html.artx .dkrule{color:#c9bea6}
 @media (min-width:900px){html.artx .dkside{border:2px solid #000;border-radius:4px}}
 html.artx .cf.r-com{--hc:transparent}
+/* v214 (style artiste) : feuille avec de la profondeur (pile de pages, reliure, coin corné) et intercalaires sur le côté droit, de la couleur de la feuille */
+html.artx .cbinder{--pg:#ece0c2;--pgt:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .35' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .3 0 0 0 0 .15 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");display:grid;grid-template-columns:minmax(0,1fr) 38px;align-items:start;margin:10px 0 10px}
+html.artx .cbook{grid-column:1;grid-row:1;border-radius:2px 0 0 2px;padding:14px 10px 10px 22px;
+ background:var(--pgt),linear-gradient(90deg,rgba(60,35,10,.38),rgba(60,35,10,.1) 14px,transparent 34px),radial-gradient(130% 90% at 60% 35%,rgba(255,250,235,.45),transparent 60%),radial-gradient(140% 110% at 50% 50%,transparent 55%,rgba(110,70,25,.3)),var(--pg);
+ box-shadow:inset 0 0 0 1px rgba(80,50,15,.35),2px 3px 0 -1px #dccdab,2px 3px 0 0 rgba(60,35,10,.45),4px 6px 0 -1px #d2c19c,4px 6px 0 0 rgba(60,35,10,.45),6px 9px 0 -1px #c6b48d,6px 9px 0 0 rgba(40,20,5,.55),8px 16px 22px rgba(0,0,0,.65)}
+html.artx .cbook::after{content:'';position:absolute;right:0;bottom:0;width:30px;height:30px;pointer-events:none;
+ background:linear-gradient(315deg,#1d1b18 0 50%,transparent 50%),linear-gradient(135deg,rgba(0,0,0,0) 48%,rgba(60,35,10,.35) 50%,#e9dbb8 54%,#d8c7a0 100%);background-size:100% 100%;filter:drop-shadow(-2px -2px 2px rgba(0,0,0,.35))}
+html.artx .cbook:has(.atel){box-shadow:inset 0 0 0 1px rgba(80,50,15,.35),2px 3px 0 -1px #dccdab,2px 3px 0 0 rgba(60,35,10,.45),4px 6px 0 -1px #d2c19c,4px 6px 0 0 rgba(60,35,10,.45),6px 9px 0 -1px #c6b48d,6px 9px 0 0 rgba(40,20,5,.55),0 0 0 3px var(--ax-red),0 0 22px rgba(220,60,40,.45)}
+html.artx .cflip-old,html.artx .cflip-top{background:var(--pgt),var(--pg)}
+html.artx .ctabs{grid-column:2;grid-row:1;flex-direction:column;align-items:stretch;gap:3px;margin:0;padding:12px 0 12px 0;overflow:visible;z-index:0}
+html.artx .ctab{height:auto;min-height:32px;width:34px;padding:4px 0;margin:0;flex-direction:column;justify-content:center;gap:1px;clip-path:none;border-radius:0 7px 7px 0;
+ color:var(--ax-text);background:var(--pgt),linear-gradient(90deg,rgba(60,35,10,.25),transparent 9px),var(--pg);filter:brightness(.86);
+ box-shadow:inset 0 0 0 1px rgba(80,50,15,.4),2px 2px 3px rgba(0,0,0,.45);transform:translateX(-3px)}
+html.artx .ctab svg.ink{width:18px;height:18px}
+html.artx .ctab span{display:none}
+html.artx .ctab i{display:none}
+html.artx .ctab.on{filter:none;width:38px;transform:translateX(-4px);z-index:2;background:var(--pgt),var(--pg);box-shadow:inset 0 1px 0 rgba(80,50,15,.4),inset -1px 0 0 rgba(80,50,15,.4),inset 0 -1px 0 rgba(80,50,15,.4),3px 2px 4px rgba(0,0,0,.45)}
+html.artx .ctab.evo{color:#4a2470;background:var(--pgt),linear-gradient(90deg,rgba(60,35,10,.25),transparent 9px),#dccdf0}
+html.artx .cnewdot{top:3px;right:3px;width:7px;height:7px}
+@media (hover:hover){html.artx .ctab:not(.on):hover{filter:brightness(.95)}}
