@@ -4,7 +4,7 @@
 const fs=require('fs'),path=require('path');
 const ROOT=path.join(__dirname,'..','assets'),ART=path.join(ROOT,'art');
 const OLD={cards:'cards_cartoon',sprites:'sprites_cartoon',relics:'relics',ui:'ui'};
-const NEW_UI=new Set(['bandeau.webp','plateau.webp']);// images propres au style artiste (rien à remplacer)
+const NEW_UI=new Set(['bandeau.webp','plateau.webp','cadre-amine.webp']);// images propres au style artiste (rien à remplacer)
 const IMG=/\.(webp|png|jpg|jpeg|svg)$/i;
 function build(){const L={},warn=[];
  for(const d in OLD){const dir=path.join(ART,d);L[d]=fs.existsSync(dir)?fs.readdirSync(dir).filter(f=>IMG.test(f)).sort():[];

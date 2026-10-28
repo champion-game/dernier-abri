@@ -1334,29 +1334,6 @@ html.bigtext .uf .bp{font-size:14px}
 html.eco .redsky{display:none}
 @media (prefers-reduced-motion:reduce){.go.ready{animation:none}.redsky{display:none}.hurtv.on{animation-duration:.3s}}
 
-/* style artiste (v194) : cadre portrait de l'artiste (assets/art/ui/cadre.webp, 1024 × 1536) ; html.artx quand il est choisi.
-   Fenêtre d'illustration en haut, coût dans la gemme du haut à gauche, dégâts dans la gemme rouge, PV dans la noire, texte sur le parchemin. */
-.artx .cf{aspect-ratio:1024/1536}
-.artx .cf-art,.artx .cf-vig{left:10.5%;right:8.3%;top:8.6%;bottom:29%;height:auto}
-.artx .cf-art{background-position:center 25%}
-.artx .cf-vig{box-shadow:inset 0 0 4cqw rgba(0,0,0,.45)}
-.artx .cf-cost,.artx .cf.mini .cf-cost{left:13.7%;top:8.8%;width:16cqw;height:16cqw;transform:translate(-50%,-50%);background:none;border:0;box-shadow:none;color:#f4ead2;text-shadow:0 0 1.2cqw #000,0 .4cqw .6cqw #000}
-.artx .cf-cost{font-size:11cqw}.artx .cf.mini .cf-cost{font-size:21cqw;width:22cqw;height:22cqw}
-.artx .cf-rar{top:70.6%}
-.artx .cf-name{top:72.4%;left:12%;right:12%;opacity:1;color:#1c120a}
-.artx .cf-rule{top:78.6%}
-.artx .cf-txt{top:78.8%;bottom:13.2%;left:16%;right:16%;line-height:1.08}
-.artx .cf-foot{left:2%;right:2.4%;top:83.7%;bottom:auto;height:11%;gap:0}
-.artx .cf-atk,.artx .cf-hp{width:19.4cqw;height:100%;flex:none;justify-content:center;background:none;box-shadow:none;border-radius:0;mix-blend-mode:normal;opacity:1;
- color:#f4ead2;text-shadow:0 0 1.2cqw #000,0 .4cqw .6cqw #000;font:700 9cqw/1 'Special Elite',serif}
-.artx .cf-atk .ink{display:none}.artx .cf-atk.heal{color:#c9f0b0}
-.artx .cf-hp b{transform:none}
-.artx .cf-marks{align-self:center;margin-top:1cqw}
-.artx .cf.mini .cf-name{top:73%;font-size:11cqw}
-.artx .cf.mini .cf-v{top:80%}
-.artx .cf.mini .cf-atk,.artx .cf.mini .cf-hp{font-size:18cqw}
-.artx .cf.mini .cf-marks{margin-top:0;align-self:center}
-
 /* ===== v196 : refonte de l'interface du style artiste (maquette d'Amine) — seulement sous html.artx =====
    encre sombre et texture usée, boutons en parchemin à texte noir, bouton principal rouge sang,
    titres en capitales condensées (Oswald), onglets sombres avec le choisi en rouge, interrupteurs rouges */
@@ -1563,27 +1540,7 @@ html.artx #go:not(.speed):not(:disabled):active{transform:rotate(-1.2deg) transl
 html.artx #go.speed{transform:none}
 
 /* ===== v200 : refonte du jeu (maquettes validées par Amine), style artiste seulement (html.artx) ===== */
-/* cadre de carte d'Amine (assets/art/ui/cadre.webp, 1024 × 1536, fenêtre et extérieur transparents) :
-   coût dans le rond du haut, nom dans le bandeau du haut, texte sur le parchemin, dégâts dans le rond rouge, PV dans le rond blanc */
-.artx .cf-art,.artx .cf-vig{left:6.8%;right:6.7%;top:12.6%;bottom:29.8%;height:auto;border-radius:2.5cqw}
-.artx .cf-art{background-position:center 22%}
-.artx .cf-vig{box-shadow:inset 0 0 5cqw rgba(0,0,0,.55)}
-.artx .cf-cost,.artx .cf.mini .cf-cost{left:13.5%;top:9%;color:#1b1712;text-shadow:none;font-family:'Oswald','Arial Narrow',sans-serif;font-weight:600}
-.artx .cf-cost{font-size:12cqw}.artx .cf.mini .cf-cost{font-size:22cqw}
-.artx .cf-name{top:5.9%;left:26%;right:9%;height:6.2%;display:flex;align-items:center;justify-content:center;color:#1b1712;line-height:1}
-.artx .cf-rar{top:69.6%}
-.artx .cf-rule{display:none}
-.artx .cf-txt{top:72.6%;bottom:17%;left:11%;right:11%;color:#2a1c0e}
-.artx .cf-foot{left:1.6%;right:1.6%;top:84%;height:13%}
-.artx .cf-atk,.artx .cf-hp{width:18.6cqw;font:600 10cqw/1 'Oswald','Arial Narrow',sans-serif}
-.artx .cf-atk{color:#fff3e6;text-shadow:0 0 1cqw #4a0906,0 .4cqw .5cqw #000}
-.artx .cf-hp{color:#1b1712;text-shadow:none}
-.artx .cf-hp .ink,.artx .cf-hp svg{display:none}
-.artx .cf.mini .cf-name{top:5.2%;left:24%;right:6%;height:7.4%;font-size:10.5cqw}
-.artx .cf.mini .cf-v{top:73%}
-.artx .cf.mini .cf-atk,.artx .cf.mini .cf-hp{font-size:17cqw}
-.artx .cf-name{font:600 8.6cqw/1 'Oswald','Arial Narrow',sans-serif;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;padding-top:1.4cqw;text-align:center}
-.artx .cf.mini .cf-name{font-size:12.5cqw;padding-top:1.6cqw}
+/* v201 : retour au cadre cartoon (choix d'Amine) avec les illustrations de l'artiste ; son cadre est gardé dans assets/art/ui/cadre-amine.webp */
 /* ---- PC (html.felton) : bandeau en haut, colonne d'infos à gauche, plateau au centre, fiche et bouton à droite, main en bas ---- */
 html.artx.felton body{background:#16120f}
 html.artx.felton body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
@@ -1651,3 +1608,28 @@ html.artx.felton .side2>.table{padding-block:12px}
 /* bouton de vitesse (nuit) : plaque d'acier lisible */
 html.artx #go.speed{background:var(--ax-rv2),var(--ax-brush2) 0 0/400px 200px,linear-gradient(#bab4a8 0,#9a9488 12%,#857f74 50%,#767066 51%,#827c71 88%,#544f47 100%)!important;background-blend-mode:normal,normal,soft-light,normal!important;
  color:#1c1a17!important;text-shadow:0 1px 0 rgba(255,255,255,.4)!important;filter:none!important;opacity:1!important;font-family:var(--ax-head);font-weight:600;letter-spacing:.06em}
+
+/* ===== v201 : PC — plateau sur toute la hauteur, colonnes gauche et droite de même hauteur ; halo seulement sur la carte survolée ou choisie ===== */
+html.artx.felton .app{--pad:8px;--gap:8px;--pw:226px;--rw:256px;--map:min(calc(100dvh - 12px),calc(100vw - var(--pw) - var(--rw) - 2*var(--gap) - 2*var(--pad)));
+ padding-left:8px!important;padding-right:8px!important;grid-template-columns:var(--pw) var(--map) var(--rw)!important;grid-template-rows:auto auto auto minmax(0,1fr) auto!important}
+html.artx.felton .side:first-child{grid-column:3!important;grid-row:1!important}
+html.artx.felton .top{flex-wrap:wrap;gap:4px!important;align-content:flex-start;justify-content:flex-end;padding-top:0!important}
+html.artx.felton .top .mute{width:30px!important;height:30px!important;padding:0!important}html.artx.felton .top .mute svg{width:16px;height:16px}
+html.artx.felton button.round{order:-1;width:72px!important;min-height:72px!important;font-size:30px!important;margin-right:auto}
+html.artx.felton .top .shel{min-width:0!important;flex:1 1 140px}
+html.artx.felton .felt{grid-row:1/-1!important;height:auto!important;align-self:stretch;margin-top:0!important}
+html.artx.felton .app>.map{grid-row:1/-1!important;margin:0!important;align-self:center}
+html.artx.felton .side2>.info{grid-row:2!important;margin-top:6px!important;max-height:none!important;font-size:12px}
+html.artx.felton .side2>.table{grid-column:3!important;grid-row:4!important;height:auto!important;margin-top:6px!important;grid-template-columns:1fr!important;padding:6px!important;align-self:stretch}
+html.artx.felton .side2 .hand{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-self:start;gap:4px}
+html.artx.felton .side2>.go{grid-row:5!important;margin-top:6px!important;min-height:80px!important;font-size:24px}
+html.artx.felton .fpiles{display:flex!important}
+html.artx.felton .felt .pile{width:58px!important;height:82px!important}
+html.artx.felton .axbig{grid-row:2/5!important}
+html.artx.felton body::before{height:100px}
+html.artx.felton .top .mute{background:linear-gradient(#45413b,#1e1c19)!important;color:#f1e7cf!important;border:1.5px solid #000!important;opacity:1!important;filter:none!important}html.artx.felton .top .mute svg{stroke:#f1e7cf}
+html.artx.felton .felt .ztoks{display:none!important}
+html.artx .hand .card:not(.sel):not(:hover)::before{display:none!important}
+html.artx .hand .card:not(.sel):not(:hover) .cf{filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))!important}
+html.artx .hand .card:hover:not(.sel)::before{animation:none}
+html.artx.felton .axbig{position:fixed!important;right:calc(var(--rw) + 22px);top:140px;width:250px!important;margin:0!important}

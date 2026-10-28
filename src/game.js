@@ -155,7 +155,7 @@ const zArt=k=>artP('cards','z_'+k+'.webp','assets/cards_cartoon/z_'+k+'.webp');
 const popUrl=t=>{if(!popOK(t))return'';if(artNew('cards',t+'.webp'))return artNew('cards',t+'_pop.webp')?'assets/art/cards/'+t+'_pop.webp':'';return CART_POP.includes(t)?'assets/cards_cartoon/'+t+'_pop.webp':''};
 const artUrl=t=>artNew('cards',t+'.webp')?'assets/art/cards/'+t+'.webp':CART_FILES.includes(t)?'assets/cards_cartoon/'+t+'.webp':'';
 // applique le style choisi : fonds et cadres (variables CSS --ui-<nom>), sprites du plateau, maison fortifiée, puis redessine l'écran
-function applyArt(){try{const on=ART_DEV&&OPT.art;DE.classList.toggle('artx',!!(on&&(ART_NEW.ui||[]).includes('cadre.webp')));(ART_NEW.ui||[]).forEach(f=>{const v='--ui-'+f.replace(/\.\w+$/,'');
+function applyArt(){try{const on=ART_DEV&&OPT.art;DE.classList.toggle('artx',!!(on&&(ART_NEW.ui||[]).includes('plateau.webp')));(ART_NEW.ui||[]).forEach(f=>{const v='--ui-'+f.replace(/\.\w+$/,'');
   if(on)DE.style.setProperty(v,`url("${new URL('assets/art/ui/'+f,document.baseURI).href}")`);else DE.style.removeProperty(v)});
  if(on)(ART_NEW.sprites||[]).forEach(f=>{const k=f.replace(/\.\w+$/,'');if(!SPRN[k]){SPRN[k]=0;const im=new Image();im.onload=()=>SPRN[k]=im;im.src='assets/art/sprites/'+f}});
  if(typeof FORT!=='undefined')FORT.src=uiUrl('shelter_fort.webp');
@@ -216,7 +216,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v200 · 29 oct.';
+const VERSION='v201 · 29 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;

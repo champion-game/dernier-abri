@@ -7,7 +7,8 @@ const AX={on:()=>DE.classList.contains('artx'),plat:null};
 function axGround(){try{setBiome.done=0;setBiome(BIOME)}catch(e){}}
 function axPlat(){if(AX.plat||!(ART_NEW.ui||[]).includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/plateau.webp'}
 {const a0=applyArt;applyArt=function(){a0.apply(this,arguments);try{feltLayout();if(AX.on())axPlat();else axGround()}catch(e){}}}
-if(AX.on())axPlat();
+// la liste des images peut arriver avant le chargement de ce fichier : on refait la disposition ici
+try{feltLayout()}catch(e){}if(AX.on())axPlat();
 // étiquette du jour : nombre de jours avant la prochaine nuit rouge (lu sur la piste des nuits)
 {const r0=render;render=function(){r0.apply(this,arguments);try{const r=$('#round');if(!AX.on()||!r||!G||S.busy||G.oneNight)return;
  const cs=[...document.querySelectorAll('#horde .tc')],i=cs.findIndex(c=>c.classList.contains('now')),j=cs.findIndex((c,k)=>k>i&&c.classList.contains('red'));
