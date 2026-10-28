@@ -246,8 +246,8 @@ function cfList(pool){let ts=pool.filter(t=>!CF.role||(CF.role.startsWith('c:')?
 function cfTabs(base,isOwn,deck){if(CF.fam==='*'&&!(META.eds||[]).length)CF.fam='';
  const T=[['',ii('card'),_t('Toutes')]].concat(Object.keys(Z.FAM).map(f=>[f,ink(f),Z.FAM[f].n]),[['-',ii('pack'),_t('Neutres')]]);if((META.eds||[]).length)T.push(['*',ii('star'),_t('Spéciales')]);
  const h=T.map(([k,ic,n])=>{const p=cfPool(base,k),o=p.filter(isOwn).length,nw=p.some(t=>CNEW.includes(t));
-  return `<button type="button" role="tab" class="ctab${CF.fam===k?' on':''}" data-a="cfam" data-v="${k}" aria-selected="${CF.fam===k}">${ic}<span>${n}</span><i>${deck||k==='*'?o:o+'/'+p.length}</i>${nw?'<em class="cnewdot"></em>':''}</button>`}).join('');
- const ev=deck?'':`<button type="button" role="tab" class="ctab evo" data-a="evo">${ii('spark')}<span>${_t('Évolutions')}</span><i>${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length}</i></button>`;
+  return `<button type="button" role="tab" class="ctab${CF.fam===k?' on':''}" data-a="cfam" data-v="${k}" aria-selected="${CF.fam===k}" title="${n}" aria-label="${n}">${ic}<i>${deck||k==='*'?o:o+'/'+p.length}</i>${nw?'<em class="cnewdot"></em>':''}</button>`}).join('');
+ const ev=deck?'':`<button type="button" role="tab" class="ctab evo" data-a="evo" title="${_t('Évolutions')}" aria-label="${_t('Évolutions')}">${ii('spark')}<i>${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length}</i></button>`;
  return `<div class="ctabs" role="tablist">${h}${ev}</div>`}
 function cfBar(own){const o=(v,n)=>`<option value="${v}">${n}</option>`;
  const sel=CF.more?`<div class="cfsel"><select data-f="sort" aria-label="${_t('Trier')}">${o('cat',_t('Par type'))}${o('cost',_t('Par coût'))}${o('rar',_t('Par rareté'))}${o('name',_t('Par nom'))}${o('fam',_t('Par faction'))}</select>
