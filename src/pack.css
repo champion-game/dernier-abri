@@ -1,0 +1,24 @@
+/* Test (branche seulement) : panneaux et boutons du pack BarriCard Clean UI v1 (assets/pack/), étirés en 9 morceaux.
+   Panneaux papier (texte encre), boutons métal sombre, action principale orange. */
+html{--pk-ink:#111111;--pk-paper:#EBD7B1;--pk-cream:#F2E4C6;--pk-orange:#E6391D}
+
+/* panneaux papier */
+html #panel,html .event,html .info{border:14px solid transparent!important;border-image:url(../assets/pack/panel.png) 16 fill / 14px stretch!important;background:none!important;box-shadow:0 6px 16px rgba(0,0,0,.55)!important;color:var(--pk-ink)!important;border-radius:0!important}
+html :is(#panel,.event,.info) :is(h2,h3,p,small,b,span,label,li,td,th,div){text-shadow:none}
+html :is(#panel,.event,.info) :is(h2,h3,p,label,li,small){color:var(--pk-ink)}
+html .table{border:12px solid transparent!important;border-image:url(../assets/pack/panel-res.png) 14 fill / 12px stretch!important;background:none!important}
+
+/* boutons secondaires : métal sombre */
+html :is(button.skip,button.tab,button.mute,button.char,button.rchip){border:7px solid transparent!important;border-image:url(../assets/pack/btn.png) 8 fill / 7px stretch!important;background:none!important;color:var(--pk-cream)!important;box-shadow:0 3px 0 rgba(0,0,0,.6)!important;border-radius:0!important;text-shadow:0 1px 0 #000}
+html :is(button.skip,button.tab,button.mute,button.char,button.rchip):hover{border-image-source:url(../assets/pack/btn-hover.png)!important}
+html :is(button.tab.on,button.char.on,button.rchip.on){border-image-source:url(../assets/pack/btn-on.png)!important;color:#fff!important}
+
+/* bouton principal : orange */
+html button.go{border:8px solid transparent!important;border-image:url(../assets/pack/btn-on.png) 8 fill / 8px stretch!important;background:none!important;color:#FFF4E2!important;text-shadow:0 2px 0 rgba(0,0,0,.5)!important;box-shadow:0 4px 0 rgba(0,0,0,.6),0 6px 14px rgba(0,0,0,.45)!important;border-radius:0!important}
+html button.go:hover{filter:brightness(1.08)}
+html button.go:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.6)!important}
+html button.go:disabled{border-image-source:url(../assets/pack/btn.png)!important;color:#8A8F92!important;filter:none}
+html .go:not(.speed)::before{display:none}
+/* texte encre sur le papier (événement du jour, aide) */
+html :is(.event,.info) :is(p,span,div,em,i,b,strong):not(.ii):not([class*="chip"]):not(.ztk b){color:var(--pk-ink)!important}
+html .event .ztoks{background:rgba(17,17,17,.08)!important;border-color:rgba(17,17,17,.25)!important}
