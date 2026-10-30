@@ -145,7 +145,7 @@ const cartoon=t=>CART_FILES.includes(t)&&(ART_STYLE==='cartoon'||!ART_FILES.incl
    assets/art/liste.json dit lesquelles existent (à refaire avec node tools/art-liste.js). La case « Images de l'artiste » des Options bascule
    d'un style à l'autre ; elle n'existe que sur le site GitHub et en local (pas sur itch.io, où assets/art n'est pas envoyé).
    Une image absente du dossier artiste garde l'image actuelle. */
-const ART_DEV=typeof location!=='undefined'&&/github\.io$|^localhost$|^127\./.test(location.hostname);
+const ART_DEV=typeof location!=='undefined'&&/github\.io$|githack\.com$|^localhost$|^127\./.test(location.hostname);
 let ART_NEW={cards:[],sprites:[],relics:[],ui:[]};const SPRN={};
 const artNew=(d,f)=>!!(ART_DEV&&OPT.art&&ART_NEW[d]&&ART_NEW[d].includes(f));
 const artP=(d,f,old)=>artNew(d,f)?'assets/art/'+d+'/'+f:old;
@@ -216,6 +216,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
+let NDK='4,7,18',NTN='95,120,190'; // couleurs du voile de nuit et de la teinte de nuit (changées par game-tex.js pour la nuit rouge)
 const VERSION='v214 · 29 oct.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
@@ -233,7 +234,7 @@ const STEAM_URL='';// page Steam (liste de souhaits) : à remplir quand elle est
 try{if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}catch(e){}
 // slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
-const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',cur:'a',lang:LANG};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
+const OPT=(()=>{const d={sfx:1,mus:1,speed:1,shake:1,vib:1,text:0,eco:0,all:0,back:'',shelter:'',cur:'a',lang:LANG,art:typeof location!=='undefined'&&/githack\.com$/.test(location.hostname)?1:0};try{return Object.assign(d,JSON.parse(localStorage.getItem('abri-opts'))||{})}catch(e){return d}})();
 function saveOpt(){try{localStorage.setItem('abri-opts',JSON.stringify(OPT))}catch(e){}}
 // style artiste : liste des images déjà livrées (site de test seulement)
 if(ART_DEV&&typeof fetch==='function')fetch('assets/art/liste.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j){ART_NEW=Object.assign({cards:[],sprites:[],relics:[],ui:[]},j);if(OPT.art)applyArt()}}).catch(()=>{});
