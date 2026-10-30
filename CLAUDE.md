@@ -45,6 +45,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - `tools/balance.js` : le test d’équilibrage (à lancer quand Amine le demande).
 - `tools/test.js` : les tests automatiques (moteur et navigateur).
 - `docs/GAME_DESIGN.md` : le document de conception, à tenir à jour.
+- `docs/PACK_GRAPHIQUE.md` : inventaire de tous les graphismes et règles de cohérence du pack graphique.
 
 ## Économie de tokens (demande d'Amine)
 
