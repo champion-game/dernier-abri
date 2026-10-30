@@ -1,50 +1,93 @@
-/* Essai (branche textures-ambiances) : pack de textures par-dessus le style artiste.
-   html.artx.tex + data-amb = day | night | blood (réglé par src/game-tex.js). */
-html.tex{--tx-paper:url(../assets/art/tex/paper.webp);--tx-metal:url(../assets/art/tex/metal.webp);--tx-red:url(../assets/art/tex/redmetal.webp);
- --tx-wood:url(../assets/art/tex/wood.webp);--tx-silh:url(../assets/art/tex/silh.webp);--tx-shel:url(../assets/art/tex/shelter.webp);
- --tx-scene:url(../assets/art/tex/scene-day.webp);--tx-sky:url(../assets/art/tex/sky-day.webp);--tx-glow:rgba(0,0,0,0);--tx-veil:rgba(10,8,6,.18)}
-html.tex[data-amb=night]{--tx-scene:url(../assets/art/tex/scene-night.webp);--tx-sky:url(../assets/art/tex/sky-night.webp);--tx-glow:rgba(70,110,200,.16);--tx-veil:rgba(4,7,18,.45)}
-html.tex[data-amb=blood]{--tx-scene:url(../assets/art/tex/scene-blood.webp);--tx-sky:url(../assets/art/tex/sky-blood.webp);--tx-glow:rgba(200,20,20,.3);--tx-veil:rgba(40,2,4,.42)}
+/* Essai (branche de test) : pack de textures par-dessus le style artiste.
+   html.artx.tex + data-amb = day | night | blood (réglé par src/game-tex.js). PC : html.felton. */
+html.tex{--tx-bp:url(../assets/art/tex/ui-black-panel.webp);--tx-pp:url(../assets/art/tex/ui-paper-panel.webp);--tx-rb:url(../assets/art/tex/ui-red-button.webp);
+ --tx-wf:url(../assets/art/tex/ui-wood-frame.webp);--tx-silh:url(../assets/art/tex/silh.webp);--tx-shel:url(../assets/art/tex/shelter.webp);
+ --tx-horde:url(../assets/art/tex/horde.webp);--tx-back:url(../assets/art/tex/ui-card-back.webp);
+ --tx-pano:url(../assets/art/tex/pano-day.webp);--tx-sky:url(../assets/art/tex/sky-day.webp);--tx-glow:rgba(0,0,0,0);--tx-veil:rgba(10,8,6,.2)}
+html.tex[data-amb=night]{--tx-pano:url(../assets/art/tex/pano-night.webp);--tx-sky:url(../assets/art/tex/sky-night.webp);--tx-glow:rgba(70,110,200,.18);--tx-veil:rgba(4,7,18,.35)}
+html.tex[data-amb=blood]{--tx-pano:url(../assets/art/tex/pano-blood.webp);--tx-sky:url(../assets/art/tex/sky-blood.webp);--tx-glow:rgba(210,20,20,.3);--tx-veil:rgba(40,2,4,.35)}
 
-/* décor : la scène de l'ambiance, floutée en fond, nette dans la colonne de droite sur PC */
+/* décor : le panorama de l'ambiance, flouté derrière tout l'écran */
 html.artx.tex body{background:#0d0a08!important}
-html.artx.tex body::before,html.artx.tex.felton body::before{inset:-12px!important;filter:blur(4px) brightness(.8);
- background:linear-gradient(var(--tx-veil),var(--tx-veil)),var(--tx-scene) center 70%/cover no-repeat!important}
-html.artx.tex.felton body::after{content:"";position:fixed;right:0;bottom:0;width:320px;height:440px;z-index:-1;pointer-events:none;
- background:linear-gradient(var(--tx-veil),var(--tx-veil)),var(--tx-scene) right bottom/cover no-repeat;
- -webkit-mask:linear-gradient(90deg,transparent,#000 22%),linear-gradient(transparent,#000 22%);-webkit-mask-composite:source-in;
- mask:linear-gradient(90deg,transparent,#000 22%) intersect,linear-gradient(transparent,#000 22%)}
+html.artx.tex body::before,html.artx.tex.felton body::before{inset:-14px!important;height:auto!important;filter:blur(5px) brightness(.62);
+ background:linear-gradient(var(--tx-veil),var(--tx-veil)),var(--tx-pano) center 40%/cover no-repeat!important}
 
-/* panneaux en métal noir */
-html.artx.tex .mat,html.artx.tex .info,html.artx.tex .fpiles,html.artx.tex .ft-body,html.artx.tex .top .mute,html.artx.tex .ft-tabs button{
- background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.32)),var(--tx-metal) center/360px auto!important;
- border:2px solid #050403!important;border-radius:4px!important;
- box-shadow:inset 0 0 0 1px rgba(255,235,210,.07),inset 0 0 22px var(--tx-glow),0 4px 10px rgba(0,0,0,.55)!important}
-html.artx.tex .ft-tabs button.on{background:linear-gradient(rgba(120,10,10,.25),rgba(0,0,0,.2)),var(--tx-metal) center/360px auto!important;color:#f3e3c3!important}
-html.artx.tex .top .mute{color:#efe2c8!important}
-
-/* jour et abri : parchemin, avec le ciel de l'ambiance (soleil, lune, lune rouge) */
-html.artx.tex button.round{color:#1d140c!important;text-shadow:0 0 6px rgba(250,236,205,.9),0 0 2px #f6e8c8!important;border:2px solid #120c07!important;border-radius:4px!important;
- background:linear-gradient(rgba(242,226,192,.0) 40%,rgba(242,226,192,.55) 100%),var(--tx-sky) center/cover no-repeat,var(--tx-paper) center/cover!important;
- box-shadow:inset 0 0 0 1px rgba(80,50,20,.35),0 4px 10px rgba(0,0,0,.6)!important}
+/* cadres du pack (9 parts : coins à rivets intacts, centre étiré) */
+html.artx.tex .mat,html.artx.tex .info,html.artx.tex #ftabs,html.artx.tex .fpiles,html.artx.tex .top .mute,html.artx.tex .txbtns>button,html.artx.tex #go.speed{
+ background:none!important;border:12px solid transparent!important;border-radius:0!important;border-image:var(--tx-bp) 64 fill/12px stretch!important;
+ box-shadow:none!important;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6))}
+html.artx.tex .info,html.artx.tex .mat{color:#efe2c8}
+html.artx.tex button.round,html.artx.tex .top .shel{border:12px solid transparent!important;border-radius:0!important;border-image:var(--tx-pp) 64 fill/12px stretch!important;
+ box-shadow:none!important;color:#1d140c!important;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6))}
+html.artx.tex button.round,html.artx.tex .top .shel{border-image:var(--tx-pp) 64/12px stretch!important;background:var(--tx-pp) center/100% 100% no-repeat!important;background-origin:border-box!important}
+html.artx.tex button.round{text-shadow:0 0 5px #f1e2c3,0 0 2px #f1e2c3!important}
 html.artx.tex button.round .axn{color:#8d0f0f!important}
-html.artx.tex .top .shel{color:#1d140c!important;border:2px solid #120c07!important;border-radius:4px!important;
- background:var(--tx-paper) center/cover!important;box-shadow:0 4px 10px rgba(0,0,0,.55)!important}
-html.artx.tex .top .shel .shel-t,html.artx.tex .top .shel b{color:#1d140c!important;text-shadow:none!important}
+html.artx.tex .top .shel .shel-t,html.artx.tex .top .shel b,html.artx.tex .top .shel span{color:#1d140c!important;text-shadow:none!important}
+html.artx.tex .table{border:16px solid transparent!important;border-radius:0!important;border-image:var(--tx-wf) 70 fill/16px stretch!important;background:none!important;
+ box-shadow:none!important;filter:drop-shadow(0 6px 8px rgba(0,0,0,.6))}
+html.artx.tex #go:not(.speed){border:12px solid transparent!important;border-radius:0!important;border-image:var(--tx-rb) 50/12px stretch!important;
+ background:var(--tx-silh) left 14px bottom 12px/auto 70% no-repeat,var(--tx-rb) center/100% 100% no-repeat!important;background-origin:border-box!important;box-shadow:none!important;color:#f6e6cf!important;text-shadow:0 2px 0 #2a0505,0 0 8px rgba(0,0,0,.6)!important;
+ filter:drop-shadow(0 5px 7px rgba(0,0,0,.65))}
+html.artx.tex #go:not(.speed)::before,html.artx.tex #go:not(.speed)::after{display:none!important}
+html.artx.tex #go.speed{color:#ffd36b!important;text-shadow:0 1px 0 #000!important}
+html.artx.tex .top .mute{color:#efe2c8!important;border-width:8px!important;border-image-width:8px!important}
 
-/* plateau de la main : bois */
-html.artx.tex .side2>.table,html.artx.tex .table{background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.4)),var(--tx-wood) center/420px auto!important;
- border:2px solid #0b0705!important;border-radius:4px!important;box-shadow:inset 0 0 0 1px rgba(255,220,170,.08),inset 0 0 24px var(--tx-glow),0 6px 14px rgba(0,0,0,.6)!important}
-
-/* « Affronter la nuit » : métal rouge et silhouettes */
-html.artx.tex #go:not(.speed){color:#f6e6cf!important;text-shadow:0 2px 0 #2a0505,0 0 8px rgba(0,0,0,.6)!important;border:2px solid #120403!important;border-radius:4px!important;
- background:var(--tx-silh) 6px bottom/auto 82% no-repeat,linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.25)),var(--tx-red) center/cover!important;
- box-shadow:inset 0 0 0 1px rgba(255,200,180,.18),0 5px 12px rgba(0,0,0,.65)!important}
-html.artx.tex #go:not(.speed)::after{display:none!important}
-html.artx.tex #go.speed{color:#ffd36b!important;text-shadow:0 1px 0 #000!important;border:2px solid #050403!important;
- background:linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.35)),var(--tx-metal) center/360px auto!important;box-shadow:inset 0 0 0 1px rgba(255,211,107,.25),inset 0 0 18px var(--tx-glow)!important}
-html.artx.tex.felton .top .shel{background:var(--tx-shel) right 52px top 3px/auto 58% no-repeat,var(--tx-paper) center/cover!important}
-/* PC : étiquette du jour élargie, texte à gauche, ciel à droite (comme la maquette) */
-html.artx.tex.felton button.round{width:150px!important;text-align:left!important;padding-left:12px!important;
- background:linear-gradient(90deg,rgba(240,224,190,.92) 0,rgba(240,224,190,.75) 32%,rgba(240,224,190,0) 58%),var(--tx-sky) right center/auto 100% no-repeat,var(--tx-paper) center/cover!important}
-html.artx.tex.felton button.round .axn{display:block;max-width:80px;line-height:1.1;text-shadow:0 0 4px #f3e4c4,0 0 2px #f3e4c4!important}
+/* ===== PC : disposition de la maquette ===== */
+html.artx.tex.felton .app{--tl:clamp(220px,20vw,270px);--tr:clamp(220px,20vw,270px);--hh:clamp(150px,23vh,200px);--gap:10px;
+ --map:min(calc((100dvh - var(--hh) - 3*var(--gap)) / 1.02),calc((100vw - var(--tl) - var(--tr) - 4*var(--gap)) / 1.05));
+ display:grid!important;grid-template-columns:var(--tl) minmax(0,1fr) var(--tr)!important;grid-template-rows:minmax(0,1fr) var(--hh)!important;
+ height:100dvh!important;max-width:none!important;margin:0!important;padding:var(--gap)!important;gap:var(--gap)!important;align-content:stretch!important;box-sizing:border-box}
+html.artx.tex.felton .side:first-child{display:none!important}
+html.artx.tex.felton .app>.map{grid-column:2!important;grid-row:1!important;align-self:center!important;justify-self:center!important;margin:0!important;width:var(--map)!important}
+/* colonne de gauche */
+html.artx.tex.felton .felt{grid-column:1!important;grid-row:1/3!important;display:flex!important;flex-direction:column;gap:8px;height:auto!important;min-height:0;margin:0!important;padding:0!important;
+ background:none!important;border:0!important;box-shadow:none!important;overflow:hidden}
+html.artx.tex.felton .felt::before,html.artx.tex.felton .felt::after{display:none!important}
+html.artx.tex.felton .felt>button.round{order:0;flex:none;width:auto!important;min-height:96px!important;margin:0!important;padding:4px 6px!important;text-align:left!important;
+ font:600 30px/1 'Oswald',sans-serif!important;text-transform:uppercase;letter-spacing:.02em;white-space:normal;transform:none!important}
+html.artx.tex.felton .felt>button.round::first-line{font-size:22px!important}
+html.artx.tex.felton .felt>button.round .axn{display:block;font:600 11px/1.1 'Oswald',sans-serif!important;text-transform:uppercase;margin-top:4px;max-width:60%}
+html.artx.tex.felton .felt>.mat{order:1;flex:none;margin:0!important;padding:4px!important}
+html.artx.tex.felton .fpiles{order:2;flex:none;display:flex!important;justify-content:space-around;align-items:center;gap:6px;padding:2px!important;min-height:0}
+html.artx.tex.felton #ftabs{order:3;flex:1 1 0;min-height:120px;margin:0!important;padding:0!important;display:flex;flex-direction:column;overflow:hidden}
+html.artx.tex.felton #ftabs .ft-body{flex:1;min-height:0;overflow:auto;background:none!important;border:0!important;border-image:none!important;filter:none}
+html.artx.tex.felton .txbtns{order:4;flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+html.artx.tex.felton .txbtns>button{position:static!important;width:auto!important;height:62px!important;padding:0!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#efe2c8!important}
+html.artx.tex.felton .txbtns>button svg{width:22px!important;height:22px!important}
+html.artx.tex.felton .txl{font:600 11px/1 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.04em}
+/* la main, sous le plateau */
+html.artx.tex.felton .app>.table{position:relative;z-index:5;grid-column:2!important;grid-row:2!important;height:auto!important;min-height:0;margin:0!important;padding:4px 10px!important;
+ display:flex!important;align-items:center;justify-content:center;overflow:visible}
+html.artx.tex.felton .app>.table>.piles{display:none!important}
+html.artx.tex.felton .app>.table>.hand{display:grid!important;grid-template-columns:repeat(var(--n,5),minmax(0,118px))!important;justify-content:center;gap:8px!important;width:100%;height:100%;align-items:center}
+/* colonne de droite : outils, abri, infos, décor net, bouton de la nuit */
+html.artx.tex.felton .side2{grid-column:3!important;grid-row:1/3!important;display:flex!important;flex-direction:column;gap:8px;position:relative;min-height:0;margin:0!important}
+html.artx.tex.felton .side2::before{content:"";position:absolute;left:0;right:0;bottom:60px;height:62%;z-index:-1;pointer-events:none;
+ background:linear-gradient(var(--tx-veil),var(--tx-veil)),var(--tx-pano) center 45%/cover no-repeat;-webkit-mask:linear-gradient(transparent,#000 22%,#000 82%,transparent);mask:linear-gradient(transparent,#000 22%,#000 82%,transparent)}
+html.artx.tex.felton .side2>*{grid-column:auto!important;grid-row:auto!important;margin:0!important}
+html.artx.tex.felton .side2>.top{display:flex!important;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px!important;height:auto!important;padding:0!important;flex:none}
+html.artx.tex.felton .side2>.top .brand{display:none!important}
+html.artx.tex.felton .side2>.top .mute{width:44px!important;height:44px!important;padding:0!important}
+html.artx.tex.felton .side2>.top .shel{flex:1 1 100%;min-width:0!important;padding:4px 8px!important;background:var(--tx-shel) right 12px top 50%/auto 62% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important;
+ font:600 15px 'Oswald',sans-serif;text-transform:uppercase}
+html.artx.tex.felton .side2>.info{flex:none;max-height:none!important;overflow:visible!important;
+ border-image:var(--tx-bp) 64/12px stretch!important;background:var(--tx-horde) left 12px top 50%/auto 72% no-repeat,var(--tx-bp) center/100% 100% no-repeat!important;background-origin:border-box!important;padding-left:58px!important;min-height:64px}
+html.artx.tex.felton .side2>.go{margin-top:auto!important;min-height:92px!important;flex:none;width:100%}
+html.artx.tex.felton .axbig{position:absolute!important;left:50%;bottom:110px;transform:translateX(-50%);width:min(200px,86%)!important;z-index:6;margin:0!important}
+html.artx.tex.felton #axFrame{display:none!important}
+html.artx.tex.felton .app>.map{box-shadow:none!important;border:0!important}
+/* la nuit rouge est déjà dans le décor : pas de voile rouge sur toute l'interface */
+html.tex .redsky{display:none!important}
+html.artx.tex.felton .side2>.top .shel{padding:6px 10px!important;background:var(--tx-shel) right 64px top 8px/auto 46% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important}
+html.artx.tex.felton .side2>.top .shel .shel-t{font:600 18px/1.1 'Oswald',sans-serif!important;margin-bottom:6px}
+html.artx.tex.felton .side2>.top .shel .shel-bar{height:10px!important}
+html.artx.tex.felton .felt>button.round{min-height:112px!important;font-size:36px!important;white-space:nowrap!important;background:var(--tx-sky) right 4px bottom 4px/auto 88% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important}
+html.artx.tex.felton .felt>button.round{white-space:normal!important;padding:2px 46% 2px 8px!important;font-size:48px!important;line-height:.95!important}
+html.artx.tex.felton .felt>button.round::first-line{font-size:26px!important}
+html.artx.tex.felton .felt>button.round .axn{max-width:none;white-space:nowrap}
+html.artx.tex.felton #axFx{display:none!important}
+html.artx.tex.felton .felt>button.round{font-size:40px!important;min-height:120px!important;padding-bottom:6px!important}
+html.artx.tex.felton #axPlat{background:transparent!important}
+html.artx.tex.felton .app{--hh:clamp(150px,23vh,250px)}
+html.artx.tex.felton .app>.table>.hand{grid-template-columns:repeat(var(--n,5),minmax(0,calc(var(--hh) * .7)))!important}
+html.artx.tex.felton .felt>button.round{font-size:36px!important}

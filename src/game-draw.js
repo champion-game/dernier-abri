@@ -942,8 +942,8 @@ function drawDark(now){
  if(nightAmt<.01)return;const k=dark.width/(L+2*PADU);
  dctx.setTransform(1,0,0,1,0,0);dctx.globalCompositeOperation='source-over';dctx.clearRect(0,0,dark.width,dark.height);
  const dq=(now-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0;
- if(dawn){const gr=dctx.createLinearGradient(0,0,dark.width,0),fx=1-dq*1.35;for(let k=0;k<=8;k++){const s=k/8;gr.addColorStop(s,`rgba(${NDK},${.8*clamp((fx+.3-s)/.3,0,1)})`)}dctx.fillStyle=gr}
- else dctx.fillStyle=`rgba(${NDK},${.8*nightAmt})`;
+ if(dawn){const gr=dctx.createLinearGradient(0,0,dark.width,0),fx=1-dq*1.35;for(let k=0;k<=8;k++){const s=k/8;gr.addColorStop(s,`rgba(${NDK},${NDA*clamp((fx+.3-s)/.3,0,1)})`)}dctx.fillStyle=gr}
+ else dctx.fillStyle=`rgba(${NDK},${NDA*nightAmt})`;
  dctx.fillRect(0,0,dark.width,dark.height);
  dctx.setTransform(k,0,0,k,PADU*k,PADU*k);dctx.globalCompositeOperation='destination-out';
  for(const l of lights(now))dctx.drawImage(LIGHT,l.x-l.r,l.y-l.r,2*l.r,2*l.r);

@@ -1543,4 +1543,7 @@ I18N.en={
 "Préparer une partie":"Prepare a run",
 "Quitter l’atelier":"Leave the workshop",
 "Accueil":"Home",
+"Menu":"Menu",
+"Combats":"Fights",
+"Zones":"Zones",
 };

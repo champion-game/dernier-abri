@@ -78,8 +78,8 @@ addEventListener('resize',()=>setTimeout(axLay,50));
 // v206 : voile de nuit de la palissade, calqué sur drawDark (game-draw.js) : même couleur, même intensité (nightAmt), même aube
 {let last='';const loop=()=>{try{const d=$('#axPlat'),n=$('#axNight');if(d&&n&&!d.hidden){let bg='none';
  const dq=(performance.now()-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0;
- if(dawn){const fx=1-dq*1.35,ox=d._ox||0,cw=d._cw||1,W=d.offsetWidth||1,st=[];for(let k=0;k<=12;k++){const x=k/12*W,s=(x-ox)/cw;st.push(`rgba(${NDK},${(.8*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${x.toFixed(0)}px`)}bg=`linear-gradient(90deg,${st.join(',')})`}
- else if(nightAmt>=.01)bg=`rgba(${NDK},${(.8*nightAmt).toFixed(3)})`;
+ if(dawn){const fx=1-dq*1.35,ox=d._ox||0,cw=d._cw||1,W=d.offsetWidth||1,st=[];for(let k=0;k<=12;k++){const x=k/12*W,s=(x-ox)/cw;st.push(`rgba(${NDK},${(NDA*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${x.toFixed(0)}px`)}bg=`linear-gradient(90deg,${st.join(',')})`}
+ else if(nightAmt>=.01)bg=`rgba(${NDK},${(NDA*nightAmt).toFixed(3)})`;
  if(bg!==last){n.style.background=bg;last=bg}
  axFxDraw()}}catch(e){}requestAnimationFrame(loop)};requestAnimationFrame(loop)}
 // v208 : nuit (PC) — les effets de brume de la v195 (nappes du bord : ringFog ; bandes qui dérivent : drawFog) sont dessinés sur #axFx,
@@ -137,9 +137,9 @@ function axPaint(){try{const d=$('#axPlat');if(!d||d.hidden||!axOn()||!axSky)ret
  // voile de la nuit et de l'aube (drawDark) hors des cases : le canvas du jeu le dessine déjà sur les cases
  if(!PADU){const dq=(now-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0,cx0=(0-ox)*k,cy0=(0-oy)*k,cw=L*k;if(dawn||n>=.01){
   p.save();p.beginPath();p.rect(0,0,w,h);p.rect(cx0+cw,cy0,-cw,cw);p.clip('evenodd');
-  if(dawn){const fx=1-dq*1.35,gr=p.createLinearGradient(cx0,0,cx0+cw,0);for(let j=0;j<=8;j++){const q=j/8;gr.addColorStop(q,`rgba(${NDK},${.8*Math.min(1,Math.max(0,(fx+.3-q)/.3))})`)}
+  if(dawn){const fx=1-dq*1.35,gr=p.createLinearGradient(cx0,0,cx0+cw,0);for(let j=0;j<=8;j++){const q=j/8;gr.addColorStop(q,`rgba(${NDK},${NDA*Math.min(1,Math.max(0,(fx+.3-q)/.3))})`)}
    p.fillStyle=gr;p.fillRect(0,0,cx0+.5,h);p.fillRect(0,0,w,h)}
-  else{p.fillStyle=`rgba(${NDK},${.8*n})`;p.fillRect(0,0,w,h)}
+  else{p.fillStyle=`rgba(${NDK},${NDA*n})`;p.fillRect(0,0,w,h)}
   p.globalCompositeOperation='destination-in';p.drawImage(AX.plat,0,0,w,h);p.restore()}}
 }catch(e){}}
 {let raf=()=>{axPaint();requestAnimationFrame(raf)};requestAnimationFrame(raf)}
