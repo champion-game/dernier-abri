@@ -291,3 +291,9 @@ Réserve non utilisée (idées pour plus tard) : `assets/extras/` (78 illustrati
 | plan | Plan de l’abri |
 | insigne | Insigne du sauveteur |
 | fanion | Fanion des secours |
+
+## 5. Pack d’interface généré (essai)
+
+`python3 tools/ui_pack.py` produit 47 éléments dans `assets/art/ui/pack/` (PNG transparents, taille ×2, ombre comprise) et `pack.json` (taille, découpe pour `border-image`, usage) :
+boutons rouge, gris, parchemin et rond (états normal, survol, appuyé, inactif), panneaux métal, parchemin, bois et papier, cadres seuls, onglets, étiquette du jour, pastilles, gemmes (coût, dégâts, PV), cases de la piste des nuits, cases d’énergie, barres (PV, énergie, progression), champ de saisie, interrupteurs, cases à cocher, séparateur, rivet.
+Matières : `tools/textures.py`. Lumière en haut à gauche, dégradé clair en haut et sombre en bas. Pas encore branché dans le jeu.

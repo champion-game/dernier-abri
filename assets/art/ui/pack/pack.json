@@ -1,0 +1,370 @@
+{
+ "btn-rouge-normal": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton principal (Affronter la nuit, Jouer)"
+ },
+ "btn-gris-normal": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton secondaire"
+ },
+ "btn-parchemin-normal": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton clair (texte noir)"
+ },
+ "btn-rond-normal": {
+  "taille": [
+   134,
+   140
+  ],
+  "decoupe": null,
+  "usage": "bouton icône (pause, vitesse, options)"
+ },
+ "btn-rouge-survol": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton principal (Affronter la nuit, Jouer)"
+ },
+ "btn-gris-survol": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton secondaire"
+ },
+ "btn-parchemin-survol": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton clair (texte noir)"
+ },
+ "btn-rond-survol": {
+  "taille": [
+   134,
+   140
+  ],
+  "decoupe": null,
+  "usage": "bouton icône (pause, vitesse, options)"
+ },
+ "btn-rouge-appuye": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton principal (Affronter la nuit, Jouer)"
+ },
+ "btn-gris-appuye": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton secondaire"
+ },
+ "btn-parchemin-appuye": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton clair (texte noir)"
+ },
+ "btn-rond-appuye": {
+  "taille": [
+   134,
+   140
+  ],
+  "decoupe": null,
+  "usage": "bouton icône (pause, vitesse, options)"
+ },
+ "btn-rouge-inactif": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton principal (Affronter la nuit, Jouer)"
+ },
+ "btn-gris-inactif": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton secondaire"
+ },
+ "btn-parchemin-inactif": {
+  "taille": [
+   392,
+   148
+  ],
+  "decoupe": 40,
+  "usage": "bouton clair (texte noir)"
+ },
+ "btn-rond-inactif": {
+  "taille": [
+   134,
+   140
+  ],
+  "decoupe": null,
+  "usage": "bouton icône (pause, vitesse, options)"
+ },
+ "panneau-metal": {
+  "taille": [
+   552,
+   418
+  ],
+  "decoupe": 48,
+  "usage": "panneau (fiche, options)"
+ },
+ "panneau-parchemin": {
+  "taille": [
+   552,
+   418
+  ],
+  "decoupe": 48,
+  "usage": "fiche de carte, texte"
+ },
+ "panneau-bois": {
+  "taille": [
+   552,
+   418
+  ],
+  "decoupe": 48,
+  "usage": "fond des menus"
+ },
+ "panneau-papier": {
+  "taille": [
+   544,
+   408
+  ],
+  "decoupe": 24,
+  "usage": "feuille du classeur"
+ },
+ "cadre-metal": {
+  "taille": [
+   552,
+   418
+  ],
+  "decoupe": 48,
+  "usage": "cadre seul (plateau, main), centre transparent"
+ },
+ "cadre-fin": {
+  "taille": [
+   552,
+   418
+  ],
+  "decoupe": 30,
+  "usage": "liseré fin"
+ },
+ "onglet-actif": {
+  "taille": [
+   252,
+   118
+  ],
+  "decoupe": 26,
+  "usage": "onglet choisi"
+ },
+ "onglet": {
+  "taille": [
+   252,
+   118
+  ],
+  "decoupe": 26,
+  "usage": "onglet"
+ },
+ "etiquette-jour": {
+  "taille": [
+   332,
+   158
+  ],
+  "decoupe": 30,
+  "usage": "étiquette JOUR n"
+ },
+ "pastille-metal": {
+  "taille": [
+   104,
+   110
+  ],
+  "decoupe": null,
+  "usage": "pastille (ferraille, cartes)"
+ },
+ "pastille-parchemin": {
+  "taille": [
+   104,
+   110
+  ],
+  "decoupe": null,
+  "usage": "pastille claire"
+ },
+ "gemme-rouge": {
+  "taille": [
+   88,
+   94
+  ],
+  "decoupe": null,
+  "usage": "dégâts"
+ },
+ "gemme-noire": {
+  "taille": [
+   88,
+   94
+  ],
+  "decoupe": null,
+  "usage": "PV"
+ },
+ "gemme-jaune": {
+  "taille": [
+   88,
+   94
+  ],
+  "decoupe": null,
+  "usage": "coût en énergie"
+ },
+ "case-nuit": {
+  "taille": [
+   72,
+   78
+  ],
+  "decoupe": 16,
+  "usage": "nuit passée ou à venir"
+ },
+ "case-nuit-rouge": {
+  "taille": [
+   72,
+   78
+  ],
+  "decoupe": 16,
+  "usage": "nuit rouge"
+ },
+ "case-nuit-actuelle": {
+  "taille": [
+   72,
+   78
+  ],
+  "decoupe": 16,
+  "usage": "nuit en cours"
+ },
+ "energie-pleine": {
+  "taille": [
+   60,
+   78
+  ],
+  "decoupe": null,
+  "usage": "case d’énergie"
+ },
+ "energie-vide": {
+  "taille": [
+   60,
+   78
+  ],
+  "decoupe": null,
+  "usage": "case d’énergie vide"
+ },
+ "barre-pv": {
+  "taille": [
+   336,
+   50
+  ],
+  "decoupe": 17,
+  "usage": "barre de vie"
+ },
+ "barre-energie": {
+  "taille": [
+   336,
+   50
+  ],
+  "decoupe": 17,
+  "usage": "barre d’énergie"
+ },
+ "barre-xp": {
+  "taille": [
+   336,
+   50
+  ],
+  "decoupe": 17,
+  "usage": "barre de progression"
+ },
+ "barre-vide": {
+  "taille": [
+   336,
+   50
+  ],
+  "decoupe": 17,
+  "usage": "fond de barre"
+ },
+ "champ": {
+  "taille": [
+   452,
+   114
+  ],
+  "decoupe": 22,
+  "usage": "champ de saisie, recherche"
+ },
+ "interrupteur-oui": {
+  "taille": [
+   140,
+   84
+  ],
+  "decoupe": null,
+  "usage": "option activée"
+ },
+ "interrupteur-non": {
+  "taille": [
+   140,
+   84
+  ],
+  "decoupe": null,
+  "usage": "option désactivée"
+ },
+ "case-oui": {
+  "taille": [
+   76,
+   82
+  ],
+  "decoupe": null,
+  "usage": "case cochée"
+ },
+ "case-non": {
+  "taille": [
+   76,
+   82
+  ],
+  "decoupe": null,
+  "usage": "case vide"
+ },
+ "separateur": {
+  "taille": [
+   432,
+   26
+  ],
+  "decoupe": 10,
+  "usage": "trait de séparation"
+ },
+ "rivet": {
+  "taille": [
+   32,
+   32
+  ],
+  "decoupe": null,
+  "usage": "rivet seul"
+ }
+}

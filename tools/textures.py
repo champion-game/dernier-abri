@@ -160,4 +160,4 @@ def main():
         sheet.paste(p, (x0 + 20, y0 + 128), mk)
     out = os.path.join(PREV, 'textures-apercu.png'); sheet.save(out); print(out)
 
-main()
+if __name__ == "__main__": main()
