@@ -32,62 +32,127 @@ html.artx.tex #go:not(.speed)::before,html.artx.tex #go:not(.speed)::after{displ
 html.artx.tex #go.speed{color:#ffd36b!important;text-shadow:0 1px 0 #000!important}
 html.artx.tex .top .mute{color:#efe2c8!important;border-width:8px!important;border-image-width:8px!important}
 
-/* ===== PC : disposition de la maquette ===== */
-html.artx.tex.felton .app{--tl:clamp(220px,20vw,270px);--tr:clamp(220px,20vw,270px);--hh:clamp(150px,23vh,200px);--gap:10px;
- --map:min(calc((100dvh - var(--hh) - 3*var(--gap)) / 1.02),calc((100vw - var(--tl) - var(--tr) - 4*var(--gap)) / 1.05));
- display:grid!important;grid-template-columns:var(--tl) minmax(0,1fr) var(--tr)!important;grid-template-rows:minmax(0,1fr) var(--hh)!important;
- height:100dvh!important;max-width:none!important;margin:0!important;padding:var(--gap)!important;gap:var(--gap)!important;align-content:stretch!important;box-sizing:border-box}
-html.artx.tex.felton .side:first-child{display:none!important}
-html.artx.tex.felton .app>.map{grid-column:2!important;grid-row:1!important;align-self:center!important;justify-self:center!important;margin:0!important;width:var(--map)!important}
-/* colonne de gauche */
-html.artx.tex.felton .felt{grid-column:1!important;grid-row:1/3!important;display:flex!important;flex-direction:column;gap:8px;height:auto!important;min-height:0;margin:0!important;padding:0!important;
- background:none!important;border:0!important;box-shadow:none!important;overflow:hidden}
-html.artx.tex.felton .felt::before,html.artx.tex.felton .felt::after{display:none!important}
-html.artx.tex.felton .felt>button.round{order:0;flex:none;width:auto!important;min-height:96px!important;margin:0!important;padding:4px 6px!important;text-align:left!important;
- font:600 30px/1 'Oswald',sans-serif!important;text-transform:uppercase;letter-spacing:.02em;white-space:normal;transform:none!important}
-html.artx.tex.felton .felt>button.round::first-line{font-size:22px!important}
-html.artx.tex.felton .felt>button.round .axn{display:block;font:600 11px/1.1 'Oswald',sans-serif!important;text-transform:uppercase;margin-top:4px;max-width:60%}
-html.artx.tex.felton .felt>.mat{order:1;flex:none;margin:0!important;padding:4px!important}
-html.artx.tex.felton .fpiles{order:2;flex:none;display:flex!important;justify-content:space-around;align-items:center;gap:6px;padding:2px!important;min-height:0}
-html.artx.tex.felton #ftabs{order:3;flex:1 1 0;min-height:120px;margin:0!important;padding:0!important;display:flex;flex-direction:column;overflow:hidden}
-html.artx.tex.felton #ftabs .ft-body{flex:1;min-height:0;overflow:auto;background:none!important;border:0!important;border-image:none!important;filter:none}
-html.artx.tex.felton .txbtns{order:4;flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-html.artx.tex.felton .txbtns>button{position:static!important;width:auto!important;height:62px!important;padding:0!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#efe2c8!important}
-html.artx.tex.felton .txbtns>button svg{width:22px!important;height:22px!important}
-html.artx.tex.felton .txl{font:600 11px/1 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.04em}
-/* la main, sous le plateau */
-html.artx.tex.felton .app>.table{position:relative;z-index:5;grid-column:2!important;grid-row:2!important;height:auto!important;min-height:0;margin:0!important;padding:4px 10px!important;
- display:flex!important;align-items:center;justify-content:center;overflow:visible}
-html.artx.tex.felton .app>.table>.piles{display:none!important}
-html.artx.tex.felton .app>.table>.hand{display:grid!important;grid-template-columns:repeat(var(--n,5),minmax(0,118px))!important;justify-content:center;gap:8px!important;width:100%;height:100%;align-items:center}
-/* colonne de droite : outils, abri, infos, décor net, bouton de la nuit */
-html.artx.tex.felton .side2{grid-column:3!important;grid-row:1/3!important;display:flex!important;flex-direction:column;gap:8px;position:relative;min-height:0;margin:0!important}
-html.artx.tex.felton .side2::before{content:"";position:absolute;left:0;right:0;bottom:60px;height:62%;z-index:-1;pointer-events:none;
- background:linear-gradient(var(--tx-veil),var(--tx-veil)),var(--tx-pano) center 45%/cover no-repeat;-webkit-mask:linear-gradient(transparent,#000 22%,#000 82%,transparent);mask:linear-gradient(transparent,#000 22%,#000 82%,transparent)}
-html.artx.tex.felton .side2>*{grid-column:auto!important;grid-row:auto!important;margin:0!important}
-html.artx.tex.felton .side2>.top{display:flex!important;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px!important;height:auto!important;padding:0!important;flex:none}
-html.artx.tex.felton .side2>.top .brand{display:none!important}
-html.artx.tex.felton .side2>.top .mute{width:44px!important;height:44px!important;padding:0!important}
-html.artx.tex.felton .side2>.top .shel{flex:1 1 100%;min-width:0!important;padding:4px 8px!important;background:var(--tx-shel) right 12px top 50%/auto 62% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important;
- font:600 15px 'Oswald',sans-serif;text-transform:uppercase}
-html.artx.tex.felton .side2>.info{flex:none;max-height:none!important;overflow:visible!important;
- border-image:var(--tx-bp) 64/12px stretch!important;background:var(--tx-horde) left 12px top 50%/auto 72% no-repeat,var(--tx-bp) center/100% 100% no-repeat!important;background-origin:border-box!important;padding-left:58px!important;min-height:64px}
-html.artx.tex.felton .side2>.go{margin-top:auto!important;min-height:92px!important;flex:none;width:100%}
-html.artx.tex.felton .axbig{position:absolute!important;left:50%;bottom:110px;transform:translateX(-50%);width:min(200px,86%)!important;z-index:6;margin:0!important}
-html.artx.tex.felton #axFrame{display:none!important}
-html.artx.tex.felton .app>.map{box-shadow:none!important;border:0!important}
-/* la nuit rouge est déjà dans le décor : pas de voile rouge sur toute l'interface */
 html.tex .redsky{display:none!important}
-html.artx.tex.felton .side2>.top .shel{padding:6px 10px!important;background:var(--tx-shel) right 64px top 8px/auto 46% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important}
-html.artx.tex.felton .side2>.top .shel .shel-t{font:600 18px/1.1 'Oswald',sans-serif!important;margin-bottom:6px}
-html.artx.tex.felton .side2>.top .shel .shel-bar{height:10px!important}
-html.artx.tex.felton .felt>button.round{min-height:112px!important;font-size:36px!important;white-space:nowrap!important;background:var(--tx-sky) right 4px bottom 4px/auto 88% no-repeat,var(--tx-pp) center/100% 100% no-repeat!important}
-html.artx.tex.felton .felt>button.round{white-space:normal!important;padding:2px 46% 2px 8px!important;font-size:48px!important;line-height:.95!important}
-html.artx.tex.felton .felt>button.round::first-line{font-size:26px!important}
-html.artx.tex.felton .felt>button.round .axn{max-width:none;white-space:nowrap}
-html.artx.tex.felton #axFx{display:none!important}
-html.artx.tex.felton .felt>button.round{font-size:40px!important;min-height:120px!important;padding-bottom:6px!important}
-html.artx.tex.felton #axPlat{background:transparent!important}
-html.artx.tex.felton .app{--hh:clamp(150px,23vh,250px)}
-html.artx.tex.felton .app>.table>.hand{grid-template-columns:repeat(var(--n,5),minmax(0,calc(var(--hh) * .7)))!important}
-html.artx.tex.felton .felt>button.round{font-size:36px!important}
+
+/* ===== PC : la maquette telle quelle (html.mq, page de 1280 × 853 mise à l'échelle par game-tex.js) ===== */
+@font-face{font-family:'Barlow';font-weight:400;font-display:swap;src:url(../assets/fonts/barlow-400.ttf) format('truetype')}
+@font-face{font-family:'Barlow Condensed';font-weight:600;font-display:swap;src:url(../assets/fonts/barlow-cond-600.ttf) format('truetype')}
+@font-face{font-family:'Barlow Condensed';font-weight:700;font-display:swap;src:url(../assets/fonts/barlow-cond-700.ttf) format('truetype')}
+@font-face{font-family:'Barlow Condensed';font-weight:800;font-display:swap;src:url(../assets/fonts/barlow-cond-800.ttf) format('truetype')}
+html.mq body{background:#07090b!important;overflow:hidden}
+html.mq body::before,html.mq body::after{display:none!important}
+html.mq .app{display:block!important;padding:0!important;margin:0!important;max-width:none!important;height:100dvh!important}
+html.mq .app>:not(#mq){display:none!important}
+html.mq #axPlat,html.mq #axFrame,html.mq #axFx{display:none!important}
+#mq[hidden]{display:none!important}
+#mq{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#182027 0,#07080b 80%);color:#e8d4ad}
+#mq *{box-sizing:border-box}
+#mq .mq-fit{position:relative;width:1280px;height:853px;flex-shrink:0;overflow:hidden;box-shadow:0 0 80px #0008}
+#mq .mq-c{position:absolute;left:0;top:0;width:1280px;height:853px;transform-origin:top left;overflow:hidden;background:#10171b;isolation:isolate;font-family:'Barlow Condensed','Arial Narrow',sans-serif}
+#mq button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+#mq h2,#mq p{margin:0}#mq img{user-select:none;-webkit-user-drag:none}
+#mq .scene-sky{position:absolute;inset:0;background:linear-gradient(#10223a 0,#060e1b 65%,#090b09 100%)}
+#mq .floor-wood{position:absolute;left:0;bottom:0;width:100%;height:70px;background:linear-gradient(#05060533,#000b),url(../assets/art/tex/ui-wood-frame.webp) center/100% 180px;filter:brightness(.6)}
+#mq .panorama{position:absolute;left:1008px;top:278px;width:272px;height:363px;overflow:hidden;z-index:1}
+#mq .panorama img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 65%}
+#mq .panorama:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 85%,#050703aa);pointer-events:none}
+#mq .battlefield{position:absolute;left:278px;top:0;width:730px;height:630px;overflow:hidden}
+#mq .world-base{display:block;width:100%;height:100%;object-fit:fill}
+#mq .world-shade{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 -20px 25px #05060455,inset 12px 0 15px #0005;z-index:1}
+#mq #map{position:absolute!important;margin:0!important;max-width:none!important;max-height:none!important;clip-path:none!important;transform:none!important;z-index:2;box-shadow:none!important;border:0!important;background:none!important;border-radius:0!important}
+#mq .hand-support{position:absolute;left:280px;top:615px;width:730px;height:231px;background:linear-gradient(transparent,#0005),url(../assets/art/tex/ui-wood-frame.webp) center/100% 100%;filter:brightness(.65);z-index:8}
+html[data-amb=day] #mq .scene-sky{background:linear-gradient(#80b8d3,#d8c6a1)}
+html[data-amb=day] #mq .floor-wood{filter:brightness(.85)}
+html[data-amb=blood] #mq .scene-sky{background:linear-gradient(#370b0c,#0c0607)}
+/* panneaux */
+#mq .metal,#mq .paper{background-repeat:no-repeat;background-size:100% 100%;background-position:center;box-shadow:0 3px 5px #000a;isolation:isolate}
+#mq .metal{background-color:#101110;background-image:url(../assets/art/tex/ui-black-panel.webp);color:#f0dfbd;border:1px solid #544a35;border-radius:6px}
+#mq .paper{background-color:#e9d0a5;background-image:url(../assets/art/tex/ui-paper-panel.webp);color:#12120e;border:1px solid #4e3621;border-radius:6px}
+#mq .day-panel,#mq .deck-panel,#mq .inventory,#mq .bottom-menu,#mq .shelter-panel,#mq .threat-panel,#mq .action-button,#mq .speed-panel,#mq .game-toolbar,#mq .mq-hand,#mq .mq-info{position:absolute;font-family:'Barlow Condensed','Arial Narrow',sans-serif;z-index:12}
+#mq .day-panel{left:16px;top:9px;width:256px;height:142px;overflow:hidden}
+#mq .day-panel .phase{position:absolute;left:29px;top:12px;font-size:27px;font-weight:800;line-height:1;z-index:2;letter-spacing:.2px}
+#mq .day-panel .day-number{position:absolute;left:41px;top:35px;font-size:61px;font-weight:800;line-height:1;z-index:2;letter-spacing:-1px}
+#mq .day-moon{position:absolute;right:25px;top:14px;width:57px;height:57px;border-radius:50%;background:radial-gradient(circle at 29% 38%,#b3b2a35c 0 7%,transparent 8%),radial-gradient(circle at 67% 31%,#a9a89975 0 12%,transparent 13%),radial-gradient(circle at 58% 76%,#aaa79785 0 15%,transparent 16%),radial-gradient(circle at 35% 65%,#b7b29c 0 6%,transparent 7%),#fff2cf;box-shadow:0 0 18px #e8dfa166;z-index:1}
+html[data-amb=day] #mq .day-moon{background:#ffcf3b;border:3px solid #efaa19;box-shadow:0 0 0 7px #ffb81729,0 0 28px #ffc43088}
+html[data-amb=blood] #mq .day-moon{background:radial-gradient(circle at 28% 36%,#821e1966 0 8%,transparent 9%),radial-gradient(circle at 67% 31%,#a4242099 0 12%,transparent 13%),radial-gradient(circle at 58% 76%,#a61a1685 0 15%,transparent 16%),#f02c23;box-shadow:0 0 24px #f11f1799}
+#mq .day-panel img.skyline{position:absolute;bottom:17px;left:0;width:100%;height:81px;object-fit:fill;z-index:2}
+#mq .day-progress{position:absolute;left:17px;right:16px;bottom:10px;display:flex;gap:8px;z-index:3}
+#mq .day-progress i{display:block;width:14px;height:14px;transform:rotate(45deg);background:#393936;border:1px solid #787368;box-shadow:1px 1px 2px #0008;flex-shrink:0}
+#mq .day-progress i.filled{background:#e72827;border-color:#fa5b46}
+#mq .day-progress i.half{background:linear-gradient(135deg,#eb3530 50%,#8a897b 50%);border-color:#b0a998}
+#mq .day-progress i.red:not(.filled){border-color:#e72827}
+#mq .deck-panel{left:17px;top:157px;width:255px;height:211px;overflow:hidden}
+#mq .deck-upper{height:149px;display:flex;gap:19px;padding:9px 14px 7px;cursor:pointer}
+#mq .deck-back{position:relative;width:98px;height:133px;flex-shrink:0;background:url(../assets/art/tex/ui-card-back.webp) center/100% 100% no-repeat;filter:drop-shadow(2px 3px 2px #000b)}
+#mq .deck-back>img{position:absolute;left:19px;top:37px;width:60px;height:60px;object-fit:contain}
+#mq .deck-copy{padding-top:13px;line-height:1}#mq .deck-copy .label{font-size:24px;font-weight:700;display:block}
+#mq .deck-count{font-size:42px;font-weight:700;display:block;margin-top:3px}
+#mq .deck-copy p{margin:3px 0 0;font-family:Barlow,Arial,sans-serif;font-size:13px;font-weight:400;line-height:1.22;color:#d2c7b1;max-width:75px}
+#mq .deck-lower{height:62px;display:flex;border-top:1px solid #72634a77;background:#06070655}
+#mq .stock{display:flex;position:relative;align-items:center;justify-content:center;gap:8px;flex:1;padding:6px 8px;line-height:1.05;cursor:pointer}
+#mq .stock+.stock{border-left:1px solid #70634b88}#mq .stock img{width:33px;height:37px;object-fit:contain}
+#mq .stock>span{font-size:18px;font-weight:700;display:block}#mq .stock strong{font-size:26px;display:block;text-align:center;margin-top:2px;font-weight:700}
+#mq .inventory{left:17px;top:376px;width:255px;height:337px;overflow:hidden;padding:0 10px 8px;display:flex;flex-direction:column}
+#mq .inventory h2{font-size:22px;line-height:1;font-weight:700;letter-spacing:.2px;margin:8px 2px 4px;color:#f3e1bf}
+#mq .inventory-list{display:flex;flex-direction:column;gap:1px;overflow-y:auto;scrollbar-width:none;min-height:0;flex:1}
+#mq .inventory-list::-webkit-scrollbar{display:none}
+#mq .inventory-row{position:relative;flex:none;height:41px;display:flex;align-items:center;gap:6px;padding:2px 7px 2px 4px;color:#171810;background:#e4cba1 url(../assets/art/tex/ui-paper-panel.webp) center/100% 100% no-repeat;border:1px solid #a38760;border-radius:3px;box-shadow:0 1px 2px #000a}
+#mq .inventory-row.selected{border:2px solid #e62e24;box-shadow:0 0 5px #dc221d88,inset 0 0 0 1px #ff9f7555}
+#mq .inventory-row .inv-icon{width:53px;height:35px;object-fit:cover;border-radius:2px;flex-shrink:0;filter:sepia(.35) contrast(1.05);box-shadow:0 0 0 1px #604b3488}
+#mq .inventory-row strong{font-size:18px;font-weight:700;line-height:1.05;flex:1;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mq .inv-count{display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:#10110d;color:#f3dfb7;font-size:22px;font-weight:700;line-height:1;flex-shrink:0}
+#mq .selected .inv-count{color:#f6c642}#mq .inventory-row.empty{filter:grayscale(1);opacity:.46}#mq .inventory-row.empty .inv-count{color:#9a9993}
+#mq .bottom-menu{left:17px;top:725px;width:255px;height:96px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+#mq .menu-button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:9px 2px 8px;font:700 17px/1 'Barlow Condensed','Arial Narrow',sans-serif;color:#edddbd;text-transform:uppercase}
+#mq .menu-button img{width:37px;height:37px;object-fit:contain;filter:drop-shadow(0 1px 1px #0008)}
+#mq .shelter-panel{left:1011px;top:62px;width:255px;height:101px;overflow:hidden}
+#mq .shelter-panel h2{position:absolute;left:16px;top:10px;margin:0;font-size:25px;line-height:1;font-weight:800}
+#mq .shelter-value{position:absolute;left:17px;top:39px;font-size:23px;line-height:1;font-weight:700}
+#mq .shelter-panel img.fortress{position:absolute;right:11px;top:9px;width:144px;height:58px;object-fit:contain;object-position:right bottom}
+#mq .health-track{position:absolute;bottom:15px;left:17px;right:17px;height:13px;border:2px solid #18170f;border-radius:8px;background:#141711;box-shadow:0 1px 0 #f6e1b466;overflow:hidden}
+#mq .health-track>span{display:block;width:95%;height:100%;background:linear-gradient(#f75351,#d3232c);border-radius:5px 0 0 5px;box-shadow:inset 0 1px #ffb3a666;transition:width .3s}
+#mq .threat-panel{left:1011px;top:175px;width:255px;height:110px;display:flex;gap:8px;padding:10px 10px 8px 13px;overflow:hidden}
+#mq .threat-panel img.horde{width:82px;height:82px;object-fit:contain;align-self:center}
+#mq .threat-copy{padding-top:5px;line-height:1}#mq .threat-copy>span{font-size:24px;white-space:nowrap;font-weight:700}
+#mq .threat-copy strong{font-size:35px;line-height:1;color:#e3262a;vertical-align:-1px;margin-right:4px}
+#mq .threat-copy p{font-family:Barlow,Arial,sans-serif;font-size:12px;color:#d3cbbd;line-height:1.1;margin:3px 0 9px}
+#mq .threat-boxes{display:flex;gap:9px}
+#mq .threat-boxes i{display:block;width:24px;height:21px;border:1px solid #6c685c;background:#101311;border-radius:2px;box-shadow:inset 0 0 0 2px #171b13}
+#mq .threat-boxes i.filled{background:linear-gradient(#ffd83d,#ed9d07);border-color:#d2b577;box-shadow:inset 0 0 0 2px #726349}
+#mq .action-button{left:1018px;top:630px;width:247px;height:106px;display:flex;align-items:center;justify-content:flex-end;gap:9px;padding:13px 15px 13px 10px;background:#9b1513 url(../assets/art/tex/ui-red-button.webp) center/100% 100% no-repeat;border:1px solid #685039;border-radius:6px;color:#f5e2ba;text-shadow:1px 2px 0 #49130c;box-shadow:0 4px 7px #000a}
+#mq .action-button img{position:absolute;left:14px;bottom:13px;width:65px;height:79px;object-fit:contain;filter:brightness(.12);opacity:.95}
+#mq .action-button span{position:relative;font-size:32px;line-height:1.05;font-weight:700;text-align:center;max-width:163px;text-transform:uppercase}
+#mq .action-button:not(.off):hover{filter:brightness(1.1)}#mq .action-button:not(.off):active{transform:translateY(2px)}
+#mq .action-button.off{cursor:default;filter:saturate(.75) brightness(.85)}#mq .action-button.off span{font-size:26px}
+#mq .speed-panel{left:1018px;top:750px;width:247px;height:69px;display:flex;align-items:center;padding:8px;gap:4px}
+#mq .speed-panel button{display:flex;align-items:center;justify-content:center;gap:6px;height:48px;flex:1;color:#777970;font:700 25px/1 'Barlow Condensed','Arial Narrow',sans-serif;border:1px solid #252b25;border-radius:4px}
+#mq .speed-panel button.active{flex:1.3;color:#f0b22b;border:2px solid #b37f12;box-shadow:inset 0 0 0 2px #11160e,0 0 4px #b77c1333}
+#mq .speed-panel button img{height:28px;width:28px;object-fit:contain;filter:brightness(0) saturate(100%) invert(77%) sepia(93%) saturate(843%) hue-rotate(341deg) brightness(101%) contrast(95%)}
+#mq .speed-panel button:not(.active) img{filter:brightness(0) invert(.45)}
+#mq .game-toolbar{left:1063px;top:8px;display:flex;gap:10px}
+#mq .square-control{display:flex;align-items:center;justify-content:center;width:43px;height:42px;padding:8px;border-radius:4px;color:#efe2c8}
+#mq .square-control img,#mq .square-control svg{width:25px;height:25px;object-fit:contain;filter:drop-shadow(1px 2px 1px #0008)}
+#mq .square-control svg{fill:none;stroke:currentColor;stroke-width:2}
+#mq .square-control.muted{opacity:.45}
+html.mute-on #mq [data-mq=sfx]{opacity:.45}
+/* infos du jeu (événement du jour, fiche de la carte choisie, rappel) : en haut du décor de droite */
+#mq .mq-info{left:1011px;top:292px;width:255px;max-height:200px;overflow:auto;scrollbar-width:none;padding:0;font-family:'Barlow',Arial,sans-serif;font-size:12px;color:#e9dcc1;text-shadow:0 1px 2px #000}
+#mq .mq-ev{font:700 15px/1.15 'Barlow Condensed',sans-serif;color:#f0dfbd;padding:6px 9px;background:#0b0c0bcc;border:1px solid #544a3588;border-radius:4px;margin-bottom:5px}
+#mq .mq-ev:empty{display:none}
+#mq #info{position:static!important;display:block!important;margin:0!important;max-height:none!important;padding:7px 9px!important;background:#0b0c0bcc!important;border:1px solid #544a3588!important;border-image:none!important;border-radius:4px!important;filter:none!important;font-size:12px!important;text-align:left!important}
+#mq #info .nrg{display:none!important}
+/* la main : cartes de la maquette (papier, coût rond, illustration, nom), en éventail */
+#mq .mq-hand{left:303px;top:621px;width:690px;height:192px}
+#mq #hand{position:absolute!important;inset:0!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;gap:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;grid-template-columns:none!important;transform:none!important;isolation:isolate}
+#mq #hand .card{position:relative!important;flex:0 0 140px!important;width:140px!important;height:185px!important;max-width:none!important;margin:0 0 0 -2px!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;transform-origin:50% 100%;transition:transform .15s,filter .15s;--rot:0deg;transform:rotate(var(--rot))!important;filter:drop-shadow(2px 3px 3px #000c)!important;animation:none!important}
+#mq #hand .card:nth-child(1){--rot:-7deg;z-index:1}#mq #hand .card:nth-child(2){--rot:-3deg;z-index:2}#mq #hand .card:nth-child(3){--rot:1deg;z-index:3}#mq #hand .card:nth-child(4){--rot:5deg;z-index:4}#mq #hand .card:nth-child(5){--rot:9deg;z-index:5}#mq #hand .card:nth-child(6){--rot:12deg;z-index:6}#mq #hand .card:nth-child(7){--rot:15deg;z-index:7}
+#mq #hand .card:hover{transform:rotate(var(--rot)) translateY(-14px)!important;z-index:20}
+#mq #hand .card.sel{transform:rotate(0deg) translateY(-26px)!important;z-index:21;filter:drop-shadow(0 0 6px #f0b22b) drop-shadow(2px 3px 3px #000c)!important}
+#mq #hand .card::before,#mq #hand .card::after{display:none!important}
+#mq #hand .card .cf{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;background:url(../assets/art/tex/ui-card-front.webp) center/100% 100% no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;transform:none!important;color:#1b1b12!important;overflow:visible!important;filter:none!important}
+#mq #hand .card .cf::before,#mq #hand .card .cf::after{display:none!important}
+#mq #hand .card .cf-art{position:absolute!important;top:18px!important;left:12px!important;right:12px!important;width:auto!important;height:122px!important;bottom:auto!important;background-size:cover!important;background-position:center 30%!important;border:0!important;border-radius:2px!important;filter:sepia(.25) contrast(1.05)!important;-webkit-mask:linear-gradient(#000 85%,transparent)!important;mask:linear-gradient(#000 85%,transparent)!important;z-index:2}
+#mq #hand .card .cf-vig,#mq #hand .card .cf-foot,#mq #hand .card .cf-tag,#mq #hand .card .cf-txt,#mq #hand .card .cf-rar{display:none!important}
+#mq #hand .card .cf-cost{position:absolute!important;top:1px!important;left:1px!important;right:auto!important;display:flex!important;align-items:center;justify-content:center;width:31px!important;height:31px!important;border-radius:50%!important;background:#0a1010!important;color:#f7e3bd!important;border:2px solid #dac39c!important;outline:2px solid #29241a;box-shadow:1px 2px 2px #0009!important;font:700 25px/1 'Barlow Condensed',sans-serif!important;z-index:4;transform:none!important;text-shadow:none!important}
+#mq #hand .card .cf-name{position:absolute!important;left:10px!important;right:10px!important;bottom:20px!important;top:auto!important;display:flex!important;align-items:center;justify-content:center;min-height:26px;text-align:center;border-top:1px solid #634e3580!important;background:none!important;color:#1b1b12!important;font:600 19px/1.05 'Barlow Condensed',sans-serif!important;padding:5px 0 0!important;z-index:3;text-shadow:none!important;white-space:normal!important;transform:none!important;width:auto!important;border-radius:0!important;box-shadow:none!important}
+#mq #hand .card .cf>*:not(.cf-art):not(.cf-cost):not(.cf-name){display:none!important}
