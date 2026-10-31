@@ -302,4 +302,4 @@ Matières : `tools/textures.py`. Bordures simples (v2, choix d’Amine) : un lis
 
 `python3 tools/ui_pack2.py` produit 35 éléments dans `assets/art/ui/pack2/` (+ `pack.json`) :
 panneaux noir charbon à bord gris fin et usé (panneau, tuile, bouton icône, bouton tuile), parchemin aux bords brûlés (panneau JOUR / Abri, ligne de carte normale, grisée et choisie à contour rouge lumineux, fond de carte, bandeau du nom, bouton clair), bouton rouge sang taché « Affronter la nuit » (4 états), pastilles de nombre et de coût (rond noir cerclé de crème), sélecteur de vitesse (fond + contour jaune du choix), cases d’énergie jaunes, losanges de la piste des nuits (rouge, gris, noir), barre de PV.
-Peu de relief : léger dégradé, ombre intérieure près du bord, ombre portée. Pas encore branché.
+Peu de relief : léger dégradé, ombre intérieure près du bord, ombre portée. **Branché dans le style artiste en v215** (versions sans marge pour le CSS : `assets/art/ui/pack2/css/*.webp`).

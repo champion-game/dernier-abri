@@ -28,7 +28,10 @@ def band(sd, a, b, soft=.8):
 
 def mix(c, col, t): return c * (1 - t[..., None]) + np.array(col, np.float32) * t[..., None]
 
+RAW = [False]
 def finish(c, a, M=14, dy=6, blur=8, op=.75):
+    if RAW[0]:  # version pour le CSS : l'élément seul, sans marge ni ombre
+        return Image.fromarray(np.dstack([np.clip(c, 0, 255), np.clip(a, 0, 1) * 255]).astype(np.uint8), 'RGBA')
     h, w = a.shape; W, H = w + 2 * M, h + 2 * M + dy
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     el = Image.fromarray(np.dstack([np.clip(c, 0, 255), np.clip(a, 0, 1) * 255]).astype(np.uint8), 'RGBA')
@@ -242,5 +245,11 @@ def main():
         im.save(os.path.join(OUT, n + '.png'), optimize=True); info[n] = {'taille': list(im.size), 'decoupe': cut, 'usage': role}
     json.dump(info, open(os.path.join(OUT, 'pack.json'), 'w'), ensure_ascii=False, indent=1)
     sheet()
+    # version pour le jeu (CSS, découpe 9 cases) : assets/art/ui/pack2/css/*.webp, même tirage aléatoire
+    CSS = os.path.join(OUT, 'css'); os.makedirs(CSS, exist_ok=True)
+    RAW[0] = True; SEED[0] = 100; ELEMS.clear(); build()
+    for n, (im, cut, role) in ELEMS.items():
+        if n.startswith('ligne-carte-choisie'): continue
+        im.save(os.path.join(CSS, n + '.webp'), quality=90, method=6)
 
 if __name__ == '__main__': main()

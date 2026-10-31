@@ -1909,3 +1909,45 @@ html.artx .dkrow{background:linear-gradient(#f3d8a8,#eecd98 55%,#e6c38c);border:
 html.artx .dkrow.r-com{--hc:#4a2e14}
 html.artx .dkname{text-shadow:0 0 4px #eecd98,0 0 2px #eecd98}
 html.artx .dkart{-webkit-mask:linear-gradient(90deg,#0000,#000 75%);mask:linear-gradient(90deg,#0000,#000 75%)}
+/* ===== v215 : pack « maquette » d'Amine (style artiste seulement) : images en découpe 9 cases (border-image), générées par tools/ui_pack2.py =====
+   panneaux noir charbon à bord gris usé, parchemin aux bords brûlés, bouton rouge taché ; remplace les textures en filtres SVG de ces éléments */
+html.artx :is(.panel,.event,.table,.meter,.info),html.artx :is(.felt,.table,.info,.event,.meter),html.artx.felton .felt>:is(.mat,.ftabs,.fpiles){
+ background:none!important;border-image:url(../assets/art/ui/pack2/css/panneau-sombre.webp) 30 fill/15px stretch!important;box-shadow:0 6px 14px rgba(0,0,0,.55)!important}
+html.artx.felton .felt>.mat .event{border-image:none!important;box-shadow:none!important}
+html.artx :is(.track,.info .nrg,.ftabs){background:none!important;border-image:url(../assets/art/ui/pack2/css/tuile-sombre.webp) 26 fill/10px stretch!important;box-shadow:none!important}
+html.artx .panel>h2:first-child{background:none;box-shadow:inset 0 -2px 0 #6a1610}
+/* boutons secondaires : tuile charbon, texte crème */
+html.artx :is(.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip,.dkbtns .skip){background:none!important;filter:none!important;
+ border-image:url(../assets/art/ui/pack2/css/btn-tuile-normal.webp) 30 fill/13px stretch;box-shadow:0 4px 8px rgba(0,0,0,.55)!important;color:#f1e7cf;text-shadow:0 2px 0 #000}
+html.artx :is(.skip,.go.speed):not(:disabled):hover{border-image-source:url(../assets/art/ui/pack2/css/btn-tuile-survol.webp)}
+html.artx :is(.skip,.go.speed):not(:disabled):active{border-image-source:url(../assets/art/ui/pack2/css/btn-tuile-appuye.webp);transform:translateY(3px);box-shadow:0 1px 3px rgba(0,0,0,.6)!important}
+html.artx :is(.skip,.go.speed):disabled{border-image-source:url(../assets/art/ui/pack2/css/btn-tuile-inactif.webp);color:rgba(241,231,207,.4)}
+/* bouton principal : tôle rouge sang tachée, texte crème cerné de noir */
+html.artx :is(.go,.panel .go,.dkbtns .go):not(.speed){background:none!important;filter:none!important;
+ border-image:url(../assets/art/ui/pack2/css/btn-nuit-normal.webp) 40 fill/15px stretch;box-shadow:0 5px 10px rgba(0,0,0,.6)!important;color:#f6ecd6;
+ text-shadow:-1px -1px 0 #1a0504,1px -1px 0 #1a0504,-1px 1px 0 #1a0504,1px 1px 0 #1a0504,0 2px 3px rgba(0,0,0,.6)}
+html.artx .go:not(.speed):not(:disabled):hover{border-image-source:url(../assets/art/ui/pack2/css/btn-nuit-survol.webp)}
+html.artx .go:not(.speed):not(:disabled):active{border-image-source:url(../assets/art/ui/pack2/css/btn-nuit-appuye.webp);transform:translateY(3px);box-shadow:0 1px 3px rgba(0,0,0,.6)!important}
+html.artx .go:not(.speed):disabled{border-image-source:url(../assets/art/ui/pack2/css/btn-nuit-inactif.webp);color:rgba(246,236,214,.45)}
+/* « Affronter la nuit » : droit, mains de zombies par-dessus la tôle, sous le texte */
+html.artx #go:not(.speed){transform:none;border-image-width:18px}
+html.artx #go:not(.speed):not(:disabled):active{transform:translateY(3px)}
+html.artx #go:not(.speed)::after{content:"";position:absolute;z-index:-1;left:8px;right:8px;bottom:6px;height:62%;pointer-events:none;
+ background:var(--ax-hands) left -20px bottom -4px/auto 100% repeat-x;opacity:.85}
+/* onglets : tuile charbon, le choisi en rouge */
+html.artx :is(.panel .tab,.panel button.char,.panel .rchip,.ft-tabs button){background:none!important;border-image:url(../assets/art/ui/pack2/css/tuile-sombre.webp) 26 fill/10px stretch;box-shadow:0 3px 6px rgba(0,0,0,.5)!important}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on,.ft-tabs button.on){border-image:url(../assets/art/ui/pack2/css/btn-nuit-normal.webp) 40 fill/12px stretch;box-shadow:0 0 10px rgba(230,60,40,.4)!important}
+/* boutons icônes (son, musique, plein écran) */
+html.artx .mute{background:none!important;border-image:url(../assets/art/ui/pack2/css/btn-icone-normal.webp) 20 fill/10px stretch;box-shadow:0 3px 6px rgba(0,0,0,.5)!important}
+html.artx .mute:hover{border-image-source:url(../assets/art/ui/pack2/css/btn-icone-survol.webp)}
+html.artx .mute:active{border-image-source:url(../assets/art/ui/pack2/css/btn-icone-appuye.webp)}
+/* étiquette du jour : parchemin brûlé */
+html.artx button.round,html.artx:not(.felton) button.round{background:none!important;border-image:url(../assets/art/ui/pack2/css/panneau-parchemin.webp) 28 fill/12px stretch;
+ box-shadow:none!important;filter:drop-shadow(0 3px 3px rgba(0,0,0,.6))}
+/* fiches et pastilles en papier : parchemin aux bords brûlés */
+html.artx :is(.panel .relic,.panel .rfiche,.panel .stile,.panel .hrow,.panel .dk.ed,.panel .deck.pickable .dk,.panel .pl,.panel .csum span,.panel .achi,.fam){
+ background:none!important;border-image:url(../assets/art/ui/pack2/css/ligne-carte.webp) 24 fill/10px stretch;box-shadow:0 2px 4px rgba(0,0,0,.45)}
+html.artx :is(.fam.l1,.fam.l2,.fam.ally){box-shadow:0 0 0 1px #e8b52a,0 2px 4px rgba(0,0,0,.45)}
+/* énergie : cases jaunes à bord sombre */
+html.artx .nrg i{background:#121112;box-shadow:inset 0 0 0 1px #6e6b66}
+html.artx .nrg i.on{background:linear-gradient(#fbbd2a,#dc9a1c);box-shadow:inset 0 0 0 1px #15100a}
