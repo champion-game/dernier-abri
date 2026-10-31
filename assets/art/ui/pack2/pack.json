@@ -1,0 +1,282 @@
+{
+ "btn-nuit-normal": {
+  "taille": [
+   628,
+   264
+  ],
+  "decoupe": 40,
+  "usage": "Affronter la nuit"
+ },
+ "btn-icone-normal": {
+  "taille": [
+   116,
+   114
+  ],
+  "decoupe": 22,
+  "usage": "son, musique, plein écran, stats"
+ },
+ "btn-tuile-normal": {
+  "taille": [
+   214,
+   220
+  ],
+  "decoupe": 30,
+  "usage": "Options, Règles, Recount"
+ },
+ "btn-parchemin-normal": {
+  "taille": [
+   428,
+   134
+  ],
+  "decoupe": 30,
+  "usage": "bouton clair"
+ },
+ "btn-nuit-survol": {
+  "taille": [
+   628,
+   264
+  ],
+  "decoupe": 40,
+  "usage": "Affronter la nuit"
+ },
+ "btn-icone-survol": {
+  "taille": [
+   116,
+   114
+  ],
+  "decoupe": 22,
+  "usage": "son, musique, plein écran, stats"
+ },
+ "btn-tuile-survol": {
+  "taille": [
+   214,
+   220
+  ],
+  "decoupe": 30,
+  "usage": "Options, Règles, Recount"
+ },
+ "btn-parchemin-survol": {
+  "taille": [
+   428,
+   134
+  ],
+  "decoupe": 30,
+  "usage": "bouton clair"
+ },
+ "btn-nuit-appuye": {
+  "taille": [
+   628,
+   260
+  ],
+  "decoupe": 40,
+  "usage": "Affronter la nuit"
+ },
+ "btn-icone-appuye": {
+  "taille": [
+   116,
+   110
+  ],
+  "decoupe": 22,
+  "usage": "son, musique, plein écran, stats"
+ },
+ "btn-tuile-appuye": {
+  "taille": [
+   214,
+   216
+  ],
+  "decoupe": 30,
+  "usage": "Options, Règles, Recount"
+ },
+ "btn-parchemin-appuye": {
+  "taille": [
+   428,
+   130
+  ],
+  "decoupe": 30,
+  "usage": "bouton clair"
+ },
+ "btn-nuit-inactif": {
+  "taille": [
+   628,
+   264
+  ],
+  "decoupe": 40,
+  "usage": "Affronter la nuit"
+ },
+ "btn-icone-inactif": {
+  "taille": [
+   116,
+   114
+  ],
+  "decoupe": 22,
+  "usage": "son, musique, plein écran, stats"
+ },
+ "btn-tuile-inactif": {
+  "taille": [
+   214,
+   220
+  ],
+  "decoupe": 30,
+  "usage": "Options, Règles, Recount"
+ },
+ "btn-parchemin-inactif": {
+  "taille": [
+   428,
+   134
+  ],
+  "decoupe": 30,
+  "usage": "bouton clair"
+ },
+ "panneau-sombre": {
+  "taille": [
+   648,
+   474
+  ],
+  "decoupe": 34,
+  "usage": "grands panneaux (Deck, Cartes disponibles)"
+ },
+ "tuile-sombre": {
+  "taille": [
+   328,
+   184
+  ],
+  "decoupe": 26,
+  "usage": "Réserve, Défausse, compteur de zombies"
+ },
+ "panneau-parchemin": {
+  "taille": [
+   648,
+   354
+  ],
+  "decoupe": 40,
+  "usage": "JOUR, Abri"
+ },
+ "ligne-carte": {
+  "taille": [
+   580,
+   112
+  ],
+  "decoupe": 24,
+  "usage": "ligne de la liste de cartes"
+ },
+ "ligne-carte-vide": {
+  "taille": [
+   580,
+   112
+  ],
+  "decoupe": 24,
+  "usage": "ligne grisée (0 exemplaire)"
+ },
+ "ligne-carte-choisie": {
+  "taille": [
+   592,
+   124
+  ],
+  "decoupe": 24,
+  "usage": "ligne choisie (contour rouge lumineux)"
+ },
+ "cadre-carte": {
+  "taille": [
+   358,
+   496
+  ],
+  "decoupe": 40,
+  "usage": "fond de carte (illustration posée dessus)"
+ },
+ "bandeau-nom": {
+  "taille": [
+   286,
+   79
+  ],
+  "decoupe": 16,
+  "usage": "nom en bas de la carte"
+ },
+ "pastille-nombre": {
+  "taille": [
+   72,
+   75
+  ],
+  "decoupe": null,
+  "usage": "nombre d’exemplaires"
+ },
+ "pastille-cout": {
+  "taille": [
+   90,
+   94
+  ],
+  "decoupe": null,
+  "usage": "coût de la carte"
+ },
+ "vitesse-fond": {
+  "taille": [
+   608,
+   144
+  ],
+  "decoupe": 30,
+  "usage": "sélecteur de vitesse"
+ },
+ "vitesse-choix": {
+  "taille": [
+   192,
+   96
+  ],
+  "decoupe": 16,
+  "usage": "segment choisi (contour jaune)"
+ },
+ "energie-pleine": {
+  "taille": [
+   58,
+   60
+  ],
+  "decoupe": null,
+  "usage": "énergie"
+ },
+ "energie-vide": {
+  "taille": [
+   58,
+   60
+  ],
+  "decoupe": null,
+  "usage": "énergie vide"
+ },
+ "nuit-rouge": {
+  "taille": [
+   42,
+   44
+  ],
+  "decoupe": null,
+  "usage": "nuit passée / nuit rouge"
+ },
+ "nuit-grise": {
+  "taille": [
+   42,
+   44
+  ],
+  "decoupe": null,
+  "usage": "nuit à venir"
+ },
+ "nuit-noire": {
+  "taille": [
+   42,
+   44
+  ],
+  "decoupe": null,
+  "usage": "nuit lointaine"
+ },
+ "barre-pv": {
+  "taille": [
+   532,
+   40
+  ],
+  "decoupe": 13,
+  "usage": "PV de l’abri"
+ },
+ "barre-vide": {
+  "taille": [
+   532,
+   40
+  ],
+  "decoupe": 13,
+  "usage": "fond de barre"
+ }
+}
