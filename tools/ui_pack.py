@@ -81,24 +81,22 @@ def shadow(rgba, dy=6, blur=8, op=.7):
 def to_img(col, a):
     return Image.fromarray(np.dstack([col, a * 255]).clip(0, 255).astype(np.uint8), 'RGBA')
 
-def framed(w, h, r, frame, inner, fw, state='normal', rivets=True, M=16, inner_bevel=7, grad=.38, sunk=False, inner_scale=.5):
-    """élément encadré : cadre de métal + plaque intérieure ; M = marge pour l'ombre"""
+BORD = 4  # liseré sombre (px à taille x2), le même partout
+INK = np.array([18, 16, 15], np.float32)
+
+def framed(w, h, r, frame, inner, fw, state='normal', rivets=False, M=16, inner_bevel=7, grad=.38, sunk=False, inner_scale=.5):
+    """élément simple : plaque en relief (texture + dégradé + biseau) cernée d'un liseré sombre ; M = marge pour l'ombre"""
     W, H = w + 2 * M, h + 2 * M + 6
     press = state == 'appuye'; dy = 4 if press else 0
     br = {'normal': 1., 'survol': 1.14, 'appuye': .86, 'inactif': .8}[state]
     full = np.zeros((H, W, 3), np.float32); A = np.zeros((H, W), np.float32)
-    fc, fa = layer(w, h, r, 0, TEX[frame], 6, grad=.25, bright=br * (.95 if not press else .9))
-    ic, ia = layer(w, h, max(r - fw, 2), fw, TEX[inner], inner_bevel, grad=grad, press=press, bright=br, sunk=sunk, scale=inner_scale)
-    # rainure sombre entre cadre et plaque
-    groove = np.clip(1 - np.abs(sdf_rrect(w, h, max(r - fw, 2), fw) + .5) / 2.2, 0, 1)
-    c = comp(fc, ic, ia); c *= (1 - .55 * groove[..., None])
+    fa = np.clip(.5 - sdf_rrect(w, h, r, 0), 0, 1)
+    ic, ia = layer(w, h, max(r - BORD, 2), BORD, TEX[inner], inner_bevel, grad=grad, press=press, bright=br, sunk=sunk, scale=inner_scale)
+    c = comp(np.broadcast_to(INK, ic.shape), ic, ia)
     if state == 'inactif':
         g = c.mean(2, keepdims=True); c = g * .8 + c * .2
     full[M + dy:M + dy + h, M:M + w] = c; A[M + dy:M + dy + h, M:M + w] = fa
     im = to_img(full, A)
-    if rivets and min(w, h) >= 70:
-        o = fw / 2 + 1
-        for cx, cy in ((o, o), (w - o, o), (o, h - o), (w - o, h - o)): rivet(im, M + cx, M + dy + cy, min(7, fw * .45))
     if state == 'survol':  # léger halo chaud
         a = im.getchannel('A').filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * .45))
         glow = Image.new('RGBA', im.size, (255, 190, 90, 0)); glow.putalpha(a)
@@ -114,17 +112,17 @@ def plain(w, h, r, tex, bevel=6, M=12, grad=.35, sunk=False, scale=.5, op_sh=.7)
     return shadow(im, dy=0 if sunk else 5, blur=6, op=0 if sunk else op_sh)
 
 def ring(w, h, r, frame, fw, M=16):
-    """cadre seul, centre transparent (à poser autour d'un contenu)"""
+    """cadre seul, centre transparent : liseré sombre avec un filet clair à l'intérieur"""
     W, H = w + 2 * M, h + 2 * M + 6
-    fc, fa = layer(w, h, r, 0, TEX[frame], 6, grad=.25)
-    inner = np.clip(.5 - sdf_rrect(w, h, max(r - fw, 2), fw), 0, 1)
-    lip = np.clip(1 - np.abs(sdf_rrect(w, h, max(r - fw, 2), fw) + 1) / 3, 0, 1)
-    fc = fc * (1 - .5 * lip[..., None]); fa = fa * (1 - inner)
+    sd = sdf_rrect(w, h, r, 0); sd2 = sdf_rrect(w, h, max(r - fw, 2), fw)
+    fa = np.clip(.5 - sd, 0, 1) * np.clip(.5 + sd2, 0, 1)
+    tone = {'brosse': (176, 180, 186)}.get(frame, (112, 115, 120))
+    fc = np.broadcast_to(INK, (h, w, 3)).copy()
+    filet = np.clip(1 - np.abs(sd2 - 2) / 1.6, 0, 1) * fa
+    fc = comp(fc, np.broadcast_to(np.array(tone, np.float32), fc.shape), filet)
     full = np.zeros((H, W, 3), np.float32); A = np.zeros((H, W), np.float32)
     full[M:M + h, M:M + w] = fc; A[M:M + h, M:M + w] = fa
-    im = to_img(full, A); o = fw / 2 + 1
-    for cx, cy in ((o, o), (w - o, o), (o, h - o), (w - o, h - o)): rivet(im, M + cx, M + cy, min(7, fw * .45))
-    return shadow(im, dy=5, blur=8, op=.6)
+    return shadow(to_img(full, A), dy=5, blur=8, op=.6)
 
 def bar(w, h, fillk, frac):
     """barre creusée avec remplissage (frac = part remplie)"""
@@ -179,8 +177,8 @@ def build():
     add('panneau-parchemin', framed(520, 380, 20, 'sombre', 'parchemin', 18, inner_bevel=8, grad=.25, inner_scale=.6), 48, 'fiche de carte, texte')
     add('panneau-bois', framed(520, 380, 20, 'sombre', 'bois', 18, inner_bevel=8, grad=.3, inner_scale=.6), 48, 'fond des menus')
     add('panneau-papier', plain(520, 380, 6, 'papier', bevel=5, grad=.18, scale=.6), 24, 'feuille du classeur')
-    add('cadre-metal', ring(520, 380, 20, 'sombre', 18), 48, 'cadre seul (plateau, main), centre transparent')
-    add('cadre-fin', ring(520, 380, 12, 'brosse', 9), 30, 'liseré fin')
+    add('cadre-metal', ring(520, 380, 16, 'sombre', 8), 48, 'cadre seul (plateau, main), centre transparent')
+    add('cadre-fin', ring(520, 380, 10, 'brosse', 5), 30, 'liseré fin')
     add('onglet-actif', framed(220, 80, 14, 'sombre', 'rougeuni', 10, rivets=False, inner_bevel=6), 26, 'onglet choisi')
     add('onglet', framed(220, 80, 14, 'sombre', 'tole', 10, rivets=False, inner_bevel=6, state='normal'), 26, 'onglet')
     add('etiquette-jour', framed(300, 120, 10, 'tole', 'parchemin', 10, inner_bevel=8, inner_scale=.4), 30, 'étiquette JOUR n')
