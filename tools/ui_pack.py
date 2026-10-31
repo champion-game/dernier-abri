@@ -47,9 +47,31 @@ def light(hm, k):
     d = (-dx * LIGHT[0] - dy * LIGHT[1] + LIGHT[2]) * nz
     return d / LIGHT[2]  # 1 = à plat
 
-def layer(w, h, r, inset, tex, bevel, grad=.38, press=False, bright=1., k=1.6, scale=.5, sunk=False):
+USE = [0]
+def wear_noise(w, h):
+    """bruits d'usure (raccordables, recoupés à la taille) : un tirage différent par élément"""
+    USE[0] += 1; k = USE[0] * 7919
+    def crop(n): return np.tile(n, (h // T.S + 1, w // T.S + 1))[:h, :w]
+    chip = crop(T.noise(60, 60, k) * .6 + T.noise(14, 14, k + 1) * .7)   # éclats du contour
+    rub = crop(T.noise(30, 30, k + 2) * .7 + T.noise(5, 5, k + 3) * .5)  # peinture frottée
+    return chip, rub
+
+def worn(sd, chip, amt):
+    """grignote le contour là où le bruit est fort (vers l'intérieur seulement)"""
+    return sd + np.clip(chip - .7, 0, None) * amt
+
+def age(col, sd, rub, zone=16, lift=(196, 186, 168)):
+    """arêtes usées : peinture frottée (plus clair, plus terne) et crasse près du bord"""
+    e = np.clip(1 - (-sd) / zone, 0, 1)
+    r = (e ** 1.5 * np.clip(rub - .4, 0, 1.2) * .38)[..., None]
+    col = col * (1 - r) + (col * .45 + np.array(lift, np.float32) * .55) * r
+    grime = (np.clip(1 - (-sd) / (zone * .6), 0, 1) ** 2 * np.clip(.6 - rub * .3, 0, 1) * .28)[..., None]
+    return col * (1 - grime)
+
+def layer(w, h, r, inset, tex, bevel, grad=.38, press=False, bright=1., k=1.6, scale=.5, sunk=False, jit=None):
     """une plaque : texture + dégradé + biseau éclairé ; renvoie couleur et alpha"""
     sd = sdf_rrect(w, h, r, inset)
+    if jit is not None: sd = sd + jit
     a = np.clip(.5 - sd, 0, 1)
     hm = np.clip(-sd / bevel, 0, 1); hm = hm * hm * (3 - 2 * hm)  # biseau arrondi
     if sunk or press: hm = -hm
@@ -90,8 +112,12 @@ def framed(w, h, r, frame, inner, fw, state='normal', rivets=False, M=16, inner_
     press = state == 'appuye'; dy = 4 if press else 0
     br = {'normal': 1., 'survol': 1.14, 'appuye': .86, 'inactif': .8}[state]
     full = np.zeros((H, W, 3), np.float32); A = np.zeros((H, W), np.float32)
-    fa = np.clip(.5 - sdf_rrect(w, h, r, 0), 0, 1)
-    ic, ia = layer(w, h, max(r - BORD, 2), BORD, TEX[inner], inner_bevel, grad=grad, press=press, bright=br, sunk=sunk, scale=inner_scale)
+    chip, rub = wear_noise(w, h)
+    big = min(w, h) >= 60
+    fa = np.clip(.5 - worn(sdf_rrect(w, h, r, 0), chip, 1.8 if big else .8), 0, 1)
+    jit = np.clip(chip - .9, 0, None) * (1.6 if big else .6)
+    ic, ia = layer(w, h, max(r - BORD, 2), BORD, TEX[inner], inner_bevel, grad=grad, press=press, bright=br, sunk=sunk, scale=inner_scale, jit=jit)
+    ic = age(ic, sdf_rrect(w, h, max(r - BORD, 2), BORD) + jit, rub, min(18 if big else 8, min(w, h) * .1))
     c = comp(np.broadcast_to(INK, ic.shape), ic, ia)
     if state == 'inactif':
         g = c.mean(2, keepdims=True); c = g * .8 + c * .2
@@ -106,7 +132,10 @@ def framed(w, h, r, frame, inner, fw, state='normal', rivets=False, M=16, inner_
 def plain(w, h, r, tex, bevel=6, M=12, grad=.35, sunk=False, scale=.5, op_sh=.7):
     W, H = w + 2 * M, h + 2 * M + 4
     full = np.zeros((H, W, 3), np.float32); A = np.zeros((H, W), np.float32)
-    c, a = layer(w, h, r, 0, TEX[tex], bevel, grad=grad, sunk=sunk, scale=scale)
+    chip, rub = wear_noise(w, h); big = min(w, h) >= 60
+    jit = np.clip(chip - .9, 0, None) * (2 if big else .5)
+    c, a = layer(w, h, r, 0, TEX[tex], bevel, grad=grad, sunk=sunk, scale=scale, jit=jit)
+    c = age(c, sdf_rrect(w, h, r, 0) + jit, rub, 16 if big else 6)
     full[M:M + h, M:M + w] = c; A[M:M + h, M:M + w] = a
     im = to_img(full, A)
     return shadow(im, dy=0 if sunk else 5, blur=6, op=0 if sunk else op_sh)
@@ -114,11 +143,12 @@ def plain(w, h, r, tex, bevel=6, M=12, grad=.35, sunk=False, scale=.5, op_sh=.7)
 def ring(w, h, r, frame, fw, M=16):
     """cadre seul, centre transparent : liseré sombre avec un filet clair à l'intérieur"""
     W, H = w + 2 * M, h + 2 * M + 6
-    sd = sdf_rrect(w, h, r, 0); sd2 = sdf_rrect(w, h, max(r - fw, 2), fw)
+    chip, rub = wear_noise(w, h)
+    sd = worn(sdf_rrect(w, h, r, 0), chip, 3); sd2 = sdf_rrect(w, h, max(r - fw, 2), fw) - np.clip(chip - .5, 0, None) * 1.5
     fa = np.clip(.5 - sd, 0, 1) * np.clip(.5 + sd2, 0, 1)
     tone = {'brosse': (176, 180, 186)}.get(frame, (112, 115, 120))
     fc = np.broadcast_to(INK, (h, w, 3)).copy()
-    filet = np.clip(1 - np.abs(sd2 - 2) / 1.6, 0, 1) * fa
+    filet = np.clip(1 - np.abs(sd2 - 2) / 1.6, 0, 1) * fa * np.clip(1.1 - np.clip(rub, 0, None) * .5, .25, 1)
     fc = comp(fc, np.broadcast_to(np.array(tone, np.float32), fc.shape), filet)
     full = np.zeros((H, W, 3), np.float32); A = np.zeros((H, W), np.float32)
     full[M:M + h, M:M + w] = fc; A[M:M + h, M:M + w] = fa
