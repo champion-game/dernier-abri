@@ -1325,6 +1325,8 @@ I18N.en={
 "Pioche":"Draw pile",
 "Réserve":"Reserve",
 "Défausse":"Discard pile",
+"Deck":"Deck",
+"cartes restantes":"cards left",
 "Les 3 cartes sont pour toi.":"All 3 cards are yours.",
 "Choisis {0} cartes parmi 3.":"Choose {0} cards out of 3.",
 "Choisis 1 carte parmi 3.":"Choose 1 card out of 3.",

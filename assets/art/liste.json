@@ -166,11 +166,22 @@
  "sprites": [],
  "relics": [],
  "ui": [
+  "abri.webp",
+  "bac-avant.webp",
+  "bac-fond.webp",
   "bandeau.webp",
   "barricard.webp",
+  "btn-nuit.webp",
   "cadre-amine.webp",
+  "ciel-jour.webp",
+  "ciel-nuit.webp",
+  "ciel-rouge.webp",
+  "decor-jour.webp",
+  "decor-nuit.webp",
+  "decor-rouge.webp",
   "fond-portrait2.webp",
   "fond.webp",
+  "panneau-noir.webp",
   "plateau.webp"
  ]
 }
