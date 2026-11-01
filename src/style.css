@@ -2108,10 +2108,11 @@ html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important}
 html.artx.ax3 .axboard{position:relative;width:var(--axB);height:calc(var(--axB) * .97737)}
 html.artx.ax3 #ax3 #map{position:absolute!important;left:calc(var(--axB) * -.024064)!important;top:calc(var(--axB) * -.02061)!important;width:calc(var(--axB) * 1.04902)!important;height:calc(var(--axB) * 1.04902)!important;
  margin:0!important;max-width:none!important;max-height:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;z-index:1;aspect-ratio:auto!important;background:transparent!important;
- clip-path:inset(4.692% 4.588% 4.866% 4.418%)}
+ -webkit-mask:var(--ui-plateau-herbe) calc(var(--axB) * .024064) calc(var(--axB) * .02061)/var(--axB) calc(var(--axB) * .97737) no-repeat;
+ mask:var(--ui-plateau-herbe) calc(var(--axB) * .024064) calc(var(--axB) * .02061)/var(--axB) calc(var(--axB) * .97737) no-repeat}
 #axBord{display:none}
-html.artx.ax3 #axBord{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;background:var(--ui-plateau-bord,none) 0 0/100% 100% no-repeat;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(0,0,0,.8))}
-html.artx.ax3 #axBord>i{position:absolute;inset:0;-webkit-mask:var(--ui-plateau-bord) 0 0/100% 100% no-repeat;mask:var(--ui-plateau-bord) 0 0/100% 100% no-repeat}
+html.artx.ax3 #axBord{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;background:var(--ui-plateau-cadre,none) 0 0/100% 100% no-repeat;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(0,0,0,.8))}
+html.artx.ax3 #axBord>i{position:absolute;inset:0;-webkit-mask:var(--ui-plateau-cadre) 0 0/100% 100% no-repeat;mask:var(--ui-plateau-cadre) 0 0/100% 100% no-repeat}
 html.artx.ax3 #axBord>i.t{background:rgb(95,120,190);mix-blend-mode:multiply;opacity:0}
 /* v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche de devant gardent leur forme),
    les cartes, puis la planche de devant qui cache le bas des cartes */
