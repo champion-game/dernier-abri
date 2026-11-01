@@ -2064,31 +2064,15 @@ html.artx.ax3 #ax3 #go::before,html.artx.ax3 #ax3 #go::after{display:none!import
 html.artx.ax3 #ax3 #go.speed{font-size:calc(var(--gof,26px) * .62)!important}
 html.artx.ax3 #ax3 #go:disabled{filter:var(--axsh) grayscale(.7) brightness(.7)}
 html.artx.ax3 #ax3 #go:not(:disabled):active{transform:translateY(2px)!important}
-/* plateau : l'image d'Amine, le canvas du jeu calé sur ses cases (11 × 11 cases = 1,0257 fois l'image) */
-html.artx.ax3 .axboard{position:relative}
-html.artx.ax3 #ax3 #map{position:absolute!important;left:calc(var(--axB) * -.01208)!important;top:calc(var(--axB) * -.00973)!important;width:calc(var(--axB) * 1.02572)!important;height:calc(var(--axB) * 1.02572)!important;
- margin:0!important;max-width:none!important;max-height:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;z-index:1;aspect-ratio:auto!important;background:transparent!important}
-html.artx.ax3 #ax3 #axFrame{display:none!important}
-html.artx.ax3 #ax3 #axPlat{filter:drop-shadow(3px 5px 0 rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(0,0,0,.8));background-color:transparent!important}
-/* bac de cartes : le fond derrière les cartes, la planche de devant par-dessus (découpe 9 cases : les poteaux gardent leur forme) */
-html.artx.ax3 .axbac{position:relative;height:var(--axbh)}
-html.artx.ax3 .axbac>i{position:absolute;left:0;right:0;pointer-events:none;border-style:solid;border-color:transparent;border-width:0 calc(var(--axbh) * .6)}
-html.artx.ax3 .axbac-f{top:0;bottom:0;border-image:var(--ui-bac-fond) 0 145 fill / 0 calc(var(--axbh) * .6) stretch;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(0,0,0,.85))}
-html.artx.ax3 .axbac-a{bottom:0;height:34.6%;z-index:3;border-image:var(--ui-bac-avant) 0 145 fill / 0 calc(var(--axbh) * .6) stretch;filter:drop-shadow(0 -3px 4px rgba(0,0,0,.55))}
-html.artx.ax3 #ax3 #hand{position:absolute!important;left:calc(var(--axbh) * .56);right:calc(var(--axbh) * .56);top:11%;height:76%;z-index:2;margin:0!important;padding:0!important;min-height:0!important;
- display:flex!important;justify-content:center;align-items:stretch;gap:0!important;container-type:inline-size;--axcw:calc(var(--axbh) * .76 * .75);background:none!important;border:0!important;box-shadow:none!important}
-html.artx.ax3 #ax3 #hand .card{flex:none;height:100%;width:var(--axcw)!important;max-width:none!important;rotate:0deg!important;translate:0 0!important;margin:0;padding:0}
-html.artx.ax3 #ax3 #hand .card+.card{margin-left:min(4px,calc((100cqw - var(--hn,5) * var(--axcw)) / max(1,var(--hn,5) - 1)))!important}
-html.artx.ax3 #ax3 #hand .card .cf{width:100%!important}
 html.artx.ax3 #ax3 #hand .card:hover:not(.sel),html.artx.ax3 #ax3 #hand .card.lift:not(.sel){transform:translateY(-7%)!important;z-index:4}
 html.artx.ax3 #ax3 #hand .card.sel{transform:translateY(-46%)!important;z-index:6}
 html.artx.ax3 #ax3 #hand .card.sel .cf{filter:drop-shadow(0 0 7px rgba(242,177,28,.95)) drop-shadow(4px 8px 6px rgba(0,0,0,.7))!important}
 /* ---- ordinateur ---- */
-html.artx.ax3.felton{--axbh:clamp(118px,21.5dvh,210px);--axov:10px;--axB:min(calc(100dvh - 6px - var(--axbh) * .6),calc(100vw - 2 * 250px + 2 * var(--axov)));--axw:min(400px,calc((100vw - var(--axB) + 2 * var(--axov) - 12px) / 2));--goh:clamp(70px,11.5dvh,100px);--gof:clamp(20px,3.3dvh,28px)}
+html.artx.ax3.felton{--goh:clamp(70px,11.5dvh,100px);--gof:clamp(20px,3.3dvh,28px)}
 html.artx.ax3.felton #ax3{position:fixed;inset:0;grid-template-columns:var(--axw) calc(var(--axB) - 2 * var(--axov)) var(--axw);justify-content:center;padding:6px 6px 0;height:100dvh;box-sizing:border-box}
 html.artx.ax3.felton .ax3-l,html.artx.ax3.felton .ax3-r{display:flex;flex-direction:column;gap:7px;min-height:0;height:calc(100dvh - 12px);z-index:1;min-width:0}
 html.artx.ax3.felton .ax3-c{position:relative;z-index:5;min-width:0}
-html.artx.ax3.felton .axboard{position:absolute;left:50%;top:0;width:var(--axB);height:calc(var(--axB) * 1.00545);transform:translateX(-50%)}
+html.artx.ax3.felton .axboard{position:absolute;left:50%;top:0;width:var(--axB);height:calc(var(--axB) * .97737);transform:translateX(-50%)}
 html.artx.ax3.felton .axbac{position:absolute;left:calc(var(--axov) * -1);right:calc(var(--axov) * -1);bottom:0;z-index:6}
 /* ---- téléphone en hauteur ---- */
 html.artx.ax3:not(.felton) body::before{background:linear-gradient(rgba(16,11,9,0) 70px,rgba(16,11,9,.85) 190px,#100b09 250px),var(--ui-decor-jour,none) center top/auto 270px no-repeat,#100b09!important}
@@ -2106,7 +2090,7 @@ html.artx.ax3:not(.felton) #axIcons>button{width:26px!important;height:26px!impo
 html.artx.ax3:not(.felton) #ax3 #fams{grid-area:fams;border-width:9px!important;border-image-width:9px!important;gap:4px 12px}
 html.artx.ax3:not(.felton) #fams :is(.fam,.tok){font-size:13px!important}html.artx.ax3:not(.felton) #fams :is(.fam,.tok) svg{width:14px!important;height:14px!important}
 html.artx.ax3:not(.felton) #ax3 #horde{grid-area:piste}html.artx.ax3:not(.felton) #horde .tc{height:20px}
-html.artx.ax3:not(.felton) .axboard{grid-area:board;width:var(--axB);height:calc(var(--axB) * 1.00545);justify-self:center;margin:2px 0}
+html.artx.ax3:not(.felton) .axboard{grid-area:board;width:var(--axB);height:calc(var(--axB) * .97737);justify-self:center;margin:2px 0}
 html.artx.ax3:not(.felton) #ax3 #info{grid-area:info;max-height:none;font-size:11.5px;border-width:10px!important;border-image-width:10px!important;margin:0!important}
 html.artx.ax3:not(.felton) #ax3 :is(#tip,#meter){grid-area:tip}
 html.artx.ax3:not(.felton) .axbig{display:none!important}
@@ -2119,3 +2103,51 @@ html.artx.ax3:not(.felton) #ax3 #pRes,html.artx.ax3:not(.felton) #ax3 #pDisc{fle
 html.artx.ax3:not(.felton) #ax3 .pile>svg{width:16px;height:16px}html.artx.ax3:not(.felton) .axpt em{font-size:8px}html.artx.ax3:not(.felton) .axpt b{font-size:15px!important}
 html.artx.ax3:not(.felton) .axbac{grid-area:bac;margin:0 -6px}
 html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important}
+/* v217 : plateau d'Amine : le sol (plateau-herbe.webp) est peint par le canvas, coupé sur le bord extérieur du cadre ;
+   le cadre (plateau-bord.webp) passe devant, avec la même nuit que le canvas (game-artx.js) */
+html.artx.ax3 .axboard{position:relative;width:var(--axB);height:calc(var(--axB) * .97737)}
+html.artx.ax3 #ax3 #map{position:absolute!important;left:calc(var(--axB) * -.024064)!important;top:calc(var(--axB) * -.02061)!important;width:calc(var(--axB) * 1.04902)!important;height:calc(var(--axB) * 1.04902)!important;
+ margin:0!important;max-width:none!important;max-height:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;z-index:1;aspect-ratio:auto!important;background:transparent!important;
+ clip-path:inset(4.692% 4.588% 4.866% 4.418%)}
+#axBord{display:none}
+html.artx.ax3 #axBord{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;background:var(--ui-plateau-bord,none) 0 0/100% 100% no-repeat;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(0,0,0,.8))}
+html.artx.ax3 #axBord>i{position:absolute;inset:0;-webkit-mask:var(--ui-plateau-bord) 0 0/100% 100% no-repeat;mask:var(--ui-plateau-bord) 0 0/100% 100% no-repeat}
+html.artx.ax3 #axBord>i.t{background:rgb(95,120,190);mix-blend-mode:multiply;opacity:0}
+/* v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche de devant gardent leur forme),
+   les cartes, puis la planche de devant qui cache le bas des cartes */
+html.artx.ax3 .axbac{position:relative;width:var(--axB);height:var(--axbh)}
+html.artx.ax3 .axbac>i{position:absolute;left:0;right:0;pointer-events:none;border-style:solid;border-color:transparent}
+html.artx.ax3 .axbac-f{top:0;bottom:0;border-width:calc(var(--axB) * .03209) calc(var(--axB) * .082) calc(var(--axB) * .10517);
+ border-image:var(--ui-bac2-fond) 36 92 118 fill / calc(var(--axB) * .03209) calc(var(--axB) * .082) calc(var(--axB) * .10517) stretch;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 14px rgba(0,0,0,.8))}
+html.artx.ax3 .axbac-a{bottom:0;height:calc(var(--axB) * .10517);z-index:3;border-width:0 calc(var(--axB) * .082);border-image:var(--ui-bac2-avant) 0 92 fill / 0 calc(var(--axB) * .082) stretch;filter:drop-shadow(0 -2px 3px rgba(0,0,0,.5))}
+html.artx.ax3 #ax3 #hand{position:absolute!important;left:calc(var(--axB) * .086);right:calc(var(--axB) * .086);top:calc(var(--axB) * .012);bottom:calc(var(--axB) * .042);z-index:2;margin:0!important;padding:0!important;min-height:0!important;
+ display:flex!important;justify-content:center;align-items:stretch;gap:0!important;container-type:size;--axcw:calc(100cqh * .75);background:none!important;border:0!important;box-shadow:none!important}
+html.artx.ax3 #ax3 #hand .card{flex:none;height:100%;width:var(--axcw)!important;max-width:none!important;rotate:0deg!important;translate:0 0!important;margin:0;padding:0}
+html.artx.ax3 #ax3 #hand .card+.card{margin-left:min(4px,calc((100cqw - var(--hn,5) * var(--axcw)) / max(1,var(--hn,5) - 1)))!important}
+html.artx.ax3 #ax3 #hand .card .cf{width:100%!important}
+html.artx.ax3 #ax3 #hand .card:hover:not(.sel),html.artx.ax3 #ax3 #hand .card.lift:not(.sel){transform:translateY(-7%)!important;z-index:4}
+html.artx.ax3 #ax3 #hand .card.sel{transform:translateY(-46%)!important;z-index:6}
+html.artx.ax3 #ax3 #hand .card.sel .cf{filter:drop-shadow(0 0 7px rgba(242,177,28,.95)) drop-shadow(4px 8px 6px rgba(0,0,0,.7))!important}
+/* v217 : abri en panneau noir, texte crème */
+html.artx.ax3 #ax3 .shel{aspect-ratio:900/539!important;background-image:var(--ui-abri-noir,none)!important}
+html.artx.ax3 .shel .shel-t{left:7%!important;top:9%!important;color:var(--axcr)!important;font-size:22px!important;text-shadow:0 2px 3px #000!important}
+html.artx.ax3 .shel .shel-bar{left:7%!important;right:7%!important;bottom:13%!important;height:7%!important;background:#120d0b!important;border:2px solid #4a3f36!important}
+/* v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut */
+html.artx.ax3 #ftabs .ft-tabs button{opacity:1!important;filter:none!important;border:7px solid transparent!important;border-bottom:0!important;border-image:var(--ui-panneau-noir) 36 36 0 fill / 7px 7px 0 stretch!important;
+ background:none!important;box-shadow:none!important;color:#8a7f70!important;position:relative;top:0}
+html.artx.ax3 #ftabs .ft-tabs button.on{color:var(--axcr)!important;box-shadow:inset 0 3px 0 #c8141a!important;z-index:2}
+html.artx.ax3 #ftabs .ft-tabs button:not(.on){filter:brightness(.72)!important}
+/* v217 : Deck, Réserve et Défausse toujours pleins ; vides ou pendant la nuit, seuls le chiffre et l'icône pâlissent */
+html.artx.ax3 #ax3 .pile:disabled,html.artx.ax3 #pRes.empty{opacity:1!important}
+html.artx.ax3 #pRes.empty :is(svg,b){opacity:.45}
+/* v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonnes sur toute la largeur restante */
+html.artx.ax3.felton{--axB:min(calc((100dvh - 12px) / 1.2385),calc(100vw - 2 * 262px));--axbh:calc(var(--axB) * .26114)}
+html.artx.ax3.felton #ax3{grid-template-columns:minmax(0,1fr) var(--axB) minmax(0,1fr)!important;gap:0 12px;padding:6px 12px 0!important}
+html.artx.ax3.felton .ax3-c{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100dvh - 12px)}
+html.artx.ax3.felton .axboard{position:relative!important;left:auto!important;top:auto!important;transform:none!important}
+html.artx.ax3.felton .axbac{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important}
+/* v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet */
+html.artx.ax3:not(.felton){--axbh:clamp(calc(var(--axB) * .26114),calc(100dvh - 100vw - 300px),calc(var(--axB) * .42))}
+html.artx.ax3:not(.felton) .axbac{margin:0!important;justify-self:center}
+html.artx.ax3:not(.felton) #ax3{height:100dvh;min-height:0!important;overflow-x:clip;grid-template-rows:auto auto auto auto auto auto auto auto minmax(calc(var(--axB) * .2),1fr)!important}
+html.artx.ax3:not(.felton) .axbac{height:auto!important;align-self:stretch!important;margin-bottom:4px!important}

@@ -596,6 +596,13 @@ Les illustrations de l’artiste remplacent les images actuelles petit à petit,
   - **décor du fond** selon le moment (`decor-jour/nuit/rouge.webp`) : jour pendant la préparation, nuit pendant l’attaque, rouge pour les nuits rouges et les boss ;
   - **formes** : panneau noir (`panneau-noir.webp`), bouton et bac en découpe 9 cases (les coins et les poteaux gardent leur forme) ; ombre nette en bas à droite et léger halo noir derrière chaque forme ; les cartes cartoon ne changent pas ;
   - le téléphone tourné garde la disposition précédente.
+- **v217 : nouveau plateau et nouveau bac d’Amine** (une seule image découpée en couches) :
+  - plateau : le sol (`plateau-herbe.webp`, cases 107 × 103,33 px à partir de (80, 81)) est peint par le canvas, coupé sur le bord extérieur du cadre ; le cadre (`plateau-bord.webp`) passe devant le canvas et reçoit la même nuit (teinte bleue et voile, même aube) : plus de démarcation à la tombée de la nuit ; les zombies arrivent par les ouvertures des routes ; l’ancien rendu PC (v205 à v211) est coupé dans cette disposition ;
+  - bac : fond (`bac2-fond.webp`, découpe 9 cases), cartes, puis planche de devant (`bac2-avant.webp`) qui cache le bas des cartes ; même largeur que le plateau, juste dessous ;
+  - abri en panneau noir (`abri-noir.webp`), texte crème ;
+  - ordinateur en plein écran : les colonnes prennent toute la largeur restante et grossissent avec la hauteur de l’écran (zoom jusqu’à × 1,6) ;
+  - onglets en formes pleines, Réserve et Deck jamais transparents ;
+  - nouveaux noms de fichiers : le téléphone gardait l’ancien `plateau.webp` en mémoire.
 - Quand le style artiste sera validé : il deviendra le style par défaut, puis les anciennes images seront retirées (ou gardées en option « classique », au choix d’Amine).
 
 ## Le mode test (v130)

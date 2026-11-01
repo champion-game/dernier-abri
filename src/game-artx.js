@@ -1,13 +1,13 @@
 // v200 : refonte du jeu dans le style artiste (html.artx seulement) : plateau dessiné d'Amine comme sol,
 // grande carte au survol (PC), « Nuit rouge dans N » sur l'étiquette du jour. Chargé en dernier.
 const AX={on:()=>DE.classList.contains('artx'),plat:null};
-// v216 : plateau d'Amine (1269 × 1240 px) : ses 9 × 9 cases commencent à 103 px et mesurent 118,3 × 115 px ; calées sur les cases 1 à 9 du jeu
-const AXI=(()=>{const w=1269,h=1240,sx=T/118.33,sy=T/115;return{w,h,iw:w*sx,ih:h*sy,ox:T-103*sx,oy:T-103*sy}})();
+// v217 : plateau d'Amine (plateau-herbe.webp, 1122 × 1059 px) : ses 9 × 9 cases commencent à (80, 81) et mesurent 107 × 103,33 px ; calées sur les cases 1 à 9 du jeu
+const AXI=(()=>{const w=1122,h=1059,sx=T/107,sy=T/103.33;return{w,h,iw:w*sx,ih:h*sy,ox:T-80*sx,oy:T-81*sy}})();
 // sol du plateau : l'image d'Amine (9 × 9 cases + palissade) posée sur les 11 × 11 cases du jeu (la palissade couvre l'anneau de la forêt)
 {const g0=buildGround;buildGround=function(B){g0.apply(this,arguments);try{if(!AX.on()||!AX.plat)return;const g=ground.getContext('2d'),k=ground.width/L;
- g.save();g.setTransform(1,0,0,1,0,0);g.fillStyle='#100b09';g.fillRect(0,0,ground.width,ground.height);g.drawImage(AX.plat,AXI.ox*k,AXI.oy*k,AXI.iw*k,AXI.ih*k);g.restore()}catch(e){}}}
+ g.save();g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,ground.width,ground.height);g.drawImage(AX.plat,AXI.ox*k,AXI.oy*k,AXI.iw*k,AXI.ih*k);g.restore()}catch(e){}}}
 function axGround(){try{setBiome.done=0;setBiome(BIOME)}catch(e){}}
-function axPlat(){if(AX.plat||!(ART_NEW.ui||[]).includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/plateau.webp'}
+function axPlat(){const u=ART_NEW.ui||[];if(AX.plat||!u.includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/'+(u.includes('plateau-herbe.webp')?'plateau-herbe.webp':'plateau.webp')}
 {const a0=applyArt;applyArt=function(){a0.apply(this,arguments);try{feltLayout();if(AX.on())axPlat();else axGround()}catch(e){}}}
 // la liste des images peut arriver avant le chargement de ce fichier : on refait la disposition ici
 try{feltLayout()}catch(e){}if(AX.on())axPlat();
@@ -58,7 +58,7 @@ axHome();
 const AXPAD=0,AXGB=Element.prototype.getBoundingClientRect;
 cv.getBoundingClientRect=function(){const r=AXGB.call(this);if(!PADU)return r;const f=PADU/(L+2*PADU);return new DOMRect(r.left+r.width*f,r.top+r.height*f,r.width*(1-2*f),r.height*(1-2*f))};
 function axPad(v){if(PADU===v)return;PADU=v;if(v)DE.style.setProperty('--axp',v/L);else DE.style.removeProperty('--axp');try{fit()}catch(e){}}
-function axLay(){try{const on=AX.on()&&DE.classList.contains('felton')&&AX.plat,c=$('#map');let d=$('#axPlat');axPad(on?AXPAD:0);
+function axLay(){try{const on=AX.on()&&DE.classList.contains('felton')&&AX.plat&&!ax3Want(),c=$('#map');let d=$('#axPlat');axPad(on?AXPAD:0);
  if(!on||!c){if(c)c.style.clipPath='';{const f=$('#axFrame');if(f)f.hidden=true}if(d)d.hidden=true;{const fx=$('#axFx');if(fx)fx.hidden=true}DE.style.removeProperty('--axlt');return}
  if(!d){d=document.createElement('div');d.id='axPlat';d.setAttribute('aria-hidden','true');c.parentNode.insertBefore(d,c)}
  const a=c.parentNode.getBoundingClientRect(),r=c.getBoundingClientRect(),k=r.width/L;
@@ -87,7 +87,7 @@ addEventListener('resize',()=>setTimeout(axLay,50));
 // v208 : nuit (PC) — les effets de brume de la v195 (nappes du bord : ringFog ; bandes qui dérivent : drawFog) sont dessinés sur #axFx,
 // un canvas qui déborde du plateau (AXM de chaque côté) : mêmes formules, même rythme, mais ils continuent sur la palissade, donc plus de bord visible
 const AXM=.13;let AXRF=null;
-function axOn(){return AX.on()&&DE.classList.contains('felton')&&AX.plat}
+function axOn(){return AX.on()&&DE.classList.contains('felton')&&AX.plat&&!ax3Want()}
 {const rf=ringFog;let E=null;ringFog=function(){if(axOn()){if(!E){E=document.createElement('canvas');E.width=E.height=2}return E}return rf.apply(this,arguments)}}
 {const df=drawFog;drawFog=function(){if(axOn())return;return df.apply(this,arguments)}}
 function axRing(){if(AXRF)return AXRF;const W=L*(1+2*AXM),o=L*AXM,c=document.createElement('canvas');c.width=c.height=Math.round(W/2);const g=c.getContext('2d'),r=rng(31);g.scale(.5,.5);
@@ -158,7 +158,7 @@ const AX3={el:null,mv:[]};
 function ax3Want(){return AX.on()&&(DE.classList.contains('felton')||matchMedia('(orientation:portrait)').matches)}
 function ax3Build(){if(AX3.el)return AX3.el;const a=document.querySelector('.app');if(!a)return null;const e=document.createElement('div');e.id='ax3';
  e.innerHTML='<div class="ax3-l"><div class="axsky" id="axSky"></div><div class="axpiles"><div class="axdk" id="axDk"></div><div class="axrd" id="axRd"></div></div></div>'
-  +'<div class="ax3-c"><div class="axboard" id="axBoard"></div><div class="axbac" id="axBac"><i class="axbac-f"></i><i class="axbac-a"></i></div></div>'
+  +'<div class="ax3-c"><div class="axboard" id="axBoard"><div id="axBord" aria-hidden="true"><i class="t"></i><i class="d"></i></div></div><div class="axbac" id="axBac"><i class="axbac-f"></i><i class="axbac-a"></i></div></div>'
   +'<div class="ax3-r"><div class="axtop" id="axTop"><div class="axicons" id="axIcons"></div></div></div>';
  a.appendChild(e);return AX3.el=e}
 // range les éléments de list (dans l'ordre) dans box ; un élément pas encore créé est simplement ignoré
@@ -169,7 +169,7 @@ function ax3Put(){try{if(!ax3Want()){ax3Back();return}const e=ax3Build();if(!e)r
  ax3Put1($('#axSky'),['#round','#event']);
  ax3Put1(e.querySelector('.ax3-l'),['#axSky','#horde','#fams','.axpiles','#ftabs']);
  ax3Put1($('#axDk'),['#pDraw']);ax3Put1($('#axRd'),['#pRes','#pDisc']);
- ax3Put1($('#axBoard'),['#axPlat','#map','#axFx','#axFrame']);
+ ax3Put1($('#axBoard'),['#map','#axBord']);
  ax3Put1($('#axBac'),[$('#axBac .axbac-f'),'#hand',$('#axBac .axbac-a')]);
  ax3Put1($('#axTop'),['.top .brand','#axIcons']);ax3Put1($('#axIcons'),['#pz','#mute','#fs','#mtb','#holes']);
  ax3Put1(e.querySelector('.ax3-r'),['#axTop','.shel','#tip','#meter','#axBig','#info','#go']);
@@ -191,4 +191,17 @@ const AXIC={res:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="5" w
  px.innerHTML=`${AXIC.dis}<span class="axpt"><em>${_t('Défausse')}</em><b class="pn">${S.discard.length}</b></span>`;
  pr.innerHTML=`${AXIC.res}<span class="axpt"><em>${_t('Réserve')}</em><b class="pn">${b.length}</b></span>`;pr.classList.toggle('empty',!b.length);if(!b.length)pr.disabled=true}catch(e){}return r}}
 {const r6=render;render=function(){r6.apply(this,arguments);try{if(DE.classList.contains('ax3'))pilesHtml()}catch(e){}}}
+try{feltLayout()}catch(e){}
+// v217 : le cadre du plateau (plateau-bord.webp) passe devant le canvas, qui est coupé sur le bord extérieur du cadre :
+// la nuit (teinte bleue et voile, mêmes formules que drawSky et drawDark) est peinte sur le cadre, donc plus de démarcation
+{let last='';const loop=()=>{try{const b=$('#axBord');if(b&&DE.classList.contains('ax3')){const t=b.firstChild,d=b.lastChild,n=Math.max(0,Math.min(1,nightAmt));
+ const dq=(performance.now()-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0;let bg='none';
+ if(dawn){const fx=1-dq*1.35,st=[];for(let k=0;k<=12;k++){const x=k/12,s=(x*1122+27)/1177;st.push(`rgba(4,7,18,${(.8*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${(x*100).toFixed(1)}%`)}bg=`linear-gradient(90deg,${st.join(',')})`}
+ else if(n>=.01)bg=`rgba(4,7,18,${(.8*n).toFixed(3)})`;
+ const k=bg+'|'+(n>.03?(n*.7).toFixed(3):0);if(k!==last){last=k;d.style.background=bg;t.style.opacity=n>.03?(n*.7).toFixed(3):0}}}catch(e){}requestAnimationFrame(loop)};requestAnimationFrame(loop)}
+// v217 : sur grand écran, les colonnes grossissent avec la hauteur (zoom), sans dépasser leur largeur
+function ax3Zoom(){try{const on=DE.classList.contains('ax3')&&DE.classList.contains('felton');document.querySelectorAll('#ax3 .ax3-l,#ax3 .ax3-r').forEach(c=>{
+ if(!on){c.style.zoom='';c.style.height='';return}c.style.zoom='';const w=c.getBoundingClientRect().width,k=Math.max(1,Math.min(1.6,innerHeight/800,w/290));
+ c.style.zoom=k===1?'':k.toFixed(3);c.style.height=((innerHeight-12)/k).toFixed(1)+'px'})}catch(e){}}
+{const f1=feltLayout;feltLayout=function(){const r=f1.apply(this,arguments);ax3Zoom();return r}}
 try{feltLayout()}catch(e){}

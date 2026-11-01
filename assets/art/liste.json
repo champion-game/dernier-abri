@@ -166,9 +166,9 @@
  "sprites": [],
  "relics": [],
  "ui": [
-  "abri.webp",
-  "bac-avant.webp",
-  "bac-fond.webp",
+  "abri-noir.webp",
+  "bac2-avant.webp",
+  "bac2-fond.webp",
   "bandeau.webp",
   "barricard.webp",
   "btn-nuit.webp",
@@ -182,6 +182,8 @@
   "fond-portrait2.webp",
   "fond.webp",
   "panneau-noir.webp",
+  "plateau-bord.webp",
+  "plateau-herbe.webp",
   "plateau.webp"
  ]
 }
