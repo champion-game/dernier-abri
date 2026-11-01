@@ -437,7 +437,7 @@ let cbSw=null,cbAt=0;panel.addEventListener('pointerdown',e=>{cbSw=e.target.clos
 panel.addEventListener('pointerup',e=>{const w=cbSw;cbSw=null;if(!w||!CB)return;const dx=e.clientX-w.x,dy=e.clientY-w.y;
  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4&&Date.now()-w.t<900){const n=panel.querySelector(`.cpg[data-v="${dx<0?1:-1}"]`);cbAt=Date.now();if(n&&!n.disabled)ACT.cpg(dx<0?1:-1)}});
 panel.addEventListener('click',e=>{if(Date.now()-cbAt<400&&e.target.closest('.cbook')){e.stopPropagation();e.preventDefault()}},true);
-panel.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f==='q'){CF.q=e.target.value;CF.page=0;if(panel.querySelector('.cbook'))cfBook();else cfApply()}});
+panel.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f==='q'){CF.q=e.target.value;CF.page=0;if(panel.querySelector('.cbook'))cfBook();else if(panel.querySelector('.lcoll'))lcSearch();else cfApply()}});
 panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f;if(!f||f==='q')return;CF[f]=e.target.value;CF.page=0;cfRe()});
 panel.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v)});
 ['fullscreenchange','webkitfullscreenchange'].forEach(n=>document.addEventListener(n,()=>{const c=panel.querySelector('[data-o=fs]');if(c)c.checked=!!(document.fullscreenElement||document.webkitFullscreenElement)}));

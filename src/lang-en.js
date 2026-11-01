@@ -1545,4 +1545,9 @@ I18N.en={
 "Préparer une partie":"Prepare a run",
 "Quitter l’atelier":"Leave the workshop",
 "Accueil":"Home",
+"Débloquée":"Unlocked",
+"Aucune carte.":"No cards.",
+"Faction":"Faction",
+"Toutes les factions":"All factions",
+"Sans faction":"No faction",
 };
