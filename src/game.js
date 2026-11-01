@@ -207,7 +207,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
  const txt=U0.chief?U0.d.replace(/^Che(?:f|ffe) d[^:]*: /,'').replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/,_t('. Faction : +1 palier')):U0.d;
  // faction et rôle : pictogrammes à l'encre en bas de la carte, entre les dégâts et les PV (rôle en couleur : tank / soin / DPS)
  const marks=(f&&seen('fam1')?`<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>`:'')+(ro?`<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>`:'');
- return `<span class="cf r-${r}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}${E?' ed ed-'+E:''}">${o.gold?_t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
+ return `<span class="cf r-${r}${U0.evo?' evo':''}${o.mini?' mini':''}${D.up?' up':''}${o.gold?' gold':''}${E?' ed ed-'+E:''}">${o.gold?_t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>`:''}
   <span class="cf-art"${u?` style="background-image:url('${u}')"`:''}>${u?'':svg(B)}</span><span class="cf-vig"></span>${u&&popUrl(B)?`<span class="cf-pop" style="background-image:url('${popUrl(B)}')"></span>`:''}${E?`<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>`:''}
   ${r!=='com'?`<span class="cf-rar" title="${Z.RARITY[r].n}"></span>`:''}<span class="cf-cost">${cost}</span>
   <span class="cf-name">${D.n}</span>
@@ -216,7 +216,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v218 · 1er nov.';
+const VERSION='v219 · 1er nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;

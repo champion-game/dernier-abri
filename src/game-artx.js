@@ -145,9 +145,7 @@ function axPaint(){try{const d=$('#axPlat');if(!d||d.hidden||!axOn()||!axSky)ret
   p.globalCompositeOperation='destination-in';p.drawImage(AX.plat,0,0,w,h);p.restore()}}
 }catch(e){}}
 {let raf=()=>{axPaint();requestAnimationFrame(raf)};requestAnimationFrame(raf)}
-// v212 : cartes en illustrations cartoon dans le style artiste (choix d'Amine) : les illustrations de l'artiste restent dans assets/art/cards, inutilisées
-{const a3=applyArt;applyArt=function(){try{ART_NEW.cards=[]}catch(e){}return a3.apply(this,arguments)}}
-try{ART_NEW.cards=[];if(typeof render==='function'&&typeof G!=='undefined'&&G)render()}catch(e){}
+// v219 : nouvelles illustrations de l'artiste (assets/art/cards) et cadres par rareté (style.css, fin du fichier)
 // ===== v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine =====
 // Ordinateur : à gauche le ciel du jour (jour, phrase, tampon), la piste, le camp, Deck / Réserve / Défausse, les onglets ;
 // au centre le plateau le plus grand possible et le bac de cartes en bas (le bac et le plateau passent devant les colonnes) ;
