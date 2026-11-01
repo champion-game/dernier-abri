@@ -2154,3 +2154,28 @@ html.artx.ax3:not(.felton) #ax3{height:100dvh;min-height:0!important;overflow-x:
 html.artx.ax3:not(.felton) .axbac{height:auto!important;align-self:stretch!important;margin-bottom:4px!important}
 html.artx.ax3 .shel .shel-bar{min-height:9px;box-sizing:border-box;border-width:1.5px!important}
 html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important;top:10%!important}
+/* ===== v219 : les formes de la maquette d'Amine partout dans le style artiste (menus, écrans, boutons, onglets) =====
+   panneaux : panneau noir (panneau-noir.webp) ; boutons principaux : tôle rouge (btn-rouge.webp, le bouton de la nuit sans les silhouettes) ;
+   boutons secondaires, onglets et icônes : panneau noir ; ombre nette en bas à droite et léger halo noir */
+html.artx{--axsh:drop-shadow(3px 4px 0 rgba(0,0,0,.9)) drop-shadow(0 0 12px rgba(0,0,0,.8)) drop-shadow(0 0 3px rgba(0,0,0,.7));
+ --axsh2:drop-shadow(2px 3px 0 rgba(0,0,0,.9)) drop-shadow(0 0 6px rgba(0,0,0,.7));--axcr:#f1e6cf;--axmu:#a89c8a}
+html.artx :is(.panel,.event,.table,.meter,.info){border-image:var(--ui-panneau-noir) 36 fill / 16px stretch!important;box-shadow:none!important}
+html.artx #panel.panel{filter:var(--axsh)}
+html.artx .panel>h2:first-child{font-family:var(--ax-head,'Oswald'),sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--axcr);background:none!important;border:0!important;
+ box-shadow:inset 0 -2px 0 #7a1a1a!important}
+html.artx .panel>h2:first-child::before{display:none!important}
+html.artx :is(.skip,.panel .skip,.go.speed,.panel .go.speed,.gbox .skip,.dkbtns .skip){border-image:var(--ui-panneau-noir) 36 fill / 10px stretch!important;box-shadow:none!important;filter:var(--axsh2)!important;color:var(--axcr)!important}
+html.artx :is(.skip,.go.speed):not(:disabled):hover{border-image-source:var(--ui-panneau-noir)!important;filter:var(--axsh2) brightness(1.35)!important}
+html.artx :is(.skip,.go.speed):not(:disabled):active{border-image-source:var(--ui-panneau-noir)!important;transform:translateY(2px);filter:drop-shadow(1px 1px 0 #000)!important}
+html.artx :is(.skip,.go.speed):disabled{border-image-source:var(--ui-panneau-noir)!important;color:rgba(241,231,207,.4)!important;filter:var(--axsh2) brightness(.75)!important}
+html.artx :is(.go,.panel .go,.dkbtns .go):not(.speed):not(#go){border-image:var(--ui-btn-rouge) 40 fill / 14px stretch!important;box-shadow:none!important;filter:var(--axsh2)!important;color:#f6ecd6!important}
+html.artx .go:not(.speed):not(#go):not(:disabled):hover{border-image-source:var(--ui-btn-rouge)!important;filter:var(--axsh2) brightness(1.18)!important}
+html.artx .go:not(.speed):not(#go):not(:disabled):active{border-image-source:var(--ui-btn-rouge)!important;transform:translateY(2px);filter:drop-shadow(1px 1px 0 #000)!important}
+html.artx .go:not(.speed):not(#go):disabled{border-image-source:var(--ui-btn-rouge)!important;filter:var(--axsh2) grayscale(.75) brightness(.6)!important;color:rgba(246,236,214,.5)!important}
+html.artx:not(.ax3) #go:not(.speed){border-image:var(--ui-btn-nuit) 36 40 36 279 fill / 14px 16px 14px 96px stretch!important;padding-left:84px!important;box-shadow:none!important;filter:var(--axsh)}
+html.artx:not(.ax3) #go:not(.speed)::after{display:none!important}
+html.artx :is(.panel .tab,.panel button.char,.panel .rchip){border-image:var(--ui-panneau-noir) 36 fill / 8px stretch!important;box-shadow:none!important;filter:var(--axsh2);color:#a89c8a}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on){border-image:var(--ui-panneau-noir) 36 fill / 8px stretch!important;box-shadow:inset 0 3px 0 #c8141a!important;color:var(--axcr)!important}
+html.artx .mute{border-image:var(--ui-panneau-noir) 36 fill / 6px stretch!important;box-shadow:none!important;filter:var(--axsh2)}
+html.artx .mute:is(:hover,:active){border-image-source:var(--ui-panneau-noir)!important}
+html.artx .mute:hover{filter:var(--axsh2) brightness(1.35)}
