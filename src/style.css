@@ -2204,3 +2204,9 @@ html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on){border-imag
 html.artx .mute{border-image:var(--ui-panneau-noir) 36 fill / 6px stretch!important;box-shadow:none!important;filter:var(--axsh2)}
 html.artx .mute:is(:hover,:active){border-image-source:var(--ui-panneau-noir)!important}
 html.artx .mute:hover{filter:var(--axsh2) brightness(1.35)}
+/* v219 : accueil sans panneau (les boutons et les fiches se posent directement sur le fond) */
+html.artx #panel.panel.ttl{border-image:none!important;background:none!important;filter:none!important;box-shadow:none!important}
+/* v219 : pied des écrans à défilement (Options, Préparer la partie…) : plus de plaque de métal, le noir du panneau avec un fondu */
+html.artx .panel .pfoot{background:linear-gradient(rgba(17,15,14,0),#110f0e 16px)!important;border:0!important;box-shadow:none!important;border-image:none!important}
+html.artx .panel .pfoot::before,html.artx .panel .pfoot::after{display:none!important}
+html.artx #panel.panel.ttl{text-shadow:0 1px 2px #000,0 0 8px #000,0 0 3px #000}
