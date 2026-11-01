@@ -2130,7 +2130,7 @@ html.artx.ax3 #ax3 #hand .card:hover:not(.sel),html.artx.ax3 #ax3 #hand .card.li
 html.artx.ax3 #ax3 #hand .card.sel{transform:translateY(-46%)!important;z-index:6}
 html.artx.ax3 #ax3 #hand .card.sel .cf{filter:drop-shadow(0 0 7px rgba(242,177,28,.95)) drop-shadow(4px 8px 6px rgba(0,0,0,.7))!important}
 /* v217 : abri en panneau noir, texte crème */
-html.artx.ax3 #ax3 .shel{aspect-ratio:900/539!important;background-image:var(--ui-abri-noir,none)!important}
+html.artx.ax3 #ax3 .shel{aspect-ratio:2000/770!important;background-image:var(--ui-abri-fort,none)!important}
 html.artx.ax3 .shel .shel-t{left:7%!important;top:9%!important;color:var(--axcr)!important;font-size:22px!important;text-shadow:0 2px 3px #000!important}
 html.artx.ax3 .shel .shel-bar{left:7%!important;right:7%!important;bottom:13%!important;height:7%!important;background:#120d0b!important;border:2px solid #4a3f36!important}
 /* v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut */
@@ -2152,3 +2152,5 @@ html.artx.ax3:not(.felton){--axbh:clamp(calc(var(--axB) * .26114),calc(100dvh - 
 html.artx.ax3:not(.felton) .axbac{margin:0!important;justify-self:center}
 html.artx.ax3:not(.felton) #ax3{height:100dvh;min-height:0!important;overflow-x:clip;grid-template-rows:auto auto auto auto auto auto auto auto minmax(calc(var(--axB) * .2),1fr)!important}
 html.artx.ax3:not(.felton) .axbac{height:auto!important;align-self:stretch!important;margin-bottom:4px!important}
+html.artx.ax3 .shel .shel-bar{min-height:9px;box-sizing:border-box;border-width:1.5px!important}
+html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important;top:10%!important}
