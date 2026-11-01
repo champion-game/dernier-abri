@@ -604,6 +604,7 @@ Les illustrations de l’artiste remplacent les images actuelles petit à petit,
   - onglets en formes pleines, Réserve et Deck jamais transparents ;
   - nouveaux noms de fichiers : le téléphone gardait l’ancien `plateau.webp` en mémoire.
 - **v218 : découpage du plateau refait au pixel près** : le cadre (`plateau-cadre.webp`) contient le bois, les équerres en fer avec leur forme exacte et les bouts de route des ouvertures ; le canvas est masqué par la forme du plateau (plus de taches de lumière dans les ouvertures ni de bande sombre au bord). Abri : nouvelle image d’Amine (`abri-fort.webp`, panneau noir large).
+- **v219 : les formes de la maquette partout** (menus et écrans du style artiste) : panneaux en panneau noir, titres en capitales crème soulignés de rouge ; boutons principaux en tôle rouge (`btn-rouge.webp`, le bouton de la nuit sans les silhouettes) ; boutons secondaires, onglets et icônes en panneau noir (onglet choisi : trait rouge en haut) ; ombre nette et léger halo noir ; accueil sans panneau ; pied des écrans à défilement sans plaque de métal. Champs, menus déroulants et petites étiquettes restent en papier.
 - Quand le style artiste sera validé : il deviendra le style par défaut, puis les anciennes images seront retirées (ou gardées en option « classique », au choix d’Amine).
 
 ## Le mode test (v130)
