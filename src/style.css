@@ -2325,3 +2325,5 @@ html.artx.eco :is(.lcd-float,.lc.on .lc-tilt,.lc-w.deal){animation:none}
 html.artx .panel .lc-search input[type=search]{background:none;border:0;box-shadow:none;min-height:0;height:36px}
 @media (min-width:900px){html.artx .lc-f{min-height:31px;padding:4px 10px}html.artx .lc-filters{gap:4px}}
 html.artx .lc{isolation:isolate}
+/* v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et le rendu se dilue), le reste reste centré */
+html.artx.ax3.felton #ax3{grid-template-columns:minmax(0,440px) var(--axB) minmax(0,440px)!important;justify-content:center!important}
