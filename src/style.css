@@ -2444,3 +2444,15 @@ html.artx .lc-pg .cpg:not(:disabled):hover{filter:var(--axsh2) brightness(1.35)}
 html.artx .lc-pg .cpg:not(:disabled):active{transform:translateY(2px)}
 html.artx .lc-pg .cpg:disabled{opacity:.4}
 @media (min-width:900px){html.artx .lcx .lc-f.on::after{right:-12px}}
+/* v227 : onde au clic sur les boutons (src/game-artx.js) */
+html.artx rip-w{position:absolute;inset:3px;z-index:4;display:block;overflow:hidden;border-radius:4px;pointer-events:none}
+html.artx rip-i{position:absolute;display:block;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) scale(0);
+ background:radial-gradient(circle,rgba(255,240,210,.6),rgba(255,240,210,.28) 55%,transparent 70%);animation:axrip .55s ease-out forwards}
+@keyframes axrip{0%{transform:translate(-50%,-50%) scale(0);opacity:1}55%{opacity:.85}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+/* v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, trait rouge en haut (choix B d’Amine) */
+html.artx :is(.panel .tab,.panel .rchip,.panel button.char,.ft-tabs button,.lcx .lc-f,.panel .atelb){position:relative}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on,.ft-tabs button.on,.lcx .lc-f.on,.panel .atelb.on){transform:translateY(2px);color:#fff3d6!important;box-shadow:none!important}
+html.artx :is(.panel .tab.on,.panel .rchip.on,.panel button.char.on,.ft-tabs button.on,.lcx .lc-f.on,.panel .atelb.on)::before{content:"";display:block!important;position:absolute;inset:3px;z-index:-1;border-radius:3px;pointer-events:none;animation:none;opacity:1;
+ background:rgba(0,0,0,.3);box-shadow:inset 0 3px 0 #c8141a,inset 0 7px 10px rgba(0,0,0,.95),inset 0 -1px 0 rgba(255,255,255,.12)}
+html.artx .lcx .lc-f.on{filter:var(--axsh2) brightness(.95)}
+html.artx .lcx .lc-f.on svg{stroke:#ff5a48}

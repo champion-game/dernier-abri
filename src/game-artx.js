@@ -203,3 +203,12 @@ function ax3Zoom(){try{const on=DE.classList.contains('ax3')&&DE.classList.conta
  c.style.zoom=k===1?'':k.toFixed(3);c.style.height=((innerHeight-12)/k).toFixed(1)+'px'})}catch(e){}}
 {const f1=feltLayout;feltLayout=function(){const r=f1.apply(this,arguments);ax3Zoom();return r}}
 try{feltLayout()}catch(e){}
+
+/* v227 : onde au clic (choix d’Amine) : un cercle clair part de l’endroit touché et remplit le bouton.
+   Style artiste seulement ; rien en Mode économie ni pour les joueurs qui demandent moins d’animations. Les cartes de la main ont leurs propres effets. */
+document.addEventListener('pointerdown',e=>{try{if(!ARTX()||OPT.eco||reduce||e.button>0)return;
+ const b=e.target.closest&&e.target.closest('button');if(!b||b.disabled||b.classList.contains('card')||b.closest('#hand'))return;
+ const r=b.getBoundingClientRect();if(r.width<8||r.height<8)return;if(getComputedStyle(b).position==='static')b.style.position='relative';
+ const x=e.clientX-r.left,y=e.clientY-r.top,d=2*Math.hypot(Math.max(x,r.width-x),Math.max(y,r.height-y));
+ const w=document.createElement('rip-w'),i=document.createElement('rip-i');
+ Object.assign(i.style,{left:(x-3)+'px',top:(y-3)+'px',width:d+'px',height:d+'px'});w.appendChild(i);b.appendChild(w);setTimeout(()=>w.remove(),560)}catch(x){}},true);
