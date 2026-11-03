@@ -2327,3 +2327,5 @@ html.artx .panel .lc-search input[type=search]{background:none;border:0;box-shad
 html.artx .lc{isolation:isolate}
 /* v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et le rendu se dilue), le reste reste centré */
 html.artx.ax3.felton #ax3{grid-template-columns:minmax(0,440px) var(--axB) minmax(0,440px)!important;justify-content:center!important}
+/* v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix B d'Amine) */
+html.artx.ax3.felton #ax3{column-gap:clamp(12px,calc((100vw - var(--axB) - 904px) / 2),50px)!important}
