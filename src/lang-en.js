@@ -1550,4 +1550,8 @@ I18N.en={
 "Faction":"Faction",
 "Toutes les factions":"All factions",
 "Sans faction":"No faction",
+"Rareté":"Rarity",
+"État":"Status",
+"Fermer":"Close",
+"Touche une carte pour l’ajouter.":"Tap a card to add it.",
 };

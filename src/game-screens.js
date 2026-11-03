@@ -230,7 +230,7 @@ function prepScreen(){const u=Z.unlocks(META);PREP.menace=Math.max(0,Math.min(ME
   <div class="bgrid"><button type="button" class="skip" data-a="coll">Collection · ${META.points} pts</button><button type="button" class="skip" data-a="title">Retour</button></div>`)}
 /* recherche et tri des cartes (collection et éditeur de deck) */
 /* collection et éditeur de deck en classeur (v213, inspiré de Hearthstone) : onglets de faction, pastilles d’énergie, pages, Atelier, tiroir du deck */
-const CF={q:'',sort:'cat',fam:'',own:'',role:'',page:0,atel:0,drawer:0,more:0};
+const CF={q:'',sort:'cat',fam:'',own:'',role:'',rar:'',page:0,atel:0,drawer:0,more:0};
 const RORD={com:0,rare:1,epic:2,leg:3};
 const norm=x=>x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 let CB=null,CNEW=[];// CB : classeur affiché {all, item, deck} ; CNEW : cartes gagnées depuis la dernière visite (« Nouveau » le temps de la visite)

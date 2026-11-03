@@ -94,7 +94,7 @@ function cascade(fan){if(!AOK())return;const pr=panel.getBoundingClientRect(),cx
 const _collectionScreen=collectionScreen;collectionScreen=function(keep){_collectionScreen(keep);if(!keep)try{cascade(0)}catch(e){}};
 const _deckEditor=deckEditor;deckEditor=function(keep){_deckEditor(keep);if(!keep)try{cascade(1)}catch(e){}};
 panel.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.f;if(f&&f!=='q')try{cascade(0)}catch(x){}});
-const itemOf=t=>panel.querySelector(`.citem-w[data-t="${t}"] .citem`)||panel.querySelector(`.lcd[data-t="${t}"] .citem`);
+const itemOf=t=>panel.querySelector(`.citem-w[data-t="${t}"] .citem`)||panel.querySelector(`.lcd[data-t="${t}"] .citem`)||panel.querySelector(`.lc-w[data-t="${t}"] .lc-tilt`);
 function coinsFx(a,b,n){if(!a||!b)return;const p=aMid(a),q=aMid(b);for(let k=0;k<n;k++){const c=aEl('coin');const ox=(Math.random()-.5)*40,oy=(Math.random()-.5)*20;
  const an=aAnim(c,[{transform:`translate(${p.x+ox}px,${p.y+oy}px) scale(.6)`,opacity:0},{transform:`translate(${(p.x+q.x)/2}px,${Math.min(p.y,q.y)-50}px) scale(1.1)`,opacity:1,offset:.5},{transform:`translate(${q.x}px,${q.y}px) scale(.5)`,opacity:.9}],{duration:460,delay:k*45,easing:'ease-in',fill:'both'});
  aDone(an,()=>c.remove());if(k%3===0)setTimeout(()=>{try{SFX.play('coin',.03)}catch(e){}},k*45+420)}}
