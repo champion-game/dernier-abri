@@ -2424,3 +2424,23 @@ html.artx.eco .lcx .lc-pr{display:flex;animation:none}
 /* v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste) */
 html.artx .hand .card.card:disabled .cf,html.artx #hand .card:disabled .cf{filter:grayscale(.9) brightness(.5) drop-shadow(0 3px 5px rgba(0,0,0,.6))!important}
 @media (min-width:600px) and (max-width:899px){html.artx .lcx .lc-grid{grid-template-columns:repeat(5,minmax(0,1fr))}html.artx .lc-ft{grid-template-columns:160px minmax(0,1fr)}}
+/* v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau noir) pour les filtres, la recherche et les boutons */
+html.artx .lcx .lc-side{overflow:visible}
+html.artx .panel:has(.lcx),html.artx .lcx :is(.lc-side,.lc-det,.dklist,.lc-filters){scrollbar-width:none}
+html.artx .panel:has(.lcx)::-webkit-scrollbar,html.artx .lcx :is(.lc-side,.lc-det,.dklist,.lc-filters)::-webkit-scrollbar{display:none}
+html.artx .lcx .lc-filters{background:none;border:0;box-shadow:none;padding:2px;gap:5px}
+html.artx .lcx .lc-f{background:none;border:0;border-radius:0;border-image:var(--ui-panneau-noir) 36 fill / 8px stretch;box-shadow:none;filter:var(--axsh2);color:#a89c8a}
+html.artx .lcx .lc-f svg{stroke:#a89c8a}
+html.artx .lcx .lc-f.on{color:var(--axcr);box-shadow:inset 0 3px 0 #c8141a;filter:var(--axsh2) brightness(1.3)}
+html.artx .lcx .lc-f.on svg{stroke:var(--axcr)}
+html.artx .lcx .lc-f.on::after{border-left-color:#c8141a}
+html.artx .lcx .lc-f.evo{color:#cdb2ea}html.artx .lcx .lc-f.evo svg{stroke:#cdb2ea}
+@media (hover:hover){html.artx .lcx .lc-f:hover{filter:var(--axsh2) brightness(1.35);color:var(--axcr)}}
+html.artx .lcx .lc-search{background:none;border:0;border-radius:0;border-image:var(--ui-panneau-noir) 36 fill / 8px stretch;box-shadow:none}
+html.artx .lc-pg .cpg,html.artx .lcoll.ov .lc-x{background:none!important;border:0!important;border-radius:0!important;border-image:var(--ui-panneau-noir) 36 fill / 8px stretch!important;box-shadow:none!important;filter:var(--axsh2);color:var(--axcr)}
+html.artx .lc-pg .cpg{width:48px;height:40px;display:grid;place-items:center}
+html.artx .lc-pg .cpg svg{stroke:var(--axcr)}
+html.artx .lc-pg .cpg:not(:disabled):hover{filter:var(--axsh2) brightness(1.35)}
+html.artx .lc-pg .cpg:not(:disabled):active{transform:translateY(2px)}
+html.artx .lc-pg .cpg:disabled{opacity:.4}
+@media (min-width:900px){html.artx .lcx .lc-f.on::after{right:-12px}}

@@ -1554,4 +1554,5 @@ I18N.en={
 "État":"Status",
 "Fermer":"Close",
 "Touche une carte pour l’ajouter.":"Tap a card to add it.",
+"Clic gauche : ajouter. Clic droit : retirer.":"Left click: add. Right click: remove.",
 };

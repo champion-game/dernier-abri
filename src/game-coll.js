@@ -75,7 +75,7 @@ function lcScreen(keep,deck){LC.deck=!!deck;if(!keep){cfOpen();LC.ov=0}const own
  const nIn=Z.KEYS.filter(t=>own.includes(t)).length,{h,np}=lcCells();
  const ls=panel.querySelector('.dklist'),lsY=ls?ls.scrollTop:0;
  show(`<h2 class="pw chead lc-h">${deck?_t`Deck ${META.slot+1}`:_t('Collection')}${deck?'':`<span class="cpts"><b>${pts}</b> ${_t('pts')}</span>`}</h2>
-  <p class="lc-sub">${deck?_t('Touche une carte pour l’ajouter.'):_t`${nIn}/${Z.KEYS.length} débloquées`}</p>
+  <p class="lc-sub">${deck?(matchMedia('(hover:hover)').matches?_t('Clic gauche : ajouter. Clic droit : retirer.'):_t('Touche une carte pour l’ajouter.')):_t`${nIn}/${Z.KEYS.length} débloquées`}</p>
   <div class="lcoll lcx${deck?' lcdeck':''}${LC.ov&&!deck?' ov':''}">
    <aside class="lc-side"><div class="lc-filters" role="toolbar" aria-label="${_t('Rôle ou type')}">${filters}</div></aside>
    <section class="lc-mid">
@@ -162,6 +162,9 @@ panel.addEventListener('click',e=>{if(Date.now()-lcSwAt<400&&e.target.closest('.
 // téléphone : toucher à côté de la grande carte la ferme
 panel.addEventListener('click',e=>{if(LC.ov&&e.target.closest('.lcoll.ov .lc-det')&&!e.target.closest('.lcd,.lcd-info,button'))lcOvClose()});
 panel.addEventListener('scroll',()=>{if(LC.ov)lcOvPlace()},{passive:true});
+// deck : clic gauche ajoute, clic droit retire un exemplaire
+panel.addEventListener('contextmenu',e=>{const c=e.target.closest('.lcdeck .lc[data-a=lcadd]');if(!c)return;e.preventDefault();
+ if(META.decks[META.slot].includes(c.dataset.v))ACT.dkm(c.dataset.v);else{lcNo(c);try{SFX.play('no')}catch(x){}}});
 
 // inclinaison 3D et reflet qui suivent la souris
 let lcHov=null;
