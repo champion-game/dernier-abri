@@ -1555,4 +1555,10 @@ I18N.en={
 "Fermer":"Close",
 "Touche une carte pour l’ajouter.":"Tap a card to add it.",
 "Clic gauche : ajouter. Clic droit : retirer.":"Left click: add. Right click: remove.",
+"Rôles du deck":"Deck roles",
+"Commune ×3":"Common ×3",
+"Rare ×2":"Rare ×2",
+"Épique ×1":"Epic ×1",
+"Touche une carte pour l’ajouter, une ligne du deck pour la retirer.":"Tap a card to add it, a deck row to remove it.",
+"Cartes spéciales : 1 par carte, {0} au maximum, comptées dans la limite de leur carte.":"Special cards: 1 per card, {0} at most, counted in their card’s limit.",
 };

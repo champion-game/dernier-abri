@@ -53,11 +53,12 @@ const lcPgH=np=>`<button type="button" class="cpg" data-a="lcpg" data-v="-1" ${C
 // panneau du deck : à droite sur ordinateur, tiroir sous la grille sur téléphone
 function lcDeckSide(){const d=META.decks[META.slot],cnt=deckCount(d),err=Z.deckError(d,ownAll());
  const u=[...new Set(d)].sort((a,b)=>Z.cost(a)-Z.cost(b)||Z.U[a].n.localeCompare(Z.U[b].n,'fr'));
- const cs=[...new Set(Z.KEYS.map(t=>Z.cost(t)))].sort((a,b)=>a-b),cv=cs.map(c=>d.filter(t=>Z.cost(t)===c).length),cm=Math.max(1,...cv);
  return `<aside class="dkside${CF.drawer?' open':''}"><button type="button" class="dkhd" data-a="dkdraw" aria-expanded="${!!CF.drawer}"><span class="dkcount">${_t`Deck ${META.slot+1}`} · <b>${d.length}</b> / ${Z.DECK_MAX}</span><span class="dkst${err?' bad':' good'}">${err||_t('Prêt.')}</span><i class="dkchev${CF.drawer?' open':''}"></i></button>
   <div class="dkbody"><div class="dklist">${u.length?u.map(t=>`<button type="button" class="dkrow r-${rar(t)}" data-a="dkm" data-v="${t}" title="${_t('Retirer')}"><span class="dkcost">${Z.cost(t)}</span><span class="dkname">${Z.U[t].n}</span><span class="dkart" style="background-image:url('${artUrl(Z.baseOf(t))}')"></span><b>×${cnt[t]}</b></button>`).join(''):_t('<p class="dkempty">Touche une carte du classeur pour l’ajouter.</p>')}</div>
-  <div class="dkcurve" aria-label="${_t('Courbe d’énergie')}">${cs.map((c,k)=>`<span><b>${cv[k]}</b><i style="height:${Math.round(cv[k]/cm*80)}%"></i><em>${c}</em></span>`).join('')}</div>
-  <p class="dkrule">${_t('Commune ×3, rare ×2, épique ×1 au maximum.')}${(META.eds||[]).length?_t` Cartes spéciales : 1 par carte, ${Z.ED_MAX} au maximum, comptées dans la limite de leur carte.`:''} ${_t('Touche une ligne pour retirer la carte.')}</p>
+  <div class="dkst2"><h4>${_t('Rôles du deck')}</h4><div class="dkroles">${[['tank','Tank','#c9bea6'],['heal',_t('Soin'),'#6cc65a'],['dps','DPS','#e8392b']].map(([k,n,c])=>{const v=d.filter(t=>Z.roleOf(t)===k).length;
+   return `<span class="${v?'':'zero'}">${ink(k)}<b>${v}</b><small>${n}</small><em style="--w:${Math.min(100,v*10)}%;--c:${c}"></em></span>`}).join('')}</div>
+  <div class="dkchips">${[['com','#8d8370',_t('Commune ×3')],['rare','#4fa3ff',_t('Rare ×2')],['epic','#b06bff',_t('Épique ×1')]].map(([r,c,n])=>`<span><i style="background:${c}"></i>${n}</span>`).join('')}</div>
+  ${(META.eds||[]).length?`<p class="dkrule">${_t`Cartes spéciales : 1 par carte, ${Z.ED_MAX} au maximum, comptées dans la limite de leur carte.`}</p>`:''}</div>
   <button type="button" class="skip lc-reset" data-a="dkreset">${_t('Remettre le deck de départ')}</button></div></aside>`}
 // un seul écran pour la collection et pour le deck (même filtres, même grille en pages)
 function lcScreen(keep,deck){LC.deck=!!deck;if(!keep){cfOpen();LC.ov=0}const own=META.cards,eds=META.eds||[],pts=META.points;
@@ -75,7 +76,7 @@ function lcScreen(keep,deck){LC.deck=!!deck;if(!keep){cfOpen();LC.ov=0}const own
  const nIn=Z.KEYS.filter(t=>own.includes(t)).length,{h,np}=lcCells();
  const ls=panel.querySelector('.dklist'),lsY=ls?ls.scrollTop:0;
  show(`<h2 class="pw chead lc-h">${deck?_t`Deck ${META.slot+1}`:_t('Collection')}${deck?'':`<span class="cpts"><b>${pts}</b> ${_t('pts')}</span>`}</h2>
-  <p class="lc-sub">${deck?(matchMedia('(hover:hover)').matches?_t('Clic gauche : ajouter. Clic droit : retirer.'):_t('Touche une carte pour l’ajouter.')):_t`${nIn}/${Z.KEYS.length} débloquées`}</p>
+  <p class="lc-sub">${deck?(matchMedia('(hover:hover)').matches?_t('Clic gauche : ajouter. Clic droit : retirer.'):_t('Touche une carte pour l’ajouter, une ligne du deck pour la retirer.')):_t`${nIn}/${Z.KEYS.length} débloquées`}</p>
   <div class="lcoll lcx${deck?' lcdeck':''}${LC.ov&&!deck?' ov':''}">
    <aside class="lc-side"><div class="lc-filters" role="toolbar" aria-label="${_t('Rôle ou type')}">${filters}</div></aside>
    <section class="lc-mid">

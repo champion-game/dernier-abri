@@ -2476,3 +2476,18 @@ html.artx .lcdeck .dkart{opacity:.55;-webkit-mask:linear-gradient(90deg,#0000,#0
 html.artx .lcdeck .dkcurve em,html.artx .lcdeck .dkcurve b{color:#a89c8a}
 html.artx .lcdeck .dkrule{color:#a89c8a;font-size:12px}
 html.artx .lcdeck .dklist{gap:5px}
+/* v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par rareté en pastilles (choix C2 d’Amine, sans courbe d’énergie) */
+html.artx .dkst2{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding-top:12px;flex:none;
+ background:url(../assets/art/ui/pack/separateur.png) top center/100% 9px no-repeat}
+html.artx .dkst2 h4{margin:0;font:600 12.5px var(--ax-head);text-transform:uppercase;letter-spacing:.08em;color:#c9bea6}
+html.artx .dkroles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+html.artx .dkroles span{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 4px 10px;border-image:url(../assets/art/ui/pack2/tuile-sombre.png) 26 fill / 10px stretch;color:var(--axcr);font-family:var(--ax-head)}
+html.artx .dkroles svg,html.artx .dkroles img{width:20px;height:20px;stroke:#d6c7a6}
+html.artx .dkroles b{font-size:22px;line-height:1}
+html.artx .dkroles small{font-size:11px;letter-spacing:.06em;color:#a89c8a;text-transform:uppercase}
+html.artx .dkroles em{position:absolute;left:8px;right:8px;bottom:5px;height:4px;border-radius:2px;background:#0b0a09;overflow:hidden}
+html.artx .dkroles em::before{content:"";display:block;height:100%;width:var(--w);background:var(--c)}
+html.artx .dkroles .zero b,html.artx .dkroles .zero small{color:#ff8a70}
+html.artx .dkchips{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+html.artx .dkchips span{display:flex;align-items:center;gap:5px;font:600 11.5px var(--ax-head);text-transform:uppercase;letter-spacing:.04em;padding:4px 8px;border-image:var(--ui-panneau-noir) 36 fill / 6px stretch;color:#e9dcc0}
+html.artx .dkchips i{width:8px;height:8px;transform:rotate(45deg);display:block;box-shadow:0 0 0 1px #000}
