@@ -35,6 +35,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-fiche.js` : fiche de fin de partie (rapport de survie) et son image à partager ; chargé après `game-anim.js`.
   - `game-artx.js` : refonte du style artiste (plateau dessiné, grande carte au survol, « Nuit rouge dans N ») ; chargé tout à la fin.
   - `game-fx2.js` : troisième série d’effets (avant → après, zones non couvertes, bouton de la nuit, nuit rouge, gros coups, maison touchée, aube).
+  - `game-fx3.js` : quatrième série d’effets (gel court, morts selon l’arme, corps et douilles, pluie et orage, réactions et gestes des unités) ; chargé tout à la fin.
   - `game-coll.js` : collection du style artiste reprise du laboratoire (`champion-game/laboratoire-`, `interfaces/collection`) : filtres, grille, grande carte qui se retourne ; chargé tout à la fin.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
 - `assets/art/` : les images de l’artiste en essai (même nom que l’image remplacée, puis `node tools/art-liste.js`), visibles via Options → « Images de l’artiste » sur le site GitHub seulement (voir `docs/GAME_DESIGN.md`, « Le style artiste »).

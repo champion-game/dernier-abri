@@ -2492,3 +2492,4 @@ html.artx .dkroles .zero b,html.artx .dkroles .zero small{color:#ff8a70}
 html.artx .dkchips{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 html.artx .dkchips span{display:flex;align-items:center;gap:5px;font:600 11.5px var(--ax-head);text-transform:uppercase;letter-spacing:.04em;padding:4px 8px;border-image:var(--ui-panneau-noir) 36 fill / 6px stretch;color:#e9dcc0}
 html.artx .dkchips i{width:8px;height:8px;transform:rotate(45deg);display:block;box-shadow:0 0 0 1px #000}
+html.artx.ax3 #axWx{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}#axWx{display:none}html.artx.ax3 #axWx{display:block}
