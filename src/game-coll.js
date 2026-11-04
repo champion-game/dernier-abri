@@ -67,10 +67,10 @@ function lcScreen(keep,deck){LC.deck=!!deck;if(!keep){cfOpen();LC.ov=0}const own
   return `<button type="button" class="lc-f${CF.role===v?' on':''}" data-a="lcf" data-v="${v}" aria-pressed="${CF.role===v}">${ic}<span>${n}</span><i>${deck?p.length:o+'/'+p.length}</i></button>`}).join('')
   +(deck?'':`<button type="button" class="lc-f evo" data-a="evo">${ii('spark')}<span>${_t('Évolutions')}</span><i>${(META.evo||[]).filter(k=>Z.EVO[k]).length}/${Z.EVO_KEYS.length}</i></button>`);
  const o=(v,n)=>`<option value="${v}">${n}</option>`;
- const sel=`<select class="lc-type" data-f="role" aria-label="${_t('Type')}">${T.map(([v,,n])=>o(v,v?n:_t('Type'))).join('')}</select>
-  <select data-f="fam" aria-label="${_t('Faction')}">${o('',_t('Faction'))}${Object.keys(Z.FAM).map(f=>o(f,Z.FAM[f].n)).join('')}${o('-',_t('Sans faction'))}${eds.length?o('*',_t('Spéciales')):''}</select>
-  <select data-f="rar" aria-label="${_t('Rareté')}">${o('',_t('Rareté'))}${['com','rare','epic','leg'].map(r=>o(r,GIFT_RN[r])).join('')}</select>
-  ${deck?'':`<select data-f="own" aria-label="${_t('Débloquées')}">${o('',_t('État'))}${o('y',_t('Débloquées'))}${o('n',_t('À débloquer'))}${o('b',_t('À portée'))}</select>`}`;
+ const sel=`<span class="lc-dd lc-type"><select data-f="role" aria-label="${_t('Type')}">${T.map(([v,,n])=>o(v,v?n:_t('Type'))).join('')}</select></span>
+  <span class="lc-dd"><select data-f="fam" aria-label="${_t('Faction')}">${o('',_t('Faction'))}${Object.keys(Z.FAM).map(f=>o(f,Z.FAM[f].n)).join('')}${o('-',_t('Sans faction'))}${eds.length?o('*',_t('Spéciales')):''}</select></span>
+  <span class="lc-dd"><select data-f="rar" aria-label="${_t('Rareté')}">${o('',_t('Rareté'))}${['com','rare','epic','leg'].map(r=>o(r,GIFT_RN[r])).join('')}</select></span>
+  ${deck?'':`<span class="lc-dd"><select data-f="own" aria-label="${_t('Débloquées')}">${o('',_t('État'))}${o('y',_t('Débloquées'))}${o('n',_t('À débloquer'))}${o('b',_t('À portée'))}</select></span>`}`;
  const L0=lcList();if(!deck&&(!LC.sel||!Z.U[LC.sel]||!L0.includes(LC.sel)))LC.sel=L0[0]||null;
  const nIn=Z.KEYS.filter(t=>own.includes(t)).length,{h,np}=lcCells();
  const ls=panel.querySelector('.dklist'),lsY=ls?ls.scrollTop:0;
