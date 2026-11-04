@@ -2072,7 +2072,7 @@ html.artx.ax3.felton{--goh:clamp(70px,11.5dvh,100px);--gof:clamp(20px,3.3dvh,28p
 html.artx.ax3.felton #ax3{position:fixed;inset:0;grid-template-columns:var(--axw) calc(var(--axB) - 2 * var(--axov)) var(--axw);justify-content:center;padding:6px 6px 0;height:100dvh;box-sizing:border-box}
 html.artx.ax3.felton .ax3-l,html.artx.ax3.felton .ax3-r{display:flex;flex-direction:column;gap:7px;min-height:0;height:calc(100dvh - 12px);z-index:1;min-width:0}
 html.artx.ax3.felton .ax3-c{position:relative;z-index:5;min-width:0}
-html.artx.ax3.felton .axboard{position:absolute;left:50%;top:0;width:var(--axB);height:calc(var(--axB) * .97737);transform:translateX(-50%)}
+html.artx.ax3.felton .axboard{position:absolute;left:50%;top:0;width:var(--axB);height:calc(var(--axB) * .86759);transform:translateX(-50%)}
 html.artx.ax3.felton .axbac{position:absolute;left:calc(var(--axov) * -1);right:calc(var(--axov) * -1);bottom:0;z-index:6}
 /* ---- téléphone en hauteur ---- */
 html.artx.ax3:not(.felton) body::before{background:linear-gradient(rgba(16,11,9,0) 70px,rgba(16,11,9,.85) 190px,#100b09 250px),var(--ui-decor-jour,none) center top/auto 270px no-repeat,#100b09!important}
@@ -2090,7 +2090,7 @@ html.artx.ax3:not(.felton) #axIcons>button{width:26px!important;height:26px!impo
 html.artx.ax3:not(.felton) #ax3 #fams{grid-area:fams;border-width:9px!important;border-image-width:9px!important;gap:4px 12px}
 html.artx.ax3:not(.felton) #fams :is(.fam,.tok){font-size:13px!important}html.artx.ax3:not(.felton) #fams :is(.fam,.tok) svg{width:14px!important;height:14px!important}
 html.artx.ax3:not(.felton) #ax3 #horde{grid-area:piste}html.artx.ax3:not(.felton) #horde .tc{height:20px}
-html.artx.ax3:not(.felton) .axboard{grid-area:board;width:var(--axB);height:calc(var(--axB) * .97737);justify-self:center;margin:2px 0}
+html.artx.ax3:not(.felton) .axboard{grid-area:board;width:var(--axB);height:calc(var(--axB) * .86759);justify-self:center;margin:2px 0}
 html.artx.ax3:not(.felton) #ax3 #info{grid-area:info;max-height:none;font-size:11.5px;border-width:10px!important;border-image-width:10px!important;margin:0!important}
 html.artx.ax3:not(.felton) #ax3 :is(#tip,#meter){grid-area:tip}
 html.artx.ax3:not(.felton) .axbig{display:none!important}
@@ -2103,16 +2103,17 @@ html.artx.ax3:not(.felton) #ax3 #pRes,html.artx.ax3:not(.felton) #ax3 #pDisc{fle
 html.artx.ax3:not(.felton) #ax3 .pile>svg{width:16px;height:16px}html.artx.ax3:not(.felton) .axpt em{font-size:8px}html.artx.ax3:not(.felton) .axpt b{font-size:15px!important}
 html.artx.ax3:not(.felton) .axbac{grid-area:bac;margin:0 -6px}
 html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important}
-/* v217 : plateau d'Amine : le sol (plateau-herbe.webp) est peint par le canvas, coupé sur le bord extérieur du cadre ;
-   le cadre (plateau-bord.webp) passe devant, avec la même nuit que le canvas (game-artx.js) */
-html.artx.ax3 .axboard{position:relative;width:var(--axB);height:calc(var(--axB) * .97737)}
-html.artx.ax3 #ax3 #map{position:absolute!important;left:calc(var(--axB) * -.024064)!important;top:calc(var(--axB) * -.02061)!important;width:calc(var(--axB) * 1.04902)!important;height:calc(var(--axB) * 1.04902)!important;
- margin:0!important;max-width:none!important;max-height:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;z-index:1;aspect-ratio:auto!important;background:transparent!important;
- -webkit-mask:var(--ui-plateau-herbe) calc(var(--axB) * .024064) calc(var(--axB) * .02061)/var(--axB) calc(var(--axB) * .97737) no-repeat;
- mask:var(--ui-plateau-herbe) calc(var(--axB) * .024064) calc(var(--axB) * .02061)/var(--axB) calc(var(--axB) * .97737) no-repeat}
+/* v230 : plateau d'Amine avec la forêt (plateau-foret.webp) : l'image entière est sous le canvas (#axBord, même nuit que le canvas) ;
+   le canvas (11 × 11 cases) se fond sur ses bords ; #axFar montre dans la forêt les zombies qui arrivent (game-artx.js) */
+html.artx.ax3 .axboard{position:relative;width:var(--axB);height:calc(var(--axB) * .86759)}
+html.artx.ax3 #ax3 #map{position:absolute!important;left:calc(var(--axB) * .12709)!important;top:calc(var(--axB) * .066414)!important;width:calc(var(--axB) * .74505)!important;height:calc(var(--axB) * .74505)!important;
+ margin:0!important;max-width:none!important;max-height:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;z-index:2;aspect-ratio:auto!important;background:transparent!important;
+ -webkit-mask:linear-gradient(90deg,transparent,#000 3.5%,#000 96.5%,transparent),linear-gradient(transparent,#000 3.5%,#000 96.5%,transparent);-webkit-mask-composite:source-in;
+ mask:linear-gradient(90deg,transparent,#000 3.5%,#000 96.5%,transparent),linear-gradient(transparent,#000 3.5%,#000 96.5%,transparent);mask-composite:intersect}
 #axBord{display:none}
-html.artx.ax3 #axBord{display:block;position:absolute;inset:0;z-index:3;pointer-events:none;background:var(--ui-plateau-cadre,none) 0 0/100% 100% no-repeat;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(0,0,0,.8))}
-html.artx.ax3 #axBord>i{position:absolute;inset:0;-webkit-mask:var(--ui-plateau-cadre) 0 0/100% 100% no-repeat;mask:var(--ui-plateau-cadre) 0 0/100% 100% no-repeat}
+html.artx.ax3 #axBord{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;background:var(--ui-plateau-foret,none) 0 0/100% 100% no-repeat;filter:drop-shadow(3px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(0,0,0,.8))}
+html.artx.ax3 #axBord>i{position:absolute;inset:0;-webkit-mask:var(--ui-plateau-foret) 0 0/100% 100% no-repeat;mask:var(--ui-plateau-foret) 0 0/100% 100% no-repeat}
+html.artx.ax3 #axFar{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}#axFar{display:none}html.artx.ax3 #axFar{display:block}
 html.artx.ax3 #axBord>i.t{background:rgb(95,120,190);mix-blend-mode:multiply;opacity:0}
 /* v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche de devant gardent leur forme),
    les cartes, puis la planche de devant qui cache le bas des cartes */
@@ -2142,7 +2143,7 @@ html.artx.ax3 #ftabs .ft-tabs button:not(.on){filter:brightness(.72)!important}
 html.artx.ax3 #ax3 .pile:disabled,html.artx.ax3 #pRes.empty{opacity:1!important}
 html.artx.ax3 #pRes.empty :is(svg,b){opacity:.45}
 /* v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonnes sur toute la largeur restante */
-html.artx.ax3.felton{--axB:min(calc((100dvh - 12px) / 1.2385),calc(100vw - 2 * 262px));--axbh:calc(var(--axB) * .26114)}
+html.artx.ax3.felton{--axB:min(calc((100dvh - 12px) / 1.12873),calc(100vw - 2 * 262px));--axbh:calc(var(--axB) * .26114)}
 html.artx.ax3.felton #ax3{grid-template-columns:minmax(0,1fr) var(--axB) minmax(0,1fr)!important;gap:0 12px;padding:6px 12px 0!important}
 html.artx.ax3.felton .ax3-c{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100dvh - 12px)}
 html.artx.ax3.felton .axboard{position:relative!important;left:auto!important;top:auto!important;transform:none!important}

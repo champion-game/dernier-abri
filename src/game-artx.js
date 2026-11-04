@@ -1,13 +1,13 @@
 // v200 : refonte du jeu dans le style artiste (html.artx seulement) : plateau dessiné d'Amine comme sol,
 // grande carte au survol (PC), « Nuit rouge dans N » sur l'étiquette du jour. Chargé en dernier.
 const AX={on:()=>DE.classList.contains('artx'),plat:null};
-// v217 : plateau d'Amine (plateau-herbe.webp, 1122 × 1059 px) : ses 9 × 9 cases commencent à (80, 81) et mesurent 107 × 103,33 px ; calées sur les cases 1 à 9 du jeu
-const AXI=(()=>{const w=1122,h=1059,sx=T/107,sy=T/103.33;return{w,h,iw:w*sx,ih:h*sy,ox:T-80*sx,oy:T-81*sy}})();
+// v230 : plateau d'Amine avec la forêt (plateau-foret.webp, 1314 × 1093 px) : ses 9 × 9 cases commencent à (256, 169) et mesurent 89 × 85,33 px ; calées sur les cases 1 à 9 du jeu
+const AXI=(()=>{const w=1314,h=1093,cw=89,ch=85.33,x0=256,y0=169,sx=T/cw,sy=T/ch;return{w,h,cw,ch,x0,y0,iw:w*sx,ih:h*sy,ox:T-x0*sx,oy:T-y0*sy}})();
 // sol du plateau : l'image d'Amine (9 × 9 cases + palissade) posée sur les 11 × 11 cases du jeu (la palissade couvre l'anneau de la forêt)
 {const g0=buildGround;buildGround=function(B){g0.apply(this,arguments);try{if(!AX.on()||!AX.plat)return;const g=ground.getContext('2d'),k=ground.width/L;
  g.save();g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,ground.width,ground.height);g.drawImage(AX.plat,AXI.ox*k,AXI.oy*k,AXI.iw*k,AXI.ih*k);g.restore()}catch(e){}}}
 function axGround(){try{setBiome.done=0;setBiome(BIOME)}catch(e){}}
-function axPlat(){const u=ART_NEW.ui||[];if(AX.plat||!u.includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/'+(u.includes('plateau-herbe.webp')?'plateau-herbe.webp':'plateau.webp')}
+function axPlat(){const u=ART_NEW.ui||[];if(AX.plat||!u.includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/'+(u.includes('plateau-foret.webp')?'plateau-foret.webp':'plateau.webp')}
 {const a0=applyArt;applyArt=function(){a0.apply(this,arguments);try{feltLayout();if(AX.on())axPlat();else axGround()}catch(e){}}}
 // la liste des images peut arriver avant le chargement de ce fichier : on refait la disposition ici
 try{feltLayout()}catch(e){}if(AX.on())axPlat();
@@ -88,7 +88,7 @@ addEventListener('resize',()=>setTimeout(axLay,50));
 // un canvas qui déborde du plateau (AXM de chaque côté) : mêmes formules, même rythme, mais ils continuent sur la palissade, donc plus de bord visible
 const AXM=.13;let AXRF=null;
 function axOn(){return AX.on()&&DE.classList.contains('felton')&&AX.plat&&!ax3Want()}
-{const rf=ringFog;let E=null;ringFog=function(){if(axOn()){if(!E){E=document.createElement('canvas');E.width=E.height=2}return E}return rf.apply(this,arguments)}}
+{const rf=ringFog;AX.rf=rf;let E=null;ringFog=function(){if(axOn()||DE.classList.contains('ax3')){if(!E){E=document.createElement('canvas');E.width=E.height=2}return E}return rf.apply(this,arguments)}}
 {const df=drawFog;drawFog=function(){if(axOn())return;return df.apply(this,arguments)}}
 function axRing(){if(AXRF)return AXRF;const W=L*(1+2*AXM),o=L*AXM,c=document.createElement('canvas');c.width=c.height=Math.round(W/2);const g=c.getContext('2d'),r=rng(31);g.scale(.5,.5);
  for(let k=0;k<150;k++){let x=o+r()*L,y=o+r()*L;const s=Math.floor(r()*4),d=-T*.9+r()*T*2.1;if(s===0)y=o+d;else if(s===1)y=o+L-d;else if(s===2)x=o+d;else x=o+L-d;
@@ -156,7 +156,7 @@ const AX3={el:null,mv:[]};
 function ax3Want(){return AX.on()&&(DE.classList.contains('felton')||matchMedia('(orientation:portrait)').matches)}
 function ax3Build(){if(AX3.el)return AX3.el;const a=document.querySelector('.app');if(!a)return null;const e=document.createElement('div');e.id='ax3';
  e.innerHTML='<div class="ax3-l"><div class="axsky" id="axSky"></div><div class="axpiles"><div class="axdk" id="axDk"></div><div class="axrd" id="axRd"></div></div></div>'
-  +'<div class="ax3-c"><div class="axboard" id="axBoard"><div id="axBord" aria-hidden="true"><i class="t"></i><i class="d"></i></div></div><div class="axbac" id="axBac"><i class="axbac-f"></i><i class="axbac-a"></i></div></div>'
+  +'<div class="ax3-c"><div class="axboard" id="axBoard"><div id="axBord" aria-hidden="true"><i class="t"></i><i class="d"></i></div><canvas id="axFar" aria-hidden="true"></canvas></div><div class="axbac" id="axBac"><i class="axbac-f"></i><i class="axbac-a"></i></div></div>'
   +'<div class="ax3-r"><div class="axtop" id="axTop"><div class="axicons" id="axIcons"></div></div></div>';
  a.appendChild(e);return AX3.el=e}
 // range les éléments de list (dans l'ordre) dans box ; un élément pas encore créé est simplement ignoré
@@ -194,7 +194,7 @@ try{feltLayout()}catch(e){}
 // la nuit (teinte bleue et voile, mêmes formules que drawSky et drawDark) est peinte sur le cadre, donc plus de démarcation
 {let last='';const loop=()=>{try{const b=$('#axBord');if(b&&DE.classList.contains('ax3')){const t=b.firstChild,d=b.lastChild,n=Math.max(0,Math.min(1,nightAmt));
  const dq=(performance.now()-dawnT)/DAWN,dawn=dq>=0&&dq<1&&nightTarget===0;let bg='none';
- if(dawn){const fx=1-dq*1.35,st=[];for(let k=0;k<=12;k++){const x=k/12,s=(x*1122+27)/1177;st.push(`rgba(4,7,18,${(.8*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${(x*100).toFixed(1)}%`)}bg=`linear-gradient(90deg,${st.join(',')})`}
+ if(dawn){const fx=1-dq*1.35,st=[];for(let k=0;k<=12;k++){const x=k/12,s=(x*AXI.w-AXI.x0+AXI.cw)/(11*AXI.cw);st.push(`rgba(4,7,18,${(.8*Math.min(1,Math.max(0,(fx+.3-s)/.3))).toFixed(3)}) ${(x*100).toFixed(1)}%`)}bg=`linear-gradient(90deg,${st.join(',')})`}
  else if(n>=.01)bg=`rgba(4,7,18,${(.8*n).toFixed(3)})`;
  const k=bg+'|'+(n>.03?(n*.7).toFixed(3):0);if(k!==last){last=k;d.style.background=bg;t.style.opacity=n>.03?(n*.7).toFixed(3):0}}}catch(e){}requestAnimationFrame(loop)};requestAnimationFrame(loop)}
 // v217 : sur grand écran, les colonnes grossissent avec la hauteur (zoom), sans dépasser leur largeur
@@ -212,3 +212,31 @@ document.addEventListener('pointerdown',e=>{try{if(!ARTX()||OPT.eco||reduce||e.b
  const x=e.clientX-r.left,y=e.clientY-r.top,d=2*Math.hypot(Math.max(x,r.width-x),Math.max(y,r.height-y));
  const w=document.createElement('rip-w'),i=document.createElement('rip-i');
  Object.assign(i.style,{left:(x-3)+'px',top:(y-3)+'px',width:d+'px',height:d+'px'});w.appendChild(i);b.appendChild(w);setTimeout(()=>w.remove(),560)}catch(x){}},true);
+
+/* v230 : les zombies qui arrivent, vus de loin dans la forêt (affichage seulement : lit G.pending, la liste du moteur).
+   Silhouettes sombres aux yeux rouges qui marchent du bord du plateau vers la route ; elles passent sous le canvas
+   juste avant que le moteur fasse entrer le zombie. Coupé en Mode économie (moins de silhouettes) et sans style artiste. */
+const AXF={t:0,W:6};
+{const s0=syncZ;syncZ=function(now){AXF.t=now;return s0.apply(this,arguments)}}
+{const fl=()=>{try{const cv=$('#axFar');if(cv&&DE.classList.contains('ax3'))axFarDraw(cv)}catch(e){}requestAnimationFrame(fl)};requestAnimationFrame(fl)}
+function axFarDraw(cv){
+ const W=cv.clientWidth,H=cv.clientHeight;if(!W||!H)return;const dpr=Math.min(2,OPT.eco?1:(devicePixelRatio||1)),w=Math.round(W*dpr),h=Math.round(H*dpr);
+ if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}const g=cv.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,w,h);
+ // v230 : la brume du bord (ringFog) entoure tout le plateau, forêt comprise, au lieu du seul carré du canvas
+ if(nightAmt>.03&&AX.rf){const dx=reduce?0:Math.sin(performance.now()/2600)*5*dpr,dy=reduce?0:Math.cos(performance.now()/3100)*4*dpr;g.globalAlpha=nightAmt*.7;g.drawImage(AX.rf(),dx-w*.02,dy-h*.02,w*1.04,h*1.04);g.globalAlpha=1;if(AX.plat){g.globalCompositeOperation='destination-in';g.drawImage(AX.plat,0,0,w,h);g.globalCompositeOperation='source-over'}}
+ if(!G||!S.busy||!G.pending||!G.pending.length||nightAmt<.2)return;
+ const kx=w/AXI.w,ky=h/(AXI.h*AXI.cw/AXI.ch),now=performance.now(),fr=Math.max(0,Math.min(1,(now-AXF.t)/tickMs())),wt=(G.wtick||0)+fr,wv=G.wave||1;
+ const cx=(c)=>AXI.x0+(c-.5)*AXI.cw,cy=(r)=>(AXI.y0+(r-.5)*AXI.ch)*AXI.cw/AXI.ch;// centre d'une case du jeu, en px de l'image (hauteur redressée)
+ const X0=72,X1=1242,Y0=64*AXI.cw/AXI.ch,Y1=1028*AXI.cw/AXI.ch;// intérieur du cadre
+ g.save();g.scale(kx,ky);g.beginPath();g.rect(X0,Y0,X1-X0,Y1-Y0);g.clip();let n=0;
+ for(const p of G.pending){if((p.wave||1)!==wv)continue;const d=p.at-wt;if(d<=0||d>AXF.W)continue;if(++n>(OPT.eco?8:24))break;
+  const[r,c]=Z.rc(p.pos),ex=cx(c),ey=cy(r),ox=c===0?-1:c===10?1:0,oy=r===0?-1:r===10?1:0;
+  const sx=ox<0?X0:ox>0?X1:ex,sy=oy<0?Y0:oy>0?Y1:ey;// départ : bord du cadre, dans l'axe de la route
+  const q=1-d/AXF.W,hs=(p.at*7919+p.pos*31)%100/100,lat=(hs-.5)*34,bob=Math.sin(now/260+hs*6)*2.5;
+  const x=sx+(ex+ox*46-sx)*q+(oy?lat:0)+(ox?0:bob*.4),y=sy+(ey+oy*46-sy)*q+(ox?lat:0)+(oy?0:bob*.4);
+  const big=(Z.ZT&&Z.ZT[p.k]&&(Z.ZT[p.k].boss||Z.ZT[p.k].hp>=20))?1.5:1,R=24*big,a=Math.min(1,q*2.2)*Math.min(1,nightAmt);
+  g.globalAlpha=a*.75;g.fillStyle='#07090c';g.beginPath();g.ellipse(x,y,R,R*.9,0,0,7);g.fill();
+  const ang=Math.atan2(ey-sy,ex-sx),px=-Math.sin(ang),py=Math.cos(ang),fx=Math.cos(ang)*R*.45,fy=Math.sin(ang)*R*.45,bl=(now/1000+hs*9)%3.2<.12;
+  if(!bl){g.globalAlpha=a;g.fillStyle='#ff3a2a';if(!OPT.eco){g.shadowColor='#ff2a1a';g.shadowBlur=8}
+   for(const s of[-1,1]){g.beginPath();g.arc(x+fx+px*s*R*.3,y+fy+py*s*R*.3,3.4*big,0,7);g.fill()}g.shadowBlur=0}}
+ g.restore()}
