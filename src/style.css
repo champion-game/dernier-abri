@@ -2540,3 +2540,11 @@ html.artx.ax3 #ax3 #hand{--axcw:calc(100cqh * .6018)}
  html.artx.ax3:not(.felton) #ax3 :is(#fams,.axpiles,#go){align-self:stretch}
  html.artx.ax3:not(.felton) #ax3 .shel{width:auto!important;height:calc(var(--axSh) - 32px)!important;justify-self:center}
 }
+
+/* v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.webp) ; le canvas (11 × 11 cases) remplit le cadre carré */
+html.artx.ax3.axpal .axboard{height:var(--axB)!important}
+html.artx.ax3.axpal #ax3 #map{left:0!important;top:0!important;width:100%!important;height:100%!important;clip-path:inset(8.2% 7.4% 6.4% 7.8% round 1.5%)}
+html.artx.ax3.axpal #axBord{inset:auto;left:2.294%;top:1.965%;width:95.33%;height:93.17%;background-image:var(--ui-plateau-herbe,none)}
+html.artx.ax3.axpal #axBord>i{-webkit-mask-image:var(--ui-plateau-herbe);mask-image:var(--ui-plateau-herbe)}
+html.artx.ax3.axpal #axFar{display:none}
+@media (orientation:landscape){html.artx.ax3.axpal:not(.felton){--axBd:min(var(--axH),calc((100vw - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)) * .52))}}

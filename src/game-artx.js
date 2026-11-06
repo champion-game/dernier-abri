@@ -2,12 +2,18 @@
 // grande carte au survol (PC), « Nuit rouge dans N » sur l'étiquette du jour. Chargé en dernier.
 const AX={on:()=>DE.classList.contains('artx'),plat:null};
 // v230 : plateau d'Amine avec la forêt (plateau-foret.webp, 1314 × 1093 px) : ses 9 × 9 cases commencent à (256, 169) et mesurent 89 × 85,33 px ; calées sur les cases 1 à 9 du jeu
-const AXI=(()=>{const w=1314,h=1093,cw=89,ch=85.33,x0=256,y0=169,sx=T/cw,sy=T/ch;return{w,h,cw,ch,x0,y0,iw:w*sx,ih:h*sy,ox:T-x0*sx,oy:T-y0*sy}})();
+const AXIm=(w,h,cw,ch,x0,y0)=>{const sx=T/cw,sy=T/ch;return{w,h,cw,ch,x0,y0,iw:w*sx,ih:h*sy,ox:T-x0*sx,oy:T-y0*sy}};
+const AXI=AXIm(1314,1093,89,85.33,256,169);
+// v239 : sur téléphone (portrait et paysage), plateau à palissade sans forêt (plateau-herbe.webp, 1122 × 1059 px, cases de 107 × 103,33 px à partir de (80, 81)) :
+// les cases sont bien plus grandes ; on ne voit plus les zombies arriver de loin (html.axpal)
+const axPalWant=()=>AX.on()&&!DE.classList.contains('felton')&&(ART_NEW.ui||[]).includes('plateau-herbe.webp');
+function axPalSet(){const on=axPalWant();if(on===DE.classList.contains('axpal'))return false;DE.classList.toggle('axpal',on);
+ Object.assign(AXI,on?AXIm(1122,1059,107,103.33,80,81):AXIm(1314,1093,89,85.33,256,169));AX.plat=null;return true}
 // sol du plateau : l'image d'Amine (9 × 9 cases + palissade) posée sur les 11 × 11 cases du jeu (la palissade couvre l'anneau de la forêt)
 {const g0=buildGround;buildGround=function(B){g0.apply(this,arguments);try{if(!AX.on()||!AX.plat)return;const g=ground.getContext('2d'),k=ground.width/L;
  g.save();g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,ground.width,ground.height);g.drawImage(AX.plat,AXI.ox*k,AXI.oy*k,AXI.iw*k,AXI.ih*k);g.restore()}catch(e){}}}
 function axGround(){try{setBiome.done=0;setBiome(BIOME)}catch(e){}}
-function axPlat(){const u=ART_NEW.ui||[];if(AX.plat||!u.includes('plateau.webp'))return axGround();const im=new Image();im.onload=()=>{AX.plat=im;axGround()};im.src='assets/art/ui/'+(u.includes('plateau-foret.webp')?'plateau-foret.webp':'plateau.webp')}
+function axPlat(){const u=ART_NEW.ui||[];if(AX.plat||!u.includes('plateau.webp'))return axGround();const f=DE.classList.contains('axpal')?'plateau-herbe.webp':u.includes('plateau-foret.webp')?'plateau-foret.webp':'plateau.webp',im=new Image();AX.want=f;im.onload=()=>{if(AX.want!==f)return;AX.plat=im;axGround()};im.src='assets/art/ui/'+f}
 {const a0=applyArt;applyArt=function(){a0.apply(this,arguments);try{feltLayout();if(AX.on())axPlat();else axGround()}catch(e){}}}
 // la liste des images peut arriver avant le chargement de ce fichier : on refait la disposition ici
 try{feltLayout()}catch(e){}if(AX.on())axPlat();
@@ -176,7 +182,7 @@ function ax3Back(){if(!AX3.mv.length&&!DE.classList.contains('ax3'))return;DE.cl
  for(let i=AX3.mv.length-1;i>=0;i--){const n=AX3.mv[i],ph=n._axPh;if(ph&&ph.parentNode)ph.parentNode.replaceChild(n,ph);n._axPh=null}AX3.mv=[]}
 // ciel et décor : jour pendant la préparation, nuit (ou nuit rouge, et nuit du boss) pendant l'attaque
 function ax3Phase(){try{let p='jour';if(typeof G!=='undefined'&&G&&S.busy)p=(Z.pressure(G.night)||G.night%10===0)?'rouge':'nuit';if(DE.dataset.axph!==p)DE.dataset.axph=p}catch(e){}}
-{const f0=feltLayout;feltLayout=function(){ax3Back();const r=f0.apply(this,arguments);ax3Put();return r}}
+{const f0=feltLayout;feltLayout=function(){ax3Back();const r=f0.apply(this,arguments);ax3Put();try{if(axPalSet())axPlat()}catch(e){}return r}}
 {const r5=render;render=function(){r5.apply(this,arguments);ax3Put()}}
 {const a5=applyArt;applyArt=function(){const r=a5.apply(this,arguments);try{feltLayout()}catch(e){}return r}}
 addEventListener('resize',()=>{try{feltLayout();fit()}catch(e){}});
