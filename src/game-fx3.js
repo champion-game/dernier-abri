@@ -8,7 +8,7 @@ const FX3_FIRE=new Set(['flame','heavyflame','fire','firetrap','napalm','brasero
 const FX3_BOOM=new Set(['rocket','mortar','grenade','dyn','mine','clay','air','bomber','sap','napalm']);
 const FX3_BOW=new Set(['xbow','tracker','bow']);
 const FX3_BLADE=new Set(['cop','butch','monk','riot','pitch','chief_farm','slaughter','saint','amb','orderly','chief_care','axe','assassin']);
-const FX3_GUN=new Set(['gun','snp','mg','kid','swat','vigile','sentry','turret','bunker','chief_police','chief_mil','hunter','nightsnp','autogun','gang','fortin','doc','nailer','ranger','chief_comm','chief_tech','sht']);
+const FX3_GUN=new Set(['gun','snp','mg','kid','swat','vigile','sentry','turret','bunker','chief_police','chief_mil','hunter','nightsnp','autogun','gang','fortin','doc','nailer','ranger','chief_comm','chief_tech','rosa','hirond','chief_rail','sht']);
 function fx3Reset(){FX3.corp.length=0;FX3.cas.length=0;FX3.react.length=0;FX3.idle.length=0;FX3.g=G}
 
 // 1 : gel court (40 à 120 ms) : tout le plateau s'arrête une fraction de seconde, ce qui donne du poids au coup

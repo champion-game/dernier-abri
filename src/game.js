@@ -133,7 +133,7 @@ const popOK=t=>Z.RAR[t]==='leg'||!!(Z.U[t]&&Z.U[t].evo);
 /* style des illustrations (essai) : « cartoon » utilise assets/cards_cartoon/ pour les cartes qui y ont une image, les autres gardent l'illustration actuelle */
 // style graphique : cartoon pour tout le monde (v77). Les cartes sans image cartoon gardent leur image réaliste.
 let ART_STYLE='cartoon';
-const CART_FILES=('chief_police chief_mil chief_pyro chief_trap chief_farm chief_care chief_tech chief_comm k9squad nightsnp '+
+const CART_FILES=('chief_police chief_mil chief_pyro chief_trap chief_farm chief_care chief_tech chief_comm k9squad nightsnp '+'chief_rail rosa rempart bielle hirond charbon veuve aiguille fourgon nid butoir draisine billets retard coupsif express '+
  'gun snp sht xbow flame mg molo kid swat mortar sentry hunter turret tesla vigile doc nailer ranger rocket axe dog cop butch monk riot k9 dogs pitch amb orderly '+
  'med lamp radio cook mech siren lead solar pharma hospital priest stretch scare workshop teacher market carp canteen '+
  'fortin autogun tracker brasero dyn bear food kit rep roadmap gas molotov grenade shot flare bait patch napalm rush horn air trap wire mine spike tear firetrap fen fire clay sand bar modwall barrier bunker door car '+
@@ -170,7 +170,7 @@ const TRAPK=['trap','mine','spike','gas','clay','firetrap','dyn','burn','wire'];
 function cardStats(D){const o={};if(D.dmg)o.atk=D.dmg+(D.hits>1?'×'+D.hits:'');else{const k=TRAPK.find(k=>D[k]);if(k)o.atk=D[k];else if(D.heal||D.mech)o.heal=D.heal||D.mech}
  if(D.block&&D.hp)o.hp=D.hp;return o}
 // pictogrammes à l'encre (factions, rôles, stats) : monochromes, pour se fondre dans le parchemin
-const INKI={police:ICON.cop,mil:ICON.relic,care:ICON.med,pyro:ICON.fire,trap:ICON.trap,farm:ICON.dog,tech:ICON.rush,comm:'<path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-6h4v6"/>',
+const INKI={rail:'<path d="M8 3 5 21M16 3l3 18M7.3 7h9.4M6.6 12h10.8M5.9 17h12.2"/>',police:ICON.cop,mil:ICON.relic,care:ICON.med,pyro:ICON.fire,trap:ICON.trap,farm:ICON.dog,tech:ICON.rush,comm:'<path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-6h4v6"/>',
  tank:ICON.riot,heal:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',dps:'<path d="M4 4l10 10M14 14l2-2M14 14l-2 2M20 4L10 14M10 14l-2-2M10 14l2 2M5 17l2 2M19 17l-2 2"/>',
  atk:'<path d="M4 20l9-9M13 11l2-6 4-1-1 4-6 2zM6 14l4 4"/>'};
 INKI.cap='<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-4 2.7-6 6-6s6 2 6 6M15.5 4.8a3.2 3.2 0 0 1 0 6.4M17.5 14.3c2 .7 3.5 2.6 3.5 5.7"/>';
@@ -216,7 +216,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v233 · 6 nov.';
+const VERSION='v234 · 6 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;

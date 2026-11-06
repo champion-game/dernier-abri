@@ -103,6 +103,15 @@ function dps20(k,P,tank,lv){const st=fresh();st.night=3;st.testLv=lv||0;if(k)Z.p
  const z={id:1,k:'walk',pos:7*Z.N+4,hp:1e6,max:1e6,cd:99,style:0};st.z=[z];for(let t=0;t<20;t++){z.cd=99;z.pos=7*Z.N+4;Z.step(st)}return 1e6-z.hp}
 check('tir de soutien : un DPS fait +1 sur un zombie collé à un Tank (v136)',()=>{const T=dps20(null,0,1);eq(dps20('gun',5*Z.N+4,0),40);eq(dps20('gun',5*Z.N+4,1)-T,60)});
 check('tirs lents : bonus fixes multipliés par l’intervalle (v136)',()=>{eq(dps20('snp',5*Z.N+4,0,2),10*(5+2))});
+// v234 : les Cheminots (routes = la croix du milieu)
+{const I=(r,c)=>r*Z.N+c,M=(Z.N-1)/2;
+ const drop=(k,P,zs,steps,setup)=>{const st=fresh();st.night=3;Z.place(st,k,P,rng(1),true);if(setup)setup(st);Z.startNight(st,rng(1));st.pending=[];st.z=zs.map((p,j)=>({id:j+1,k:'walk',pos:p,hp:1e6,max:1e6,cd:99,style:0}));for(let t=0;t<steps;t++){st.z.forEach((z,j)=>{z.cd=99;z.pos=zs[j]});Z.step(st)}return st.z.map(z=>1e6-z.hp)};
+ check('Cheminots : Fourgon de fer seulement sur une route',()=>{const st=fresh();ok(Z.canPlace(st,'fourgon',I(M,3)),'refusé sur la route');ok(!Z.canPlace(st,'fourgon',I(3,3)),'accepté hors route')});
+ check('Cheminots : Rosa a +1 portée sur une route',()=>{ok(drop('rosa',I(1,M),[I(4,M)],2)[0]>0,'ne tire pas à 3 cases sur la route');eq(drop('rosa',I(1,3),[I(4,3)],2)[0],0,'tire à 3 cases hors route')});
+ check('Cheminots : Fourgon + Gros Charbon donnent l’Express de minuit',()=>{const st=fresh();Z.place(st,'fourgon',I(M,2),rng(1));Z.place(st,'charbon',I(M,3),rng(1));ok(st.grid.some(u=>u&&u.t==='express'),'pas d’évolution')});
+ check('Cheminots : l’Express charge une fois par nuit (3 zombies sur sa ligne)',()=>{const d=drop('express',I(M,1),[I(M,3),I(M,4),I(2,1)],3);ok(d.every(v=>v>=6),'charge manquée '+d);const e=drop('express',I(M,1),[I(M,3),I(M,4),I(2,1)],8);ok(e[0]<6+3*8,'charge répétée')});
+ check('Cheminots : palier 2, un train passe tous les 5 tours sur la route la plus chargée',()=>{const d=drop('chief_rail',I(1,1),[I(M,2),I(M,3),I(8,8)],5,st=>{['rosa','bielle','aiguille'].forEach((k,j)=>Z.place(st,k,I(9,1+j),rng(1),true))});ok(d[0]>=4&&d[1]>=4,'pas de train '+d);eq(d[2],0,'train hors route')});
+}
 check('tanks : 1 dégât de base (v136)',()=>{['cop','monk','riot','amb','handler','v_apc','saint','chief_farm'].forEach(k=>eq(Z.U[k].dmg,1));eq(Z.U.pitch.dmg,2)});
 check('nuit rouge : +15 % de zombies sur le total (v132)',()=>{const st=fresh(),sum=w=>Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((a,k)=>a+w[k],0);st.night=15;const a=sum(Z.waveList(st));const b=Z.ZK.filter(k=>!Z.ZT[k].boss).reduce((x,k)=>x+Z.waveCount(k,15),0);eq(a,b+Math.round(b*Z.PRESSURE))});
 check('nuit de pression : plus de zombies que la nuit d’avant',()=>{const st=fresh();st.night=15;const a=Z.waveList(st).walk;st.night=14;ok(a>Z.waveList(st).walk)});

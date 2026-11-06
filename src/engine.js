@@ -182,23 +182,40 @@ const Z=(()=>{
   canteen:{n:_t('Cantine de campagne'),cat:'help',hp:6,block:1,heal:2,hfast:1,cook:2,evo:1,v:_t('Soin 2 · +2 abri'),d:_t('Soin au contact : 2 PV à chaque tour à l’unité voisine la plus blessée, et l’abri récupère 2 PV à chaque aube')},
   gang:{n:_t('Bande de gamins'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,hits:4,evo:1,v:_t('1 ×4 · P2'),d:_t('Toute la classe au lance-pierre : 4 tirs de 1 dégât par tour, portée 2')},
   saint:{n:_t('Le Saint'),cat:'melee',hp:13,block:1,rng:1,dmg:1,every:1,aoe:1,bless:1,evo:1,v:_t('1 zone · Protège'),d:_t('1 dégât à tous les zombies autour, et ses voisins survivent une fois à un coup fatal')},
-  tracker:{n:_t('Traqueur'),cat:'shoot',hp:5,block:1,rng:3,dmg:2,every:1,hits:2,distinct:1,evo:1,v:_t('2 ×2 · P3'),d:_t('À chaque tour, 2 dégâts à 2 zombies différents, portée 3')}
+  tracker:{n:_t('Traqueur'),cat:'shoot',hp:5,block:1,rng:3,dmg:2,every:1,hits:2,distinct:1,evo:1,v:_t('2 ×2 · P3'),d:_t('À chaque tour, 2 dégâts à 2 zombies différents, portée 3')},
+  // v234 : les Cheminots (9ᵉ faction, illustrations bonus de l'artiste). Plus forts sur les routes (la croix de terre au milieu du plateau).
+  rosa:{n:_t('Rosa du Quai 9'),cat:'shoot',hp:3,block:1,rng:2,dmg:2,every:1,railRng:1,v:_t('2 · P2'),d:_t('2 dégâts par tour, portée 2. Sur une route : portée 3')},
+  rempart:{n:_t('Le Rempart du 7 h 12'),cat:'melee',hp:12,block:1,rng:1,dmg:1,every:1,push:2,v:_t('1 · Recul ×2'),d:_t('Bloque, 12 PV. 1 dégât au contact et repousse le zombie de 2 cases')},
+  bielle:{n:_t('Mamie Bielle'),cat:'help',hp:3,block:1,mech:1,mechRail:1,v:_t('Répare'),d:_t('Répare 1 PV par tour à une défense ou un poste voisin, 2 PV aux défenses du rail')},
+  chief_rail:{n:_t('Monsieur Terminus'),cat:'shoot',hp:5,block:1,rng:2,dmg:1,every:1,whistle:4,chief:'rail',v:_t('1 · P2 · Sifflet'),d:_t('Chef des Cheminots : 1 dégât par tour, portée 2. Tous les 4 tours, son sifflet étourdit 1 tour les zombies sur les routes. Compte pour 2 Cheminots')},
+  hirond:{n:_t('L’Hirondelle des wagons'),cat:'shoot',hp:3,block:1,rng:3,dmg:1,every:1,hits:2,v:_t('1 ×2 · P3'),d:_t('2 tirs de 1 dégât par tour, portée 3, sur le zombie le plus proche de l’abri')},
+  charbon:{n:_t('Gros Charbon'),cat:'melee',hp:7,block:1,rng:1,dmg:2,every:1,ignite:2,v:_t('2 · Feu'),d:_t('2 dégâts au contact et le zombie brûle 2 tours, 7 PV')},
+  veuve:{n:_t('La Veuve du Tunnel'),cat:'shoot',hp:3,block:1,rng:3,dmg:3,every:2,hits:2,distinct:1,v:_t('3 ×2 · P3'),d:_t('Tous les 2 tours, son carreau transperce : 3 dégâts à 2 zombies différents, portée 3')},
+  aiguille:{n:_t('Maître Aiguille'),cat:'help',hp:4,block:1,repel:3,v:_t('Recul'),d:_t('Tous les 3 tours, les zombies à 2 cases ou moins reculent d’une case (pas le Colosse)')},
+  fourgon:{n:_t('Le Fourgon de fer'),cat:'wall',hp:14,block:1,road:1,v:_t('14 PV'),d:_t('Bloque, 14 PV, seulement sur une route')},
+  nid:{n:_t('Le Nid d’aiguillage'),cat:'post',hp:8,block:1,v:_t('+1 · +1 portée'),d:_t('Les Cheminots à 2 cases ou moins font +1 dégât et ont +1 portée')},
+  butoir:{n:_t('Le Butoir'),cat:'wall',hp:6,block:1,stunHit:2,v:_t('6 PV · Étourdit'),d:_t('Bloque, 6 PV. Chaque nuit, le premier zombie qui le frappe est étourdi 2 tours')},
+  draisine:{n:_t('L’Œil de la draisine'),cat:'post',hp:5,block:1,v:_t('+1'),d:_t('Les unités autour font +1 dégât, même sans courant')},
+  billets:{n:_t('Vos billets !'),cat:'item',instant:1,v:_t('Pioche 2'),d:_t('Utilise-la sur l’abri : pioche 2 cartes')},
+  retard:{n:_t('Retard en gare'),cat:'react',react:'any',v:_t('Retard'),d:_t('Pendant la nuit : la horde s’arrête 2 tours et les zombies à venir arrivent 2 tours plus tard (pas le Colosse)')},
+  coupsif:{n:_t('Coup de sifflet'),cat:'react',react:'cell',v:_t('Étourdit'),d:_t('Pendant la nuit : les zombies à 2 cases ou moins de la case visée sont étourdis 2 tours')},
+  express:{n:_t('L’Express de minuit'),cat:'wall',hp:20,block:1,rng:1,dmg:3,every:1,charge:6,evo:1,v:_t('20 PV · 3 · Charge'),d:_t('Fourgon et Gros Charbon : bloque, 20 PV, frappe au contact (3 dégâts). Une fois par nuit, dès que 3 zombies sont sur sa ligne ou sa colonne, il charge : 6 dégâts à chacun')}
  };
  /* rôles des unités : 🛡️ Tank, ❤️ Soin, ⚔️ DPS (les autres sont des murs, pièges, objets ou du soutien)
     Tank : provoque les zombies à 3 cases ou moins (ils le visent au lieu de l'abri) et bloque 1 coup sur 3.
     Soin : soigne le double sur un Tank. DPS : +1 dégât s'il a un Tank voisin (à couvert).
     Escouade : une unité qui a, avec ses voisins, un Tank, un Soin et un DPS gagne +1 dégât (ou +1 soin). */
  const ROLES={tank:{n:_t('Tank'),ic:'🛡️'},heal:{n:_t('Soin'),ic:'❤️'},dps:{n:_t('DPS'),ic:'⚔️'}};
- const TANKS='riot amb monk cop pitch chief_farm saint handler v_apc'.split(' '),HEALS='med pharma stretch hospital priest orderly doc chief_care canteen fieldnurse v_medic'.split(' ');
+ const TANKS='riot amb monk cop pitch chief_farm saint handler v_apc rempart'.split(' '),HEALS='med pharma stretch hospital priest orderly doc chief_care canteen fieldnurse v_medic'.split(' ');
  const TAUNT=3;
  function roleOf(t){t=baseOf(t);const D=U[t];if(!D||!D.block||!isUnit(t))return null;if(TANKS.includes(t))return'tank';if(HEALS.includes(t))return'heal';
   if(D.dmg&&(D.cat==='shoot'||D.cat==='melee'))return'dps';return null}
  // les évolutions ne sont jamais tirées : elles restent hors des cartes jouables
  const KEYS=Object.keys(U).filter(t=>!U[t].evo);
- const EVO={k9squad:['cop','dog'],nightsnp:['snp','lamp'],heavyflame:['flame','gas'],fortin:['car','bunker'],autogun:['gun','mech'],slaughter:['axe','butch'],canteen:['med','cook'],gang:['kid','teacher'],saint:['monk','priest'],tracker:['xbow','hunter']};
+ const EVO={k9squad:['cop','dog'],nightsnp:['snp','lamp'],heavyflame:['flame','gas'],fortin:['car','bunker'],autogun:['gun','mech'],slaughter:['axe','butch'],canteen:['med','cook'],gang:['kid','teacher'],saint:['monk','priest'],tracker:['xbow','hunter'],express:['fourgon','charbon']};
  const EVO_KEYS=Object.keys(EVO);
  // survivants nommés : chaque humain ou chien posé reçoit un prénom et un trait, compte ses victimes, et meurt pour de bon
- const HUMANS='gun snp sht xbow flame mg molo kid axe cop butch monk med cook mech lead riot swat pharma priest stretch hunter pitch teacher vigile carp amb doc orderly nailer ranger handler welder scout assassin fieldnurse genmech v_hmg v_medic v_sniper'.split(' ');
+ const HUMANS='gun snp sht xbow flame mg molo kid axe cop butch monk med cook mech lead riot swat pharma priest stretch hunter pitch teacher vigile carp amb doc orderly nailer ranger handler welder scout assassin fieldnurse genmech v_hmg v_medic v_sniper rosa rempart bielle hirond charbon veuve aiguille'.split(' ');
  const NAMES='Marco Léa Karim Sofia Hugo Nadia Bruno Inès Yanis Chloé Malik Julie Théo Amira Victor Lina Samir Emma Rachid Zoé Paul Yasmine Louis Clara Mehdi Sarah Hector Nora Igor Maya Omar Jade Gaston Lou Bilal Rose Kenji Alice Driss Margot'.split(' ');
  const DOG_NAMES='Rex Kira Brutus Lola Tyson Médor Nala Rocky'.split(' ');
  const TRAITS={
@@ -216,6 +233,9 @@ const Z=(()=>{
  // équipements portés par une unité
  const eqOf=u=>(u&&u.eq)||[],hasEq=(u,t)=>eqOf(u).includes(t);
  // une unité profite-t-elle d'un poste de soutien voisin de ce type ?
+ const RAILW=['fourgon','butoir','express'];
+ const onRoad=j=>{const[r,c]=rc(j);return(r===MID||c===MID)&&!isEdge(j)&&j!==C};
+ const nearNid=(st,i)=>st.grid.some((v,j)=>v&&v.t==='nid'&&j!==i&&cheb(j,i)<=2);
  const nearPost=(st,i,t)=>around(i).some(j=>st.grid[j]&&st.grid[j].t===t);
  // unités (survivants, chiens, machines, chefs, évolutions) : limitées sur le terrain. Les murs et les pièges ne comptent pas.
  const isUnit=t=>!!(U[t]&&U[t].block&&(U[t].cat==='shoot'||U[t].cat==='melee'||U[t].cat==='help'));
@@ -250,7 +270,7 @@ const Z=(()=>{
   if(kind==='atk')u.lvA=(u.lvA||0)+1;else{u.lvD=(u.lvD||0)+1;u.hp=maxHp(st,u)}return true}
  // énergie : chaque jour on a ENERGY points, chaque carte coûte de 0 à 3 selon sa puissance
  const ENERGY=4,HAND_MAX=8;
- const COST={v_heli:1,v_hmg:3,v_radio:2,v_medic:2,v_cont:3,v_sniper:3,v_mines:2,v_rdog:2,v_napalm:2,v_apc:3,rocket:3,amb:2,doc:2,orderly:2,nailer:2,ranger:2,riot:2,k9:1,barrier:2,swat:3,mortar:3,sentry:2,clay:2,bunker:3,pharma:2,hospital:3,priest:2,stretch:1,brasero:2,firetrap:1,net:1,bear:2,hunter:2,dogs:2,pitch:2,scare:1,turret:2,workshop:3,modwall:2,tesla:3,teacher:2,market:2,vigile:1,carp:2,tear:1,napalm:2,air:3,chief_police:3,chief_mil:3,chief_care:3,chief_pyro:3,chief_trap:3,chief_farm:3,chief_tech:3,chief_comm:3,coffee:0,grenade:1,shot:1,patch:1,molotov:2,horn:2,rush:2};
+ const COST={v_heli:1,v_hmg:3,v_radio:2,v_medic:2,v_cont:3,v_sniper:3,v_mines:2,v_rdog:2,v_napalm:2,v_apc:3,rocket:3,amb:2,doc:2,orderly:2,nailer:2,ranger:2,riot:2,k9:1,barrier:2,swat:3,mortar:3,sentry:2,clay:2,bunker:3,pharma:2,hospital:3,priest:2,stretch:1,brasero:2,firetrap:1,net:1,bear:2,hunter:2,dogs:2,pitch:2,scare:1,turret:2,workshop:3,modwall:2,tesla:3,teacher:2,market:2,vigile:1,carp:2,tear:1,napalm:2,air:3,chief_police:3,chief_mil:3,chief_care:3,chief_pyro:3,chief_trap:3,chief_farm:3,chief_tech:3,chief_comm:3,chief_rail:3,rosa:2,rempart:3,bielle:2,hirond:2,charbon:2,veuve:3,aiguille:2,fourgon:2,nid:3,butoir:1,draisine:2,billets:1,retard:2,coupsif:1,coffee:0,grenade:1,shot:1,patch:1,molotov:2,horn:2,rush:2};
  'bar fen sand trap fire wire smoke bait food kid dog med roadmap kit flare'.split(' ').forEach(t=>COST[t]=1);
  'gun axe cop tire spike mine lamp radio cook mech butch monk flame xbow rep gas'.split(' ').forEach(t=>COST[t]=2);
  'car door snp sht mg molo siren lead solar dyn'.split(' ').forEach(t=>COST[t]=3);
@@ -350,9 +370,10 @@ const Z=(()=>{
   trap:{n:_t('Trappeurs'),ic:'🪤',cards:['net','bear','hunter','trap','spike','wire','smoke','bait','xbow','scout','chief_trap'],lv:[2,5],d:[_t('pièges : +2 dégâts'),_t('pièges : +4 dégâts au total ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
   farm:{n:_t('Fermiers'),ic:'🐕',cards:['dogs','pitch','scare','dog','axe','butch','chief_farm'],lv:[2,5],d:[_t('corps à corps : +1 dégât'),_t('corps à corps : +1 PV à chaque zombie tué ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
   tech:{n:_t('Bricoleurs'),ic:'⚡',cards:['nailer','turret','workshop','modwall','tesla','fen','solar','mech','radio','welder','genmech','chief_tech'],lv:[2,5],d:[_t('tes bricoleurs font +1 dégât, clôtures +1'),_t('clôtures : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
-  comm:{n:_t('Communauté'),ic:'🏠',cards:['ranger','teacher','market','vigile','carp','lead','monk','kid','chief_comm'],lv:[2,5],d:[_t('tes membres de la Communauté ont +1 portée, l’abri +1 PV à l’aube'),_t('ta 1ʳᵉ carte de chaque jour coûte 1 énergie de moins ; équipe complète : +1 dégât et +2 PV pour toute la faction')]}
+  comm:{n:_t('Communauté'),ic:'🏠',cards:['ranger','teacher','market','vigile','carp','lead','monk','kid','chief_comm'],lv:[2,5],d:[_t('tes membres de la Communauté ont +1 portée, l’abri +1 PV à l’aube'),_t('ta 1ʳᵉ carte de chaque jour coûte 1 énergie de moins ; équipe complète : +1 dégât et +2 PV pour toute la faction')]},
+  rail:{n:_t('Cheminots'),ic:'',cards:['rosa','rempart','bielle','hirond','charbon','veuve','aiguille','fourgon','nid','butoir','draisine','chief_rail'],lv:[2,5],d:[_t('tes Cheminots sur une route font +1 dégât'),_t('tous les 5 tours, un train passe sur la route la plus chargée : 4 dégâts à chaque zombie ; équipe complète : +1 dégât et +2 PV pour toute la faction')]}
  };
- const CHIEF={police:'chief_police',mil:'chief_mil',care:'chief_care',pyro:'chief_pyro',trap:'chief_trap',farm:'chief_farm',tech:'chief_tech',comm:'chief_comm'};
+ const CHIEF={police:'chief_police',mil:'chief_mil',care:'chief_care',pyro:'chief_pyro',trap:'chief_trap',farm:'chief_farm',tech:'chief_tech',comm:'chief_comm',rail:'chief_rail'};
  const famOf=t=>{t=baseOf(t);return Object.keys(FAM).find(f=>FAM[f].cards.includes(t))};
  // seuls les survivants (humains et chiens) comptent pour les paliers de faction : ni les constructions, ni les machines.
  // Le Chef d'une faction compte pour 2.
@@ -542,6 +563,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  'binoc medkit pills tape tower pump flood gate gabion log pit rocks airdrop storm'.split(' ').forEach(t=>RAR[t]='rare');
  'keys radioop bomber'.split(' ').forEach(t=>RAR[t]='epic');
  'welder fieldnurse'.split(' ').forEach(t=>RAR[t]='com');'handler scout genmech'.split(' ').forEach(t=>RAR[t]='rare');RAR.assassin='epic';RAR.shell='rare';
+ 'rosa rempart charbon butoir coupsif'.split(' ').forEach(t=>RAR[t]='com');'bielle hirond veuve fourgon draisine billets'.split(' ').forEach(t=>RAR[t]='rare');'aiguille nid retard'.split(' ').forEach(t=>RAR[t]='epic');
  KEYS.filter(t=>U[t].chief).forEach(t=>RAR[t]='leg');'molotov horn'.split(' ').forEach(t=>RAR[t]='rare');
  const SIDES=[_t('le nord'),_t('le sud'),_t('l’ouest'),_t('l’est')];
  const rc=i=>[Math.floor(i/N),i%N],idx=(r,c)=>r*N+c;
@@ -786,11 +808,11 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
  // Les cases se posent comme on veut : une par une, ou en ligne droite (1 à 4 cases d'un glissé), tant qu'il en reste.
  // La carte est payée à la 1ʳᵉ pose ; les cases suivantes sont gratuites. Elle part à la défausse quand ses 4 cases sont posées,
  // ou le soir. Plusieurs exemplaires de la même carte additionnent leurs cases.
- const LINE=['bar','fen','sand','tire','barrier','modwall','wire','palis'],LINE_MAX=4,TRACE=LINE,CHARGES=4;
+ const LINE=['bar','fen','sand','tire','barrier','modwall','wire','palis','fourgon'],LINE_MAX=4,TRACE=LINE,CHARGES=4;
  const isTrace=t=>TRACE.includes(t);
  // cases encore disponibles aujourd'hui pour une carte à tracer (déjà payée si reuse, sinon une nouvelle carte : 4 cases)
  // nombre de cases par carte : 4, sauf les murs les plus solides (3)
- const CHG={tire:3,barrier:3,modwall:3},chargesOf=t=>CHG[t]||CHARGES;
+ const CHG={tire:3,barrier:3,modwall:3,fourgon:2},chargesOf=t=>CHG[t]||CHARGES;
  const charges=(st,t,reuse)=>reuse?((st.charges||{})[t]||0):chargesOf(t);
  function useCharges(st,t,n,reuse){if(!isTrace(t))return;const c=st.charges||(st.charges={});if(!reuse)c[t]=(c[t]||0)+chargesOf(t);c[t]=Math.max(0,c[t]-n)}
  // autres cartes de construction (pièges) : après la 1ʳᵉ pose, la carte reste en main pour la journée et se repose à son prix normal.
@@ -812,6 +834,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   if(D.instant)return i===C;
   if(isEdge(i)||i===C)return false;
   if(D.near)return cheb(i,C)===1;
+  if(D.road)return onRoad(i);
   return true}
  function place(st,t,i,rnd=Math.random,free,opt){const ed=edOf(t);const D=stat(st,t);if(ed)t=baseOf(t);if(!free){st.energy=(st.energy??ENERGY)-buildCost(st,t,opt&&opt.reuse);useCharges(st,t,1,opt&&opt.reuse);if(!(opt&&opt.reuse))st.disc=1}if(D.instant){applyItem(st,t,i,rnd);return}
   const u={t,hp:D.hp};if(ed){u.ed=ed;u.hp=maxHp(st,u)}
@@ -884,6 +907,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   if(D.equip&&st.grid[i]){const u=st.grid[i];(u.eq=u.eq||[]).push(t);if(t==='gear')u.hp+=4}
   if(t==='supply')st.scrap+=6;
   if(t==='airdrop')st.drawNow=(st.drawNow||0)+3;
+  if(t==='billets')st.drawNow=(st.drawNow||0)+2;
   if(t==='v_heli'){st.energy+=2;st.drawNow=(st.drawNow||0)+2}
   if(t==='jerry')st.nextE=(st.nextE||0)+2;
   if(t==='rest')(st.bench||[]).forEach(u=>{delete u.koUntil;u.hp=maxHp(st,u)});
@@ -963,6 +987,9 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   if(D.cat==='shoot'){const rd=st.grid.map((v,j)=>v&&v.t==='v_radio'&&j!==i&&cheb(j,i)<=2?j:-1).filter(j=>j>=0);if(rd.length)add('radio',1,U.v_radio.n,rd)}
   add('sol',sol(st,i,u),_t('Bonus'));
   if(fl.mil&&F==='mil')add('fam',1,FAM.mil.n);
+  if(fl.rail&&F==='rail'&&onRoad(i))add('fam',1,FAM.rail.n);
+  if(F==='rail'){const Nn=st.grid.map((v,j)=>v&&v.t==='nid'&&j!==i&&cheb(j,i)<=2?j:-1).filter(j=>j>=0);if(Nn.length)add('fam',1,U.nid.n,Nn)}
+  {const Dr=cells(v=>v.t==='draisine');if(Dr.length)add('lamp',1,U.draisine.n,Dr)}
   if(D.cat==='melee'&&fl.farm)add('fam',1,FAM.farm.n);
   if(fl.tech&&F==='tech')add('fam',1,FAM.tech.n);
   if(fl.care&&F==='care')add('fam',1,FAM.care.n);
@@ -994,7 +1021,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    if(D.mark&&z.hp>0)z.markT=Math.max(z.markT||0,D.mark+1);
    if((D.ignite||(u.t==='tesla'&&ally(st,'short')))&&z.hp>0)z.burnT=Math.max(z.burnT||0,D.ignite||3);
    if(D.stun&&z.hp>0&&(u.t!=='k9'||u.stunT!==st.tick)){z.cd+=D.stun;u.stunT=st.tick}
-   if((D.push||(D.cat==='melee'&&ally(st,'patrol')))&&z.hp>0&&!ZT[z.k].boss){const b=back(z.pos),bu=st.grid[b];if(!(bu&&U[bu.t].block))z.pos=b}
+   if((D.push||(D.cat==='melee'&&ally(st,'patrol')))&&z.hp>0&&!ZT[z.k].boss)for(let k=0;k<(D.push>1?D.push:1);k++){const b=back(z.pos),bu=st.grid[b];if(!(bu&&U[bu.t].block))z.pos=b}
    if((D.feed||(D.cat==='melee'&&(st._fl||{}).farm>=2))&&killed)cure(st,u,1,u)}
  }
  // réparateurs (Mécanicien, Atelier, Charpentier, L'Ingénieur) : ils réparent les murs et les postes de soutien ; les soigneurs, eux, soignent les unités
@@ -1017,6 +1044,7 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   ouch(st,tu,d,tu.hp);tu.hp-=d;ev.push({i:tn,txt:'−'+d,k:ranged?'spit':'bite',zid:z.id,from:z.pos});
   if(!ranged&&u.t==='fen'&&pow){const el=(st._fl||{}).tech||0;hit(st,z,((st.relics.includes('groupe')||has(st,'solar')||has(st,'genmech'))?2:1)+(el?1:0),ev,n);if(el>=2)z.cd+=1;if(ally(st,'short'))z.burnT=Math.max(z.burnT||0,3)}
   if(!ranged&&D.thorns&&u.t!=='fen')hit(st,z,D.thorns,ev,n);
+  if(!ranged&&D.stunHit&&u.stunN!==st.night&&!T.boss){u.stunN=st.night;z.cd+=D.stunHit;ev.push({i:n,k:'smoke'})}
   // riposte : une unité de corps à corps frappée au contact rend le coup aussitôt
   if(!ranged&&D.cat==='melee'&&D.dmg&&u.hp>0&&z.hp>0){const fl=st._fl||{};if(hit(st,z,D.dmg+unitDmg(u)+sol(st,n,u)+(fl.farm?1:0)+(fl.care&&famOf(u.t)==='care'?1:0)+(ally(st,'hunt')?1:0),ev,n)){u.kills=(u.kills||0)+1;u.nk=(u.nk||0)+1;edKill(st,u)}}
   if(D.gas){st.grid[n]=null;st._su=u;explode(st,n,D.gas,ev);st._su=null;return}
@@ -1050,13 +1078,13 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   for(let i=0;i<st.grid.length;i++){const u=st.grid[i];if(!u)continue;const D=stat(st,u.t);
    if(D.rng&&st.tick%D.every===0&&!(D.jam&&st.tick%D.jam===0)&&!(D.needPow&&!pow)){
     const reps=1+(around(i).some(j=>{const L=st.grid[j]&&U[st.grid[j].t];return L&&L.lead&&st.tick%(L.chief?3:2)===0})?1:0)+(st.rushT>0?1:0);
-    const F=famOf(u.t),rng=Math.max(1,D.rng-(e==='brume'&&D.cat==='shoot'?1:0)+(D.cat==='shoot'&&ally(st,'martial')?1:0)+((TRAITS[u.trait]||{}).rngB||0)+(fl.police>=2&&F==='police'?1:0)+(fl.comm&&F==='comm'&&D.rng>1?1:0)+(D.rng>1&&hasEq(u,'binoc')?1:0)+(D.cat==='shoot'&&D.rng>1&&nearPost(st,i,'tower')?1:0)+(e==='brume'&&D.cat==='shoot'&&hasEq(u,'torch')?1:0)),
+    const F=famOf(u.t),rng=Math.max(1,D.rng-(e==='brume'&&D.cat==='shoot'?1:0)+(D.cat==='shoot'&&ally(st,'martial')?1:0)+((TRAITS[u.trait]||{}).rngB||0)+(fl.police>=2&&F==='police'?1:0)+(fl.comm&&F==='comm'&&D.rng>1?1:0)+(D.rng>1&&hasEq(u,'binoc')?1:0)+(D.cat==='shoot'&&D.rng>1&&nearPost(st,i,'tower')?1:0)+(D.railRng&&onRoad(i)?1:0)+(F==='rail'&&D.rng>1&&nearNid(st,i)?1:0)+(e==='brume'&&D.cat==='shoot'&&hasEq(u,'torch')?1:0)),
      dmg=D.dmg+dmgParts(st,i,fl,pow).reduce((a,p)=>a+(p.s?0:p.v),0);
     // v136 : les tirs lents (Sniper…) reçoivent leurs bonus fixes multipliés par leur intervalle, pour ne pas perdre la moitié des bonus
     const bon=dmg-D.dmg,dmgF=D.every>1&&bon>0?D.dmg+bon*D.every:dmg;
     for(let r=0;r<reps;r++)attack(st,i,u,D,rng,dmgF,ev)}
    if(D.heal&&(D.hfast||st.tick%2===0)){const ns=(D.hrng>1?st.grid.map((v,j)=>j).filter(j=>j!==i&&inRange(j,i,D.hrng)):around(i)).map(j=>st.grid[j]).filter(v=>v&&isUnit(v.t)&&v.hp<maxHp(st,v));if(ns.length){ns.sort((a,b)=>(a.hp-maxHp(st,a))-(b.hp-maxHp(st,b)));cure(st,ns[0],D.heal+(fl.care?1:0)+(hasR(st,'chirurgien')?1:0)+(u.gold||0)+(squad(st,i)?1:0),u);ev.push({i,k:'heal'})}}
-   if(D.mech&&!D.mechAll){const ns=around(i).filter(j=>st.grid[j]&&repairable(st.grid[j].t)&&st.grid[j].hp<maxHp(st,st.grid[j])&&repOK(st,j));if(ns.length){repDone(st,ns[0]);const w=st.grid[ns[0]];cure(st,w,(D.mech>1?D.mech:1)+(fl.tech>=2?1:0)+(u.gold||0)+(sol(st,i,u)?1:0),u);ev.push({i:ns[0],k:'heal'})}}
+   if(D.mech&&!D.mechAll){const ns=around(i).filter(j=>st.grid[j]&&repairable(st.grid[j].t)&&st.grid[j].hp<maxHp(st,st.grid[j])&&repOK(st,j));if(ns.length){repDone(st,ns[0]);const w=st.grid[ns[0]];cure(st,w,(D.mech>1?D.mech:1)+(fl.tech>=2?1:0)+(u.gold||0)+(sol(st,i,u)?1:0)+(D.mechRail&&RAILW.includes(w.t)?1:0),u);ev.push({i:ns[0],k:'heal'})}}
    if(D.selfHeal&&st.tick%2===0&&u.hp<maxHp(st,u)){cure(st,u,1,u);ev.push({i,k:'heal'})}
    if(hasEq(u,'medkit')&&st.tick%2===0){const ns=around(i).filter(j=>{const v=st.grid[j];return v&&isUnit(v.t)&&v.hp<maxHp(st,v)});if(ns.length){const v=st.grid[ns[0]];cure(st,v,1,u);ev.push({i:ns[0],k:'heal'})}}
    if(D.regen&&st.tick%D.regen===0&&u.hp<maxHp(st,u)){cure(st,u,1,u);ev.push({i,k:'heal'})}
@@ -1064,8 +1092,12 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
    if(D.mechAll)around(i).forEach(j=>{const v=st.grid[j];if(v&&repairable(v.t)&&v.hp<maxHp(st,v)&&repOK(st,j)){repDone(st,j);cure(st,v,1+(fl.tech>=2?1:0),u);ev.push({i:j,k:'heal'})}});
    if(D.aura&&st.tick%2===0)alive().filter(z=>cheb(z.pos,i)<=1).forEach(z=>{hit(st,z,1+(fl.pyro?1:0),ev,i,1);z.burnT=Math.max(z.burnT||0,2)});
    if(D.burn&&e!=='pluie')alive().filter(z=>z.pos===i).forEach(z=>{z.inFire=1;hit(st,z,D.burn+(fl.pyro?1:0),ev,i,1)});
+   if(D.whistle&&st.tick%D.whistle===0){const zs=alive().filter(z=>onRoad(z.pos)&&!ZT[z.k].boss);zs.forEach(z=>z.cd+=1);if(zs.length)ev.push({i,k:'horn'})}
+   if(D.repel&&st.tick%D.repel===0){const zs=alive().filter(z=>!ZT[z.k].boss&&!isEdge(z.pos)&&cheb(z.pos,i)<=2);zs.forEach(z=>{const b=back(z.pos),bu=st.grid[b];if(!(bu&&U[bu.t].block))z.pos=b});if(zs.length)ev.push({i,k:'horn'})}
+   if(D.charge&&u.chgN!==st.night){const[r0,c0]=rc(i),zs=alive().filter(z=>!isEdge(z.pos)&&(rc(z.pos)[0]===r0||rc(z.pos)[1]===c0));if(zs.length>=3){u.chgN=st.night;zs.forEach(z=>hit(st,z,D.charge,ev,i,1));ev.push({i,k:'boom'})}}
    if(D.dyn&&st.tick===8){st.grid[i]=null;st._su=u;explode(st,i,D.dyn+(fl.mil>=2?3:0),ev);st._su=null}
   }
+  if(fl.rail>=2&&st.tick%5===0){const rw=alive().filter(z=>!isEdge(z.pos)&&rc(z.pos)[0]===MID&&z.pos!==C),cl=alive().filter(z=>!isEdge(z.pos)&&rc(z.pos)[1]===MID&&z.pos!==C),zs=rw.length>=cl.length?rw:cl;if(zs.length){zs.forEach(z=>hit(st,z,4,ev,-1,1));ev.push({i:C,k:'horn'})}}
   // Patient Zéro : les zombies proches avancent 50 % plus vite ; la Mère pond des rampants
   const hasters=alive().filter(z=>ZT[z.k].haste&&!isEdge(z.pos));
   for(const z of alive())if(ZT[z.k].brood&&!isEdge(z.pos)&&(z.kids||0)<6&&st.tick%ZT[z.k].brood===0){z.kids=(z.kids||0)+1;const c=spawn(st,'crawl',z.pos);c.cd=2;ev.push({i:z.pos,k:'howl'})}
@@ -1139,6 +1171,8 @@ function mutate(st,rnd=Math.random){const cur=(st.muts||[])[0],pool=Object.keys(
   if(t==='storm'){al().forEach(z=>{z.cd+=2;z.burnT=0});st.grid.forEach((u,j)=>{if(u&&u.t==='fire')st.grid[j]=null});ev.push({i:C,k:'horn'})}
   if(t==='bomber'){const r=rc(i)[0];al().filter(z=>rc(z.pos)[0]===r).forEach(z=>hit(st,z,8,ev,-1,1));for(let c=1;c<N-1;c++)ev.push({i:idx(r,c),k:'boom'})}
   if(t==='noise'){st.noise={i,until:st.tick+4};ev.push({i,k:'howl'})}
+  if(t==='retard'){al().forEach(z=>{if(!ZT[z.k].boss)z.cd+=2});st.pending.forEach(p=>{if(!ZT[p.k].boss)p.at+=2});ev.push({i:C,k:'horn'})}
+  if(t==='coupsif'){al().filter(z=>cheb(z.pos,i)<=2&&!ZT[z.k].boss).forEach(z=>z.cd+=2);ev.push({i,k:'smoke'})}
   if(t==='air'){al().filter(z=>cheb(z.pos,i)<=2).forEach(z=>hit(st,z,10,ev,-1,1));ev.push({i,k:'air'})}
   if(t==='napalm'){around(i).concat(i).forEach(j=>{if(!isEdge(j)&&j!==C&&!st.grid[j])st.grid[j]={t:'fire',hp:1,gen:1}});al().filter(z=>cheb(z.pos,i)<=1).forEach(z=>{hit(st,z,1,ev,-1,1);z.burnT=Math.max(z.burnT||0,3)});ev.push({i,k:'molo',src:C})}
   for(const z of st.z)if(z.hp<=0&&!z.dead){z.dead=1;st.kills++;st.scrap+=killScrap(st,ZT[z.k].boss);ev.push({i:z.pos,k:'die',zid:z.id,boss:!!ZT[z.k].boss});if(ZT[z.k].brood)broodDeath(st,z,ev)}

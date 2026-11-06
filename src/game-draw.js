@@ -384,6 +384,15 @@ const WEAP={
 /* survivants : une silhouette commune vue de dessus, habillée selon le métier */
 const SKINS=['#e8bf96','#c99067','#8d5a3b','#f0cfa8','#a87048','#6e4630'];
 const LOOK={
+ // v234 : Cheminots (en attendant leurs sprites) : bleu de travail, casquette
+ rosa:{body:'#2e3550',w:'rifle',head:'cap',hc:'#1e2438',extra:'belt'},
+ rempart:{body:'#2e3550',w:'none',head:'cap',hc:'#2a2a2a',extra:'shield'},
+ bielle:{body:'#2e3550',w:'wrench',hc:'#cfcfcf',extra:'grease'},
+ chief_rail:{body:'#26304a',w:'pistol',head:'cap',hc:'#1a1f30',one:1,chief:1},
+ hirond:{body:'#5a3a2a',w:'pistol',hc:'#c0502a',one:1},
+ charbon:{body:'#3a3a40',w:'axe',head:'bald',hc:'#2a2a2a',extra:'apron'},
+ veuve:{body:'#3a2a3a',w:'xbow',head:'hood',hc:'#d0d0d0'},
+ aiguille:{body:'#4a3a2a',w:'baton',hc:'#2a1a10',extra:'vest'},
  gun:{body:'#4f5d3a',w:'rifle',head:'cap',hc:'#2e3a22',pack:'#3a3a2a'},
  snp:{body:'#3b4734',w:'sniper',head:'hood',hc:'#2a3324'},
  sht:{body:'#6b4a2c',w:'shotgun',hc:'#2e2218',extra:'belt'},
@@ -559,6 +568,7 @@ function drawUnit(i,u,now){
 }
 function drawUnitInner(i,u,now){
  const{x,y}=tc(i),dx=x-CEN.x,dy=y-CEN.y,out=Math.atan2(dy,dx);const a=facing[i]??out,s=rng(i+3);
+ {const ra={fourgon:'car',express:'fortin',butoir:'bar',nid:'tower',draisine:'lamp'}[u.t];if(ra)u={...u,t:ra}}
  if(!PLAIN.has(u.t)&&u.t!=='wire'&&drawSpr(u.t,x,y,a,out))return;
  const sk0=SKINS[(i*7+(u.name||'').length)%SKINS.length];
  if(u.t==='k9squad'){ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.translate(-2,11);ctx.scale(.75,.75);dogShape('#3a2a1a','#4a3626','#1e140c',now,90);ctx.restore();person(x-2,y-5,a,LOOK.cop,now,sk0);return}
