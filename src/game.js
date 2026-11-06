@@ -124,7 +124,9 @@ const SPRDC={},SPRC={},DOWN=Math.PI/2;
  ['rot',DOWN,34,'z_walk z_run z_sap z_armor z_howl z_crawl z_spit z_boss z_mere z_zero'],['rot',DOWN,40,'z_fat'],['rot',DOWN,30,'z_zdog']
 ].forEach(([m,b,z,ids])=>ids.split(' ').forEach(k=>{SPRDC[k]=[m,b,z];const im=new Image();im.onload=()=>SPRC[k]=im;im.src='assets/sprites_cartoon/'+k+'.webp'}));
 // le sprite à utiliser selon le style choisi (cartoon si disponible, sinon réaliste)
-function sprK(k){if(SPRN[k]&&ART_DEV&&OPT.art&&(SPRDC[k]||SPRD[k]))return[SPRN[k],SPRDC[k]||SPRD[k]];if((ART_STYLE==='cartoon'||!SPRD[k])&&SPRC[k])return[SPRC[k],SPRDC[k]];return[SPR[k],SPRD[k]]}
+// cheminots : sprites de l'artiste seulement (pas d'image cartoon), v238
+const SPRDA={};[['rot',DOWN,46,'rosa rempart bielle hirond charbon veuve aiguille'],['rot',DOWN,50,'chief_rail']].forEach(([m,b,z,ids])=>ids.split(' ').forEach(k=>SPRDA[k]=[m,b,z]));
+function sprK(k){const dn=SPRDC[k]||SPRD[k]||SPRDA[k];if(SPRN[k]&&ART_DEV&&OPT.art&&dn)return[SPRN[k],dn];if((ART_STYLE==='cartoon'||!SPRD[k])&&SPRC[k])return[SPRC[k],SPRDC[k]];return[SPR[k],SPRD[k]]}
 function drawSpr(k,x,y,a,out,mul){const[im,d]=sprK(k);if(!im||!d)return false;const[m,b,z]=d,sz=z*(mul||1),r=im.width/im.height,w=r>=1?sz:sz*r,h=r>=1?sz/r:sz;
  ctx.save();ctx.translate(x,y);if(m==='rot')ctx.rotate(a-b);else if(m==='wall')ctx.rotate(out);else if(m==='wallh')ctx.rotate(out+Math.PI/2);else if((m==='up'||m==='flip')&&Math.cos(a)<-.1)ctx.scale(-1,1);
  ctx.drawImage(im,-w/2,-h/2,w,h);ctx.restore();return true}
@@ -216,7 +218,7 @@ function cardFace(t,o={}){const E=Z.edOf(t),B=Z.baseOf(t),U0=Z.U[t],D=o.base?(E?
 const art=t=>{t=Z.baseOf(t);const u=Z.U[t]&&artUrl(t);return u?`<span class="art" style="background-image:url('${u}')"></span>`:svg(t)};
 const cc=t=>`var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION='v237 · 6 nov.';
+const VERSION='v238 · 6 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD=false;

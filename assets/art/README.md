@@ -11,3 +11,5 @@ Chaque image remplace l'image actuelle **du même nom** :
 
 Après chaque ajout : `node tools/art-liste.js` (met à jour `liste.json`).
 En jeu : Options → « Images de l'artiste » (site GitHub et local seulement ; ce dossier n'est pas envoyé sur itch.io).
+
+Sprites des cheminots (`rosa rempart bielle chief_rail hirond charbon veuve aiguille`) : pas d'image cartoon, ils n'existent qu'ici (liste `SPRDA` dans `src/game.js`).

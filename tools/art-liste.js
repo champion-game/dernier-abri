@@ -5,11 +5,12 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.join(__dirname,'..','assets'),ART=path.join(ROOT,'art');
 const OLD={cards:'cards_cartoon',sprites:'sprites_cartoon',relics:'relics',ui:'ui'};
 const NEW_UI=new Set(['bandeau.webp','plateau.webp','cadre-amine.webp','ciel-jour.webp','ciel-nuit.webp','ciel-rouge.webp','decor-jour.webp','decor-nuit.webp','decor-rouge.webp','abri-fort.webp','panneau-noir.webp','btn-nuit.webp','bac2-fond.webp','bac2-avant.webp','plateau-herbe.webp','plateau-cadre.webp','plateau-foret.webp','cadre-acier.webp','cadre-glace.webp','cadre-holo.webp','cadre-or.webp','cadre-sang.webp','cadre-noir.webp','btn-rouge.webp']);// images propres au style artiste (rien à remplacer)
+const NEW_SPR=new Set(['rosa','rempart','bielle','chief_rail','hirond','charbon','veuve','aiguille'].map(k=>k+'.webp'));// sprites sans image cartoon (cheminots)
 const IMG=/\.(webp|png|jpg|jpeg|svg)$/i;
 function build(){const L={},warn=[];
  for(const d in OLD){const dir=path.join(ART,d);L[d]=fs.existsSync(dir)?fs.readdirSync(dir).filter(f=>IMG.test(f)).sort():[];
   const old=new Set(fs.readdirSync(path.join(ROOT,OLD[d])));
-  L[d].forEach(f=>{if(!old.has(f)&&!(d==='ui'&&NEW_UI.has(f)))warn.push(`${d}/${f} : aucune image actuelle « assets/${OLD[d]}/${f} »`)})}
+  L[d].forEach(f=>{if(!old.has(f)&&!(d==='ui'&&NEW_UI.has(f))&&!(d==='sprites'&&NEW_SPR.has(f)))warn.push(`${d}/${f} : aucune image actuelle « assets/${OLD[d]}/${f} »`)})}
  return{L,warn}}
 const{L,warn}=build(),file=path.join(ART,'liste.json'),txt=JSON.stringify(L,null,1)+'\n';
 if(require.main===module){
