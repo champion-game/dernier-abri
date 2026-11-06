@@ -2152,7 +2152,7 @@ html.artx.ax3.felton .axbac{position:relative!important;left:auto!important;righ
 /* v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet */
 html.artx.ax3:not(.felton){--axbh:clamp(calc(var(--axB) * .26114),calc(100dvh - 100vw - 300px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)),calc(var(--axB) * .42))}
 html.artx.ax3:not(.felton) .axbac{margin:0!important;justify-self:center}
-html.artx.ax3:not(.felton) #ax3{height:100dvh;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:0!important;overflow-x:clip;grid-template-rows:auto auto auto auto auto auto auto auto minmax(calc(var(--axB) * .2),1fr)!important}
+html.artx.ax3:not(.felton) #ax3{height:100dvh;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:0!important;overflow-x:clip;grid-template-rows:auto auto auto auto auto auto auto auto minmax(calc(var(--axB) * .2),calc(var(--axB) * .52))!important;align-content:center}
 html.artx.ax3:not(.felton) .axbac{height:auto!important;align-self:stretch!important;margin-bottom:4px!important}
 html.artx.ax3 .shel .shel-bar{min-height:9px;box-sizing:border-box;border-width:1.5px!important}
 html.artx.ax3:not(.felton) .shel .shel-t{font-size:14px!important;top:10%!important}
