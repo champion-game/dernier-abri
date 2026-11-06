@@ -153,7 +153,7 @@ function axPaint(){try{const d=$('#axPlat');if(!d||d.hidden||!axOn()||!axSky)ret
 // Téléphone en hauteur : les mêmes éléments, empilés. Les éléments sont déplacés dans #ax3 ; une marque reste à leur place
 // d'origine pour les y remettre (style classique, téléphone tourné).
 const AX3={el:null,mv:[]};
-function ax3Want(){return AX.on()&&(DE.classList.contains('felton')||matchMedia('(orientation:portrait)').matches)}
+function ax3Want(){return AX.on()}// v237 : aussi sur téléphone tourné (plateau encadré à gauche, bac à droite)
 function ax3Build(){if(AX3.el)return AX3.el;const a=document.querySelector('.app');if(!a)return null;const e=document.createElement('div');e.id='ax3';
  e.innerHTML='<div class="ax3-l"><div class="axsky" id="axSky"></div><div class="axpiles"><div class="axdk" id="axDk"></div><div class="axrd" id="axRd"></div></div></div>'
   +'<div class="ax3-c"><div class="axboard" id="axBoard"><div id="axBord" aria-hidden="true"><i class="t"></i><i class="d"></i></div><canvas id="axFar" aria-hidden="true"></canvas></div><div class="axbac" id="axBac"><i class="axbac-f"></i><i class="axbac-a"></i></div></div>'
