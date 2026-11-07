@@ -13891,6 +13891,25 @@ html.artx.ax3 #ax3 #hand {
 }
 /* v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, à droite le reste avec la main dans le bac */
 @media (orientation: landscape) {
+  /* le décor couvre tout l'écran (la règle « en hauteur » le limite à une bande de 270 px en haut) */
+  html.artx.ax3:not(.felton) body::before {
+    background:
+      linear-gradient(rgba(8, 6, 5, 0.25), rgba(8, 6, 5, 0.55)),
+      var(--ui-decor-jour, none) center/cover no-repeat,
+      #100b09 !important;
+  }
+  html.artx.ax3:not(.felton)[data-axph='nuit'] body::before {
+    background:
+      linear-gradient(rgba(4, 6, 14, 0.2), rgba(4, 6, 14, 0.55)),
+      var(--ui-decor-nuit, none) center/cover no-repeat,
+      #100b09 !important;
+  }
+  html.artx.ax3:not(.felton)[data-axph='rouge'] body::before {
+    background:
+      linear-gradient(rgba(14, 4, 4, 0.2), rgba(14, 4, 4, 0.55)),
+      var(--ui-decor-rouge, none) center/cover no-repeat,
+      #100b09 !important;
+  }
   html.artx.ax3:not(.felton) {
     --axH: calc(100dvh - 12px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     --axBd: min(
@@ -13941,6 +13960,15 @@ html.artx.ax3 #ax3 #hand {
     grid-area: bac;
     align-self: start;
     z-index: 8;
+  }
+  /* jauge d'énergie à plat : la bande d'info tient sur une ligne et laisse la hauteur à la main */
+  html.artx.ax3:not(.felton) #ax3 #info .nrgb {
+    flex-direction: row;
+    gap: 6px;
+    padding: 2px 8px;
+  }
+  html.artx.ax3:not(.felton) #ax3 #info .nrgb b {
+    font-size: 20px;
   }
   html.artx.ax3:not(.felton) #ax3 #info {
     font-size: 10.5px;
