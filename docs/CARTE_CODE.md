@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 
 ## src/style.css
 
-14854 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1072 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+14882 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1077 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 67 Layout: one-screen phone app — header, night forecast, live top-down map (canvas), hand of
@@ -473,21 +473,21 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 - 13697 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
 - 13805 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
 - 13892 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
-- 13980 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
-- 14012 v241 : interface plus lisible (demande d'Amine)
-- 14013 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
-- 14083 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
-- 14089 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
-- 14121 téléphone en portrait
-- 14235 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
-- 14252 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
-- 14312 textes posés sur le décor, sans fiche beige
-- 14373 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
-- 14408 « Jouer » : panneau noir rougi (version B)
-- 14451 « Jouer » respire : il grossit un peu et son halo s'élargit
-- 14478 barre du bas
-- 14561 PC peu haut et téléphone tourné : tout se resserre
-- 14599 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
-- 14683 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
-- 14740 lueurs du décor : étoiles, brume devant la forêt, lucioles
-- 14822 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
+- 14008 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
+- 14040 v241 : interface plus lisible (demande d'Amine)
+- 14041 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
+- 14111 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
+- 14117 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
+- 14149 téléphone en portrait
+- 14263 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
+- 14280 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
+- 14340 textes posés sur le décor, sans fiche beige
+- 14401 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
+- 14436 « Jouer » : panneau noir rougi (version B)
+- 14479 « Jouer » respire : il grossit un peu et son halo s'élargit
+- 14506 barre du bas
+- 14589 PC peu haut et téléphone tourné : tout se resserre
+- 14627 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
+- 14711 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
+- 14768 lueurs du décor : étoiles, brume devant la forêt, lucioles
+- 14850 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
