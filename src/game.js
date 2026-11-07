@@ -468,6 +468,9 @@ function novice() {
     return false;
   }
 }
+// bouclier des PV d'un tank (v249) : acier, reflet à gauche, ombre en bas
+const SHIELD_SVG =
+  '<svg class="shd" viewBox="0 0 24 28" aria-hidden="true"><path d="M12 1.5 22 5v8.5c0 6.3-4.3 10.6-10 13-5.7-2.4-10-6.7-10-13V5z" fill="#4f6b84" stroke="#16222d" stroke-width="1.2"/><path d="M2.6 13.5h18.8c-.4 5.8-4.4 9.8-9.4 12-5-2.2-9-6.2-9.4-12z" fill="rgba(10,20,30,.35)"/><path d="M12 4 4.5 6.7v6.8c0 4.8 3.1 8.2 7.5 10.2" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1"/></svg>';
 const ink = k => `<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
 function cardFace(t, o = {}) {
   const E = Z.edOf(t),
@@ -486,7 +489,12 @@ function cardFace(t, o = {}) {
       : st.heal
         ? _t`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`
         : '';
-  const hp = st.hp ? `<span class="cf-hp" title="PV"><b>${st.hp}</b></span>` : '';
+  // v249 : les PV d'un tank sont dans un bouclier, pour le reconnaître d'un coup d'œil
+  const hp = !st.hp
+    ? ''
+    : ro === 'tank'
+      ? `<span class="cf-hp shield" title="PV">${SHIELD_SVG}<b>${st.hp}</b></span>`
+      : `<span class="cf-hp" title="PV"><b>${st.hp}</b></span>`;
   // texte de la carte : pour un chef, la faction est déjà indiquée par le pictogramme, on raccourcit
   const txt = U0.chief
     ? U0.d
@@ -511,7 +519,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v248 · 7 nov.';
+const VERSION = 'v249 · 7 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo

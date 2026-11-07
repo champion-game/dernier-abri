@@ -14888,3 +14888,72 @@ html.artx :is(.cf-cost, .cf-atk, .cf-hp, .cf-v, .cf-tag) {
   font-family: var(--ax-head);
   font-weight: 600;
 }
+/* v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tank dans un bouclier */
+html.artx .cf-atk {
+  position: relative;
+  width: 13cqw;
+  height: 13cqw;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #d9a441, #8a5512 62%, #4d2c06);
+  mix-blend-mode: normal;
+  opacity: 1;
+  box-shadow:
+    inset 0 -0.8cqw 1.4cqw rgba(0, 0, 0, 0.45),
+    0 0 0 0.5cqw rgba(30, 18, 4, 0.55);
+  color: #fff4dc;
+  font-size: 8cqw;
+}
+html.artx .cf-atk.heal {
+  background: radial-gradient(circle at 38% 32%, #7fae5a, #35602a 62%, #1a3312);
+  color: #f0f7e4;
+}
+html.artx .cf .cf-atk .ink {
+  position: absolute;
+  inset: 1.6cqw;
+  width: auto;
+  height: auto;
+  opacity: 0.28;
+  stroke: #2a1702;
+}
+html.artx .cf .cf-atk.heal .ink {
+  stroke: #0e2008;
+}
+html.artx .cf-atk b,
+html.artx .cf-hp.shield b {
+  position: relative;
+  text-shadow: 0 0.3cqw 0.6cqw rgba(0, 0, 0, 0.6);
+}
+html.artx .cf.mini .cf-atk {
+  width: 20cqw;
+  height: 20cqw;
+  font-size: 12cqw;
+}
+html.artx .cf.mini .cf-atk .ink {
+  inset: 2.4cqw;
+}
+html.artx .cf-hp.shield {
+  position: relative;
+  width: 12cqw;
+  height: 14cqw;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  opacity: 1;
+  color: #f2f6fa;
+}
+html.artx .cf-hp.shield .shd {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0.4cqw 0.5cqw rgba(0, 0, 0, 0.5));
+}
+html.artx .cf-hp.shield b {
+  transform: translateY(-0.2cqw);
+}
+html.artx .cf.mini .cf-hp.shield {
+  width: 19cqw;
+  height: 22cqw;
+  font-size: 12cqw;
+}

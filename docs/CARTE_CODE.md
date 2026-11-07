@@ -10,7 +10,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1569 lignes)
+6. `src/game.js` (1577 lignes)
 7. `src/game-draw.js` (5935 lignes)
 8. `src/game-ui.js` (2019 lignes)
 9. `src/game-screens.js` (1679 lignes)
@@ -56,13 +56,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1413 | game-artx.js:979 |
+| `pilesHtml` | game.js:1421 | game-artx.js:979 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:601 | game-anim.js:1158 |
-| `showAch` | game.js:763 | game-anim.js:1108 |
+| `showAch` | game.js:771 | game-anim.js:1108 |
 | `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:457 novice:464 cardFace:472 saveOpt:576 applyOpt:584 applyCur:604 toggleFs:623 unpause:642 R:650
-- **681** state
-- **683** progression entre les parties (localStorage) : loadMeta:684 endTest:705 saveMeta:710 ach:751 showAch:763 deckCanAdd:796 edGain:810 edCommit:819 edDrop:849 achCheck:875 achNight:900 achScreen:908 tuto:927 guideStep:958 guideOk:1098 tutoTip:1119 tutoHand:1131 tutoPicks:1154 tutoEnd:1159 newGame:1174 fillHand:1224 drawCards:1232 syncBoard:1259 cellRect:1297 fly:1302 animPiles:1355 pilesHtml:1413
-- **1483** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1486 loadSave:1510 clearSave:1533 resume:1539
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:457 novice:464 cardFace:475 saveOpt:584 applyOpt:592 applyCur:612 toggleFs:631 unpause:650 R:658
+- **689** state
+- **691** progression entre les parties (localStorage) : loadMeta:692 endTest:713 saveMeta:718 ach:759 showAch:771 deckCanAdd:804 edGain:818 edCommit:827 edDrop:857 achCheck:883 achNight:908 achScreen:916 tuto:935 guideStep:966 guideOk:1106 tutoTip:1127 tutoHand:1139 tutoPicks:1162 tutoEnd:1167 newGame:1182 fillHand:1232 drawCards:1240 syncBoard:1267 cellRect:1305 fly:1310 animPiles:1363 pilesHtml:1421
+- **1491** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1494 loadSave:1518 clearSave:1541 resume:1547
 
 ### src/game-draw.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 
 ## src/style.css
 
-14891 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1078 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+14960 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1090 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 67 Layout: one-screen phone app — header, night forecast, live top-down map (canvas), hand of
@@ -493,3 +493,4 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 - 14772 lueurs du décor : étoiles, brume devant la forêt, lucioles
 - 14854 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
 - 14886 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
+- 14891 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
