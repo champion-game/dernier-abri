@@ -284,7 +284,9 @@ const cartoon = t => CART_FILES.includes(t) && (ART_STYLE === 'cartoon' || !ART_
    assets/art/liste.json dit lesquelles existent (à refaire avec node tools/art-liste.js). La case « Images de l'artiste » des Options bascule
    d'un style à l'autre ; elle n'existe que sur le site GitHub et en local (pas sur itch.io, où assets/art n'est pas envoyé).
    Une image absente du dossier artiste garde l'image actuelle. */
-const ART_DEV = typeof location !== 'undefined' && /github\.io$|^localhost$|^127\./.test(location.hostname);
+// site GitHub, raw.githack.com (le dépôt sans attendre GitHub Pages) et l’ordinateur de développement
+const ART_DEV =
+  typeof location !== 'undefined' && /github\.io$|^raw\.githack\.com$|^localhost$|^127\./.test(location.hostname);
 let ART_NEW = { cards: [], sprites: [], relics: [], ui: [] };
 const SPRN = {};
 const artNew = (d, f) => !!(ART_DEV && OPT.art && ART_NEW[d] && ART_NEW[d].includes(f));
