@@ -11489,47 +11489,82 @@ html.artx.ax3 #ax3 #meter {
   max-height: 40%;
   overflow: auto;
 }
+/* v251 : « Affronter la nuit » au style de « Jouer » (panneau noir rougi, halo de braise), avec le sticker de zombies dans le bouton */
 html.artx.ax3 #ax3 #go {
   flex: none;
+  position: relative;
+  isolation: isolate;
   height: var(--goh, 92px);
   min-height: 0 !important;
   margin: 0 !important;
-  padding: 0 8px 0 0 !important;
+  padding: 0 8px !important;
   width: 100%;
-  display: grid;
-  place-items: center;
-  border-style: solid !important;
-  border-color: transparent !important;
-  border-width: calc(var(--goh, 92px) * 0.11) calc(var(--goh, 92px) * 0.13) calc(var(--goh, 92px) * 0.11)
-    calc(var(--goh, 92px) * 0.86) !important;
-  border-image: var(--ui-btn-nuit) 36 40 36 279 fill / calc(var(--goh, 92px) * 0.11) calc(var(--goh, 92px) * 0.13)
-    calc(var(--goh, 92px) * 0.11) calc(var(--goh, 92px) * 0.86) stretch !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 10px solid transparent !important;
+  border-image: var(--ui-panneau-noir) 36 fill / 10px stretch !important;
   background: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  filter: var(--axsh);
+  border-radius: 10px !important;
+  box-shadow: 0 0 18px 2px rgba(255, 100, 35, 0.35) !important;
+  filter: none;
   transform: none !important;
   font:
-    600 var(--gof, 26px) / 1.02 var(--ax-head, 'Oswald'),
+    700 var(--gof, 26px) / 1.02 var(--ax-head, 'Oswald'),
     sans-serif !important;
-  color: #f3e6cf !important;
+  color: #fff3dc !important;
   text-shadow:
-    0 2px 2px #000,
-    0 0 6px rgba(0, 0, 0, 0.7) !important;
+    0 2px 0 #3a0603,
+    0 0 10px rgba(0, 0, 0, 0.6) !important;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   text-align: center;
   white-space: normal;
 }
-html.artx.ax3 #ax3 #go::before,
+/* fond rouge du bouton, comme « Jouer » */
 html.artx.ax3 #ax3 #go::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  inset: -5px;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  border-radius: 9px;
+  pointer-events: none;
+  background: linear-gradient(#a8261a, #4a0705);
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+/* sticker de zombies, à gauche du texte et à l'intérieur du bouton */
+html.artx.ax3 #ax3 #go::before {
+  content: '' !important;
+  display: block !important;
+  position: static;
+  inset: auto;
+  border: 0;
+  flex: none;
+  height: 100%;
+  max-height: 64px;
+  aspect-ratio: 1;
+  background: var(--ui-zombies-nuit, none) center / contain no-repeat;
+  filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+}
+html.artx.ax3 #ax3 #go.speed::before {
   display: none !important;
 }
 html.artx.ax3 #ax3 #go.speed {
   font-size: calc(var(--gof, 26px) * 0.62) !important;
 }
+html.artx.ax3 #ax3 #go:not(:disabled):hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 26px 5px rgba(255, 120, 45, 0.5) !important;
+}
 html.artx.ax3 #ax3 #go:disabled {
-  filter: var(--axsh) grayscale(0.7) brightness(0.7);
+  filter: grayscale(0.7) brightness(0.7);
+  box-shadow: none !important;
 }
 html.artx.ax3 #ax3 #go:not(:disabled):active {
   transform: translateY(2px) !important;
