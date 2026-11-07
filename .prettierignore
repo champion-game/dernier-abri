@@ -1,0 +1,7 @@
+index.html
+assets/
+docs/
+tools/balance-out/
+tools/test-out/
+*.md
+*.json

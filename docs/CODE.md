@@ -4,11 +4,22 @@
 
 ## Lire le code sans tout charger
 
-Les fichiers `game*.js`, `engine.js` et `style.css` ont des lignes très longues (jusqu’à 2 600 caractères).
+Le code est formaté par Prettier (`.prettierrc.json`), mais les fichiers sont longs (`engine.js` et `game-draw.js` près de 6 000 lignes, `style.css` 14 000). Quelques lignes restent longues : ce sont des textes et des gabarits HTML, qu’on ne peut pas couper.
 
 - Trouver où vit une fonction : `grep -n "nom" docs/CARTE_CODE.md`, puis `sed -n 'N,Mp' src/fichier.js | cut -c1-300`.
-- Chercher dans le code : `grep -noE ".{0,60}motif.{0,60}" src/*.js` (montre le contexte sans la ligne entière).
+- Chercher dans le code : `grep -n "motif" src/*.js | cut -c1-200`.
 - Ne jamais `cat` un fichier `src/` en entier.
+
+## Bonnes pratiques à suivre
+
+- **Mise en forme** : après chaque modification, `npx --yes prettier@3.3.3 --write <fichiers touchés>`. Pas d’autre style à la main.
+- **Noms** : parlants pour tout nouveau code (`drawSmoke`, `zombieSpeed`), même si l’ancien code utilise des abréviations (`G`, `S`, `ii`).
+- **Une règle de jeu va dans `engine.js`**, jamais dans `game*.js`. Le moteur ne touche pas au DOM.
+- **Pas de nouvelle variable globale implicite** : toujours `const` ou `let`.
+- **Pas de code mort** : une fonction remplacée est supprimée, pas laissée de côté (l’historique git la garde).
+- **Commentaires** : en français, courts, pour expliquer le pourquoi (pas le quoi).
+- **Tests** : une règle qui change a son test dans `tools/test-engine.js`.
+- Un commit de mise en forme pure est noté dans `.git-blame-ignore-revs`, pour que `git blame` montre la vraie origine des lignes.
 
 ## Architecture en une minute
 

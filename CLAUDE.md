@@ -57,7 +57,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - Une seule capture d'écran par changement visuel, en largeur téléphone (390 px). PC et téléphone tourné seulement si quelque chose cloche ou si Amine le demande.
 - Ne regarde pas les captures de `tools/test-out/` si le test ne signale aucun problème.
-- Cherche avec `grep` et lis seulement les passages utiles : jamais un fichier entier, les lignes des fichiers `game*.js` sont très longues.
+- Cherche avec `grep` et lis seulement les passages utiles : jamais un fichier entier (`engine.js` et `game-draw.js` font près de 6 000 lignes, `style.css` 14 000).
 - Lance le test navigateur complet une seule fois, juste avant la mise en ligne ; entre-temps, `node tools/test-engine.js` suffit.
 - Réponses courtes. Pas de longue analyse sans demande.
 - Une conversation par sujet : quand un sujet est terminé, propose à Amine d'ouvrir une nouvelle conversation (avec le dépôt champion-game/dernier-abri) pour le suivant.
@@ -71,6 +71,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - La boucle d'affichage ne doit jamais s'arrêter sur une erreur : chaque élément est dessiné dans un bloc protégé. Évite les API de canvas récentes sans solution de secours (exemple : `roundRect`, déjà remplacé si absent).
 - Mets à jour `docs/GAME_DESIGN.md` quand une décision de conception change.
 - Fais des commits petits, avec un message clair en français.
+- **Mise en forme (v242)** : le code est formaté par Prettier (`.prettierrc.json` : 120 colonnes, guillemets simples, points-virgules). Après chaque modification, lance `npx --yes prettier@3.3.3 --write` sur les fichiers touchés. Écris du code lisible : un nom parlant pour toute nouvelle fonction ou variable, une fonction par tâche, un commentaire court en français pour expliquer le pourquoi.
 - Après chaque mise en ligne, donne toujours à Amine le lien direct vers la nouvelle version, avec son numéro pour contourner le cache : `https://champion-game.github.io/dernier-abri/?v=NNN` (NNN = numéro de `version.txt`, ex. `?v=151`). Publié depuis `main`.
 - Travaille et pousse toujours directement sur `main`, sans pull request (décision d'Amine) : c'est `main` qui est en ligne. Si la session impose une autre branche, fusionne-la dans `main` à chaque mise en ligne.
 - Avant chaque mise en ligne, lance `node tools/test.js` et corrige tout ce qui échoue :
