@@ -11568,6 +11568,53 @@ html.artx.ax3 #ax3 #go:not(.speed) {
   font-weight: 400 !important;
   letter-spacing: 0.03em;
 }
+/* v253 : plus de carte jouable, « Affronter la nuit » brille et respire comme « Jouer ».
+   Le bouton grossit (scale, car transform est figé en !important) et son fond rouge (::after) s'éclaire avec un halo de braise
+   (filter et box-shadow du bouton sont figés par d'anciennes règles). */
+html.artx.ax3 #ax3 #go.ready:not(:disabled):not(.speed) {
+  animation: axGoBreath 2.2s ease-in-out infinite;
+}
+html.artx.ax3 #ax3 #go.ready:not(:disabled):not(.speed)::after {
+  animation: axGoGlow 2.2s ease-in-out infinite;
+}
+@keyframes axGoBreath {
+  0%,
+  100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.05;
+  }
+}
+@keyframes axGoGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 1px rgba(255, 100, 35, 0.3);
+    filter: none;
+  }
+  50% {
+    box-shadow: 0 0 26px 9px rgba(255, 120, 45, 0.75);
+    filter: brightness(1.35);
+  }
+}
+html.eco.artx.ax3 #ax3 #go.ready:not(:disabled),
+html.eco.artx.ax3 #ax3 #go.ready:not(:disabled)::after {
+  animation: none;
+}
+html.eco.artx.ax3 #ax3 #go.ready:not(:disabled)::after {
+  box-shadow: 0 0 18px 5px rgba(255, 120, 45, 0.7);
+  filter: brightness(1.25);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.artx.ax3 #ax3 #go.ready:not(:disabled),
+  html.artx.ax3 #ax3 #go.ready:not(:disabled)::after {
+    animation: none;
+  }
+  html.artx.ax3 #ax3 #go.ready:not(:disabled)::after {
+    box-shadow: 0 0 18px 5px rgba(255, 120, 45, 0.7);
+    filter: brightness(1.25);
+  }
+}
 html.artx.ax3 #ax3 #go.speed::before {
   display: none !important;
 }
