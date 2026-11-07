@@ -24,7 +24,8 @@ let shots = 0;
 
 async function run(vp, label, lang = 'fr') {
   const b = await pw.chromium.launch(exe ? { executablePath: exe } : {});
-  const ctx = await b.newContext({ viewport: vp, deviceScaleFactor: 1 });
+  // animations réduites : le bouton « Jouer » de l’accueil respire sans arrêt, Playwright refuserait de cliquer un bouton qui bouge
+  const ctx = await b.newContext({ viewport: vp, deviceScaleFactor: 1, reducedMotion: 'reduce' });
   await ctx.addInitScript(LG => {
     try {
       if (!localStorage.getItem('abri-tuto')) localStorage.setItem('abri-tuto', '5');
