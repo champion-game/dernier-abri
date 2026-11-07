@@ -31,6 +31,8 @@ const NEW_UI = new Set([
   'cadre-sang.webp',
   'cadre-noir.webp',
   'btn-rouge.webp',
+  'accueil.webp',
+  'accueil-portrait.webp',
 ]); // images propres au style artiste (rien à remplacer)
 const NEW_SPR = new Set(
   ['rosa', 'rempart', 'bielle', 'chief_rail', 'hirond', 'charbon', 'veuve', 'aiguille'].map(k => k + '.webp'),

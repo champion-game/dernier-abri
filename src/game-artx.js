@@ -177,6 +177,75 @@ const AXG = {
   },
 };
 const AXH = {};
+// v245 : accueil sur le modèle d'Amine (plateau sur la table, menu à gauche sur PC, sous le plateau en hauteur).
+// Lueurs de ce décor : flamme de la lanterne qui vacille, étoiles qui scintillent, brume devant la forêt, lucioles au-dessus du plateau.
+// Positions en % de l'image (accueil.webp 1672 × 941, accueil-portrait.webp 941 × 1672).
+const AXG2 = {
+  l: {
+    w: 1672,
+    h: 941,
+    fire: [],
+    lamp: [[90.3, 19.2, 3.4]],
+    mist: [12.5, 15.5],
+    stars: [
+      [6, 3],
+      [14, 7],
+      [23, 2.5],
+      [31, 6],
+      [39, 3.5],
+      [47, 8],
+      [55, 2],
+      [62, 5.5],
+      [70, 3],
+      [78, 7.5],
+      [86, 2.5],
+      [95, 5],
+      [18, 11],
+      [51, 12],
+      [74, 10.5],
+    ],
+    flies: [
+      [45, 30],
+      [58, 26],
+      [72, 34],
+      [52, 52],
+      [83, 46],
+      [64, 60],
+      [40, 44],
+    ],
+  },
+  p: {
+    w: 941,
+    h: 1672,
+    fire: [],
+    lamp: [[85.6, 28.8, 7]],
+    mist: [22.5, 26],
+    stars: [
+      [5, 3],
+      [16, 9],
+      [27, 2],
+      [38, 15],
+      [50, 1.5],
+      [62, 16],
+      [73, 2.5],
+      [84, 8],
+      [94, 3.5],
+      [10, 18],
+      [90, 17],
+      [46, 19],
+    ],
+    flies: [
+      [20, 36],
+      [42, 32],
+      [66, 35],
+      [30, 48],
+      [55, 50],
+      [78, 44],
+    ],
+  },
+};
+// l'accueil du style artiste a ses propres fonds : les lueurs vont dans le calque #axbg (qui suit la souris sur PC)
+const axNewHome = () => AX.on() && !!$('#ov.axh');
 function axGlow() {
   try {
     const ov = $('#ov');
@@ -184,6 +253,8 @@ function axGlow() {
     if (!ov) return;
     if (!AX.on()) {
       if (g) g.remove();
+      const bg0 = $('#axbg');
+      if (bg0) bg0.remove();
       ['fond', 'fond-portrait2'].forEach(k => {
         if (AXH[k]) {
           HGLOW[k] = AXH[k];
@@ -200,32 +271,55 @@ function axGlow() {
     });
     const og = $('#hglow');
     if (og) og.remove();
-    const por = matchMedia('(max-aspect-ratio:3/4)').matches,
-      d = por ? AXG.p : AXG.l,
-      k = por ? 'p' : 'l';
-    if (!g || g.dataset.k !== k) {
+    const nw = axNewHome(),
+      por = matchMedia('(max-aspect-ratio:3/4)').matches,
+      d = nw ? (por ? AXG2.p : AXG2.l) : por ? AXG.p : AXG.l,
+      k = (nw ? 'n' : '') + (por ? 'p' : 'l');
+    let bg = $('#axbg');
+    if (nw && !bg) {
+      bg = document.createElement('div');
+      bg.id = 'axbg';
+      bg.setAttribute('aria-hidden', 'true');
+      ov.insertBefore(bg, ov.firstChild);
+    }
+    const host = nw ? bg : ov;
+    if (!g || g.dataset.k !== k || g.parentNode !== host) {
       if (g) g.remove();
       g = document.createElement('div');
       g.id = 'axglow';
       g.dataset.k = k;
       g.setAttribute('aria-hidden', 'true');
-      let h = `<i class="ax-sun" style="left:${d.sun[0]}%;top:${d.sun[1]}%;--r:${d.sun[2]}"></i>`;
-      d.fire.forEach((f, i) => {
-        h += `<i class="ax-fire" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.41}s"></i>`;
-      });
-      d.lamp.forEach((f, i) => {
-        h += `<i class="ax-lamp" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.53}s;animation-duration:${1.7 + i * 0.37}s"></i>`;
-      });
-      g.innerHTML = h;
-      ov.insertBefore(g, ov.firstChild);
+      g.innerHTML = axGlowHtml(d);
+      host.insertBefore(g, host.firstChild);
     }
-    const W = ov.clientWidth,
-      H = ov.clientHeight,
-      sc = Math.max(W / d.w, H / d.h),
+    const W = host.clientWidth,
+      H = host.clientHeight,
+      sc = nw && por ? W / d.w : Math.max(W / d.w, H / d.h),
       w = d.w * sc,
       hh = d.h * sc;
     g.style.cssText = `width:${w}px;height:${hh}px;left:${(W - w) / 2}px;top:${por ? 0 : (H - hh) * 0.6}px;--w:${w / 100}px`;
   } catch (e) {}
+}
+// les lueurs d'un décor (soleil, feux, lanternes, et pour l'accueil v245 : brume, étoiles, lucioles)
+function axGlowHtml(d) {
+  let h = d.sun ? `<i class="ax-sun" style="left:${d.sun[0]}%;top:${d.sun[1]}%;--r:${d.sun[2]}"></i>` : '';
+  (d.stars || []).forEach((s, i) => {
+    h += `<i class="ax-star" style="left:${s[0]}%;top:${s[1]}%;animation-delay:-${(i * 1.37) % 5}s;animation-duration:${2.4 + ((i * 0.73) % 2.6)}s"></i>`;
+  });
+  if (d.mist)
+    d.mist.forEach((y, i) => {
+      h += `<i class="ax-mist" style="top:${y}%;animation-duration:${38 + i * 17}s;animation-delay:-${i * 9}s"></i>`;
+    });
+  d.fire.forEach((f, i) => {
+    h += `<i class="ax-fire" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.41}s"></i>`;
+  });
+  d.lamp.forEach((f, i) => {
+    h += `<i class="ax-lamp" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.53}s;animation-duration:${1.7 + i * 0.37}s"></i>`;
+  });
+  (d.flies || []).forEach((f, i) => {
+    h += `<i class="ax-fly" style="left:${f[0]}%;top:${f[1]}%;--dx:${((i * 37) % 7) - 3}vw;--dy:${((i * 53) % 5) - 2.5}vw;animation-delay:-${(i * 1.9) % 9}s;animation-duration:${7 + ((i * 1.3) % 5)}s"></i>`;
+  });
+  return h;
 }
 {
   const h0 = hglowFit;
@@ -1293,4 +1387,102 @@ artNames();
     artNames();
     return a6.apply(this, arguments);
   };
+}
+
+// ===== v245 : accueil du style artiste sur le modèle d'Amine =====
+// Logo, phrase entre deux filets, gros bouton « Jouer » (panneau noir rougi, lueur de braise), deux grands boutons avec icône,
+// barre du bas (Règles, Bestiaire, Stats, Succès, Crédits) et engrenage des Options en haut à droite.
+// Le mode test et les crédits passent aussi dans les Options (sur téléphone, la barre n'a pas la place pour « Crédits »).
+let axhFirst = true; // l'entrée animée (logo qui tombe, boutons qui glissent) ne se joue qu'au premier affichage
+function axPlayHtml() {
+  const d = loadSave();
+  if (!d) return `<button type="button" class="go axh-play" data-a="new">${_t('Jouer')}</button>`;
+  return `<button type="button" class="go axh-play" data-a="load">${_t`Continuer · ${d.s.phase ? _t('Aube') : _t('Jour')} ${d.g.night}`}</button><button type="button" class="axh-new" data-a="new">${_t('Nouvelle partie')}</button>`;
+}
+function axBigBtn(act, icon, label, extra) {
+  return `<button type="button" class="skip axh-big" data-a="${act}">${ii(icon)}<b>${label}${extra || ''}</b></button>`;
+}
+function axTitleHtml() {
+  const intro = DEMO
+    ? _t`<p class="demob">Démo</p><p>Tiens <b>${Z.DEMO_N} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>${wishBtn()}`
+    : `<p class="axh-tag"><i></i>${_t`Tiens ${Z.WIN_NIGHT} nuits jusqu’à l’arrivée des secours.`}<i></i></p>`;
+  const won =
+    META.menaceWon >= 0
+      ? _t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins > 1 ? _t` · ${META.wins} victoires` : ''}</p>`
+      : '';
+  const coll = novice()
+    ? ''
+    : axBigBtn(
+        'coll',
+        'cards',
+        _t('Collection et decks'),
+        seen('coll') ? '' : ` <span class="newb">${_t('Nouveau !')}</span>`,
+      );
+  const daily = DEMO
+    ? `<button type="button" class="skip axh-big lockb" disabled title="${_t('Dans le jeu complet')}">${ii('lock')}<b>${_t('Défi du jour')}</b></button>`
+    : axBigBtn('daily', 'cal', _t('Défi du jour'));
+  const best = META.best
+    ? `<p>${_t`Record : ${plural(META.best, _t('nuit survécue'), _t('nuits survécues'))}`}</p>`
+    : '';
+  const nAch = ACH.filter(a => (META.ach || {})[a[0]]).length;
+  const tab = (act, icon, label, cls) =>
+    `<button type="button" class="axh-tab${cls ? ' ' + cls : ''}" data-a="${act}">${icon ? ii(icon) : ''}<span>${label}</span></button>`;
+  const cls = axhFirst ? ' axh-in' : '';
+  axhFirst = false;
+  return `<div class="axh-col${cls}"><h1 class="logo">${LOGO.replace(/src="[^"]*"/, 'src="' + uiUrl('barricard.webp') + '"')}</h1>${intro}${won}
+  <div class="axh-menu">${axPlayHtml()}${coll}${daily}<div class="axh-info">${best}${nextUnlockTxt()}</div></div></div>
+  <nav class="axh-bar${cls}">${tab('rules', 'book', _t('Règles'))}${tab('deck', 'skull', _t('Bestiaire'))}${tab('stats', 'chart', _t('Stats'))}${tab('achs', 'trophy', `${_t('Succès')} ${nAch}/${ACH.length}`)}${tab('credits', '', _t('Crédits'), 'cr')}</nav>
+  <button type="button" class="axh-gear" data-a="options" aria-label="${_t('Options')}">${ii('cog')}</button>
+  ${iosHint() ? _t('<p class="ver">Sur iPhone : Partager → « Sur l’écran d’accueil » pour jouer en plein écran.</p>') : ''}<p class="ver axh-ver">${VERSION}</p>`;
+}
+// crédits (sortis de l'accueil)
+ACT.credits = () => {
+  onTitle = true;
+  show(
+    `<h2 class="pw">${_t('Crédits')}</h2><p>${_t('Barricard : un jeu d’Amine.')}</p><p>${_t('Sons : Kenney (kenney.nl), artisticdude et saturn91 (OpenGameArt), sous licence CC0 ; La Sonothèque, Pixabay, Sound Fishing (détails dans CREDITS.md).')}</p><p>${_t('Polices : Special Elite, Atkinson Hyperlegible et Oswald (licence SIL Open Font).')}</p><button type="button" class="go" data-a="title">${_t('Retour')}</button>`,
+  );
+};
+// Options ouvertes depuis l'accueil : boutons Crédits et Mode test (qui ne sont plus sur l'accueil du style artiste)
+{
+  const o0 = optionsScreen;
+  optionsScreen = function () {
+    const r = o0.apply(this, arguments);
+    try {
+      const o = $('#panel .opts');
+      if (AX.on() && optBack === 'title' && o)
+        o.insertAdjacentHTML(
+          'afterend',
+          `<div class="bgrid axh-optx"><button type="button" class="skip" data-a="credits">${_t('Crédits')}</button><button type="button" class="skip" data-a="testmode">${_t('Mode test')}</button></div>`,
+        );
+    } catch (e) {}
+    return r;
+  };
+}
+// la liste des images de l'artiste arrive après le premier affichage de l'accueil : on le refait dans le bon style
+{
+  const a2 = applyArt;
+  applyArt = function () {
+    a2.apply(this, arguments);
+    try {
+      const home = onTitle && !ov.hidden && panel.classList.contains('ttl');
+      if (home && AX.on() !== !!panel.querySelector('.axh-col')) title();
+    } catch (e) {}
+  };
+}
+// PC : le décor suit très légèrement la souris (effet de profondeur), coupé en Mode économie
+{
+  let axPx = 0,
+    axPy = 0,
+    axRaf = 0;
+  addEventListener('mousemove', e => {
+    if (!DE.classList.contains('artx') || DE.classList.contains('eco') || !matchMedia('(hover:hover)').matches) return;
+    axPx = (e.clientX / innerWidth) * 2 - 1;
+    axPy = (e.clientY / innerHeight) * 2 - 1;
+    if (axRaf) return;
+    axRaf = requestAnimationFrame(() => {
+      axRaf = 0;
+      const bg = $('#ov.axh #axbg');
+      if (bg) bg.style.transform = `translate3d(${(-axPx * 10).toFixed(1)}px,${(-axPy * 6).toFixed(1)}px,0)`;
+    });
+  });
 }

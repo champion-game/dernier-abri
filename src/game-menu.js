@@ -436,6 +436,11 @@ function title() {
     return;
   }
   onTitle = true;
+  // style artiste : accueil à part (game-artx.js), sur le modèle d’Amine
+  if (document.documentElement.classList.contains('artx') && typeof axTitleHtml === 'function') {
+    show(axTitleHtml());
+    return;
+  }
   show(_t`<h1 class="logo">${LOGO}</h1>${DEMO ? _t`<p class="demob">Démo</p><p>Tiens <b>${Z.DEMO_N} nuits</b> et repousse le Colosse. Dans le jeu complet : 30 nuits jusqu’aux secours, 3 boss et 10 Mutations.</p>${wishBtn()}` : _t`<p>Tiens <b>${Z.WIN_NIGHT} nuits</b> jusqu’à l’arrivée des secours… ou reste pour <b>une nuit de plus</b>. Chaque nuit, la horde est plus nombreuse et plus coriace.</p>`}${META.menaceWon >= 0 ? _t`<p class="mwon">${ii('trophy')} Mutation ${META.menaceWon} vaincue${META.wins > 1 ? _t` · ${META.wins} victoires` : ''}</p>` : ''}
 
 ${META.best ? _t`<p>Ton record : <b>${plural(META.best, _t('nuit survécue'), _t('nuits survécues'))}</b> · total : <b>${META.total}</b> nuits sur ${plural(META.runs, _t('partie'), _t('parties'))}.</p>` : ''}${nextUnlockTxt()}

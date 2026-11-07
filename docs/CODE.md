@@ -66,6 +66,7 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 
 - Le style actuel (cartoon) reste celui des joueurs.
 - Le style artiste vit sous `html.artx` (CSS) et dans `game-artx.js`, `game-coll.js` (JS, testé avec `ARTX()` ou `AX.on()`), avec les images de `assets/art/`.
+- Accueil du style artiste (v245) : `title()` appelle `axTitleHtml()` (game-artx.js) quand `html.artx` est actif ; `show()` met la classe `axh` sur `#ov` ; le décor est le calque `#axbg` (lueurs `AXG2` dans `#axglow`).
 - Une modification du style artiste ne doit jamais changer le style actuel : la préfixer par `html.artx`.
 
 ## Le CSS

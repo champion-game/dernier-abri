@@ -429,6 +429,10 @@ const GLY = {
   sword: 'M4 20l9-9M13 11l2-6 4-1-1 4-6 2zM6 14l4 4',
   chart: 'M4 20h16M7 20v-6M12 20V8M17 20v-11',
   undo: 'M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3',
+  book: 'M3 5c3-1 6-1 9 1v14c-3-2-6-2-9-1z M21 5c-3-1-6-1-9 1v14c3-2 6-2 9-1z',
+  cal: 'M4 6h16v15H4z M4 10h16 M8 3v5 M16 3v5 M8 14h1 M12 14h1 M16 14h1 M8 17h1 M12 17h1',
+  cards: 'M4 7l8-2 2 13-8 2z M14 5l6 2-3 13',
+  cog: 'M10.3 2h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9L2 13.7v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8z M12 8.8a3.2 3.2 0 1 0 0 6.4a3.2 3.2 0 1 0 0-6.4z',
 };
 const ii = (k, cls) =>
   `<svg class="ink${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
@@ -503,7 +507,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v244 · 7 nov.';
+const VERSION = 'v245 · 7 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD = false;

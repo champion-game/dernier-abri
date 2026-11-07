@@ -620,6 +620,7 @@ function show(h, keep) {
   if (onTitle && typeof hglowFit === 'function') hglowFit();
   panel.classList.toggle('ttl', !!panel.querySelector('.logo'));
   ov.classList.toggle('hm', !!onTitle && panel.classList.contains('ttl'));
+  ov.classList.toggle('axh', !!panel.querySelector('.axh-col'));
   pfoot();
   panel.scrollTop = keep ? y : 0;
   // v139 : fondu de l'écran à l'ouverture, contenu qui glisse quand on change d'écran (pas quand on reste sur le même écran)

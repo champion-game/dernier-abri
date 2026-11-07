@@ -14231,3 +14231,584 @@ html.eco .go.ready:not(:disabled) {
     font-size: 22px;
   }
 }
+
+/* ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) =====
+   Décor : plateau sur la table (accueil.webp, accueil-portrait.webp) dans le calque #axbg, qui suit un peu la souris sur PC.
+   PC : logo et menu à gauche, barre du bas centrée, engrenage en haut à droite. Téléphone : logo dans le ciel, menu sous le plateau.
+   Tous les boutons sur le panneau noir ; « Jouer » : panneau noir rougi, lueur de braise qui respire et reflet qui passe. */
+#axbg {
+  display: none;
+}
+html.artx #ov.home.axh {
+  display: block;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #24150c !important;
+  backdrop-filter: none;
+}
+html.artx #ov.axh::before,
+html.artx #ov.axh::after {
+  display: none;
+}
+html.artx #ov.axh #axbg {
+  display: block;
+  position: absolute;
+  inset: -14px;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--ui-accueil, var(--fond)) center 60% / cover no-repeat;
+  transition: transform 0.5s ease-out;
+}
+html.artx #ov.axh #panel.panel.ttl {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-height: 100%;
+  max-height: none;
+  overflow: visible;
+  margin: 0;
+  padding: max(3vh, env(safe-area-inset-top, 0px)) 4vw 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+}
+html.artx #ov.axh .axh-col {
+  width: min(29vw, 360px);
+  min-width: 270px;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+html.artx #ov.axh .axh-col .logo {
+  width: 100%;
+  margin: 0;
+}
+html.artx #ov.axh .axh-col .logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* textes posés sur le décor, sans fiche beige */
+html.artx #ov.axh .panel.ttl p {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  color: #f1e4c8;
+  font-size: clamp(13px, 1.25vw, 16px);
+  text-shadow:
+    0 2px 4px #000,
+    0 0 8px #000;
+}
+html.artx #ov.axh .panel.ttl p b {
+  color: #ffb27a;
+}
+html.artx #ov.axh .panel.ttl p.axh-tag {
+  position: relative;
+  padding: 11px 0;
+  font-size: clamp(14px, 1.4vw, 18px);
+}
+.axh-tag::before,
+.axh-tag::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a46a, transparent);
+}
+.axh-tag::before {
+  top: 0;
+}
+.axh-tag::after {
+  bottom: 0;
+}
+.axh-tag i {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: #c9a46a;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.axh-tag i:first-child {
+  top: 0;
+}
+.axh-tag i:last-child {
+  top: 100%;
+}
+html.artx #ov.axh .axh-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vh;
+}
+html.artx #ov.axh .axh-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé */
+html.artx #ov.axh .axh-big {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 0;
+  height: clamp(42px, 6.2vh, 54px);
+  margin: 0;
+  padding: 0;
+  font-family: Oswald, sans-serif;
+  font-weight: 600;
+  font-size: clamp(15px, 1.45vw, 19px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: left;
+}
+html.artx #ov.axh .axh-big .ink {
+  width: clamp(22px, 1.9vw, 28px);
+  height: auto;
+  margin: 0 4%;
+  align-self: center;
+  flex: none;
+}
+html.artx #ov.axh .axh-big b {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 6%;
+  border-left: 1px solid rgba(201, 164, 106, 0.55);
+  font-weight: inherit;
+}
+html.artx #ov.axh .axh-big .newb {
+  font-size: 0.6em;
+}
+/* « Jouer » : panneau noir rougi (version B) */
+html.artx #ov.axh #panel .axh-play {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 1.3vh 0;
+  border-image: var(--ui-panneau-noir) 36 fill / 10px stretch !important;
+  filter: none !important;
+  font-family: Oswald, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 32px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff3dc !important;
+  text-shadow:
+    0 2px 0 #3a0603,
+    0 0 12px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 0 0 2px rgba(255, 140, 60, 0.35),
+    0 0 26px 4px rgba(255, 90, 30, 0.5) !important;
+  animation: axhGlow 2s ease-in-out infinite;
+}
+html.artx #ov.axh #panel .axh-play::before {
+  content: none;
+}
+html.artx #ov.axh #panel .axh-play::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  border-radius: 9px;
+  pointer-events: none;
+  background:
+    linear-gradient(100deg, transparent 30%, rgba(255, 210, 140, 0.55) 45%, transparent 60%) -200% 0 / 250% 100% no-repeat,
+    linear-gradient(#a8261a, #4a0705);
+  mix-blend-mode: screen;
+  animation: axhSweep 3s ease-in-out infinite;
+}
+html.artx #ov.axh #panel .axh-play:hover {
+  filter: brightness(1.15) !important;
+}
+html.artx #ov.axh #panel .axh-play:active {
+  transform: translateY(2px);
+}
+@keyframes axhGlow {
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(255, 170, 80, 0.6),
+      0 0 40px 10px rgba(255, 110, 40, 0.65);
+  }
+}
+@keyframes axhSweep {
+  0%,
+  40% {
+    background-position:
+      -200% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      200% 0,
+      0 0;
+  }
+}
+html.artx #ov.axh .axh-new {
+  align-self: center;
+  margin: -4px 0 0;
+  padding: 2px 8px;
+  border: 0;
+  background: none;
+  color: #f1e4c8;
+  font:
+    15px 'Atkinson Hyperlegible',
+    sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-shadow: 0 1px 3px #000;
+  cursor: pointer;
+}
+/* barre du bas */
+html.artx #ov.axh .axh-bar {
+  position: relative;
+  isolation: isolate;
+  align-self: center;
+  display: flex;
+  width: min(60vw, 780px);
+  margin: auto 0 max(2vh, env(safe-area-inset-bottom, 0px));
+  padding-top: 0;
+  border-image: var(--ui-panneau-noir) 36 fill / 10px stretch;
+  filter: var(--axsh2);
+}
+html.artx #ov.axh .axh-tab {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px 6px;
+  border: 0;
+  border-left: 1px solid rgba(201, 164, 106, 0.4);
+  background: none;
+  color: #f1e4c8;
+  font-family: Oswald, sans-serif;
+  font-size: clamp(13px, 1.15vw, 16px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+html.artx #ov.axh .axh-tab:first-child {
+  border-left: 0;
+}
+html.artx #ov.axh .axh-tab:hover {
+  color: #ffd88a;
+}
+html.artx #ov.axh .axh-tab .ink {
+  width: 21px;
+  height: 21px;
+  flex: none;
+}
+html.artx #ov.axh .axh-tab.cr {
+  flex: 0.6 1 0;
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+html.artx #ov.axh .axh-gear {
+  position: absolute;
+  top: max(2vh, env(safe-area-inset-top, 0px));
+  right: 1.5vw;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #f1e4c8;
+  border-image: var(--ui-panneau-noir) 36 fill / 8px stretch;
+  filter: var(--axsh2);
+  cursor: pointer;
+}
+html.artx #ov.axh .axh-gear .ink {
+  width: 28px;
+  height: 28px;
+}
+html.artx #ov.axh .axh-gear:hover {
+  filter: var(--axsh2) brightness(1.35);
+}
+html.artx #ov.axh .panel.ttl p.axh-ver {
+  position: absolute;
+  right: 1.5vw;
+  bottom: 2px;
+  padding: 0;
+  font-size: 11px;
+  color: #a8977a;
+  opacity: 1;
+}
+html.artx .axh-optx {
+  margin-top: 4px;
+}
+/* PC peu haut et téléphone tourné : tout se resserre */
+@media (min-aspect-ratio: 3/4) and (max-height: 560px) {
+  html.artx #ov.axh .axh-col {
+    gap: 7px;
+    width: min(40vw, 330px);
+  }
+  html.artx #ov.axh .axh-col .logo {
+    width: 72%;
+    align-self: center;
+  }
+  html.artx #ov.axh .panel.ttl p.axh-tag {
+    display: none;
+  }
+  html.artx #ov.axh .axh-menu {
+    gap: 7px;
+  }
+  html.artx #ov.axh #panel .axh-play {
+    font-size: 21px;
+    padding: 5px 0;
+  }
+  html.artx #ov.axh .axh-big {
+    height: 36px;
+    font-size: 14px;
+  }
+  html.artx #ov.axh .axh-bar {
+    width: min(78vw, 700px);
+    margin-bottom: 6px;
+  }
+  html.artx #ov.axh .axh-tab {
+    padding: 6px 4px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  html.artx #ov.axh .axh-tab .ink {
+    width: 17px;
+    height: 17px;
+  }
+}
+/* téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes */
+@media (max-aspect-ratio: 3/4) {
+  html.artx #ov.axh #axbg {
+    inset: 0 0 auto 0;
+    height: calc(100vw * 1.777);
+    background: var(--ui-accueil-portrait, var(--ui-fond-portrait2)) center top / 100% auto no-repeat;
+    transform: none !important;
+  }
+  html.artx #ov.axh #axbg::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 18%;
+    background: linear-gradient(rgba(36, 21, 12, 0), #24150c);
+  }
+  html.artx #ov.axh #panel.panel.ttl {
+    padding: 0 16px max(6px, env(safe-area-inset-bottom, 0px));
+  }
+  html.artx #ov.axh .axh-col {
+    flex: 1;
+    width: 100%;
+    max-width: 420px;
+    min-width: 0;
+    align-self: center;
+    gap: 9px;
+  }
+  html.artx #ov.axh .axh-col .logo {
+    width: min(60%, 300px);
+    margin: max(2vh, env(safe-area-inset-top, 0px)) auto 0;
+  }
+  html.artx #ov.axh .panel.ttl p.axh-tag {
+    display: none;
+  }
+  html.artx #ov.axh .axh-menu {
+    margin-top: auto;
+    padding-top: 12px;
+    gap: 9px;
+  }
+  html.artx #ov.axh #panel .axh-play {
+    font-size: 25px;
+    padding: 8px 0;
+  }
+  html.artx #ov.axh .axh-big {
+    height: 44px;
+    font-size: 15px;
+  }
+  html.artx #ov.axh .axh-big .ink {
+    width: 24px;
+  }
+  html.artx #ov.axh .panel.ttl p {
+    font-size: 13px;
+  }
+  html.artx #ov.axh .axh-bar {
+    width: 100%;
+    max-width: 420px;
+    margin: 10px 0 4px;
+  }
+  html.artx #ov.axh .axh-tab {
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px 2px;
+    font-size: 11px;
+  }
+  html.artx #ov.axh .axh-tab .ink {
+    width: 20px;
+    height: 20px;
+  }
+  html.artx #ov.axh .axh-tab.cr {
+    display: none;
+  }
+  html.artx #ov.axh .axh-gear {
+    top: max(10px, env(safe-area-inset-top, 0px));
+    right: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  html.artx #ov.axh .panel.ttl p.axh-ver {
+    position: static;
+    text-align: center;
+  }
+}
+/* entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte (premier affichage seulement) */
+html.artx .axh-in .logo img {
+  animation: axhDrop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+html.artx .axh-in .axh-menu > * {
+  animation: axhSlide 0.45s ease-out both;
+}
+html.artx .axh-in .axh-menu > :nth-child(1) {
+  animation-delay: 0.2s;
+}
+html.artx .axh-in .axh-menu > :nth-child(2) {
+  animation-delay: 0.3s;
+}
+html.artx .axh-in .axh-menu > :nth-child(3) {
+  animation-delay: 0.4s;
+}
+html.artx .axh-in .axh-menu > :nth-child(4) {
+  animation-delay: 0.5s;
+}
+html.artx .axh-in .axh-menu > .axh-play {
+  animation:
+    axhSlide 0.45s 0.2s ease-out both,
+    axhGlow 2s 0.7s ease-in-out infinite;
+}
+html.artx .axh-bar.axh-in {
+  animation: axhUp 0.5s 0.55s ease-out both;
+}
+@keyframes axhDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes axhSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes axhUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* lueurs du décor : étoiles, brume devant la forêt, lucioles */
+#axglow .ax-star {
+  width: 3px;
+  height: 3px;
+  background: #fff6dc;
+  box-shadow: 0 0 4px 1px rgba(255, 240, 200, 0.7);
+  animation: axTw 3s ease-in-out infinite;
+}
+@keyframes axTw {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+#axglow .ax-mist {
+  left: -20%;
+  width: 140%;
+  height: calc(var(--w) * 5);
+  border-radius: 0;
+  transform: translateY(-50%);
+  opacity: 0.5;
+  background: radial-gradient(ellipse 18% 50% at 15% 50%, rgba(190, 205, 230, 0.4), transparent 70%),
+    radial-gradient(ellipse 22% 45% at 45% 55%, rgba(200, 212, 235, 0.35), transparent 70%),
+    radial-gradient(ellipse 16% 50% at 75% 45%, rgba(190, 205, 230, 0.38), transparent 70%);
+  animation: axMist 40s ease-in-out infinite alternate;
+}
+@keyframes axMist {
+  from {
+    transform: translate(-6%, -50%);
+  }
+  to {
+    transform: translate(6%, -50%);
+  }
+}
+#axglow .ax-fly {
+  width: 5px;
+  height: 5px;
+  background: #fff2a0;
+  box-shadow:
+    0 0 6px 2px rgba(255, 220, 90, 0.75),
+    0 0 14px 4px rgba(255, 180, 60, 0.3);
+  animation: axFly 9s ease-in-out infinite alternate;
+}
+@keyframes axFly {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)));
+  }
+}
+html.eco #ov.axh #panel .axh-play,
+html.eco #ov.axh #panel .axh-play::after,
+html.eco .axh-in .logo img,
+html.eco .axh-in .axh-menu > *,
+html.eco .axh-bar.axh-in {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #ov.axh #panel .axh-play,
+  #ov.axh #panel .axh-play::after,
+  .axh-in .logo img,
+  .axh-in .axh-menu > *,
+  .axh-bar.axh-in {
+    animation: none !important;
+  }
+}
