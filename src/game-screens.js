@@ -614,6 +614,7 @@ function show(h, keep) {
   const y = panel.scrollTop,
     was = ov.hidden;
   panel.innerHTML = h;
+  hdArt(panel.querySelector('.picks, .gifts, .lcd')); // grandes cartes : images complètes
   ov.hidden = false;
   ov.classList.toggle('home', !!onTitle);
   if (onTitle && typeof hglowFit === 'function') hglowFit();

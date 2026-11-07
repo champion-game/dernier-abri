@@ -302,7 +302,10 @@ async function lcShow(t) {
     const lcd = box.querySelector('.lcd');
     if (lcd) lcd.dataset.t = t;
     const c = fl.querySelector('.lcd-c');
-    if (c) c.innerHTML = cardFace(t, { base: 1 });
+    if (c) {
+      c.innerHTML = cardFace(t, { base: 1 });
+      hdArt(c);
+    }
     const inf = box.querySelector('.lcd-info');
     if (inf) inf.innerHTML = lcInfo(t);
     box.classList.remove('pop');

@@ -42,6 +42,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-coll.js` : collection du style artiste reprise du laboratoire (`champion-game/laboratoire-`, `interfaces/collection`) : filtres, grille, grande carte qui se retourne ; chargé tout à la fin.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
 - `assets/art/` : les images de l’artiste en essai (même nom que l’image remplacée, puis `node tools/art-liste.js`), visibles via Options → « Images de l’artiste » sur le site GitHub seulement (voir `docs/GAME_DESIGN.md`, « Le style artiste »).
+- `assets/cards_min/` : miniatures (320 px) des illustrations de `assets/cards_cartoon/`, pour les petites cartes ; la grande carte charge l’image complète (`hdArt`). Après tout ajout ou remplacement d’illustration : `python3 tools/miniatures.py`.
 - `assets/fonts/` : les polices, intégrées au jeu (plus de Google Fonts).
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
 - `src/i18n.js` : la traduction (`_t`, langue choisie) ; `src/lang-en.js` : le dictionnaire anglais (clé = texte français).

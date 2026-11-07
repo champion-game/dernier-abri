@@ -173,6 +173,7 @@ const SPRD = {},
    Vus strictement du dessus, personnages et zombies tournés vers le BAS (angle π/2) ; murs dessinés à l'horizontale. */
 const SPRDC = {},
   SPRC = {},
+  SPRQ = [], // sprites en attente de chargement
   DOWN = Math.PI / 2;
 [
   ['rot', DOWN, 44, 'gun snp sht xbow flame mg molo kid swat hunter vigile doc nailer ranger rocket'],
@@ -219,11 +220,19 @@ const SPRDC = {},
 ].forEach(([m, b, z, ids]) =>
   ids.split(' ').forEach(k => {
     SPRDC[k] = [m, b, z];
+    SPRQ.push(k);
+  }),
+);
+// les sprites (1,6 Mo) se chargent une fois la page affichée, pour ne pas ralentir l'accueil
+function loadSprites() {
+  SPRQ.splice(0).forEach(k => {
     const im = new Image();
     im.onload = () => (SPRC[k] = im);
     im.src = 'assets/sprites_cartoon/' + k + '.webp';
-  }),
-);
+  });
+}
+if (document.readyState === 'complete') loadSprites();
+else addEventListener('load', loadSprites);
 // le sprite à utiliser selon le style choisi (cartoon si disponible, sinon réaliste)
 // cheminots : sprites de l'artiste seulement (pas d'image cartoon), v238
 const SPRDA = {};
@@ -282,19 +291,36 @@ const artNew = (d, f) => !!(ART_DEV && OPT.art && ART_NEW[d] && ART_NEW[d].inclu
 const artP = (d, f, old) => (artNew(d, f) ? 'assets/art/' + d + '/' + f : old);
 const uiUrl = f => artP('ui', f, 'assets/ui/' + f);
 const sprUrl = k => artP('sprites', k + '.webp', 'assets/sprites_cartoon/' + k + '.webp');
-const zArt = k => artP('cards', 'z_' + k + '.webp', 'assets/cards_cartoon/z_' + k + '.webp');
-const popUrl = t => {
+// illustrations cartoon : miniature (assets/cards_min, 320 px) pour les petites cartes, image complète si big
+const cartDir = big => (big ? 'assets/cards_cartoon/' : 'assets/cards_min/');
+const zArt = (k, big) => artP('cards', 'z_' + k + '.webp', cartDir(big) + 'z_' + k + '.webp');
+const popUrl = (t, big) => {
   if (!popOK(t)) return '';
   if (artNew('cards', t + '.webp'))
     return artNew('cards', t + '_pop.webp') ? 'assets/art/cards/' + t + '_pop.webp' : '';
-  return CART_POP.includes(t) ? 'assets/cards_cartoon/' + t + '_pop.webp' : '';
+  return CART_POP.includes(t) ? cartDir(big) + t + '_pop.webp' : '';
 };
-const artUrl = t =>
+const artUrl = (t, big) =>
   artNew('cards', t + '.webp')
     ? 'assets/art/cards/' + t + '.webp'
     : CART_FILES.includes(t)
-      ? 'assets/cards_cartoon/' + t + '.webp'
+      ? cartDir(big) + t + '.webp'
       : '';
+// carte affichée en grand : remplace les miniatures par les images complètes, une fois celles-ci chargées
+// (la miniature reste visible pendant le chargement)
+function hdArt(root) {
+  if (!root) return;
+  try {
+    root.querySelectorAll('[style*="cards_min/"]').forEach(el => {
+      const m = el.style.backgroundImage.match(/url\(["']?([^"')]+)["']?\)/);
+      if (!m) return;
+      const full = m[1].replace('assets/cards_min/', 'assets/cards_cartoon/');
+      const im = new Image();
+      im.onload = () => (el.style.backgroundImage = `url('${full}')`);
+      im.src = full;
+    });
+  } catch (e) {}
+}
 // applique le style choisi : fonds et cadres (variables CSS --ui-<nom>), sprites du plateau, maison fortifiée, puis redessine l'écran
 function applyArt() {
   try {
@@ -443,7 +469,7 @@ function cardFace(t, o = {}) {
     st = cardStats(D),
     f = Z.famOf(t),
     ro = Z.roleOf(t),
-    u = artUrl(B),
+    u = artUrl(B, o.big),
     cost = o.cost ?? (o.base ? Z.cost(t) : Z.costOf(G, t));
   const atk =
     st.atk != null
@@ -463,7 +489,7 @@ function cardFace(t, o = {}) {
     (f && seen('fam1') ? `<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>` : '') +
     (ro ? `<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>` : '');
   return `<span class="cf r-${r}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
-  <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
+  <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
   ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost">${cost}</span>
   <span class="cf-name">${D.n}</span>
   ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${D.rng > 1 && !/portée/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
@@ -476,7 +502,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v242 · 7 nov.';
+const VERSION = 'v243 · 7 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD = false;

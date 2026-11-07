@@ -252,6 +252,7 @@ function zoomCf(cf, lp) {
   c.classList.remove('ghost');
   zoomEl.innerHTML = _t('<div class="zoomc"></div><p>Touche pour fermer</p>');
   zoomEl.firstChild.appendChild(c);
+  hdArt(c);
   zoomEl.hidden = false;
   try {
     SFX.play('ui');

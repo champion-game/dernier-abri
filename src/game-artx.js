@@ -131,6 +131,7 @@ function axBig() {
     const t = S.hand[k];
     if (big._t !== t) {
       big.innerHTML = cardFace(t);
+      hdArt(big);
       big._t = t;
     }
     big.hidden = false;

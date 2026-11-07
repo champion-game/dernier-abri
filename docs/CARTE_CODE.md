@@ -9,16 +9,16 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 2. `src/lang-en.js` (2160 lignes)
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
-5. `src/game.js` (1539 lignes)
+5. `src/game.js` (1565 lignes)
 6. `src/game-draw.js` (5935 lignes)
 7. `src/game-ui.js` (2019 lignes)
-8. `src/game-screens.js` (1686 lignes)
-9. `src/game-menu.js` (841 lignes)
+8. `src/game-screens.js` (1687 lignes)
+9. `src/game-menu.js` (842 lignes)
 10. `src/game-anim.js` (1181 lignes)
 11. `src/game-fiche.js` (695 lignes)
 12. `src/game-fx2.js` (364 lignes)
-13. `src/game-artx.js` (1296 lignes)
-14. `src/game-coll.js` (659 lignes)
+13. `src/game-artx.js` (1297 lignes)
+14. `src/game-coll.js` (662 lignes)
 15. `src/game-fx3.js` (556 lignes)
 16. `src/game-fx5.js` (768 lignes)
 
@@ -29,46 +29,46 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
-| `render` | game-ui.js:601 | game-fx2.js:261, game-artx.js:82, game-artx.js:157, game-artx.js:282, game-artx.js:389, game-artx.js:840, game-artx.js:903 |
-| `applyArt` | game.js:299 | game-artx.js:65, game-artx.js:273, game-artx.js:847, game-artx.js:1291 |
-| `frameInner` | game-draw.js:5426 | game-artx.js:582, game-fx3.js:85, game-fx3.js:501, game-fx5.js:155 |
+| `render` | game-ui.js:601 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:283, game-artx.js:390, game-artx.js:841, game-artx.js:904 |
+| `applyArt` | game.js:325 | game-artx.js:65, game-artx.js:274, game-artx.js:848, game-artx.js:1292 |
+| `frameInner` | game-draw.js:5426 | game-artx.js:583, game-fx3.js:85, game-fx3.js:501, game-fx5.js:155 |
 | `playEvents` | game-ui.js:4 | game-anim.js:913, game-fx2.js:329, game-fx3.js:94, game-fx5.js:106 |
-| `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:594 |
-| `collectionScreen` | game-screens.js:937 | game-anim.js:397, game-coll.js:639 |
-| `deckEditor` | game-screens.js:905 | game-anim.js:405, game-coll.js:649 |
-| `feltLayout` | game-ui.js:1857 | game-artx.js:828, game-artx.js:971 |
-| `syncZ` | game-draw.js:2249 | game-fx2.js:201, game-artx.js:1013 |
+| `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:595 |
+| `collectionScreen` | game-screens.js:938 | game-anim.js:397, game-coll.js:642 |
+| `deckEditor` | game-screens.js:906 | game-anim.js:405, game-coll.js:652 |
+| `feltLayout` | game-ui.js:1857 | game-artx.js:829, game-artx.js:972 |
+| `syncZ` | game-draw.js:2249 | game-fx2.js:201, game-artx.js:1014 |
 | `unitAnim` | game-draw.js:2927 | game-fx3.js:348, game-fx5.js:476 |
-| `countUp` | game-screens.js:646 | game-anim.js:1117 |
+| `countUp` | game-screens.js:647 | game-anim.js:1117 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:298 |
 | `drawFloats` | game-draw.js:4890 | game-fx5.js:760 |
-| `drawFog` | game-draw.js:5153 | game-artx.js:456 |
+| `drawFog` | game-draw.js:5153 | game-artx.js:457 |
 | `drawFX` | game-draw.js:4796 | game-fx5.js:650 |
 | `drawPlace` | game-draw.js:5314 | game-fx3.js:336 |
 | `drawShelter` | game-draw.js:4493 | game-fx5.js:520 |
-| `drawSky` | game-draw.js:4962 | game-artx.js:575 |
+| `drawSky` | game-draw.js:4962 | game-artx.js:576 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:724 |
-| `hglowFit` | game-menu.js:803 | game-artx.js:231 |
-| `keepEnd` | game-menu.js:554 | game-fiche.js:206 |
+| `hglowFit` | game-menu.js:804 | game-artx.js:232 |
+| `keepEnd` | game-menu.js:555 | game-fiche.js:206 |
 | `lights` | game-draw.js:5073 | game-fx3.js:399 |
 | `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
-| `pilesHtml` | game.js:1383 | game-artx.js:884 |
+| `pilesHtml` | game.js:1409 | game-artx.js:885 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
-| `ringFog` | game-draw.js:2096 | game-artx.js:443 |
+| `ringFog` | game-draw.js:2096 | game-artx.js:444 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:610 | game-anim.js:1158 |
-| `showAch` | game.js:733 | game-anim.js:1108 |
+| `showAch` | game.js:759 | game-anim.js:1108 |
 | `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
-| `title` | game-menu.js:429 | game-artx.js:240 |
+| `title` | game-menu.js:430 | game-artx.js:241 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
 
 ## Actions des boutons
 
-Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, ligne 1133).
+Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, ligne 1134).
 
-testmode:1134 · teststart:1141 · tcards:1159 · tadd:1175 · options:1181 · optclose:1182 · presume:1189 · pquit:1194 · prestart:1198 · prestart2:1202 · pmenu:1211 · closeov:1212 · bpick:1216 · artstyle:1224 · new:1231 · prepdeck:1242 · prepch:1247 · preppl:1251 · preprel:1262 · prepmen:1266 · start:1272 · edit:1287 · dkp:1288 · cfam:1296 · crole:1307 · cpg:1318 · cfmore:1322 · atel:1326 · dkdraw:1333 · dkm:1337 · dkreset:1346 · coll:1351 · mdet:1359 · achs:1360 · gift:1361 · gyes:1362 · gno:1363 · gdone:1364 · mback:1365 · evo:1369 · unlock:1370 · load:1384 · title:1389 · close:1390 · rules:1391 · stats:1395 · rgo:1396 · retuto:1400 · deck:1412 · dawn:1420 · lvl:1421 · relic:1433 · evc:1438 · todraft:1457 · draft:1458 · shop:1467 · day:1519 · nightpick:1520 · nightgo:1524 · daily:1528 · wish:1531 · dpick:1541 · peek:1546
+testmode:1135 · teststart:1142 · tcards:1160 · tadd:1176 · options:1182 · optclose:1183 · presume:1190 · pquit:1195 · prestart:1199 · prestart2:1203 · pmenu:1212 · closeov:1213 · bpick:1217 · artstyle:1225 · new:1232 · prepdeck:1243 · prepch:1248 · preppl:1252 · preprel:1263 · prepmen:1267 · start:1273 · edit:1288 · dkp:1289 · cfam:1297 · crole:1308 · cpg:1319 · cfmore:1323 · atel:1327 · dkdraw:1334 · dkm:1338 · dkreset:1347 · coll:1352 · mdet:1360 · achs:1361 · gift:1362 · gyes:1363 · gno:1364 · gdone:1365 · mback:1366 · evo:1370 · unlock:1371 · load:1385 · title:1390 · close:1391 · rules:1392 · stats:1396 · rgo:1397 · retuto:1401 · deck:1413 · dawn:1421 · lvl:1422 · relic:1434 · evc:1439 · todraft:1458 · draft:1459 · shop:1468 · day:1520 · nightpick:1521 · nightgo:1525 · daily:1529 · wish:1532 · dpick:1542 · peek:1547
 
 Ajoutées ou remplacées ailleurs : unlock (game-anim.js:481) · dkp (game-anim.js:507) · dkm (game-anim.js:541) · prepdeck (game-anim.js:573) · start (game-anim.js:687) · gift (game-anim.js:758) · relic (game-anim.js:1015) · prepmen (game-anim.js:1091) · fshare (game-fiche.js:689)
 
@@ -114,10 +114,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : sprK:234 drawSpr:240 applyArt:299 cardStats:341 seen:422 novice:429 cardFace:437 saveOpt:538 applyOpt:554 applyCur:574 toggleFs:593 unpause:612 R:620
-- **651** state
-- **653** progression entre les parties (localStorage) : loadMeta:654 endTest:675 saveMeta:680 ach:721 showAch:733 deckCanAdd:766 edGain:780 edCommit:789 edDrop:819 achCheck:845 achNight:870 achScreen:878 tuto:897 guideStep:928 guideOk:1068 tutoTip:1089 tutoHand:1101 tutoPicks:1124 tutoEnd:1129 newGame:1144 fillHand:1194 drawCards:1202 syncBoard:1229 cellRect:1267 fly:1272 animPiles:1325 pilesHtml:1383
-- **1453** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1456 loadSave:1480 clearSave:1503 resume:1509
+- **1** (début) : loadSprites:227 sprK:243 drawSpr:249 hdArt:311 applyArt:325 cardStats:367 seen:448 novice:455 cardFace:463 saveOpt:564 applyOpt:580 applyCur:600 toggleFs:619 unpause:638 R:646
+- **677** state
+- **679** progression entre les parties (localStorage) : loadMeta:680 endTest:701 saveMeta:706 ach:747 showAch:759 deckCanAdd:792 edGain:806 edCommit:815 edDrop:845 achCheck:871 achNight:896 achScreen:904 tuto:923 guideStep:954 guideOk:1094 tutoTip:1115 tutoHand:1127 tutoPicks:1150 tutoEnd:1155 newGame:1170 fillHand:1220 drawCards:1228 syncBoard:1255 cellRect:1293 fly:1298 animPiles:1351 pilesHtml:1409
+- **1479** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1482 loadSave:1506 clearSave:1529 resume:1535
 
 ### src/game-draw.js
 
@@ -139,14 +139,14 @@ _t:19 _tPage:41
 
 > Dernier Abri : écrans (aube, options, collection, decks, préparation) et actions des bouto
 
-- **3** l'aube : relique, carte pour demain, boutique : dawn:5 afterRelic:30 dawnStep:35 dawnTxt:85 shopScreen:102 storeScreen:121 listScreen:135 removeCard:140 nightScreen:151 nextDay:165 victory:179 leaveWin:239 wishBtn:263 demoEnd:268 giftStart:295 giftLeft:305 giftScreen:309 giftSync:326 giftTap:347 giftTake:371 giftDone:374 statsScreen:392 logRun:416 end:431 zombieFace:499 optionsScreen:515 runInfo:554 pfoot:593 show:610 countUp:646 hide:661
-- **669** collection, decks et préparation de la partie : takeLegacy:671 ensureMeta:683 prepScreen:716 cfOpen:773 cfPool:784 cfList:794 cfTabs:810 cfBar:828 cfPips:847 cfBookHTML:855 cfBook:866 cfSync:899 deckEditor:905 collectionScreen:937 cfBarOld:999 cfGrid:1012 cfApply:1042 cfSyncOld:1047 deckEditorOld:1053 collectionScreenOld:1065 evoScreen:1121 nextUnlockTxt:1665
+- **3** l'aube : relique, carte pour demain, boutique : dawn:5 afterRelic:30 dawnStep:35 dawnTxt:85 shopScreen:102 storeScreen:121 listScreen:135 removeCard:140 nightScreen:151 nextDay:165 victory:179 leaveWin:239 wishBtn:263 demoEnd:268 giftStart:295 giftLeft:305 giftScreen:309 giftSync:326 giftTap:347 giftTake:371 giftDone:374 statsScreen:392 logRun:416 end:431 zombieFace:499 optionsScreen:515 runInfo:554 pfoot:593 show:610 countUp:647 hide:662
+- **670** collection, decks et préparation de la partie : takeLegacy:672 ensureMeta:684 prepScreen:717 cfOpen:774 cfPool:785 cfList:795 cfTabs:811 cfBar:829 cfPips:848 cfBookHTML:856 cfBook:867 cfSync:900 deckEditor:906 collectionScreen:938 cfBarOld:1000 cfGrid:1013 cfApply:1043 cfSyncOld:1048 deckEditorOld:1054 collectionScreenOld:1066 evoScreen:1122 nextUnlockTxt:1666
 
 ### src/game-menu.js
 
 > Dernier Abri : défi quotidien, tableau des combats, menu pause, raccourcis, accueil et dém
 
-- **3** défi du jour (v151) : une seule nuit contre la horde du jour, 8 cartes tirées « 1 parmi 3  : dailyEnd:9 dailyBest:13 dailyScreen:34 dailyDraft:44 dailyStart:54 dailyOver:63 pauseMenu:192 abortNight:202 nightBanner:227 zoomCf:246 zoomClose:260 title:429 meterHead:474 meterBody:479 meterSync:510 keepEnd:554 detScreen:557 detSync:564 muteIcon:583 iosHint:592 hglowFit:803
+- **3** défi du jour (v151) : une seule nuit contre la horde du jour, 8 cartes tirées « 1 parmi 3  : dailyEnd:9 dailyBest:13 dailyScreen:34 dailyDraft:44 dailyStart:54 dailyOver:63 pauseMenu:192 abortNight:202 nightBanner:227 zoomCf:246 zoomClose:261 title:430 meterHead:475 meterBody:480 meterSync:511 keepEnd:555 detScreen:558 detSync:565 muteIcon:584 iosHint:593 hglowFit:804
 
 ### src/game-anim.js
 
@@ -190,14 +190,14 @@ _t:19 _tPage:41
 
 > v200 : refonte du jeu dans le style artiste (html.artx seulement) : plateau dessiné d'Amin
 
-- **1** (début) : axPalSet:15 axGround:40 axPlat:46 axBig:102 axGlow:179 axHome:258 axPad:302 axLay:311 axOn:436 axRing:461 axFxDraw:488 axPaint:609
-- **743** v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine : ax3Want:750 ax3Build:753 ax3Put1:767 ax3Put:786 ax3Back:807 ax3Phase:819 ax3Zoom:952 axFarDraw:1028 artNames:1277
+- **1** (début) : axPalSet:15 axGround:40 axPlat:46 axBig:102 axGlow:180 axHome:259 axPad:303 axLay:312 axOn:437 axRing:462 axFxDraw:489 axPaint:610
+- **744** v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine : ax3Want:751 ax3Build:754 ax3Put1:768 ax3Put:787 ax3Back:808 ax3Phase:820 ax3Zoom:953 axFarDraw:1029 artNames:1278
 
 ### src/game-coll.js
 
 > ---------- collection du style artiste (v222) ----------
 
-lcItem:43 lcDkItem:58 lcInfo:67 lcDetail:92 lcBase:99 lcList:106 lcCells:111 lcDeckSide:129 lcScreen:157 lcFill:216 lcPage:234 lcSearch:274 lcShow:280 lcOvPlace:331 lcOvOpen:344 lcOvClose:377 lcOri:411 lcGyro:424 lcNo:441 lcReset:608
+lcItem:43 lcDkItem:58 lcInfo:67 lcDetail:92 lcBase:99 lcList:106 lcCells:111 lcDeckSide:129 lcScreen:157 lcFill:216 lcPage:234 lcSearch:274 lcShow:280 lcOvPlace:334 lcOvOpen:347 lcOvClose:380 lcOri:414 lcGyro:427 lcNo:444 lcReset:611
 
 ### src/game-fx3.js
 

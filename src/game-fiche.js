@@ -274,9 +274,9 @@ async function ficheCanvas(d) {
   const [wood, logo, ca, cs, ...dk] = await Promise.all([
     fImg(uiUrl('wood.webp')),
     fImg(uiUrl('barricard.webp')),
-    fImg(d.card && artUrl(d.card.t)),
-    fImg((d.sv || d.wall) && artUrl((d.sv || d.wall).t)),
-    ...d.deck.map(t => fImg(artUrl(t))),
+    fImg(d.card && artUrl(d.card.t, 1)),
+    fImg((d.sv || d.wall) && artUrl((d.sv || d.wall).t, 1)),
+    ...d.deck.map(t => fImg(artUrl(t, 1))),
   ]);
   // fond : bois sombre
   if (wood) {
