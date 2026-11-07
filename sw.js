@@ -30,6 +30,7 @@ const CORE = [
   'assets/fonts/atkinson-400.woff2',
   'assets/fonts/atkinson-700.woff2',
   'assets/fonts/oswald-600.woff2',
+  'assets/fonts/creepster.woff2',
   'assets/art/ui/accueil.webp',
   'assets/art/ui/accueil-portrait.webp',
   'assets/art/ui/fond.webp',

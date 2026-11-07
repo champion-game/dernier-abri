@@ -1,4 +1,12 @@
 /* polices intégrées au jeu (licence SIL OFL), pour jouer sans internet */
+/* v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit » */
+@font-face {
+  font-family: 'Creepster';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../assets/fonts/creepster.woff2) format('woff2');
+}
 @font-face {
   font-family: 'Special Elite';
   font-style: normal;
@@ -7816,10 +7824,12 @@ html.eco .redsky {
 /* Trois polices, trois rôles (v248) :
    --ax-titre (Special Elite) : titres d'écran et documents (radio, journal, rapport) ;
    --ax-head (Oswald) : boutons, onglets, chiffres ;
-   --f-body (Atkinson) : tout le texte courant. */
+   --f-body (Atkinson) : tout le texte courant.
+   Exception (v252) : --ax-nuit (Creepster) pour le seul bouton « Affronter la nuit ». */
 html.artx {
   --ax-titre: 'Special Elite', 'Courier New', monospace;
   --ax-head: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --ax-nuit: 'Creepster', 'Oswald', Impact, sans-serif;
   --ax-black: #0b0a09;
   --ax-dark: #191714;
   --ax-dark2: #24211d;
@@ -11551,6 +11561,12 @@ html.artx.ax3 #ax3 #go::before {
   background: var(--ui-zombies-nuit, none) center / contain no-repeat;
   filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.8));
   pointer-events: none;
+}
+/* police d'horreur sur « Affronter la nuit » (le bouton de vitesse, pendant la nuit, garde Oswald) */
+html.artx.ax3 #ax3 #go:not(.speed) {
+  font-family: var(--ax-nuit) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em;
 }
 html.artx.ax3 #ax3 #go.speed::before {
   display: none !important;
