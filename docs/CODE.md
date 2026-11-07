@@ -82,7 +82,7 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 - **Nouveau texte** : en français dans `_t('…')`, traduction dans `src/lang-en.js` (clé = texte français exact). Le test moteur signale les oublis.
 - **Nouveau bouton** : `<button data-a="nom">` et une entrée `nom:()=>{…}` dans `ACT` (`game-screens.js`).
 - **Nouvel effet de nuit** : `playEvents` (`game-ui.js`) reçoit les événements du moteur ; le dessin se fait dans `frameInner` / `drawFX` (`game-draw.js`).
-- **Chargement des images** : `src/game-load.js`. L’écran de chargement (`#boot`, style dans `index.html`) attend l’essentiel (`bootUrls`) ; le reste se charge ensuite en arrière-plan (`preloadBackground`), en sautant ce que le service worker garde déjà.
+- **Chargement des images** : `src/game-load.js`. L’écran de chargement (`#boot`, style dans `index.html` ; v254 : fond et logo allégés dans `assets/boot/`, barre dans le panneau noir, étape, pourcentage et astuces `BOOT_TIPS`) attend l’essentiel (`bootUrls`) ; le reste se charge ensuite en arrière-plan (`preloadBackground`), en sautant ce que le service worker garde déjà.
 - **Dessin** : chaque élément dans un `try{}catch(e){}` pour que la boucle d’affichage ne s’arrête jamais.
 - **Mise en ligne** : voir `CLAUDE.md` (numéro de version à trois endroits, `node tools/test.js`).
 

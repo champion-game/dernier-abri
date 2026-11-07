@@ -1,4 +1,4 @@
-/* v244 : chargement des images.
+/* v244 : chargement des images (v254 : étape, pourcentage et astuces sur l'écran de chargement).
    1. Au lancement, l'écran de chargement (#boot, dans index.html) attend l'essentiel : la page et ses images,
       les sprites du plateau, les cadres de cartes et les cartes du deck. Il ne s'affiche qu'au bout de 0,4 s
       (style.css), donc pas du tout quand tout est déjà sur l'appareil ; il disparaît au plus tard après 12 s.
@@ -59,9 +59,60 @@ function bootUrls() {
   return [...spr, ...preloadUi(f => /^cadre-/.test(f)), ...deck].filter(Boolean);
 }
 
+// v254 : étape affichée sous la barre, selon l'avancement
+function bootStepLabel(r) {
+  if (r < 0.3) return _t('Fouille des ruines…');
+  if (r < 0.6) return _t('Barricades…');
+  if (r < 0.9) return _t('Mélange des cartes…');
+  return _t('Dernières planches…');
+}
+
 function bootBar(r) {
   const b = document.getElementById('bootBar');
   if (b) b.style.width = Math.round(r * 100) + '%';
+  const pct = document.getElementById('bootPct');
+  if (pct) pct.textContent = Math.round(r * 100) + ' %';
+  const step = document.getElementById('bootStep');
+  if (step) step.textContent = bootStepLabel(r);
+}
+
+// v254 : astuces de l'écran de chargement (règles vérifiées dans docs/GAME_DESIGN.md)
+const BOOT_TIPS = [
+  () => _t('Les cartes que tu ne joues pas restent en main pour les jours suivants.'),
+  () => _t('Glisse un mur sur 1 à 4 cases en ligne droite : chaque case en plus coûte 1 énergie.'),
+  () => _t('Après sa première pose, une carte de construction reste en main toute la journée.'),
+  () => _t('Trois unités du même type et du même nombre d’étoiles fusionnent en une unité plus forte.'),
+  () => _t('Certaines cartes posées côte à côte se transforment en une unité unique.'),
+  () => _t('Des murs voisins se soudent en un rempart avec une seule barre de PV.'),
+  () => _t('Toutes les 4 nuits, la horde mute et devient plus dangereuse.'),
+  () => _t('Toutes les 5 nuits, tu choisis une relique parmi trois.'),
+  () => _t('Le Colosse attaque toutes les 10 nuits : prépare-toi.'),
+  () => _t('Touche une unité qui tire pour voir sa zone de tir.'),
+  () => _t('Plus tu poses d’unités d’une même faction, plus la faction devient forte.'),
+  () => _t('Au troc, la ferraille sert à réparer, acheter et améliorer.'),
+  () => _t('Le Café ne coûte rien et donne 2 énergies de plus.'),
+  () => _t('Une Radio en jeu ajoute une carte à ta main chaque jour.'),
+  () => _t('Les unités posées restent en place d’une nuit à l’autre et gardent leurs dégâts.'),
+];
+
+// affiche une astuce au hasard, puis une autre toutes les 4,5 s (fondu entre deux)
+function bootTips() {
+  const el = document.getElementById('bootTip');
+  if (!el) return;
+  let i = Math.floor(Math.random() * BOOT_TIPS.length);
+  const show = () => {
+    el.innerHTML = '<em>' + _t('ASTUCE') + '</em>' + BOOT_TIPS[i]();
+    el.classList.remove('fade');
+  };
+  show();
+  const timer = setInterval(() => {
+    if (!document.getElementById('bootTip')) return clearInterval(timer);
+    el.classList.add('fade');
+    setTimeout(() => {
+      i = (i + 1) % BOOT_TIPS.length;
+      show();
+    }, 300);
+  }, 4500);
 }
 
 function bootEnd() {
@@ -77,6 +128,10 @@ function bootEnd() {
 
 async function preloadBoot() {
   setTimeout(bootEnd, 12000); // jamais bloqué plus de 12 s
+  try {
+    bootTips();
+    bootBar(0);
+  } catch (e) {}
   try {
     await ART_READY;
     const urls = bootUrls();

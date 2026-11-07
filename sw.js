@@ -36,6 +36,9 @@ const CORE = [
   'assets/art/ui/fond.webp',
   'assets/art/ui/barricard.webp',
   'assets/art/ui/panneau-noir.webp',
+  'assets/boot/logo.webp',
+  'assets/boot/fond.webp',
+  'assets/boot/fond-portrait.webp',
   'assets/art/ui/btn-rouge.webp',
 ];
 self.addEventListener('install', e => {

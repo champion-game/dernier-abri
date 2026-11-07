@@ -6,7 +6,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 ## Ordre de chargement (index.html)
 
 1. `src/i18n.js` (57 lignes)
-2. `src/lang-en.js` (2179 lignes)
+2. `src/lang-en.js` (2209 lignes)
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
@@ -22,7 +22,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 15. `src/game-coll.js` (662 lignes)
 16. `src/game-fx3.js` (556 lignes)
 17. `src/game-fx5.js` (768 lignes)
-18. `src/game-load.js` (140 lignes)
+18. `src/game-load.js` (195 lignes)
 
 ## Fonctions enveloppées
 
@@ -223,9 +223,9 @@ fx5On:64 fx5Named:71 fx5Line:80 fx5Say:87 fx5Events:114 fx5Tick:163 fx5Edge:232 
 
 ### src/game-load.js
 
-> v244 : chargement des images.
+> v244 : chargement des images (v254 : étape, pourcentage et astuces sur l'écran de chargeme
 
-preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 bootEnd:67 preloadBoot:78 preloadBigOk:98 preloadIdle:104 preloadBackground:118
+preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:63 bootBar:70 bootTips:99 bootEnd:118 preloadBoot:129 preloadBigOk:153 preloadIdle:159 preloadBackground:173
 
 ## src/style.css
 

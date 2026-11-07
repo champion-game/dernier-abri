@@ -2175,4 +2175,34 @@ I18N.en = {
     'Sounds: Kenney (kenney.nl), artisticdude and saturn91 (OpenGameArt), under CC0 license; La Sonothèque, Pixabay, Sound Fishing (details in CREDITS.md).',
   'Polices : Special Elite, Atkinson Hyperlegible et Oswald (licence SIL Open Font).':
     'Fonts: Special Elite, Atkinson Hyperlegible and Oswald (SIL Open Font License).',
+  'Fouille des ruines…': 'Searching the ruins…',
+  'Barricades…': 'Barricading…',
+  'Mélange des cartes…': 'Shuffling cards…',
+  'Dernières planches…': 'Last planks…',
+  ASTUCE: 'TIP',
+  'Les cartes que tu ne joues pas restent en main pour les jours suivants.':
+    'Cards you don’t play stay in your hand for the following days.',
+  'Glisse un mur sur 1 à 4 cases en ligne droite : chaque case en plus coûte 1 énergie.':
+    'Drag a wall across 1 to 4 tiles in a straight line: each extra tile costs 1 energy.',
+  'Après sa première pose, une carte de construction reste en main toute la journée.':
+    'After its first placement, a building card stays in your hand all day.',
+  'Trois unités du même type et du même nombre d’étoiles fusionnent en une unité plus forte.':
+    'Three units of the same type and star count merge into a stronger unit.',
+  'Certaines cartes posées côte à côte se transforment en une unité unique.':
+    'Some cards placed side by side turn into a unique unit.',
+  'Des murs voisins se soudent en un rempart avec une seule barre de PV.':
+    'Neighbouring walls join into a rampart with a single HP bar.',
+  'Toutes les 4 nuits, la horde mute et devient plus dangereuse.':
+    'Every 4 nights, the horde mutates and grows more dangerous.',
+  'Toutes les 5 nuits, tu choisis une relique parmi trois.': 'Every 5 nights, you choose one relic out of three.',
+  'Le Colosse attaque toutes les 10 nuits : prépare-toi.': 'The Colossus attacks every 10 nights: be ready.',
+  'Touche une unité qui tire pour voir sa zone de tir.': 'Tap a shooting unit to see its firing zone.',
+  'Plus tu poses d’unités d’une même faction, plus la faction devient forte.':
+    'The more units of one faction you place, the stronger that faction gets.',
+  'Au troc, la ferraille sert à réparer, acheter et améliorer.':
+    'At the dawn barter, scrap lets you repair, buy and upgrade.',
+  'Le Café ne coûte rien et donne 2 énergies de plus.': 'Coffee costs nothing and gives 2 extra energy.',
+  'Une Radio en jeu ajoute une carte à ta main chaque jour.': 'A Radio in play adds one card to your hand each day.',
+  'Les unités posées restent en place d’une nuit à l’autre et gardent leurs dégâts.':
+    'Placed units stay put from one night to the next and keep their damage.',
 };
