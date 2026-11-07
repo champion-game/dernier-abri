@@ -9,7 +9,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 2. `src/lang-en.js` (2160 lignes)
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
-5. `src/game.js` (1565 lignes)
+5. `src/game.js` (1569 lignes)
 6. `src/game-draw.js` (5935 lignes)
 7. `src/game-ui.js` (2019 lignes)
 8. `src/game-screens.js` (1687 lignes)
@@ -21,6 +21,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 14. `src/game-coll.js` (662 lignes)
 15. `src/game-fx3.js` (556 lignes)
 16. `src/game-fx5.js` (768 lignes)
+17. `src/game-load.js` (140 lignes)
 
 ## Fonctions enveloppées
 
@@ -30,7 +31,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
 | `render` | game-ui.js:601 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:283, game-artx.js:390, game-artx.js:841, game-artx.js:904 |
-| `applyArt` | game.js:325 | game-artx.js:65, game-artx.js:274, game-artx.js:848, game-artx.js:1292 |
+| `applyArt` | game.js:326 | game-artx.js:65, game-artx.js:274, game-artx.js:848, game-artx.js:1292 |
 | `frameInner` | game-draw.js:5426 | game-artx.js:583, game-fx3.js:85, game-fx3.js:501, game-fx5.js:155 |
 | `playEvents` | game-ui.js:4 | game-anim.js:913, game-fx2.js:329, game-fx3.js:94, game-fx5.js:106 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:595 |
@@ -53,13 +54,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `lights` | game-draw.js:5073 | game-fx3.js:399 |
 | `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
-| `pilesHtml` | game.js:1409 | game-artx.js:885 |
+| `pilesHtml` | game.js:1413 | game-artx.js:885 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:444 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:610 | game-anim.js:1158 |
-| `showAch` | game.js:759 | game-anim.js:1108 |
+| `showAch` | game.js:763 | game-anim.js:1108 |
 | `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
 | `title` | game-menu.js:430 | game-artx.js:241 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
@@ -114,10 +115,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:243 drawSpr:249 hdArt:311 applyArt:325 cardStats:367 seen:448 novice:455 cardFace:463 saveOpt:564 applyOpt:580 applyCur:600 toggleFs:619 unpause:638 R:646
-- **677** state
-- **679** progression entre les parties (localStorage) : loadMeta:680 endTest:701 saveMeta:706 ach:747 showAch:759 deckCanAdd:792 edGain:806 edCommit:815 edDrop:845 achCheck:871 achNight:896 achScreen:904 tuto:923 guideStep:954 guideOk:1094 tutoTip:1115 tutoHand:1127 tutoPicks:1150 tutoEnd:1155 newGame:1170 fillHand:1220 drawCards:1228 syncBoard:1255 cellRect:1293 fly:1298 animPiles:1351 pilesHtml:1409
-- **1479** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1482 loadSave:1506 clearSave:1529 resume:1535
+- **1** (début) : loadSprites:227 sprK:243 drawSpr:249 hdArt:312 applyArt:326 cardStats:368 seen:449 novice:456 cardFace:464 saveOpt:565 applyOpt:584 applyCur:604 toggleFs:623 unpause:642 R:650
+- **681** state
+- **683** progression entre les parties (localStorage) : loadMeta:684 endTest:705 saveMeta:710 ach:751 showAch:763 deckCanAdd:796 edGain:810 edCommit:819 edDrop:849 achCheck:875 achNight:900 achScreen:908 tuto:927 guideStep:958 guideOk:1098 tutoTip:1119 tutoHand:1131 tutoPicks:1154 tutoEnd:1159 newGame:1174 fillHand:1224 drawCards:1232 syncBoard:1259 cellRect:1297 fly:1302 animPiles:1355 pilesHtml:1413
+- **1483** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1486 loadSave:1510 clearSave:1533 resume:1539
 
 ### src/game-draw.js
 
@@ -210,6 +211,12 @@ fx3Reset:67 hitStop:76 fx3Events:102 fx3DawnK:239 fx3Corpses:245 fx3Idle:382 fx3
 > v240 : le camp prend vie (demande d'Amine). Affichage seulement, aucune règle ne change.
 
 fx5On:64 fx5Named:71 fx5Line:80 fx5Say:87 fx5Events:114 fx5Tick:163 fx5Edge:232 fx5Crows:241 fx5Shoo:270 fx5Crow:277 fx5Chores:364 fx5Smoke:488 fx5Marks:528 fx5Leaves:582 fx5Dusk:632 fx5Wrap:677 fx5Bubbles:691
+
+### src/game-load.js
+
+> v244 : chargement des images.
+
+preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 bootEnd:67 preloadBoot:78 preloadBigOk:98 preloadIdle:104 preloadBackground:118
 
 ## src/style.css
 

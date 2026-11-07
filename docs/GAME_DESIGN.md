@@ -313,6 +313,11 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - Accueil animé (v174) : braises qui montent, brume qui dérive en bas, logo qui tombe puis se balance comme un panneau, bouton principal qui luit ; v175 : la lune rayonne, les étoiles scintillent et la ville en feu vacille (lueurs posées sur l’image, positions par image dans `HGLOW` de `game-menu.js`). CSS seulement, coupé en Mode économie et si l’appareil demande moins d’animations.
 - Menus (les cartes flottantes derrière l’accueil ont été essayées puis retirées à la demande d’Amine) : la mutation choisie se fissure avec une lueur verte ; un succès tombe du haut et rebondit, avec un son de cloche ; les compteurs de l’aube et les points de fin de partie montent par paliers avec un petit tremblement.
 
+**v244 : écran de chargement et images en arrière-plan** (demande d’Amine).
+- Au lancement, un écran « Barricard » avec une barre de progression attend l’essentiel : la page et ses images, les sprites du plateau, les cadres de cartes et les cartes du deck. Il n’apparaît qu’après 0,4 s (donc pas quand tout est déjà sur l’appareil) et jamais plus de 12 s.
+- Ensuite, en arrière-plan : les miniatures de toutes les cartes, le reste de l’interface du style artiste, puis les grandes images si la connexion est bonne (4G ou mieux, sans économie de données). Pause pendant la nuit. Tout reste gardé sur l’appareil par le service worker.
+- Style artiste : miniatures de ses illustrations aussi (`assets/art_min/cards/`, 41 Ko en moyenne au lieu de 100), sans toucher à ses fichiers.
+
 **v243 : chargement plus rapide des images** (demande d’Amine).
 - Les petites cartes (main, collection, decks, listes) affichent une miniature de 320 px (`assets/cards_min/`, 24 Ko en moyenne au lieu de 80) ; la grande carte (zoom, aube, récompense, détail de la collection, grande carte au survol) montre d’abord la miniature puis l’image complète dès qu’elle est chargée. La collection complète passe de 12,8 Mo à 3,5 Mo.
 - Les images du plateau (1,6 Mo) se chargent une fois la page affichée, pour ne pas ralentir l’accueil.

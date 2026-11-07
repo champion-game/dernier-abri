@@ -23,6 +23,7 @@ const CORE = [
   'src/game-coll.js',
   'src/game-fx3.js',
   'src/game-fx5.js',
+  'src/game-load.js',
   'manifest.webmanifest',
   'assets/fonts/special-elite.woff2',
   'assets/fonts/atkinson-400.woff2',

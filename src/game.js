@@ -291,30 +291,31 @@ const artNew = (d, f) => !!(ART_DEV && OPT.art && ART_NEW[d] && ART_NEW[d].inclu
 const artP = (d, f, old) => (artNew(d, f) ? 'assets/art/' + d + '/' + f : old);
 const uiUrl = f => artP('ui', f, 'assets/ui/' + f);
 const sprUrl = k => artP('sprites', k + '.webp', 'assets/sprites_cartoon/' + k + '.webp');
-// illustrations cartoon : miniature (assets/cards_min, 320 px) pour les petites cartes, image complète si big
-const cartDir = big => (big ? 'assets/cards_cartoon/' : 'assets/cards_min/');
-const zArt = (k, big) => artP('cards', 'z_' + k + '.webp', cartDir(big) + 'z_' + k + '.webp');
+// illustration d'une carte (fichier f) : miniature de 320 px pour les petites cartes, image complète si big
+// (cartoon : assets/cards_min et assets/cards_cartoon ; artiste : assets/art_min/cards et assets/art/cards)
+const cardSrc = (f, big) =>
+  artNew('cards', f)
+    ? (big ? 'assets/art/cards/' : 'assets/art_min/cards/') + f
+    : (big ? 'assets/cards_cartoon/' : 'assets/cards_min/') + f;
+const zArt = (k, big) => cardSrc('z_' + k + '.webp', big);
 const popUrl = (t, big) => {
   if (!popOK(t)) return '';
-  if (artNew('cards', t + '.webp'))
-    return artNew('cards', t + '_pop.webp') ? 'assets/art/cards/' + t + '_pop.webp' : '';
-  return CART_POP.includes(t) ? cartDir(big) + t + '_pop.webp' : '';
+  if (artNew('cards', t + '.webp')) return artNew('cards', t + '_pop.webp') ? cardSrc(t + '_pop.webp', big) : '';
+  return CART_POP.includes(t) ? cardSrc(t + '_pop.webp', big) : '';
 };
-const artUrl = (t, big) =>
-  artNew('cards', t + '.webp')
-    ? 'assets/art/cards/' + t + '.webp'
-    : CART_FILES.includes(t)
-      ? cartDir(big) + t + '.webp'
-      : '';
+const artUrl = (t, big) => (artNew('cards', t + '.webp') || CART_FILES.includes(t) ? cardSrc(t + '.webp', big) : '');
+// adresse de l'image complète d'une miniature
+const fullSrc = u =>
+  u.replace('assets/cards_min/', 'assets/cards_cartoon/').replace('assets/art_min/cards/', 'assets/art/cards/');
 // carte affichée en grand : remplace les miniatures par les images complètes, une fois celles-ci chargées
 // (la miniature reste visible pendant le chargement)
 function hdArt(root) {
   if (!root) return;
   try {
-    root.querySelectorAll('[style*="cards_min/"]').forEach(el => {
+    root.querySelectorAll('[style*="cards_min/"], [style*="art_min/"]').forEach(el => {
       const m = el.style.backgroundImage.match(/url\(["']?([^"')]+)["']?\)/);
       if (!m) return;
-      const full = m[1].replace('assets/cards_min/', 'assets/cards_cartoon/');
+      const full = fullSrc(m[1]);
       const im = new Image();
       im.onload = () => (el.style.backgroundImage = `url('${full}')`);
       im.src = full;
@@ -502,7 +503,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v243 · 7 nov.';
+const VERSION = 'v244 · 7 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD = false;
@@ -567,16 +568,19 @@ function saveOpt() {
   } catch (e) {}
 }
 // style artiste : liste des images déjà livrées (site de test seulement)
-if (ART_DEV && typeof fetch === 'function')
-  fetch('assets/art/liste.json', { cache: 'no-store' })
-    .then(r => (r.ok ? r.json() : null))
-    .then(j => {
-      if (j) {
-        ART_NEW = Object.assign({ cards: [], sprites: [], relics: [], ui: [] }, j);
-        if (OPT.art) applyArt();
-      }
-    })
-    .catch(() => {});
+// ART_READY : promesse tenue quand la liste est connue (utilisée par l'écran de chargement, game-load.js)
+const ART_READY =
+  ART_DEV && typeof fetch === 'function'
+    ? fetch('assets/art/liste.json', { cache: 'no-store' })
+        .then(r => (r.ok ? r.json() : null))
+        .then(j => {
+          if (j) {
+            ART_NEW = Object.assign({ cards: [], sprites: [], relics: [], ui: [] }, j);
+            if (OPT.art) applyArt();
+          }
+        })
+        .catch(() => {})
+    : Promise.resolve();
 function applyOpt() {
   try {
     SFX.setVol(OPT.sfx, OPT.mus);

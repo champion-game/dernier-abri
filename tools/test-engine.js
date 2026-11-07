@@ -278,16 +278,15 @@ check('événements d’aube : rares, espacés de 3 nuits, sans répétition', (
     'répétition avant d’avoir tout vu',
   );
 });
-check(
-  'chaque illustration de assets/cards_cartoon a sa miniature dans assets/cards_min (python3 tools/miniatures.py)',
-  () => {
-    const mini = new Set(fs.readdirSync(path.join(ROOT, 'assets/cards_min')));
-    const miss = fs
-      .readdirSync(path.join(ROOT, 'assets/cards_cartoon'))
-      .filter(f => f.endsWith('.webp') && !mini.has(f));
+for (const [src, min] of [
+  ['assets/cards_cartoon', 'assets/cards_min'],
+  ['assets/art/cards', 'assets/art_min/cards'],
+])
+  check(`chaque illustration de ${src} a sa miniature dans ${min} (python3 tools/miniatures.py)`, () => {
+    const mini = new Set(fs.readdirSync(path.join(ROOT, min)));
+    const miss = fs.readdirSync(path.join(ROOT, src)).filter(f => f.endsWith('.webp') && !mini.has(f));
     ok(!miss.length, miss.length + ' sans miniature : ' + miss.slice(0, 5).join(', '));
-  },
-);
+  });
 check('chaque illustration de assets/cards_cartoon est déclarée dans CART_FILES (game.js)', () => {
   const m = fs
     .readFileSync(path.join(ROOT, 'src/game.js'), 'utf8')

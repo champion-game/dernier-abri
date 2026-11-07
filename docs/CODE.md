@@ -77,10 +77,11 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 ## Recettes
 
 - **Nouvelle carte** : données dans `U` de `engine.js` (règles), puis affichage (nom, texte, icône) dans `game.js` si besoin, traduction dans `lang-en.js`, et test dans `tools/test-engine.js`. Lire d’abord `docs/GAME_DESIGN.md`.
-- **Nouvelle illustration de carte** (`assets/cards_cartoon/`) : la déclarer dans `CART_FILES` (`game.js`), puis `python3 tools/miniatures.py` (miniature dans `assets/cards_min/`, vérifiée par le test moteur). Les petites cartes affichent la miniature ; `hdArt(élément)` passe une grande carte à l’image complète.
+- **Nouvelle illustration de carte** (`assets/cards_cartoon/`) : la déclarer dans `CART_FILES` (`game.js`), puis `python3 tools/miniatures.py` (miniature dans `assets/cards_min/`, ou `assets/art_min/cards/` pour l’artiste, vérifiée par le test moteur). Les petites cartes affichent la miniature ; `hdArt(élément)` passe une grande carte à l’image complète.
 - **Nouveau texte** : en français dans `_t('…')`, traduction dans `src/lang-en.js` (clé = texte français exact). Le test moteur signale les oublis.
 - **Nouveau bouton** : `<button data-a="nom">` et une entrée `nom:()=>{…}` dans `ACT` (`game-screens.js`).
 - **Nouvel effet de nuit** : `playEvents` (`game-ui.js`) reçoit les événements du moteur ; le dessin se fait dans `frameInner` / `drawFX` (`game-draw.js`).
+- **Chargement des images** : `src/game-load.js`. L’écran de chargement (`#boot`, style dans `index.html`) attend l’essentiel (`bootUrls`) ; le reste se charge ensuite en arrière-plan (`preloadBackground`), en sautant ce que le service worker garde déjà.
 - **Dessin** : chaque élément dans un `try{}catch(e){}` pour que la boucle d’affichage ne s’arrête jamais.
 - **Mise en ligne** : voir `CLAUDE.md` (numéro de version à trois endroits, `node tools/test.js`).
 
@@ -94,6 +95,6 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 | `tools/balance.js` | équilibrage, seulement quand Amine le demande |
 | `tools/equilibrage.js` | génère `docs/EQUILIBRAGE_IA.md` (règles et valeurs pour une IA) |
 | `tools/carte-code.js` | génère `docs/CARTE_CODE.md` |
-| `tools/miniatures.py` | miniatures des illustrations de cartes (`assets/cards_min/`) |
+| `tools/miniatures.py` | miniatures des illustrations de cartes (`assets/cards_min/`, `assets/art_min/cards/`) |
 | `tools/art-liste.js` | liste des images de l’artiste |
 | `tools/*.py` | génération ponctuelle d’images (textures, pack d’interface, agrandissement) |
