@@ -11591,22 +11591,23 @@ html.artx.ax3.felton .axbac {
   z-index: 6;
 }
 /* ---- téléphone en hauteur ---- */
+/* v250 : le décor couvre tout l'écran, recadré au centre et assombri (avant : bande de 270 px cachée par l'en-tête) */
 html.artx.ax3:not(.felton) body::before {
   background:
-    linear-gradient(rgba(16, 11, 9, 0) 70px, rgba(16, 11, 9, 0.85) 190px, #100b09 250px),
-    var(--ui-decor-jour, none) center top/auto 270px no-repeat,
+    linear-gradient(rgba(8, 6, 5, 0.3), rgba(8, 6, 5, 0.6)),
+    var(--ui-decor-jour, none) center/cover no-repeat,
     #100b09 !important;
 }
 html.artx.ax3:not(.felton)[data-axph='nuit'] body::before {
   background:
-    linear-gradient(rgba(16, 11, 9, 0) 70px, rgba(16, 11, 9, 0.85) 190px, #100b09 250px),
-    var(--ui-decor-nuit, none) center top/auto 270px no-repeat,
+    linear-gradient(rgba(4, 6, 14, 0.25), rgba(4, 6, 14, 0.6)),
+    var(--ui-decor-nuit, none) center/cover no-repeat,
     #100b09 !important;
 }
 html.artx.ax3:not(.felton)[data-axph='rouge'] body::before {
   background:
-    linear-gradient(rgba(16, 11, 9, 0) 70px, rgba(16, 11, 9, 0.85) 190px, #100b09 250px),
-    var(--ui-decor-rouge, none) center top/auto 270px no-repeat,
+    linear-gradient(rgba(14, 4, 4, 0.25), rgba(14, 4, 4, 0.6)),
+    var(--ui-decor-rouge, none) center/cover no-repeat,
     #100b09 !important;
 }
 html.artx.ax3:not(.felton) body {
@@ -12173,24 +12174,44 @@ html.artx :is(.skip, .go.speed):disabled {
   color: rgba(241, 231, 207, 0.4) !important;
   filter: var(--axsh2) brightness(0.75) !important;
 }
+/* v250 : les boutons rouges reprennent le style de « Jouer » (panneau noir rougi, halo de braise), sans la respiration */
 html.artx :is(.go, .panel .go, .dkbtns .go):not(.speed):not(#go) {
-  border-image: var(--ui-btn-rouge) 40 fill / 14px stretch !important;
-  box-shadow: none !important;
-  filter: var(--axsh2) !important;
-  color: #f6ecd6 !important;
+  position: relative;
+  isolation: isolate;
+  border-image: var(--ui-panneau-noir) 36 fill / 10px stretch !important;
+  border-radius: 10px;
+  box-shadow: 0 0 14px 1px rgba(255, 100, 35, 0.3) !important;
+  filter: none !important;
+  font-family: var(--ax-head);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff3dc !important;
+  text-shadow:
+    0 2px 0 #3a0603,
+    0 0 10px rgba(0, 0, 0, 0.6);
+}
+html.artx .go:not(.speed):not(#go)::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  border-radius: 9px;
+  pointer-events: none;
+  background: linear-gradient(#a8261a, #4a0705);
+  mix-blend-mode: screen;
 }
 html.artx .go:not(.speed):not(#go):not(:disabled):hover {
-  border-image-source: var(--ui-btn-rouge) !important;
-  filter: var(--axsh2) brightness(1.18) !important;
+  filter: brightness(1.15) !important;
+  box-shadow: 0 0 24px 4px rgba(255, 120, 45, 0.45) !important;
 }
 html.artx .go:not(.speed):not(#go):not(:disabled):active {
-  border-image-source: var(--ui-btn-rouge) !important;
   transform: translateY(2px);
-  filter: drop-shadow(1px 1px 0 #000) !important;
+  filter: none !important;
 }
 html.artx .go:not(.speed):not(#go):disabled {
-  border-image-source: var(--ui-btn-rouge) !important;
-  filter: var(--axsh2) grayscale(0.75) brightness(0.6) !important;
+  box-shadow: none !important;
+  filter: grayscale(0.75) brightness(0.6) !important;
   color: rgba(246, 236, 214, 0.5) !important;
 }
 html.artx:not(.ax3) #go:not(.speed) {
@@ -13895,7 +13916,7 @@ html.artx.ax3 #ax3 #hand {
 }
 /* v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, à droite le reste avec la main dans le bac */
 @media (orientation: landscape) {
-  /* le décor couvre tout l'écran (la règle « en hauteur » le limite à une bande de 270 px en haut) */
+  /* le décor couvre tout l’écran, un peu moins assombri qu’en hauteur */
   html.artx.ax3:not(.felton) body::before {
     background:
       linear-gradient(rgba(8, 6, 5, 0.25), rgba(8, 6, 5, 0.55)),

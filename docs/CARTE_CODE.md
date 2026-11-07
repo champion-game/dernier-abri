@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 
 ## src/style.css
 
-14960 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1090 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+14981 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1091 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 67 Layout: one-screen phone app — header, night forecast, live top-down map (canvas), hand of
@@ -442,55 +442,57 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 - 11350 colonne de droite : logo et icônes centrés sur l'abri, abri, grande carte, énergie, bouton
 - 11549 ---- ordinateur ----
 - 11593 ---- téléphone en hauteur ----
-- 11762 v230 : plateau d'Amine avec la forêt (plateau-foret.webp) : l'image entière est sous le ca
-- 11828 v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche d
-- 11907 v217 : abri en panneau noir, texte crème
-- 11927 v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut
-- 11948 v217 : Deck, Réserve et Défausse toujours pleins ; vides ou pendant la nuit, seuls le chif
-- 11956 v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonn
-- 11988 v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet
-- 12022 v219 : nouveaux cadres de carte de l'artiste (assets/art/ui/cadre-*.webp, fenêtre transpar
-- 12126 ===== v219 : les formes de la maquette d'Amine partout dans le style artiste (menus, écran
-- 12227 v219 : accueil sans panneau (les boutons et les fiches se posent directement sur le fond)
-- 12234 v219 : pied des écrans à défilement (Options, Préparer la partie…) : plus de plaque de mét
-- 12252 ===== v222 : collection du style artiste reprise du laboratoire (interfaces/collection) : 
-- 12468 une carte de la grille : inclinaison 3D, reflet, lueur dorée quand elle est choisie
-- 12584 cartes distribuées : elles tombent de haut en tournant
-- 12602 grande carte : se retourne, flotte, s’incline au survol
-- 12790 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
-- 12920 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
-- 12925 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
-- 12929 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
-- 13017 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
-- 13067 téléphone : grande carte par-dessus la grille
-- 13148 deck sur téléphone : le tiroir reste dans la page, sous la grille
-- 13163 effets des cartes
-- 13297 ordinateur : trois colonnes, rien ne défile
-- 13402 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
-- 13415 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
-- 13509 v227 : onde au clic sur les boutons (src/game-artx.js)
-- 13541 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
-- 13581 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
-- 13701 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
-- 13809 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
-- 13896 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
-- 14012 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
-- 14044 v241 : interface plus lisible (demande d'Amine)
-- 14045 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
-- 14115 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
-- 14121 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
-- 14153 téléphone en portrait
-- 14267 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
-- 14284 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
-- 14344 textes posés sur le décor, sans fiche beige
-- 14405 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
-- 14440 « Jouer » : panneau noir rougi (version B)
-- 14483 « Jouer » respire : il grossit un peu et son halo s'élargit
-- 14510 barre du bas
-- 14593 PC peu haut et téléphone tourné : tout se resserre
-- 14631 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
-- 14715 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
-- 14772 lueurs du décor : étoiles, brume devant la forêt, lucioles
-- 14854 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
-- 14886 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
-- 14891 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
+- 11594 v250 : le décor couvre tout l'écran, recadré au centre et assombri (avant : bande de 270 p
+- 11763 v230 : plateau d'Amine avec la forêt (plateau-foret.webp) : l'image entière est sous le ca
+- 11829 v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche d
+- 11908 v217 : abri en panneau noir, texte crème
+- 11928 v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut
+- 11949 v217 : Deck, Réserve et Défausse toujours pleins ; vides ou pendant la nuit, seuls le chif
+- 11957 v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonn
+- 11989 v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet
+- 12023 v219 : nouveaux cadres de carte de l'artiste (assets/art/ui/cadre-*.webp, fenêtre transpar
+- 12127 ===== v219 : les formes de la maquette d'Amine partout dans le style artiste (menus, écran
+- 12177 v250 : les boutons rouges reprennent le style de « Jouer » (panneau noir rougi, halo de br
+- 12248 v219 : accueil sans panneau (les boutons et les fiches se posent directement sur le fond)
+- 12255 v219 : pied des écrans à défilement (Options, Préparer la partie…) : plus de plaque de mét
+- 12273 ===== v222 : collection du style artiste reprise du laboratoire (interfaces/collection) : 
+- 12489 une carte de la grille : inclinaison 3D, reflet, lueur dorée quand elle est choisie
+- 12605 cartes distribuées : elles tombent de haut en tournant
+- 12623 grande carte : se retourne, flotte, s’incline au survol
+- 12811 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
+- 12941 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
+- 12946 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
+- 12950 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
+- 13038 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
+- 13088 téléphone : grande carte par-dessus la grille
+- 13169 deck sur téléphone : le tiroir reste dans la page, sous la grille
+- 13184 effets des cartes
+- 13318 ordinateur : trois colonnes, rien ne défile
+- 13423 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
+- 13436 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
+- 13530 v227 : onde au clic sur les boutons (src/game-artx.js)
+- 13562 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
+- 13602 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
+- 13722 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
+- 13830 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
+- 13917 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
+- 14033 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
+- 14065 v241 : interface plus lisible (demande d'Amine)
+- 14066 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
+- 14136 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
+- 14142 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
+- 14174 téléphone en portrait
+- 14288 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
+- 14305 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
+- 14365 textes posés sur le décor, sans fiche beige
+- 14426 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
+- 14461 « Jouer » : panneau noir rougi (version B)
+- 14504 « Jouer » respire : il grossit un peu et son halo s'élargit
+- 14531 barre du bas
+- 14614 PC peu haut et téléphone tourné : tout se resserre
+- 14652 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
+- 14736 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
+- 14793 lueurs du décor : étoiles, brume devant la forêt, lucioles
+- 14875 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
+- 14907 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
+- 14912 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
