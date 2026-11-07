@@ -10,7 +10,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1567 lignes)
+6. `src/game.js` (1569 lignes)
 7. `src/game-draw.js` (5935 lignes)
 8. `src/game-ui.js` (2019 lignes)
 9. `src/game-screens.js` (1679 lignes)
@@ -56,13 +56,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1411 | game-artx.js:979 |
+| `pilesHtml` | game.js:1413 | game-artx.js:979 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:601 | game-anim.js:1158 |
-| `showAch` | game.js:761 | game-anim.js:1108 |
+| `showAch` | game.js:763 | game-anim.js:1108 |
 | `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:457 novice:464 cardFace:472 saveOpt:574 applyOpt:582 applyCur:602 toggleFs:621 unpause:640 R:648
-- **679** state
-- **681** progression entre les parties (localStorage) : loadMeta:682 endTest:703 saveMeta:708 ach:749 showAch:761 deckCanAdd:794 edGain:808 edCommit:817 edDrop:847 achCheck:873 achNight:898 achScreen:906 tuto:925 guideStep:956 guideOk:1096 tutoTip:1117 tutoHand:1129 tutoPicks:1152 tutoEnd:1157 newGame:1172 fillHand:1222 drawCards:1230 syncBoard:1257 cellRect:1295 fly:1300 animPiles:1353 pilesHtml:1411
-- **1481** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1484 loadSave:1508 clearSave:1531 resume:1537
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:457 novice:464 cardFace:472 saveOpt:576 applyOpt:584 applyCur:604 toggleFs:623 unpause:642 R:650
+- **681** state
+- **683** progression entre les parties (localStorage) : loadMeta:684 endTest:705 saveMeta:710 ach:751 showAch:763 deckCanAdd:796 edGain:810 edCommit:819 edDrop:849 achCheck:875 achNight:900 achScreen:908 tuto:927 guideStep:958 guideOk:1098 tutoTip:1119 tutoHand:1131 tutoPicks:1154 tutoEnd:1159 newGame:1174 fillHand:1224 drawCards:1232 syncBoard:1259 cellRect:1297 fly:1302 animPiles:1355 pilesHtml:1413
+- **1483** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1486 loadSave:1510 clearSave:1533 resume:1539
 
 ### src/game-draw.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 
 ## src/style.css
 
-14882 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1077 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+14891 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1078 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 67 Layout: one-screen phone app — header, night forecast, live top-down map (canvas), hand of
@@ -366,128 +366,130 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootBar:62 boo
 - 7651 tutoriel : main qui montre le geste
 - 7693 v191 : bouton des trous, bouton de la nuit vivant, nuit rouge, maison touchée
 - 7795 ===== v196 : refonte de l'interface du style artiste (maquette d'Amine) — seulement sous h
-- 7834 panneaux : encre sombre usée, liseré clair très fin
-- 7854 titre : bandeau sombre, capitales condensées, trait rouge à gauche
-- 7916 fiches de papier : parchemin crème, bord noir
-- 7935 boutons : parchemin, texte noir en capitales ; principal : rouge sang ; plus de bois ni de
-- 7994 icônes du haut : carrés sombres
-- 8008 onglets, choix, quantités : cases sombres ; le choisi en rouge
-- 8052 champs, menus déroulants, barre de filtres, étagère du bas
-- 8090 curseurs et cases : rouge ; les cases des Options deviennent des interrupteurs
-- 8132 succès et barres de progression
-- 8149 écran de jeu : fiche de nuit, main, tableau et tapis PC en encre sombre (plus de feutre ve
-- 8172 jour en cours : étiquette de parchemin, comme sur la maquette
-- 8198 v197 : écran de jeu d'après la 2e maquette d'Amine
-- 8199 téléphone en hauteur : grande étiquette « JOUR n » posée à gauche de la fiche de nuit
-- 8243 piste des nuits : cases sombres, nuit rouge en rouge sang, nuit en cours en parchemin
-- 8281 pastilles (survivants, menaces, ferraille) : parchemin à bord noir
-- 8304 énergie : cases jaunes dans une barre sombre ; Annuler : bouton sombre à bord vert
-- 8328 zombies de la horde : jetons ronds à liseré, chiffre sur pastille claire
-- 8332 v197 : boutons en métal usé (demande d'Amine) : acier brossé, rayures, rouille et rivets ;
-- 8372 onglets et icônes : métal sombre bruni, le choisi en tôle rouge
-- 8398 v198 : métal uniforme (plus de taches de rouille sur les bords, rayures discrètes) ; cadre
-- 8454 ===== v199 : relief (demande d'Amine) : métal éclairé et bosselé, biseaux, texte gravé ; p
-- 8475 panneaux et cadres : tôle épaisse bosselée, éclairée d'en haut, biseau clair en haut et so
-- 8511 boutons secondaires : plaque d'acier brossé épaisse, texte gravé
-- 8534 bouton principal : tôle peinte en rouge, bosselée
-- 8552 onglets : touches de métal, la choisie enfoncée et rouge
-- 8590 champs creusés dans le métal
-- 8607 « Affronter la nuit » : le panneau de la maquette (tôle rouge cabossée, cadre de métal noi
-- 8639 ===== v200 : refonte du jeu (maquettes validées par Amine), style artiste seulement (html.
-- 8640 v201 : retour au cadre cartoon (choix d'Amine) avec les illustrations de l'artiste ; son c
-- 8641 ---- PC (html.felton) : bandeau en haut, colonne d'infos à gauche, plateau au centre, fich
-- 8747 bandeau : étiquette du jour à gauche, icônes et abri à droite
-- 8795 cadres en métal fin et foncé : colonnes, plateau, main
-- 8818 pioche à droite de la main, défausse à gauche
-- 8884 ---- téléphone en hauteur : bandeau en fond du haut, bouton carré « Affronter la nuit » à 
-- 8953 bouton de vitesse (nuit) : plaque d'acier lisible
-- 8969 ===== v201 : PC — plateau sur toute la hauteur, colonnes gauche et droite de même hauteur 
-- 9091 ===== v202 : fonds d'Amine à l'accueil et derrière le jeu, lueurs de l'accueil sur ce déco
-- 9186 v203 : PC — panneau de droite : jour et icônes, fiche d'unité, grande carte (survolée ou c
-- 9233 v204 : PC — le plateau garde sa taille maximale ; sur grand écran, les panneaux prennent t
-- 9267 ===== v205 : PC — panneau gauche en 3 blocs (nuit, onglets Pioche/Horde/Journal, défausse 
-- 9470 ===== v206 : nuit (PC) — hors du canvas, l'image du plateau s'assombrit exactement comme l
-- 9481 v208 : nuit (PC) — canvas des brumes de la v195 prolongées sur la palissade (#axFx), fondu
-- 9513 v211 : PC — cadre en acier serré autour du plateau ; le canvas du jeu déborde jusqu'au cad
-- 9543 ===== v213 : collection et decks en classeur (style artiste seulement) (inspiré de Hearths
-- 9579 intercalaires : de vrais onglets de classeur, collés à la page ; l’onglet choisi se fond d
-- 9657 recherche + bouton Filtres sur une ligne ; les menus s’ouvrent dessous
-- 9707 puces de rôle et de type
-- 9743 le classeur : une page de papier réglé à anneaux
-- 9789 page qui tourne comme un livre, autour de la reliure à gauche
-- 9889 repères : « Nouveau », carte spéciale cachée derrière (coin doré)
-- 9918 Atelier : les cartes acquises s’éteignent, celles qu’on peut payer brillent
-- 9945 éditeur de deck : toucher une carte l’ajoute ; le deck est un tiroir en bas (téléphone) ou
-- 10307 ===== v213 : le classeur dans le style artiste (acier, papier crème, rouge, capitales Oswa
-- 10471 le pied de la collection et le tiroir du deck : même plaque d’acier rivetée, liseré rouge
-- 10548 v214 (style artiste) : feuille avec de la profondeur (pile de pages, reliure, coin corné) 
-- 10672 v214 : lignes du deck de la même couleur crème que le papier des cartes (cadre.webp)
-- 10692 ===== v215 : pack « maquette » d'Amine (style artiste seulement) : images en découpe 9 cas
-- 10714 boutons secondaires : tuile charbon, texte crème
-- 10735 bouton principal : tôle rouge sang tachée, texte crème cerné de noir
-- 10761 « Affronter la nuit » : droit, mains de zombies par-dessus la tôle, sous le texte
-- 10781 onglets : tuile charbon, le choisi en rouge
-- 10791 boutons icônes (son, musique, plein écran)
-- 10803 étiquette du jour : parchemin brûlé
-- 10811 fiches et pastilles en papier : parchemin aux bords brûlés
-- 10834 énergie : cases jaunes à bord sombre
-- 10843 ===== v216 : nouvelle disposition du style artiste (maquettes d'Amine) : #ax3 (game-artx.j
-- 10885 formes communes : panneau noir
-- 10895 ciel du jour : jour (ou nuit) en haut à gauche, phrase dessous, tampon à côté
-- 11033 piste des nuits
-- 11090 camp : icônes et chiffres, sans pastilles
-- 11148 Deck (dos noir biohazard), Réserve et Défausse : trois formes séparées
-- 11280 onglets Pioche / Horde / Journal : liste en lignes sombres, liseré de couleur, illustratio
-- 11345 colonne de droite : logo et icônes centrés sur l'abri, abri, grande carte, énergie, bouton
-- 11546 ---- ordinateur ----
-- 11590 ---- téléphone en hauteur ----
-- 11759 v230 : plateau d'Amine avec la forêt (plateau-foret.webp) : l'image entière est sous le ca
-- 11825 v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche d
-- 11904 v217 : abri en panneau noir, texte crème
-- 11924 v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut
-- 11945 v217 : Deck, Réserve et Défausse toujours pleins ; vides ou pendant la nuit, seuls le chif
-- 11953 v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonn
-- 11985 v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet
-- 12019 v219 : nouveaux cadres de carte de l'artiste (assets/art/ui/cadre-*.webp, fenêtre transpar
-- 12123 ===== v219 : les formes de la maquette d'Amine partout dans le style artiste (menus, écran
-- 12223 v219 : accueil sans panneau (les boutons et les fiches se posent directement sur le fond)
-- 12230 v219 : pied des écrans à défilement (Options, Préparer la partie…) : plus de plaque de mét
-- 12248 ===== v222 : collection du style artiste reprise du laboratoire (interfaces/collection) : 
-- 12464 une carte de la grille : inclinaison 3D, reflet, lueur dorée quand elle est choisie
-- 12580 cartes distribuées : elles tombent de haut en tournant
-- 12598 grande carte : se retourne, flotte, s’incline au survol
-- 12786 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
-- 12916 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
-- 12921 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
-- 12925 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
-- 13013 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
-- 13063 téléphone : grande carte par-dessus la grille
-- 13144 deck sur téléphone : le tiroir reste dans la page, sous la grille
-- 13159 effets des cartes
-- 13293 ordinateur : trois colonnes, rien ne défile
-- 13398 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
-- 13411 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
-- 13505 v227 : onde au clic sur les boutons (src/game-artx.js)
-- 13537 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
-- 13577 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
-- 13697 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
-- 13805 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
-- 13892 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
-- 14008 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
-- 14040 v241 : interface plus lisible (demande d'Amine)
-- 14041 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
-- 14111 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
-- 14117 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
-- 14149 téléphone en portrait
-- 14263 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
-- 14280 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
-- 14340 textes posés sur le décor, sans fiche beige
-- 14401 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
-- 14436 « Jouer » : panneau noir rougi (version B)
-- 14479 « Jouer » respire : il grossit un peu et son halo s'élargit
-- 14506 barre du bas
-- 14589 PC peu haut et téléphone tourné : tout se resserre
-- 14627 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
-- 14711 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
-- 14768 lueurs du décor : étoiles, brume devant la forêt, lucioles
-- 14850 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
+- 7816 Trois polices, trois rôles (v248) :
+- 7839 panneaux : encre sombre usée, liseré clair très fin
+- 7859 titre : bandeau sombre, capitales condensées, trait rouge à gauche
+- 7921 fiches de papier : parchemin crème, bord noir
+- 7940 boutons : parchemin, texte noir en capitales ; principal : rouge sang ; plus de bois ni de
+- 7999 icônes du haut : carrés sombres
+- 8013 onglets, choix, quantités : cases sombres ; le choisi en rouge
+- 8057 champs, menus déroulants, barre de filtres, étagère du bas
+- 8095 curseurs et cases : rouge ; les cases des Options deviennent des interrupteurs
+- 8137 succès et barres de progression
+- 8154 écran de jeu : fiche de nuit, main, tableau et tapis PC en encre sombre (plus de feutre ve
+- 8177 jour en cours : étiquette de parchemin, comme sur la maquette
+- 8203 v197 : écran de jeu d'après la 2e maquette d'Amine
+- 8204 téléphone en hauteur : grande étiquette « JOUR n » posée à gauche de la fiche de nuit
+- 8248 piste des nuits : cases sombres, nuit rouge en rouge sang, nuit en cours en parchemin
+- 8286 pastilles (survivants, menaces, ferraille) : parchemin à bord noir
+- 8309 énergie : cases jaunes dans une barre sombre ; Annuler : bouton sombre à bord vert
+- 8333 zombies de la horde : jetons ronds à liseré, chiffre sur pastille claire
+- 8337 v197 : boutons en métal usé (demande d'Amine) : acier brossé, rayures, rouille et rivets ;
+- 8377 onglets et icônes : métal sombre bruni, le choisi en tôle rouge
+- 8403 v198 : métal uniforme (plus de taches de rouille sur les bords, rayures discrètes) ; cadre
+- 8459 ===== v199 : relief (demande d'Amine) : métal éclairé et bosselé, biseaux, texte gravé ; p
+- 8480 panneaux et cadres : tôle épaisse bosselée, éclairée d'en haut, biseau clair en haut et so
+- 8516 boutons secondaires : plaque d'acier brossé épaisse, texte gravé
+- 8539 bouton principal : tôle peinte en rouge, bosselée
+- 8557 onglets : touches de métal, la choisie enfoncée et rouge
+- 8595 champs creusés dans le métal
+- 8612 « Affronter la nuit » : le panneau de la maquette (tôle rouge cabossée, cadre de métal noi
+- 8644 ===== v200 : refonte du jeu (maquettes validées par Amine), style artiste seulement (html.
+- 8645 v201 : retour au cadre cartoon (choix d'Amine) avec les illustrations de l'artiste ; son c
+- 8646 ---- PC (html.felton) : bandeau en haut, colonne d'infos à gauche, plateau au centre, fich
+- 8752 bandeau : étiquette du jour à gauche, icônes et abri à droite
+- 8800 cadres en métal fin et foncé : colonnes, plateau, main
+- 8823 pioche à droite de la main, défausse à gauche
+- 8889 ---- téléphone en hauteur : bandeau en fond du haut, bouton carré « Affronter la nuit » à 
+- 8958 bouton de vitesse (nuit) : plaque d'acier lisible
+- 8974 ===== v201 : PC — plateau sur toute la hauteur, colonnes gauche et droite de même hauteur 
+- 9096 ===== v202 : fonds d'Amine à l'accueil et derrière le jeu, lueurs de l'accueil sur ce déco
+- 9191 v203 : PC — panneau de droite : jour et icônes, fiche d'unité, grande carte (survolée ou c
+- 9238 v204 : PC — le plateau garde sa taille maximale ; sur grand écran, les panneaux prennent t
+- 9272 ===== v205 : PC — panneau gauche en 3 blocs (nuit, onglets Pioche/Horde/Journal, défausse 
+- 9475 ===== v206 : nuit (PC) — hors du canvas, l'image du plateau s'assombrit exactement comme l
+- 9486 v208 : nuit (PC) — canvas des brumes de la v195 prolongées sur la palissade (#axFx), fondu
+- 9518 v211 : PC — cadre en acier serré autour du plateau ; le canvas du jeu déborde jusqu'au cad
+- 9548 ===== v213 : collection et decks en classeur (style artiste seulement) (inspiré de Hearths
+- 9584 intercalaires : de vrais onglets de classeur, collés à la page ; l’onglet choisi se fond d
+- 9662 recherche + bouton Filtres sur une ligne ; les menus s’ouvrent dessous
+- 9712 puces de rôle et de type
+- 9748 le classeur : une page de papier réglé à anneaux
+- 9794 page qui tourne comme un livre, autour de la reliure à gauche
+- 9894 repères : « Nouveau », carte spéciale cachée derrière (coin doré)
+- 9923 Atelier : les cartes acquises s’éteignent, celles qu’on peut payer brillent
+- 9950 éditeur de deck : toucher une carte l’ajoute ; le deck est un tiroir en bas (téléphone) ou
+- 10312 ===== v213 : le classeur dans le style artiste (acier, papier crème, rouge, capitales Oswa
+- 10476 le pied de la collection et le tiroir du deck : même plaque d’acier rivetée, liseré rouge
+- 10553 v214 (style artiste) : feuille avec de la profondeur (pile de pages, reliure, coin corné) 
+- 10677 v214 : lignes du deck de la même couleur crème que le papier des cartes (cadre.webp)
+- 10697 ===== v215 : pack « maquette » d'Amine (style artiste seulement) : images en découpe 9 cas
+- 10719 boutons secondaires : tuile charbon, texte crème
+- 10740 bouton principal : tôle rouge sang tachée, texte crème cerné de noir
+- 10766 « Affronter la nuit » : droit, mains de zombies par-dessus la tôle, sous le texte
+- 10786 onglets : tuile charbon, le choisi en rouge
+- 10796 boutons icônes (son, musique, plein écran)
+- 10808 étiquette du jour : parchemin brûlé
+- 10816 fiches et pastilles en papier : parchemin aux bords brûlés
+- 10839 énergie : cases jaunes à bord sombre
+- 10848 ===== v216 : nouvelle disposition du style artiste (maquettes d'Amine) : #ax3 (game-artx.j
+- 10890 formes communes : panneau noir
+- 10900 ciel du jour : jour (ou nuit) en haut à gauche, phrase dessous, tampon à côté
+- 11038 piste des nuits
+- 11095 camp : icônes et chiffres, sans pastilles
+- 11153 Deck (dos noir biohazard), Réserve et Défausse : trois formes séparées
+- 11285 onglets Pioche / Horde / Journal : liste en lignes sombres, liseré de couleur, illustratio
+- 11350 colonne de droite : logo et icônes centrés sur l'abri, abri, grande carte, énergie, bouton
+- 11549 ---- ordinateur ----
+- 11593 ---- téléphone en hauteur ----
+- 11762 v230 : plateau d'Amine avec la forêt (plateau-foret.webp) : l'image entière est sous le ca
+- 11828 v217 : bac de cartes en 3 couches : le fond (découpe 9 cases : les poteaux et la planche d
+- 11907 v217 : abri en panneau noir, texte crème
+- 11927 v217 : onglets en formes pleines (panneau noir) ; l'onglet ouvert a un trait rouge en haut
+- 11948 v217 : Deck, Réserve et Défausse toujours pleins ; vides ou pendant la nuit, seuls le chif
+- 11956 v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonn
+- 11988 v217 : téléphone : bac de la largeur du plateau, aussi haut que la place le permet
+- 12022 v219 : nouveaux cadres de carte de l'artiste (assets/art/ui/cadre-*.webp, fenêtre transpar
+- 12126 ===== v219 : les formes de la maquette d'Amine partout dans le style artiste (menus, écran
+- 12227 v219 : accueil sans panneau (les boutons et les fiches se posent directement sur le fond)
+- 12234 v219 : pied des écrans à défilement (Options, Préparer la partie…) : plus de plaque de mét
+- 12252 ===== v222 : collection du style artiste reprise du laboratoire (interfaces/collection) : 
+- 12468 une carte de la grille : inclinaison 3D, reflet, lueur dorée quand elle est choisie
+- 12584 cartes distribuées : elles tombent de haut en tournant
+- 12602 grande carte : se retourne, flotte, s’incline au survol
+- 12790 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
+- 12920 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
+- 12925 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
+- 12929 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
+- 13017 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
+- 13067 téléphone : grande carte par-dessus la grille
+- 13148 deck sur téléphone : le tiroir reste dans la page, sous la grille
+- 13163 effets des cartes
+- 13297 ordinateur : trois colonnes, rien ne défile
+- 13402 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
+- 13415 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
+- 13509 v227 : onde au clic sur les boutons (src/game-artx.js)
+- 13541 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
+- 13581 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
+- 13701 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
+- 13809 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
+- 13896 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
+- 14012 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
+- 14044 v241 : interface plus lisible (demande d'Amine)
+- 14045 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
+- 14115 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
+- 14121 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
+- 14153 téléphone en portrait
+- 14267 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
+- 14284 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
+- 14344 textes posés sur le décor, sans fiche beige
+- 14405 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
+- 14440 « Jouer » : panneau noir rougi (version B)
+- 14483 « Jouer » respire : il grossit un peu et son halo s'élargit
+- 14510 barre du bas
+- 14593 PC peu haut et téléphone tourné : tout se resserre
+- 14631 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
+- 14715 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
+- 14772 lueurs du décor : étoiles, brume devant la forêt, lucioles
+- 14854 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
+- 14886 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)

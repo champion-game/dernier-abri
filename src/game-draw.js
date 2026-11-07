@@ -3080,7 +3080,7 @@ function drawUnit(i, u, now) {
     ctx.fillStyle = 'rgba(0,0,0,.75)';
     ctx.fillRect(p0.x + 11, p0.y + 14, 18, 12);
     ctx.fillStyle = '#9fd86b';
-    ctx.font = 'bold 9px system-ui,sans-serif';
+    ctx.font = '600 10px ' + FONT_CHIFFRE;
     ctx.textAlign = 'center';
     ctx.fillText(_t('N') + lv, p0.x + 20, p0.y + 23);
   }
@@ -3242,7 +3242,7 @@ function drawUnitInner(i, u, now) {
       ctx.fill();
       oRect(-8, -4, 16, 6, '#4f6b3f', 1);
       ctx.fillStyle = '#ddd';
-      ctx.font = 'bold 4px sans-serif';
+      ctx.font = '600 4.5px ' + FONT_CHIFFRE;
       ctx.fillText(_t('FRONT'), -6, 0);
       if (Math.floor(now / 400) % 2) circ(6, -2, 1.2, '#ff3b3b');
       ctx.restore();
@@ -5678,7 +5678,7 @@ function frameInner(now) {
 
 const powered = () => G.event.id !== 'coupure' || G.relics.includes('groupe') || G.grid.some(u => u && u.t === 'solar');
 function safeTxt(x, y, t, c) {
-  ctx.font = 'bold 14px system-ui,sans-serif';
+  ctx.font = '600 15px ' + FONT_CHIFFRE;
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(0,0,0,.7)';
   ctx.fillText(t, x + 1, y + 1);
@@ -5785,7 +5785,7 @@ function dmgCached(i, now) {
 }
 // petite étiquette arrondie (texte coloré sur fond sombre)
 function bTag(x, y, txt, c, fs) {
-  ctx.font = `bold ${fs || 11}px system-ui,sans-serif`;
+  ctx.font = `600 ${(fs || 11) + 1}px ${FONT_CHIFFRE}`;
   const w = ctx.measureText(txt).width + 9,
     h = (fs || 11) + 4;
   ctx.beginPath();
@@ -5810,7 +5810,7 @@ function dmgBadge(i, p, D, now) {
     x = p.x - 19,
     y = p.y + 20,
     txt = String(di.total);
-  ctx.font = 'bold 10px system-ui,sans-serif';
+  ctx.font = '600 11px ' + FONT_CHIFFRE;
   const w = ctx.measureText(txt).width + 17;
   ctx.fillStyle = 'rgba(10,8,5,.85)';
   ctx.fillRect(x - w / 2, y - 6.5, w, 13);

@@ -863,7 +863,7 @@ function lvFx(i, lv) {
       ctx.fillRect(p.x - w / 2, p.y - 110, w, 130);
       const s = q < 0.3 ? 2.4 - 1.4 * (q / 0.3) : 1;
       ctx.globalAlpha = q < 0.8 ? 1 : (1 - q) / 0.2;
-      ctx.font = `bold ${Math.round(16 * s)}px system-ui,sans-serif`;
+      ctx.font = `600 ${Math.round(17 * s)}px ${FONT_CHIFFRE}`;
       ctx.textAlign = 'center';
       ctx.fillStyle = 'rgba(0,0,0,.7)';
       ctx.fillText(_t('N') + lv, p.x + 1, p.y - 36 + 1);

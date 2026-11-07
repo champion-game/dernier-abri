@@ -1029,7 +1029,7 @@ button.ammo[hidden] {
   color: var(--ink);
   text-align: center;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-family: var(--f-body);
 }
 .cf > * {
   position: absolute;
@@ -1584,7 +1584,7 @@ button.ammo[hidden] {
   border-radius: 999px;
   padding: 1px 7px;
   font-size: 13px;
-  font-family: 'Special Elite', monospace;
+  font-family: var(--f-disp);
 }
 .pile .pt {
   position: absolute;
@@ -3458,7 +3458,7 @@ html.eco .citem.s-buy .cf {
   gap: 8px;
 }
 .mt-h > b {
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 15px;
   color: #f3e6c4;
   margin-right: auto;
@@ -3706,7 +3706,7 @@ html.eco .citem.s-buy .cf {
 }
 .achtoast b {
   display: block;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 17px;
 }
 .achtoast em,
@@ -4964,7 +4964,7 @@ p.demob {
   border-radius: 6px;
   background: var(--blood) !important;
   color: #fff !important;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 15px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -5590,7 +5590,7 @@ html.goldback .pk-bk {
   width: max-content;
   z-index: 7;
   pointer-events: none;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 19px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -5880,7 +5880,7 @@ html.eco .gp-glow {
   animation: bossban 1.9s cubic-bezier(0.2, 0.9, 0.3, 1) both;
 }
 .bossban span {
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: clamp(24px, 7vw, 40px);
   letter-spacing: 0.12em;
   color: #ffe7c8;
@@ -6140,7 +6140,7 @@ html.eco .rf-rays {
   position: relative;
   padding: 16px 14px 14px;
   color: #2b1a0c;
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-family: var(--f-body);
   text-align: left;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .08 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .28 0 0 0 0 .1 0 0 0 1.6 -.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E"),
@@ -6188,7 +6188,7 @@ html.eco .rf-rays {
 }
 .fiche .fh h3 {
   margin: 0;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 19px;
   letter-spacing: 0.04em;
   color: #2b1a0c;
@@ -6208,7 +6208,7 @@ html.eco .rf-rays {
   position: absolute;
   right: 12px;
   top: 60px;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 21px;
   line-height: 1;
   color: rgba(185, 25, 20, 0.9);
@@ -6257,7 +6257,7 @@ html.eco .rf-rays {
 }
 .fiche .fnum b {
   display: block;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: clamp(17px, 5.6vw, 23px);
   color: #8a1a14;
   white-space: nowrap;
@@ -6315,7 +6315,7 @@ html.eco .rf-rays {
 }
 .fiche .pol b {
   display: block;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 14px;
   margin-top: 5px;
   line-height: 1.1;
@@ -6344,7 +6344,7 @@ html.eco .rf-rays {
 }
 .fiche .fdk h4 {
   margin: 0 0 4px;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 13px;
   font-weight: 400;
   color: #5a3a1a;
@@ -6881,7 +6881,7 @@ html.eco #hglow {
   }
   .ft-body h5 {
     margin: 2px 0 0;
-    font-family: 'Special Elite', monospace;
+    font-family: var(--f-disp);
     font-size: 13px;
     color: #f2e1b0;
   }
@@ -7813,7 +7813,12 @@ html.eco .redsky {
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* Trois polices, trois rôles (v248) :
+   --ax-titre (Special Elite) : titres d'écran et documents (radio, journal, rapport) ;
+   --ax-head (Oswald) : boutons, onglets, chiffres ;
+   --f-body (Atkinson) : tout le texte courant. */
 html.artx {
+  --ax-titre: 'Special Elite', 'Courier New', monospace;
   --ax-head: 'Oswald', 'Arial Narrow', Impact, sans-serif;
   --ax-black: #0b0a09;
   --ax-dark: #191714;
@@ -7853,10 +7858,10 @@ html.artx .panel::-webkit-scrollbar-thumb {
 }
 /* titre : bandeau sombre, capitales condensées, trait rouge à gauche */
 html.artx .panel h2 {
-  font-family: var(--ax-head);
-  font-weight: 600;
+  font-family: var(--ax-titre);
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   font-size: 22px;
   line-height: 1.15;
   color: var(--ax-cream);
@@ -7891,10 +7896,10 @@ html.artx .panel h2.pw {
   color: var(--ax-cream);
 }
 html.artx .panel h3 {
-  font-family: var(--ax-head);
-  font-weight: 600;
+  font-family: var(--ax-titre);
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   font-size: 15px;
   color: var(--ax-cream);
   text-shadow: none;
@@ -8862,10 +8867,10 @@ html.artx :is(.ft-c, .ft-z, .ft-sg div, .ft-mvp) {
   border-color: #3b362f;
 }
 html.artx .ft-body h4 {
-  font-family: var(--ax-head);
-  font-weight: 600;
+  font-family: var(--ax-titre);
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   color: #f1e7cf;
 }
 html.artx :is(.ft-body h4 small, .ft-zt p, .ft-e, .ft-sg span, .ft-chl) {
@@ -9321,7 +9326,7 @@ html.artx .ft-c {
 html.artx .ft-c .ft-n {
   color: #2b1a0c !important;
   text-shadow: none !important;
-  font-family: 'Special Elite', monospace;
+  font-family: var(--f-disp);
   font-size: 13.5px !important;
 }
 html.artx .ft-c .ft-a {
@@ -9335,7 +9340,7 @@ html.artx .ft-c b {
   background: #2b1a0c !important;
   border: 1.5px solid #c9a35a !important;
   color: #f3e6c4 !important;
-  font-family: 'Oswald', sans-serif !important;
+  font-family: var(--ax-head) !important;
   font-weight: 600;
 }
 html.artx .ft-c .ft-d {
@@ -9620,7 +9625,7 @@ html.artx .ctab svg.ink {
   flex: none;
 }
 html.artx .ctab span {
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 13px;
   white-space: nowrap;
 }
@@ -9847,7 +9852,7 @@ html.artx .cpager {
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 15px;
   color: #5b3a1a;
 }
@@ -9895,7 +9900,7 @@ html.artx .cnew {
   transform: translateX(-50%) rotate(-4deg);
   background: #c8321f;
   color: #fff;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 11px;
   padding: 2px 7px;
   border-radius: 4px;
@@ -10005,7 +10010,7 @@ html.artx .dkhd {
   text-align: left;
 }
 html.artx .dkcount {
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 16px;
   white-space: nowrap;
 }
@@ -10094,7 +10099,7 @@ html.artx .dkcost {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 14px;
   color: #2a1708;
   background: radial-gradient(circle at 35% 30%, #ffeab0, #e0a63a 55%, #8a5410);
@@ -10104,7 +10109,7 @@ html.artx .dkcost {
 html.artx .dkname {
   flex: 1;
   min-width: 0;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
@@ -10177,7 +10182,7 @@ html.artx .dkcurve b {
 }
 html.artx .dkcurve em {
   font-style: normal;
-  font-family: 'Special Elite', serif;
+  font-family: var(--f-disp);
   font-size: 12px;
   color: #ffd36b;
 }
@@ -11352,9 +11357,7 @@ html.artx.ax3 #axTop {
 }
 html.artx.ax3 #axTop .brand {
   display: block !important;
-  font:
-    400 22px/1 'Special Elite',
-    monospace !important;
+  font: 400 22px/1 var(--f-disp) !important;
   color: #f0d9a8 !important;
   text-shadow: 2px 3px 3px #000 !important;
   margin: 0 !important;
@@ -12138,9 +12141,10 @@ html.artx #panel.panel {
   filter: var(--axsh);
 }
 html.artx .panel > h2:first-child {
-  font-family: var(--ax-head, 'Oswald'), sans-serif;
+  font-family: var(--ax-titre);
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--axcr);
   background: none !important;
   border: 0 !important;
@@ -13706,9 +13710,9 @@ html.artx .dkst2 {
 }
 html.artx .dkst2 h4 {
   margin: 0;
-  font: 600 12.5px var(--ax-head);
+  font: 400 12.5px var(--ax-titre);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.03em;
   color: #c9bea6;
 }
 html.artx .dkroles {
@@ -14319,7 +14323,7 @@ html.artx #ov.axh #panel.panel.ttl {
   display: flex;
   flex-direction: column;
   gap: 0;
-  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-family: var(--f-body);
 }
 html.artx #ov.axh .axh-col {
   width: min(29vw, 360px);
@@ -14408,7 +14412,7 @@ html.artx #ov.axh .axh-big {
   height: clamp(42px, 6.2vh, 54px);
   margin: 0;
   padding: 0;
-  font-family: Oswald, sans-serif;
+  font-family: var(--ax-head);
   font-weight: 600;
   font-size: clamp(15px, 1.45vw, 19px);
   letter-spacing: 0.05em;
@@ -14443,7 +14447,7 @@ html.artx #ov.axh #panel .axh-play {
   padding: 1.3vh 0;
   border-image: var(--ui-panneau-noir) 36 fill / 10px stretch !important;
   filter: none !important;
-  font-family: Oswald, sans-serif;
+  font-family: var(--ax-head);
   font-weight: 700;
   font-size: clamp(24px, 2.6vw, 32px);
   letter-spacing: 0.08em;
@@ -14527,7 +14531,7 @@ html.artx #ov.axh .axh-tab {
   border-left: 1px solid rgba(201, 164, 106, 0.4);
   background: none;
   color: #f1e4c8;
-  font-family: Oswald, sans-serif;
+  font-family: var(--ax-head);
   font-size: clamp(13px, 1.15vw, 16px);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -14547,7 +14551,7 @@ html.artx #ov.axh .axh-tab .ink {
 }
 html.artx #ov.axh .axh-tab.cr {
   flex: 0.6 1 0;
-  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-family: var(--f-body);
   text-transform: none;
   letter-spacing: 0;
 }
@@ -14878,4 +14882,9 @@ html.eco .axh-bar.axh-in {
     opacity: 0.95;
     transform: translate(-50%, -50%) scale(1.04);
   }
+}
+/* v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit) */
+html.artx :is(.cf-cost, .cf-atk, .cf-hp, .cf-v, .cf-tag) {
+  font-family: var(--ax-head);
+  font-weight: 600;
 }

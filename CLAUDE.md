@@ -18,7 +18,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - HTML, CSS et JavaScript sans framework ni étape de build. Ouvrir `index.html` suffit pour jouer.
 - Rendu de la carte en Canvas 2D (`src/game.js`). Tous les graphismes sont dessinés en code pour l'instant.
-- Polices : Special Elite (titres) et Atkinson Hyperlegible (texte), fichiers dans `assets/fonts/`. Style artiste : Oswald (titres et boutons en capitales condensées).
+- Polices (v248, une police par rôle, fichiers dans `assets/fonts/`) : **Special Elite** pour les titres et les documents de l’histoire (radio, journal, rapport) → `var(--ax-titre)` / `var(--f-disp)` ; **Oswald** pour les boutons, onglets et chiffres → `var(--ax-head)`, et sur le canvas `FONT_CHIFFRE` ; **Atkinson Hyperlegible** pour tout le texte → `var(--f-body)`. Jamais de nom de police écrit en dur ni de `system-ui` pour du texte.
 - Interface en français (langue source) et en anglais (`src/lang-en.js`).
 
 ## Structure
