@@ -127,9 +127,11 @@ function render(){
  else if(S.moveFrom!==null&&G.grid[S.moveFrom])info.innerHTML=unitLine(G.grid[S.moveFrom])+_t(' Touche une case libre en bleu pour la déplacer.')+(Z.canRecall(G,S.moveFrom)?' <button type="button" class="recall" data-a="recall">'+ii('back')+_t(' Rappeler</button>'):'');
  else if(S.inspect!==null&&G.grid[S.inspect])info.innerHTML=unitLine(G.grid[S.inspect])+(Z.canRecall(G,S.inspect)?' <button type="button" class="recall" data-a="recall">'+ii('back')+_t(' Rappeler</button>'):'');
  else if(G.oneNight)info.innerHTML=_t`<b>Défi du jour</b> : énergie illimitée. Pose tes cartes, puis affronte la horde. Touche une carte posée pour la déplacer.`;
- else info.innerHTML=_t`<span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,Math.max(0,left)))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-left))}</span> <b>${left}</b> énergie. Touche une carte posée pour la déplacer ou la rappeler.`;
+ else info.innerHTML=_t('Touche une carte posée pour la déplacer ou la rappeler.');
  if(TEST&&!S.busy)info.insertAdjacentHTML('beforeend',_t` <button type="button" class="recall" data-a="tcards">+ Carte (test)</button>`);
  if(canUndo())info.insertAdjacentHTML('beforeend',_t` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`);
+ // v241 : compteur d'énergie toujours visible le jour, à gauche du texte (gros chiffre et jetons)
+ if(!S.busy&&!G.oneNight){const l=Math.max(0,left);info.innerHTML=`<span class="nrgb${l?'':' zero'}" title="${_t('Énergie')}"><b>${l}</b><span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10,l))}${'<i></i>'.repeat(Math.max(0,Z.ENERGY-l))}</span><small>${_t('énergie')}</small></span><span class="itx">${info.innerHTML}</span>`;info.classList.add('wn')}else info.classList.remove('wn');
  // bouton de tir : un seul élément, mis à jour sans être recréé (sinon le toucher peut se perdre pendant la nuit)
  updatePreview();checkHints();
  const tip=$('#tip'),gs=guideStep(),tt=tutoTip();if(tt&&ov.hidden){tip.hidden=false;const sk=gs?_t('Passer le tutoriel'):'';if(tip.dataset.t!==tt+sk){tip.dataset.t=tt+sk;tip.textContent=tt;if(sk)tip.insertAdjacentHTML('beforeend',` <button type="button" class="tskip" data-a="tskip">${sk}</button>`)}}else if(TUTO<4&&ov.hidden&&(S.busy?TUTO===3:TUTO<3)&&!tutoDay()){tip.hidden=false;tip.dataset.t='';tip.textContent=TIPS[TUTO]}else tip.hidden=true;

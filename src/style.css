@@ -2548,3 +2548,50 @@ html.artx.ax3.axpal #axBord{inset:auto;left:2.294%;top:1.965%;width:95.33%;heigh
 html.artx.ax3.axpal #axBord>i{-webkit-mask-image:var(--ui-plateau-herbe);mask-image:var(--ui-plateau-herbe)}
 html.artx.ax3.axpal #axFar{display:none}
 @media (orientation:landscape){html.artx.ax3.axpal:not(.felton){--axBd:min(var(--axH),calc((100vw - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)) * .52))}}
+
+/* v241 : interface plus lisible (demande d'Amine) */
+/* 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte */
+.info.wn{display:flex;align-items:center;gap:10px;text-align:left}
+.info.wn .itx{flex:1;min-width:0}
+.nrgb{flex:none;display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-width:54px;padding:3px 7px 3px;border-radius:9px;background:radial-gradient(circle at 50% 30%,#4a3618,#1c140a 75%);border:2px solid #d9a032;box-shadow:0 2px 0 #5a3c10,0 3px 8px rgba(0,0,0,.55),inset 0 0 8px rgba(255,200,80,.2);color:#ffd25a;line-height:1}
+.nrgb b{font:700 24px/1 var(--f-disp),system-ui,sans-serif;color:#ffd25a;text-shadow:0 0 8px rgba(255,190,60,.55),0 2px 0 #000}
+.nrgb small{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#e8c98a}
+.nrgb .nrg{gap:3px}
+.nrgb .nrg i{width:9px;height:9px}
+.nrgb.zero{border-color:#7a6a50;background:radial-gradient(circle at 50% 30%,#3a3128,#16120e 75%)}
+.nrgb.zero b{color:#b9a888;text-shadow:0 2px 0 #000}
+html.artx .info .nrgb .nrg{background:none!important;border-image:none!important;padding:0!important;box-shadow:none!important;border:0!important}
+html.bigtext .nrgb b{font-size:28px}
+/* 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la partie : il reste sur l'accueil */
+@media (orientation:landscape) and (min-aspect-ratio:5/4) and (min-width:560px){.side .top .brand{display:none}}
+/* 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement */
+.go.ready:not(:disabled){animation:goready2 1.4s ease-in-out infinite}
+@keyframes goready2{0%,100%{box-shadow:var(--sh),0 0 0 0 rgba(255,190,80,0);filter:none}50%{box-shadow:var(--sh),0 0 22px 6px rgba(255,190,80,.85),0 0 0 3px rgba(255,214,120,.9);filter:brightness(1.2)}}
+html.eco .go.ready:not(:disabled){animation:none;outline:3px solid #ffd25a;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.go.ready:not(:disabled){animation:none;outline:3px solid #ffd25a;outline-offset:2px}}
+/* téléphone en portrait */
+@media (max-width:560px) and (orientation:portrait){
+ /* 4 : la fiche de la nuit sur une seule ligne : phrase à gauche, horde à droite */
+ html:not(.artx) .side .event{display:flex;align-items:center;gap:8px;padding-block:5px}
+ html:not(.artx) .side .event .fiche-top{flex:1 1 auto;min-width:0}
+ html:not(.artx) .side .event .fiche-top b{white-space:normal;font-size:13.5px;line-height:1.15}
+ html:not(.artx) .side .event .ztoks{flex:0 1 auto;margin-top:0;justify-content:flex-end;max-width:58%}
+ html:not(.artx) .side .event .ztoks::before{content:none;display:none}
+ html:not(.artx) .side .event:has(.stamp){display:block}html:not(.artx) .side .event:has(.stamp) .ztoks{margin-top:8px;max-width:none;justify-content:flex-start}
+ /* 5 : cartes en main plus grandes, qui se chevauchent quand la main est pleine */
+ html:not(.artx) .table .hand{display:flex!important;justify-content:center;align-items:flex-end;container-type:inline-size;--cw2:min(68px,30cqw)}
+ html:not(.artx) .table .hand .card{flex:none;width:var(--cw2);max-width:none;position:relative}
+ html:not(.artx) .table .hand .card+.card{margin-left:min(4px,calc((100cqw - 6px - var(--hn,5) * var(--cw2)) / max(1,var(--hn,5) - 1)))}
+ /* la pioche et la défausse montent à droite de la ligne d'énergie : toute la largeur revient aux cartes */
+ html:not(.artx) .table{position:relative;grid-template-columns:minmax(0,1fr)!important;padding-inline:4px}
+ html:not(.artx) .table>.piles{position:absolute;top:-58px;bottom:auto;padding:0;gap:6px;flex-direction:row;align-items:flex-end;z-index:2}
+ html:not(.artx) .table>.piles:first-child{right:48px}html:not(.artx) .table>.piles:last-child{right:4px}
+ html:not(.artx) .table>.piles .pile{width:36px;height:50px}html:not(.artx) .table>.piles .pile.res{width:30px;height:30px}
+ html:not(.artx) .table>.piles .pile em{display:none}
+ html:not(.artx) .side2 .info{padding-right:96px;min-height:50px}
+ html:not(.artx) .side2:has(.pile.res:not([hidden])) .info{padding-right:132px}
+ html:not(.artx) .table .hand .card.sel,html:not(.artx) .table .hand .card:focus-visible{z-index:3}
+ html:not(.artx) .table .hand .cf.mini .cf-name{font-size:12.8cqw}
+ html:not(.artx) .table .hand .cf.mini .cf-cost{width:29cqw;height:29cqw;font-size:19cqw}
+ .nrgb{min-width:50px;padding-inline:5px}.nrgb b{font-size:22px}
+}

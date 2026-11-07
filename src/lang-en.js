@@ -1797,4 +1797,7 @@ I18N.en={
 "Adieu, {0}…":"Farewell, {0}…",
 "{0}, tiens bon !":"{0}, hang on!",
 "Couvrez {0} !":"Cover {0}!",
+"Énergie":"Energy",
+"énergie":"energy",
+"Touche une carte posée pour la déplacer ou la rappeler.":"Tap a placed card to move or recall it.",
 };
