@@ -313,6 +313,10 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 - Accueil animé (v174) : braises qui montent, brume qui dérive en bas, logo qui tombe puis se balance comme un panneau, bouton principal qui luit ; v175 : la lune rayonne, les étoiles scintillent et la ville en feu vacille (lueurs posées sur l’image, positions par image dans `HGLOW` de `game-menu.js`). CSS seulement, coupé en Mode économie et si l’appareil demande moins d’animations.
 - Menus (les cartes flottantes derrière l’accueil ont été essayées puis retirées à la demande d’Amine) : la mutation choisie se fissure avec une lueur verte ; un succès tombe du haut et rebondit, avec un son de cloche ; les compteurs de l’aube et les points de fin de partie montent par paliers avec un petit tremblement.
 
+**v242 : code plus lisible** (demande d’Amine). Aucun changement de jeu.
+- Code formaté par Prettier (vérifié identique une fois compacté), guide `docs/CODE.md` et index généré `docs/CARTE_CODE.md`.
+- Retirés : l’ancien écran de choix du survivant et du lieu (remplacé par la préparation), un bouton de tir jamais créé, `tools/simulate.js`.
+
 **v241 : interface plus lisible** (demande d’Amine).
 - Énergie : un vrai compteur (gros chiffre, jetons, « énergie ») toujours visible le jour à gauche du texte d’aide, même quand une carte est choisie ; grisé à 0. Le texte d’aide ne répète plus l’énergie.
 - Bouton « Affronter la nuit » : quand il ne reste plus d’énergie ou plus rien à jouer, il pulse nettement (lueur dorée et contour) ; contour fixe en Mode économie ou si l’appareil demande moins d’animations.

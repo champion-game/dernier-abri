@@ -587,38 +587,6 @@ function runInfo() {
     .join('')}</div>
   <button type="button" class="go" data-a="close">Fermer</button>`);
 }
-function charScreen() {
-  const ok = Z.unlocks(META).chars;
-  show(_t`<h2 class="pw">Choisis ton survivant</h2><p>Chacun commence avec son propre deck de 8 cartes. Total de nuits survécues : <b>${META.total}</b>.</p>
-  <div class="chars">${Object.entries(Z.CHARS)
-    .map(([k, c]) =>
-      ok.includes(k)
-        ? `<button type="button" class="char" data-a="char" data-v="${k}"><b>${c.n}</b><span>${c.d}</span><span class="mini">${c.deck.map(t => `<i style="color:${cc(t)}">${art(t)}</i>`).join('')}</span></button>`
-        : _t`<button type="button" class="char" disabled><b>${ii('lock')} ${c.n}</b><span>${DEMO && !Z.DEMO_CHARS.includes(k) ? _t('Dans le jeu complet.') : _t`Se débloque à ${Z.UNLOCK.chars[k]} nuits survécues au total.`}</span></button>`,
-    )
-    .join('')}</div>
-  <button type="button" class="skip" data-a="title">Retour</button>`);
-}
-let pendingChar = 'surv';
-function placeScreen() {
-  const ok = Z.unlocks(META).places;
-  if (ok.length === 1) {
-    newGame(pendingChar, 'bois');
-    save();
-    hide();
-    render();
-    return;
-  }
-  show(_t`<h2 class="pw">Choisis ton lieu</h2><p>Ton record : <b>${plural(META.best, _t('nuit'), _t('nuits'))}</b>.</p>
-  <div class="chars">${Object.entries(Z.PLACES)
-    .map(([k, p]) =>
-      ok.includes(k)
-        ? `<button type="button" class="char" data-a="place" data-v="${k}"><b>${p.n}</b><span>${p.d}</span></button>`
-        : _t`<button type="button" class="char" disabled><b>${ii('lock')} ${p.n}</b><span>${DEMO && !Z.DEMO_PLACES.includes(k) ? _t('Dans le jeu complet.') : _t`Se débloque avec un record de ${Z.UNLOCK.places[k]} nuits.`}</span></button>`,
-    )
-    .join('')}</div>
-  <button type="button" class="skip" data-a="new">Retour</button>`);
-}
 const ov = $('#ov'),
   panel = $('#panel');
 // v142 : les boutons de fin d'écran (Retour, Terminé…) sont rangés sur une étagère qui reste visible quand l'écran défile
@@ -1412,16 +1380,7 @@ const ACT = {
     }
     collectionScreen(1);
   },
-  char: v => {
-    pendingChar = v;
-    placeScreen();
-  },
-  place: v => {
-    newGame(pendingChar, v);
-    save();
-    hide();
-    render();
-  },
+
   load: () => {
     const d = loadSave();
     if (d) resume(d);

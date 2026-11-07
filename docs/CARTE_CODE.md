@@ -11,8 +11,8 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 4. `src/audio.js` (811 lignes)
 5. `src/game.js` (1539 lignes)
 6. `src/game-draw.js` (5935 lignes)
-7. `src/game-ui.js` (2032 lignes)
-8. `src/game-screens.js` (1727 lignes)
+7. `src/game-ui.js` (2019 lignes)
+8. `src/game-screens.js` (1686 lignes)
 9. `src/game-menu.js` (841 lignes)
 10. `src/game-anim.js` (1181 lignes)
 11. `src/game-fiche.js` (695 lignes)
@@ -34,12 +34,12 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `frameInner` | game-draw.js:5426 | game-artx.js:582, game-fx3.js:85, game-fx3.js:501, game-fx5.js:155 |
 | `playEvents` | game-ui.js:4 | game-anim.js:913, game-fx2.js:329, game-fx3.js:94, game-fx5.js:106 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:594 |
-| `collectionScreen` | game-screens.js:969 | game-anim.js:397, game-coll.js:639 |
-| `deckEditor` | game-screens.js:937 | game-anim.js:405, game-coll.js:649 |
-| `feltLayout` | game-ui.js:1870 | game-artx.js:828, game-artx.js:971 |
+| `collectionScreen` | game-screens.js:937 | game-anim.js:397, game-coll.js:639 |
+| `deckEditor` | game-screens.js:905 | game-anim.js:405, game-coll.js:649 |
+| `feltLayout` | game-ui.js:1857 | game-artx.js:828, game-artx.js:971 |
 | `syncZ` | game-draw.js:2249 | game-fx2.js:201, game-artx.js:1013 |
 | `unitAnim` | game-draw.js:2927 | game-fx3.js:348, game-fx5.js:476 |
-| `countUp` | game-screens.js:678 | game-anim.js:1117 |
+| `countUp` | game-screens.js:646 | game-anim.js:1117 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:298 |
 | `drawFloats` | game-draw.js:4890 | game-fx5.js:760 |
 | `drawFog` | game-draw.js:5153 | game-artx.js:456 |
@@ -51,24 +51,24 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `hglowFit` | game-menu.js:803 | game-artx.js:231 |
 | `keepEnd` | game-menu.js:554 | game-fiche.js:206 |
 | `lights` | game-draw.js:5073 | game-fx3.js:399 |
-| `mergeFx` | game-ui.js:1457 | game-anim.js:807 |
+| `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `pilesHtml` | game.js:1383 | game-artx.js:884 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
-| `resumeWave` | game-ui.js:1739 | game-anim.js:903 |
+| `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:443 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
-| `show` | game-screens.js:642 | game-anim.js:1158 |
+| `show` | game-screens.js:610 | game-anim.js:1158 |
 | `showAch` | game.js:733 | game-anim.js:1108 |
-| `tapCell` | game-ui.js:1591 | game-ui.js:2020 |
+| `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
 | `title` | game-menu.js:429 | game-artx.js:240 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
 
 ## Actions des boutons
 
-Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, ligne 1165).
+Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, ligne 1133).
 
-testmode:1166 · teststart:1173 · tcards:1191 · tadd:1207 · options:1213 · optclose:1214 · presume:1221 · pquit:1226 · prestart:1230 · prestart2:1234 · pmenu:1243 · closeov:1244 · bpick:1248 · artstyle:1256 · new:1263 · prepdeck:1274 · prepch:1279 · preppl:1283 · preprel:1294 · prepmen:1298 · start:1304 · edit:1319 · dkp:1320 · cfam:1328 · crole:1339 · cpg:1350 · cfmore:1354 · atel:1358 · dkdraw:1365 · dkm:1369 · dkreset:1378 · coll:1383 · mdet:1391 · achs:1392 · gift:1393 · gyes:1394 · gno:1395 · gdone:1396 · mback:1397 · evo:1401 · unlock:1402 · char:1415 · place:1419 · load:1425 · title:1430 · close:1431 · rules:1432 · stats:1436 · rgo:1437 · retuto:1441 · deck:1453 · dawn:1461 · lvl:1462 · relic:1474 · evc:1479 · todraft:1498 · draft:1499 · shop:1508 · day:1560 · nightpick:1561 · nightgo:1565 · daily:1569 · wish:1572 · dpick:1582 · peek:1587
+testmode:1134 · teststart:1141 · tcards:1159 · tadd:1175 · options:1181 · optclose:1182 · presume:1189 · pquit:1194 · prestart:1198 · prestart2:1202 · pmenu:1211 · closeov:1212 · bpick:1216 · artstyle:1224 · new:1231 · prepdeck:1242 · prepch:1247 · preppl:1251 · preprel:1262 · prepmen:1266 · start:1272 · edit:1287 · dkp:1288 · cfam:1296 · crole:1307 · cpg:1318 · cfmore:1322 · atel:1326 · dkdraw:1333 · dkm:1337 · dkreset:1346 · coll:1351 · mdet:1359 · achs:1360 · gift:1361 · gyes:1362 · gno:1363 · gdone:1364 · mback:1365 · evo:1369 · unlock:1370 · load:1384 · title:1389 · close:1390 · rules:1391 · stats:1395 · rgo:1396 · retuto:1400 · deck:1412 · dawn:1420 · lvl:1421 · relic:1433 · evc:1438 · todraft:1457 · draft:1458 · shop:1467 · day:1519 · nightpick:1520 · nightgo:1524 · daily:1528 · wish:1531 · dpick:1541 · peek:1546
 
 Ajoutées ou remplacées ailleurs : unlock (game-anim.js:481) · dkp (game-anim.js:507) · dkm (game-anim.js:541) · prepdeck (game-anim.js:573) · start (game-anim.js:687) · gift (game-anim.js:758) · relic (game-anim.js:1015) · prepmen (game-anim.js:1091) · fshare (game-fiche.js:689)
 
@@ -133,14 +133,14 @@ _t:19 _tPage:41
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4
-- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 FIRE:848 fireAmmo:860 updatePreview:884 curAt:1076 useBuild:1097 spentTrace:1105 countPlay:1113 placeLineUI:1124 dmgInfo:1174 dmgSnap:1188 bonusMsg:1196 unitLine:1238 hint:1396 showHint:1405 checkHints:1433 mergeFx:1457 playReact:1496 snapUndo:1534 doUndo:1549 squadFx:1579 tapCell:1591 peekScreen:1715 wavePause:1728 resumeWave:1739 night:1753 feltLayout:1870 ftPioche:1913 ftHorde:1937 ftJournal:1953 feltTabs:1979
+- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 fireAmmo:847 updatePreview:871 curAt:1063 useBuild:1084 spentTrace:1092 countPlay:1100 placeLineUI:1111 dmgInfo:1161 dmgSnap:1175 bonusMsg:1183 unitLine:1225 hint:1383 showHint:1392 checkHints:1420 mergeFx:1444 playReact:1483 snapUndo:1521 doUndo:1536 squadFx:1566 tapCell:1578 peekScreen:1702 wavePause:1715 resumeWave:1726 night:1740 feltLayout:1857 ftPioche:1900 ftHorde:1924 ftJournal:1940 feltTabs:1966
 
 ### src/game-screens.js
 
 > Dernier Abri : écrans (aube, options, collection, decks, préparation) et actions des bouto
 
-- **3** l'aube : relique, carte pour demain, boutique : dawn:5 afterRelic:30 dawnStep:35 dawnTxt:85 shopScreen:102 storeScreen:121 listScreen:135 removeCard:140 nightScreen:151 nextDay:165 victory:179 leaveWin:239 wishBtn:263 demoEnd:268 giftStart:295 giftLeft:305 giftScreen:309 giftSync:326 giftTap:347 giftTake:371 giftDone:374 statsScreen:392 logRun:416 end:431 zombieFace:499 optionsScreen:515 runInfo:554 charScreen:590 placeScreen:603 pfoot:625 show:642 countUp:678 hide:693
-- **701** collection, decks et préparation de la partie : takeLegacy:703 ensureMeta:715 prepScreen:748 cfOpen:805 cfPool:816 cfList:826 cfTabs:842 cfBar:860 cfPips:879 cfBookHTML:887 cfBook:898 cfSync:931 deckEditor:937 collectionScreen:969 cfBarOld:1031 cfGrid:1044 cfApply:1074 cfSyncOld:1079 deckEditorOld:1085 collectionScreenOld:1097 evoScreen:1153 nextUnlockTxt:1706
+- **3** l'aube : relique, carte pour demain, boutique : dawn:5 afterRelic:30 dawnStep:35 dawnTxt:85 shopScreen:102 storeScreen:121 listScreen:135 removeCard:140 nightScreen:151 nextDay:165 victory:179 leaveWin:239 wishBtn:263 demoEnd:268 giftStart:295 giftLeft:305 giftScreen:309 giftSync:326 giftTap:347 giftTake:371 giftDone:374 statsScreen:392 logRun:416 end:431 zombieFace:499 optionsScreen:515 runInfo:554 pfoot:593 show:610 countUp:646 hide:661
+- **669** collection, decks et préparation de la partie : takeLegacy:671 ensureMeta:683 prepScreen:716 cfOpen:773 cfPool:784 cfList:794 cfTabs:810 cfBar:828 cfPips:847 cfBookHTML:855 cfBook:866 cfSync:899 deckEditor:905 collectionScreen:937 cfBarOld:999 cfGrid:1012 cfApply:1042 cfSyncOld:1047 deckEditorOld:1053 collectionScreenOld:1065 evoScreen:1121 nextUnlockTxt:1665
 
 ### src/game-menu.js
 

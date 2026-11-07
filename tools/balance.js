@@ -15,7 +15,7 @@ const Z = require(path.join(__dirname, '../src/engine.js'));
 const OUT = path.join(__dirname, 'balance-out');
 fs.mkdirSync(OUT, { recursive: true });
 const VERSION =
-  (fs.readFileSync(path.join(__dirname, '../src/game.js'), 'utf8').match(/const VERSION='([^ ']+)/) || [])[1] || '?';
+  (fs.readFileSync(path.join(__dirname, '../src/game.js'), 'utf8').match(/const VERSION\s*=\s*'([^ ']+)/) || [])[1] || '?';
 const PARTIES = +process.env.PARTIES || 40,
   ESSAIS = +process.env.ESSAIS || 24;
 function rng(seed) {

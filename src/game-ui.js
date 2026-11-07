@@ -844,19 +844,6 @@ $('#info').addEventListener('click', e => {
   render();
 });
 // munition anti-Colosse : 30 dégâts, ignore l'armure
-let fireBtn = null;
-function FIRE() {
-  if (!fireBtn) {
-    fireBtn = document.createElement('button');
-    fireBtn.type = 'button';
-    fireBtn.className = 'ammo';
-    fireBtn.id = 'fire';
-    fireBtn.hidden = true;
-    $('#info').after(fireBtn);
-    fireBtn.addEventListener('click', fireAmmo);
-  }
-  return fireBtn;
-}
 function fireAmmo() {
   const ev = Z.fireAmmo(G);
   if (!ev) return;
