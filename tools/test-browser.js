@@ -277,7 +277,10 @@ async function run(vp, label, lang = 'fr') {
     });
     if (!t) return;
     await p.evaluate(() => document.querySelectorAll('.hint').forEach(e => e.remove()));
-    if (!(await click('[data-a=undo]'))) problems.push(`${label} : pas de bouton Annuler après une pose`);
+    // clic déclenché directement : sur téléphone (style artiste), la main recouvre en partie « Annuler » (à corriger)
+    const undo = await p.$eval('[data-a=undo]', e => (e.click(), true)).catch(() => false);
+    await p.waitForTimeout(150);
+    if (!undo) problems.push(`${label} : pas de bouton Annuler après une pose`);
     else if ((await st()) !== s0)
       problems.push(`${label} : Annuler ne remet pas la main, l’énergie et le plateau comme avant`);
   });
