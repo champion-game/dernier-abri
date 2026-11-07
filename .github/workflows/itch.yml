@@ -36,8 +36,10 @@ jobs:
           find build -name '*.md' -delete
           sed -i -E "s/\?v=([0-9]+)/?v=\1-${GITHUB_RUN_NUMBER}/g" build/index.html
           cp -r build build-demo
-          grep -q 'var DEMO_BUILD=false;' build-demo/src/game.js
-          sed -i 's/var DEMO_BUILD=false;/var DEMO_BUILD=true;/' build-demo/src/game.js
+          # espaces facultatifs autour de « = » (Prettier les ajoute depuis la v242)
+          grep -qE 'var DEMO_BUILD *= *false;' build-demo/src/game.js
+          sed -i -E 's/var DEMO_BUILD *= *false;/var DEMO_BUILD = true;/' build-demo/src/game.js
+          grep -q 'var DEMO_BUILD = true;' build-demo/src/game.js
           npm i -s --no-save terser@5
           for d in build build-demo; do
             for f in $d/src/*.js $d/sw.js; do npx terser "$f" -c -m --comments false -o "$f"; done
