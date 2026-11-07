@@ -185,7 +185,7 @@ const AXG2 = {
     w: 1672,
     h: 941,
     fire: [],
-    lamp: [[90.3, 19.2, 3.4]],
+    lamp: [[90.3, 19.2, 5.5]],
     mist: [12.5, 15.5],
     stars: [
       [6, 3],
@@ -218,7 +218,7 @@ const AXG2 = {
     w: 941,
     h: 1672,
     fire: [],
-    lamp: [[85.6, 28.8, 7]],
+    lamp: [[85.6, 28.8, 11]],
     mist: [22.5, 26],
     stars: [
       [5, 3],
@@ -244,8 +244,8 @@ const AXG2 = {
     ],
   },
 };
-// l'accueil du style artiste a ses propres fonds : les lueurs vont dans le calque #axbg (qui suit la souris sur PC)
-const axNewHome = () => AX.on() && !!$('#ov.axh');
+// l'accueil et les menus ouverts depuis l'accueil (v246) ont ce décor : les lueurs vont dans le calque #axbg (qui suit la souris sur PC)
+const axNewHome = () => AX.on() && !!$('#ov.home');
 function axGlow() {
   try {
     const ov = $('#ov');
@@ -314,7 +314,7 @@ function axGlowHtml(d) {
     h += `<i class="ax-fire" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.41}s"></i>`;
   });
   d.lamp.forEach((f, i) => {
-    h += `<i class="ax-lamp" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.53}s;animation-duration:${1.7 + i * 0.37}s"></i>`;
+    h += `<i class="ax-lamp${d.flies ? ' ax-lamp2' : ''}" style="left:${f[0]}%;top:${f[1]}%;--r:${f[2]};animation-delay:-${i * 0.53}s;animation-duration:${1.7 + i * 0.37}s"></i>`;
   });
   (d.flies || []).forEach((f, i) => {
     h += `<i class="ax-fly" style="left:${f[0]}%;top:${f[1]}%;--dx:${((i * 37) % 7) - 3}vw;--dy:${((i * 53) % 5) - 2.5}vw;animation-delay:-${(i * 1.9) % 9}s;animation-duration:${7 + ((i * 1.3) % 5)}s"></i>`;
@@ -1486,3 +1486,7 @@ ACT.credits = () => {
     });
   });
 }
+// v246 : le premier accueil est dessiné (game-menu.js) avant que ce fichier soit chargé : on le refait avec la mise en page artiste
+try {
+  if (AX.on() && onTitle && !ov.hidden && panel.classList.contains('ttl') && !panel.querySelector('.axh-col')) title();
+} catch (e) {}

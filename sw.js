@@ -2,7 +2,7 @@
    - Code (page, scripts, styles) : réseau d'abord, copie gardée pour jouer hors ligne. Les mises à jour arrivent donc tout de suite.
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
-const CACHE = 'abri-1';
+const CACHE = 'abri-2'; // v246 : style artiste officiel (anciennes images retirées)
 const CORE = [
   './',
   'index.html',
@@ -11,6 +11,7 @@ const CORE = [
   'src/lang-en.js',
   'src/engine.js',
   'src/audio.js',
+  'src/art-liste.js',
   'src/game.js',
   'src/game-draw.js',
   'src/game-ui.js',
@@ -29,15 +30,12 @@ const CORE = [
   'assets/fonts/atkinson-400.woff2',
   'assets/fonts/atkinson-700.woff2',
   'assets/fonts/oswald-600.woff2',
-  'assets/ui/fond.webp',
-  'assets/ui/fond-2.webp',
-  'assets/ui/fond-3.webp',
-  'assets/ui/fond-4.webp',
-  'assets/ui/fond-5.webp',
-  'assets/ui/fond-6.webp',
-  'assets/ui/fond-zombies.webp',
-  'assets/ui/fond-portrait2.webp',
-  'assets/ui/barricard.webp',
+  'assets/art/ui/accueil.webp',
+  'assets/art/ui/accueil-portrait.webp',
+  'assets/art/ui/fond.webp',
+  'assets/art/ui/barricard.webp',
+  'assets/art/ui/panneau-noir.webp',
+  'assets/art/ui/btn-rouge.webp',
 ];
 self.addEventListener('install', e => {
   e.waitUntil(

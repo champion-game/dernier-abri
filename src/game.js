@@ -226,6 +226,7 @@ const SPRDC = {},
 // les sprites (1,6 Mo) se chargent une fois la page affichée, pour ne pas ralentir l'accueil
 function loadSprites() {
   SPRQ.splice(0).forEach(k => {
+    if (artNew('sprites', k + '.webp')) return; // v246 : sprite de l'artiste (chargé par applyArt), l'ancien n'existe plus
     const im = new Image();
     im.onload = () => (SPRC[k] = im);
     im.src = 'assets/sprites_cartoon/' + k + '.webp';
@@ -280,14 +281,14 @@ const CART_FILES = (
 const CART_ZOMB = 'walk fat sap armor zdog crawl run howl spit boss mere zero'.split(' ');
 const CART_POP = CART_FILES.slice(0, 10);
 const cartoon = t => CART_FILES.includes(t) && (ART_STYLE === 'cartoon' || !ART_FILES.includes(t));
-/* style artiste (essai, v193) : les images de l'artiste vont dans assets/art/<cards|sprites|relics|ui>/, avec le même nom de fichier que l'image actuelle.
-   assets/art/liste.json dit lesquelles existent (à refaire avec node tools/art-liste.js). La case « Images de l'artiste » des Options bascule
-   d'un style à l'autre ; elle n'existe que sur le site GitHub et en local (pas sur itch.io, où assets/art n'est pas envoyé).
-   Une image absente du dossier artiste garde l'image actuelle. */
-// site GitHub, raw.githack.com (le dépôt sans attendre GitHub Pages) et l’ordinateur de développement
-const ART_DEV =
-  typeof location !== 'undefined' && /github\.io$|^raw\.githack\.com$|^localhost$|^127\./.test(location.hostname);
-let ART_NEW = { cards: [], sprites: [], relics: [], ui: [] };
+/* style artiste (v193, style officiel depuis la v246) : les images de l'artiste sont dans assets/art/<cards|sprites|relics|ui>/,
+   avec le même nom de fichier que l'ancienne image. src/art-liste.js (node tools/art-liste.js) dit lesquelles existent ;
+   une image absente du dossier artiste garde l'ancienne image (assets/cards_cartoon, sprites_cartoon, ui). */
+const ART_DEV = true; // nom gardé de l'essai : le style artiste est toujours actif
+let ART_NEW = Object.assign(
+  { cards: [], sprites: [], relics: [], ui: [] },
+  typeof ART_LIST !== 'undefined' ? ART_LIST : {},
+);
 const SPRN = {};
 const artNew = (d, f) => !!(ART_DEV && OPT.art && ART_NEW[d] && ART_NEW[d].includes(f));
 const artP = (d, f, old) => (artNew(d, f) ? 'assets/art/' + d + '/' + f : old);
@@ -327,7 +328,8 @@ function hdArt(root) {
 // applique le style choisi : fonds et cadres (variables CSS --ui-<nom>), sprites du plateau, maison fortifiée, puis redessine l'écran
 function applyArt() {
   try {
-    const on = ART_DEV && OPT.art;
+    const on = ART_DEV && OPT.art,
+      DE = document.documentElement; // applyArt tourne dès le chargement de game.js, avant la définition de DE (game-menu.js)
     DE.classList.toggle('artx', !!(on && (ART_NEW.ui || []).includes('plateau.webp')));
     (ART_NEW.ui || []).forEach(f => {
       const v = '--ui-' + f.replace(/\.\w+$/, '');
@@ -509,7 +511,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v245 · 7 nov.';
+const VERSION = 'v246 · 7 nov.';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
    (.github/workflows/itch.yml). « ?demo » dans l'adresse l'active aussi, pour essayer. Règles : Z.setDemo (engine.js). */
 var DEMO_BUILD = false;
@@ -561,9 +563,10 @@ const OPT = (() => {
     shelter: '',
     cur: 'a',
     lang: LANG,
+    art: 1,
   };
   try {
-    return Object.assign(d, JSON.parse(localStorage.getItem('abri-opts')) || {});
+    return Object.assign(d, JSON.parse(localStorage.getItem('abri-opts')) || {}, { art: 1 }); // v246 : style artiste toujours actif
   } catch (e) {
     return d;
   }
@@ -573,20 +576,9 @@ function saveOpt() {
     localStorage.setItem('abri-opts', JSON.stringify(OPT));
   } catch (e) {}
 }
-// style artiste : liste des images déjà livrées (site de test seulement)
-// ART_READY : promesse tenue quand la liste est connue (utilisée par l'écran de chargement, game-load.js)
-const ART_READY =
-  ART_DEV && typeof fetch === 'function'
-    ? fetch('assets/art/liste.json', { cache: 'no-store' })
-        .then(r => (r.ok ? r.json() : null))
-        .then(j => {
-          if (j) {
-            ART_NEW = Object.assign({ cards: [], sprites: [], relics: [], ui: [] }, j);
-            if (OPT.art) applyArt();
-          }
-        })
-        .catch(() => {})
-    : Promise.resolve();
+// style artiste : la liste des images est connue dès le lancement (src/art-liste.js) ; ART_READY reste pour l'écran de chargement (game-load.js)
+const ART_READY = Promise.resolve();
+applyArt();
 function applyOpt() {
   try {
     SFX.setVol(OPT.sfx, OPT.mus);

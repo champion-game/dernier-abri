@@ -1834,8 +1834,6 @@ I18N.en = {
   '<b>cicatrice</b> : la prochaine chute sera fatale': '<b>scar</b>: the next fall will be fatal',
   'Zones non couvertes': 'Uncovered areas',
   'Nuit rouge': 'Red night',
-  'Images de l’artiste (essai, visible seulement sur le site de test) : {0} prêtes':
-    'Artist images (trial, only visible on the test site): {0} ready',
   'Nuit rouge demain': 'Red night tomorrow',
   'Nuit rouge dans {0}': 'Red night in {0}',
   // v213 : collection en classeur

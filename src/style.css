@@ -4609,18 +4609,18 @@ html.eco .citem.in .cf {
 #ov.home {
   background:
     linear-gradient(rgba(15, 10, 6, 0.1), rgba(15, 10, 6, 0.35)),
-    #1a1f33 var(--ui-fond, url(../assets/ui/fond.webp)) center 60% / cover no-repeat;
+    #1a1f33 var(--ui-fond, url(../assets/art/ui/fond.webp)) center 60% / cover no-repeat;
   backdrop-filter: none;
 }
 #ov.home {
   background-image: linear-gradient(rgba(15, 10, 6, 0.1), rgba(15, 10, 6, 0.35)),
-    var(--fond, var(--ui-fond, url(../assets/ui/fond.webp)));
+    var(--fond, var(--ui-fond, url(../assets/art/ui/fond.webp)));
 }
 /* v168 : en hauteur, sans phrase d'accroche ; le logo monte dans le ciel et le menu commence sous la palissade des survivants (à 74 % de la largeur dans l'image) */
 @media (max-aspect-ratio: 3/4) {
   #ov.home {
     background-image: linear-gradient(rgba(15, 10, 6, 0.1), rgba(15, 10, 6, 0.35)),
-      var(--ui-fond-portrait2, url(../assets/ui/fond-portrait2.webp));
+      var(--ui-fond-portrait2, url(../assets/art/ui/fond-portrait2.webp));
     background-position: center top;
   }
   .panel.ttl .logo + p:not(.demob) {
@@ -14239,19 +14239,36 @@ html.eco .go.ready:not(:disabled) {
 #axbg {
   display: none;
 }
+html.artx #ov.home {
+  background: #24150c !important;
+  backdrop-filter: none;
+}
 html.artx #ov.home.axh {
   display: block;
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #24150c !important;
-  backdrop-filter: none;
+}
+/* v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau */
+html.artx #ov.home:not(.axh) #axbg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(10, 6, 4, 0.5);
+}
+html.artx #ov.home #axglow {
+  display: block;
+}
+html.artx #ov.home:not(.axh) > .panel {
+  position: relative;
+  z-index: 2;
 }
 html.artx #ov.axh::before,
 html.artx #ov.axh::after {
   display: none;
 }
-html.artx #ov.axh #axbg {
+html.artx #ov.home #axbg {
   display: block;
   position: absolute;
   inset: -14px;
@@ -14407,10 +14424,9 @@ html.artx #ov.axh #panel .axh-play {
   text-shadow:
     0 2px 0 #3a0603,
     0 0 12px rgba(0, 0, 0, 0.6);
-  box-shadow:
-    0 0 0 2px rgba(255, 140, 60, 0.35),
-    0 0 26px 4px rgba(255, 90, 30, 0.5) !important;
-  animation: axhGlow 2s ease-in-out infinite;
+  border-radius: 10px;
+  box-shadow: 0 0 18px 2px rgba(255, 100, 35, 0.35) !important;
+  animation: axhBreath 2.6s ease-in-out infinite;
 }
 html.artx #ov.axh #panel .axh-play::before {
   content: none;
@@ -14423,11 +14439,8 @@ html.artx #ov.axh #panel .axh-play::after {
   z-index: -1;
   border-radius: 9px;
   pointer-events: none;
-  background:
-    linear-gradient(100deg, transparent 30%, rgba(255, 210, 140, 0.55) 45%, transparent 60%) -200% 0 / 250% 100% no-repeat,
-    linear-gradient(#a8261a, #4a0705);
+  background: linear-gradient(#a8261a, #4a0705);
   mix-blend-mode: screen;
-  animation: axhSweep 3s ease-in-out infinite;
 }
 html.artx #ov.axh #panel .axh-play:hover {
   filter: brightness(1.15) !important;
@@ -14435,24 +14448,16 @@ html.artx #ov.axh #panel .axh-play:hover {
 html.artx #ov.axh #panel .axh-play:active {
   transform: translateY(2px);
 }
-@keyframes axhGlow {
-  50% {
-    box-shadow:
-      0 0 0 2px rgba(255, 170, 80, 0.6),
-      0 0 40px 10px rgba(255, 110, 40, 0.65);
-  }
-}
-@keyframes axhSweep {
+/* « Jouer » respire : il grossit un peu et son halo s'élargit */
+@keyframes axhBreath {
   0%,
-  40% {
-    background-position:
-      -200% 0,
-      0 0;
-  }
   100% {
-    background-position:
-      200% 0,
-      0 0;
+    transform: scale(1);
+    box-shadow: 0 0 18px 2px rgba(255, 100, 35, 0.35);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 0 40px 10px rgba(255, 120, 45, 0.65);
   }
 }
 html.artx #ov.axh .axh-new {
@@ -14593,13 +14598,13 @@ html.artx .axh-optx {
 }
 /* téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes */
 @media (max-aspect-ratio: 3/4) {
-  html.artx #ov.axh #axbg {
+  html.artx #ov.home #axbg {
     inset: 0 0 auto 0;
     height: calc(100vw * 1.777);
     background: var(--ui-accueil-portrait, var(--ui-fond-portrait2)) center top / 100% auto no-repeat;
     transform: none !important;
   }
-  html.artx #ov.axh #axbg::after {
+  html.artx #ov.home #axbg::after {
     content: '';
     position: absolute;
     left: 0;
@@ -14609,7 +14614,8 @@ html.artx .axh-optx {
     background: linear-gradient(rgba(36, 21, 12, 0), #24150c);
   }
   html.artx #ov.axh #panel.panel.ttl {
-    padding: 0 16px max(6px, env(safe-area-inset-bottom, 0px));
+    /* le menu commence juste sous les cartes de l'image (70 % de sa hauteur) quand l'écran est assez haut */
+    padding: 0 16px max(6px, env(safe-area-inset-bottom, 0px), calc(100vh - 124.4vw - 300px));
   }
   html.artx #ov.axh .axh-col {
     flex: 1;
@@ -14696,7 +14702,7 @@ html.artx .axh-in .axh-menu > :nth-child(4) {
 html.artx .axh-in .axh-menu > .axh-play {
   animation:
     axhSlide 0.45s 0.2s ease-out both,
-    axhGlow 2s 0.7s ease-in-out infinite;
+    axhBreath 2.6s 0.7s ease-in-out infinite;
 }
 html.artx .axh-bar.axh-in {
   animation: axhUp 0.5s 0.55s ease-out both;
@@ -14810,5 +14816,38 @@ html.eco .axh-bar.axh-in {
   .axh-in .axh-menu > *,
   .axh-bar.axh-in {
     animation: none !important;
+  }
+}
+
+/* v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en lumière) */
+#axglow .ax-lamp2 {
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle,
+    rgba(255, 238, 170, 0.95) 0 7%,
+    rgba(255, 190, 80, 0.65) 18%,
+    rgba(255, 140, 45, 0.32) 38%,
+    rgba(255, 110, 30, 0.12) 56%,
+    transparent 72%
+  );
+  animation: axLamp 2.4s ease-in-out infinite;
+}
+@keyframes axLamp {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+  35% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.04);
   }
 }

@@ -67,8 +67,9 @@ for (const t of KEYS) {
     );
   check(`carte ${t} : illustration présente`, () =>
     ok(
-      fs.existsSync(path.join(ROOT, 'assets/cards_cartoon', t + '.webp')),
-      'assets/cards_cartoon/' + t + '.webp manquant',
+      fs.existsSync(path.join(ROOT, 'assets/art/cards', t + '.webp')) ||
+        fs.existsSync(path.join(ROOT, 'assets/cards_cartoon', t + '.webp')),
+      t + '.webp manquant (assets/art/cards ou assets/cards_cartoon)',
     ),
   );
 }
@@ -1491,6 +1492,10 @@ for (let d = 0; d < 40; d++) {
     const A = require('./art-liste.js'),
       cur = fs.readFileSync(path.join(ROOT, 'assets/art/liste.json'), 'utf8');
     ok(cur === A.txt, 'lancer node tools/art-liste.js');
+    ok(
+      fs.readFileSync(path.join(ROOT, 'src/art-liste.js'), 'utf8') === A.js,
+      'src/art-liste.js : lancer node tools/art-liste.js',
+    );
   });
   // le moteur en anglais : noms traduits et nuits sans plantage
   const g = {

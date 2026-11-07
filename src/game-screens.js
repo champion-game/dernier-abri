@@ -541,15 +541,6 @@ function optionsScreen(back) {
   <label class="chk"><input type="checkbox" data-o="text" ${OPT.text ? 'checked' : ''}> Texte plus grand</label>
   <label class="chk"><input type="checkbox" data-o="cb" ${OPT.cb ? 'checked' : ''}> Couleurs adaptées au daltonisme (barres de vie bleu, orange et rose)</label>
  </div>${matchMedia('(hover: hover)').matches ? _t`<h3>Raccourcis clavier</h3><dl class="keys">${KEYS_HELP.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>` : ''}<button type="button" class="go" data-a="optclose">Retour</button>`);
-  // style artiste (site de test seulement)
-  if (ART_DEV) {
-    const o = $('#panel .opts') || document.querySelector('.opts');
-    if (o)
-      o.insertAdjacentHTML(
-        'beforeend',
-        `<label class="chk"><input type="checkbox" data-o="art" ${OPT.art ? 'checked' : ''}> ${_t`Images de l’artiste (essai, visible seulement sur le site de test) : ${Object.values(ART_NEW).reduce((s, l) => s + l.length, 0)} prêtes`}</label>`,
-      );
-  }
 }
 function runInfo() {
   onTitle = false;

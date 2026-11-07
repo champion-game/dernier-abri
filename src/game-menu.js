@@ -621,15 +621,7 @@ if (fsReq && !standalone) {
 }
 
 // v169 : image d'accueil sur écran en largeur, tirée au hasard à chaque démarrage (poids : 1 = normale). « fond-zombies » (zombies en vedette) est l'easter egg : environ 1 démarrage sur 25.
-const FONDS = [
-  ['fond.webp', 1],
-  ['fond-2.webp', 1],
-  ['fond-3.webp', 1],
-  ['fond-4.webp', 1],
-  ['fond-5.webp', 1],
-  ['fond-6.webp', 1],
-  ['fond-zombies.webp', 0.25],
-];
+const FONDS = [['fond.webp', 1]]; // v246 : style artiste seul, un seul fond (les autres ont été retirés)
 let FOND_F = 'fond.webp';
 try {
   let r = Math.random() * FONDS.reduce((s, f) => s + f[1], 0),
