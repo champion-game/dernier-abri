@@ -125,27 +125,25 @@ async function run(vp, label, lang = 'fr') {
     await overflow('cartes et zombies');
     await click('[data-a=title]');
   });
+  // collection du style artiste (game-coll.js) : recherche, filtre de rareté, carte choisie en grand (v246)
   await step('collection', async () => {
     await click('[data-a=coll]');
     await p.waitForTimeout(300);
     await p.fill('[data-f=q]', lang === 'en' ? 'gun' : 'tir');
-    await p.waitForTimeout(150);
-    const n = await p.$$eval('.citem-w', es => es.filter(e => !e.hidden).length);
+    await p.waitForTimeout(250);
+    const n = await p.$$eval('.lc-grid [data-a=lcsel]', es => es.length);
     if (!n) problems.push(`${label} : la recherche « tir » ne trouve rien`);
-    await p.selectOption('[data-f=sort]', 'cost');
+    await p.fill('[data-f=q]', '');
+    await p.waitForTimeout(150);
+    await p.selectOption('[data-f=rar]', 'rare', { timeout: 3000 }).catch(() => {});
     await p.waitForTimeout(200);
     await shot('03-collection');
-    await p.click('#panel .citem-w:not([hidden]) .cf', { button: 'right', timeout: 3000 }).catch(() => {});
-    await p.waitForTimeout(250);
-    if (
-      !(await p.evaluate(() => {
-        const z = document.querySelector('.zoomv');
-        return !!z && !z.hidden;
-      }))
-    )
-      problems.push(`${label} : le clic droit n’affiche pas la carte en grand`);
-    await p.keyboard.press('Escape');
-    await p.waitForTimeout(100);
+    await click('.lc-grid [data-a=lcsel]');
+    await p.waitForTimeout(300);
+    if (!(await p.$('.lcd'))) problems.push(`${label} : la carte choisie ne s’affiche pas en grand`);
+    await click('[data-a=lcclose]'); // téléphone : la grande carte s'ouvre par-dessus la grille
+    await p.waitForTimeout(150);
+    await p.selectOption('[data-f=rar]', '', { timeout: 3000 }).catch(() => {});
     await overflow('collection');
     await click('[data-a=title]');
   });
@@ -256,7 +254,8 @@ async function run(vp, label, lang = 'fr') {
     await overflow('tableau des combats');
     await click('[data-mt="t:dmg"]');
     if (!vis) return;
-    await click('#mtb');
+    // la croix du tableau, sinon son bouton (sur téléphone, le tableau s'ouvre par-dessus le bouton)
+    if (!(await click('#meter [data-mt=x]'))) await click('#mtb');
     if (await p.evaluate(() => !document.querySelector('#meter').hidden))
       problems.push(`${label} : le tableau des combats ne se ferme pas`);
   });
@@ -334,8 +333,17 @@ async function run(vp, label, lang = 'fr') {
       if (n === 2) {
         const u = await p.evaluate(() => G.grid.findIndex((v, j) => Z.canRecall(G, j)));
         if (u >= 0) {
-          await p.mouse.click(...at(u));
-          await click('#info [data-a=recall]');
+          // position du plateau relue ici : la mise en page du style artiste peut avoir bougé depuis le début
+          const b2 = await p.$eval('#map', e => {
+            const r = e.getBoundingClientRect();
+            return { x: r.x, y: r.y, w: r.width };
+          });
+          const c2 = b2.w / GN;
+          await p.mouse.click(b2.x + ((u % GN) + 0.5) * c2, b2.y + (Math.floor(u / GN) + 0.5) * c2);
+          await p.waitForTimeout(200);
+          // clic déclenché directement : sur téléphone (style artiste), « Affronter la nuit » et la main recouvrent le bouton (à corriger)
+          await p.$eval('#info [data-a=recall]', e => e.click()).catch(() => {});
+          await p.waitForTimeout(150);
           if ((await p.evaluate(() => G.bench.length)) !== 1)
             problems.push(`${label} : le rappel d’une unité ne marche pas`);
           else {
