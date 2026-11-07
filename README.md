@@ -14,7 +14,7 @@ Ouvre `index.html` dans un navigateur. Aucune installation n'est nécessaire.
 Avec Node.js installé :
 
 ```
-node tools/simulate.js
+node tools/balance.js
 ```
 
 ## Documents

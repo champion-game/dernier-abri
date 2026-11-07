@@ -23,6 +23,8 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 ## Structure
 
+**Avant d’intervenir sur le code : lis `docs/CODE.md`** (architecture, variables globales, fonctions enveloppées, recettes), puis cherche dans `docs/CARTE_CODE.md` la ligne exacte de ce que tu veux modifier.
+
 - `index.html` : la page et la structure de l'interface.
 - `src/engine.js` : le moteur, avec les règles pures (cartes, zombies, vagues, événements, déroulé d'une nuit tour par tour). Aucun accès au DOM, il doit tourner dans Node comme dans le navigateur. Il expose l'objet global `Z`.
 - `src/game.js` et `src/game-*.js` : l’interface, découpée en fichiers chargés dans l’ordre par `index.html` (ils partagent leurs variables) :
@@ -44,10 +46,11 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 - `src/audio.js` : les sons, générés en code avec Web Audio (objet global `SFX`).
 - `src/i18n.js` : la traduction (`_t`, langue choisie) ; `src/lang-en.js` : le dictionnaire anglais (clé = texte français).
 - `src/style.css` : le style de l'interface.
-- `tools/simulate.js` : ancienne simulation d’équilibrage (remplacée par `tools/balance.js`).
+- `tools/carte-code.js` : génère `docs/CARTE_CODE.md` (index des fonctions, enveloppes, boutons et sections CSS, avec leurs lignes) ; lancé par `tools/test.js`.
 - `tools/balance.js` : le test d’équilibrage (à lancer quand Amine le demande).
 - `tools/test.js` : les tests automatiques (moteur et navigateur).
 - `docs/GAME_DESIGN.md` : le document de conception, à tenir à jour.
+- `docs/CODE.md` : guide du code (écrit à la main, à tenir à jour) ; `docs/CARTE_CODE.md` : son index généré (ne pas modifier à la main).
 - `docs/PACK_GRAPHIQUE.md` : inventaire de tous les graphismes et règles de cohérence du pack graphique.
 
 ## Économie de tokens (demande d'Amine)
@@ -63,7 +66,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
 
 - **Règle d’or (Amine) : jamais d’emoji** dans le jeu ni l’interface. Utilise les icônes dessinées (`ii('…')`, `ink('…')` dans `src/game.js`). Symboles autorisés (choix d’Amine, v213) : ★ (fusion), ✦ (évolution), ⚔ et ♥ (dégâts, PV), ✓, ✚ (soin), ⏸ (pause).
 - Garde la séparation moteur / rendu : une règle de jeu va dans `engine.js`, jamais dans `game.js`.
-- Amine teste lui-même le gameplay et l'équilibrage sur son téléphone. Ne lance pas `node tools/simulate.js` ni `node tools/balance.js` sauf s'il le demande : contente-toi de vérifier que le jeu tourne sans erreur. Le joueur automatique joue nettement moins bien que lui.
+- Amine teste lui-même le gameplay et l'équilibrage sur son téléphone. Ne lance pas `node tools/balance.js` sauf s'il le demande : contente-toi de vérifier que le jeu tourne sans erreur. Le joueur automatique joue nettement moins bien que lui.
 - Après chaque changement visible, teste le jeu en largeur téléphone et sur écran d'ordinateur, et vérifie qu'il n'y a aucune erreur dans la console.
 - La boucle d'affichage ne doit jamais s'arrêter sur une erreur : chaque élément est dessiné dans un bloc protégé. Évite les API de canvas récentes sans solution de secours (exemple : `roundRect`, déjà remplacé si absent).
 - Mets à jour `docs/GAME_DESIGN.md` quand une décision de conception change.

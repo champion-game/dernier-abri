@@ -1,4 +1,4 @@
-// Moteur du jeu : règles pures, sans DOM. Utilisé par le jeu (navigateur) et par tools/simulate.js (Node).
+// Moteur du jeu : règles pures, sans DOM. Utilisé par le jeu (navigateur) et par les outils de tools/ (Node : tests, équilibrage).
 const Z=(()=>{
  // traduction : _t vient de src/i18n.js dans le navigateur ; dans Node (tests), le texte français est gardé tel quel
  const _t=typeof globalThis!=='undefined'&&typeof globalThis._t==='function'?globalThis._t:(s,...a)=>typeof s==='string'?s:s.reduce((r,q,i)=>r+(i?a[i-1]:'')+q,'');
