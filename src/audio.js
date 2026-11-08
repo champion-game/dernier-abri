@@ -601,7 +601,10 @@ const SFX = (() => {
     mI = 0,
     loopG = null,
     duckT = null;
-  const mUrl = n => 'assets/sounds/music-' + n + '.mp3';
+  // Numéro de révision par musique : à augmenter quand on remplace un fichier, sinon le navigateur
+  // (qui lit la musique par morceaux, hors du cache du jeu) peut garder l’ancienne version.
+  const MUSIC_REV = { menu: 2 };
+  const mUrl = n => 'assets/sounds/music-' + n + '.mp3' + (MUSIC_REV[n] ? '?r=' + MUSIC_REV[n] : '');
   function players() {
     if (MP.length) return MP;
     for (let k = 0; k < 3; k++) {
