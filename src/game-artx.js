@@ -244,7 +244,7 @@ const AXG2 = {
     ],
   },
 };
-// l'accueil et les menus ouverts depuis l'accueil (v246) ont ce décor, dans le calque #axbg (immobile depuis la v259)
+// l'accueil et les menus ouverts depuis l'accueil (v246) ont ce décor, dans le calque #axbg (fixe depuis la v260 : il ne suit plus la souris)
 const axNewHome = () => AX.on() && !!$('#ov.home');
 function axGlow() {
   try {
@@ -283,11 +283,6 @@ function axGlow() {
       ov.insertBefore(bg, ov.firstChild);
     }
     const host = nw ? bg : ov;
-    // v259 : l'accueil reste immobile (demande d'Amine) : plus de lueurs animées sur son décor
-    if (nw) {
-      if (g) g.remove();
-      return;
-    }
     if (!g || g.dataset.k !== k || g.parentNode !== host) {
       if (g) g.remove();
       g = document.createElement('div');
