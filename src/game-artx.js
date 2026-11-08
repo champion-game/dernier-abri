@@ -244,7 +244,7 @@ const AXG2 = {
     ],
   },
 };
-// l'accueil et les menus ouverts depuis l'accueil (v246) ont ce décor : les lueurs vont dans le calque #axbg (qui suit la souris sur PC)
+// l'accueil et les menus ouverts depuis l'accueil (v246) ont ce décor, dans le calque #axbg (immobile depuis la v259)
 const axNewHome = () => AX.on() && !!$('#ov.home');
 function axGlow() {
   try {
@@ -283,6 +283,11 @@ function axGlow() {
       ov.insertBefore(bg, ov.firstChild);
     }
     const host = nw ? bg : ov;
+    // v259 : l'accueil reste immobile (demande d'Amine) : plus de lueurs animées sur son décor
+    if (nw) {
+      if (g) g.remove();
+      return;
+    }
     if (!g || g.dataset.k !== k || g.parentNode !== host) {
       if (g) g.remove();
       g = document.createElement('div');
@@ -1468,24 +1473,6 @@ ACT.credits = () => {
       if (home && AX.on() !== !!panel.querySelector('.axh-col')) title();
     } catch (e) {}
   };
-}
-// PC : le décor suit très légèrement la souris (effet de profondeur), coupé en Mode économie
-{
-  let axPx = 0,
-    axPy = 0,
-    axRaf = 0;
-  addEventListener('mousemove', e => {
-    if (!DE.classList.contains('artx') || DE.classList.contains('eco') || !matchMedia('(hover:hover)').matches) return;
-    axPx = (e.clientX / innerWidth) * 2 - 1;
-    axPy = (e.clientY / innerHeight) * 2 - 1;
-    if (axRaf) return;
-    axRaf = requestAnimationFrame(() => {
-      axRaf = 0;
-      const bg = $('#ov.axh #axbg');
-      if (bg)
-        bg.style.transform = `translate3d(${(-axPx * 10).toFixed(1)}px,${(-axPy * 6).toFixed(1)}px,0) scale(1.04)`;
-    });
-  });
 }
 // v246 : le premier accueil est dessiné (game-menu.js) avant que ce fichier soit chargé : on le refait avec la mise en page artiste
 try {

@@ -15208,3 +15208,16 @@ html.artx .cpts.ferr b {
   color: #f3e6c4;
   text-shadow: 0 2px 0 #000;
 }
+
+/* v259 : accueil immobile (demande d'Amine) : décor fixe, ni entrée animée ni bouton « Jouer » qui respire */
+html.artx #ov.home #axbg {
+  transform: none !important;
+  transition: none;
+}
+html.artx #ov.axh #panel .axh-play,
+html.artx #ov.axh #panel .axh-play::after,
+html.artx .axh-in .logo img,
+html.artx .axh-in .axh-menu > *,
+html.artx .axh-bar.axh-in {
+  animation: none !important;
+}

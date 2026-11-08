@@ -2,7 +2,7 @@
    - Code (page, scripts, styles) : réseau d'abord, copie gardée pour jouer hors ligne. Les mises à jour arrivent donc tout de suite.
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
-const CACHE = 'abri-2'; // v246 : style artiste officiel (anciennes images retirées)
+const CACHE = 'abri-3'; // v259 : nouvelles images d'accueil (même nom de fichier)
 const CORE = [
   './',
   'index.html',
