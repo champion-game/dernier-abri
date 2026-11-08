@@ -8,7 +8,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 1. `src/i18n.js` (57 lignes)
 2. `src/lang-en.js` (2210 lignes)
 3. `src/engine.js` (5759 lignes)
-4. `src/audio.js` (811 lignes)
+4. `src/audio.js` (814 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1602 lignes)
 7. `src/game-draw.js` (5935 lignes)
@@ -505,6 +505,6 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15050 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
 - 15072 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
 - 15078 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
-- 15117 ===== v259 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
+- 15117 ===== v261 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
 - 15157 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
 - 15184 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
