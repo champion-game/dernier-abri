@@ -739,10 +739,10 @@ function render() {
       'beforeend',
       _t` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`,
     );
-  // v241 : compteur d'énergie toujours visible le jour, à gauche du texte (gros chiffre et jetons)
+  // v258 : énergie en batterie (cellules rouges, chiffre sur un bout de scotch), toujours visible le jour
   if (!S.busy && !G.oneNight) {
     const l = Math.max(0, left);
-    info.innerHTML = `<span class="nrgb${l ? '' : ' zero'}" title="${_t('Énergie')}"><b>${l}</b><span class="nrg">${'<i class="on"></i>'.repeat(Math.min(10, l))}${'<i></i>'.repeat(Math.max(0, Z.ENERGY - l))}</span><small>${_t('énergie')}</small></span><span class="itx">${info.innerHTML}</span>`;
+    info.innerHTML = `<span class="batt${l ? '' : ' zero'}" title="${_t('Énergie')}"><span class="batt-n">${l}</span><span class="batt-cells">${'<i class="on"></i>'.repeat(Math.min(10, l))}${'<i></i>'.repeat(Math.max(0, Z.ENERGY - l))}</span></span><span class="itx">${info.innerHTML}</span>`;
     info.classList.add('wn');
   } else info.classList.remove('wn');
   // bouton de tir : un seul élément, mis à jour sans être recréé (sinon le toucher peut se perdre pendant la nuit)

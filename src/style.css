@@ -15113,3 +15113,98 @@ html.artx .cf.mini .cf-hp.shield {
     gap: 6px;
   }
 }
+
+/* ===== v258 : énergie en batterie (cellules rouges, chiffre sur un bout de scotch) ===== */
+.batt {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  gap: 3px;
+  margin: 10px 12px 2px 2px;
+  padding: 4px;
+  min-width: 70px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 3px solid #3a3f44;
+  border-radius: 7px;
+  background: linear-gradient(#2a2d30, #16181a);
+  box-shadow:
+    inset 0 0 0 2px #575e64,
+    0 3px 6px rgba(0, 0, 0, 0.7);
+  line-height: 1;
+}
+/* borne de la batterie */
+.batt::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  width: 5px;
+  height: 13px;
+  margin-top: -6.5px;
+  background: #575e64;
+  border-radius: 0 3px 3px 0;
+}
+.batt-cells {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+.batt-cells i {
+  flex: 1;
+  min-width: 11px;
+  border-radius: 2px;
+  background: #0c0d0e;
+  box-shadow: inset 0 0 4px #000;
+}
+.batt-cells i.on {
+  background: linear-gradient(90deg, #5e0b07, #d0281a 35%, #ff5a3c 50%, #b51d12 70%, #4e0905);
+  box-shadow:
+    0 0 6px rgba(255, 42, 26, 0.5),
+    inset 0 0 0 1px #2a0503;
+}
+.batt-n {
+  position: absolute;
+  left: 50%;
+  top: -14px;
+  transform: translateX(-50%) rotate(-5deg);
+  padding: 1px 9px 0;
+  background: url(../assets/art/ui/pack2/css/bandeau-nom.webp) center / 100% 100%;
+  font: 18px/1.1 var(--ax-titre);
+  color: #2a1c0c;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+.batt.zero .batt-n {
+  color: #8a1a10;
+}
+html.bigtext .batt-n {
+  font-size: 22px;
+}
+
+/* ===== v258 : points de la collection : écrou de ferraille sur le panneau noir ===== */
+html.artx .cpts.ferr {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px 0 0;
+  border: 8px solid transparent;
+  border-image: var(--ui-panneau-noir) 36 fill / 8px stretch;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-family: var(--ax-titre);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+}
+html.artx .cpts.ferr .ecrou {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+html.artx .cpts.ferr b {
+  font: 20px/1 var(--ax-titre);
+  color: #f3e6c4;
+  text-shadow: 0 2px 0 #000;
+}

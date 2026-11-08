@@ -195,7 +195,7 @@ function lcScreen(keep, deck) {
   const ls = panel.querySelector('.dklist'),
     lsY = ls ? ls.scrollTop : 0;
   show(
-    `<h2 class="pw chead lc-h">${deck ? _t`Deck ${META.slot + 1}` : _t('Collection')}${deck ? '' : `<span class="cpts"><b>${pts}</b> ${_t('pts')}</span>`}</h2>
+    `<h2 class="pw chead lc-h">${deck ? _t`Deck ${META.slot + 1}` : _t('Collection')}${deck ? '' : ptsBadge(pts)}</h2>
   <p class="lc-sub">${deck ? (matchMedia('(hover:hover)').matches ? _t('Clic gauche : ajouter. Clic droit : retirer.') : _t('Touche une carte pour l’ajouter, une ligne du deck pour la retirer.')) : _t`${nIn}/${Z.KEYS.length} débloquées`}</p>
   <div class="lcoll lcx${deck ? ' lcdeck' : ''}${LC.ov && !deck ? ' ov' : ''}">
    <aside class="lc-side"><div class="lc-filters" role="toolbar" aria-label="${_t('Rôle ou type')}">${filters}</div></aside>

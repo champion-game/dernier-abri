@@ -938,7 +938,7 @@ function renderFx() {
   if (dg && !document.querySelector('.dangerv')) aEl('dangerv');
   // 34 : énergie : le point dépensé s'éteint, au lever du jour la jauge se rallume une à une
   const e = G.energy ?? 0,
-    pips = [...document.querySelectorAll('#info .nrg i')];
+    pips = [...document.querySelectorAll('#info .batt-cells i')];
   if (RP.e != null && AOK() && !S.busy && pips.length) {
     if (e < RP.e)
       pips
@@ -947,7 +947,7 @@ function renderFx() {
           aAnim(
             i,
             [
-              { background: '#ffe7a0', transform: 'scale(1.5)', boxShadow: '0 0 8px #ffd25a' },
+              { background: '#ffb09a', transform: 'scale(1.3)', boxShadow: '0 0 10px #ff3a22' },
               { transform: 'scale(1)' },
             ],
             { duration: 380, easing: 'ease-out' },

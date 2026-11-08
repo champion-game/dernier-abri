@@ -979,7 +979,7 @@ function collectionScreen(keep) {
     },
   };
   show(
-    `<h2 class="pw chead">${A ? _t('Atelier') : _t('Collection')}<span class="cpts"><b>${pts}</b> ${_t('pts')}</span></h2>
+    `<h2 class="pw chead">${A ? _t('Atelier') : _t('Collection')}${ptsBadge(pts)}</h2>
   ${A ? _t`<p class="cbank">Tu as <b>${pts}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>` : ''}
   <div class="csum"><span class="cs-in">${_t`${nIn}/${Z.KEYS.length} débloquées`}</span><span class="cs-buy">${ii('unlock')} ${_t`${nBuy} à portée`}</span>${eds.length ? `<span class="cs-in">${ii('star')} ${_t`${eds.length} spéciale(s)`}</span>` : ''}</div>
   ${cfBar(true)}${cfPips()}<div class="cbinder">${cfTabs(Z.KEYS, t => own.includes(t) || eds.includes(t), 0)}${cfBookBox()}</div>

@@ -1875,6 +1875,7 @@ I18N.en = {
   Collection: 'Collection',
   Débloquer: 'Unlock',
   pts: 'pts',
+  Points: 'Points',
   'il en manque {0}': '{0} missing',
   'Carte spéciale obtenue': 'Special card owned',
   '<p class="cbank">Tu as <b>{0}</b> points de survie. Chaque partie en rapporte : 10 par nuit survécue, plus 1 tous les 4 zombies. Une carte débloquée l’est pour toujours.</p>':

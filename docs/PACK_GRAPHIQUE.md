@@ -29,7 +29,7 @@ Réserve non utilisée (idées pour plus tard) : `assets/extras/` (78 illustrati
 - **Arbres et décor de la couronne** : feuillus, sapins enneigés, cactus et rochers, ruines urbaines, sapins de montagne.
 - **Maison au centre** (abri de base, avant fortification).
 - **Effets de nuit** : projectiles (balle, carreau, roquette, mortier), flammes, explosions, gaz, fumée, sang, éclairs du Tesla, lumière des lampes, brouillard, lune, aube.
-- **Interface** : boutons, panneaux, onglets, barres de vie et d’énergie, piste des nuits (en CSS et SVG).
+- **Interface** : boutons, panneaux, onglets, barres de vie et d’énergie, piste des nuits (en CSS et SVG). Depuis la v258, l’énergie est une batterie à cellules rouges (chiffre sur un bout de scotch) et les points de la collection un écrou de ferraille sur le panneau noir.
 - **102 icônes** (une par carte, plus statistiques, menus) et 6 pastilles de rôle : attaque, dégâts, soin, tank, piège, chef.
 
 ## 3. Règles de cohérence

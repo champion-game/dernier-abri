@@ -440,6 +440,10 @@ const GLY = {
 };
 const ii = (k, cls) =>
   `<svg class="ink${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
+// v258 : points de la collection en ferraille (écrou dessiné) sur le panneau noir du jeu
+const ECROU_SVG =
+  '<svg class="ecrou" viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="#8f969b" stroke="#1d2022" stroke-width="2"/><polygon points="16,6 25,11 25,21 16,26 7,21 7,11" fill="#6a7176"/><circle cx="16" cy="16" r="5.5" fill="#15110d" stroke="#c7cdd1" stroke-width="1.5"/></svg>';
+const ptsBadge = pts => `<span class="cpts ferr" title="${_t('Points')}">${ECROU_SVG}<b>${pts}</b></span>`;
 const P2D = {};
 const glyph = (k, x, y, sz, col, lw) => {
   const p = P2D[k] || (P2D[k] = new Path2D(GLY[k]));
@@ -519,7 +523,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v257 · 8 nov.';
+const VERSION = 'v258 · 8 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo

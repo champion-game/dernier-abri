@@ -6,11 +6,11 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 ## Ordre de chargement (index.html)
 
 1. `src/i18n.js` (57 lignes)
-2. `src/lang-en.js` (2209 lignes)
+2. `src/lang-en.js` (2210 lignes)
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1577 lignes)
+6. `src/game.js` (1581 lignes)
 7. `src/game-draw.js` (5935 lignes)
 8. `src/game-ui.js` (2019 lignes)
 9. `src/game-screens.js` (1679 lignes)
@@ -56,13 +56,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1421 | game-artx.js:979 |
+| `pilesHtml` | game.js:1425 | game-artx.js:979 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:601 | game-anim.js:1158 |
-| `showAch` | game.js:771 | game-anim.js:1108 |
+| `showAch` | game.js:775 | game-anim.js:1108 |
 | `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:457 novice:464 cardFace:475 saveOpt:584 applyOpt:592 applyCur:612 toggleFs:631 unpause:650 R:658
-- **689** state
-- **691** progression entre les parties (localStorage) : loadMeta:692 endTest:713 saveMeta:718 ach:759 showAch:771 deckCanAdd:804 edGain:818 edCommit:827 edDrop:857 achCheck:883 achNight:908 achScreen:916 tuto:935 guideStep:966 guideOk:1106 tutoTip:1127 tutoHand:1139 tutoPicks:1162 tutoEnd:1167 newGame:1182 fillHand:1232 drawCards:1240 syncBoard:1267 cellRect:1305 fly:1310 animPiles:1363 pilesHtml:1421
-- **1491** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1494 loadSave:1518 clearSave:1541 resume:1547
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:461 novice:468 cardFace:479 saveOpt:588 applyOpt:596 applyCur:616 toggleFs:635 unpause:654 R:662
+- **693** state
+- **695** progression entre les parties (localStorage) : loadMeta:696 endTest:717 saveMeta:722 ach:763 showAch:775 deckCanAdd:808 edGain:822 edCommit:831 edDrop:861 achCheck:887 achNight:912 achScreen:920 tuto:939 guideStep:970 guideOk:1110 tutoTip:1131 tutoHand:1143 tutoPicks:1166 tutoEnd:1171 newGame:1186 fillHand:1236 drawCards:1244 syncBoard:1271 cellRect:1309 fly:1314 animPiles:1367 pilesHtml:1425
+- **1495** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1498 loadSave:1522 clearSave:1545 resume:1551
 
 ### src/game-draw.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15116 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1109 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15211 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1112 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -505,3 +505,6 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15050 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
 - 15072 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
 - 15078 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
+- 15117 ===== v258 : énergie en batterie (cellules rouges, chiffre sur un bout de scotch) =====
+- 15136 borne de la batterie
+- 15185 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
