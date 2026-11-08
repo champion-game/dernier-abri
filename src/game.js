@@ -440,6 +440,27 @@ const GLY = {
 };
 const ii = (k, cls) =>
   `<svg class="ink${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
+// v259 : énergie en cartouches de fusil (rouges et laiton, contour noir, grain) ; une cartouche dépensée devient une douille vide.
+// Les dégradés et filtres sont posés une seule fois dans la page (ajouterDefsCartouches).
+const CARTOUCHE_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="ctg-grain" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.15"/><feComposite in2="SourceGraphic" operator="in" result="n"/><feBlend in="SourceGraphic" in2="n" mode="multiply"/></filter>
+<pattern id="ctg-hach" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="4" stroke="#140d08" stroke-width="1.3" opacity=".55"/></pattern>
+<linearGradient id="ctg-rouge" x1="0" x2="1"><stop offset="0" stop-color="#5a0f0a"/><stop offset=".3" stop-color="#a5231a"/><stop offset=".42" stop-color="#d6553f"/><stop offset=".55" stop-color="#9c2118"/><stop offset="1" stop-color="#4a0b07"/></linearGradient>
+<linearGradient id="ctg-laiton" x1="0" x2="1"><stop offset="0" stop-color="#5c4013"/><stop offset=".35" stop-color="#b78a33"/><stop offset=".48" stop-color="#f0d27e"/><stop offset=".62" stop-color="#a87a28"/><stop offset="1" stop-color="#4a320d"/></linearGradient>
+<linearGradient id="ctg-terne" x1="0" x2="1"><stop offset="0" stop-color="#2d2416"/><stop offset=".45" stop-color="#5d4c2e"/><stop offset="1" stop-color="#241c10"/></linearGradient>
+</defs></svg>`;
+function ajouterDefsCartouches() {
+  if (!document.getElementById('ctg-grain')) document.body.insertAdjacentHTML('beforeend', CARTOUCHE_DEFS);
+}
+// une cartouche (pleine) ou une douille vide, dessinée dans une case de 18 × 60
+function cartoucheSvg(pleine) {
+  const contour = 'stroke="#140d08" stroke-width="2.2"';
+  const corps = pleine
+    ? `<path d="M2 10q0-5 3-6h9q3 1 3 6v34H2z" fill="url(#ctg-rouge)" ${contour}/><path d="M13 8v34" stroke="url(#ctg-hach)" stroke-width="5"/><rect x="5" y="12" width="2" height="28" rx="1" fill="#f19b84" opacity=".6"/>`
+    : `<ellipse cx="9.5" cy="44" rx="7.5" ry="2.5" fill="#0a0604" stroke="#140d08" stroke-width="1.5"/>`;
+  const culot = pleine ? 'url(#ctg-laiton)' : 'url(#ctg-terne)';
+  return `<svg viewBox="0 0 19 64" aria-hidden="true"><g filter="url(#ctg-grain)">${corps}<rect x="2" y="44" width="15" height="16" fill="${culot}" ${contour}/><rect x=".5" y="58" width="18" height="5" rx="1" fill="${culot}" stroke="#140d08" stroke-width="2"/>${pleine ? '<path d="M13 45v13" stroke="url(#ctg-hach)" stroke-width="5"/>' : ''}</g></svg>`;
+}
 // v258 : points de la collection en ferraille (écrou dessiné) sur le panneau noir du jeu
 const ECROU_SVG =
   '<svg class="ecrou" viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="#8f969b" stroke="#1d2022" stroke-width="2"/><polygon points="16,6 25,11 25,21 16,26 7,21 7,11" fill="#6a7176"/><circle cx="16" cy="16" r="5.5" fill="#15110d" stroke="#c7cdd1" stroke-width="1.5"/></svg>';

@@ -10,12 +10,12 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1581 lignes)
+6. `src/game.js` (1602 lignes)
 7. `src/game-draw.js` (5935 lignes)
-8. `src/game-ui.js` (2019 lignes)
+8. `src/game-ui.js` (2023 lignes)
 9. `src/game-screens.js` (1679 lignes)
 10. `src/game-menu.js` (839 lignes)
-11. `src/game-anim.js` (1181 lignes)
+11. `src/game-anim.js` (1178 lignes)
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (364 lignes)
 14. `src/game-artx.js` (1476 lignes)
@@ -38,10 +38,10 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
 | `collectionScreen` | game-screens.js:930 | game-anim.js:397, game-coll.js:644 |
 | `deckEditor` | game-screens.js:898 | game-anim.js:405, game-coll.js:654 |
-| `feltLayout` | game-ui.js:1857 | game-artx.js:923, game-artx.js:1066 |
+| `feltLayout` | game-ui.js:1861 | game-artx.js:923, game-artx.js:1066 |
 | `syncZ` | game-draw.js:2249 | game-fx2.js:201, game-artx.js:1108 |
 | `unitAnim` | game-draw.js:2927 | game-fx3.js:348, game-fx5.js:476 |
-| `countUp` | game-screens.js:639 | game-anim.js:1117 |
+| `countUp` | game-screens.js:639 | game-anim.js:1114 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:298 |
 | `drawFloats` | game-draw.js:4890 | game-fx5.js:760 |
 | `drawFog` | game-draw.js:5153 | game-artx.js:551 |
@@ -53,17 +53,17 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `hglowFit` | game-menu.js:801 | game-artx.js:326 |
 | `keepEnd` | game-menu.js:560 | game-fiche.js:206 |
 | `lights` | game-draw.js:5073 | game-fx3.js:399 |
-| `mergeFx` | game-ui.js:1444 | game-anim.js:807 |
+| `mergeFx` | game-ui.js:1448 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1425 | game-artx.js:979 |
+| `pilesHtml` | game.js:1446 | game-artx.js:979 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
-| `resumeWave` | game-ui.js:1726 | game-anim.js:903 |
+| `resumeWave` | game-ui.js:1730 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
-| `show` | game-screens.js:601 | game-anim.js:1158 |
-| `showAch` | game.js:775 | game-anim.js:1108 |
-| `tapCell` | game-ui.js:1578 | game-ui.js:2007 |
+| `show` | game-screens.js:601 | game-anim.js:1155 |
+| `showAch` | game.js:796 | game-anim.js:1105 |
+| `tapCell` | game-ui.js:1582 | game-ui.js:2011 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
 
@@ -73,7 +73,7 @@ Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, li
 
 testmode:1127 · teststart:1134 · tcards:1152 · tadd:1168 · options:1174 · optclose:1175 · presume:1182 · pquit:1187 · prestart:1191 · prestart2:1195 · pmenu:1204 · closeov:1205 · bpick:1209 · artstyle:1217 · new:1224 · prepdeck:1235 · prepch:1240 · preppl:1244 · preprel:1255 · prepmen:1259 · start:1265 · edit:1280 · dkp:1281 · cfam:1289 · crole:1300 · cpg:1311 · cfmore:1315 · atel:1319 · dkdraw:1326 · dkm:1330 · dkreset:1339 · coll:1344 · mdet:1352 · achs:1353 · gift:1354 · gyes:1355 · gno:1356 · gdone:1357 · mback:1358 · evo:1362 · unlock:1363 · load:1377 · title:1382 · close:1383 · rules:1384 · stats:1388 · rgo:1389 · retuto:1393 · deck:1405 · dawn:1413 · lvl:1414 · relic:1426 · evc:1431 · todraft:1450 · draft:1451 · shop:1460 · day:1512 · nightpick:1513 · nightgo:1517 · daily:1521 · wish:1524 · dpick:1534 · peek:1539
 
-Ajoutées ou remplacées ailleurs : unlock (game-anim.js:481) · dkp (game-anim.js:507) · dkm (game-anim.js:541) · prepdeck (game-anim.js:573) · start (game-anim.js:687) · gift (game-anim.js:758) · relic (game-anim.js:1015) · prepmen (game-anim.js:1091) · fshare (game-fiche.js:689) · credits (game-artx.js:1439)
+Ajoutées ou remplacées ailleurs : unlock (game-anim.js:481) · dkp (game-anim.js:507) · dkm (game-anim.js:541) · prepdeck (game-anim.js:573) · start (game-anim.js:687) · gift (game-anim.js:758) · relic (game-anim.js:1012) · prepmen (game-anim.js:1088) · fshare (game-fiche.js:689) · credits (game-artx.js:1439)
 
 ## Fichier par fichier
 
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 seen:461 novice:468 cardFace:479 saveOpt:588 applyOpt:596 applyCur:616 toggleFs:635 unpause:654 R:662
-- **693** state
-- **695** progression entre les parties (localStorage) : loadMeta:696 endTest:717 saveMeta:722 ach:763 showAch:775 deckCanAdd:808 edGain:822 edCommit:831 edDrop:861 achCheck:887 achNight:912 achScreen:920 tuto:939 guideStep:970 guideOk:1110 tutoTip:1131 tutoHand:1143 tutoPicks:1166 tutoEnd:1171 newGame:1186 fillHand:1236 drawCards:1244 syncBoard:1271 cellRect:1309 fly:1314 animPiles:1367 pilesHtml:1425
-- **1495** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1498 loadSave:1522 clearSave:1545 resume:1551
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardFace:500 saveOpt:609 applyOpt:617 applyCur:637 toggleFs:656 unpause:675 R:683
+- **714** state
+- **716** progression entre les parties (localStorage) : loadMeta:717 endTest:738 saveMeta:743 ach:784 showAch:796 deckCanAdd:829 edGain:843 edCommit:852 edDrop:882 achCheck:908 achNight:933 achScreen:941 tuto:960 guideStep:991 guideOk:1131 tutoTip:1152 tutoHand:1164 tutoPicks:1187 tutoEnd:1192 newGame:1207 fillHand:1257 drawCards:1265 syncBoard:1292 cellRect:1330 fly:1335 animPiles:1388 pilesHtml:1446
+- **1516** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1519 loadSave:1543 clearSave:1566 resume:1572
 
 ### src/game-draw.js
 
@@ -142,7 +142,7 @@ _t:19 _tPage:41
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4
-- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 fireAmmo:847 updatePreview:871 curAt:1063 useBuild:1084 spentTrace:1092 countPlay:1100 placeLineUI:1111 dmgInfo:1161 dmgSnap:1175 bonusMsg:1183 unitLine:1225 hint:1383 showHint:1392 checkHints:1420 mergeFx:1444 playReact:1483 snapUndo:1521 doUndo:1536 squadFx:1566 tapCell:1578 peekScreen:1702 wavePause:1715 resumeWave:1726 night:1740 feltLayout:1857 ftPioche:1900 ftHorde:1924 ftJournal:1940 feltTabs:1966
+- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 fireAmmo:851 updatePreview:875 curAt:1067 useBuild:1088 spentTrace:1096 countPlay:1104 placeLineUI:1115 dmgInfo:1165 dmgSnap:1179 bonusMsg:1187 unitLine:1229 hint:1387 showHint:1396 checkHints:1424 mergeFx:1448 playReact:1487 snapUndo:1525 doUndo:1540 squadFx:1570 tapCell:1582 peekScreen:1706 wavePause:1719 resumeWave:1730 night:1744 feltLayout:1861 ftPioche:1904 ftHorde:1928 ftJournal:1944 feltTabs:1970
 
 ### src/game-screens.js
 
@@ -174,7 +174,7 @@ _t:19 _tPage:41
 - **571** préparation : le deck choisi avance, les autres reculent
 - **603** lancement : le deck est battu puis plonge dans la pioche : launchFx:604
 - **698** récompense : paquet qui tremble puis explose, retournement selon la rareté : packFx:699 revealFx:732
-- **784** v171 : deuxième série (unités, nuit, économie, menus) : cvPt:786 bolt:791 lvFx:849 typeFx:879 bossBanner:893 renderFx:933 endPts:1148
+- **784** v171 : deuxième série (unités, nuit, économie, menus) : cvPt:786 bolt:791 lvFx:849 typeFx:879 bossBanner:893 renderFx:933 endPts:1145
 
 ### src/game-fiche.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15217 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1113 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15189 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1113 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -505,7 +505,6 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15050 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
 - 15072 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
 - 15078 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
-- 15117 ===== v258 : énergie en batterie (cellules rouges, chiffre sur un bout de scotch) =====
-- 15136 borne de la batterie
-- 15185 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
-- 15212 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
+- 15117 ===== v259 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
+- 15157 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
+- 15184 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
