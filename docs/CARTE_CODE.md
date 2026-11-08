@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15079 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1099 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15101 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1102 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -502,3 +502,4 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 14973 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
 - 15005 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
 - 15010 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
+- 15080 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne

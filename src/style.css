@@ -15076,3 +15076,25 @@ html.artx .cf.mini .cf-hp.shield {
   height: 22cqw;
   font-size: 12cqw;
 }
+
+/* v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tiennent pas en hauteur.
+   La liste se resserre et défile dans sa colonne, au lieu de passer sous le pied de page. */
+@media (min-width: 900px) and (max-height: 560px) {
+  html.artx .lcx .lc-side {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 18px), transparent);
+    mask-image: linear-gradient(#000 calc(100% - 18px), transparent);
+    padding-bottom: 14px;
+  }
+  html.artx .lcx .lc-filters {
+    gap: 3px;
+  }
+  html.artx .lcx .lc-f {
+    min-height: 27px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12.5px;
+  }
+}
