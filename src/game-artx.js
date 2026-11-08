@@ -984,7 +984,7 @@ const AXIC = {
         px = $('#pDisc'),
         pr = $('#pRes'),
         b = G.bench || [];
-      pd.innerHTML = `<span class="axdos">${AXBIO}</span><span class="axdkt"><em>${_t('Deck')}</em><b>${S.draw.length}</b><small>${_t('cartes restantes')}</small></span>`;
+      pd.innerHTML = `<span class="axdos"></span><span class="axdkt"><em>${_t('Deck')}</em><b>${S.draw.length}</b><small>${_t('cartes restantes')}</small></span>`;
       px.innerHTML = `${AXIC.dis}<span class="axpt"><em>${_t('Défausse')}</em><b class="pn">${S.discard.length}</b></span>`;
       pr.innerHTML = `${AXIC.res}<span class="axpt"><em>${_t('Réserve')}</em><b class="pn">${b.length}</b></span>`;
       pr.classList.toggle('empty', !b.length);
@@ -1482,7 +1482,8 @@ ACT.credits = () => {
     axRaf = requestAnimationFrame(() => {
       axRaf = 0;
       const bg = $('#ov.axh #axbg');
-      if (bg) bg.style.transform = `translate3d(${(-axPx * 10).toFixed(1)}px,${(-axPy * 6).toFixed(1)}px,0)`;
+      if (bg)
+        bg.style.transform = `translate3d(${(-axPx * 10).toFixed(1)}px,${(-axPy * 6).toFixed(1)}px,0) scale(1.04)`;
     });
   });
 }

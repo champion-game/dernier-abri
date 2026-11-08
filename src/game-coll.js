@@ -88,14 +88,16 @@ function lcInfo(t) {
             : _t`<span class="cfar"><span>${ii('lock')} ${pr} pts</span><small>il en manque ${pr - META.points}</small></span>`;
   return `<div class="lcd-meta">${meta}</div><div class="lcd-act">${act}</div>${sp ? `<p class="lcd-sp">${ii('star')} ${_t('Carte spéciale obtenue')}</p>` : ''}`;
 }
-const lcBack = () => `<div class="lcd-back"><i class="lcd-sun"></i><b class="lcd-emb">BARRI<em>CARD</em></b></div>`;
+// verso de la grande carte : le dos d'Amine, le même que la pioche
+const lcBack = () => `<div class="lcd-back"></div>`;
 function lcDetail(t) {
   if (!t) return `<p class="lc-none">${_t('Aucune carte.')}</p>`;
   return `<div class="lcd" data-t="${t}"><div class="lcd-float"><div class="lcd-flip"><div class="lcd-tilt"><div class="citem lcd-c">${cardFace(t, { base: 1 })}</div><i class="lc-glare"></i></div>${lcBack()}</div></div></div><div class="lcd-info">${lcInfo(t)}</div>`;
 }
 
 // liste affichée (filtres, tri, recherche) et pages : 9 cartes (3 × 3) sur téléphone, 10 (5 × 2) sur tablette ou téléphone tourné, 12 (4 × 3) sur ordinateur
-const lcPer = () => (innerWidth >= 900 ? 12 : innerWidth >= 600 ? 10 : 9);
+// téléphone tourné (large mais peu haut, v257) : 5 × 2 pour des cartes plus grandes
+const lcPer = () => (innerWidth >= 900 ? (innerHeight <= 560 ? 10 : 12) : innerWidth >= 600 ? 10 : 9);
 function lcBase() {
   const own = META.cards;
   const b = LC.deck
