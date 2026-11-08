@@ -440,7 +440,7 @@ const GLY = {
 };
 const ii = (k, cls) =>
   `<svg class="ink${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${GLY[k]}"/></svg>`;
-// v259 : énergie en cartouches de fusil (rouges et laiton, contour noir, grain) ; une cartouche dépensée devient une douille vide.
+// v261 : énergie en cartouches de fusil (rouges et laiton, contour noir, grain) ; une cartouche dépensée devient une douille vide.
 // Les dégradés et filtres sont posés une seule fois dans la page (ajouterDefsCartouches).
 const CARTOUCHE_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <filter id="ctg-grain" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.15"/><feComposite in2="SourceGraphic" operator="in" result="n"/><feBlend in="SourceGraphic" in2="n" mode="multiply"/></filter>
@@ -544,7 +544,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v260 · 8 nov.';
+const VERSION = 'v261 · 8 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo

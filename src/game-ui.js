@@ -739,7 +739,7 @@ function render() {
       'beforeend',
       _t` <button type="button" class="recall undo" data-a="undo" title="Annuler la dernière action du jour">${ii('undo')} Annuler</button>`,
     );
-  // v259 : énergie en cartouches de fusil (une douille vide par point dépensé), toujours visible le jour
+  // v261 : énergie en cartouches de fusil (une douille vide par point dépensé), toujours visible le jour
   if (!S.busy && !G.oneNight) {
     const l = Math.max(0, left);
     ajouterDefsCartouches();

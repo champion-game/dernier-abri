@@ -15114,7 +15114,7 @@ html.artx .cf.mini .cf-hp.shield {
   }
 }
 
-/* ===== v259 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js), chiffre dessous ===== */
+/* ===== v261 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js), chiffre dessous ===== */
 .ctg {
   flex: none;
   display: inline-flex;
