@@ -15299,17 +15299,24 @@ html.artx .cf-txt {
   left: 9cqw;
   right: 9cqw;
   top: 138.4cqw;
-  bottom: 19.6cqw;
+  bottom: 13.4cqw;
 }
+/* dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte */
 html.artx .cf-foot {
-  left: 8cqw;
-  right: 8cqw;
-  bottom: 10cqw;
-  height: 9cqw;
+  left: 5cqw;
+  right: 5cqw;
+  bottom: 2.4cqw;
+  height: 10cqw;
 }
 html.artx .cf.mini .cf-foot {
-  bottom: 10.4cqw;
+  bottom: 2.4cqw;
   height: 13cqw;
+}
+html.artx .cf-foot .cf-marks {
+  filter: drop-shadow(0 0 0.6cqw #f3e2c2) drop-shadow(0 0 0.6cqw #f3e2c2);
+}
+html.artx .cf-foot .cf-marks em {
+  display: none;
 }
 html.artx .cf-v,
 html.artx .cf.mini .cf-v {
