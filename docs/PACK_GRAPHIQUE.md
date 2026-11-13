@@ -11,6 +11,7 @@ Règle : chaque nouvelle image garde **le même nom de fichier** que celle qu’
 | Sprites du plateau (vus du dessus) | 108 unités + 12 zombies | webp transparent, 256 px max, tournés vers la droite | `assets/sprites_cartoon/` |
 | Reliques (icônes) | 22 | webp transparent, 192 px | `assets/relics/` |
 | Cadre et dos de carte | 2 | webp, 768 × 1024 / 360 × 480 | `assets/ui/cadre.webp`, `dos.webp` |
+| Cadre de carte (v263, Amine) | 1 | webp, 728 × 1106, fenêtre en arche transparente | `assets/art/ui/cadre-barricard.webp` : découpé en 9 (`style.css`, fin), teinté selon la rareté et l’édition |
 | Fonds d’écran | 7 paysage + 1 portrait | webp, 1672 × 941 / 841 × 1870 | `assets/ui/fond*.webp` |
 | Logo, affiche | 4 | webp, svg | `barricard.webp`, `logo.svg`, `keyart*.webp` |
 | Abri fortifié, hélicoptère | 2 | webp transparent | `shelter_fort.webp`, `heli.webp` |

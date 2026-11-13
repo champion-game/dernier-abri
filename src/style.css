@@ -15186,3 +15186,138 @@ html.artx #ov.home #axbg {
   transform: none !important;
   transition: none;
 }
+/* v263 : nouveau cadre de carte d'Amine (assets/art/ui/cadre-barricard.webp, 728 × 1106, fenêtre en arche transparente).
+   Découpage en 9 : seuls les côtés droits de la fenêtre s'allongent (tranches haut 300, bas 484, côtés 52 sur 728 de large),
+   l'arche, les coins et le parchemin gardent leurs proportions. 1 px du cadre d'origine (971 de large) = 0,103cqw.
+   Le nom, le texte et les stats sont imprimés sur le parchemin du bas. La rareté et les éditions teintent le même cadre. */
+html.artx .cf::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard.webp) !important;
+  border-image-slice: 300 52 484 52 fill;
+  border-image-width: 41.2cqw 7.2cqw 66.5cqw 7.2cqw;
+}
+html.artx .cf.r-rare::after {
+  filter: grayscale(0.85) brightness(1.18) contrast(1.05);
+}
+html.artx .cf.r-epic::after {
+  filter: sepia(0.4) hue-rotate(225deg) saturate(1.7) brightness(1.05);
+}
+html.artx .cf.r-leg::after {
+  filter: sepia(0.5) saturate(2.4) brightness(1.15) hue-rotate(-8deg);
+}
+html.artx .cf.ed-dor::after {
+  filter: sepia(0.6) saturate(2.8) brightness(1.2) hue-rotate(-6deg);
+}
+html.artx .cf.ed-arm::after {
+  filter: grayscale(1) brightness(1.25) contrast(1.1);
+}
+html.artx .cf.ed-sang::after {
+  filter: sepia(1) saturate(4) hue-rotate(-38deg) brightness(0.9);
+}
+html.artx .cf.ed-holo::after {
+  animation: cfHolo 6s linear infinite;
+}
+html.artx .cf.ed-fan::after {
+  filter: grayscale(0.6) sepia(0.3) hue-rotate(160deg) saturate(1.6) brightness(1.2);
+}
+@keyframes cfHolo {
+  to {
+    filter: hue-rotate(360deg) saturate(1.6);
+  }
+}
+html.artx .cf-art,
+html.artx .cf-vig,
+html.artx .cf.ed .cf-ed::before,
+html.artx .cf.ed .cf-ed::after {
+  left: 4.3cqw;
+  right: 4.2cqw;
+  top: 6.8cqw;
+  height: 116cqw;
+}
+html.artx .cf-art {
+  background-position: center 18%;
+}
+/* reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'appareil demande moins de mouvement) */
+html.artx .cf-vig {
+  box-shadow: inset 0 0 3cqw rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+html.artx .cf-vig::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 245, 220, 0.28), transparent);
+  transform: skewX(-18deg);
+  animation: cfSweep 7s ease-in-out infinite;
+  animation-delay: var(--sweepDelay, 0s);
+}
+html.artx .hand .cf-vig::after {
+  animation-delay: calc(var(--i, 0) * 0.4s);
+}
+@keyframes cfSweep {
+  0%,
+  70% {
+    left: -60%;
+  }
+  92%,
+  100% {
+    left: 130%;
+  }
+}
+html.eco.artx .cf-vig::after {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.artx .cf-vig::after,
+  html.artx .cf.ed-holo::after {
+    animation: none;
+    display: none;
+  }
+}
+html.artx .cf-name {
+  left: 9cqw;
+  right: 9cqw;
+  top: 129.6cqw;
+  height: 8.6cqw;
+  color: #26150a;
+  text-shadow: 0 0.3cqw 0 rgba(255, 238, 205, 0.55);
+}
+html.artx .cf.mini .cf-name {
+  top: 130cqw;
+  height: 10cqw;
+}
+html.artx .cf.up .cf-name {
+  color: #7a1d0c;
+}
+html.artx .cf.ed-dor .cf-name,
+html.artx .cf.ed-holo .cf-name {
+  color: #26150a;
+}
+html.artx .cf-txt {
+  left: 9cqw;
+  right: 9cqw;
+  top: 138.4cqw;
+  bottom: 19.6cqw;
+}
+html.artx .cf-foot {
+  left: 8cqw;
+  right: 8cqw;
+  bottom: 10cqw;
+  height: 9cqw;
+}
+html.artx .cf.mini .cf-foot {
+  bottom: 10.4cqw;
+  height: 13cqw;
+}
+html.artx .cf-v,
+html.artx .cf.mini .cf-v {
+  top: 142cqw;
+}
+html.artx .cf-cost {
+  top: 6.4cqw;
+}
+html.artx .cf.mini .cf-cost {
+  top: 5.6cqw;
+}
