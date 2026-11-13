@@ -15313,7 +15313,18 @@ html.artx .cf.mini .cf-foot {
   height: 13cqw;
 }
 html.artx .cf-foot .cf-marks {
-  filter: drop-shadow(0 0 0.6cqw #f3e2c2) drop-shadow(0 0 0.6cqw #f3e2c2);
+  flex: 0 0 auto;
+  margin: 0 auto;
+  padding: 0.4cqw 1.6cqw;
+  border-radius: 3cqw;
+  background: linear-gradient(#f3e2c2, #cdb487);
+  box-shadow:
+    0 0 0 0.4cqw #1a120c,
+    0 0.8cqw 1cqw rgba(0, 0, 0, 0.6);
+  mix-blend-mode: normal;
+}
+html.artx .cf-foot .cf-marks:empty {
+  display: none;
 }
 html.artx .cf-foot .cf-marks em {
   display: none;
@@ -15327,4 +15338,108 @@ html.artx .cf-cost {
 }
 html.artx .cf.mini .cf-cost {
   top: 5.6cqw;
+}
+/* v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord métal biseauté),
+   ombre portée sur la carte, chiffres gravés, et un éclat qui passe sur la pièce de temps en temps. */
+html.artx .cf-cost {
+  background: radial-gradient(circle at 35% 28%, #7a6448, #3a2c1e 45%, #140e08 80%);
+  border: 0;
+  box-shadow:
+    0 0 0 0.7cqw #e7cf9f,
+    0 0 0 1.1cqw #6b4d26,
+    0 0 0 1.6cqw #120c06,
+    0 1.6cqw 2cqw 0.4cqw rgba(0, 0, 0, 0.75),
+    inset 0 1.2cqw 1cqw rgba(255, 236, 200, 0.35),
+    inset 0 -1.6cqw 1.6cqw rgba(0, 0, 0, 0.75);
+}
+html.artx .cf-atk {
+  background: radial-gradient(circle at 35% 28%, #ffe08a, #d39a2c 38%, #8a5512 68%, #3d2304);
+  box-shadow:
+    0 0 0 0.45cqw #2a1702,
+    0 1.2cqw 1.6cqw 0.2cqw rgba(0, 0, 0, 0.7),
+    inset 0 1cqw 0.8cqw rgba(255, 250, 225, 0.55),
+    inset 0 -1.3cqw 1.4cqw rgba(40, 20, 0, 0.7);
+}
+html.artx .cf-atk.heal {
+  background: radial-gradient(circle at 35% 28%, #c4ec9a, #6fa64a 38%, #35602a 68%, #142a0c);
+}
+html.artx .cf-hp:not(.shield) {
+  background: radial-gradient(circle at 36% 28%, #ff8a70, #c3301f 38%, #6e140c 70%, #2e0503);
+  opacity: 1;
+  box-shadow:
+    0 0 0 0.45cqw #2a0503,
+    0 1.2cqw 1.6cqw 0.2cqw rgba(0, 0, 0, 0.7),
+    inset 0 1cqw 0.8cqw rgba(255, 225, 210, 0.5),
+    inset 0 -1.3cqw 1.4cqw rgba(40, 0, 0, 0.75);
+}
+html.artx .cf-hp.shield .shd {
+  filter: drop-shadow(0 0.4cqw 0 #0b141c) drop-shadow(0 1.2cqw 1.2cqw rgba(0, 0, 0, 0.7)) brightness(1.15) contrast(1.1);
+}
+/* reflet bombé en haut de la pièce + éclat qui la traverse */
+html.artx .cf-cost::before,
+html.artx .cf-atk::before,
+html.artx .cf-hp:not(.shield)::before {
+  content: '';
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 6%;
+  height: 38%;
+  border-radius: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+html.artx .cf-cost::after,
+html.artx .cf-atk::after,
+html.artx .cf-hp:not(.shield)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.7) 50%, transparent 58%) 160% 0 / 300% 100%
+    no-repeat;
+  animation: cfGlint 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+html.artx .cf-atk::after {
+  animation-delay: 0.25s;
+}
+html.artx .cf-hp:not(.shield)::after {
+  animation-delay: 0.5s;
+}
+@keyframes cfGlint {
+  0%,
+  78% {
+    background-position: 160% 0;
+  }
+  96%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+/* chiffres gravés : clair en haut, ombre en bas, contour sombre */
+html.artx .cf-cost,
+html.artx .cf-atk b,
+html.artx .cf-hp b {
+  position: relative;
+  z-index: 3;
+  -webkit-text-stroke: 0.35cqw #120a04;
+  paint-order: stroke fill;
+  text-shadow:
+    0 -0.25cqw 0 rgba(255, 245, 220, 0.45),
+    0 0.45cqw 0 #000,
+    0 0.9cqw 1cqw rgba(0, 0, 0, 0.7);
+}
+html.artx .cf-cost {
+  color: #fbe9c4;
+}
+html.eco.artx :is(.cf-cost, .cf-atk, .cf-hp)::after {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.artx :is(.cf-cost, .cf-atk, .cf-hp)::after {
+    display: none;
+  }
 }
