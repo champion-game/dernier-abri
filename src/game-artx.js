@@ -1,14 +1,14 @@
 // v200 : refonte du jeu dans le style artiste (html.artx seulement) : plateau dessiné d'Amine comme sol,
 // grande carte au survol (PC), « Nuit rouge dans N » sur l'étiquette du jour. Chargé en dernier.
 const AX = { on: () => DE.classList.contains('artx'), plat: null };
-// v263 : plateau d'Amine avec la forêt (plateau-foret.webp, 1447 × 1087 px) : ses 9 × 9 cases commencent à (317, 187) et mesurent 91,4 × 80,4 px ; calées sur les cases 1 à 9 du jeu
+// v263 : plateau d'Amine avec la forêt (plateau-foret.webp, 1254 × 1254 px) : ses 9 × 9 cases commencent à (248, 204) et mesurent 84,7 × 88,8 px ; calées sur les cases 1 à 9 du jeu
 const AXIm = (w, h, cw, ch, x0, y0) => {
   const sx = T / cw,
     sy = T / ch;
   return { w, h, cw, ch, x0, y0, iw: w * sx, ih: h * sy, ox: T - x0 * sx, oy: T - y0 * sy };
 };
-const AXI = AXIm(1447, 1087, 91.4, 80.4, 317, 187);
-// v263 : sur téléphone (portrait et paysage), le même plateau resserré sur la grille (plateau-herbe.webp, 959 × 848 px, cases de 91,4 × 80,4 px à partir de (68, 62)) :
+const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
+// v263 : sur téléphone (portrait et paysage), le même plateau resserré sur la grille (plateau-herbe.webp, 890 × 931 px, cases de 84,7 × 88,8 px à partir de (64, 66)) :
 // les cases sont bien plus grandes ; on ne voit plus les zombies arriver de loin (html.axpal)
 const axPalWant = () =>
   AX.on() && !DE.classList.contains('felton') && (ART_NEW.ui || []).includes('plateau-herbe.webp');
@@ -16,7 +16,7 @@ function axPalSet() {
   const on = axPalWant();
   if (on === DE.classList.contains('axpal')) return false;
   DE.classList.toggle('axpal', on);
-  Object.assign(AXI, on ? AXIm(959, 848, 91.4, 80.4, 68, 62) : AXIm(1447, 1087, 91.4, 80.4, 317, 187));
+  Object.assign(AXI, on ? AXIm(890, 931, 84.7, 88.8, 64, 66) : AXIm(1254, 1254, 84.7, 88.8, 248, 204));
   AX.plat = null;
   return true;
 }

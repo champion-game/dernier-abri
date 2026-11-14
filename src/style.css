@@ -11674,7 +11674,7 @@ html.artx.ax3.felton .axboard {
   left: 50%;
   top: 0;
   width: var(--axB);
-  height: calc(var(--axB) * 0.85398);
+  height: calc(var(--axB) * 0.95384);
   transform: translateX(-50%);
 }
 html.artx.ax3.felton .axbac {
@@ -11785,7 +11785,7 @@ html.artx.ax3:not(.felton) #horde .tc {
 html.artx.ax3:not(.felton) .axboard {
   grid-area: board;
   width: var(--axB);
-  height: calc(var(--axB) * 0.85398);
+  height: calc(var(--axB) * 0.95384);
   justify-self: center;
   margin: 2px 0;
 }
@@ -11859,14 +11859,14 @@ html.artx.ax3:not(.felton) .shel .shel-t {
 html.artx.ax3 .axboard {
   position: relative;
   width: var(--axB);
-  height: calc(var(--axB) * 0.85398);
+  height: calc(var(--axB) * 0.95384);
 }
 html.artx.ax3 #ax3 #map {
   position: absolute !important;
-  left: calc(var(--axB) * 0.15591) !important;
-  top: calc(var(--axB) * 0.083749) !important;
-  width: calc(var(--axB) * 0.69482) !important;
-  height: calc(var(--axB) * 0.69482) !important;
+  left: calc(var(--axB) * 0.13022) !important;
+  top: calc(var(--axB) * 0.087625) !important;
+  width: calc(var(--axB) * 0.74298) !important;
+  height: calc(var(--axB) * 0.74298) !important;
   margin: 0 !important;
   max-width: none !important;
   max-height: none !important;
@@ -12051,7 +12051,7 @@ html.artx.ax3 #pRes.empty :is(svg, b) {
 /* v217 : ordinateur : plateau et bac (même largeur, comme l'image d'Amine) au centre, colonnes sur toute la largeur restante */
 html.artx.ax3.felton {
   --axB: min(
-    calc((100dvh - 12px) / 1.15398),
+    calc((100dvh - 12px) / 1.25384),
     calc(100vw - 2 * 262px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px))
   );
   --axbh: calc(var(--axB) * 0.3);
@@ -14003,7 +14003,7 @@ html.artx.ax3 #ax3 #hand {
   html.artx.ax3:not(.felton) {
     --axH: calc(100dvh - 12px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     --axBd: min(
-      calc(var(--axH) / 0.85398),
+      calc(var(--axH) / 0.95384),
       calc((100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) * 0.52)
     );
     --axB: var(--axBd);
@@ -14104,14 +14104,14 @@ html.artx.ax3.axpal #ax3 #map {
   top: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  clip-path: inset(7.7% 7.75% 7.7% 7.8% round 1.5%);
+  clip-path: inset(7.86% 7.73% 7.88% 7.7% round 1.5%);
 }
 html.artx.ax3.axpal #axBord {
   inset: auto;
-  left: 2.33%;
-  top: 2.08%;
-  width: 95.38%;
-  height: 95.88%;
+  left: 2.22%;
+  top: 2.33%;
+  width: 95.53%;
+  height: 95.31%;
   background-image: var(--ui-plateau-herbe, none);
 }
 html.artx.ax3.axpal #axBord > i {
