@@ -92,7 +92,7 @@ function lcInfo(t) {
 const lcBack = () => `<div class="lcd-back"></div>`;
 function lcDetail(t) {
   if (!t) return `<p class="lc-none">${_t('Aucune carte.')}</p>`;
-  return `<div class="lcd" data-t="${t}"><div class="lcd-float"><div class="lcd-flip"><div class="lcd-tilt"><div class="citem lcd-c">${cardFace(t, { base: 1 })}</div><i class="lc-glare"></i></div>${lcBack()}</div></div></div><div class="lcd-info">${lcInfo(t)}</div>`;
+  return `<div class="lcd" data-t="${t}"><div class="lcd-float"><div class="lcd-flip"><div class="lcd-tilt">${AOK() ? thickLayers() : ''}<div class="citem lcd-c">${cardFace(t, { base: 1 })}</div><i class="lc-glare"></i></div>${lcBack()}</div></div></div><div class="lcd-info">${lcInfo(t)}</div>`;
 }
 
 // liste affichée (filtres, tri, recherche) et pages : 9 cartes (3 × 3) sur téléphone, 10 (5 × 2) sur tablette ou téléphone tourné, 12 (4 × 3) sur ordinateur

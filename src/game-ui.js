@@ -171,13 +171,15 @@ function playEvents(ev, types, now) {
       if (v) v.flash = now;
       {
         const dm = parseInt(e.txt.replace('−', '')) || 0;
+        // v266 : les chiffres jaillissent vers l'écran (drawFloats) ; les gros coups (critiques) sont plus gros et rouges
         floatTxt(
           tp.x,
           tp.y,
           e.txt,
-          dm >= 10 ? '#ff9a2e' : dm >= 4 ? '#ffd25a' : '#ffffff',
-          dm >= 10 ? 23 : dm >= 4 ? 17 : 13,
+          dm >= 10 ? '#ff3b2a' : dm >= 4 ? '#ffd25a' : '#ffffff',
+          dm >= 10 ? 26 : dm >= 4 ? 17 : 13,
         );
+        floats[floats.length - 1].pop = dm >= 10 ? 2 : 1;
         if (dm >= 10) shake(now, 3);
       }
       burst(tp.x, tp.y, 'rgba(140,20,24,.9)', 4, 0.06, 2);

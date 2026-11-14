@@ -1469,7 +1469,16 @@ function fly(t, a, b, delay, back, done, o) {
         opacity: 1,
         offset: 0.55,
       },
-      { transform: `translate(${x1}px,${y1}px) rotate(0deg) scale(${s1})`, opacity: 1 },
+      ...(o.lay
+        ? // v266 : pose : la carte plane au-dessus de la case puis se couche à plat dessus avant de laisser place à la figurine
+          [
+            { transform: `translate(${x1}px,${y1 - 14}px) rotate(0deg) scale(${s1 * 1.15})`, opacity: 1, offset: 0.78 },
+            {
+              transform: `translate(${x1}px,${y1}px) perspective(260px) rotateX(62deg) scale(${s1 * 0.95})`,
+              opacity: 0.35,
+            },
+          ]
+        : [{ transform: `translate(${x1}px,${y1}px) rotate(0deg) scale(${s1})`, opacity: 1 }]),
     ],
     { duration: dur, delay, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'both' },
   );

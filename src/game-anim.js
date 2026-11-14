@@ -169,16 +169,18 @@ function placeFx(t, i, D) {
     landFx(i);
     return;
   }
-  const dur = 230;
+  const dur = 340;
   SLAM[i] = performance.now() + dur;
-  fly(t, a, cellRect(i), 0, 0, null, { s1: 0.5, dur });
-  setTimeout(() => landFx(i), dur + 150);
+  fly(t, a, cellRect(i), 0, 0, null, { s1: 0.5, dur, lay: 1 });
+  setTimeout(() => landFx(i), dur);
 }
 function landFx(i) {
   try {
     const p = tc(i);
     burst(p.x, p.y, '#cdb68a', OPT.eco ? 5 : 11, 0.07, 2.3);
     burst(p.x, p.y, 'rgba(90,70,40,.7)', OPT.eco ? 2 : 5, 0.05, 3);
+    // v266 : nuage de poussière soulevé par la carte qui se couche
+    if (!OPT.eco) burst(p.x, p.y + 6, 'rgba(200,180,140,.45)', 8, 0.035, 5);
     addFX({ type: 'ring', x: p.x, y: p.y, r: 32, c: 'rgba(235,215,170,.95)', dur: 320 });
     shake(performance.now(), 3);
     SFX.play('thud', 0.05);
@@ -198,13 +200,17 @@ function burnFx() {
     g.style.top = r.top + 'px';
     g.style.width = r.width + 'px';
     g.style.animationDelay = k * 70 + 'ms';
+    // v266 : la carte se consume de bas en haut : ligne de braise qui monte, étincelles et cendres
+    aEl('burn-line', '', g).style.animationDelay = k * 70 + 'ms';
     if (!OPT.eco)
-      for (let j = 0; j < 6; j++) {
-        const s = aEl('ember', '', g);
-        s.style.left = 15 + Math.random() * 70 + '%';
-        s.style.animationDelay = k * 70 + 120 + Math.random() * 300 + 'ms';
+      for (let j = 0; j < 10; j++) {
+        const s = aEl(j % 2 ? 'ember' : 'ash', '', g),
+          q = j / 10;
+        s.style.left = 10 + Math.random() * 80 + '%';
+        s.style.bottom = q * 80 + '%';
+        s.style.animationDelay = k * 70 + q * 700 + 'ms';
       }
-    setTimeout(() => g.remove(), 900 + k * 70);
+    setTimeout(() => g.remove(), 1300 + k * 70);
   });
   try {
     SFX.play('flame', 0.1);
@@ -271,19 +277,33 @@ function dealPicks() {
     );
     setTimeout(
       () => {
-        const a = aAnim(b, [{ transform: 'scaleX(1)' }, { transform: 'scaleX(0)' }], {
-          duration: 110,
-          easing: 'ease-in',
-        });
+        // v266 : vrai retournement en 3D ; une carte rare (ou mieux) jaillit avec un éclat doré
+        const a = aAnim(
+          b,
+          [{ transform: 'perspective(700px) rotateY(0)' }, { transform: 'perspective(700px) rotateY(90deg)' }],
+          { duration: 150, easing: 'ease-in' },
+        );
         aDone(a, () => {
           bk.remove();
           const f = aEl('pk-fl', '', b);
           f.style.setProperty('--rc', RARC[r]);
           setTimeout(() => f.remove(), 700);
+          const rare = r !== 'com';
+          if (rare) goldBurst(b, r);
           aAnim(
             b,
-            [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1.06)', offset: 0.7 }, { transform: 'scaleX(1)' }],
-            { duration: 200, easing: 'ease-out' },
+            rare
+              ? [
+                  { transform: 'perspective(700px) rotateY(-90deg)' },
+                  { transform: 'perspective(700px) translateY(-22px) scale(1.12)', offset: 0.5 },
+                  { transform: 'none' },
+                ]
+              : [
+                  { transform: 'perspective(700px) rotateY(-90deg)' },
+                  { transform: 'perspective(700px) rotateY(6deg)', offset: 0.7 },
+                  { transform: 'none' },
+                ],
+            { duration: rare ? 520 : 220, easing: 'cubic-bezier(.2,1.2,.4,1)' },
           );
           try {
             SFX.play(r === 'epic' || r === 'leg' ? 'rare' : 'card', 0.05);
@@ -293,6 +313,20 @@ function dealPicks() {
       420 + k * 170,
     );
   });
+}
+// éclat doré derrière une carte rare : rayons qui tournent et paillettes qui jaillissent
+function goldBurst(b, r) {
+  const g = aEl('pk-gold', '', b);
+  g.style.setProperty('--rc', r === 'rare' ? '#ffd76a' : RARC[r]);
+  if (!OPT.eco)
+    for (let j = 0; j < 10; j++) {
+      const p = aEl('pk-spk', '', g),
+        an = (j / 10) * 6.28 + Math.random() * 0.4,
+        d = 90 + Math.random() * 60;
+      p.style.setProperty('--dx', Math.cos(an) * d + 'px');
+      p.style.setProperty('--dy', Math.sin(an) * d + 'px');
+    }
+  setTimeout(() => g.remove(), 1300);
 }
 const _dawnStep = dawnStep;
 dawnStep = function (ph, picks) {
@@ -304,6 +338,11 @@ dawnStep = function (ph, picks) {
   return r;
 };
 
+// v266 : épaisseur de la grande carte : feuillets empilés derrière la face (translateZ) et dos de la carte,
+// visibles quand elle penche ou se retourne
+const thickLayers = () =>
+  Array.from({ length: 6 }, (_, k) => `<i class="thk" style="--k:${k + 1}"></i>`).join('') + '<i class="thk-back"></i>';
+
 /* ---------- grande carte : elle grandit depuis sa place, penche sous le doigt, reflet qui suit ---------- */
 const _zoomCf = zoomCf;
 zoomCf = function (cf, lp) {
@@ -312,6 +351,7 @@ zoomCf = function (cf, lp) {
     const z = zoomEl.querySelector('.zoomc');
     if (!z) return;
     aEl('zsh', '', z);
+    if (AOK()) z.insertAdjacentHTML('afterbegin', thickLayers());
     if (AOK() && cf && cf.getBoundingClientRect) {
       const a = cf.getBoundingClientRect(),
         b = z.getBoundingClientRect();
@@ -810,6 +850,7 @@ mergeFx = function (m) {
     if (!m || typeof m !== 'object' || m.k !== 'fuse' || !AOK()) return;
     const p = tc(m.i),
       fr = (m.from || []).map(tc);
+    fuseCardsFx(m);
     addFX({
       type: 'fn',
       dur: 380,
@@ -845,6 +886,64 @@ mergeFx = function (m) {
     }, 320);
   } catch (e) {}
 };
+// v266 : fusion spectaculaire : les cartes identiques tournent l'une vers l'autre au-dessus du plateau, éclair,
+// puis la carte fusionnée sort avec ses étoiles et plonge dans sa case
+function fuseCardsFx(m) {
+  const to = aMid(cvPt(tc(m.i))),
+    srcs = (m.from || []).map(j => aMid(cvPt(tc(j)))).concat([to]),
+    W = 64,
+    H = 106,
+    meet = 520;
+  srcs.forEach((a, k) => {
+    const c = aEl('fusec', cardFace(m.t, { mini: 1 })),
+      side = k % 2 ? 1 : -1,
+      mx = (a.x + to.x) / 2 + side * 26,
+      my = Math.min(a.y, to.y) - 70;
+    const an = aAnim(
+      c,
+      [
+        {
+          transform: `translate(${a.x - W / 2}px,${a.y - H / 2}px) perspective(400px) rotateY(0) scale(.4)`,
+          opacity: 0,
+        },
+        {
+          transform: `translate(${mx - W / 2}px,${my - H / 2}px) perspective(400px) rotateY(${side * -50}deg) scale(1)`,
+          opacity: 1,
+          offset: 0.45,
+        },
+        {
+          transform: `translate(${to.x - W / 2}px,${to.y - 80 - H / 2}px) perspective(400px) rotateY(${side * -90}deg) scale(.9)`,
+          opacity: 1,
+        },
+      ],
+      { duration: meet, delay: k * 40, easing: 'cubic-bezier(.4,0,.6,1)', fill: 'both' },
+    );
+    aDone(an, () => c.remove());
+  });
+  setTimeout(() => {
+    const fl = aEl('fuse-flash');
+    fl.style.left = to.x + 'px';
+    fl.style.top = to.y - 80 + 'px';
+    setTimeout(() => fl.remove(), 500);
+    const c = aEl('fusec gold', cardFace(m.t, { mini: 1, gold: m.gold || 1 }));
+    const an = aAnim(
+      c,
+      [
+        {
+          transform: `translate(${to.x - W / 2}px,${to.y - 80 - H / 2}px) perspective(400px) rotateY(90deg) scale(.9)`,
+        },
+        {
+          transform: `translate(${to.x - W / 2}px,${to.y - 90 - H / 2}px) perspective(400px) rotateY(0) scale(1.35)`,
+          offset: 0.35,
+        },
+        { transform: `translate(${to.x - W / 2}px,${to.y - 90 - H / 2}px) scale(1.3)`, offset: 0.7 },
+        { transform: `translate(${to.x - W / 2}px,${to.y - H / 2}px) scale(.3)`, opacity: 0 },
+      ],
+      { duration: 900, easing: 'cubic-bezier(.2,1,.4,1)', fill: 'both' },
+    );
+    aDone(an, () => c.remove());
+  }, meet + 40);
+}
 // 28 : niveau : colonne de lumière et « N2 » qui grossit puis se pose
 function lvFx(i, lv) {
   if (!AOK()) return;
@@ -928,10 +1027,57 @@ playEvents = function (ev, types, now) {
     } catch (x) {}
   } catch (e) {}
 };
+// v266 : énergie dépensée : la cartouche est éjectée en tournoyant, comme d'un fusil, puis retombe et disparaît
+function ejectCartridge(pip, k) {
+  const r = pip.getBoundingClientRect();
+  if (!r.width || OPT.eco) return;
+  const c = aEl('ejectc', cartoucheSvg(true));
+  c.style.width = r.width + 'px';
+  c.style.height = r.height + 'px';
+  const x = r.left,
+    y = r.top,
+    dx = 40 + Math.random() * 30,
+    tour = 540 + Math.random() * 360;
+  const a = aAnim(
+    c,
+    [
+      { transform: `translate(${x}px,${y}px) rotate(0deg)`, opacity: 1 },
+      { transform: `translate(${x + dx * 0.5}px,${y - 46}px) rotate(${tour * 0.5}deg)`, opacity: 1, offset: 0.4 },
+      { transform: `translate(${x + dx}px,${y + 30}px) rotate(${tour}deg)`, opacity: 0 },
+    ],
+    { duration: 650, delay: k * 90, easing: 'cubic-bezier(.25,.6,.55,1)', fill: 'both' },
+  );
+  aDone(a, () => c.remove());
+}
 // 33, 34, 35 : après chaque dessin de l'interface (abri en danger, énergie, ferraille)
 let RP = { e: null, s: null, day: null };
+// v266 : pièces qui tournent : quand le coût, les dégâts ou les PV d'une carte de la main changent, la pièce fait un tour
+const COIN_PREV = {};
+function spinChangedCoins() {
+  if (!AOK()) return;
+  document.querySelectorAll('#hand .card[data-k]').forEach(card => {
+    const t = S.hand[+card.dataset.k];
+    if (!t) return;
+    const prev = COIN_PREV[t] || {},
+      now = {};
+    for (const [k, sel] of [
+      ['cost', '.cf-cost'],
+      ['atk', '.cf-atk'],
+      ['hp', '.cf-hp'],
+    ]) {
+      const coin = card.querySelector(sel);
+      if (!coin) continue;
+      now[k] = coin.textContent.trim();
+      if (prev[k] != null && prev[k] !== now[k]) coin.classList.add('coin-spin');
+    }
+    COIN_PREV[t] = now;
+  });
+}
 function renderFx() {
   if (!G) return;
+  try {
+    spinChangedCoins();
+  } catch (e) {}
   // 33 : l'abri presque détruit : la barre bat comme un cœur, les bords de l'écran pulsent en rouge
   const dg = S.busy && G.shelter > 0 && G.shelter / Z.maxS(G) <= 0.3;
   document.documentElement.classList.toggle('danger', !!dg);
@@ -941,15 +1087,14 @@ function renderFx() {
     pips = [...document.querySelectorAll('#info .ctg-rang i')];
   if (RP.e != null && AOK() && !S.busy && pips.length) {
     if (e < RP.e)
-      pips
-        .slice(e, RP.e)
-        .forEach(i =>
-          aAnim(
-            i,
-            [{ filter: 'brightness(1.8)', transform: 'translateY(-6px) rotate(-12deg)' }, { transform: 'scale(1)' }],
-            { duration: 380, easing: 'ease-out' },
-          ),
+      pips.slice(e, RP.e).forEach((i, k) => {
+        aAnim(
+          i,
+          [{ filter: 'brightness(1.8)', transform: 'translateY(-6px) rotate(-12deg)' }, { transform: 'scale(1)' }],
+          { duration: 380, easing: 'ease-out' },
         );
+        ejectCartridge(i, k);
+      });
     else if (e > RP.e && RP.day !== G.night)
       pips
         .filter(i => i.classList.contains('on'))

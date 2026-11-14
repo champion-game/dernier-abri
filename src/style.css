@@ -15931,3 +15931,239 @@ html.eco.artx .cf .bonus-new {
     animation: none;
   }
 }
+/* 7 : douille éjectée quand on dépense de l'énergie (game-anim.js : ejectCartridge) */
+.ejectc {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 70;
+  pointer-events: none;
+  transform-origin: 50% 60%;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.6));
+}
+.ejectc svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* 4 : pièce qui tourne quand sa valeur change ; la tranche est une ombre qui glisse sur le côté pendant le tour */
+html.artx .cf :is(.cf-cost, .cf-atk, .cf-hp).coin-spin {
+  animation: coinSpin 0.6s ease-in-out both;
+}
+@keyframes coinSpin {
+  0% {
+    transform: perspective(200px) rotateY(0);
+  }
+  25% {
+    transform: perspective(200px) rotateY(90deg) scale(1.15);
+    filter: drop-shadow(1.2cqw 0 0 #6b4d26) drop-shadow(1cqw 0 0 #3a2a14);
+  }
+  50% {
+    transform: perspective(200px) rotateY(180deg) scale(1.25);
+    filter: drop-shadow(-1.2cqw 0 0 #6b4d26) drop-shadow(-1cqw 0 0 #3a2a14) brightness(1.3);
+  }
+  75% {
+    transform: perspective(200px) rotateY(270deg) scale(1.15);
+    filter: drop-shadow(1.2cqw 0 0 #6b4d26) drop-shadow(1cqw 0 0 #3a2a14);
+  }
+  100% {
+    transform: perspective(200px) rotateY(360deg);
+  }
+}
+html.eco.artx .cf .coin-spin {
+  animation: none;
+}
+/* 1 : récompense face cachée : une carte rare jaillit avec un éclat doré (game-anim.js : goldBurst) */
+.pk-gold {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 0;
+  height: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.pk-gold::before {
+  content: '';
+  position: absolute;
+  left: -190px;
+  top: -190px;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--rc) 0 7deg, transparent 7deg 22deg);
+  -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+  mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+  animation: pkGold 1.3s ease-out both;
+}
+@keyframes pkGold {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4) rotate(70deg);
+  }
+}
+.pk-spk {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  border-radius: 50%;
+  background: #fff6c8;
+  box-shadow: 0 0 8px 2px var(--rc);
+  animation: pkSpk 0.9s ease-out both;
+}
+@keyframes pkSpk {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0.3);
+    opacity: 0;
+  }
+}
+.picks .pick {
+  isolation: isolate;
+}
+/* 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de braise, cendres */
+@property --brn {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: -8%;
+}
+.burnc {
+  -webkit-mask-image: linear-gradient(to top, transparent var(--brn), #000 calc(var(--brn) + 7%));
+  mask-image: linear-gradient(to top, transparent var(--brn), #000 calc(var(--brn) + 7%));
+  animation: burnUp 1.05s ease-in both;
+}
+@keyframes burnUp {
+  0% {
+    --brn: -8%;
+    filter: none;
+  }
+  15% {
+    --brn: -4%;
+    filter: sepia(0.5) saturate(1.8) brightness(1.1);
+  }
+  100% {
+    --brn: 102%;
+    filter: sepia(0.9) brightness(0.55) contrast(1.2);
+    transform: translateY(-6px);
+  }
+}
+.burnc .burn-line {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  z-index: 9;
+  height: 9%;
+  bottom: calc(var(--brn) + 1%);
+  background: linear-gradient(transparent, #ff8a1a 45%, #ffe08a 60%, transparent);
+  box-shadow: 0 0 12px 4px rgba(255, 110, 20, 0.7);
+  mix-blend-mode: screen;
+  border-radius: 40%;
+}
+.burnc .ash {
+  position: absolute;
+  z-index: 9;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: #6d6660;
+  animation: ashUp 1s ease-out both;
+}
+@keyframes ashUp {
+  0% {
+    opacity: 0;
+    transform: none;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -60px) rotate(220deg) scale(0.6);
+  }
+}
+/* 5 : fusion spectaculaire (game-anim.js : fuseCardsFx) */
+.fusec {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 65;
+  width: 64px;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+.fusec .cf {
+  width: 100%;
+}
+.fusec.gold {
+  filter: drop-shadow(0 0 10px #ffd23f) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+.fuse-flash {
+  position: fixed;
+  z-index: 66;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.fuse-flash::before {
+  content: '';
+  position: absolute;
+  left: -90px;
+  top: -90px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0, #ffe27a 25%, rgba(255, 190, 60, 0.4) 45%, transparent 68%);
+  animation: fuseFlash 0.5s ease-out both;
+}
+@keyframes fuseFlash {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+/* 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte et celle de la collection */
+.zoomc,
+html.artx .lcd-tilt {
+  transform-style: preserve-3d;
+}
+.thk,
+.thk-back {
+  position: absolute;
+  inset: 0.4% 0.6%;
+  border-radius: 5%/3.8%;
+  pointer-events: none;
+}
+.thk {
+  transform: translateZ(calc(var(--k) * -1.1px));
+  background: #8a6f47;
+  box-shadow: inset 0 0 0 2px #e6d4ad;
+}
+.thk:nth-child(odd) {
+  background: #5e4a2e;
+  box-shadow: inset 0 0 0 2px #c9ae7c;
+}
+.thk-back {
+  transform: translateZ(-7.4px) rotateY(180deg);
+  background: var(--ui-dos, url(../assets/ui/dos.webp)) center/100% 100% no-repeat;
+}
+html.artx .lcd-back {
+  transform: rotateY(180deg) translateZ(7.4px);
+}
+html.eco :is(.thk, .thk-back) {
+  display: none;
+}

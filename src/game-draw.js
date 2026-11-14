@@ -4615,9 +4615,10 @@ function zAnim(v, now, a, moving) {
     ctx.scale(1 + 0.08 * k, 1 + 0.08 * k);
   }
   const tf = now - (v.flash || -1e9);
-  if (tf < 150) {
-    const k = 1 - tf / 150;
-    ctx.translate(-Math.cos(a) * 3 * k, -Math.sin(a) * 3 * k);
+  if (tf < 180) {
+    // v266 : le zombie touché recule nettement
+    const k = 1 - tf / 180;
+    ctx.translate(-Math.cos(a) * 6 * k, -Math.sin(a) * 6 * k);
     ctx.scale(1 - 0.1 * k, 1 + 0.08 * k);
   }
 }
@@ -4687,6 +4688,17 @@ function drawZombie(v, now) {
   if (zim) {
     if (zup && Math.cos(a) < -0.1) ctx.scale(-1, 1);
     drawSpr(zk, 0, 0, 0, 0);
+    // v266 : touché, le zombie blanchit un instant (le dessin repassé en lumière ajoutée)
+    const tw = now - (v.flash || -1e9);
+    if (tw < 130 && !v.dying) {
+      const ga = ctx.globalAlpha,
+        op = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = ga * 0.75 * (1 - tw / 130);
+      drawSpr(zk, 0, 0, 0, 0);
+      ctx.globalCompositeOperation = op;
+      ctx.globalAlpha = ga;
+    }
   } else if (Lk.dog) {
     dogShape(skin, skin, cloth, now, 70);
     circ(10, -2, 1, '#d7262e');
@@ -4756,7 +4768,7 @@ function drawZombie(v, now) {
       circ(6, 2, 1.1, '#d7262e');
     }
   }
-  if (v.flash && now - v.flash < 110) {
+  if (!zim && v.flash && now - v.flash < 110) {
     ctx.globalAlpha = alpha * 0.8;
     circ(0, 0, 11, '#fff');
   }
@@ -4927,10 +4939,29 @@ function drawFloats(now) {
       ctx.lineWidth = 1;
       ctx.strokeRect(f.x - w / 2, yy - f.sz + 1, w, f.sz + 6);
     }
-    ctx.fillStyle = 'rgba(0,0,0,.7)';
-    ctx.fillText(tx, f.x + 1, yy + 1);
-    ctx.fillStyle = f.c;
-    ctx.fillText(tx, f.x, yy);
+    if (f.pop && !reduce) {
+      // v266 : dégâts qui jaillissent : le chiffre part de loin, saute vers l'écran (gros, ombre décalée) puis se pose
+      const sc =
+          p < 0.15
+            ? 0.4 + (p / 0.15) * (f.pop > 1 ? 1.5 : 1.1)
+            : p < 0.3
+              ? (f.pop > 1 ? 1.9 : 1.5) - ((p - 0.15) / 0.15) * (f.pop > 1 ? 0.9 : 0.5)
+              : 1,
+        depth = Math.max(0, sc - 1) * 4;
+      ctx.save();
+      ctx.translate(f.x, yy);
+      ctx.scale(sc, sc);
+      ctx.fillStyle = 'rgba(0,0,0,.7)';
+      ctx.fillText(tx, 1 + depth, 1 + depth);
+      ctx.fillStyle = f.c;
+      ctx.fillText(tx, 0, 0);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = 'rgba(0,0,0,.7)';
+      ctx.fillText(tx, f.x + 1, yy + 1);
+      ctx.fillStyle = f.c;
+      ctx.fillText(tx, f.x, yy);
+    }
     ctx.globalAlpha = 1;
     if (cl) ctx.restore();
   }

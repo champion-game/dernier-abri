@@ -1,6 +1,6 @@
 # Idées validées pour les cartes (à mettre dans le jeu)
 
-Validées par Amine le 14 novembre 2026, à partir des pages de démo. Rien n’est encore dans le jeu (état : v265).
+Validées par Amine le 14 novembre 2026, à partir des pages de démo. **Toutes mises dans le jeu en v266** (code : fin de `src/style.css`, bloc « v266 » ; `cardLook`, `bonusCoins`, `isNewCard` dans `src/game.js` ; `goldBurst`, `burnFx`, `placeFx`, `fuseCardsFx`, `ejectCartridge`, `spinChangedCoins`, `thickLayers` dans `src/game-anim.js` ; `drawFloats` dans `src/game-draw.js`).
 Tout est faisable en code (CSS et `game-*.js`), sans nouvelle image. Chaque effet qui bouge doit se couper en Mode économie (`html.eco`) et avec `prefers-reduced-motion`, et rester jouable à 390 px de large.
 
 Déjà en place en v265 (pour mémoire) : cadre d’Amine teinté selon la rareté, couleur du rôle, pierre de coût selon le type, emblème de bande (faction) en filigrane, petite vie selon le rôle (grandes cartes), Holographique arc-en-ciel, Légendaire animée (`cardLook` dans `src/game.js`, fin de `src/style.css`).
