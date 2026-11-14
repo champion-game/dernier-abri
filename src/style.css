@@ -16167,3 +16167,25 @@ html.artx .lcd-back {
 html.eco :is(.thk, .thk-back) {
   display: none;
 }
+/* v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la carte */
+html.artx .cf .cf-wm {
+  top: 146cqw;
+  width: 34cqw;
+  height: 34cqw;
+  opacity: 0.24;
+}
+html.artx .cf.mini .cf-wm {
+  top: 142cqw;
+  width: 36cqw;
+  height: 36cqw;
+}
+html.artx .cf .cf-wm-role {
+  position: absolute;
+  right: -4cqw;
+  bottom: -4cqw;
+  width: 40%;
+  height: 40%;
+}
+html.artx .cf .cf-wm-role svg {
+  stroke-width: 2.6;
+}

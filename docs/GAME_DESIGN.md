@@ -774,6 +774,7 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 - Équilibrage : tous les DPS à distance gagnent +1 de portée, tous les DPS au corps à corps +2 dégâts par coup (textes des cartes mis à jour).
 - Cartes (v58) : faction et rôle imprimés à l’encre en bas de la carte, entre les dégâts et les PV, à côté du type ; le rôle est en couleur (bleu = tank, vert = soin, rouge = DPS). Visibles aussi sur les petites cartes de la main.
 - Cartes (v249) : les dégâts sont dans une bulle ronde couleur laiton (épée en filigrane), le soin dans une bulle verte ; les PV d’un tank sont dans un bouclier bleu acier au lieu de la goutte rouge, pour le reconnaître d’un coup d’œil.
+- Cartes (v267, option B d’Amine) : plus de pastille faction / rôle en bas de la carte ; un seul filigrane discret dans le parchemin : l’emblème de la bande, avec le pictogramme du rôle en petit dans son coin (le rôle seul pour une carte sans bande).
 - Collection et éditeur de deck : recherche par nom ou texte, tri (type, coût, rareté, nom, faction), filtre par faction, et dans la collection filtre débloquées / à débloquer.
 - Murs construits (v57) : dessinés en code avec leur propre matériau (bois, sacs de sable, pneus, béton rayé, tôle, acier, épave rouillée). Des murs voisins se raccordent automatiquement par une section continue (moitié du matériau de chacun), avec des poteaux aux extrémités et aux angles ; un mur seul est un tronçon en travers de la route.
 

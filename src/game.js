@@ -539,10 +539,15 @@ function cardLook(t, mini) {
         : cat === 'item' || cat === 'react'
           ? 'dia'
           : 'rond';
+  // v267 (option B d'Amine) : faction et rôle en un seul filigrane dans le parchemin : l'emblème de la bande,
+  // avec le pictogramme du rôle en petit dans son coin (le rôle seul pour une carte sans bande)
   const f = Z.famOf(t),
+    emb = f && BANDE_EMB[f] ? BANDE_EMB[f] : '',
+    roleIc = ro && INKI[ro] ? INKI[ro] : '',
+    svgWm = p => `<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`,
     wm =
-      f && BANDE_EMB[f]
-        ? `<span class="cf-wm"><svg viewBox="0 0 24 24" aria-hidden="true">${BANDE_EMB[f]}</svg></span>`
+      emb || roleIc
+        ? `<span class="cf-wm"${f ? ` title="${Z.FAM[f].n}"` : ''}>${svgWm(emb || roleIc)}${emb && roleIc ? `<i class="cf-wm-role">${svgWm(roleIc)}</i>` : ''}</span>`
         : '';
   const pts = n =>
     Array.from(
@@ -605,7 +610,6 @@ function cardFace(t, o = {}) {
     D = o.base ? (E ? Z.stat(null, t) : U0) : Z.stat(G, t),
     r = rar(t),
     st = cardStats(D),
-    f = Z.famOf(t),
     ro = Z.roleOf(t),
     u = artUrl(B, o.big),
     cost = o.cost ?? (o.base ? Z.cost(t) : Z.costOf(G, t)),
@@ -630,16 +634,12 @@ function cardFace(t, o = {}) {
         .replace(/^Che(?:f|ffe) d[^:]*: /, '')
         .replace(/\. (?:Les?|La) [^.]* gagne(?:nt)? un palier$/, _t('. Faction : +1 palier'))
     : U0.d;
-  // faction et rôle : pictogrammes à l'encre en bas de la carte, entre les dégâts et les PV (rôle en couleur : tank / soin / DPS)
-  const marks =
-    (f && seen('fam1') ? `<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>` : '') +
-    (ro ? `<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>` : '');
   return `<span class="cf r-${r}${look.cls}${neuf ? ' neuf' : ''}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
   <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${look.html}${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
   ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost${bonus.cost || ''}">${cost}</span>${neuf ? `<span class="cf-neuf">${_t('Nouveau')}</span>` : ''}
   ${look.wm}<span class="cf-name">${D.n}</span>
   ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
-  <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${marks}${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
+  <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
 }
 const art = t => {
   t = Z.baseOf(t);
@@ -648,7 +648,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v266 · 14 nov.';
+const VERSION = 'v267 · 14 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
