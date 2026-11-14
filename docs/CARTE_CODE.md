@@ -123,7 +123,7 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:566 isNewCard:587 markCardSeen:594 cardFace:601 saveOpt:713 applyOpt:721 applyCur:741 toggleFs:760 unpause:779 R:787
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:606 saveOpt:713 applyOpt:721 applyCur:741 toggleFs:760 unpause:779 R:787
 - **818** state
 - **820** progression entre les parties (localStorage) : loadMeta:821 endTest:842 saveMeta:847 ach:888 showAch:900 deckCanAdd:933 edGain:947 edCommit:956 edDrop:986 achCheck:1012 achNight:1037 achScreen:1045 tuto:1064 guideStep:1095 guideOk:1235 tutoTip:1256 tutoHand:1268 tutoPicks:1291 tutoEnd:1296 newGame:1311 fillHand:1361 drawCards:1369 syncBoard:1396 cellRect:1434 fly:1439 animPiles:1501 pilesHtml:1559
 - **1629** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1632 loadSave:1656 clearSave:1679 resume:1685
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-16170 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1231 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+16192 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1235 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -536,3 +536,4 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 16035 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de b
 - 16095 5 : fusion spectaculaire (game-anim.js : fuseCardsFx)
 - 16139 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte
+- 16170 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
