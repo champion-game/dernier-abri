@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15189 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1113 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15472 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1172 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -505,6 +505,13 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15050 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
 - 15072 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
 - 15078 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
-- 15117 ===== v259 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
+- 15117 ===== v261 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
 - 15157 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
 - 15184 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
+- 15189 v263 : nouveau cadre de carte d'Amine (assets/art/ui/cadre-barricard.webp, 728 × 1106, fen
+- 15239 reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'apparei
+- 15304 dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte
+- 15342 v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord m
+- 15378 reflet bombé en haut de la pièce + éclat qui la traverse
+- 15422 chiffres gravés : clair en haut, ombre en bas, contour sombre
+- 15446 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
