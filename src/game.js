@@ -497,6 +497,68 @@ function novice() {
 const SHIELD_SVG =
   '<svg class="shd" viewBox="0 0 24 28" aria-hidden="true"><path d="M12 1.5 22 5v8.5c0 6.3-4.3 10.6-10 13-5.7-2.4-10-6.7-10-13V5z" fill="#4f6b84" stroke="#16222d" stroke-width="1.2"/><path d="M2.6 13.5h18.8c-.4 5.8-4.4 9.8-9.4 12-5-2.2-9-6.2-9.4-12z" fill="rgba(10,20,30,.35)"/><path d="M12 4 4.5 6.7v6.8c0 4.8 3.1 8.2 7.5 10.2" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1"/></svg>';
 const ink = k => `<svg class="ink" viewBox="0 0 24 24" aria-hidden="true">${INKI[k]}</svg>`;
+// v264 : identité visuelle de chaque carte (choix d'Amine) : couleur du rôle (couleurs de l'artiste), forme de la pierre de coût,
+// emblème de la bande (= faction) en filigrane sur le parchemin, petite vie selon le rôle (grandes cartes seulement),
+// reflet arc-en-ciel des Holographiques et braises des Légendaires.
+const BANDE_EMB = {
+  police: '<path d="M3 20h18M5 20V11l7-7 7 7v9M12 4v16M8.5 20v-6h7v6"/>',
+  care: '<path d="M12 3v2M8 9a4 4 0 0 1 8 0v6l2 3H6l2-3zM10.5 20a1.5 1.5 0 0 0 3 0"/>',
+  pyro: '<circle cx="12" cy="10" r="6.5"/><path d="M12 3.5v13M5.5 10h13M7.4 5.4l9.2 9.2M16.6 5.4l-9.2 9.2M8 21l4-4.5 4 4.5"/>',
+  trap: '<path d="M2 20 12 4l10 16zM12 4v16M8 20l4-6 4 6"/>',
+  farm: '<path d="M7 4c-3 2-4 6-3 10 1 3 3 5 5 6M17 4c3 2 4 6 3 10-1 3-3 5-5 6M6 8h2M5.5 12h2M16 8h2M16.5 12h2"/>',
+  tech: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  comm: '<path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-6h4v6"/>',
+  mil: '<path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6zM8 12l3 3 5-6"/>',
+  rail: '<path d="M8 3 5 21M16 3l3 18M7.3 7h9.4M6.6 12h10.8M5.9 17h12.2"/>',
+};
+function cardLook(t, mini) {
+  const U0 = Z.U[Z.baseOf(t)] || {},
+    cat = U0.cat,
+    ro = Z.roleOf(t);
+  const rk =
+    cat === 'trap'
+      ? 'piege'
+      : cat === 'wall'
+        ? 'def'
+        : cat === 'item'
+          ? 'objet'
+          : cat === 'post'
+            ? 'poste'
+            : cat === 'react'
+              ? 'react'
+              : ro === 'tank'
+                ? 'tank'
+                : ro === 'heal' || cat === 'help'
+                  ? 'soin'
+                  : 'dps';
+  const cs =
+    cat === 'wall' || cat === 'post'
+      ? 'sq'
+      : cat === 'trap'
+        ? 'hex'
+        : cat === 'item' || cat === 'react'
+          ? 'dia'
+          : 'rond';
+  const f = Z.famOf(t),
+    wm =
+      f && BANDE_EMB[f]
+        ? `<span class="cf-wm"><svg viewBox="0 0 24 24" aria-hidden="true">${BANDE_EMB[f]}</svg></span>`
+        : '';
+  const pts = n =>
+    Array.from(
+      { length: n },
+      () =>
+        `<i style="left:${(6 + Math.random() * 88).toFixed(0)}%;--d:${(3 + Math.random() * 3).toFixed(1)}s;--w:${(-Math.random() * 6).toFixed(1)}s;--dx:${(Math.random() * 12 - 6).toFixed(0)}cqw"></i>`,
+    ).join('');
+  const fx = mini || rk === 'tank' ? '' : pts(6);
+  const holo = Z.edOf(t) === 'holo' ? '<span class="cf-foil"></span><span class="cf-spark"></span>' : '';
+  const leg = rar(t) === 'leg' && !mini ? `<span class="cf-embers">${pts(8)}</span>` : '';
+  return {
+    cls: ` rk-${rk} cs-${cs}`,
+    html: `<span class="cf-tint"></span><span class="cf-fx">${fx}</span><span class="cf-rim"></span>${holo}${leg}`,
+    wm,
+  };
+}
 function cardFace(t, o = {}) {
   const E = Z.edOf(t),
     B = Z.baseOf(t),
@@ -507,7 +569,8 @@ function cardFace(t, o = {}) {
     f = Z.famOf(t),
     ro = Z.roleOf(t),
     u = artUrl(B, o.big),
-    cost = o.cost ?? (o.base ? Z.cost(t) : Z.costOf(G, t));
+    cost = o.cost ?? (o.base ? Z.cost(t) : Z.costOf(G, t)),
+    look = cardLook(t, o.mini);
   const atk =
     st.atk != null
       ? _t`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`
@@ -530,10 +593,10 @@ function cardFace(t, o = {}) {
   const marks =
     (f && seen('fam1') ? `<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>` : '') +
     (ro ? `<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>` : '');
-  return `<span class="cf r-${r}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
-  <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
+  return `<span class="cf r-${r}${look.cls}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
+  <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${look.html}${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
   ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost">${cost}</span>
-  <span class="cf-name">${D.n}</span>
+  ${look.wm}<span class="cf-name">${D.n}</span>
   ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
   <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${marks}${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
 }
@@ -544,7 +607,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v264 · 14 nov.';
+const VERSION = 'v265 · 14 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo

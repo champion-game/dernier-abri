@@ -10,7 +10,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (5759 lignes)
 4. `src/audio.js` (811 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1602 lignes)
+6. `src/game.js` (1665 lignes)
 7. `src/game-draw.js` (5935 lignes)
 8. `src/game-ui.js` (2029 lignes)
 9. `src/game-screens.js` (1679 lignes)
@@ -56,13 +56,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `mergeFx` | game-ui.js:1448 | game-anim.js:807 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1446 | game-artx.js:979 |
+| `pilesHtml` | game.js:1509 | game-artx.js:979 |
 | `placeHints` | game-draw.js:5926 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1730 | game-anim.js:903 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:601 | game-anim.js:1155 |
-| `showAch` | game.js:796 | game-anim.js:1105 |
+| `showAch` | game.js:859 | game-anim.js:1105 |
 | `tapCell` | game-ui.js:1582 | game-ui.js:2017 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardFace:500 saveOpt:609 applyOpt:617 applyCur:637 toggleFs:656 unpause:675 R:683
-- **714** state
-- **716** progression entre les parties (localStorage) : loadMeta:717 endTest:738 saveMeta:743 ach:784 showAch:796 deckCanAdd:829 edGain:843 edCommit:852 edDrop:882 achCheck:908 achNight:933 achScreen:941 tuto:960 guideStep:991 guideOk:1131 tutoTip:1152 tutoHand:1164 tutoPicks:1187 tutoEnd:1192 newGame:1207 fillHand:1257 drawCards:1265 syncBoard:1292 cellRect:1330 fly:1335 animPiles:1388 pilesHtml:1446
-- **1516** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1519 loadSave:1543 clearSave:1566 resume:1572
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 cardFace:562 saveOpt:672 applyOpt:680 applyCur:700 toggleFs:719 unpause:738 R:746
+- **777** state
+- **779** progression entre les parties (localStorage) : loadMeta:780 endTest:801 saveMeta:806 ach:847 showAch:859 deckCanAdd:892 edGain:906 edCommit:915 edDrop:945 achCheck:971 achNight:996 achScreen:1004 tuto:1023 guideStep:1054 guideOk:1194 tutoTip:1215 tutoHand:1227 tutoPicks:1250 tutoEnd:1255 newGame:1270 fillHand:1320 drawCards:1328 syncBoard:1355 cellRect:1393 fly:1398 animPiles:1451 pilesHtml:1509
+- **1579** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1582 loadSave:1606 clearSave:1629 resume:1635
 
 ### src/game-draw.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15502 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1183 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15737 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1205 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -517,3 +517,10 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15446 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
 - 15486 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
 - 15495 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste
+- 15502 v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
+- 15531 liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : da
+- 15542 au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le
+- 15629 emblème de la bande (faction) imprimé en filigrane dans le parchemin
+- 15654 pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et 
+- 15674 Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes
+- 15712 Légendaire animée : braises qui montent et lueur dorée qui respire

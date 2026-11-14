@@ -15499,3 +15499,238 @@ html.artx.ax3 #ax3 #ftabs.ft-closed {
 html.artx.felton .felt > .ftabs.ft-closed {
   flex: none !important;
 }
+/* v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
+   DPS orange, Tank rouge, Soin vert, Piège brun, Défense acier, Objet violet, Poste bleu, Réaction rose. */
+.cf.rk-dps {
+  --rc: #ff8a3d;
+}
+.cf.rk-tank {
+  --rc: #e5484d;
+}
+.cf.rk-soin {
+  --rc: #7fd65a;
+}
+.cf.rk-piege {
+  --rc: #b07a45;
+}
+.cf.rk-def {
+  --rc: #8a939c;
+}
+.cf.rk-objet {
+  --rc: #b58cff;
+}
+.cf.rk-poste {
+  --rc: #5fb8ff;
+}
+.cf.rk-react {
+  --rc: #ff6fb5;
+}
+.cf :is(.cf-tint, .cf-fx, .cf-rim, .cf-embers, .cf-wm, .cf-foil, .cf-spark) {
+  display: none;
+}
+/* liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : dans la fenêtre en arche */
+html.artx .cf :is(.cf-tint, .cf-fx, .cf-rim, .cf-embers) {
+  display: block;
+  z-index: 1;
+  left: 4.3cqw;
+  right: 4.2cqw;
+  top: 6.8cqw;
+  height: 116cqw;
+  pointer-events: none;
+  border-radius: 46cqw 46cqw 0.6cqw 0.6cqw / 32cqw 32cqw 0.6cqw 0.6cqw;
+}
+/* au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le bord de la fenêtre */
+html.artx .cf .cf-rim {
+  z-index: 3;
+  left: 4.9cqw;
+  right: 4.8cqw;
+  top: 7.6cqw;
+  height: 114.8cqw;
+  mix-blend-mode: screen;
+  box-shadow:
+    inset 0 0 0 0.7cqw color-mix(in srgb, var(--rc) 80%, transparent),
+    inset 0 0 8cqw color-mix(in srgb, var(--rc) 70%, transparent);
+}
+html.artx .cf .cf-tint {
+  top: 50cqw;
+  height: 72.8cqw;
+  border-radius: 0;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--rc) 70%, transparent));
+  mix-blend-mode: overlay;
+}
+html.artx .cf .cf-name {
+  color: color-mix(in srgb, var(--rc) 45%, #1a0d06);
+}
+html.artx .cf :is(.cf-fx, .cf-embers) {
+  overflow: hidden;
+}
+html.artx .cf :is(.cf-fx, .cf-embers) i {
+  position: absolute;
+  bottom: -3%;
+  width: 1.3cqw;
+  height: 1.3cqw;
+  border-radius: 50%;
+  opacity: 0;
+  background: color-mix(in srgb, var(--rc) 45%, #fff);
+  box-shadow: 0 0 1.5cqw 0.5cqw color-mix(in srgb, var(--rc) 85%, transparent);
+  animation: cfUp var(--d) linear var(--w) infinite;
+}
+html.artx .cf:is(.rk-piege, .rk-def) .cf-fx i {
+  top: -3%;
+  bottom: auto;
+  width: 0.8cqw;
+  height: 0.8cqw;
+  background: rgba(240, 225, 200, 0.8);
+  box-shadow: none;
+  animation-name: cfDown;
+}
+html.artx .cf .cf-embers i {
+  width: 1.6cqw;
+  height: 1.6cqw;
+  background: #ffb347;
+  box-shadow: 0 0 1.6cqw 0.6cqw rgba(255, 120, 30, 0.8);
+}
+html.artx .cf.rk-tank:not(.mini) .cf-rim {
+  animation: cfPulse 2.2s ease-in-out infinite;
+}
+@keyframes cfUp {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), -110cqw);
+    opacity: 0;
+  }
+}
+@keyframes cfDown {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(var(--dx), 110cqw);
+    opacity: 0;
+  }
+}
+@keyframes cfPulse {
+  50% {
+    box-shadow:
+      inset 0 0 0 0.7cqw color-mix(in srgb, var(--rc) 90%, transparent),
+      inset 0 0 14cqw color-mix(in srgb, var(--rc) 95%, transparent);
+  }
+}
+/* emblème de la bande (faction) imprimé en filigrane dans le parchemin */
+html.artx .cf .cf-wm {
+  display: block;
+  left: 50%;
+  top: 143cqw;
+  width: 24cqw;
+  height: 24cqw;
+  transform: translate(-50%, -50%);
+  opacity: 0.14;
+  pointer-events: none;
+}
+html.artx .cf.mini .cf-wm {
+  top: 140cqw;
+  width: 30cqw;
+  height: 30cqw;
+}
+html.artx .cf .cf-wm svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #2a1508;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et poste, hexagone piège, losange objet et réaction) */
+html.artx .cf .cf-cost {
+  background: radial-gradient(
+    circle at 35% 28%,
+    color-mix(in srgb, var(--rc) 75%, #fff),
+    color-mix(in srgb, var(--rc) 65%, #000) 50%,
+    #120a04 88%
+  );
+}
+html.artx .cf.cs-sq .cf-cost {
+  border-radius: 3cqw;
+}
+html.artx .cf.cs-hex .cf-cost {
+  border-radius: 0;
+  clip-path: polygon(25% 2%, 75% 2%, 100% 50%, 75% 98%, 25% 98%, 0 50%);
+}
+html.artx .cf.cs-dia .cf-cost {
+  border-radius: 0;
+  clip-path: polygon(50% -4%, 104% 50%, 50% 104%, -4% 50%);
+}
+/* Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes */
+html.artx .cf .cf-foil {
+  display: block;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  opacity: 0.32;
+  border-radius: 5cqw;
+  background: linear-gradient(115deg, #ff4f7b, #ffcf5c, #5cffb0, #5cc7ff, #c45cff, #ff4f7b) 0 50% / 300% 300%;
+  animation: cfFoil 6s linear infinite;
+}
+html.artx .cf .cf-spark {
+  display: block;
+  z-index: 4;
+  left: 4.3cqw;
+  right: 4.2cqw;
+  top: 6.8cqw;
+  height: 116cqw;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background-image: radial-gradient(circle, #fff 0 0.35cqw, transparent 0.6cqw),
+    radial-gradient(circle, #fff 0 0.25cqw, transparent 0.5cqw);
+  background-size:
+    9cqw 11cqw,
+    6cqw 5cqw;
+  animation: cfTwinkle 2.4s ease-in-out infinite;
+}
+@keyframes cfFoil {
+  to {
+    background-position: 300% 50%;
+  }
+}
+@keyframes cfTwinkle {
+  50% {
+    opacity: 0.25;
+  }
+}
+/* Légendaire animée : braises qui montent et lueur dorée qui respire */
+html.artx .cf.r-leg:not(.mini) {
+  animation: cfLeg 2.6s ease-in-out infinite;
+}
+@keyframes cfLeg {
+  50% {
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 3cqw rgba(255, 190, 60, 0.75));
+  }
+}
+html.eco.artx .cf :is(.cf-fx, .cf-embers, .cf-spark),
+html.eco.artx .cf .cf-foil {
+  animation: none;
+}
+html.eco.artx .cf :is(.cf-fx, .cf-embers) {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.artx .cf :is(.cf-fx, .cf-embers) {
+    display: none;
+  }
+  html.artx .cf :is(.cf-foil, .cf-spark, .cf-rim),
+  html.artx .cf.r-leg {
+    animation: none !important;
+  }
+}

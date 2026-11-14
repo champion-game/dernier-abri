@@ -12,6 +12,7 @@ Règle : chaque nouvelle image garde **le même nom de fichier** que celle qu’
 | Reliques (icônes) | 22 | webp transparent, 192 px | `assets/relics/` |
 | Cadre et dos de carte | 2 | webp, 768 × 1024 / 360 × 480 | `assets/ui/cadre.webp`, `dos.webp` |
 | Cadre de carte (v263, Amine) | 1 | webp, 728 × 1106, fenêtre en arche transparente | `assets/art/ui/cadre-barricard.webp` : découpé en 9 (`style.css`, fin), teinté selon la rareté et l’édition |
+| Identité des cartes (v264, Amine) | code | couleurs de rôle de l’artiste | `cardLook` (`game.js`) : liseré et teinte du rôle, forme et couleur de la pierre de coût, emblème de bande (faction) en filigrane, petite vie selon le rôle, Holographique arc-en-ciel, Légendaire animée |
 | Fonds d’écran | 7 paysage + 1 portrait | webp, 1672 × 941 / 841 × 1870 | `assets/ui/fond*.webp` |
 | Logo, affiche | 4 | webp, svg | `barricard.webp`, `logo.svg`, `keyart*.webp` |
 | Abri fortifié, hélicoptère | 2 | webp transparent | `shelter_fort.webp`, `heli.webp` |
