@@ -1002,10 +1002,6 @@ I18N.en = {
   Piège: 'Trap',
   Objet: 'Item',
   Réaction: 'Reaction',
-  '<span class="cf-atk" title="Dégâts">{0}<b>{1}</b></span>':
-    '<span class="cf-atk" title="Damage">{0}<b>{1}</b></span>',
-  '<span class="cf-atk heal" title="Soin">{0}<b>+{1}</b></span>':
-    '<span class="cf-atk heal" title="Heal">{0}<b>+{1}</b></span>',
   '. Faction : +1 palier': '. Faction: +1 tier',
   '<span class="cf-stars" title="Fusionnée">{0}</span>': '<span class="cf-stars" title="Merged">{0}</span>',
   '. <b>Portée {0}</b>': '. <b>Range {0}</b>',
@@ -1862,6 +1858,7 @@ I18N.en = {
   'Page {0} / {1}': 'Page {0} / {1}',
   'Page suivante': 'Next page',
   '<span class="cnew">Nouveau</span>': '<span class="cnew">New</span>',
+  Nouveau: 'New',
   Ajouter: 'Add',
   'Deck {0}': 'Deck {0}',
   Retirer: 'Remove',

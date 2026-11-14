@@ -1647,6 +1647,7 @@ function tapCell(i) {
   snapUndo(re ? null : t);
   tuto(1);
   if (!re) countPlay(t);
+  markCardSeen(t);
   if (build) useBuild(t);
   else S.hand.splice(S.sel, 1);
   const mg = Z.place(G, t, i, R, false, { reuse: re });

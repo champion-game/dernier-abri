@@ -15734,3 +15734,200 @@ html.eco.artx .cf :is(.cf-fx, .cf-embers) {
     animation: none !important;
   }
 }
+
+/* ===== v266 : idées validées pour les cartes (docs/IDEES_CARTES.md) ===== */
+/* 12 : lumière de la scène : chaude le jour, bleue la nuit, rouge pendant la nuit rouge (html[data-axph], game-artx.js) */
+.cf .cf-lum {
+  display: none;
+}
+html.artx :is(.hand, .picks, .zoomc, .flyc) .cf .cf-lum {
+  display: block;
+  inset: 1.6cqw 1.2cqw 1cqw;
+  z-index: 8;
+  pointer-events: none;
+  border-radius: 3cqw;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(ellipse 90% 70% at 25% 0%, rgba(255, 200, 120, 0.5), rgba(255, 170, 90, 0.1) 70%);
+}
+html.artx[data-axph='nuit'] :is(.hand, .picks, .zoomc, .flyc) .cf .cf-lum {
+  mix-blend-mode: multiply;
+  background: linear-gradient(rgba(150, 170, 255, 0.45), rgba(80, 100, 200, 0.55));
+}
+html.artx[data-axph='rouge'] :is(.hand, .picks, .zoomc, .flyc) .cf .cf-lum {
+  mix-blend-mode: multiply;
+  background: linear-gradient(rgba(255, 170, 150, 0.4), rgba(220, 70, 50, 0.5));
+}
+/* 11 : cadre métallique : un reflet glisse sur les ornements du cadre seulement (masque = le cadre, sans le parchemin) */
+.cf .cf-met {
+  display: none;
+}
+@supports (-webkit-mask-box-image: none) {
+  html.artx .cf:not(.mini) .cf-met,
+  html.artx :is(.hand, .zoomc) .cf .cf-met {
+    display: block;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+    -webkit-mask-box-image: url(../assets/art/ui/cadre-barricard.webp) 300 52 484 52 fill / 41.2cqw 7.2cqw 66.5cqw
+      7.2cqw;
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      8% calc(100% - 37cqw),
+      92% calc(100% - 37cqw),
+      92% calc(100% - 9.5cqw),
+      8% calc(100% - 9.5cqw),
+      8% calc(100% - 37cqw)
+    );
+  }
+  html.artx .cf .cf-met::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    bottom: -20%;
+    left: 0;
+    width: 45%;
+    background: linear-gradient(
+      90deg,
+      transparent 20%,
+      rgba(255, 244, 214, 0.7) 45%,
+      #fff 50%,
+      rgba(255, 244, 214, 0.7) 55%,
+      transparent 80%
+    );
+    transform: translateX(-120%) skewX(-12deg);
+    animation: cfMet 11s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.7s + 2s);
+    mix-blend-mode: screen;
+  }
+}
+@keyframes cfMet {
+  0%,
+  84% {
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(260%) skewX(-12deg);
+  }
+}
+/* 9 : bonus visibles : pièce verte, petite flèche, et elle grossit la première fois qu'on la voit */
+html.artx .cf :is(.cf-cost, .cf-atk, .cf-hp).bonus {
+  overflow: visible;
+}
+html.artx .cf .cf-cost.bonus,
+html.artx .cf .cf-atk.bonus,
+html.artx .cf .cf-hp.bonus:not(.shield) {
+  background: radial-gradient(circle at 35% 28%, #c8ff9a, #4fbf3a 38%, #1f7a1c 68%, #0b3309);
+}
+html.artx .cf .cf-hp.shield.bonus .shd {
+  filter: hue-rotate(-90deg) saturate(1.6) brightness(1.2) drop-shadow(0 0 1.5cqw #6dff5a);
+}
+html.artx .cf :is(.cf-cost, .cf-atk, .cf-hp).bonus b,
+html.artx .cf .cf-cost.bonus {
+  color: #eaffd9;
+}
+html.artx .cf :is(.cf-cost, .cf-atk, .cf-hp).bonus > b::after,
+html.artx .cf .cf-cost.bonus::before {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  top: -7cqw;
+  right: -6cqw;
+  left: auto;
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  background: none;
+  border-left: 4.5cqw solid transparent;
+  border-right: 4.5cqw solid transparent;
+  border-bottom: 6.5cqw solid #7dff5c;
+  filter: drop-shadow(0 0.6cqw 0 #0b3309) drop-shadow(0 0 1cqw rgba(0, 0, 0, 0.6));
+  -webkit-text-stroke: 0;
+}
+html.artx .cf :is(.cf-cost, .cf-atk, .cf-hp).bonus-new {
+  animation: cfBonus 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+@keyframes cfBonus {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.5);
+    filter: brightness(1.5) drop-shadow(0 0 2cqw #7dff5c);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* 10 : carte nouvelle : bandeau NOUVEAU et reflet (main) ; dans la collection, le même reflet sous le bandeau .cnew */
+.cf .cf-neuf {
+  display: none;
+}
+html.artx .cf .cf-neuf {
+  display: block;
+  z-index: 9;
+  top: 30cqw;
+  left: -3cqw;
+  right: -3cqw;
+  padding: 1.2cqw 0;
+  text-align: center;
+  font-family: var(--ax-head);
+  font-weight: 700;
+  font-size: 9cqw;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(#e0452f, #a8231a);
+  box-shadow:
+    0 0.6cqw 0 #5a0f0a,
+    0 1.4cqw 2cqw rgba(0, 0, 0, 0.6);
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+html.artx .cf.neuf::before,
+html.artx :is(.lc, .citem):has(.cnew) .cf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  border-radius: 5%/3.8%;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 250, 225, 0.55) 50%, transparent 65%) 150% 0 / 300%
+    100% no-repeat;
+  animation: cfNeuf 2.8s ease-in-out infinite;
+}
+@keyframes cfNeuf {
+  0%,
+  30% {
+    background-position: 150% 0;
+  }
+  80%,
+  100% {
+    background-position: -50% 0;
+  }
+}
+/* Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle */
+html.eco.artx .cf :is(.cf-met, .cf-lum) {
+  display: none !important;
+}
+html.eco.artx .cf.neuf::before,
+html.eco.artx :is(.lc, .citem):has(.cnew) .cf::before,
+html.eco.artx .cf .bonus-new {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.artx .cf .cf-met {
+    display: none !important;
+  }
+  html.artx .cf.neuf::before,
+  html.artx :is(.lc, .citem):has(.cnew) .cf::before,
+  html.artx .cf .bonus-new {
+    animation: none;
+  }
+}

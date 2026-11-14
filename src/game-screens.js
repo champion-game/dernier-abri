@@ -675,6 +675,8 @@ const legacyTxt0 = () =>
     : '';
 function ensureMeta() {
   if (!META.cards || !META.cards.length) META.cards = Z.STARTER_CARDS.slice();
+  // v266 : cartes déjà vues (le bandeau « Nouveau » ne marque que les cartes gagnées ensuite)
+  if (!META.seenC) META.seenC = ownAll().slice();
   if (META.points == null) META.points = (META.total || 0) * 5;
   if (!META.decks) META.decks = [0, 1, 2].map(() => Z.STARTER_DECK.slice());
   if (META.slot == null) META.slot = 0;

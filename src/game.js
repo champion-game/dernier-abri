@@ -555,9 +555,48 @@ function cardLook(t, mini) {
   const leg = rar(t) === 'leg' && !mini ? `<span class="cf-embers">${pts(8)}</span>` : '';
   return {
     cls: ` rk-${rk} cs-${cs}`,
-    html: `<span class="cf-tint"></span><span class="cf-fx">${fx}</span><span class="cf-rim"></span>${holo}${leg}`,
+    // v266 : reflet sur le métal du cadre (cf-met) et lumière de la scène (cf-lum, jour, nuit ou nuit rouge)
+    html: `<span class="cf-tint"></span><span class="cf-fx">${fx}</span><span class="cf-rim"></span>${holo}${leg}<span class="cf-met"></span><span class="cf-lum"></span>`,
     wm,
   };
+}
+// v266 : bonus visibles : une pièce (coût, dégâts, soin, PV) meilleure que celle de la carte de base passe en vert
+// avec une petite flèche ; elle grossit seulement la première fois qu'on voit ce bonus (la main est redessinée souvent).
+const BONUS_VUS = new Set();
+function bonusCoins(t, st, cost) {
+  const out = {};
+  try {
+    if (!G) return out;
+    const st0 = cardStats(Z.stat(null, t)),
+      gain = (k, a, b) => {
+        if (parseFloat(a) > parseFloat(b)) {
+          const cle = t + k + a;
+          out[k] = ' bonus' + (BONUS_VUS.has(cle) ? '' : ' bonus-new');
+          BONUS_VUS.add(cle);
+        }
+      };
+    if (st.atk != null && st0.atk != null) gain('atk', st.atk, st0.atk);
+    if (st.heal && st0.heal) gain('heal', st.heal, st0.heal);
+    if (st.hp && st0.hp) gain('hp', st.hp, st0.hp);
+    const c0 = Z.cost(t);
+    if (cost < c0) gain('cost', -cost, -c0);
+  } catch (e) {}
+  return out;
+}
+// v266 : carte nouvelle : obtenue mais jamais vue (ni dans la collection, ni posée) ; META.seenC garde les cartes déjà vues
+function isNewCard(t) {
+  try {
+    return !!(META.seenC && !META.seenC.includes(t) && ownAll().includes(t));
+  } catch (e) {
+    return false;
+  }
+}
+function markCardSeen(t) {
+  try {
+    if (!isNewCard(t)) return;
+    META.seenC.push(t);
+    saveMeta(META);
+  } catch (e) {}
 }
 function cardFace(t, o = {}) {
   const E = Z.edOf(t),
@@ -570,19 +609,21 @@ function cardFace(t, o = {}) {
     ro = Z.roleOf(t),
     u = artUrl(B, o.big),
     cost = o.cost ?? (o.base ? Z.cost(t) : Z.costOf(G, t)),
-    look = cardLook(t, o.mini);
+    look = cardLook(t, o.mini),
+    bonus = o.base ? {} : bonusCoins(t, st, cost);
   const atk =
     st.atk != null
-      ? _t`<span class="cf-atk" title="Dégâts">${ink('atk')}<b>${st.atk}</b></span>`
+      ? `<span class="cf-atk${bonus.atk || ''}" title="${_t('Dégâts')}">${ink('atk')}<b>${st.atk}</b></span>`
       : st.heal
-        ? _t`<span class="cf-atk heal" title="Soin">${ink('heal')}<b>+${st.heal}</b></span>`
+        ? `<span class="cf-atk heal${bonus.heal || ''}" title="${_t('Soin')}">${ink('heal')}<b>+${st.heal}</b></span>`
         : '';
   // v249 : les PV d'un tank sont dans un bouclier, pour le reconnaître d'un coup d'œil
   const hp = !st.hp
     ? ''
     : ro === 'tank'
-      ? `<span class="cf-hp shield" title="PV">${SHIELD_SVG}<b>${st.hp}</b></span>`
-      : `<span class="cf-hp" title="PV"><b>${st.hp}</b></span>`;
+      ? `<span class="cf-hp shield${bonus.hp || ''}" title="PV">${SHIELD_SVG}<b>${st.hp}</b></span>`
+      : `<span class="cf-hp${bonus.hp || ''}" title="PV"><b>${st.hp}</b></span>`;
+  const neuf = !o.base && isNewCard(t);
   // texte de la carte : pour un chef, la faction est déjà indiquée par le pictogramme, on raccourcit
   const txt = U0.chief
     ? U0.d
@@ -593,9 +634,9 @@ function cardFace(t, o = {}) {
   const marks =
     (f && seen('fam1') ? `<i class="mk-fam" title="${Z.FAM[f].n}">${ink(f)}</i>` : '') +
     (ro ? `<i class="mk-${ro}" title="${Z.ROLES[ro].n}">${ink(ro)}</i>` : '');
-  return `<span class="cf r-${r}${look.cls}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
+  return `<span class="cf r-${r}${look.cls}${neuf ? ' neuf' : ''}${o.mini ? ' mini' : ''}${D.up ? ' up' : ''}${o.gold ? ' gold' : ''}${E ? ' ed ed-' + E : ''}">${o.gold ? _t`<span class="cf-stars" title="Fusionnée">${'★'.repeat(o.gold)}</span>` : ''}
   <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${look.html}${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
-  ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost">${cost}</span>
+  ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost${bonus.cost || ''}">${cost}</span>${neuf ? `<span class="cf-neuf">${_t('Nouveau')}</span>` : ''}
   ${look.wm}<span class="cf-name">${D.n}</span>
   ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
   <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${marks}${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
@@ -607,7 +648,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v265 · 14 nov.';
+const VERSION = 'v266 · 14 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
