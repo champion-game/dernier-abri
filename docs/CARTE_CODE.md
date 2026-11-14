@@ -12,7 +12,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1602 lignes)
 7. `src/game-draw.js` (5935 lignes)
-8. `src/game-ui.js` (2023 lignes)
+8. `src/game-ui.js` (2029 lignes)
 9. `src/game-screens.js` (1679 lignes)
 10. `src/game-menu.js` (839 lignes)
 11. `src/game-anim.js` (1178 lignes)
@@ -63,7 +63,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `shelHit` | game-ui.js:582 | game-fx2.js:354 |
 | `show` | game-screens.js:601 | game-anim.js:1155 |
 | `showAch` | game.js:796 | game-anim.js:1105 |
-| `tapCell` | game-ui.js:1582 | game-ui.js:2011 |
+| `tapCell` | game-ui.js:1582 | game-ui.js:2017 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:309 |
 
@@ -142,7 +142,7 @@ _t:19 _tPage:41
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4
-- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 fireAmmo:851 updatePreview:875 curAt:1067 useBuild:1088 spentTrace:1096 countPlay:1104 placeLineUI:1115 dmgInfo:1165 dmgSnap:1179 bonusMsg:1187 unitLine:1229 hint:1387 showHint:1396 checkHints:1424 mergeFx:1448 playReact:1487 snapUndo:1525 doUndo:1540 squadFx:1570 tapCell:1582 peekScreen:1706 wavePause:1719 resumeWave:1730 night:1744 feltLayout:1861 ftPioche:1904 ftHorde:1928 ftJournal:1944 feltTabs:1970
+- **505** UI : ficheHtml:507 trackHtml:538 tagsHtml:555 shelHit:582 render:601 fireAmmo:851 updatePreview:875 curAt:1067 useBuild:1088 spentTrace:1096 countPlay:1104 placeLineUI:1115 dmgInfo:1165 dmgSnap:1179 bonusMsg:1187 unitLine:1229 hint:1387 showHint:1396 checkHints:1424 mergeFx:1448 playReact:1487 snapUndo:1525 doUndo:1540 squadFx:1570 tapCell:1582 peekScreen:1706 wavePause:1719 resumeWave:1730 night:1744 feltLayout:1861 ftPioche:1904 ftHorde:1928 ftJournal:1944 feltTabs:1972
 
 ### src/game-screens.js
 
@@ -229,7 +229,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-15472 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1172 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+15502 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1183 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -515,3 +515,5 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15378 reflet bombé en haut de la pièce + éclat qui la traverse
 - 15422 chiffres gravés : clair en haut, ombre en bas, contour sombre
 - 15446 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
+- 15486 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
+- 15495 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste

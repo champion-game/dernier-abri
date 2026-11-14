@@ -1967,6 +1967,8 @@ let ftTab = (() => {
     return 'p';
   }
 })();
+// v263 : les onglets Pioche, Horde et Journal sont repliés au lancement (choix d'Amine)
+let ftOpen = false;
 function feltTabs() {
   try {
     const f = $('#felt');
@@ -1981,6 +1983,8 @@ function feltTabs() {
       b.addEventListener('click', e => {
         const t = e.target.closest('[data-ft]');
         if (!t) return;
+        // v263 : un clic sur l'onglet ouvert le replie ; un clic sur un autre onglet l'ouvre
+        ftOpen = !(ftOpen && ftTab === t.dataset.ft);
         ftTab = t.dataset.ft;
         try {
           localStorage.setItem('abri-ftab', ftTab);
@@ -1994,7 +1998,9 @@ function feltTabs() {
       ['h', 'skull', _t('Horde')],
       ['j', 'chart', _t('Journal')],
     ];
-    const H = `<div class="ft-tabs" role="tablist">${T.map(([k, ic, n]) => `<button type="button" role="tab" data-ft="${k}" aria-selected="${ftTab === k}" class="${ftTab === k ? 'on' : ''}">${ii(ic)}${n}</button>`).join('')}</div><div class="ft-body ft-${ftTab}">${ftTab === 'h' ? ftHorde() : ftTab === 'j' ? ftJournal() : ftPioche()}</div>`;
+    const on = k => ftOpen && ftTab === k;
+    b.classList.toggle('ft-closed', !ftOpen);
+    const H = `<div class="ft-tabs" role="tablist">${T.map(([k, ic, n]) => `<button type="button" role="tab" data-ft="${k}" aria-selected="${on(k)}" aria-expanded="${on(k)}" class="${on(k) ? 'on' : ''}">${ii(ic)}${n}</button>`).join('')}</div>${ftOpen ? `<div class="ft-body ft-${ftTab}">${ftTab === 'h' ? ftHorde() : ftTab === 'j' ? ftJournal() : ftPioche()}</div>` : ''}`;
     if (H === b._h) return;
     const sc = b.querySelector('.ft-l'),
       y = sc && b._t === ftTab ? sc.scrollTop : 0;

@@ -15444,28 +15444,58 @@ html.eco.artx :is(.cf-cost, .cf-atk, .cf-hp)::after {
   }
 }
 /* v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se lire en entier ;
-   carte choisie : encore un peu plus grande. Les cartes des bords grandissent vers l'intérieur pour ne pas sortir de l'écran. */
-html.artx.ax3 #ax3 #hand .card {
-  transform-origin: 50% 100%;
-  transition: transform 0.18s ease-out;
-}
-html.artx.ax3 #ax3 #hand .card:first-child {
-  transform-origin: 0% 100%;
-}
-html.artx.ax3 #ax3 #hand .card:last-child {
-  transform-origin: 100% 100%;
-}
+   carte choisie : encore un peu plus grande. Seule la face (.cf) bouge : la zone de survol (.card) reste en place,
+   sinon la carte sortait de sous la souris, retombait et remontait (mouvement saccadé).
+   Les cartes des bords grandissent vers l'intérieur pour ne pas sortir de l'écran. */
+html.artx.ax3 #ax3 #hand .card,
 html.artx.ax3 #ax3 #hand .card:hover:not(.sel),
-html.artx.ax3 #ax3 #hand .card.lift:not(.sel) {
-  transform: translateY(-30%) scale(1.45) !important;
+html.artx.ax3 #ax3 #hand .card.lift:not(.sel),
+html.artx.ax3 #ax3 #hand .card.sel {
+  transform: none !important;
+}
+html.artx.ax3 #ax3 #hand .card:hover,
+html.artx.ax3 #ax3 #hand .card.lift {
   z-index: 8;
 }
 html.artx.ax3 #ax3 #hand .card.sel {
-  transform: translateY(-48%) scale(1.55) !important;
   z-index: 9;
 }
+html.artx.ax3 #ax3 #hand .card .cf {
+  transform-origin: 50% 100%;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.25, 1);
+  will-change: transform;
+}
+html.artx.ax3 #ax3 #hand .card:first-child .cf {
+  transform-origin: 0% 100%;
+}
+html.artx.ax3 #ax3 #hand .card:last-child .cf {
+  transform-origin: 100% 100%;
+}
+html.artx.ax3 #ax3 #hand .card:hover:not(.sel) .cf,
+html.artx.ax3 #ax3 #hand .card.lift:not(.sel) .cf {
+  transform: translateY(-30%) scale(1.45);
+}
+html.artx.ax3 #ax3 #hand .card.sel .cf {
+  transform: translateY(-48%) scale(1.55);
+}
 @media (prefers-reduced-motion: reduce) {
-  html.artx.ax3 #ax3 #hand .card {
+  html.artx.ax3 #ax3 #hand .card .cf {
     transition: none;
   }
+}
+/* v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes */
+html.artx #panel.panel:has(.picks, .gifts) {
+  max-width: min(860px, 96vw);
+  padding-left: 14px;
+  padding-right: 14px;
+}
+html.artx #panel.panel .picks {
+  gap: 14px;
+}
+/* v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste */
+html.artx.ax3 #ax3 #ftabs.ft-closed {
+  flex: none;
+}
+html.artx.felton .felt > .ftabs.ft-closed {
+  flex: none !important;
 }
