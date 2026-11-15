@@ -28,234 +28,238 @@ La couleur dominante suit le rôle de la carte, avec les couleurs déjà fixées
 | Objet | violet `#b58cff` | `#6e4a9e` | 22 |
 | Réaction | rose `#ff6fb5` | `#c43c7a` | 17 |
 
-## 3. Signes de chaque bande (faction)
+## 3. Les bandes (reprises des images actuelles)
 
-| Bande | Tenue et accessoires | Décor du fond |
-|---|---|---|
-| Police | képi ou casquette, insigne, gilet pare-balles | commissariat, voitures de patrouille en ruine |
-| Militaires | treillis, casque, plaques d'identité, sangles | barbelés, camion militaire, sacs de sable |
-| Soignants | blouse, brassard à croix, stéthoscope | tente de campagne, hôpital éventré |
-| Pyromanes | combinaison roussie, masque à gaz, gants épais | usine en flammes, cuves, fumée |
-| Trappeurs | fourrure, capuche, cuir, colliers de dents | forêt de sapins, cabane |
-| Fermiers | salopette, chapeau de paille, chemise à carreaux | grange, silo, champs |
-| Bricoleurs | bleu de travail, lunettes de soudeur, ceinture à outils | atelier, pylônes, câbles |
-| Communauté | vêtements civils rapiécés, écharpe | rue de village, église, mairie |
-| Cheminots | casquette de cheminot, gilet, foulard, suie | gare, rails, wagons, château d'eau |
-| Secours (cartes `v_`) | combinaison et casque des secours, bandes réfléchissantes | hélicoptère, convoi, projecteurs |
-| Sans bande | survivant ordinaire, tenue de récupération | ville en ruine, poteaux électriques |
+Les personnages et les noms affichés en jeu viennent des images actuelles (table `ARTN`, `src/game-artx.js`). On les **garde** : seul le traitement change.
+
+| Bande (règles) | Bande (images) | Tenue et accessoires | Décor du fond |
+|---|---|---|---|
+| Police | Cirque | costumes de piste, paillettes, maillots rayés, caniches savants | chapiteau, gradins, guirlandes |
+| Militaires | Survivalistes | bricolages de guerre, treillis rapiécé, matériel de jardin armé | pavillons, potagers, bunker de jardin |
+| Soignants | Couvent | religieuses et moines, cornettes, tabliers, croix | cloître, chapelle, jardin du couvent |
+| Pyromanes | Fête foraine | forains, punks cracheurs de feu, tatouages, couleurs criardes | grande roue, baraques, lampions |
+| Trappeurs | Scouts | uniforme scout, foulard, short, chapeau de chef | camp de tentes, forêt, totem |
+| Fermiers | Rodéo | cowboys, salopettes, chemises à carreaux, chapeaux | arène, barrières, grange, taureaux |
+| Bricoleurs | Casse | ferrailleurs, cambouis, lunettes de soudeur, pneus | piles d'épaves, grues, pylônes |
+| Communauté | Lotissement | voisins ordinaires, pantoufles, tenues de banlieue | maisons de lotissement, jardins, haies |
+| Cheminots | Cheminots | casquette, bleu de chauffe, foulard, suie | gare à verrière, rails, château d'eau |
+| Secours (`v_`) | Secours | treillis et casque des secours | hélicoptère, convoi, projecteurs |
+| Sans bande | Sans bande | survivant ordinaire, tenue de récupération | ville en ruine, poteaux électriques |
 
 ## 4. Prompt à copier
 
 > Comic poster illustration, screen-printed propaganda style, strictly 3 colors: black ink, cream parchment (#eedeb8), and [COULEUR] as the only accent color. Bold thick angular black outlines, flat colors, hatching for shadows, paper grain. Dramatic low-angle heroic shot. Background: [COULEUR] with a torn cream diagonal paper band, black silhouettes of [DÉCOR] at the bottom. Subject: [PERSONNAGE], [POSE], looking straight at the viewer. Foreground: [PREMIER PLAN], large and sharp. Post-apocalyptic zombie survival. Portrait 2:3. No text, no letters, no numbers, no flags, no cigarette, no gradients.
 
-Remplacer les crochets par les colonnes de la liste (traduites en anglais). Pour un objet ou une réaction, ajouter : *« the object is in the extreme foreground, the character is behind it »*.
+Remplacer les crochets par les colonnes de la liste (traduites en anglais). Pour une image marquée « garder », joindre l'image actuelle (`assets/art/cards/<fichier>.webp`) comme référence du personnage. Pour un objet ou une réaction, ajouter : *« the object is in the extreme foreground, the character is behind it »*.
 
 ## 5. Liste des illustrations
 
-Les 16 cartes des Cheminots et du train (de `rosa` à `express`) n'ont **pas encore d'image** : priorité. Les autres existent et seront refaites dans le nouveau style.
+Colonne « Image actuelle » : **garder** = le personnage existe déjà, on le redessine dans le nouveau style ; **+ personnage** = l'image actuelle ne montre que l'objet, il faut ajouter quelqu'un qui le manie (l'objet reste au premier plan) ; **à faire** = image de l'ancien style seulement (Cheminots), à refaire en entier.
 
 ### DPS, orange (44)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| gun | Tireur | policier trentenaire, gilet pare-balles | un genou à terre, pistolet tenu à deux mains | canon du pistolet, douilles | rue en ruine |
-| snp | Sniper | militaire en tenue camouflée | allongé, joue contre la crosse | lunette du fusil | château d'eau, toits |
-| sht | Fusil à pompe | militaire costaud, casque | debout, arme le fusil d'un coup sec | fusil à pompe, cartouches | barbelés, camion |
-| xbow | Arbalète | trappeuse en capuche de fourrure | accroupie, arbalète épaulée | carreau prêt à partir | sapins |
-| flame | Lance-flammes | pyromane en masque à gaz | jambes écartées, jet de flammes | buse du lance-flammes | cuves d'usine |
-| mg | Mitrailleuse | militaire torse en sangles | derrière l'arme sur bipied, bande de balles | mitrailleuse et bande | sacs de sable |
-| molo | Cocktails | pyromane en combinaison roussie | bras armé en arrière pour lancer | bouteille enflammée | usine en flammes |
-| kid | Gamin | gamin de 11 ans, casquette, genoux écorchés | debout sur une poubelle, élastique tendu | lance-pierre | rue de village |
-| axe | Bûcheron | fermier barbu, chemise à carreaux | hache levée au-dessus de la tête | fer de la hache | sapins, souches |
-| dog | Chien | berger allemand balafré, bandana | bondit vers l'objectif, crocs sortis | gueule ouverte | ferme |
-| butch | Boucher | boucher massif, tablier taché | couperet sur l'épaule | couperet | grange, crochets |
-| k9 | Chien policier | malinois en harnais de police | en arrêt, aboie | harnais et insigne | voitures de patrouille |
-| swat | Tireur d'élite du GIGN | policière en casque et cagoule | épaule le fusil d'assaut | viseur du fusil | commissariat |
-| mortar | Mortier | militaire, casque, gants | glisse un obus dans le tube | tube du mortier | barbelés, fumée |
-| sentry | Sentinelle automatique | soldat technicien, tablette | à côté de la tourelle, la règle | tourelle à trépied | camp militaire |
-| hunter | Chasseur | chasseur en veste de cuir, bonnet | fusil de chasse en appui sur le genou | fusil et cartouchière | forêt |
-| dogs | Meute de chiens | trois chiens efflanqués | chargent en éventail vers l'objectif | gueule du chef de meute | champs |
-| turret | Tourelle bricolée | bricoleuse en lunettes de soudeur | serre un boulon de la tourelle | tourelle en tôle et tuyaux | atelier |
-| tesla | Bobine Tesla | bricoleur, gants isolants | bras levé, arc électrique au-dessus | bobine qui crépite | pylônes |
-| vigile | Vigile | vigile de supermarché, blouson | lampe et revolver croisés | revolver | parking, caddies |
-| nailer | Cloueur | ouvrier, casque de chantier | cloueuse tendue à bout de bras | cloueuse pneumatique | échafaudages |
-| ranger | Garde champêtre | garde âgé, moustache, képi | fusil en bandoulière, prêt à tirer | fusil de chasse | église de village |
-| chief_police | Le Commissaire | commissaire grisonnant, imper ouvert | pose de chef, pistolet levé | insigne et pistolet | commissariat en ruine |
-| chief_mil | La Sergente | sergente aux tresses, casque | crie un ordre, fusil levé | fusil d'assaut | camion, barbelés |
-| chief_pyro | Le Pyromane | pyromane hilare, masque relevé | torche et lance-flammes en croix | flammes | usine qui brûle |
-| chief_trap | Le Braconnier | braconnier, crâne de loup en capuche | debout sur un rocher, fusil long | trophées et fusil | forêt, lune |
-| rocket | Lance-roquettes | survivante en veste militaire | lance-roquettes sur l'épaule | bouche du tube | ruines, Colosse au loin |
-| scout | Éclaireur | jeune trappeur, cape | perché sur un arbre, carabine | carabine et jumelles | sapins |
-| assassin | Assassin | militaire cagoulé | accroupi, couteau de combat à l'envers | lame | ombres, barbelés |
-| v_hmg | Mitrailleuse lourde | soldat des secours | fixe la mitrailleuse sur un blindé | canon de la mitrailleuse | convoi |
-| v_sniper | Tireur des secours | tireuse des secours | allongée sur un toit | grand fusil de précision | hélicoptère |
-| v_rdog | Chien de sauvetage | chien en gilet réfléchissant | assis, trousse dans la gueule | trousse et gilet | projecteurs |
-| k9squad | Brigade canine | policier et son chien | côte à côte, laisse tendue | chien prêt à mordre | voitures de patrouille |
-| nightsnp | Tireur de nuit | sniper sur une tour | projecteur à côté du fusil | faisceau et lunette | nuit, toits |
-| heavyflame | Lance-flammes lourd | pyromane en armure de récupération | flammes en éventail | réservoirs et buse | flammes partout |
-| autogun | Tourelle automatique | mécanicien couvert de cambouis | main posée sur la tourelle | tourelle automatique | atelier |
-| slaughter | Équarrisseur | colosse en tablier, deux couperets | tourne sur lui-même | couperets | abattoir |
-| gang | Bande de gamins | cinq enfants | tirent ensemble, élastiques tendus | lance-pierres | cour d'école |
-| tracker | Traqueur | traqueuse aux peintures de guerre | arbalète double épaulée | deux carreaux | sapins |
-| rosa | Rosa du Quai 9 | cheminote quarantenaire, foulard | debout sur un quai, carabine | carabine | quai de gare |
-| chief_rail | Monsieur Terminus | chef de gare moustachu, casquette | lanterne et revolver | lanterne | gare, horloge |
-| hirond | L'Hirondelle des wagons | jeune acrobate, foulard | sur le toit d'un wagon, pistolets | pistolets | wagons |
-| charbon | Gros Charbon | chauffeur de locomotive, suie | pelle de charbon brûlant | pelle et braises | locomotive |
-| veuve | La Veuve du Tunnel | veuve en voile noir | arbalète lourde, au bord d'un tunnel | carreau | entrée de tunnel |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| gun | Miss Deux-Colts | garder | cowgirl rousse à longue tresse, chapeau, veste à franges | un pied sur un tonneau, colt tendu vers l'objectif | canon du colt | chapiteau, cibles |
+| snp | La Biathlète | garder | biathlète blonde en bandeau, gants | allongée, joue contre la carabine | bouche de la carabine | montagnes, piste de ski |
+| sht | Calibre 12 | + personnage | survivaliste barbu, gilet de chasse | arme le fusil d'un coup sec | fusil sur une caisse de munitions | grange, pavillon |
+| xbow | Arbalète de camp | + personnage | cheftaine scoute, foulard | un genou au sol, arbalète épaulée | arbalète et carreau | tentes, sapins |
+| flame | Cracheur de feu | garder | punk à crête, torse tatoué, pantalon bouffant | cambré, crache une gerbe de feu | torche enflammée | chapiteau, brasero |
+| mg | Tondeuse de guerre | + personnage | survivaliste en casquette et lunettes | à califourchon sur la tondeuse | canon monté sur la tondeuse | pelouse, clôture de jardin |
+| molo | La Barmaid | garder | barmaid aux cheveux roses, créoles | assise sur le comptoir, lance une bouteille | bouteille enflammée | bar, étagères de bouteilles |
+| kid | Petit Lance-Pierre | garder | gamin en casquette, panier de vélo | debout sur les pédales, élastique tendu | lance-pierre | maisons de lotissement |
+| axe | Fend-la-Bûche | garder | bûcheron barbu à chignon, carreaux, bandana | hache abattue sur une souche | fer de la hache | sapins, montagne |
+| dog | Chien Bandana | garder | chien au pelage noir et blanc, bandana rouge | bondit sur un zombie | gueule ouverte | arène, collines |
+| butch | Gros Couperet | garder | boucher à chapeau de cowboy, tablier taché | couperet levé sur l'épaule | couperet | grange, crochets |
+| k9 | Caniche savant | garder | caniche de cirque, collerette | saute à travers un cerceau | crocs et pompons | chapiteau, filet |
+| swat | Lanceuse de couteaux | garder | lanceuse au carré noir, bas résille | accroupie, couteaux en éventail | lames | cible de piste |
+| mortar | Mortier potager | + personnage | survivaliste jardinier, chapeau de paille | glisse un obus dans le tube | tube du mortier | potager, serre |
+| sentry | Tourelle-caméra | + personnage | survivaliste en treillis, télécommande | accroupi derrière la tourelle | œil de la tourelle | pavillon, barbelés |
+| hunter | Écureuil-Vif | garder | scoute aux couettes, foulard | genou à terre, arc bandé | pointe de la flèche | cible, chalet |
+| dogs | La Meute bleue | garder | deux chiens au pelage bleu-gris | chargent vers l'objectif | gueule du chef de meute | arène, collines |
+| turret | Tourelle à jante | + personnage | ferrailleur en salopette, clé | serre un boulon | tourelle faite de jantes | épaves, grue |
+| tesla | Tour à éclairs | + personnage | ferrailleuse en gants isolants | bras levé, attire l'éclair | bobine qui crépite | pylônes, casse |
+| vigile | Livreur de pizza | garder | livreur casqué sur son scooter | lance une boîte de pizza | boîte qui vole | rue de lotissement |
+| nailer | La Couvreuse | garder | couvreuse en casque jaune, tresses | sur un toit, cloueuse tendue | cloueuse | toits de tuiles |
+| ranger | Papy Ball-trap | garder | papy en chaise longue, pantoufles | épaule son fusil, assis | canon du fusil | jardin, barbecue |
+| chief_police | La Dompteuse | garder | dompteuse brune, veste rouge à brandebourgs | fouet claquant, tigre derrière | fouet | chapiteau |
+| chief_mil | Le Prophète | garder | vieillard hirsute à lunettes, cartouchières | poing levé, fusil brandi | fusil | cheminées d'usine |
+| chief_pyro | Le Maître artificier | garder | magicien moustachu en haut-de-forme | fusée d'artifice dans la main | fusée allumée | forge, lampions |
+| chief_trap | Akela | garder | vieux chef scout, chapeau, foulard | assis sur un rocher, arc à la main | arc | forêt, chalet |
+| rocket | Bazooka | + personnage | survivante en veste militaire | tube sur l'épaule, vise | bouche du bazooka | hangars |
+| scout | Hibou-Curieux | garder | scout à lunettes, jumelles | perché sur une branche, montre du doigt | jumelles | forêt, mirador |
+| assassin | Le Samouraï | garder | samouraï au chignon, kimono | dégaine le katana | lame | dojo, ruines |
+| v_hmg | Calibre 50 | + personnage | soldat des secours, casque | aux poignées de la mitrailleuse | canons rotatifs | blindé, fumée |
+| v_sniper | L'Œil des secours | garder | tireur des secours, foulard sur le visage | allongé sur un toit | lunette du fusil | soleil couchant, ruines |
+| v_rdog | Chien sauveteur | garder | berger en harnais de secours | bondit au-dessus d'un zombie | harnais et sacoche | viaduc |
+| k9squad | Le Grand Numéro | garder | l'Hercule et son caniche | l'Hercule lance le caniche sur un zombie | caniche en vol | chapiteau |
+| nightsnp | Œil-de-Nuit | garder | tireuse aux cheveux clairs, lampe frontale | couchée derrière un muret | lunette et projecteur | ville en ruine, nuit |
+| heavyflame | Le Géant de feu | garder | cracheur de feu sur échasses | bras écartés, flammes en éventail | flammes | chapiteau en feu |
+| autogun | Manège à balles | + personnage | forain en gilet pailleté | fait tourner la manivelle | tourelle de manège | baraques foraines |
+| slaughter | L'Équarrisseur | garder | géant barbu, carreaux, tablier | hache et couperet écartés | couperet | scierie, roue à aubes |
+| gang | La Bande à vélo | garder | cinq gamins à vélo | foncent vers l'objectif, lance-pierres | roue avant et lance-pierre | rue de lotissement |
+| tracker | Renarde-Rusée | garder | scoute aux couettes, foulard | arbalète tendue, en mouvement | carreau | viaduc, forêt |
+| rosa | Rosa du Quai 9 | à faire | cheminote noire, foulard jaune | carabine épaulée sur le quai | carabine | quai, wagons |
+| chief_rail | Monsieur Terminus | à faire | vieux chef de gare, casquette, redingote | lanterne levée, sifflet aux lèvres | lanterne | verrière, horloge |
+| hirond | L'Hirondelle des wagons | à faire | rousse au foulard, clé à la main | court sur le toit d'un wagon | clé et pistolet | wagons, soleil couchant |
+| charbon | Gros Charbon | à faire | chauffeur chauve et barbu, tablier de cuir | pelle de charbon brûlant tendue | braises sur la pelle | foyer de la locomotive |
+| veuve | La Veuve du Tunnel | à faire | vieille dame aux tresses blanches, manteau | arbalète lourde épaulée | carreau | entrée de tunnel |
 
 ### Tank, rouge (10)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| cop | Policier | policier robuste | matraque et bras tendu qui repousse | matraque | voitures de patrouille |
-| monk | Moine | moine chauve, bure déchirée | bâton en rotation | bâton | monastère |
-| riot | Agent anti-émeute | agent casqué | bouclier planté devant lui | bouclier | barricades |
-| pitch | Fermier à la fourche | fermier, salopette | fourche pointée vers l'objectif | dents de la fourche | grange |
-| amb | Ambulancier | ambulancier, gilet réfléchissant | brancard tenu comme un bouclier | brancard | ambulance |
-| chief_farm | La Fermière | fermière massive, chapeau de paille | pied sur une botte de foin, faux | lame de la faux | silo, champs |
-| handler | Maître-chien | maître-chien, protections de bras | deux chiens en laisse | laisses et chiens | chenil |
-| v_apc | Blindé des secours | pilote du blindé | sortie de la tourelle | blindé de face | convoi |
-| saint | Le Saint | vieil homme, auréole de flammes | bras écartés | chapelet | église en ruine |
-| rempart | Le Rempart du 7 h 12 | cheminot géant | plaque de wagon en bouclier | plaque de fer | rails |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| cop | L'Hercule | garder | hercule moustachu, maillot rayé, ceinture de champion | jambes fléchies, paume tendue qui repousse | paume ouverte | chapiteau |
+| monk | Le Moine voisin | garder | moine chauve en robe orange | bâton tenu à deux mains | bâton | lotissement, arbres |
+| riot | Videur du chapiteau | garder | videur casqué, gilet brodé | planté derrière son bouclier | bouclier | chapiteau, réverbère |
+| pitch | Clown de rodéo | garder | clown au nez rouge, salopette | fourche pointée, sur un tonneau | dents de la fourche | grange, silo |
+| amb | Sœur Mêlée | garder | religieuse costaude, manches retroussées | charge avec un brancard en bouclier | brancard | cloître |
+| chief_farm | La Reine du rodéo | garder | cowgirl blonde au chapeau rose | sur un taureau, lasso au-dessus de la tête | lasso | arène |
+| handler | Madame Pompon | garder | dame forte en veste de dresseuse, plume | bras ouverts, caniches à ses pieds | caniches | chapiteau |
+| v_apc | Le Mastodonte | + personnage | pilote des secours | sorti de la tourelle, bras tendu | calandre du blindé | ruines |
+| saint | L'Illuminé | garder | vieillard chauve en toge, bâton | bras tendu, survivants derrière lui | bâton | ciel rouge |
+| rempart | Le Rempart du 7 h 12 | à faire | cheminot barbu, bonnet | porte de wagon tenue en bouclier | porte de wagon | verrière |
 
 ### Soin et soutien, vert (21)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| med | Infirmière | infirmière, brassard | seringue levée | seringue | tente de soins |
-| cook | Cuisinier | cuisinier bedonnant | louche levée au-dessus d'une marmite | marmite fumante | cuisine de camp |
-| mech | Mécanicien | mécanicien, bleu de travail | clé à molette sur l'épaule | clé à molette | atelier |
-| lead | Chef de groupe | meneuse, mégaphone | bras tendu, donne l'ordre | mégaphone | rue |
-| pharma | Pharmacienne | pharmacienne, blouse | flacons entre les doigts | flacons | pharmacie |
-| priest | Prêtre | prêtre, soutane déchirée | croix levée | croix | église |
-| stretch | Brancardier | brancardier | court avec un brancard | brancard | hôpital |
-| teacher | Institutrice | institutrice | livre ouvert, règle | livre | école |
-| carp | Charpentier | charpentier | marteau et planche | marteau | chantier |
-| doc | Médecin de garde | médecin, stéthoscope | pistolet et trousse | trousse | hôpital |
-| orderly | Infirmier costaud | infirmier massif | poings bandés | bandes | couloir d'hôpital |
-| chief_care | La Doctoresse | doctoresse | stéthoscope et scalpel | stéthoscope | hôpital |
-| chief_tech | L'Ingénieur | ingénieur, lunettes | plan roulé et clé | plan | atelier |
-| chief_comm | Le Maire | maire, écharpe | bras ouverts | écharpe | mairie |
-| welder | Soudeuse | soudeuse | masque relevé, chalumeau | chalumeau | atelier |
-| fieldnurse | Infirmière de campagne | infirmière militaire | bandages | trousse | tente |
-| genmech | Électricien | électricien | câbles sur l'épaule | groupe électrogène | pylônes |
-| v_medic | Médecin militaire | médecin des secours | trousse ouverte | trousse | hélicoptère |
-| canteen | Cantine de campagne | cuisinière | louche et gamelle | marmite | tente |
-| bielle | Mamie Bielle | vieille cheminote | clé et burette | burette | dépôt |
-| aiguille | Maître Aiguille | aiguilleur âgé | tire un levier | levier | poste d'aiguillage |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| med | Sœur Bicyclette | garder | jeune religieuse à vélo | lance un rouleau de bandage | panier et bandage | couvent, collines |
+| cook | Sœur Fournée | garder | religieuse ronde en toque | tarte levée, rouleau à pâtisserie | tarte fumante | cuisine du couvent |
+| mech | Mécano stock-car | garder | mécano punk aux cheveux verts, combinaison à damier | clé à molette sur l'épaule | clé et moteur | atelier, casse |
+| lead | Le Coach | garder | coach grisonnant, sifflet, survêtement | montre la direction, tableau tactique | tableau et ballon | stade de quartier |
+| pharma | Sœur Alambic | garder | religieuse aux fioles | fait boire un remède à un blessé | fiole fumante | alambic, cloître |
+| priest | L'Exorciste | garder | vieux prêtre, étole violette | brandit son goupillon | goupillon | aqueduc, chapelle |
+| stretch | Novice à roulettes | garder | novice en rollers | pousse un brancard en glissant | patin et brancard | couvent |
+| teacher | La Bibliothécaire | garder | bibliothécaire à lunettes et chignon | livre brandi, pile de livres | livre ouvert | bibliothèque vitrée |
+| carp | Bricoleur du dimanche | garder | monsieur chauve, chaussettes et sandales | perceuse en main, accroupi | perceuse | jardin, cabane |
+| doc | Sœur Pistole | garder | vieille religieuse aux lunettes | pistolet et tasse de thé | pistolet | jardin du couvent |
+| orderly | Frère Carillon | garder | moine roux et barbu | maillet levé sous une cloche | maillet | clocher |
+| chief_care | La Mère Abbesse | garder | abbesse sévère, gants verts | sécateur à la main, roses | sécateur | serre du couvent |
+| chief_tech | Le Roi de la casse | garder | vieux ferrailleur aux dreadlocks grises, bras mécanique | trône de pneus, accoudé | bras mécanique | piles d'épaves, grue |
+| chief_comm | La Présidente | garder | dame aux bigoudis, tailleur rose | sur un escabeau, mégaphone | mégaphone | lotissement |
+| welder | Soudeuse masquée | garder | soudeuse au masque peint de flammes, crête violette | chalumeau tendu | flamme du chalumeau | grue, casse |
+| fieldnurse | Sœur Lanterne | garder | vieille religieuse en tenue claire | lanterne et lampe levées | lanterne | jungle, cabanes |
+| genmech | Professeur Volts | garder | savant aux cheveux électrisés, gants verts | câbles dans les mains, en marche | pinces et batterie | casse, pylônes |
+| v_medic | Toubib des secours | garder | soldat des secours | panse une survivante | bandage | tente |
+| canteen | La Kermesse | garder | deux religieuses | servent soupe et tartes | bol de soupe | stand à rayures |
+| bielle | Mamie Bielle | à faire | mamie cheminote aux cheveux gris | clé dans un moteur, à genoux | clé à molette | dépôt, horloge |
+| aiguille | Maître Aiguille | à faire | aiguilleur musclé, foulard | tire un levier d'aiguillage | levier | rails, château d'eau |
 
 ### Défense, acier (18)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| bar | Barricade | survivante, marteau | cloue une planche | planches clouées | fenêtre de maison |
-| car | Épave | survivant | appuyé sur la carcasse | épave de voiture | route |
-| fen | Clôture | bricoleur, gants isolants | tend un fil | clôture électrique | pylônes |
-| sand | Sacs de sable | soldat | empile un sac | sacs de sable | barbelés |
-| door | Porte blindée | survivante | verrouille la porte | porte blindée | maison |
-| tire | Mur de pneus | pyromane | empile des pneus | pneus | usine |
-| barrier | Barrage de police | policier | pose une barrière | barrières | carrefour |
-| bunker | Bunker | soldat | à la meurtrière | bunker de béton | barbelés |
-| brasero | Brasero | pyromane | attise le feu | brasero | nuit |
-| modwall | Mur modulaire | bricoleuse | visse une tôle | panneaux de tôle | atelier |
-| v_cont | Mur de conteneurs | soldat des secours | guide la grue | conteneurs | port |
-| palis | Palissade | trappeur | taille un pieu | pieux | forêt |
-| gate | Grille métallique | survivant | ferme la grille | grille | entrepôt |
-| gabion | Gabions | soldat | remplit de pierres | gabions | camp |
-| fortin | Fortin | soldat et mécanicien | sur le toit | fortin soudé | route |
-| fourgon | Le Fourgon de fer | cheminot | pousse le fourgon | fourgon blindé | rails |
-| butoir | Le Butoir | cheminote | adossée au butoir | butoir | fin de voie |
-| express | L'Express de minuit | chauffeur de locomotive | à la cabine | locomotive blindée | nuit, rails |
+Toutes les images actuelles montrent l'ouvrage seul : on garde l'ouvrage au premier plan et on ajoute le survivant derrière.
+
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| bar | Planches clouées | + personnage | survivante, clous entre les lèvres | cloue une planche, marteau levé | planches clouées | fenêtre de maison |
+| car | Vieille guimbarde | + personnage | survivant appuyé sur la carcasse | bras croisés, une botte sur un pneu | épave rouillée | route, ruines |
+| fen | Grillage électrifié | + personnage | ferrailleur, gants isolants | tend le fil | grillage et panneau | casse, grue |
+| sand | Mur de sacs | + personnage | survivaliste | pose un sac sur l'épaule | sacs de sable | murs de béton |
+| door | Porte de chambre forte | + personnage | survivante | tourne la roue de la porte | porte blindée | sous-sol |
+| tire | Pneus peints | + personnage | forain, pinceau | peint un pneu de la pile | pneus colorés | fête foraine |
+| barrier | Barrière de piste | + personnage | garçon de piste | pose la barrière | barrière rayée | tunnel du cirque |
+| bunker | Bunker de jardin | + personnage | survivaliste, arrosoir | à la porte du bunker | bunker et filet de camouflage | jardin, sapins |
+| brasero | Brasero forain | + personnage | foraine | attise les braises | brasero | guirlandes, chapiteau |
+| modwall | Mur de portières | + personnage | ferrailleuse | soude une portière | portières soudées | casse |
+| v_cont | Rempart de conteneurs | + personnage | soldat des secours | guide la grue | conteneurs | port |
+| palis | Pieux taillés | + personnage | scout | taille un pieu à la hachette | palissade | camp scout |
+| gate | Grille cadenassée | + personnage | survivant | ferme le cadenas | chaîne et cadenas | entrepôt |
+| gabion | Cages à cailloux | + personnage | survivaliste | jette une pierre dans la cage | gabions | carrière |
+| fortin | Voiture-fortin | + personnage | survivaliste et mécano | sur le toit du fortin | voiture blindée | neige, ruines |
+| fourgon | Le Fourgon de fer | à faire | cheminot | pousse le fourgon | fourgon blindé | passage à niveau |
+| butoir | Le Butoir | à faire | cheminote | adossée au butoir | butoir à pieux | tunnel |
+| express | L'Express de minuit | à faire | chauffeur de locomotive | penché hors de la cabine | locomotive blindée | rails, zombies |
 
 ### Poste, bleu (15)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| lamp | Projecteur | policier | oriente le projecteur | projecteur | nuit |
-| radio | Radio | survivante | écouteurs sur la tête | poste radio | maison |
-| siren | Sirène | policier | tourne la manivelle | sirène | toits |
-| solar | Panneau solaire | bricoleur | essuie un panneau | panneau solaire | toits |
-| hospital | Hôpital de campagne | soignante | ouvre la tente | tente à croix | camp |
-| scare | Épouvantail | fermier | plante l'épouvantail | épouvantail | champs |
-| workshop | Atelier | bricoleuse | à l'établi | établi et outils | atelier |
-| market | Marché | marchand | derrière son étal | étal de ferraille | rue |
-| v_radio | Radio militaire | soldat des secours | parle dans le combiné | radio militaire | hélicoptère |
-| tower | Mirador | guetteur | en haut du mirador | mirador | forêt |
-| trench | Tranchée | soldat | dans la tranchée | rebord de la tranchée | barbelés |
-| pump | Pompe à eau | fermière | actionne la pompe | pompe | ferme |
-| flood | Projecteur de chantier | ouvrier | allume le projecteur | projecteur de chantier | chantier |
-| nid | Le Nid d'aiguillage | aiguilleur | à la fenêtre du poste | poste d'aiguillage | rails |
-| draisine | L'Œil de la draisine | cheminote | pompe la draisine | draisine et phare | rails |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| lamp | La Poursuite | + personnage | régisseur du cirque | oriente le projecteur | projecteur | chapiteau |
+| radio | Radio-cintre | + personnage | survivante, écouteurs | règle la fréquence | radio et cintre-antenne | chalet, montagnes |
+| siren | Porte-voix | + personnage | Monsieur Loyal | crie dans le porte-voix | pavillon du porte-voix | chapiteau |
+| solar | Plein Soleil | + personnage | ferrailleur | essuie le panneau | panneau solaire | grue, casse |
+| hospital | Dortoir des sœurs | + personnage | religieuse | borde un lit | lits de fer | dortoir vitré |
+| scare | Monsieur Paille | + personnage | fermier | plante l'épouvantail | épouvantail | champs sous l'orage |
+| workshop | L'Établi | + personnage | ferrailleuse | serre l'étau | établi et outils | atelier |
+| market | Vide-grenier | + personnage | voisine | derrière son étal | objets du vide-grenier | lotissement |
+| v_radio | Radio des secours | + personnage | opératrice des secours | parle dans le combiné | radio militaire | antennes |
+| tower | Nid de pie | + personnage | guetteur | en haut du mirador | mirador | marais |
+| trench | Le Boyau | + personnage | survivaliste | adossé à la paroi | caillebotis du boyau | ciel d'orage |
+| pump | Pompe du puits | + personnage | fermière | actionne la pompe | pompe et seau | moulin, rivière |
+| flood | Projo de chantier | + personnage | ouvrier | allume le projecteur | projecteur sur trépied | port, grue |
+| nid | Le Nid d'aiguillage | à faire | aiguilleur | à la fenêtre du poste | poste d'aiguillage | rails, nuit |
+| draisine | L'Œil de la draisine | à faire | cheminote | pompe le levier | phare de la draisine | gare, nuit |
 
 ### Piège, brun (19)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| trap | Piège à loup | trappeuse | arme le piège | mâchoires du piège | forêt |
-| fire | Essence | pyromane | vide un bidon | flaque d'essence | route |
-| mine | Mine | soldat | enterre la mine | mine | champ |
-| wire | Barbelés | soldat | déroule le barbelé | barbelés | camp |
-| spike | Fosse à pieux | trappeur | taille un pieu | fosse et pieux | forêt |
-| gas | Bonbonne de gaz | pyromane | roule la bonbonne | bonbonne | usine |
-| smoke | Fumigène | trappeur | pose le fumigène | fumigène | forêt |
-| bait | Appât | trappeuse | jette la viande | viande crue | forêt |
-| dyn | Dynamite | soldat | branche le détonateur | bâtons de dynamite | carrière |
-| clay | Mine claymore | soldat | pose la claymore | claymore | barbelés |
-| firetrap | Fût piégé | pyromane | trafique un fût | fût | usine |
-| net | Filet | trappeur | tire la corde | filet | forêt |
-| bear | Piège à ours | trappeur | ouvre le piège | grand piège à ours | cabane |
-| v_mines | Champ de mines | démineur des secours | plante un piquet | mines alignées | champ |
-| log | Tronc oscillant | trappeur | tient la corde | tronc suspendu | forêt |
-| pit | Fosse piégée | survivant | recouvre la fosse | fosse | route |
-| glass | Verre brisé | survivante | sème du verre | éclats de verre | rue |
-| cans | Boîtes de conserve | gamin | accroche les boîtes | boîtes sur un fil | clôture |
-| rocks | Éboulement | trappeur | coupe la corde | rochers | montagne |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| trap | Croc-de-loup | + personnage | scout | arme le piège | mâchoires | forêt |
+| fire | Nappe de feu | + personnage | forain | vide le jerrican | flaque d'essence | grande roue |
+| mine | Galette d'acier | + personnage | survivaliste | enterre la mine | mine | barrage |
+| wire | Ronces de fer | + personnage | scout, gants épais | déroule le barbelé | rouleau de barbelés | mirador |
+| spike | Gueule de pieux | + personnage | scout | plante un pieu | pieux | forêt |
+| gas | Butane | + personnage | forain | roule la bonbonne | bonbonne | baraques |
+| smoke | Fumée verte | + personnage | scout | dégoupille le fumigène | fumigène | viaduc |
+| bait | Steak pendu | + personnage | scoute | suspend la viande | steak au crochet | camp scout |
+| dyn | Réveil-matin | + personnage | survivaliste | règle le réveil | dynamite et réveil | grange |
+| clay | Éventail d'acier | + personnage | survivaliste | plante la claymore | claymore | chevalement |
+| firetrap | Baril surprise | + personnage | foraine | cloue le couvercle | baril peint | grande roue |
+| net | Filet de capture | + personnage | scout | tire la corde | filet | forêt |
+| bear | Croc-d'ours | + personnage | scout costaud | ouvre le piège à deux mains | piège et chaîne | cabane en rondins |
+| v_mines | Champ de mines | + personnage | démineur des secours | plante un panneau | panneau et mines | herbes hautes |
+| log | Bélier pendu | + personnage | scout | coupe la corde | tronc suspendu | moulin |
+| pit | Trou de loup | + personnage | survivant | couvre la fosse de feuilles | fosse | forêt d'automne |
+| glass | Tessons | + personnage | survivante | sème des tessons | éclats de verre | forêt d'automne |
+| cans | Carillon de boîtes | + personnage | gamin | accroche les boîtes | boîtes sur un fil | temple, arbres |
+| rocks | Éboulement | + personnage | scout | fait levier sur un rocher | rochers | falaise, viaduc |
 
 ### Objet, violet (22)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| food | Conserves | survivante | ouvre une conserve | conserve | cuisine |
-| rep | Outils | survivant | caisse sur l'épaule | caisse à outils | atelier |
-| kit | Trousse de secours | survivante | ouvre la trousse | trousse | maison |
-| coffee | Café | survivant | boit à la tasse | tasse fumante | aube |
-| roadmap | Carte routière | survivante | déplie la carte | carte routière | voiture |
-| flare | Fusée de détresse | survivant | lève la fusée | fusée allumée | nuit |
-| v_heli | Hélicoptère de ravitaillement | pilote | fait signe | hélicoptère | ciel |
-| gear | Matériel lourd | survivant | enfile un gilet | gilet blindé | maison |
-| binoc | Jumelles | guetteuse | regarde à la jumelle | jumelles | toits |
-| bandage | Bandages | survivant | serre un bandage | bandage | maison |
-| medkit | Sacoche de soins | soignante | sacoche en bandoulière | sacoche | tente |
-| torch | Lampe torche | survivante | éclaire l'objectif | lampe torche | nuit |
-| pills | Pilules | survivant | avale une pilule | boîte de pilules | maison |
-| pack | Sac à dos | survivante | ajuste le sac | sac à dos | route |
-| tape | Ruban adhésif | bricoleur | déroule le ruban | rouleau | atelier |
-| keys | Clés du dépôt | survivant | agite les clés | trousseau | dépôt |
-| supply | Ravitaillement | survivante | ouvre une caisse | caisse | route |
-| airdrop | Largage | survivant | attrape la caisse | caisse au parachute | ciel |
-| jerry | Jerrican | survivant | soulève le jerrican | jerrican | station-service |
-| rest | Repos | survivante | s'étire | lit de camp | maison |
-| radioop | Opérateur radio | opérateur | règle la radio | poste radio | antenne |
-| billets | Vos billets ! | contrôleur | tend les billets | billets | gare |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| food | Garde-manger | + personnage | survivante | ouvre une conserve au couteau | conserves | étagères |
+| rep | Caisse à outils | + personnage | survivant | sort une clé de la caisse | caisse ouverte | atelier |
+| kit | Boîte à pharmacie | + personnage | survivante | ouvre la boîte | trousse et ciseaux | infirmerie |
+| coffee | Café brûlant | + personnage | survivant aux yeux cernés | tasse tendue vers l'objectif | tasse fumante | cuisine, aube |
+| roadmap | Carte et boussole | + personnage | survivante | déplie la carte | carte et crayon | montagnes |
+| flare | Fusée rouge | + personnage | survivant | tire la fusée vers le ciel | pistolet lance-fusées | phare |
+| v_heli | Pluie de caisses | + personnage | pilote des secours | fait signe depuis la porte | caisses en parachute | hélicoptère |
+| gear | Casque et plaques | + personnage | survivant | boucle le gilet | casque et gilet | grue |
+| binoc | Jumelles | + personnage | guetteuse | regarde à la jumelle | jumelles | montagnes |
+| bandage | Bandages | + personnage | survivant | serre un bandage autour du bras | rouleau et épingles | tente |
+| medkit | Musette de soins | + personnage | soignante | ouvre la musette | musette | aqueduc |
+| torch | Lampe torche | + personnage | survivante | braque la lampe sur l'objectif | faisceau et lampe | pont métallique |
+| pills | Cachets | + personnage | survivant | verse des cachets dans sa main | flacon renversé | usine |
+| pack | Sac à dos | + personnage | survivante | hisse le sac sur l'épaule | sac à dos | viaduc |
+| tape | Scotch américain | + personnage | ferrailleur | déchire le ruban avec les dents | rouleau | atelier |
+| keys | Trousseau | + personnage | survivant | agite le trousseau | clés | dépôt |
+| supply | Caisse de matériel | + personnage | survivante | force la caisse au pied-de-biche | caisse | port, grue |
+| airdrop | Colis du ciel | + personnage | survivant | bras levés pour attraper le colis | caisse au parachute | aéroport |
+| jerry | Jerrican | + personnage | survivant | soulève le jerrican | jerrican | hangar |
+| rest | Lit de camp | + personnage | survivante | s'étire, couverture sur l'épaule | lit de camp | tente, lanterne |
+| radioop | Voix des secours | + personnage | opérateur | casque sur les oreilles, micro | poste radio | montagnes |
+| billets | Vos billets ! | à faire | contrôleur | tend les billets | sacoche et billets | banc de gare |
 
 ### Réaction, rose (17)
 
-| Fichier | Nom | Personnage | Pose et cadrage | Premier plan | Fond |
-|---|---|---|---|---|---|
-| tear | Gaz lacrymogène | policier masqué | tire au lanceur | lanceur et grenade | nuage |
-| napalm | Napalm | pyromane | lance le bidon | bidon en feu | flammes |
-| air | Frappe aérienne | soldat | parle à la radio | radio et pointeur | avions |
-| grenade | Grenade | survivante | dégoupille | grenade | ruines |
-| shot | Tir de l'abri | survivant | tire depuis la fenêtre | canon du fusil | maison |
-| patch | Réparation express | bricoleuse | scotche en vitesse | ruban et clé | maison |
-| molotov | Molotov | survivant | lance la bouteille | bouteille enflammée | rue |
-| horn | Klaxon | survivante | appuie sur la corne | corne de brume | voiture |
-| rush | Adrénaline | survivant | se pique au bras | seringue | nuit |
-| talkie | Talkie-walkie | survivante | parle au talkie | talkie | maison |
-| storm | Orage | survivant | lève une barre de fer | barre et éclair | pluie |
-| bomber | Bombardier | soldat | tire une fusée | pistolet lance-fusées | bombardier |
-| shell | Munition anti-Colosse | soldat | charge l'obus | gros obus | Colosse |
-| noise | Boîte à bruit | gamin | lance un réveil | réveil | rue |
-| v_napalm | Frappe au napalm | soldat des secours | marque la cible | fumigène | avion |
-| retard | Retard en gare | chef de gare | brandit sa montre | montre à gousset | gare |
-| coupsif | Coup de sifflet | contrôleuse | siffle | sifflet | quai |
+| Fichier | Nom en jeu | Image actuelle | Personnage | Pose (contre-plongée) | Premier plan | Fond |
+|---|---|---|---|---|---|---|
+| tear | Gaz lacrymo | + personnage | survivant masqué | lance la grenade | grenade fumante | ruines |
+| napalm | Brasier | + personnage | survivante | jette le bidon enflammé | bidon en feu | canyon en flammes |
+| air | Bombardement | + personnage | soldat | parle à la radio, bras tendu | radio et combiné | avions, barrage |
+| grenade | L'Ananas | + personnage | survivante | dégoupille avec les dents | grenade | usine |
+| shot | Tir de couverture | + personnage | survivant | tire depuis la fenêtre de l'abri | canon du fusil | fenêtre |
+| patch | Rafistolage | + personnage | ferrailleuse | scotche une poutre | rouleau de scotch | atelier |
+| molotov | Molotov | + personnage | survivant | lance la bouteille | bouteille enflammée | viaduc |
+| horn | Klaxon de détresse | + personnage | survivante | presse la corne | pavillon du klaxon | voiture, gare |
+| rush | Shoot d'adrénaline | + personnage | survivant | se pique au bras | seringue | laboratoire |
+| talkie | Talkie-walkie | + personnage | survivante | parle dans le talkie | talkie | pylône |
+| storm | Orage | + personnage | survivant sous la pluie | lève une barre de fer vers l'éclair | barre et éclair | montagnes, pluie |
+| bomber | Raid aérien | + personnage | soldat | tire une fusée de signal | pistolet lance-fusées | bombardier |
+| shell | Obus anti-Colosse | + personnage | soldat | charge l'obus | gros obus | hangar |
+| noise | Radiocassette | + personnage | gamin | monte le son | radiocassette | chapiteau |
+| v_napalm | Terre brûlée | + personnage | soldat des secours | marque la cible au fumigène | fumigène | avion, raffinerie |
+| retard | Retard en gare | à faire | chef de gare | brandit sa montre | montre à gousset | quai |
+| coupsif | Coup de sifflet | à faire | contrôleuse | siffle à pleins poumons | sifflet | quai, vapeur |
