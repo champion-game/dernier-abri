@@ -54,6 +54,8 @@ Remplacer les crochets par les colonnes de la liste (traduites en anglais). Pour
 
 ## 5. Liste des illustrations
 
+**Prompts prêts pour ChatGPT** : `docs/illustrations_prompts.xlsx` (une ligne par carte : carte, prompt). Les poses y sont plus extravagantes que dans la colonne « Pose » ci-dessous (demande d’Amine) : c’est le tableur qui fait foi.
+
 Colonne « Image actuelle » : **garder** = le personnage existe déjà, on le redessine dans le nouveau style ; **+ personnage** = l'image actuelle ne montre que l'objet, il faut ajouter quelqu'un qui le manie (l'objet reste au premier plan) ; **à faire** = image de l'ancien style seulement (Cheminots), à refaire en entier.
 
 ### DPS, orange (44)
