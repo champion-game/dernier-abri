@@ -36,6 +36,8 @@ Réserve non utilisée (idées pour plus tard) : `assets/extras/` (78 illustrati
 
 ## 3. Règles de cohérence
 
+**Illustrations des cartes (v268)** : modèle unique et liste carte par carte (couleur, personnage, pose, premier plan, fond) dans `docs/ILLUSTRATIONS.md`.
+
 1. **Une seule vue par famille** : cartes de face, en 3/4 ; sprites **vus du dessus**, tournés vers la droite, fond transparent ; reliques de face, fond transparent.
 2. **Une seule lumière** : en haut à gauche, partout (cartes, sprites, matières, icônes).
 3. **Une seule palette** : rouge sang `#9e2016`, acier sombre `#3a3f45`, parchemin `#eedeb8`, vert forêt éteint `#3d5a2a`, bois `#5a3a20`, plus une couleur vive par rareté (commune grise, rare bleue, épique violette, légendaire or).
