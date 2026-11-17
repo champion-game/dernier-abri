@@ -494,6 +494,12 @@ function coinsFx(a, b, n) {
   }
 }
 function unlockFx(t, src) {
+  // collection du style artiste : la carte se fissure de lumière et vole en éclats (game-coll.js)
+  if (ARTX() && typeof lcBreakBuy === 'function') {
+    const g = panel.querySelector(`.lc-w[data-t="${t}"] .lc-tilt`);
+    if (g && AOK()) coinsFx(src, g.getBoundingClientRect(), 9);
+    return lcBreakBuy(t);
+  }
   const it = itemOf(t);
   if (!it || !AOK()) return;
   const cf = it.querySelector('.cf');

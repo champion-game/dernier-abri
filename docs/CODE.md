@@ -66,6 +66,7 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 
 - Le style actuel (cartoon) reste celui des joueurs.
 - Le style artiste vit sous `html.artx` (CSS) et dans `game-artx.js`, `game-coll.js` (JS, testé avec `ARTX()` ou `AX.on()`), avec les images de `assets/art/`.
+- Déblocage d’une carte dans la collection (v268) : classe `LcBreak` dans `game-coll.js` (coque grise clonée de `.cf`, six éclats en `clip-path`, fissures en SVG, particules sur une toile `.lcb-fx` créée le temps de l’effet). `lcBreakBuy(t)` est appelé par `unlockFx` (`game-anim.js`) après un achat ; `lcBreakNew` révèle les cartes de `CNEW` (classe `lc-pend` tant qu’elles attendent). Sons `rumble` et `shatter` dans `audio.js`.
 - Accueil du style artiste (v245) : `title()` appelle `axTitleHtml()` (game-artx.js) quand `html.artx` est actif ; `show()` met la classe `axh` sur `#ov` ; le décor est le calque `#axbg`, fixe depuis la v260 (ne suit plus la souris ; lueurs gardées).
 - Une modification du style artiste ne doit jamais changer le style actuel : la préfixer par `html.artx`.
 

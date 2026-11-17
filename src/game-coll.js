@@ -44,16 +44,18 @@ function lcItem(t, i) {
   const st = lcState(t),
     eds = META.eds || [],
     sp = !Z.edOf(t) && Z.edCards(t).some(v => eds.includes(v));
-  const badge =
-    st === 'in'
-      ? ''
-      : st === 'vic'
-        ? `<span class="cbadge vic">${ii('trophy')}</span>`
-        : st === 'buy'
-          ? `<span class="lc-pr">${ii('unlock')}${lcPrice(t)}</span>`
-          : `<span class="cbadge lk">${ii('lock')}</span>`;
+  const pend = lcPend(t),
+    badge = pend
+      ? `<span class="cbadge lk">${ii('lock')}</span>`
+      : st === 'in'
+        ? ''
+        : st === 'vic'
+          ? `<span class="cbadge vic">${ii('trophy')}</span>`
+          : st === 'buy'
+            ? `<span class="lc-pr">${ii('unlock')}${lcPrice(t)}</span>`
+            : `<span class="cbadge lk">${ii('lock')}</span>`;
   return `<div class="lc-w${LC.deal ? ' deal' : ''}" data-t="${t}" style="--i:${Math.min(i, 24)};--dx:${((i % 3) - 1) * -50};--rot:${(i % 2 ? 1 : -1) * (6 + (i % 4) * 3)}">
-  <div class="lc s-${st}${t === LC.sel ? ' on' : ''}" data-a="lcsel" data-v="${t}" role="button" tabindex="0" aria-label="${Z.U[t].n}"><div class="lc-tilt">${cardFace(t, { base: 1 })}${lcShine(t)}<i class="lc-glare"></i></div>${badge}${cNew(t)}${sp ? `<span class="cspec" title="${_t('Carte spéciale obtenue')}"></span>` : ''}</div></div>`;
+  <div class="lc s-${st}${t === LC.sel ? ' on' : ''}${pend ? ' lc-pend' : ''}" data-a="lcsel" data-v="${t}" role="button" tabindex="0" aria-label="${Z.U[t].n}"><div class="lc-tilt">${cardFace(t, { base: 1 })}${lcShine(t)}<i class="lc-glare"></i></div>${badge}${cNew(t)}${sp ? `<span class="cspec" title="${_t('Carte spéciale obtenue')}"></span>` : ''}</div></div>`;
 }
 function lcDkItem(t, i, d, cnt) {
   const n = cnt[t] || 0,
@@ -161,7 +163,9 @@ function lcScreen(keep, deck) {
   if (!keep) {
     cfOpen();
     LC.ov = 0;
+    LC.brk = new Set(); // cartes nouvelles déjà révélées pendant cette visite
   }
+  const dealt = LC.deal;
   const own = META.cards,
     eds = META.eds || [],
     pts = META.points;
@@ -213,6 +217,7 @@ function lcScreen(keep, deck) {
   const ls2 = panel.querySelector('.dklist');
   if (ls2) ls2.scrollTop = lsY;
   if (LC.ov && !deck) lcOvPlace();
+  lcBreakNew(dealt);
 }
 // change de page : les cartes partent en cascade, les nouvelles arrivent de l’autre côté
 function lcFill(dir) {
@@ -222,6 +227,7 @@ function lcFill(dir) {
   const { h, np } = lcCells();
   g.innerHTML = h;
   if (pg) pg.innerHTML = lcPgH(np);
+  lcBreakNew(0);
   if (dir && AOK() && !OPT.eco)
     [...g.children].forEach((c, k) =>
       c.animate(
@@ -638,6 +644,602 @@ panel.addEventListener('pointerleave', () => {
   lcReset(lcHov);
   lcHov = null;
 });
+
+/* ---------- déblocage d’une carte : la coque grise tremble, se fissure de lumière et vole en éclats (v268) ----------
+   Joué quand on achète une carte, et à la première visite de la collection pour les cartes gagnées depuis (CNEW).
+   Six étapes (ms) : réveil 0-450, tremblement 450-1500, secousses 1500-2050, souffle 2050-2300, éclat 2300-2550, révélation -3500.
+   La carte en couleurs est déjà dessous : on pose par-dessus une copie grise découpée en six éclats le long des fissures. */
+const LCB = { live: new Set(), parts: [], cv: null, cx: null, raf: 0, last: 0 };
+const LCB_END = 3500,
+  LCB_H = 1.66; // hauteur / largeur d’une carte, pour des fissures d’épaisseur régulière
+const lcbClamp = x => (x < 0 ? 0 : x > 1 ? 1 : x);
+const lcbEase = x => 1 - Math.pow(1 - lcbClamp(x), 3);
+const lcbRnd = (a, b) => a + Math.random() * (b - a);
+const lcbSfx = (n, gap) => {
+  try {
+    SFX.play(n, gap);
+  } catch (e) {}
+};
+// une carte en attente de sa révélation (gagnée depuis la dernière visite) reste grise avec son cadenas
+const lcPend = t => !LC.deck && CNEW.includes(t) && !(LC.brk && LC.brk.has(t));
+
+// fissures (en % de la carte) : un tracé principal de haut en bas et six branches, un peu différents pour chaque carte
+function lcbGeometry(seed) {
+  let s = (seed * 9973 + 7) % 2147483647 || 1;
+  const r = () => (s = (s * 16807) % 2147483647) / 2147483647,
+    j = (v, a = 3) => v + (r() - 0.5) * 2 * a;
+  const main = [
+    [55, 0.5],
+    [49, 17],
+    [53, 29],
+    [46, 42],
+    [58, 52],
+    [50, 63],
+    [41, 72],
+    [52, 82],
+    [48, 99.5],
+  ].map(([x, y], i) => (i === 0 || i === 8 ? [j(x, 4), y] : [j(x), j(y, 2)]));
+  const lines = {
+    main,
+    b1: [main[3], [j(28), j(37)], [j(12), j(46)], [0.5, j(44, 2)]],
+    b2: [main[4], [j(73), j(45)], [j(88), j(51)], [99.5, j(40, 2)]],
+    b3: [main[6], [j(27), j(78)], [j(12), j(73)], [0.5, j(80, 2)]],
+    b4: [main[7], [j(69), j(88)], [j(84), j(84)], [99.5, j(92, 2)]],
+    b5: [main[1], [j(64), j(12)], [j(76), j(5)]],
+    b6: [main[5], [j(64), j(66)], [j(72), j(62)]],
+  };
+  const { b1, b2, b3, b4 } = lines,
+    edge = v => (v <= 1 ? 0 : v >= 99 ? 100 : v),
+    rev = a => a.slice().reverse();
+  // six éclats découpés le long des fissures
+  const shards = [
+    [[0, 0], ...main.slice(0, 4), ...b1.slice(1)],
+    [...main.slice(0, 5), ...b2.slice(1), [100, 0]],
+    [...rev(b1.slice(1)), ...main.slice(3, 7), ...b3.slice(1)],
+    [...main.slice(4, 8), ...b4.slice(1), ...rev(b2.slice(1))],
+    [...rev(b3.slice(1)), main[6], main[7], main[8], [0, 100]],
+    [main[7], ...b4.slice(1), [100, 100], main[8]],
+  ].map(p => p.map(([x, y]) => [edge(x), edge(y)]));
+  return { lines, shards };
+}
+
+// particules sur une toile posée au-dessus de tout le temps de l’effet : étincelles, poussière, débris, braises, onde de choc
+function lcbCanvas() {
+  if (LCB.cv && LCB.cv.isConnected) return;
+  const c = document.createElement('canvas');
+  c.className = 'lcb-fx';
+  c.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(c);
+  LCB.cv = c;
+  LCB.cx = c.getContext('2d');
+  lcbResize();
+}
+function lcbResize() {
+  if (!LCB.cv) return;
+  const r = Math.min(2, devicePixelRatio || 1);
+  LCB.cv.width = innerWidth * r;
+  LCB.cv.height = innerHeight * r;
+  LCB.cx.setTransform(r, 0, 0, r, 0, 0);
+}
+addEventListener('resize', lcbResize);
+function lcbEmit(p) {
+  if (LCB.parts.length < (OPT.eco ? 200 : 600)) LCB.parts.push(p);
+}
+function lcbDrawParticles(dt) {
+  const cx = LCB.cx,
+    s = dt / 1000;
+  if (!cx) return;
+  cx.clearRect(0, 0, innerWidth, innerHeight);
+  LCB.parts = LCB.parts.filter(p => (p.age += dt) < p.life);
+  for (const p of LCB.parts) {
+    p.vy += (p.g || 0) * s;
+    if (p.drag) {
+      p.vx *= p.drag;
+      p.vy *= p.drag;
+    }
+    p.x += p.vx * s;
+    p.y += p.vy * s;
+    const k = p.age / p.life;
+    cx.save();
+    if (p.type === 'spark') {
+      cx.globalCompositeOperation = 'lighter';
+      cx.strokeStyle = `rgba(255,${(200 + 55 * (1 - k)) | 0},${(120 * (1 - k)) | 0},${1 - k})`;
+      cx.lineWidth = p.w;
+      cx.lineCap = 'round';
+      cx.beginPath();
+      cx.moveTo(p.x, p.y);
+      cx.lineTo(p.x - p.vx * 0.025, p.y - p.vy * 0.025);
+      cx.stroke();
+    } else if (p.type === 'ember') {
+      cx.globalCompositeOperation = 'lighter';
+      cx.fillStyle = `rgba(255,200,90,${Math.sin(k * Math.PI) * 0.9})`;
+      cx.beginPath();
+      cx.arc(p.x + Math.sin(p.age / 140 + p.ph) * 4, p.y, p.w * (1 - k * 0.5), 0, 7);
+      cx.fill();
+    } else if (p.type === 'dust') {
+      cx.fillStyle = `rgba(150,140,128,${(1 - k) * 0.8})`;
+      cx.fillRect(p.x, p.y, p.w, p.w);
+    } else if (p.type === 'chip') {
+      p.rot += p.vr * s;
+      cx.translate(p.x, p.y);
+      cx.rotate(p.rot);
+      cx.fillStyle = `rgba(${p.c},${p.c},${p.c},${1 - k * k})`;
+      cx.beginPath();
+      cx.moveTo(-p.w, -p.w * 0.6);
+      cx.lineTo(p.w, -p.w * 0.2);
+      cx.lineTo(-p.w * 0.2, p.w);
+      cx.closePath();
+      cx.fill();
+    } else if (p.type === 'ring') {
+      const e = lcbEase(k);
+      cx.globalCompositeOperation = 'lighter';
+      cx.strokeStyle = `rgba(255,230,160,${(1 - k) * 0.8})`;
+      cx.lineWidth = 6 * (1 - k) + 1;
+      cx.beginPath();
+      cx.ellipse(p.x, p.y, p.w * e, p.w * e * 0.75, 0, 0, 7);
+      cx.stroke();
+    }
+    cx.restore();
+  }
+}
+
+// boucle de l’effet : toutes les cartes en cours, les particules, le tremblement de la collection
+function lcbFrame(now) {
+  const dt = Math.min(100, now - LCB.last); // temps réel : l’effet garde sa durée même sur un appareil lent
+  LCB.last = now;
+  let shake = 0;
+  for (const b of [...LCB.live]) {
+    try {
+      b.update(dt);
+      shake = Math.max(shake, b.screen);
+    } catch (e) {
+      b.finish();
+    }
+  }
+  try {
+    lcbDrawParticles(dt);
+  } catch (e) {}
+  const L = panel.querySelector('.lcoll');
+  if (L) L.style.translate = shake > 0.3 ? `${lcbRnd(-0.5, 0.5) * shake}px ${lcbRnd(-0.5, 0.5) * shake}px` : '';
+  if (LCB.live.size || LCB.parts.length) LCB.raf = requestAnimationFrame(lcbFrame);
+  else {
+    LCB.raf = 0;
+    if (LCB.cv) LCB.cv.remove();
+    LCB.cv = null;
+  }
+}
+function lcbStart() {
+  lcbCanvas();
+  if (!LCB.raf) {
+    LCB.last = performance.now();
+    LCB.raf = requestAnimationFrame(lcbFrame);
+  }
+}
+
+class LcBreak {
+  constructor(el, t) {
+    this.el = el;
+    this.tilt = el.querySelector('.lc-tilt');
+    this.geo = lcbGeometry(Z.KEYS.indexOf(t) + 3);
+    this.t = 0;
+    this.ph = 0;
+    this.fired = {};
+    this.screen = 0;
+    this.prog = { main: 0, b1: 0, b2: 0, b3: 0, b4: 0, b5: 0, b6: 0 };
+    this.w = this.tilt.getBoundingClientRect().width || 100;
+    this.u = this.w / 240; // 1 pour une grande carte de 240 px
+    this.build();
+  }
+  build() {
+    const cf = this.tilt.querySelector('.cf'),
+      toD = pts => 'M' + pts.map(([x, y]) => `${x.toFixed(1)} ${(y * LCB_H).toFixed(1)}`).join(' L'),
+      grey = () => {
+        const c = cf.cloneNode(true);
+        c.removeAttribute('id');
+        return c;
+      };
+    const fx = document.createElement('div');
+    fx.className = 'lcb';
+    fx.setAttribute('aria-hidden', 'true');
+    const shell = document.createElement('div');
+    shell.className = 'lcb-shell';
+    shell.appendChild(grey());
+    fx.appendChild(shell);
+    this.shardEls = this.geo.shards.map(p => {
+      const d = document.createElement('div');
+      d.className = 'lcb-shard';
+      d.style.clipPath = `polygon(${p.map(([x, y]) => `${x.toFixed(1)}% ${y.toFixed(1)}%`).join(',')})`;
+      const cx = p.reduce((a, q) => a + q[0], 0) / p.length,
+        cy = p.reduce((a, q) => a + q[1], 0) / p.length;
+      d.style.transformOrigin = `${cx}% ${cy}%`;
+      d.dataset.cx = cx;
+      d.dataset.cy = cy;
+      d.appendChild(grey());
+      fx.appendChild(d);
+      return d;
+    });
+    const paths = Object.entries(this.geo.lines)
+      .map(([id, pts]) =>
+        ['g1', 'g2', 'c'].map(cl => `<path class="${cl}" data-l="${id}" pathLength="1" d="${toD(pts)}"/>`).join(''),
+      )
+      .join('');
+    fx.insertAdjacentHTML(
+      'beforeend',
+      `<i class="lcb-leak"></i><svg class="lcb-cracks" viewBox="0 0 100 ${(100 * LCB_H).toFixed(1)}" preserveAspectRatio="none">${paths}</svg><i class="lcb-flash"></i><i class="lcb-shine"></i>`,
+    );
+    this.tilt.appendChild(fx);
+    this.el.insertAdjacentHTML('afterbegin', '<i class="lcb-rays" aria-hidden="true"></i>');
+    this.fx = fx;
+    this.shell = shell;
+    this.q = s => this.el.querySelector(s);
+    this.leak = this.q('.lcb-leak');
+    this.flash = this.q('.lcb-flash');
+    this.shine = this.q('.lcb-shine');
+    this.rays = this.q('.lcb-rays');
+    this.svg = this.q('.lcb-cracks');
+    this.paths = {};
+    fx.querySelectorAll('.lcb-cracks path').forEach(p => (this.paths[p.dataset.l] ||= []).push(p));
+    // longueurs cumulées des fissures, pour faire jaillir les étincelles le long de la partie déjà ouverte
+    this.segs = {};
+    for (const [id, pts] of Object.entries(this.geo.lines)) {
+      let L = 0;
+      const acc = [0];
+      for (let i = 1; i < pts.length; i++) {
+        L += Math.hypot(pts[i][0] - pts[i - 1][0], (pts[i][1] - pts[i - 1][1]) * LCB_H);
+        acc.push(L);
+      }
+      this.segs[id] = { pts, acc, L };
+    }
+    // le cadenas de la carte (ou un nouveau, si la grille vient d’être redessinée sans lui)
+    this.lock = this.el.querySelector('.cbadge.lk,.lc-pr');
+    if (!this.lock) {
+      this.el.insertAdjacentHTML('beforeend', `<span class="cbadge lk">${ii('lock')}</span>`);
+      this.lock = this.el.querySelector('.cbadge.lk');
+    }
+    this.el.classList.add('lcb-on');
+    this.el.classList.remove('lc-pend', 's-far', 's-buy', 's-full', 's-vic');
+  }
+  rect() {
+    const r = this.tilt.getBoundingClientRect();
+    return { x: r.left, y: r.top, w: r.width, h: r.height };
+  }
+  once(key, at, fn) {
+    if (!this.fired[key] && this.t >= at) {
+      this.fired[key] = 1;
+      fn();
+    }
+  }
+  kick(at, power) {
+    return this.t >= at ? power * Math.exp(-(this.t - at) / 75) : 0;
+  }
+  pointOnCracks() {
+    const ids = Object.keys(this.prog).filter(k => this.prog[k] > 0.02);
+    if (!ids.length) return null;
+    const id = ids[(Math.random() * ids.length) | 0],
+      s = this.segs[id],
+      d = Math.random() * this.prog[id] * s.L;
+    let i = 1;
+    while (i < s.acc.length - 1 && s.acc[i] < d) i++;
+    const k = (d - s.acc[i - 1]) / (s.acc[i] - s.acc[i - 1] || 1),
+      a = s.pts[i - 1],
+      b = s.pts[i];
+    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+  }
+  sparks(n, speed) {
+    const r = this.rect(),
+      u = this.u;
+    for (let i = 0; i < n; i++) {
+      const p = this.pointOnCracks();
+      if (!p) return;
+      const a = lcbRnd(0, Math.PI * 2),
+        v = lcbRnd(0.4, 1) * speed * u;
+      lcbEmit({
+        type: 'spark',
+        x: r.x + (p[0] / 100) * r.w,
+        y: r.y + (p[1] / 100) * r.h,
+        vx: Math.cos(a) * v,
+        vy: Math.sin(a) * v - 60 * u,
+        g: 600 * u,
+        drag: 0.985,
+        w: lcbRnd(1, 2.2) * Math.max(0.7, u),
+        life: lcbRnd(250, 600),
+        age: 0,
+      });
+    }
+  }
+  dust(n) {
+    const r = this.rect();
+    for (let i = 0; i < n; i++) {
+      const bottom = Math.random() < 0.5;
+      lcbEmit({
+        type: 'dust',
+        x: bottom ? r.x + lcbRnd(0, r.w) : r.x + (Math.random() < 0.5 ? 0 : r.w),
+        y: bottom ? r.y + r.h * lcbRnd(0.85, 1) : r.y + lcbRnd(0.2, 1) * r.h,
+        vx: lcbRnd(-20, 20),
+        vy: lcbRnd(10, 60),
+        g: 300,
+        w: lcbRnd(1, 2.5) * Math.max(0.8, this.u),
+        life: lcbRnd(400, 900),
+        age: 0,
+      });
+    }
+  }
+  update(dt) {
+    if (!this.el.isConnected) return this.finish();
+    this.t += dt;
+    const t = this.t,
+      u = this.u;
+    let amp = 0,
+      f = 0.05,
+      lift = 0,
+      sc = 1;
+    this.screen = 0;
+    if (t < 450) {
+      // 1. réveil : la carte se soulève
+      const k = t / 450;
+      lift = -8 * lcbEase(k);
+      sc = 1 + 0.04 * lcbEase(k);
+      amp = 0.6 * k;
+    } else if (t < 1500) {
+      // 2. tremblement qui monte, avec trois à-coups ; la première fissure s’ouvre
+      const k = (t - 450) / 1050;
+      lift = -8;
+      sc = 1.04;
+      f = 0.05 + 0.07 * k;
+      amp = 0.8 + 5 * k * k + this.kick(780, 4) + this.kick(1080, 5) + this.kick(1320, 6);
+      this.prog.main = lcbEase((t - 700) / 800);
+      this.prog.b5 = lcbEase((t - 1100) / 260);
+      this.prog.b6 = lcbEase((t - 1300) / 200);
+      if (Math.random() < 0.25 + k * 0.6) this.dust(1 + ((k * 2) | 0));
+      if (t > 720 && Math.random() < 0.15 + k * 0.5) this.sparks(1, 160);
+    } else if (t < 2050) {
+      // 3. deux grosses secousses : les fissures se ramifient, la collection tremble
+      const k1 = this.kick(1550, 14),
+        k2 = this.kick(1810, 18);
+      lift = -9;
+      sc = 1.05;
+      f = 0.13;
+      amp = 4 + k1 + k2;
+      this.screen = k1 * 0.5 + k2 * 0.6;
+      this.prog.main = this.prog.b5 = this.prog.b6 = 1;
+      this.prog.b1 = lcbEase((t - 1550) / 120);
+      this.prog.b2 = lcbEase((t - 1810) / 110);
+      this.prog.b3 = lcbEase((t - 1850) / 130);
+      if (Math.random() < 0.5) this.dust(2);
+      if (Math.random() < 0.6) this.sparks(2, 220);
+    } else if (t < 2300) {
+      // 4. souffle retenu : la carte vibre très vite, la lumière déborde
+      const k = (t - 2050) / 250;
+      lift = -9 - 4 * lcbEase(k);
+      sc = 1.05 + 0.07 * lcbEase(k);
+      amp = 0.9;
+      f = 0.32;
+      this.prog.b1 = this.prog.b2 = this.prog.b3 = 1;
+      this.prog.b4 = lcbEase((t - 2070) / 150);
+      if (Math.random() < 0.8) this.sparks(2, 120);
+    } else {
+      // 5 et 6. éclatement puis rebond amorti
+      const k = (t - 2300) / 1000;
+      sc = 1 + 0.12 * Math.exp(-k * 5) * Math.cos(k * 16);
+      lift = -13 * (1 - lcbEase((t - 2300) / 500));
+      this.screen = 16 * Math.exp(-(t - 2300) / 120);
+    }
+
+    // tremblement : somme de sinus à fréquence croissante
+    this.ph += dt * f;
+    const p = this.ph,
+      n1 = Math.sin(p) + 0.6 * Math.sin(p * 2.3 + 1.3) + 0.3 * Math.sin(p * 3.7 + 2.1),
+      n2 = Math.sin(p * 1.2 + 0.7) + 0.6 * Math.sin(p * 2.9 + 2.2) + 0.3 * Math.sin(p * 4.1),
+      n3 = Math.sin(p * 0.9 + 2.4) + 0.5 * Math.sin(p * 2.1),
+      a = amp * Math.max(0.55, u);
+    this.el.style.transform = `translate(${(n1 / 1.9) * a}px,${lift * Math.max(0.5, u) + (n2 / 1.9) * a * 0.6}px) rotate(${(n3 / 1.5) * amp * 0.55}deg) scale(${sc})`;
+
+    // fissures : longueur ouverte et épaisseur (voulue en pixels, convertie en unités du dessin)
+    const heat = lcbClamp((t - 700) / 1600),
+      sw = (Math.max(0.6, u) * 100) / this.w,
+      wd = [(3 + 5 * heat) * sw, (1.3 + 1.6 * heat) * sw, (0.8 + 0.7 * heat) * sw];
+    for (const [id, ps] of Object.entries(this.paths))
+      ps.forEach((q, i) => {
+        q.style.strokeDashoffset = 1 - this.prog[id];
+        q.style.strokeWidth = wd[i];
+      });
+
+    // lumière qui fuit des fissures, coque qui s’illumine
+    const leak =
+      t < 900
+        ? 0
+        : t < 1500
+          ? 0.3 * lcbEase((t - 900) / 600)
+          : t < 2050
+            ? 0.3 + 0.25 * lcbEase((t - 1500) / 550)
+            : t < 2300
+              ? 0.55 + 0.4 * lcbEase((t - 2050) / 250)
+              : 0;
+    this.leak.style.opacity = leak;
+    if (t < 2300)
+      this.shell.style.filter = `grayscale(1) brightness(${0.45 + leak * 0.25}) drop-shadow(0 0 ${(leak * 16 * Math.max(0.6, u)).toFixed(1)}px rgba(255,190,70,${Math.min(1, leak * 1.3).toFixed(2)}))`;
+
+    // le cadenas saute puis tombe
+    this.once('lock', 1000, () => {
+      this.lockFall = { x: 0, y: 0, vx: lcbRnd(-60, 30) * u, vy: -180 * u, r: 0, vr: lcbRnd(-500, -200) };
+      lcbSfx('thud');
+    });
+    if (this.lockFall && this.lock) {
+      const L = this.lockFall,
+        s = dt / 1000;
+      L.vy += 1500 * u * s;
+      L.x += L.vx * s;
+      L.y += L.vy * s;
+      L.r += L.vr * s;
+      this.lock.style.transform = `translate(${L.x}px,${L.y}px) rotate(${L.r}deg)`;
+      this.lock.style.opacity = lcbClamp(1 - (t - 1000) / 700);
+    }
+
+    // sons
+    this.once('rumble', 450, () => lcbSfx('rumble'));
+    this.once('c0', 700, () => lcbSfx('crack', 0));
+    this.once('c1', 1080, () => lcbSfx('thud', 0));
+    this.once('c2', 1320, () => lcbSfx('crack', 0));
+    this.once('k1', 1550, () => {
+      lcbSfx('crack', 0);
+      this.sparks(14, 300);
+    });
+    this.once('k2', 1810, () => {
+      lcbSfx('crack', 0);
+      this.sparks(18, 340);
+    });
+    this.once('burst', 2300, () => this.burst());
+    this.once('chime', 2420, () => lcbSfx('rare'));
+
+    if (t >= 2300) {
+      const e = t - 2300,
+        s = dt / 1000;
+      this.flash.style.opacity = e < 60 ? e / 60 : lcbClamp(1 - (e - 60) / 380);
+      this.svg.style.opacity = lcbClamp(1 - e / 120);
+      this.shardEls.forEach((el, i) => {
+        const d = this.shardPhys[i];
+        d.vy += 1700 * u * s;
+        d.x += d.vx * s;
+        d.y += d.vy * s;
+        d.r += d.vr * s;
+        el.style.transform = `translate(${d.x}px,${d.y}px) rotate(${d.r}deg) scale(${1 + e / 2000})`;
+        el.style.opacity = lcbClamp(1 - e / 650);
+      });
+      this.rays.style.opacity = e < 120 ? e / 120 : lcbClamp(1 - (e - 120) / 1000);
+      this.rays.style.transform = `translate(-50%,-50%) rotate(${e * 0.03}deg) scale(${0.6 + 0.5 * lcbEase(e / 900)})`;
+      const glow = lcbClamp(1 - e / 1100);
+      this.tilt.style.filter = `drop-shadow(0 0 ${(18 * glow * Math.max(0.6, u)).toFixed(1)}px rgba(255,200,90,${glow.toFixed(2)})) brightness(${1 + 0.5 * lcbClamp(1 - e / 400)})`;
+      const sh = lcbClamp((t - 2650) / 550);
+      this.shine.style.opacity = sh > 0 && sh < 1 ? 1 : 0;
+      this.shine.style.backgroundPosition = `${100 - sh * 100}% 0`;
+      if (t < 3300 && Math.random() < 0.55) this.embers(1);
+    }
+    if (t >= LCB_END) this.finish();
+  }
+  // 5. la coque vole en éclats : flash, onde, étincelles, débris
+  burst() {
+    this.shell.style.visibility = 'hidden';
+    const r = this.rect(),
+      u = this.u,
+      mx = r.x + r.w / 2,
+      my = r.y + r.h / 2,
+      few = OPT.eco ? 0.5 : 1;
+    this.shardPhys = this.shardEls.map(el => {
+      const dx = el.dataset.cx - 50,
+        dy = (el.dataset.cy - 50) * LCB_H,
+        L = Math.hypot(dx, dy) || 1,
+        v = lcbRnd(260, 460) * u;
+      el.style.visibility = 'visible';
+      return { x: 0, y: 0, vx: (dx / L) * v, vy: (dy / L) * v * 0.7 - 260 * u, r: 0, vr: lcbRnd(-420, 420) };
+    });
+    for (let i = 0; i < Math.round(50 * Math.max(0.5, u) * few); i++) {
+      const a = lcbRnd(0, Math.PI * 2),
+        v = lcbRnd(200, 620) * u;
+      lcbEmit({
+        type: 'spark',
+        x: mx + lcbRnd(-0.2, 0.2) * r.w,
+        y: my + lcbRnd(-0.2, 0.2) * r.h,
+        vx: Math.cos(a) * v,
+        vy: Math.sin(a) * v - 100 * u,
+        g: 700 * u,
+        drag: 0.98,
+        w: lcbRnd(1.2, 2.6) * Math.max(0.7, u),
+        life: lcbRnd(350, 800),
+        age: 0,
+      });
+    }
+    for (let i = 0; i < Math.round(26 * Math.max(0.5, u) * few); i++) {
+      const a = lcbRnd(0, Math.PI * 2),
+        v = lcbRnd(150, 480) * u;
+      lcbEmit({
+        type: 'chip',
+        x: mx + lcbRnd(-0.4, 0.4) * r.w,
+        y: my + lcbRnd(-0.4, 0.4) * r.h,
+        vx: Math.cos(a) * v,
+        vy: Math.sin(a) * v - 220 * u,
+        g: 1500 * u,
+        drag: 0.99,
+        w: lcbRnd(2, 6) * Math.max(0.6, u),
+        c: lcbRnd(55, 120) | 0,
+        rot: lcbRnd(0, 6),
+        vr: lcbRnd(-12, 12),
+        life: lcbRnd(500, 900),
+        age: 0,
+      });
+    }
+    lcbEmit({ type: 'ring', x: mx, y: my, vx: 0, vy: 0, w: r.w * 1.1, life: 450, age: 0 });
+    lcbSfx('shatter', 0);
+    vib(40);
+  }
+  embers(n) {
+    const r = this.rect();
+    for (let i = 0; i < n; i++)
+      lcbEmit({
+        type: 'ember',
+        x: r.x + lcbRnd(0.05, 0.95) * r.w,
+        y: r.y + lcbRnd(0.3, 1) * r.h,
+        vx: 0,
+        vy: lcbRnd(-70, -30) * this.u,
+        g: 0,
+        w: lcbRnd(1.2, 2.8) * Math.max(0.7, this.u),
+        ph: lcbRnd(0, 6),
+        life: lcbRnd(700, 1300),
+        age: 0,
+      });
+  }
+  finish() {
+    LCB.live.delete(this);
+    this.screen = 0;
+    this.fx.remove();
+    this.rays.remove();
+    if (this.lock) this.lock.remove();
+    this.el.style.transform = '';
+    this.tilt.style.filter = '';
+    this.el.classList.remove('lcb-on');
+  }
+}
+// lance l’effet sur une carte de la grille (sans animation : elle reprend simplement ses couleurs)
+function lcBreak(t) {
+  const el = panel.querySelector(`.lc-w[data-t="${t}"] .lc`);
+  if (!el || el.classList.contains('lcb-on')) return;
+  if (!AOK() || !el.querySelector('.lc-tilt .cf')) {
+    el.classList.remove('lc-pend');
+    el.querySelector('.cbadge.lk')?.remove();
+    lcbSfx('rare');
+    return;
+  }
+  try {
+    LCB.live.add(new LcBreak(el, t));
+    lcbStart();
+  } catch (e) {
+    el.classList.remove('lc-pend');
+  }
+}
+// cartes gagnées depuis la dernière visite et visibles sur la page : elles se révèlent l’une après l’autre
+function lcBreakNew(dealt) {
+  if (LC.deck) return;
+  const due = [...panel.querySelectorAll('.lc.lc-pend')].map(e => e.dataset.v);
+  due.forEach((t, k) =>
+    setTimeout(
+      () => {
+        if (!lcPend(t)) return;
+        LC.brk.add(t);
+        lcBreak(t);
+      },
+      (dealt ? 900 : 250) + k * 700,
+    ),
+  );
+}
+// achat dans la collection : sur téléphone, la grande carte se referme d’abord vers sa place dans la grille
+function lcBreakBuy(t) {
+  (LC.brk ||= new Set()).add(t);
+  const el = panel.querySelector(`.lc-w[data-t="${t}"] .lc`);
+  if (el) el.classList.add('lc-pend');
+  if (LC.ov) {
+    lcOvClose();
+    setTimeout(() => lcBreak(t), 330);
+  } else lcBreak(t);
+}
 
 const _collAx = collectionScreen,
   _dkAx = deckEditor;
