@@ -648,7 +648,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v268 · 17 nov.';
+const VERSION = 'v269 · 17 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
@@ -686,7 +686,6 @@ try {
   if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
     addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 } catch (e) {}
-// slowT : ralenti (mort du Colosse) jusqu'à cet instant
 // options du joueur (enregistrées sur l'appareil)
 const OPT = (() => {
   const d = {
@@ -763,9 +762,9 @@ function toggleFs(on) {
   if (b && !b.hidden && (on === undefined || on !== cur)) b.click();
 }
 const TICK = 650;
-let SPEED = 1,
-  slowT = 0;
-const tickMs = () => (TICK / SPEED) * (performance.now() < slowT ? 3 : 1);
+// v-nuit fluide (Amine) : jamais de ralenti ni de gel pendant la nuit, le rythme ne casse pas
+let SPEED = 1;
+const tickMs = () => TICK / SPEED;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 // v139 : pause du joueur (menu) ; RUN change quand on abandonne la nuit en cours, ce qui arrête sa boucle

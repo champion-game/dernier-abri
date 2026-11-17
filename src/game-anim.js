@@ -994,12 +994,11 @@ function typeFx() {
       } catch (e) {}
     }, k * 55);
 }
-// 31 : boss : bandeau qui traverse l'écran et ralenti
+// 31 : boss : bandeau qui traverse l'écran
 function bossBanner(name) {
   if (!AOK()) return;
   const b = aEl('bossban', `<span>${name}</span>`);
   setTimeout(() => b.remove(), 2000);
-  slowT = Math.max(slowT, performance.now() + 700);
   try {
     shake(performance.now(), 8);
   } catch (e) {}
@@ -1013,7 +1012,7 @@ resumeWave = function () {
       bossBanner(capF(bossName(G.night)).toUpperCase());
     } catch (e) {}
 };
-// 32 : dernier zombie de la nuit : ralenti et zoom sur le coup final
+// 32 : dernier zombie de la nuit : zoom sur le coup final
 const _playEvents = playEvents;
 playEvents = function (ev, types, now) {
   _playEvents(ev, types, now);
@@ -1022,7 +1021,6 @@ playEvents = function (ev, types, now) {
     const d = ev.filter(e => e.k === 'die');
     if (!d.length || G.z.length || G.pending.length || (G.waves > 1 && G.wave < G.waves)) return;
     const p = DEADP[DEADP.length - 1] || CEN;
-    slowT = Math.max(slowT, now + 1100);
     camZoom(now, p.x, p.y, 0.14, 1300);
     shake(now, 7);
     addFX({ type: 'flash', x: p.x, y: p.y, r: 40, c: 'rgba(255,240,200,.85)', dur: 350, light: T * 2 });

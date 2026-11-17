@@ -301,7 +301,7 @@ Un survivant nommé qui tombe après 100 victimes ou plus laisse un souvenir (3 
 
 ## Le retour visuel
 
-Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Doublé », « Triplé », « Carnage ×N » ou « MASSACRE ×N » quand une même attaque tue plusieurs zombies dans le tour (v166 : compté par attaque, plus par tour), gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), ralenti à la mort du Colosse, chiffres de l'aube qui défilent.
+Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes de la nuit en haut à gauche, « Doublé », « Triplé », « Carnage ×N » ou « MASSACRE ×N » quand une même attaque tue plusieurs zombies dans le tour (v166 : compté par attaque, plus par tour), gros chiffres jaunes pour les coups de 4 dégâts ou plus, secousse de l'écran selon la force (explosion, frappe aérienne, mort du Colosse), chiffres de l'aube qui défilent.
 
 **v170 : animations de cartes inspirées de *Hearthstone*** (fichier `src/game-anim.js`, branche à valider avant `main`). Tout reste court et ne bloque jamais le joueur ; rien ne bouge si l’appareil demande moins d’animations, et le Mode économie retire les effets en boucle.
 - En partie : la pioche arrive face cachée et se retourne en vol ; la main se courbe en éventail ; la carte survolée ou touchée se lève et grossit ; les cartes jouables ont un liseré vert qui pulse ; la carte posée vole jusqu’à sa case et s’écrase (poussière, petite secousse, son sourd) ; un refus fait trembler la carte (bulle « Pas assez d’énergie », « Se joue la nuit »…) ; la carte glissée se penche dans le sens du mouvement ; les cartes réutilisables non jouées brûlent au début de la nuit ; un reflet passe sur les cartes rares, épiques et légendaires ; une défense frappée tremble et blanchit, une défense détruite vole en éclats ; les 3 cartes de l’aube arrivent face cachée et se retournent avec un éclat de la couleur de leur rareté.
@@ -309,7 +309,7 @@ Sensations inspirées de *Balatro* et *Vampire Survivors* : compteur de victimes
 
 **v171 : deuxième série d’animations** (même fichier, mêmes règles : court, jamais bloquant, coupé si l’appareil demande moins de mouvement).
 - Plateau : une unité au corps à corps fait un pas vers sa cible puis revient, un tireur recule plus net ; fusion avec éclairs dorés et étoile qui tombe sur l’unité ; passage de niveau avec colonne de lumière et « N2 » qui grossit puis se pose ; le nom d’un survivant qui rejoint l’abri s’écrit à la machine ; une unité à moins de 35 % de ses PV respire plus lentement avec une lueur rouge.
-- Nuit : à l’arrivée du boss, bandeau à son nom qui traverse l’écran et court ralenti ; le dernier zombie de la nuit tombe au ralenti avec zoom (« Dernier ! ») ; abri à 30 % de PV ou moins : la barre bat comme un cœur et les bords de l’écran pulsent en rouge.
+- Nuit : à l’arrivée du boss, bandeau à son nom qui traverse l’écran ; le dernier zombie de la nuit tombe avec un zoom (« Dernier ! ») ; abri à 30 % de PV ou moins : la barre bat comme un cœur et les bords de l’écran pulsent en rouge.
 - Économie : chaque point d’énergie dépensé s’éteint en flash, la jauge se rallume une à une au lever du jour ; des pièces de ferraille volent des zombies tués vers le compteur ; la relique choisie tourne en 3D au centre puis file se ranger ; au troc et à la boutique, la ferraille descend chiffre par chiffre et la carte achetée vole vers la main.
 - Accueil animé (v174) : braises qui montent, brume qui dérive en bas, logo qui tombe puis se balance comme un panneau, bouton principal qui luit ; v175 : la lune rayonne, les étoiles scintillent et la ville en feu vacille (lueurs posées sur l’image, positions par image dans `HGLOW` de `game-menu.js`). CSS seulement, coupé en Mode économie et si l’appareil demande moins d’animations.
 - Menus (les cartes flottantes derrière l’accueil ont été essayées puis retirées à la demande d’Amine) : la mutation choisie se fissure avec une lueur verte ; un succès tombe du haut et rebondit, avec un son de cloche ; les compteurs de l’aube et les points de fin de partie montent par paliers avec un petit tremblement.
@@ -1078,14 +1078,14 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 **v165** : curseurs PC. Avec une souris, le jeu affiche ses propres curseurs (32 px, `assets/cursors/`) : normal, clic possible, pose interdite (carte sélectionnée qui ne peut pas aller sur cette case) et glisser. Trois styles au choix dans les options (Survivant par défaut, Rouille, Zombie) ou le curseur du système. Options : case « Plein écran » (même effet que le bouton du haut) et touche F.
 
 **v166 : la nuit plus spectaculaire** (affichage seulement, règles inchangées)
-- Mur qui cède : éclats de son matériau, secousse, et au plus une fois toutes les 12 s un ralenti d'environ 1 s avec un zoom sur la brèche et « LE MUR CÈDE ! ».
+- Mur qui cède : éclats de son matériau, secousse, et au plus une fois toutes les 12 s un zoom sur la brèche et « LE MUR CÈDE ! ».
 - Multi-éliminations : comptées par attaque (une même unité, un même piège ou une même réaction), plus par tour. 2 = Doublé, 3 = Triplé, 4-5 = Carnage ×N, 6 et plus = MASSACRE ×N avec un petit ralenti et zoom. Elles récompensent le placement (zombies entassés dans un couloir), pas le nombre total de zombies.
 - Couloirs de mort : le jour, les cases du chemin probable des zombies couvertes par au moins 2 unités qui attaquent sont teintées en rouge (plus foncé à 3 et 4+, avec une cible dès 3) ; la nuit, la teinte reste discrète. Calcul dans le moteur (`Z.killZones`), sans effet sur les règles.
 
 **v192 : vraies musiques** (ElevenLabs, voir `CREDITS.md`). Boucles : menu (accueil, collection, options), jour (pose des cartes), nuit, boss (nuits de boss, nuit rouge et nuit sanglante). Une fois : aube (écran de l’aube), défaite, victoire (avec l’hélicoptère). Fondu enchaîné entre les morceaux et à chaque tour de boucle ; la boucle baisse pendant l’aube. Réglage « Musique et ambiance ». Les insectes, chouettes et zombies lointains restent sous la musique de nuit ; la nappe et les notes générées en code ne servent plus que si le fichier ne charge pas. Le son se coupe quand le jeu passe en arrière-plan.
 
 **v230 : quatrième série d’animations** (`src/game-fx3.js`, validée par Amine ; affichage seulement, coupé si le système demande moins d’animations, allégé en Mode économie)
-- Gel court : le plateau s’arrête 55 à 120 ms sur un coup de 10 ou plus, la mort d’un gros zombie, d’un boss ou un carnage (4+ d’une même attaque). Coupé avec les secousses.
+- Gel court et ralentis : retirés en v269 (Amine) : la nuit ne s’arrête et ne ralentit jamais, même brièvement, pour garder le rythme.
 - Morts selon l’arme : lance-flammes et feu (cendres et braises qui montent, corps calciné), explosions (morceaux projetés, restes au sol), arbalète (flèche plantée dans le corps), corps à corps (trait de lame) ; les autres gardent la giclée rouge.
 - Corps et douilles au sol jusqu’à l’aube : chaque arme à feu éjecte une douille ; le rayon de l’aube fait partir corps et douilles en fumée.
 - Pluie (nuit « Pluie ») et orage (« Coupure de courant ») visibles : gouttes sur tout le plateau, éclairs toutes les 5 à 12 s qui éclairent la horde, tonnerre.
@@ -1099,6 +1099,6 @@ Des versions rares des unités, à collectionner (comme les cartes dorées de He
 - Zones non couvertes : un bouton en haut (cadre avec un rond) colore en rouge, le jour, les cases du chemin des zombies qu’aucune unité qui attaque n’atteint. Le choix est gardé.
 - Bouton de la nuit : il brille et pulse quand plus aucune carte de la main n’est payable, et reste un peu terne tant qu’il reste de quoi jouer.
 - Nuit rouge : petite cinématique (ciel rouge, caméra qui avance, « NUIT ROUGE » et le titre tapé à la machine, rugissement lointain).
-- Gros zombie abattu (Gonflé, Blindé) : ralenti court et zoom à l’endroit, au plus une fois toutes les 5 s ; boss : zoom en plus du ralenti existant.
+- Gros zombie abattu (Gonflé, Blindé) : zoom à l’endroit, au plus une fois toutes les 5 s ; boss : zoom plus long.
 - Maison touchée : les bords de l’écran s’allument en rouge un court instant.
 - Aube : un rayon de soleil balaie la carte en diagonale ; les zombies encore debout restent figés et partent en fumée quand il les touche.
