@@ -30,7 +30,7 @@ La couleur dominante suit le rôle de la carte, avec les couleurs déjà fixées
 
 ## 3. Les bandes (reprises des images actuelles)
 
-Les personnages et les noms affichés en jeu viennent des images actuelles (table `ARTN`, `src/game-artx.js`). On les **garde** : seul le traitement change.
+Les personnages et les noms affichés en jeu viennent des images actuelles (champ `n` de chaque carte dans `src/engine.js` depuis la v275). On les **garde** : seul le traitement change.
 
 | Bande (règles) | Bande (images) | Tenue et accessoires | Décor du fond |
 |---|---|---|---|

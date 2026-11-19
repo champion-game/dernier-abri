@@ -34,8 +34,8 @@ I18N.en = {
   'Carcasse de voiture : bloque, 14 PV': 'Car carcass: blocks, 14 HP',
   Clôture: 'Fence',
   '5 PV': '5 HP',
-  'Clôture électrique : bloque, 5 PV, 1 dégât à chaque zombie qui la frappe':
-    'Electric fence: blocks, 5 HP, deals 1 damage to each zombie that hits it',
+  'Grillage électrifié : bloque, 5 PV, 1 dégât à chaque zombie qui le frappe':
+    'Electrified fence: blocks, 5 HP, deals 1 damage to each zombie that hits it',
   'Sacs de sable': 'Sandbags',
   '6 PV': '6 HP',
   'Bloque, 6 PV, ne perd jamais plus de 1 PV par coup': 'Blocks, 6 HP, never loses more than 1 HP per hit',
@@ -112,8 +112,8 @@ I18N.en = {
     'Every 2 turns, units around him attack one extra time',
   'Panneau solaire': 'Solar panel',
   Courant: 'Power',
-  'Projecteurs et clôtures marchent pendant une coupure, clôtures à 2 dégâts':
-    'Floodlights and fences keep working during a blackout, fences deal 2 damage',
+  'La Poursuite et les Grillages électrifiés marchent pendant une coupure, Grillages à 2 dégâts':
+    'The Spotlight and Electrified Fences keep working during a blackout, Fences deal 2 damage',
   'Piège à loup': 'Wolf trap',
   'Le premier zombie qui marche dessus subit 5 dégâts': 'The first zombie to step on it takes 5 damage',
   Essence: 'Gasoline',
@@ -350,8 +350,8 @@ I18N.en = {
     'Ranged healing: 1 HP every 2 turns to the most wounded unit within 2 tiles. At dawn, units in reserve (not wounded) recover 2 HP',
   Électricien: 'Electrician',
   'Courant · Répare': 'Power · Repairs',
-  'Tant qu’il est sur la carte : plus de coupure de courant et clôtures à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin':
-    "While he's on the map: no more blackouts and fences deal 2 damage. Repairs 1 HP per turn on an adjacent defense or post",
+  'Tant qu’il est sur la carte : plus de coupure de courant et Grillages électrifiés à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin':
+    "While he's on the map: no more blackouts and Electrified Fences deal 2 damage. Repairs 1 HP per turn on an adjacent defense or post",
   'Hélicoptère de ravitaillement': 'Supply helicopter',
   '+2 énergie · +2 cartes': '+2 energy · +2 cards',
   'Utilise-le sur l’abri : +2 énergie aujourd’hui et pioche 2 cartes':
@@ -499,23 +499,23 @@ I18N.en = {
     'During the night: zombies walk toward the target tile for 4 turns',
   'Brigade canine': 'K-9 unit',
   '3 ×2 · Étourdit': '3 ×2 · Stuns',
-  'Un policier et son chien : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent':
-    'A cop and his dog: 2 bites of 3 damage per turn, which stun and push back',
+  'L’Hercule et son Caniche savant : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent':
+    'The Strongman and his Clever Poodle: 2 bites of 3 damage per turn, which stun and push back',
   'Tireur de nuit': 'Night sniper',
   '3 · P4': '3 · R4',
-  'Un sniper et son projecteur : 3 dégâts à chaque tour, portée 4':
-    'A sniper and his floodlight: 3 damage each turn, range 4',
+  'La Biathlète et La Poursuite : 3 dégâts à chaque tour, portée 4':
+    'The Biathlete and The Spotlight: 3 damage each turn, range 4',
   'Lance-flammes lourd': 'Heavy flamethrower',
   'Feu ×6 · P2': 'Fire ×6 · R2',
   '2 dégâts à 6 zombies au plus à 2 cases, qui brûlent ensuite 3 tours':
     '2 damage to up to 6 zombies within 2 tiles, which then burn for 3 turns',
   Fortin: 'Blockhouse',
   '32 PV · 3': '32 HP · 3',
-  'Épave et bunker soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)':
-    'Wreck and bunker welded together: blocks, 32 HP, and strikes zombies in contact (3 damage)',
+  'Vieille guimbarde et Bunker de jardin soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)':
+    'Old Jalopy and Garden Bunker welded together: blocks, 32 HP, and strikes zombies in contact (3 damage)',
   'Tourelle automatique': 'Automatic turret',
-  'Montée par le mécanicien : 3 tirs de 1 dégât par tour, portée 2':
-    'Built by the mechanic: 3 shots of 1 damage per turn, range 2',
+  'Montée par le Mécano stock-car : 3 tirs de 1 dégât par tour, portée 2':
+    'Built by the Stock-Car Mechanic: 3 shots of 1 damage per turn, range 2',
   Équarrisseur: 'Slaughterer',
   '5 zone · Soin': '5 area · Heal',
   '5 dégâts à tous les zombies autour, récupère 1 PV par zombie tué':
@@ -594,7 +594,8 @@ I18N.en = {
   "L'essence ne brûle pas": "Gasoline doesn't burn",
   'L’eau noie les flammes et les pas.': 'Water drowns the flames and the footsteps.',
   'Coupure de courant': 'Blackout',
-  'Projecteurs et clôtures inactifs': 'Floodlights and fences inactive',
+  'La Poursuite, Grillage électrifié, Tour à éclairs et Projo de chantier inactifs':
+    'The Spotlight, Electrified Fence, Lightning Tower and Site Floodlight inactive',
   'Plus une lueur. Rien que leurs râles.': 'Not a glimmer. Only their groans.',
   'Horde affamée': 'Starving horde',
   'Les rôdeurs deviennent des coureurs': 'Walkers become runners',
@@ -610,7 +611,7 @@ I18N.en = {
   'Tes défenses ont +3 PV': 'Your defenses get +3 HP',
   'Tes unités au corps à corps font +1 dégât': 'Your melee units deal +1 damage',
   'Groupe électrogène': 'Generator',
-  'Plus de coupure de courant, clôtures à 2 dégâts': 'No more blackouts, fences deal 2 damage',
+  'Plus de coupure de courant, Grillages électrifiés à 2 dégâts': 'No more blackouts, Electrified Fences deal 2 damage',
   Aimant: 'Magnet',
   '+3 ferraille à chaque aube': '+3 scrap at each dawn',
   'Sifflet de dresseur': "Trainer's whistle",
@@ -648,8 +649,8 @@ I18N.en = {
     'your cops get +1 range; full team: +1 damage and +2 HP for the whole faction',
   Militaires: 'Military',
   'tes militaires font +1 dégât': 'your soldiers deal +1 damage',
-  'mines et dynamite : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction':
-    'mines and dynamite: +3 damage; full team: +1 damage and +2 HP for the whole faction',
+  'Galette d’acier, Éventail d’acier et Réveil-matin : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction':
+    'Steel Pancake, Steel Fan and Alarm Clock: +3 damage; full team: +1 damage and +2 HP for the whole faction',
   Soignants: 'Caregivers',
   'soins +1 PV, tes soignants font +1 dégât': 'heals +1 HP, your caregivers deal +1 damage',
   'à l’aube, toutes tes unités récupèrent 2 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction':
@@ -667,9 +668,9 @@ I18N.en = {
   'corps à corps : +1 PV à chaque zombie tué ; équipe complète : +1 dégât et +2 PV pour toute la faction':
     'melee: +1 HP for each zombie killed; full team: +1 damage and +2 HP for the whole faction',
   Bricoleurs: 'Tinkerers',
-  'tes bricoleurs font +1 dégât, clôtures +1': 'your tinkerers deal +1 damage, fences +1',
-  'clôtures : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction':
-    'fences: stun for 1 turn, repairs +1 HP; full team: +1 damage and +2 HP for the whole faction',
+  'tes bricoleurs font +1 dégât, Grillages électrifiés +1': 'your tinkerers deal +1 damage, Electrified Fences +1',
+  'Grillages électrifiés : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction':
+    'Electrified Fences: stun for 1 turn, repairs +1 HP; full team: +1 damage and +2 HP for the whole faction',
   Communauté: 'Community',
   'tes membres de la Communauté ont +1 portée, l’abri +1 PV à l’aube':
     'your Community members get +1 range, the shelter +1 HP at dawn',
@@ -775,7 +776,7 @@ I18N.en = {
   'La vitrine est intacte. Quelque chose bouge dans l’arrière-boutique.':
     'The window is intact. Something moves in the back room.',
   'Forcer la porte': 'Force the door',
-  'Une Trousse de secours… ou un défenseur blessé.': 'A First aid kit… or a wounded defender.',
+  'Une Boîte à pharmacie… ou un défenseur blessé.': 'A Medicine Box… or a wounded defender.',
   'Les étagères ne sont pas vides.': "The shelves aren't empty.",
   'Un rôdeur t’attendait. ': 'A walker was waiting for you. ',
   'Tu t’en sors de justesse.': 'You barely make it out.',
@@ -784,8 +785,8 @@ I18N.en = {
   'Un enfant seul': 'A lone child',
   'Un gamin, une fronde à la main, te suit de loin depuis l’aube.':
     'A kid, slingshot in hand, has been following you from afar since dawn.',
-  'Un Gamin rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).':
-    'A Kid joins the shelter, but the shelter loses 1 HP (one more mouth to feed).',
+  'Un Petit Lance-Pierre rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).':
+    'A Little Slingshot joins the shelter, but the shelter loses 1 HP (one more mouth to feed).',
   '{0} s’installe près de la porte, sa fronde chargée.': '{0} settles in by the door, slingshot loaded.',
   'Pas de place autour de l’abri : il repart avec tes provisions.':
     'No room around the shelter: he leaves with your supplies.',
@@ -826,7 +827,7 @@ I18N.en = {
   'Il a encore son arme et son uniforme, mais plus de chef.':
     'He still has his weapon and his uniform, but no commander.',
   'L’engager (10 ferraille)': 'Hire him (10 scrap)',
-  'Un Tireur d’élite rejoint l’abri.': 'A SWAT marksman joins the shelter.',
+  'Une Lanceuse de couteaux rejoint l’abri.': 'A Knife Thrower joins the shelter.',
   '{0} prend position sans un mot.': '{0} takes position without a word.',
   'Pas de place autour de l’abri : il garde ta ferraille et s’en va.':
     'No room around the shelter: he keeps your scrap and walks away.',
@@ -859,7 +860,7 @@ I18N.en = {
   'Un hélicoptère écrasé': 'A crashed helicopter',
   'La carcasse fume encore dans la clairière.': 'The wreck is still smoking in the clearing.',
   'Fouiller l’épave': 'Search the wreck',
-  'Une Munition anti-Colosse… ou une explosion.': 'An Anti-Colossus round… or an explosion.',
+  'Un Obus anti-Colosse… ou une explosion.': 'An Anti-Colossus Shell… or an explosion.',
   'Dans la soute : une munition de gros calibre.': 'In the hold: a heavy-caliber round.',
   'Le réservoir explose ! ': 'The fuel tank explodes! ',
   'Ne pas s’approcher': 'Stay away',
@@ -878,8 +879,8 @@ I18N.en = {
   'Deux survivants armés': 'Two armed survivors',
   'Un frère et une sœur, prêts à se battre, mais affamés.': 'A brother and a sister, ready to fight, but starving.',
   'Les nourrir': 'Feed them',
-  'Un Tireur et un Bûcheron rejoignent l’abri, mais l’abri perd 3 PV.':
-    'A Gunner and a Lumberjack join the shelter, but the shelter loses 3 HP.',
+  'Miss Deux-Colts et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.':
+    'Miss Two-Guns and Log Splitter join the shelter, but the shelter loses 3 HP.',
   ' et ': ' and ',
   '{0} rejoignent l’abri.': '{0} join the shelter.',
   'Pas de place autour de l’abri : ils mangent et repartent.': 'No room around the shelter: they eat and leave.',
@@ -901,7 +902,7 @@ I18N.en = {
   'Une ferme abandonnée': 'An abandoned farm',
   'Le potager a poussé tout seul.': 'The vegetable garden grew all by itself.',
   'Remplir les sacs': 'Fill the bags',
-  'Des Conserves rejoignent ton deck.': 'Canned food joins your deck.',
+  'Un Garde-manger rejoint ton deck.': 'A Pantry joins your deck.',
   'Carottes, pommes de terre et un bocal de confiture.': 'Carrots, potatoes and a jar of jam.',
   'Ne pas s’attarder': "Don't linger",
   'Un épouvantail te regarde partir.': 'A scarecrow watches you leave.',
@@ -957,8 +958,8 @@ I18N.en = {
   'Une rivière protège le nord : la horde arrive par les 3 autres côtés. Deux bottes de paille (barricades) au départ.':
     'A river protects the north: the horde comes from the other 3 sides. Two hay bales (barricades) to start.',
   'La station-service': 'The gas station',
-  'Deux bonbonnes de gaz et 10 ferraille au départ, l’Essence ne coûte rien. Mais la horde est 15 % plus nombreuse.':
-    'Two gas canisters and 10 scrap to start, Gasoline costs nothing. But the horde is 15% larger.',
+  'Deux Butanes et 10 ferraille au départ, la Nappe de feu ne coûte rien. Mais la horde est 15 % plus nombreuse.':
+    'Two Butanes and 10 scrap to start, Fire Slick costs nothing. But the horde is 15% larger.',
   'Le centre commercial': 'The mall',
   'Murs épais : l’abri a 15 PV au lieu de 10. Mais les zombies ont 15 % de PV en plus.':
     'Thick walls: the shelter has 15 HP instead of 10. But zombies have 15% more HP.',
@@ -1055,7 +1056,7 @@ I18N.en = {
   'Fin de l’épidémie': 'End of the outbreak',
   'Tuer le Patient Zéro.': 'Kill Patient Zero.',
   'Gros calibre': 'Big gun',
-  'Achever un boss avec une Munition anti-Colosse.': 'Finish off a boss with an Anti-Colossus round.',
+  'Achever un boss avec un Obus anti-Colosse.': 'Finish off a boss with an Anti-Colossus Shell.',
   'Pas une égratignure': 'Not a scratch',
   'Finir une nuit de boss sans que l’abri perde de PV.': 'Finish a boss night without the shelter losing any HP.',
   Carnage: 'Carnage',
@@ -1283,10 +1284,10 @@ I18N.en = {
   '+{0} PV': '+{0} HP',
   Soigné: 'Healed',
   'Fusée !': 'Flare!',
-  'Largage : +': 'Airdrop: +',
+  'Colis du ciel : +': 'Sky Parcel: +',
   ' cartes': ' cards',
-  '<h2 class="pw">Carte routière</h2><p>Les prochaines cartes de ta pioche. Prends-en une dans ta main.</p>\n  <div class="picks">{0}</div>':
-    '<h2 class="pw">Road map</h2><p>The next cards in your draw pile. Take one into your hand.</p>\n  <div class="picks">{0}</div>',
+  '<h2 class="pw">Carte et boussole</h2><p>Les prochaines cartes de ta pioche. Prends-en une dans ta main.</p>\n  <div class="picks">{0}</div>':
+    '<h2 class="pw">Map and Compass</h2><p>The next cards in your draw pile. Take one into your hand.</p>\n  <div class="picks">{0}</div>',
   'Vague {0} repoussée !': 'Wave {0} repelled!',
   'Vague {0} sur {1} : {2} arrive !': 'Wave {0} of {1}: {2} is coming!',
   'sont blessés et partent': 'are wounded and go',
@@ -1513,8 +1514,8 @@ I18N.en = {
   '<p>Choisis une carte de ta <b>pioche</b> pour l’avoir en main le lendemain. Puis le <b>troc</b> : répare l’abri, améliore ou jette une carte, ou ouvre la <b>boutique</b> (objets absents de ton deck et munitions anti-Colosse, 2 au plus, usage unique).</p><p>Parfois, un <b>événement</b> te propose un choix risqué ou prudent. Toutes les 5 nuits, tu trouves une <b>relique</b>.</p>':
     '<p>Choose a card from your <b>draw pile</b> to have in hand the next day. Then the <b>barter</b>: repair the shelter, upgrade or discard a card, or open the <b>shop</b> (items not in your deck and anti-Colossus rounds, 2 at most, single use).</p><p>Sometimes, an <b>event</b> offers you a risky or a cautious choice. Every 5 nights, you find a <b>relic</b>.</p>',
   'Rôles et escouade': 'Roles and squad',
-  '<p>{0} <b>Tank</b> : beaucoup de PV ; les zombies à {1} cases ou moins le visent ; il bloque 1 coup sur 3 et frappe peu (1 dégât).</p><p>{2} <b>Soin</b> : soigne tes unités, à distance (portée en vert) ou sur les 8 cases autour. Les murs et postes sont réparés par les réparateurs.</p><p>{3} <b>DPS</b> : gros dégâts. Le corps à corps rend chaque coup reçu au contact. <b>Tir de soutien</b> : +1 dégât (une fois par tour) sur un zombie au contact d’un Tank. Les tirs lents (Sniper…) reçoivent leurs bonus multipliés par leur intervalle.</p><p><b>Escouade</b> : un Tank, un Soin et un DPS voisins gagnent chacun +1.</p>':
-    '<p>{0} <b>Tank</b>: lots of HP; zombies within {1} tiles target it; it blocks 1 hit out of 3 and hits weakly (1 damage).</p><p>{2} <b>Heal</b>: heals your units, at range (range in green) or on the 8 tiles around. Walls and posts are repaired by repairers.</p><p>{3} <b>DPS</b>: big damage. Melee units strike back at every hit taken on contact. <b>Support fire</b>: +1 damage (once per turn) on a zombie in contact with a Tank. Slow shooters (Sniper…) get their bonuses multiplied by their interval.</p><p><b>Squad</b>: an adjacent Tank, Heal and DPS each gain +1.</p>',
+  '<p>{0} <b>Tank</b> : beaucoup de PV ; les zombies à {1} cases ou moins le visent ; il bloque 1 coup sur 3 et frappe peu (1 dégât).</p><p>{2} <b>Soin</b> : soigne tes unités, à distance (portée en vert) ou sur les 8 cases autour. Les murs et postes sont réparés par les réparateurs.</p><p>{3} <b>DPS</b> : gros dégâts. Le corps à corps rend chaque coup reçu au contact. <b>Tir de soutien</b> : +1 dégât (une fois par tour) sur un zombie au contact d’un Tank. Les tirs lents (La Biathlète…) reçoivent leurs bonus multipliés par leur intervalle.</p><p><b>Escouade</b> : un Tank, un Soin et un DPS voisins gagnent chacun +1.</p>':
+    '<p>{0} <b>Tank</b>: lots of HP; zombies within {1} tiles target it; it blocks 1 hit out of 3 and hits weakly (1 damage).</p><p>{2} <b>Heal</b>: heals your units, at range (range in green) or on the 8 tiles around. Walls and posts are repaired by repairers.</p><p>{3} <b>DPS</b>: big damage. Melee units strike back at every hit taken on contact. <b>Support fire</b>: +1 damage (once per turn) on a zombie in contact with a Tank. Slow shooters (The Biathlete…) get their bonuses multiplied by their interval.</p><p><b>Squad</b>: an adjacent Tank, Heal and DPS each gain +1.</p>',
   'Les factions': 'Factions',
   '<p>Chaque faction a 2 bonus : à 2 survivants, puis à 5 (équipe complète). Seuls les survivants comptent (humains et chiens). Son Chef légendaire compte pour 2.</p><div class="deck">{0}</div>':
     '<p>Each faction has 2 bonuses: at 2 survivors, then at 5 (full team). Only survivors count (humans and dogs). Its legendary Chief counts as 2.</p><div class="deck">{0}</div>',
@@ -1681,28 +1682,29 @@ I18N.en = {
     '<button type="button" class="skip" data-a="daily">Daily challenge</button>',
   '<button type="button" class="skip lockb" disabled title="Dans le jeu complet">{0} Défi du jour</button>':
     '<button type="button" class="skip lockb" disabled title="In the full game">{0} Daily challenge</button>',
-  'Les zombies ont frappé ton Bûcheron : il lui reste {0} PV sur {1}. Touche la Trousse de secours.':
-    'The zombies hit your Lumberjack: he has {0} HP left out of {1}. Tap the First aid kit.',
-  'Touche le Bûcheron pour le soigner.': 'Tap the Lumberjack to heal him.',
-  'Touche le Policier : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.':
-    "Tap the Cop: he's a Tank. He draws zombies within 3 squares onto himself and pushes them back.",
-  'Le Policier encaisse, le Bûcheron frappe. Touche « Affronter la nuit ».':
-    'The Cop takes the hits, the Lumberjack strikes. Tap “Face the night”.',
-  'Touche le Tireur : un DPS à distance, il tire à 2 cases.': 'Tap the Gunner: a ranged DPS, he shoots 2 squares away.',
-  'Touche l’Infirmière : elle soigne à 2 cases, et deux fois plus un Tank.':
-    'Tap the Nurse: she heals 2 squares away, and twice as much on a Tank.',
-  'Pose-la derrière le Policier.': 'Place her behind the Cop.',
-  'Touche le Policier pour l’équiper.': 'Tap the Cop to equip him.',
+  'Les zombies ont frappé Fend-la-Bûche : il lui reste {0} PV sur {1}. Touche la Boîte à pharmacie.':
+    'The zombies hit Log Splitter: he has {0} HP left out of {1}. Tap the Medicine Box.',
+  'Touche Fend-la-Bûche pour le soigner.': 'Tap Log Splitter to heal him.',
+  'Touche l’Hercule : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.':
+    "Tap the Strongman: he's a Tank. He draws zombies within 3 squares onto himself and pushes them back.",
+  'L’Hercule encaisse, Fend-la-Bûche frappe. Touche « Affronter la nuit ».':
+    'The Strongman takes the hits, Log Splitter strikes. Tap “Face the night”.',
+  'Touche Miss Deux-Colts : un DPS à distance, elle tire à 2 cases.':
+    'Tap Miss Two-Guns: a ranged DPS, she shoots 2 squares away.',
+  'Touche Sœur Bicyclette : elle soigne à 2 cases, et deux fois plus un Tank.':
+    'Tap Sister Bicycle: she heals 2 squares away, and twice as much on a Tank.',
+  'Pose-la derrière l’Hercule.': 'Place her behind the Strongman.',
+  'Touche l’Hercule pour l’équiper.': 'Tap the Strongman to equip him.',
   'Ton escouade est prête. Demain soir, c’est la nuit rouge. Touche « Affronter la nuit ».':
     'Your squad is ready. Tomorrow night is the red night. Tap “Face the night”.',
-  'Le Policier attire les zombies et les repousse ; le Bûcheron frappe à côté de lui.':
-    'The Cop draws the zombies and pushes them back; the Lumberjack strikes beside him.',
+  'L’Hercule attire les zombies et les repousse ; Fend-la-Bûche frappe à côté de lui.':
+    'The Strongman draws the zombies and pushes them back; Log Splitter strikes beside him.',
   'Escouade : Tank, Soin et DPS côte à côte gagnent chacun +1 dégât (ou +1 soin).':
     'Squad: a Tank, a Heal and a DPS side by side each gain +1 damage (or +1 heal).',
-  'Le Policier a pris les coups à la place du Bûcheron. Prends le Tireur : il tirera de derrière.':
-    "The Cop took the hits for the Lumberjack. Take the Gunner: he'll shoot from behind.",
-  'Prends l’Infirmière : avec le Policier et tes DPS, elle formera une escouade.':
-    "Take the Nurse: with the Cop and your DPS, she'll form a squad.",
+  'L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss Deux-Colts : elle tirera de derrière.':
+    "The Strongman took the hits for Log Splitter. Take Miss Two-Guns: she'll shoot from behind.",
+  'Prends Sœur Bicyclette : avec l’Hercule et tes DPS, elle formera une escouade.':
+    "Take Sister Bicycle: with the Strongman and your DPS, she'll form a squad.",
   'Tutoriel terminé : tu sais tout l’essentiel. À toi de jouer !':
     'Tutorial complete: you know the essentials. Your turn!',
   'Passer le tutoriel': 'Skip the tutorial',
@@ -1710,44 +1712,44 @@ I18N.en = {
   ' À chaque aube, tu choisis une carte de ta pioche : elle arrive dans ta main dès demain. Ensuite viendra le troc, où tu dépenses ta ferraille.':
     ' Each dawn, you pick a card from your draw pile: it arrives in your hand tomorrow. Then comes the trade, where you spend your scrap.',
   'Touche la case qui brille.': 'Tap the glowing square.',
-  'Cette nuit, les zombies viendront par les 4 routes. Touche le Bûcheron : il frappe fort au corps à corps.':
-    'Tonight the zombies will come by all 4 roads. Tap the Lumberjack: he hits hard in melee.',
+  'Cette nuit, les zombies viendront par les 4 routes. Touche Fend-la-Bûche : il frappe fort au corps à corps.':
+    'Tonight the zombies will come by all 4 roads. Tap Log Splitter: he hits hard in melee.',
   'Pose-le juste au nord de ta maison.': 'Place him just north of your house.',
-  'Touche la Barricade : une carte couvre 4 cases.': 'Tap the Barricade: one card covers 4 squares.',
-  'Ferme les 3 autres côtés de la maison et protège le Bûcheron : pose la Barricade sur les 4 cases qui brillent.':
-    "Close the house's other 3 sides and protect the Lumberjack: place the Barricade on the 4 glowing squares.",
+  'Touche les Planches clouées : une carte couvre 4 cases.': 'Tap the Nailed Boards: one card covers 4 squares.',
+  'Ferme les 3 autres côtés de la maison et protège Fend-la-Bûche : pose les Planches clouées sur les 4 cases qui brillent.':
+    "Close the house's other 3 sides and protect Log Splitter: place the Nailed Boards on the 4 glowing squares.",
   'Encore {0} cases : touche les cases qui brillent.': '{0} squares left: tap the glowing squares.',
   'Encore 1 case : touche la case qui brille.': '1 square left: tap the glowing square.',
-  'La maison n’a plus qu’une porte, gardée par ton Bûcheron : les zombies devront passer par lui. Touche « Affronter la nuit ».':
-    'The house has only one door left, guarded by your Lumberjack: the zombies will have to go through him. Tap “Face the night”.',
-  'Le Bûcheron ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).':
-    "The Lumberjack won't hold alone: he'll leave the door to a Tank. Tap him to shift him one square left (moving is free during the day).",
-  'Touche la barricade de devant pour la déplacer à droite de la porte.':
-    'Tap the front barricade to move it to the right of the door.',
-  'Pose-le dans la porte, à côté du Bûcheron : à côté d’un Tank, un DPS fait +1 dégât.':
-    'Place him in the door, next to the Lumberjack: next to a Tank, a DPS deals +1 damage.',
-  'Le Policier part en première ligne : touche-le pour l’avancer d’une case.':
-    'The Cop goes to the front line: tap him to move him one square forward.',
-  'Devant, il va prendre des coups. Touche le Matériel lourd : +4 PV, et un Tank équipé bloque 1 coup sur 2.':
-    "Up front, he'll take hits. Tap the Heavy gear: +4 HP, and an equipped Tank blocks 1 hit in 2.",
-  'Pose-le juste derrière le Policier, à l’abri.': 'Place him right behind the Cop, in cover.',
-  'Touche les Barbelés : un piège qui blesse et ralentit chaque zombie qui passe, sur 4 cases.':
-    'Tap the Barbed wire: a trap that hurts and slows every zombie passing through, on 4 squares.',
+  'La maison n’a plus qu’une porte, gardée par Fend-la-Bûche : les zombies devront passer par lui. Touche « Affronter la nuit ».':
+    'The house has only one door left, guarded by Log Splitter: the zombies will have to go through him. Tap “Face the night”.',
+  'Fend-la-Bûche ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).':
+    "Log Splitter won't hold alone: he'll leave the door to a Tank. Tap him to shift him one square left (moving is free during the day).",
+  'Touche les planches de devant pour les déplacer à droite de la porte.':
+    'Tap the front boards to move them to the right of the door.',
+  'Pose-le dans la porte, à côté de Fend-la-Bûche : à côté d’un Tank, un DPS fait +1 dégât.':
+    'Place him in the door, next to Log Splitter: next to a Tank, a DPS deals +1 damage.',
+  'L’Hercule part en première ligne : touche-le pour l’avancer d’une case.':
+    'The Strongman goes to the front line: tap him to move him one square forward.',
+  'Devant, il va prendre des coups. Touche le Casque et plaques : +4 PV, et un Tank équipé bloque 1 coup sur 2.':
+    "Up front, he'll take hits. Tap the Helmet and Plates: +4 HP, and an equipped Tank blocks 1 hit in 2.",
+  'Pose-la juste derrière l’Hercule, à l’abri.': 'Place her right behind the Strongman, in cover.',
+  'Touche les Ronces de fer : un piège qui blesse et ralentit chaque zombie qui passe, sur 4 cases.':
+    'Tap the Iron Brambles: a trap that hurts and slows every zombie passing through, on 4 squares.',
   'Pose-les sur les 4 routes, à la sortie de la forêt : chaque zombie sera touché dès son arrivée.':
     'Place it on the 4 roads, where they leave the forest: every zombie gets hit as soon as it arrives.',
   'Les zombies seront ralentis dès les routes, puis abattus. Touche « Affronter la nuit ».':
     'The zombies will be slowed on the roads, then shot down. Tap “Face the night”.',
-  'Le Tireur va passer à droite : touche d’abord la barricade de droite pour l’avancer, elle le protégera.':
-    'The Gunner will move right: first tap the right barricade to move it forward, it will protect him.',
-  'Touche le Tireur pour le décaler à droite : la place derrière le Policier sera libre.':
-    'Tap the Gunner to shift him right: the spot behind the Cop will be free.',
-  'Les zombies arrivent par les 4 routes et font le tour jusqu’à ton Bûcheron. Le bouton du bas accélère la nuit.':
-    'The zombies come by all 4 roads and go around to your Lumberjack. The bottom button speeds up the night.',
-  'Les Barbelés blessent et ralentissent les zombies pendant que le Tireur les abat.':
-    'The Barbed wire hurts and slows the zombies while the Gunner shoots them down.',
+  'Miss Deux-Colts va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.':
+    'Miss Two-Guns will move right: first tap the right boards to move them forward, they will protect her.',
+  'Touche Miss Deux-Colts pour la décaler à droite : la place derrière l’Hercule sera libre.':
+    'Tap Miss Two-Guns to shift her right: the spot behind the Strongman will be free.',
+  'Les zombies arrivent par les 4 routes et font le tour jusqu’à Fend-la-Bûche. Le bouton du bas accélère la nuit.':
+    'The zombies come by all 4 roads and go around to Log Splitter. The bottom button speeds up the night.',
+  'Les Ronces de fer blessent et ralentissent les zombies pendant que Miss Deux-Colts les abat.':
+    'The Iron Brambles hurt and slow the zombies while Miss Two-Guns shoots them down.',
   'Nuit rouge : la horde est plus nombreuse !': 'Red night: the horde is bigger!',
-  'Ton Bûcheron a tenu la porte, mais il est blessé. Prends le Policier : demain, il encaissera à sa place.':
-    "Your Lumberjack held the door, but he's hurt. Take the Cop: tomorrow he'll take the hits instead.",
+  'Fend-la-Bûche a tenu la porte, mais il est blessé. Prends l’Hercule : demain, il encaissera à sa place.':
+    "Log Splitter held the door, but he's hurt. Take the Strongman: tomorrow he'll take the hits instead.",
   'Ton escouade a tenu. Demain soir, c’est la nuit rouge : plus de zombies, et plus de guide.':
     'Your squad held. Tomorrow night is the red night: more zombies, and no more guide.',
   'Ce soir, nuit rouge : la horde est plus nombreuse. À toi de jouer : renforce ta défense avec tes cartes.':
@@ -2199,8 +2201,10 @@ I18N.en = {
     'The more units of one faction you place, the stronger that faction gets.',
   'Au troc, la ferraille sert à réparer, acheter et améliorer.':
     'At the dawn barter, scrap lets you repair, buy and upgrade.',
-  'Le Café ne coûte rien et donne 2 énergies de plus.': 'Coffee costs nothing and gives 2 extra energy.',
-  'Une Radio en jeu ajoute une carte à ta main chaque jour.': 'A Radio in play adds one card to your hand each day.',
+  'Le Café brûlant ne coûte rien et donne 2 énergies de plus.':
+    'Scalding Coffee costs nothing and gives 2 extra energy.',
+  'Un Radio-cintre en jeu ajoute une carte à ta main chaque jour.':
+    'A Hanger Radio in play adds one card to your hand each day.',
   'Les unités posées restent en place d’une nuit à l’autre et gardent leurs dégâts.':
     'Placed units stay put from one night to the next and keep their damage.',
 };

@@ -24,7 +24,7 @@ const Z = (() => {
   const U = {
     // défenses
     bar: {
-      n: _t('Barricade'),
+      n: _t('Planches clouées'),
       cat: 'wall',
       hp: 7,
       block: 1,
@@ -32,7 +32,7 @@ const Z = (() => {
       d: _t('Planches clouées : bloque les zombies, 7 PV'),
     },
     car: {
-      n: _t('Épave'),
+      n: _t('Vieille guimbarde'),
       cat: 'wall',
       hp: 14,
       block: 1,
@@ -40,16 +40,16 @@ const Z = (() => {
       d: _t('Carcasse de voiture : bloque, 14 PV'),
     },
     fen: {
-      n: _t('Clôture'),
+      n: _t('Grillage électrifié'),
       cat: 'wall',
       hp: 5,
       block: 1,
       thorns: 1,
       v: _t('5 PV'),
-      d: _t('Clôture électrique : bloque, 5 PV, 1 dégât à chaque zombie qui la frappe'),
+      d: _t('Grillage électrifié : bloque, 5 PV, 1 dégât à chaque zombie qui le frappe'),
     },
     sand: {
-      n: _t('Sacs de sable'),
+      n: _t('Mur de sacs'),
       cat: 'wall',
       hp: 6,
       block: 1,
@@ -58,7 +58,7 @@ const Z = (() => {
       d: _t('Bloque, 6 PV, ne perd jamais plus de 1 PV par coup'),
     },
     door: {
-      n: _t('Porte blindée'),
+      n: _t('Porte de chambre forte'),
       cat: 'wall',
       hp: 18,
       block: 1,
@@ -67,7 +67,7 @@ const Z = (() => {
       d: _t('Bloque, 18 PV, seulement sur une case collée à l’abri'),
     },
     tire: {
-      n: _t('Mur de pneus'),
+      n: _t('Pneus peints'),
       cat: 'wall',
       hp: 8,
       block: 1,
@@ -77,7 +77,7 @@ const Z = (() => {
     },
     // tireurs
     gun: {
-      n: _t('Tireur'),
+      n: _t('Miss Deux-Colts'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -88,7 +88,7 @@ const Z = (() => {
       d: _t('2 dégâts par tour, portée 2'),
     },
     snp: {
-      n: _t('Sniper'),
+      n: _t('La Biathlète'),
       cat: 'shoot',
       hp: 2,
       block: 1,
@@ -99,7 +99,7 @@ const Z = (() => {
       d: _t('5 dégâts tous les 2 tours, portée 4'),
     },
     sht: {
-      n: _t('Fusil à pompe'),
+      n: _t('Calibre 12'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -112,7 +112,7 @@ const Z = (() => {
       d: _t('2 dégâts aux 4 zombies les plus proches à 1 case'),
     },
     xbow: {
-      n: _t('Arbalète'),
+      n: _t('Arbalète de camp'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -125,7 +125,7 @@ const Z = (() => {
       d: _t('À chaque tour, 2 dégâts à 2 zombies différents, portée 2'),
     },
     flame: {
-      n: _t('Lance-flammes'),
+      n: _t('Cracheur de feu'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -137,7 +137,7 @@ const Z = (() => {
       d: _t('1 dégât à 2 cases et enflamme le zombie : 1 dégât par tour pendant 3 tours, 5 PV'),
     },
     mg: {
-      n: _t('Mitrailleuse'),
+      n: _t('Tondeuse de guerre'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -150,7 +150,7 @@ const Z = (() => {
       d: _t('3 tirs de 2 dégâts par tour, portée 2, s’enraye 1 tour sur 3'),
     },
     molo: {
-      n: _t('Cocktails'),
+      n: _t('La Barmaid'),
       cat: 'shoot',
       hp: 2,
       block: 1,
@@ -162,7 +162,7 @@ const Z = (() => {
       d: _t('Tous les 3 tours, un cocktail sur le groupe le plus serré : 2 dégâts et feu, portée 2'),
     },
     kid: {
-      n: _t('Gamin'),
+      n: _t('Petit Lance-Pierre'),
       cat: 'shoot',
       hp: 1,
       block: 1,
@@ -175,7 +175,7 @@ const Z = (() => {
     },
     // corps à corps
     axe: {
-      n: _t('Bûcheron'),
+      n: _t('Fend-la-Bûche'),
       cat: 'melee',
       hp: 7,
       block: 1,
@@ -186,7 +186,7 @@ const Z = (() => {
       d: _t('5 dégâts par tour au corps à corps, 7 PV'),
     },
     dog: {
-      n: _t('Chien'),
+      n: _t('Chien Bandana'),
       cat: 'melee',
       hp: 5,
       block: 1,
@@ -198,7 +198,7 @@ const Z = (() => {
       d: _t('Mord 2 fois par tour (2 dégâts) au corps à corps, 5 PV'),
     },
     cop: {
-      n: _t('Policier'),
+      n: _t("L'Hercule"),
       cat: 'melee',
       hp: 9,
       block: 1,
@@ -210,7 +210,7 @@ const Z = (() => {
       d: _t('1 dégât au contact et repousse le zombie d’une case, 9 PV'),
     },
     butch: {
-      n: _t('Boucher'),
+      n: _t('Gros Couperet'),
       cat: 'melee',
       hp: 6,
       block: 1,
@@ -222,7 +222,7 @@ const Z = (() => {
       d: _t('5 dégâts au contact, récupère 1 PV à chaque zombie tué'),
     },
     monk: {
-      n: _t('Moine'),
+      n: _t('Le Moine voisin'),
       cat: 'melee',
       hp: 11,
       block: 1,
@@ -235,7 +235,7 @@ const Z = (() => {
     },
     // soutien
     med: {
-      n: _t('Infirmière'),
+      n: _t('Sœur Bicyclette'),
       cat: 'help',
       hp: 2,
       block: 1,
@@ -245,7 +245,7 @@ const Z = (() => {
       d: _t('Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases ou moins'),
     },
     lamp: {
-      n: _t('Projecteur'),
+      n: _t('La Poursuite'),
       cat: 'post',
       hp: 2,
       block: 1,
@@ -254,7 +254,7 @@ const Z = (() => {
       d: _t('Les unités autour font +1 dégât'),
     },
     radio: {
-      n: _t('Radio'),
+      n: _t('Radio-cintre'),
       cat: 'post',
       hp: 2,
       block: 1,
@@ -262,7 +262,7 @@ const Z = (() => {
       d: _t("Tant qu'elle tient, tu pioches 1 carte de plus chaque jour"),
     },
     cook: {
-      n: _t('Cuisinier'),
+      n: _t('Sœur Fournée'),
       cat: 'help',
       hp: 2,
       block: 1,
@@ -271,7 +271,7 @@ const Z = (() => {
       d: _t('À chaque aube, l’abri récupère 1 PV'),
     },
     mech: {
-      n: _t('Mécanicien'),
+      n: _t('Mécano stock-car'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -280,7 +280,7 @@ const Z = (() => {
       d: _t('Répare 1 PV à une défense ou un poste voisin à chaque tour'),
     },
     siren: {
-      n: _t('Sirène'),
+      n: _t('Porte-voix'),
       cat: 'post',
       hp: 4,
       block: 1,
@@ -289,7 +289,7 @@ const Z = (() => {
       d: _t('Les zombies à 2 cases ou moins marchent vers elle au lieu de l’abri'),
     },
     lead: {
-      n: _t('Chef de groupe'),
+      n: _t('Le Coach'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -298,17 +298,17 @@ const Z = (() => {
       d: _t('Tous les 2 tours, les unités autour attaquent une fois de plus'),
     },
     solar: {
-      n: _t('Panneau solaire'),
+      n: _t('Plein Soleil'),
       cat: 'post',
       hp: 2,
       block: 1,
       solar: 1,
       v: _t('Courant'),
-      d: _t('Projecteurs et clôtures marchent pendant une coupure, clôtures à 2 dégâts'),
+      d: _t('La Poursuite et les Grillages électrifiés marchent pendant une coupure, Grillages à 2 dégâts'),
     },
     // pièges
     trap: {
-      n: _t('Piège à loup'),
+      n: _t('Croc-de-loup'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -317,7 +317,7 @@ const Z = (() => {
       d: _t('Le premier zombie qui marche dessus subit 5 dégâts'),
     },
     fire: {
-      n: _t('Essence'),
+      n: _t('Nappe de feu'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -326,7 +326,7 @@ const Z = (() => {
       d: _t("Flaque enflammée : 1 dégât par tour aux zombies dessus, s'éteint à l'aube"),
     },
     mine: {
-      n: _t('Mine'),
+      n: _t("Galette d'acier"),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -335,7 +335,7 @@ const Z = (() => {
       d: _t('Explose au passage : 6 dégâts sur la case et autour'),
     },
     wire: {
-      n: _t('Barbelés'),
+      n: _t('Ronces de fer'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -344,7 +344,7 @@ const Z = (() => {
       d: _t('Ne bloque pas : 1 dégât et ralentit chaque zombie qui passe, reste en place'),
     },
     spike: {
-      n: _t('Fosse à pieux'),
+      n: _t('Gueule de pieux'),
       cat: 'trap',
       hp: 4,
       block: 0,
@@ -353,7 +353,7 @@ const Z = (() => {
       d: _t('3 dégâts à chaque zombie qui tombe dedans, casse après 4 zombies'),
     },
     gas: {
-      n: _t('Bonbonne de gaz'),
+      n: _t('Butane'),
       cat: 'trap',
       hp: 1,
       block: 1,
@@ -362,7 +362,7 @@ const Z = (() => {
       d: _t('Bloque. Explose quand un zombie la frappe : 5 dégâts sur la case et autour'),
     },
     smoke: {
-      n: _t('Fumigène'),
+      n: _t('Fumée verte'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -371,7 +371,7 @@ const Z = (() => {
       d: _t('Le premier zombie qui passe libère la fumée : les zombies autour sont perdus 3 tours'),
     },
     bait: {
-      n: _t('Appât'),
+      n: _t('Steak pendu'),
       cat: 'trap',
       hp: 3,
       block: 0,
@@ -380,7 +380,7 @@ const Z = (() => {
       d: _t('Viande crue : 3 zombies s’arrêtent 3 tours pour manger'),
     },
     dyn: {
-      n: _t('Dynamite'),
+      n: _t('Réveil-matin'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -390,7 +390,7 @@ const Z = (() => {
     },
     // objets
     food: {
-      n: _t('Conserves'),
+      n: _t('Garde-manger'),
       cat: 'item',
       instant: 1,
       gain: 3,
@@ -398,7 +398,7 @@ const Z = (() => {
       d: _t("Utilise-la sur l'abri : +3 PV"),
     },
     rep: {
-      n: _t('Outils'),
+      n: _t('Caisse à outils'),
       cat: 'item',
       instant: 1,
       gain: 3,
@@ -406,7 +406,7 @@ const Z = (() => {
       d: _t("Utilise-les sur l'abri : toutes tes unités récupèrent 3 PV"),
     },
     kit: {
-      n: _t('Trousse de secours'),
+      n: _t('Boîte à pharmacie'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -414,14 +414,14 @@ const Z = (() => {
       d: _t('Utilise-la sur une de tes unités blessées : elle récupère tous ses PV'),
     },
     coffee: {
-      n: _t('Café'),
+      n: _t('Café brûlant'),
       cat: 'item',
       instant: 1,
       v: _t('+2 énergie'),
       d: _t('Utilise-le sur l’abri : gratuit, +2 énergie aujourd’hui'),
     },
     roadmap: {
-      n: _t('Carte routière'),
+      n: _t('Carte et boussole'),
       cat: 'item',
       instant: 1,
       peek: 3,
@@ -430,7 +430,7 @@ const Z = (() => {
     },
     // --- extension : nouvelles cartes de faction ---
     riot: {
-      n: _t('Agent anti-émeute'),
+      n: _t('Videur du chapiteau'),
       cat: 'melee',
       hp: 14,
       block: 1,
@@ -443,7 +443,7 @@ const Z = (() => {
       d: _t('Bouclier : 14 PV, ne perd jamais plus de 2 PV par coup, 1 dégât et repousse'),
     },
     k9: {
-      n: _t('Chien policier'),
+      n: _t('Caniche savant'),
       cat: 'melee',
       hp: 6,
       block: 1,
@@ -456,7 +456,7 @@ const Z = (() => {
       d: _t('Mord 2 fois par tour (1 dégât) ; la 1ʳᵉ morsure du tour étourdit le zombie 1 tour'),
     },
     barrier: {
-      n: _t('Barrage de police'),
+      n: _t('Barrière de piste'),
       cat: 'wall',
       hp: 7,
       block: 1,
@@ -464,7 +464,7 @@ const Z = (() => {
       d: _t('Barrières de police : bloque, 7 PV'),
     },
     swat: {
-      n: _t('Tireur d’élite du GIGN'),
+      n: _t('Lanceuse de couteaux'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -475,7 +475,7 @@ const Z = (() => {
       d: _t('2 dégâts par tour, portée 2'),
     },
     mortar: {
-      n: _t('Mortier'),
+      n: _t('Mortier potager'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -487,7 +487,7 @@ const Z = (() => {
       d: _t('Tous les 3 tours, un obus sur le groupe le plus serré : 3 dégâts sur la case et autour'),
     },
     sentry: {
-      n: _t('Sentinelle automatique'),
+      n: _t('Tourelle-caméra'),
       cat: 'shoot',
       hp: 6,
       block: 1,
@@ -499,7 +499,7 @@ const Z = (() => {
       d: _t('Tourelle : 2 tirs de 1 dégât par tour, portée 2, 6 PV'),
     },
     clay: {
-      n: _t('Mine claymore'),
+      n: _t("Éventail d'acier"),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -508,7 +508,7 @@ const Z = (() => {
       d: _t('Explose au passage : 4 dégâts sur toutes les cases à 2 cases ou moins'),
     },
     bunker: {
-      n: _t('Bunker'),
+      n: _t('Bunker de jardin'),
       cat: 'wall',
       hp: 16,
       block: 1,
@@ -519,7 +519,7 @@ const Z = (() => {
       d: _t('Bloque, 16 PV, et tire sur les zombies au contact'),
     },
     pharma: {
-      n: _t('Pharmacienne'),
+      n: _t('Sœur Alambic'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -529,7 +529,7 @@ const Z = (() => {
       d: _t('Soin au contact : 1 PV à chaque tour à l’unité voisine la plus blessée (8 cases autour)'),
     },
     hospital: {
-      n: _t('Hôpital de campagne'),
+      n: _t('Dortoir des sœurs'),
       cat: 'post',
       hp: 6,
       block: 1,
@@ -538,7 +538,7 @@ const Z = (() => {
       d: _t('Soin au contact : tous les 2 tours, toutes les unités sur les 8 cases autour récupèrent 1 PV'),
     },
     priest: {
-      n: _t('Prêtre'),
+      n: _t("L'Exorciste"),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -547,7 +547,7 @@ const Z = (() => {
       d: _t('Une fois chacune, les unités voisines qui devraient tomber restent à 1 PV'),
     },
     stretch: {
-      n: _t('Brancardier'),
+      n: _t('Novice à roulettes'),
       cat: 'help',
       hp: 4,
       block: 1,
@@ -559,7 +559,7 @@ const Z = (() => {
       ),
     },
     brasero: {
-      n: _t('Brasero'),
+      n: _t('Brasero forain'),
       cat: 'wall',
       hp: 5,
       block: 1,
@@ -568,7 +568,7 @@ const Z = (() => {
       d: _t('Bloque. Tous les 2 tours, 1 dégât et feu aux zombies collés à lui'),
     },
     firetrap: {
-      n: _t('Fût piégé'),
+      n: _t('Baril surprise'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -577,7 +577,7 @@ const Z = (() => {
       d: _t('Explose au passage : 4 dégâts autour et les zombies brûlent 3 tours'),
     },
     net: {
-      n: _t('Filet'),
+      n: _t('Filet de capture'),
       cat: 'trap',
       hp: 2,
       block: 0,
@@ -586,7 +586,7 @@ const Z = (() => {
       d: _t('Le zombie qui passe est pris 4 tours, sert 2 fois'),
     },
     bear: {
-      n: _t('Piège à ours'),
+      n: _t("Croc-d'ours"),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -595,7 +595,7 @@ const Z = (() => {
       d: _t('Le premier zombie qui marche dessus subit 10 dégâts'),
     },
     hunter: {
-      n: _t('Chasseur'),
+      n: _t('Écureuil-Vif'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -606,7 +606,7 @@ const Z = (() => {
       d: _t('2 dégâts par tour, portée 2'),
     },
     dogs: {
-      n: _t('Meute de chiens'),
+      n: _t('La Meute bleue'),
       cat: 'melee',
       hp: 7,
       block: 1,
@@ -618,7 +618,7 @@ const Z = (() => {
       d: _t('4 morsures de 1 dégât par tour au corps à corps'),
     },
     pitch: {
-      n: _t('Fermier à la fourche'),
+      n: _t('Clown de rodéo'),
       cat: 'melee',
       hp: 10,
       block: 1,
@@ -630,7 +630,7 @@ const Z = (() => {
       d: _t('2 dégâts au contact et repousse le zombie d’une case, 10 PV'),
     },
     scare: {
-      n: _t('Épouvantail'),
+      n: _t('Monsieur Paille'),
       cat: 'post',
       hp: 6,
       block: 1,
@@ -639,7 +639,7 @@ const Z = (() => {
       d: _t('Les zombies à 2 cases ou moins marchent vers lui au lieu de l’abri, 6 PV'),
     },
     turret: {
-      n: _t('Tourelle bricolée'),
+      n: _t('Tourelle à jante'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -650,7 +650,7 @@ const Z = (() => {
       d: _t('2 dégâts par tour, portée 2, 4 PV'),
     },
     workshop: {
-      n: _t('Atelier'),
+      n: _t("L'Établi"),
       cat: 'post',
       hp: 5,
       block: 1,
@@ -660,7 +660,7 @@ const Z = (() => {
       d: _t('Répare 1 PV à toutes les défenses et tous les postes voisins à chaque tour'),
     },
     modwall: {
-      n: _t('Mur modulaire'),
+      n: _t('Mur de portières'),
       cat: 'wall',
       hp: 9,
       block: 1,
@@ -668,7 +668,7 @@ const Z = (() => {
       d: _t('Panneaux de tôle : bloque, 9 PV'),
     },
     tesla: {
-      n: _t('Bobine Tesla'),
+      n: _t('Tour à éclairs'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -682,7 +682,7 @@ const Z = (() => {
       d: _t('Tous les 2 tours, un arc frappe 3 zombies (2 dégâts). Inactive pendant une coupure'),
     },
     teacher: {
-      n: _t('Institutrice'),
+      n: _t('La Bibliothécaire'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -691,7 +691,7 @@ const Z = (() => {
       d: _t('Tant qu’elle tient, tu pioches 1 carte de plus chaque jour'),
     },
     market: {
-      n: _t('Marché'),
+      n: _t('Vide-grenier'),
       cat: 'post',
       hp: 4,
       block: 1,
@@ -700,7 +700,7 @@ const Z = (() => {
       d: _t('À chaque aube, +2 ferraille'),
     },
     vigile: {
-      n: _t('Vigile'),
+      n: _t('Livreur de pizza'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -711,7 +711,7 @@ const Z = (() => {
       d: _t('1 dégât par tour, portée 2, 4 PV'),
     },
     carp: {
-      n: _t('Charpentier'),
+      n: _t('Bricoleur du dimanche'),
       cat: 'help',
       hp: 4,
       block: 1,
@@ -720,21 +720,21 @@ const Z = (() => {
       d: _t('À chaque aube, les défenses et les postes voisins récupèrent 2 PV'),
     },
     tear: {
-      n: _t('Gaz lacrymogène'),
+      n: _t('Gaz lacrymo'),
       cat: 'react',
       react: 'cell',
       v: _t('Étourdit'),
       d: _t('Pendant la nuit : les zombies sur la case visée et autour sont perdus 3 tours'),
     },
     napalm: {
-      n: _t('Napalm'),
+      n: _t('Brasier'),
       cat: 'react',
       react: 'cell',
       v: _t('Feu zone'),
       d: _t('Pendant la nuit : la case visée et autour s’embrasent (flaques de feu jusqu’à l’aube)'),
     },
     air: {
-      n: _t('Frappe aérienne'),
+      n: _t('Bombardement'),
       cat: 'react',
       react: 'cell',
       v: _t('10 zone'),
@@ -742,7 +742,7 @@ const Z = (() => {
     },
     // combattants des factions de soutien
     amb: {
-      n: _t('Ambulancier'),
+      n: _t('Sœur Mêlée'),
       cat: 'melee',
       hp: 11,
       block: 1,
@@ -754,7 +754,7 @@ const Z = (() => {
       d: _t('Bloque avec son brancard : 11 PV, 1 dégât au contact et repousse le zombie'),
     },
     doc: {
-      n: _t('Médecin de garde'),
+      n: _t('Sœur Pistole'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -766,7 +766,7 @@ const Z = (() => {
       d: _t('Pistolet : 1 dégât par tour, portée 1, et récupère 1 PV tous les 2 tours'),
     },
     orderly: {
-      n: _t('Infirmier costaud'),
+      n: _t('Frère Carillon'),
       cat: 'melee',
       hp: 7,
       block: 1,
@@ -778,7 +778,7 @@ const Z = (() => {
       d: _t('2 dégâts au contact. À chaque zombie tué, ses voisins récupèrent 1 PV'),
     },
     nailer: {
-      n: _t('Cloueur'),
+      n: _t('La Couvreuse'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -790,7 +790,7 @@ const Z = (() => {
       d: _t('Cloueuse pneumatique : 2 tirs de 1 dégât par tour, portée 2'),
     },
     ranger: {
-      n: _t('Garde champêtre'),
+      n: _t('Papy Ball-trap'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -802,7 +802,7 @@ const Z = (() => {
     },
     // chefs de faction (légendaires) : chacun compte pour 2 survivants de sa faction
     chief_police: {
-      n: _t('Le Commissaire'),
+      n: _t('La Dompteuse'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -814,7 +814,7 @@ const Z = (() => {
       d: _t('Chef de la Police : 2 dégâts par tour, portée 2. Compte pour 2 dans la faction Police'),
     },
     chief_mil: {
-      n: _t('La Sergente'),
+      n: _t('Le Prophète'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -827,7 +827,7 @@ const Z = (() => {
       d: _t('Cheffe des Militaires : 3 tirs par tour, portée 2. Compte pour 2 Militaires'),
     },
     chief_care: {
-      n: _t('La Doctoresse'),
+      n: _t('La Mère Abbesse'),
       cat: 'help',
       hp: 5,
       block: 1,
@@ -844,7 +844,7 @@ const Z = (() => {
       ),
     },
     chief_pyro: {
-      n: _t('Le Pyromane'),
+      n: _t('Le Maître artificier'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -858,7 +858,7 @@ const Z = (() => {
       d: _t('Chef des Pyromanes : enflamme tous les zombies à 2 cases. Compte pour 2 Pyromanes'),
     },
     chief_trap: {
-      n: _t('Le Braconnier'),
+      n: _t('Akela'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -870,7 +870,7 @@ const Z = (() => {
       d: _t('Chef des Trappeurs : 3 dégâts tous les 2 tours, portée 3. Compte pour 2 Trappeurs'),
     },
     chief_farm: {
-      n: _t('La Fermière'),
+      n: _t('La Reine du rodéo'),
       cat: 'melee',
       hp: 14,
       block: 1,
@@ -883,7 +883,7 @@ const Z = (() => {
       d: _t('Cheffe des Fermiers : 2 coups de 1 dégât par tour, 14 PV. Compte pour 2 Fermiers'),
     },
     chief_tech: {
-      n: _t('L’Ingénieur'),
+      n: _t('Le Roi de la casse'),
       cat: 'help',
       hp: 6,
       block: 1,
@@ -899,7 +899,7 @@ const Z = (() => {
       ),
     },
     chief_comm: {
-      n: _t('Le Maire'),
+      n: _t('La Présidente'),
       cat: 'help',
       hp: 5,
       block: 1,
@@ -915,21 +915,21 @@ const Z = (() => {
     },
     // réactions : jouables seulement pendant la nuit, avec l'énergie gardée du jour
     grenade: {
-      n: _t('Grenade'),
+      n: _t("L'Ananas"),
       cat: 'react',
       react: 'cell',
       v: _t('5 zone'),
       d: _t('Pendant la nuit : 5 dégâts sur la case visée et autour'),
     },
     shot: {
-      n: _t('Tir de l’abri'),
+      n: _t('Tir de couverture'),
       cat: 'react',
       react: 'any',
       v: '6',
       d: _t('Pendant la nuit : 6 dégâts au zombie le plus proche de l’abri'),
     },
     patch: {
-      n: _t('Réparation express'),
+      n: _t('Rafistolage'),
       cat: 'react',
       react: 'unit',
       v: _t('+5 PV'),
@@ -943,21 +943,21 @@ const Z = (() => {
       d: _t('Pendant la nuit : 2 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours'),
     },
     horn: {
-      n: _t('Klaxon'),
+      n: _t('Klaxon de détresse'),
       cat: 'react',
       react: 'any',
       v: _t('Recul'),
       d: _t('Pendant la nuit : tous les zombies reculent d’une case'),
     },
     rush: {
-      n: _t('Adrénaline'),
+      n: _t("Shoot d'adrénaline"),
       cat: 'react',
       react: 'any',
       v: '×2',
       d: _t('Pendant la nuit : tes unités attaquent deux fois pendant 3 tours'),
     },
     rocket: {
-      n: _t('Lance-roquettes'),
+      n: _t('Bazooka'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -971,7 +971,7 @@ const Z = (() => {
       ),
     },
     flare: {
-      n: _t('Fusée de détresse'),
+      n: _t('Fusée rouge'),
       cat: 'item',
       instant: 1,
       flare: 1,
@@ -980,7 +980,7 @@ const Z = (() => {
     },
     // --- v89 : 6 nouveaux survivants ---
     handler: {
-      n: _t('Maître-chien'),
+      n: _t('Madame Pompon'),
       cat: 'melee',
       hp: 12,
       block: 1,
@@ -992,7 +992,7 @@ const Z = (() => {
       d: _t('Tank : 12 PV, 1 dégât au contact. Les chiens voisins font +1 dégât'),
     },
     welder: {
-      n: _t('Soudeuse'),
+      n: _t('Soudeuse masquée'),
       cat: 'help',
       hp: 4,
       block: 1,
@@ -1001,7 +1001,7 @@ const Z = (() => {
       d: _t('Répare 2 PV par tour à une défense ou un poste voisin'),
     },
     scout: {
-      n: _t('Éclaireur'),
+      n: _t('Hibou-Curieux'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -1013,7 +1013,7 @@ const Z = (() => {
       d: _t('2 dégâts par tour, portée 4. Le zombie touché est marqué 2 tours : il prend +1 dégât de chaque coup'),
     },
     assassin: {
-      n: _t('Assassin'),
+      n: _t('Le Samouraï'),
       cat: 'melee',
       hp: 5,
       block: 1,
@@ -1025,7 +1025,7 @@ const Z = (() => {
       d: _t('2 dégâts au contact. Toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas le Colosse)'),
     },
     fieldnurse: {
-      n: _t('Infirmière de campagne'),
+      n: _t('Sœur Lanterne'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -1038,7 +1038,7 @@ const Z = (() => {
       ),
     },
     genmech: {
-      n: _t('Électricien'),
+      n: _t('Professeur Volts'),
       cat: 'help',
       hp: 4,
       block: 1,
@@ -1046,12 +1046,12 @@ const Z = (() => {
       genPow: 1,
       v: _t('Courant · Répare'),
       d: _t(
-        'Tant qu’il est sur la carte : plus de coupure de courant et clôtures à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin',
+        'Tant qu’il est sur la carte : plus de coupure de courant et Grillages électrifiés à 2 dégâts. Répare 1 PV par tour à une défense ou un poste voisin',
       ),
     },
     // --- v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais en boutique ni à l'achat)
     v_heli: {
-      n: _t('Hélicoptère de ravitaillement'),
+      n: _t('Pluie de caisses'),
       cat: 'item',
       instant: 1,
       vic: 0,
@@ -1059,7 +1059,7 @@ const Z = (() => {
       d: _t('Utilise-le sur l’abri : +2 énergie aujourd’hui et pioche 2 cartes'),
     },
     v_hmg: {
-      n: _t('Mitrailleuse lourde'),
+      n: _t('Calibre 50'),
       cat: 'shoot',
       hp: 6,
       block: 1,
@@ -1072,7 +1072,7 @@ const Z = (() => {
       d: _t('3 tirs de 2 dégâts par tour, portée 2, sans jamais s’enrayer'),
     },
     v_radio: {
-      n: _t('Radio militaire'),
+      n: _t('Radio des secours'),
       cat: 'post',
       hp: 5,
       block: 1,
@@ -1081,7 +1081,7 @@ const Z = (() => {
       d: _t('Les tireurs à 2 cases ou moins font +1 dégât'),
     },
     v_medic: {
-      n: _t('Médecin militaire'),
+      n: _t('Toubib des secours'),
       cat: 'help',
       hp: 5,
       block: 1,
@@ -1092,7 +1092,7 @@ const Z = (() => {
       d: _t('Soin à distance : 2 PV tous les 2 tours à l’unité la plus blessée à 3 cases ou moins'),
     },
     v_cont: {
-      n: _t('Mur de conteneurs'),
+      n: _t('Rempart de conteneurs'),
       cat: 'wall',
       hp: 20,
       block: 1,
@@ -1102,7 +1102,7 @@ const Z = (() => {
       d: _t('Bloque, 20 PV. Un Sapeur ne lui fait que 5 dégâts'),
     },
     v_sniper: {
-      n: _t('Tireur des secours'),
+      n: _t("L'Œil des secours"),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -1125,7 +1125,7 @@ const Z = (() => {
       d: _t('Explose au passage : 8 dégâts sur la case et autour, 3 fois'),
     },
     v_rdog: {
-      n: _t('Chien de sauvetage'),
+      n: _t('Chien sauveteur'),
       cat: 'melee',
       hp: 7,
       block: 1,
@@ -1139,7 +1139,7 @@ const Z = (() => {
       d: _t('Mord 2 fois par tour (2 dégâts) et soigne 1 PV à un voisin tous les 2 tours'),
     },
     v_napalm: {
-      n: _t('Frappe au napalm'),
+      n: _t('Terre brûlée'),
       cat: 'react',
       react: 'cell',
       vic: 8,
@@ -1147,7 +1147,7 @@ const Z = (() => {
       d: _t('Pendant la nuit : 4 dégâts sur la case visée et autour, qui s’embrasent ensuite'),
     },
     v_apc: {
-      n: _t('Blindé des secours'),
+      n: _t('Le Mastodonte'),
       cat: 'melee',
       hp: 30,
       block: 1,
@@ -1162,7 +1162,7 @@ const Z = (() => {
     // --- v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et réactions) ---
     // équipements : se posent sur une de tes unités et y restent (même rappelée). Une unité ne porte qu'un exemplaire de chaque équipement.
     gear: {
-      n: _t('Matériel lourd'),
+      n: _t('Casque et plaques'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -1191,7 +1191,7 @@ const Z = (() => {
       d: _t('Équipement : l’unité récupère 1 PV à chaque zombie qu’elle tue'),
     },
     medkit: {
-      n: _t('Sacoche de soins'),
+      n: _t('Musette de soins'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -1210,7 +1210,7 @@ const Z = (() => {
       d: _t('Équipement : ignore le Brouillard, +1 dégât sur les zombies encore intacts'),
     },
     pills: {
-      n: _t('Pilules'),
+      n: _t('Cachets'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -1229,7 +1229,7 @@ const Z = (() => {
       d: _t('Équipement : à l’aube, +1 ferraille par zombie tué par l’unité pendant la nuit'),
     },
     tape: {
-      n: _t('Ruban adhésif'),
+      n: _t('Scotch américain'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -1239,7 +1239,7 @@ const Z = (() => {
       d: _t('Équipement d’une unité fusionnée : +1 dégât par étoile'),
     },
     keys: {
-      n: _t('Clés du dépôt'),
+      n: _t('Trousseau'),
       cat: 'item',
       instant: 1,
       onUnit: 1,
@@ -1249,7 +1249,7 @@ const Z = (() => {
     },
     // postes de soutien : ne comptent pas dans la limite d'unités. Leur effet ne se cumule pas (une unité profite d'un seul poste de chaque sorte).
     tower: {
-      n: _t('Mirador'),
+      n: _t('Nid de pie'),
       cat: 'post',
       hp: 8,
       block: 1,
@@ -1257,7 +1257,7 @@ const Z = (() => {
       d: _t('Les tireurs voisins ont +1 portée'),
     },
     trench: {
-      n: _t('Tranchée'),
+      n: _t('Le Boyau'),
       cat: 'post',
       hp: 6,
       block: 1,
@@ -1265,7 +1265,7 @@ const Z = (() => {
       d: _t('Les unités voisines perdent 1 PV de moins par coup (au moins 1)'),
     },
     pump: {
-      n: _t('Pompe à eau'),
+      n: _t('Pompe du puits'),
       cat: 'post',
       hp: 5,
       block: 1,
@@ -1273,7 +1273,7 @@ const Z = (() => {
       d: _t('À l’aube, les unités voisines récupèrent tous leurs PV'),
     },
     flood: {
-      n: _t('Projecteur de chantier'),
+      n: _t('Projo de chantier'),
       cat: 'post',
       hp: 3,
       block: 1,
@@ -1282,7 +1282,7 @@ const Z = (() => {
     },
     // défenses
     palis: {
-      n: _t('Palissade'),
+      n: _t('Pieux taillés'),
       cat: 'wall',
       hp: 6,
       block: 1,
@@ -1291,7 +1291,7 @@ const Z = (() => {
       d: _t('Pieux taillés : bloque, 6 PV, 1 dégât à chaque zombie qui la frappe'),
     },
     gate: {
-      n: _t('Grille métallique'),
+      n: _t('Grille cadenassée'),
       cat: 'wall',
       hp: 10,
       block: 1,
@@ -1300,7 +1300,7 @@ const Z = (() => {
       d: _t('Bloque, 10 PV, récupère 1 PV tous les 4 tours'),
     },
     gabion: {
-      n: _t('Gabions'),
+      n: _t('Cages à cailloux'),
       cat: 'wall',
       hp: 12,
       block: 1,
@@ -1310,7 +1310,7 @@ const Z = (() => {
     },
     // pièges
     log: {
-      n: _t('Tronc oscillant'),
+      n: _t('Bélier pendu'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -1319,7 +1319,7 @@ const Z = (() => {
       d: _t('5 dégâts et repousse de 2 cases, 3 fois par nuit'),
     },
     pit: {
-      n: _t('Fosse piégée'),
+      n: _t('Trou de loup'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -1328,7 +1328,7 @@ const Z = (() => {
       d: _t('Le premier zombie ordinaire qui passe y meurt. Ensuite, le trou ralentit les suivants'),
     },
     glass: {
-      n: _t('Verre brisé'),
+      n: _t('Tessons'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -1337,7 +1337,7 @@ const Z = (() => {
       d: _t('Les zombies qui passent saignent : 1 dégât par tour pendant 3 tours'),
     },
     cans: {
-      n: _t('Boîtes de conserve'),
+      n: _t('Carillon de boîtes'),
       cat: 'trap',
       hp: 1,
       block: 0,
@@ -1356,14 +1356,14 @@ const Z = (() => {
     },
     // objets
     supply: {
-      n: _t('Ravitaillement'),
+      n: _t('Caisse de matériel'),
       cat: 'item',
       instant: 1,
       v: _t('+6 ferraille'),
       d: _t('Utilise-le sur l’abri : +6 ferraille'),
     },
     airdrop: {
-      n: _t('Largage'),
+      n: _t('Colis du ciel'),
       cat: 'item',
       instant: 1,
       v: _t('+3 cartes'),
@@ -1377,7 +1377,7 @@ const Z = (() => {
       d: _t('Utilise-le sur l’abri : +2 énergie demain'),
     },
     rest: {
-      n: _t('Repos'),
+      n: _t('Lit de camp'),
       cat: 'item',
       instant: 1,
       v: _t('Réserve soignée'),
@@ -1386,7 +1386,7 @@ const Z = (() => {
       ),
     },
     radioop: {
-      n: _t('Opérateur radio'),
+      n: _t('Voix des secours'),
       cat: 'item',
       instant: 1,
       v: _t('+1 unité'),
@@ -1408,14 +1408,14 @@ const Z = (() => {
       d: _t('Pendant la nuit : tous les zombies perdent 2 tours, mais le feu s’éteint'),
     },
     bomber: {
-      n: _t('Bombardier'),
+      n: _t('Raid aérien'),
       cat: 'react',
       react: 'cell',
       v: _t('8 en ligne'),
       d: _t('Pendant la nuit : 8 dégâts à tous les zombies de la ligne visée'),
     },
     shell: {
-      n: _t('Munition anti-Colosse'),
+      n: _t('Obus anti-Colosse'),
       cat: 'react',
       react: 'any',
       antiboss: 1,
@@ -1426,7 +1426,7 @@ const Z = (() => {
       ),
     },
     noise: {
-      n: _t('Boîte à bruit'),
+      n: _t('Radiocassette'),
       cat: 'react',
       react: 'cell',
       v: _t('Attire'),
@@ -1434,7 +1434,7 @@ const Z = (() => {
     },
     // évolutions secrètes : jamais dans le deck, elles naissent de deux cartes précises posées côte à côte (voir EVO)
     k9squad: {
-      n: _t('Brigade canine'),
+      n: _t('Le Grand Numéro'),
       cat: 'melee',
       hp: 8,
       block: 1,
@@ -1446,10 +1446,10 @@ const Z = (() => {
       push: 1,
       evo: 1,
       v: _t('3 ×2 · Étourdit'),
-      d: _t('Un policier et son chien : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent'),
+      d: _t('L’Hercule et son Caniche savant : 2 morsures de 3 dégâts par tour, qui étourdissent et repoussent'),
     },
     nightsnp: {
-      n: _t('Tireur de nuit'),
+      n: _t('Œil-de-Nuit'),
       cat: 'shoot',
       hp: 4,
       block: 1,
@@ -1458,10 +1458,10 @@ const Z = (() => {
       every: 1,
       evo: 1,
       v: _t('3 · P4'),
-      d: _t('Un sniper et son projecteur : 3 dégâts à chaque tour, portée 4'),
+      d: _t('La Biathlète et La Poursuite : 3 dégâts à chaque tour, portée 4'),
     },
     heavyflame: {
-      n: _t('Lance-flammes lourd'),
+      n: _t('Le Géant de feu'),
       cat: 'shoot',
       hp: 7,
       block: 1,
@@ -1476,7 +1476,7 @@ const Z = (() => {
       d: _t('2 dégâts à 6 zombies au plus à 2 cases, qui brûlent ensuite 3 tours'),
     },
     fortin: {
-      n: _t('Fortin'),
+      n: _t('Voiture-fortin'),
       cat: 'wall',
       hp: 32,
       block: 1,
@@ -1485,10 +1485,12 @@ const Z = (() => {
       every: 1,
       evo: 1,
       v: _t('32 PV · 3'),
-      d: _t('Épave et bunker soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)'),
+      d: _t(
+        'Vieille guimbarde et Bunker de jardin soudés : bloque, 32 PV, et frappe les zombies au contact (3 dégâts)',
+      ),
     },
     autogun: {
-      n: _t('Tourelle automatique'),
+      n: _t('Manège à balles'),
       cat: 'shoot',
       hp: 7,
       block: 1,
@@ -1498,10 +1500,10 @@ const Z = (() => {
       hits: 3,
       evo: 1,
       v: _t('1 ×3 · P2'),
-      d: _t('Montée par le mécanicien : 3 tirs de 1 dégât par tour, portée 2'),
+      d: _t('Montée par le Mécano stock-car : 3 tirs de 1 dégât par tour, portée 2'),
     },
     slaughter: {
-      n: _t('Équarrisseur'),
+      n: _t("L'Équarrisseur"),
       cat: 'melee',
       hp: 9,
       block: 1,
@@ -1515,7 +1517,7 @@ const Z = (() => {
       d: _t('5 dégâts à tous les zombies autour, récupère 1 PV par zombie tué'),
     },
     canteen: {
-      n: _t('Cantine de campagne'),
+      n: _t('La Kermesse'),
       cat: 'help',
       hp: 6,
       block: 1,
@@ -1529,7 +1531,7 @@ const Z = (() => {
       ),
     },
     gang: {
-      n: _t('Bande de gamins'),
+      n: _t('La Bande à vélo'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -1542,7 +1544,7 @@ const Z = (() => {
       d: _t('Toute la classe au lance-pierre : 4 tirs de 1 dégât par tour, portée 2'),
     },
     saint: {
-      n: _t('Le Saint'),
+      n: _t("L'Illuminé"),
       cat: 'melee',
       hp: 13,
       block: 1,
@@ -1556,7 +1558,7 @@ const Z = (() => {
       d: _t('1 dégât à tous les zombies autour, et ses voisins survivent une fois à un coup fatal'),
     },
     tracker: {
-      n: _t('Traqueur'),
+      n: _t('Renarde-Rusée'),
       cat: 'shoot',
       hp: 5,
       block: 1,
@@ -2096,7 +2098,7 @@ const Z = (() => {
     {
       id: 'coupure',
       n: _t('Coupure de courant'),
-      d: _t('Projecteurs et clôtures inactifs'),
+      d: _t('La Poursuite, Grillage électrifié, Tour à éclairs et Projo de chantier inactifs'),
       p: _t('Plus une lueur. Rien que leurs râles.'),
     },
     {
@@ -2157,7 +2159,7 @@ const Z = (() => {
     sac: { n: _t('Grand sac à dos'), d: _t('Tu pioches 1 carte de plus chaque jour') },
     clous: { n: _t('Caisse de clous'), d: _t('Tes défenses ont +3 PV') },
     rage: { n: _t('Adrénaline'), d: _t('Tes unités au corps à corps font +1 dégât') },
-    groupe: { n: _t('Groupe électrogène'), d: _t('Plus de coupure de courant, clôtures à 2 dégâts') },
+    groupe: { n: _t('Groupe électrogène'), d: _t('Plus de coupure de courant, Grillages électrifiés à 2 dégâts') },
     aimant: { n: _t('Aimant'), d: _t('+3 ferraille à chaque aube') },
     // v119 : 8 nouvelles reliques disponibles tout de suite
     sifflet: { n: _t('Sifflet de dresseur'), d: _t('Tes chiens ont +2 PV et +1 dégât') },
@@ -2204,7 +2206,9 @@ const Z = (() => {
       lv: [2, 5],
       d: [
         _t('tes militaires font +1 dégât'),
-        _t('mines et dynamite : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction'),
+        _t(
+          'Galette d’acier, Éventail d’acier et Réveil-matin : +3 dégâts ; équipe complète : +1 dégât et +2 PV pour toute la faction',
+        ),
       ],
     },
     care: {
@@ -2280,9 +2284,9 @@ const Z = (() => {
       ],
       lv: [2, 5],
       d: [
-        _t('tes bricoleurs font +1 dégât, clôtures +1'),
+        _t('tes bricoleurs font +1 dégât, Grillages électrifiés +1'),
         _t(
-          'clôtures : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction',
+          'Grillages électrifiés : étourdissent 1 tour, réparations +1 PV ; équipe complète : +1 dégât et +2 PV pour toute la faction',
         ),
       ],
     },
@@ -2667,7 +2671,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('Forcer la porte'),
-          d: _t('Une Trousse de secours… ou un défenseur blessé.'),
+          d: _t('Une Boîte à pharmacie… ou un défenseur blessé.'),
           go: (st, rnd) => {
             if (rnd() < 0.6) return { txt: _t('Les étagères ne sont pas vides.'), cards: ['kit'] };
             const j = randUnit(st, rnd);
@@ -2687,7 +2691,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('L’accueillir'),
-          d: _t('Un Gamin rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).'),
+          d: _t('Un Petit Lance-Pierre rejoint l’abri, mais l’abri perd 1 PV (une bouche de plus).'),
           go: (st, rnd) => {
             st.shelter = Math.max(1, st.shelter - 1);
             const u = recruit(st, 'kid', rnd);
@@ -2795,7 +2799,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('L’engager (10 ferraille)'),
-          d: _t('Un Tireur d’élite rejoint l’abri.'),
+          d: _t('Une Lanceuse de couteaux rejoint l’abri.'),
           ok: st => st.scrap >= 10,
           go: (st, rnd) => {
             st.scrap -= 10;
@@ -2889,7 +2893,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('Fouiller l’épave'),
-          d: _t('Une Munition anti-Colosse… ou une explosion.'),
+          d: _t('Un Obus anti-Colosse… ou une explosion.'),
           go: (st, rnd) => {
             if (rnd() < 0.5) return { txt: _t('Dans la soute : une munition de gros calibre.'), cards: ['shell'] };
             const j = randUnit(st, rnd);
@@ -2935,7 +2939,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('Les nourrir'),
-          d: _t('Un Tireur et un Bûcheron rejoignent l’abri, mais l’abri perd 3 PV.'),
+          d: _t('Miss Deux-Colts et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.'),
           go: (st, rnd) => {
             st.shelter = Math.max(1, st.shelter - 3);
             const a = recruit(st, 'gun', rnd),
@@ -3005,7 +3009,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('Remplir les sacs'),
-          d: _t('Des Conserves rejoignent ton deck.'),
+          d: _t('Un Garde-manger rejoint ton deck.'),
           go: () => ({ txt: _t('Carottes, pommes de terre et un bocal de confiture.'), cards: ['food'] }),
         },
         {
@@ -3494,7 +3498,7 @@ const Z = (() => {
     station: {
       n: _t('La station-service'),
       d: _t(
-        'Deux bonbonnes de gaz et 10 ferraille au départ, l’Essence ne coûte rien. Mais la horde est 15 % plus nombreuse.',
+        'Deux Butanes et 10 ferraille au départ, la Nappe de feu ne coûte rien. Mais la horde est 15 % plus nombreuse.',
       ),
       start: [
         ['gas', N + MID],

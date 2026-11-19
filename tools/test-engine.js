@@ -1520,7 +1520,7 @@ for (let d = 0; d < 40; d++) {
     );
   const ZE = g.Z;
   check('traduction : moteur en anglais (noms de cartes et de zombies)', () => {
-    eq(ZE.U.gun.n, 'Gunner');
+    eq(ZE.U.gun.n, 'Miss Two-Guns');
     eq(ZE.ZT.walk.n, 'Walker');
     eq(ZE.U.gun.v, '2 · R2');
   });

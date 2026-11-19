@@ -90,8 +90,8 @@ const BOOT_TIPS = [
   () => _t('Touche une unité qui tire pour voir sa zone de tir.'),
   () => _t('Plus tu poses d’unités d’une même faction, plus la faction devient forte.'),
   () => _t('Au troc, la ferraille sert à réparer, acheter et améliorer.'),
-  () => _t('Le Café ne coûte rien et donne 2 énergies de plus.'),
-  () => _t('Une Radio en jeu ajoute une carte à ta main chaque jour.'),
+  () => _t('Le Café brûlant ne coûte rien et donne 2 énergies de plus.'),
+  () => _t('Un Radio-cintre en jeu ajoute une carte à ta main chaque jour.'),
   () => _t('Les unités posées restent en place d’une nuit à l’autre et gardent leurs dégâts.'),
 ];
 

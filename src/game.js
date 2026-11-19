@@ -648,7 +648,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v274 · 19 nov.';
+const VERSION = 'v275 · 19 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
@@ -863,7 +863,7 @@ const ACH = [
   ['colosse', 'skull', _t('Abattre le Colosse'), _t('Tuer le Colosse.')],
   ['mere', 'skull', _t('Matricide'), _t('Tuer la Mère.')],
   ['zero', 'skull', _t('Fin de l’épidémie'), _t('Tuer le Patient Zéro.')],
-  ['ammo', 'skull', _t('Gros calibre'), _t('Achever un boss avec une Munition anti-Colosse.')],
+  ['ammo', 'skull', _t('Gros calibre'), _t('Achever un boss avec un Obus anti-Colosse.')],
   ['bossclean', 'vest', _t('Pas une égratignure'), _t('Finir une nuit de boss sans que l’abri perde de PV.')],
   ['carnage', 'drop', _t('Carnage'), _t('Tuer 5 zombies d’un coup.')],
   ['night50', 'drop', _t('Marée noire'), _t('Tuer 50 zombies en une seule nuit.')],
@@ -1070,10 +1070,10 @@ function tuto(n) {
 }
 /* tutoriel guidé (v163, revu en v164 avec Amine) : la toute première partie (G.tuto) suit 4 journées guidées, puis la nuit rouge sans aide.
    La maison devient un fortin à une seule porte, au nord : la horde arrive par les 4 routes et fait le tour jusqu'à elle.
-   Jour 1 : Bûcheron au nord de la maison, Barricade sur 4 cases (ouest, est et sud de la maison, et devant le Bûcheron) : il est frappé.
-   Jour 2 : Trousse de secours sur le Bûcheron, Bûcheron décalé à gauche, barricade de devant déplacée à droite, Policier dans la porte.
-   Jour 3 : Policier avancé d'une case, Matériel lourd sur lui, Tireur derrière lui, Barbelés sur les 4 routes.
-   Jour 4 : barricade de droite avancée (elle protège le Tireur), Tireur décalé à droite, Infirmière derrière le Policier : Escouade.
+   Jour 1 : Fend-la-Bûche au nord de la maison, Planches clouées sur 4 cases (ouest, est et sud de la maison, et devant Fend-la-Bûche) : il est frappé.
+   Jour 2 : Boîte à pharmacie sur Fend-la-Bûche, Fend-la-Bûche décalé à gauche, planches de devant déplacées à droite, L’Hercule dans la porte.
+   Jour 3 : L’Hercule avancé d'une case, Casque et plaques sur lui, Miss Deux-Colts derrière lui, Ronces de fer sur les 4 routes.
+   Jour 4 : planches de droite avancées (elles protègent Miss Deux-Colts), Miss Deux-Colts décalée à droite, Sœur Bicyclette derrière L’Hercule : Escouade.
    Jour 5 : nuit rouge, sans guide. Les nuits du tutoriel sont réglées dans le moteur (Z.tutoOn).
    Pendant les jours guidés, seule l'action demandée est possible et seules les cases qui brillent l'acceptent. */
 const TUTO_DECK = [...Z.STARTER_DECK, 'kit', 'cop', 'wire', 'gear'];
@@ -1113,7 +1113,9 @@ function guideStep() {
       return ask(
         'axe',
         [T9(31)],
-        _t('Cette nuit, les zombies viendront par les 4 routes. Touche le Bûcheron : il frappe fort au corps à corps.'),
+        _t(
+          'Cette nuit, les zombies viendront par les 4 routes. Touche Fend-la-Bûche : il frappe fort au corps à corps.',
+        ),
         _t('Pose-le juste au nord de ta maison.'),
       );
     const b = [T9(39), T9(41), T9(49), T9(22)].filter(i => !at(i, 'bar'));
@@ -1121,10 +1123,10 @@ function guideStep() {
       return ask(
         'bar',
         b,
-        _t('Touche la Barricade : une carte couvre 4 cases.'),
+        _t('Touche les Planches clouées : une carte couvre 4 cases.'),
         b.length === 4
           ? _t(
-              'Ferme les 3 autres côtés de la maison et protège le Bûcheron : pose la Barricade sur les 4 cases qui brillent.',
+              'Ferme les 3 autres côtés de la maison et protège Fend-la-Bûche : pose les Planches clouées sur les 4 cases qui brillent.',
             )
           : b.length > 1
             ? _t`Encore ${b.length} cases : touche les cases qui brillent.`
@@ -1132,7 +1134,7 @@ function guideStep() {
       );
     return go(
       _t(
-        'La maison n’a plus qu’une porte, gardée par ton Bûcheron : les zombies devront passer par lui. Touche « Affronter la nuit ».',
+        'La maison n’a plus qu’une porte, gardée par Fend-la-Bûche : les zombies devront passer par lui. Touche « Affronter la nuit ».',
       ),
     );
   }
@@ -1143,8 +1145,8 @@ function guideStep() {
       return ask(
         'kit',
         [ax],
-        _t`Les zombies ont frappé ton Bûcheron : il lui reste ${u.hp} PV sur ${Z.maxHp(G, u)}. Touche la Trousse de secours.`,
-        _t('Touche le Bûcheron pour le soigner.'),
+        _t`Les zombies ont frappé Fend-la-Bûche : il lui reste ${u.hp} PV sur ${Z.maxHp(G, u)}. Touche la Boîte à pharmacie.`,
+        _t('Touche Fend-la-Bûche pour le soigner.'),
         1,
       );
     if (!G.grid[T9(31)] || at(T9(31), 'axe')) {
@@ -1154,27 +1156,25 @@ function guideStep() {
           T9(30),
           'axe',
           _t(
-            'Le Bûcheron ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).',
+            'Fend-la-Bûche ne tiendra pas seul : il va laisser la porte à un Tank. Touche-le pour le décaler d’une case à gauche (déplacer est gratuit le jour).',
           ),
         ))
       )
         return m;
-      if ((m = mv(T9(22), T9(32), 'bar', _t('Touche la barricade de devant pour la déplacer à droite de la porte.'))))
+      if ((m = mv(T9(22), T9(32), 'bar', _t('Touche les planches de devant pour les déplacer à droite de la porte.'))))
         return m;
     }
     if (!at(T9(31), 'cop') && inH('cop'))
       return ask(
         'cop',
         [T9(31)],
-        _t('Touche le Policier : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.'),
-        _t('Pose-le dans la porte, à côté du Bûcheron : à côté d’un Tank, un DPS fait +1 dégât.'),
+        _t('Touche l’Hercule : c’est un Tank. Il attire sur lui les zombies à 3 cases et les repousse.'),
+        _t('Pose-le dans la porte, à côté de Fend-la-Bûche : à côté d’un Tank, un DPS fait +1 dégât.'),
       );
-    return go(_t('Le Policier encaisse, le Bûcheron frappe. Touche « Affronter la nuit ».'));
+    return go(_t('L’Hercule encaisse, Fend-la-Bûche frappe. Touche « Affronter la nuit ».'));
   }
   if (d === 3) {
-    if (
-      (m = mv(T9(31), T9(22), 'cop', _t('Le Policier part en première ligne : touche-le pour l’avancer d’une case.')))
-    )
+    if ((m = mv(T9(31), T9(22), 'cop', _t('L’Hercule part en première ligne : touche-le pour l’avancer d’une case.'))))
       return m;
     const cp = posOf('cop'),
       c = G.grid[cp];
@@ -1182,23 +1182,25 @@ function guideStep() {
       return ask(
         'gear',
         [cp],
-        _t('Devant, il va prendre des coups. Touche le Matériel lourd : +4 PV, et un Tank équipé bloque 1 coup sur 2.'),
-        _t('Touche le Policier pour l’équiper.'),
+        _t(
+          'Devant, il va prendre des coups. Touche le Casque et plaques : +4 PV, et un Tank équipé bloque 1 coup sur 2.',
+        ),
+        _t('Touche l’Hercule pour l’équiper.'),
         1,
       );
     if (!at(T9(31), 'gun') && !G.grid[T9(31)] && inH('gun'))
       return ask(
         'gun',
         [T9(31)],
-        _t('Touche le Tireur : un DPS à distance, il tire à 2 cases.'),
-        _t('Pose-le juste derrière le Policier, à l’abri.'),
+        _t('Touche Miss Deux-Colts : un DPS à distance, elle tire à 2 cases.'),
+        _t('Pose-la juste derrière l’Hercule, à l’abri.'),
       );
     const w = TUTO_ROADS.filter(i => !at(i, 'wire'));
     if (w.length && inH('wire'))
       return ask(
         'wire',
         w,
-        _t('Touche les Barbelés : un piège qui blesse et ralentit chaque zombie qui passe, sur 4 cases.'),
+        _t('Touche les Ronces de fer : un piège qui blesse et ralentit chaque zombie qui passe, sur 4 cases.'),
         _t('Pose-les sur les 4 routes, à la sortie de la forêt : chaque zombie sera touché dès son arrivée.'),
       );
     return go(_t('Les zombies seront ralentis dès les routes, puis abattus. Touche « Affronter la nuit ».'));
@@ -1208,7 +1210,9 @@ function guideStep() {
       T9(32),
       T9(23),
       'bar',
-      _t('Le Tireur va passer à droite : touche d’abord la barricade de droite pour l’avancer, elle le protégera.'),
+      _t(
+        'Miss Deux-Colts va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.',
+      ),
     ))
   )
     return m;
@@ -1217,7 +1221,7 @@ function guideStep() {
       T9(31),
       T9(32),
       'gun',
-      _t('Touche le Tireur pour le décaler à droite : la place derrière le Policier sera libre.'),
+      _t('Touche Miss Deux-Colts pour la décaler à droite : la place derrière l’Hercule sera libre.'),
     ))
   )
     return m;
@@ -1225,8 +1229,8 @@ function guideStep() {
     return ask(
       'med',
       [T9(31)],
-      _t('Touche l’Infirmière : elle soigne à 2 cases, et deux fois plus un Tank.'),
-      _t('Pose-la derrière le Policier.'),
+      _t('Touche Sœur Bicyclette : elle soigne à 2 cases, et deux fois plus un Tank.'),
+      _t('Pose-la derrière l’Hercule.'),
     );
   return go(_t('Ton escouade est prête. Demain soir, c’est la nuit rouge. Touche « Affronter la nuit ».'));
 }
@@ -1238,17 +1242,17 @@ function guideOk(g, i) {
 }
 const TUTO_NIGHT = [
   null,
-  _t('Les zombies arrivent par les 4 routes et font le tour jusqu’à ton Bûcheron. Le bouton du bas accélère la nuit.'),
-  _t('Le Policier attire les zombies et les repousse ; le Bûcheron frappe à côté de lui.'),
-  _t('Les Barbelés blessent et ralentissent les zombies pendant que le Tireur les abat.'),
+  _t('Les zombies arrivent par les 4 routes et font le tour jusqu’à Fend-la-Bûche. Le bouton du bas accélère la nuit.'),
+  _t('L’Hercule attire les zombies et les repousse ; Fend-la-Bûche frappe à côté de lui.'),
+  _t('Les Ronces de fer blessent et ralentissent les zombies pendant que Miss Deux-Colts les abat.'),
   _t('Escouade : Tank, Soin et DPS côte à côte gagnent chacun +1 dégât (ou +1 soin).'),
   _t('Nuit rouge : la horde est plus nombreuse !'),
 ];
 const TUTO_DAWN = [
   null,
-  _t('Ton Bûcheron a tenu la porte, mais il est blessé. Prends le Policier : demain, il encaissera à sa place.'),
-  _t('Le Policier a pris les coups à la place du Bûcheron. Prends le Tireur : il tirera de derrière.'),
-  _t('Prends l’Infirmière : avec le Policier et tes DPS, elle formera une escouade.'),
+  _t('Fend-la-Bûche a tenu la porte, mais il est blessé. Prends l’Hercule : demain, il encaissera à sa place.'),
+  _t('L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss Deux-Colts : elle tirera de derrière.'),
+  _t('Prends Sœur Bicyclette : avec l’Hercule et tes DPS, elle formera une escouade.'),
   _t('Ton escouade a tenu. Demain soir, c’est la nuit rouge : plus de zombies, et plus de guide.'),
   _t('Tutoriel terminé : tu sais tout l’essentiel. À toi de jouer !'),
 ];

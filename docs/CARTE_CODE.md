@@ -6,11 +6,11 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 ## Ordre de chargement (index.html)
 
 1. `src/i18n.js` (57 lignes)
-2. `src/lang-en.js` (2207 lignes)
-3. `src/engine.js` (5761 lignes)
+2. `src/lang-en.js` (2211 lignes)
+3. `src/engine.js` (5765 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1716 lignes)
+6. `src/game.js` (1720 lignes)
 7. `src/game-draw.js` (6371 lignes)
 8. `src/game-ui.js` (2058 lignes)
 9. `src/game-screens.js` (1681 lignes)
@@ -18,7 +18,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 11. `src/game-anim.js` (1328 lignes)
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (363 lignes)
-14. `src/game-artx.js` (1476 lignes)
+14. `src/game-artx.js` (1303 lignes)
 15. `src/game-coll.js` (1263 lignes)
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (754 lignes)
@@ -32,7 +32,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
 | `render` | game-ui.js:618 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
-| `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1386, game-artx.js:1464 |
+| `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1291 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
 | `frameInner` | game-draw.js:5851 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
@@ -54,8 +54,8 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `lights` | game-draw.js:5498 | game-fx3.js:378 |
 | `mergeFx` | game-ui.js:1473 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
-| `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
-| `pilesHtml` | game.js:1558 | game-artx.js:979 |
+| `optionsScreen` | game-screens.js:515 | game-artx.js:1275 |
+| `pilesHtml` | game.js:1562 | game-artx.js:979 |
 | `placeHints` | game-draw.js:6362 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1756 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
@@ -73,7 +73,7 @@ Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, li
 
 testmode:1129 · teststart:1136 · tcards:1154 · tadd:1170 · options:1176 · optclose:1177 · presume:1184 · pquit:1189 · prestart:1193 · prestart2:1197 · pmenu:1206 · closeov:1207 · bpick:1211 · artstyle:1219 · new:1226 · prepdeck:1237 · prepch:1242 · preppl:1246 · preprel:1257 · prepmen:1261 · start:1267 · edit:1282 · dkp:1283 · cfam:1291 · crole:1302 · cpg:1313 · cfmore:1317 · atel:1321 · dkdraw:1328 · dkm:1332 · dkreset:1341 · coll:1346 · mdet:1354 · achs:1355 · gift:1356 · gyes:1357 · gno:1358 · gdone:1359 · mback:1360 · evo:1364 · unlock:1365 · load:1379 · title:1384 · close:1385 · rules:1386 · stats:1390 · rgo:1391 · retuto:1395 · deck:1407 · dawn:1415 · lvl:1416 · relic:1428 · evc:1433 · todraft:1452 · draft:1453 · shop:1462 · day:1514 · nightpick:1515 · nightgo:1519 · daily:1523 · wish:1526 · dpick:1536 · peek:1541
 
-Ajoutées ou remplacées ailleurs : unlock (game-anim.js:528) · dkp (game-anim.js:554) · dkm (game-anim.js:588) · prepdeck (game-anim.js:620) · start (game-anim.js:734) · gift (game-anim.js:805) · relic (game-anim.js:1162) · prepmen (game-anim.js:1238) · fshare (game-fiche.js:689) · credits (game-artx.js:1439)
+Ajoutées ou remplacées ailleurs : unlock (game-anim.js:528) · dkp (game-anim.js:554) · dkm (game-anim.js:588) · prepdeck (game-anim.js:620) · start (game-anim.js:734) · gift (game-anim.js:805) · relic (game-anim.js:1162) · prepmen (game-anim.js:1238) · fshare (game-fiche.js:689) · credits (game-artx.js:1266)
 
 ## Fichier par fichier
 
@@ -98,14 +98,14 @@ _t:19 _tPage:41
 - **431** extension : nouvelles cartes de faction
 - **981** v89 : 6 nouveaux survivants
 - **1052** v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais e
-- **1162** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1753 baseOf:1853 edOf:1856 ck:1860 levelUp:1879 waveCount:2145 famCounts:2345 famLevel:2354 famLevels:2361 allies:2375 wallGroup:2380 sol:2400 nightOffers:2414 hurt:2432 recruit:2443 dawnEvent:3023 resolveDawn:3035 testProgress:3072 mutate:3087 zhit:3115 moves:3248
-- **3267** chemins des zombies : blockCosts:3273 field:3305 sapBlast:3336 pathStep:3355 killZones:3373 back:3414 shuffle:3423
-- **3431** état d'une partie : newState:3445 unlocks:3531
-- **3541** collection et deck (entre les parties) : giftOffer:3551 edKill:3589 killScrap:3595 applyMenace:3634 deckError:3644 newDay:3665
-- **3703** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3705 stat:3722 upgrade:3772 addRelic:3776 relicChoices:3786 draftChoices:3792 dailyPlan:3814 dailyState:3845 storeOffer:3866 buyStore:3879 pay:3885 fireAmmo:3897
-- **3917** pose des cartes : frees:3933 canMove:3946 move:3950 wallLinks:3960 fixLinks:3967 recall:3975 placeBench:3986 useCharges:4006 lineCells:4018 placeLine:4034 canPlace:4047 place:4070
-- **4136** fusion et évolutions : absorb:4152 merge:4167 mkey:4222 mtr:4228 cure:4241 lose:4254 applyItem:4317
-- **4348** la nuit : waveList:4357 broodDeath:4404 zMaxHp:4410 newcomers:4420 spawn:4425 bigNight:4435 nextWave:4439 startNight:4444 hit:4501 explode:4532 lureTarget:4537 squad:4563 dmgParts:4575 attack:4641 strike:4737 enter:4845 step:4930 endNight:5280 canReact:5350 react:5364 runNight:5514
+- **1162** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1755 baseOf:1855 edOf:1858 ck:1862 levelUp:1881 waveCount:2147 famCounts:2349 famLevel:2358 famLevels:2365 allies:2379 wallGroup:2384 sol:2404 nightOffers:2418 hurt:2436 recruit:2447 dawnEvent:3027 resolveDawn:3039 testProgress:3076 mutate:3091 zhit:3119 moves:3252
+- **3271** chemins des zombies : blockCosts:3277 field:3309 sapBlast:3340 pathStep:3359 killZones:3377 back:3418 shuffle:3427
+- **3435** état d'une partie : newState:3449 unlocks:3535
+- **3545** collection et deck (entre les parties) : giftOffer:3555 edKill:3593 killScrap:3599 applyMenace:3638 deckError:3648 newDay:3669
+- **3707** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3709 stat:3726 upgrade:3776 addRelic:3780 relicChoices:3790 draftChoices:3796 dailyPlan:3818 dailyState:3849 storeOffer:3870 buyStore:3883 pay:3889 fireAmmo:3901
+- **3921** pose des cartes : frees:3937 canMove:3950 move:3954 wallLinks:3964 fixLinks:3971 recall:3979 placeBench:3990 useCharges:4010 lineCells:4022 placeLine:4038 canPlace:4051 place:4074
+- **4140** fusion et évolutions : absorb:4156 merge:4171 mkey:4226 mtr:4232 cure:4245 lose:4258 applyItem:4321
+- **4352** la nuit : waveList:4361 broodDeath:4408 zMaxHp:4414 newcomers:4424 spawn:4429 bigNight:4439 nextWave:4443 startNight:4448 hit:4505 explode:4536 lureTarget:4541 squad:4567 dmgParts:4579 attack:4645 strike:4741 enter:4849 step:4934 endNight:5284 canReact:5354 react:5368 runNight:5518
 
 ### src/audio.js
 
@@ -125,8 +125,8 @@ _t:19 _tPage:41
 
 - **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:606 saveOpt:712 applyOpt:720 applyCur:740 toggleFs:759 unpause:778 R:786
 - **817** state
-- **819** progression entre les parties (localStorage) : loadMeta:820 endTest:841 saveMeta:846 ach:887 showAch:899 deckCanAdd:932 edGain:946 edCommit:955 edDrop:985 achCheck:1011 achNight:1036 achScreen:1044 tuto:1063 guideStep:1094 guideOk:1234 tutoTip:1255 tutoHand:1267 tutoPicks:1290 tutoEnd:1295 newGame:1310 fillHand:1360 drawCards:1368 syncBoard:1395 cellRect:1433 fly:1438 animPiles:1500 pilesHtml:1558
-- **1628** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1631 loadSave:1656 clearSave:1679 resume:1685
+- **819** progression entre les parties (localStorage) : loadMeta:820 endTest:841 saveMeta:846 ach:887 showAch:899 deckCanAdd:932 edGain:946 edCommit:955 edDrop:985 achCheck:1011 achNight:1036 achScreen:1044 tuto:1063 guideStep:1094 guideOk:1238 tutoTip:1259 tutoHand:1271 tutoPicks:1294 tutoEnd:1299 newGame:1314 fillHand:1364 drawCards:1372 syncBoard:1399 cellRect:1437 fly:1442 animPiles:1504 pilesHtml:1562
+- **1632** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1635 loadSave:1660 clearSave:1683 resume:1689
 
 ### src/game-draw.js
 
@@ -201,8 +201,8 @@ _t:19 _tPage:41
 > v200 : refonte du jeu dans le style artiste (html.artx seulement) : plateau dessiné d'Amin
 
 - **1** (début) : axPalSet:15 axGround:40 axPlat:46 axBig:102 axGlow:249 axGlowHtml:304 axHome:353 axPad:397 axLay:406 axOn:531 axRing:556 axFxDraw:583 axPaint:704
-- **838** v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine : ax3Want:845 ax3Build:848 ax3Put1:862 ax3Put:881 ax3Back:902 ax3Phase:914 ax3Zoom:1047 axFarDraw:1123 artNames:1372
-- **1392** v245 : accueil du style artiste sur le modèle d'Amine : axPlayHtml:1397 axBigBtn:1402 axTitleHtml:1405
+- **838** v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine : ax3Want:845 ax3Build:848 ax3Put1:862 ax3Put:881 ax3Back:902 ax3Phase:914 ax3Zoom:1047 axFarDraw:1123
+- **1219** v245 : accueil du style artiste sur le modèle d'Amine : axPlayHtml:1224 axBigBtn:1229 axTitleHtml:1232
 
 ### src/game-coll.js
 

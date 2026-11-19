@@ -1723,7 +1723,7 @@ function tapCell(i) {
     const n = G.drawNow;
     G.drawNow = 0;
     drawCards(Math.min(n, Math.max(0, Z.HAND_MAX - S.hand.length)));
-    floatTxt(CEN.x, CEN.y - 30, _t('Largage : +') + n + _t(' cartes'), '#9ee08a');
+    floatTxt(CEN.x, CEN.y - 30, _t('Colis du ciel : +') + n + _t(' cartes'), '#9ee08a');
     save();
     render();
   }
@@ -1737,7 +1737,7 @@ function peekScreen() {
   }
   const top = S.draw.slice(-3).reverse();
   if (!top.length) return;
-  show(_t`<h2 class="pw">Carte routière</h2><p>Les prochaines cartes de ta pioche. Prends-en une dans ta main.</p>
+  show(_t`<h2 class="pw">Carte et boussole</h2><p>Les prochaines cartes de ta pioche. Prends-en une dans ta main.</p>
   <div class="picks">${top.map(t => pickBtn(t, 'peek', t)).join('')}</div>`);
 }
 
