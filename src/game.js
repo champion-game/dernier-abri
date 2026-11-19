@@ -648,7 +648,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v273 · 19 nov.';
+const VERSION = 'v274 · 19 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
@@ -1345,7 +1345,7 @@ function newGame(ch, pl, daily, deck, plan) {
   FX.length = 0;
   PT.length = 0;
   facing.fill(null);
-  clearDecals();
+  resetMarks();
   POS = new Map();
   G.grid.forEach((u, j) => {
     if (u) POS.set(u, j);
@@ -1638,6 +1638,7 @@ function save() {
       JSON.stringify({
         v: SAVE_V,
         g,
+        m: MARKS,
         s: {
           draw: S.draw,
           discard: S.discard,
@@ -1689,6 +1690,7 @@ function resume(d) {
   } catch (e) {}
   newGame(d.g.char, d.g.place);
   Object.assign(G, d.g, { event: Z.EVENTS.find(e => e.id === d.g.event) || Z.EVENTS[0] });
+  resetMarks(d.m);
   if (!d.g.tuto) G.tuto = 0;
   Z.touch(G);
   setBiome(G.biome);

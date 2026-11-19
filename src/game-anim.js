@@ -184,6 +184,7 @@ function landFx(i) {
     addFX({ type: 'ring', x: p.x, y: p.y, r: 32, c: 'rgba(235,215,170,.95)', dur: 320 });
     shake(performance.now(), 3);
     SFX.play('thud', 0.05);
+    poseImpactFx(i);
   } catch (e) {}
 }
 

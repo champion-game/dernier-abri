@@ -10,12 +10,12 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (5761 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1714 lignes)
-7. `src/game-draw.js` (6141 lignes)
-8. `src/game-ui.js` (2055 lignes)
+6. `src/game.js` (1716 lignes)
+7. `src/game-draw.js` (6371 lignes)
+8. `src/game-ui.js` (2058 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (839 lignes)
-11. `src/game-anim.js` (1327 lignes)
+11. `src/game-anim.js` (1328 lignes)
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (363 lignes)
 14. `src/game-artx.js` (1476 lignes)
@@ -33,39 +33,39 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 |---|---|---|
 | `render` | game-ui.js:618 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
 | `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1386, game-artx.js:1464 |
-| `playEvents` | game-ui.js:4 | game-anim.js:1017, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
-| `frameInner` | game-draw.js:5627 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
+| `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
+| `frameInner` | game-draw.js:5851 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
-| `collectionScreen` | game-screens.js:932 | game-anim.js:437, game-coll.js:1243 |
-| `deckEditor` | game-screens.js:900 | game-anim.js:445, game-coll.js:1253 |
-| `feltLayout` | game-ui.js:1887 | game-artx.js:923, game-artx.js:1066 |
-| `syncZ` | game-draw.js:2250 | game-fx2.js:201, game-artx.js:1108 |
-| `countUp` | game-screens.js:639 | game-anim.js:1263 |
-| `dawnStep` | game-screens.js:35 | game-anim.js:332 |
-| `drawFloats` | game-draw.js:5072 | game-fx5.js:746 |
-| `drawFog` | game-draw.js:5354 | game-artx.js:551 |
-| `drawFX` | game-draw.js:4975 | game-fx5.js:636 |
-| `drawPlace` | game-draw.js:5515 | game-fx3.js:315 |
-| `drawShelter` | game-draw.js:4530 | game-fx5.js:506 |
-| `drawSky` | game-draw.js:5163 | game-artx.js:670 |
-| `giftScreen` | game-screens.js:309 | game-anim.js:770 |
+| `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
+| `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
+| `feltLayout` | game-ui.js:1890 | game-artx.js:923, game-artx.js:1066 |
+| `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1108 |
+| `countUp` | game-screens.js:639 | game-anim.js:1264 |
+| `dawnStep` | game-screens.js:35 | game-anim.js:333 |
+| `drawFloats` | game-draw.js:5296 | game-fx5.js:746 |
+| `drawFog` | game-draw.js:5578 | game-artx.js:551 |
+| `drawFX` | game-draw.js:5199 | game-fx5.js:636 |
+| `drawPlace` | game-draw.js:5739 | game-fx3.js:315 |
+| `drawShelter` | game-draw.js:4652 | game-fx5.js:506 |
+| `drawSky` | game-draw.js:5387 | game-artx.js:670 |
+| `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:801 | game-artx.js:326 |
 | `keepEnd` | game-menu.js:560 | game-fiche.js:206 |
-| `lights` | game-draw.js:5274 | game-fx3.js:378 |
-| `mergeFx` | game-ui.js:1473 | game-anim.js:853 |
+| `lights` | game-draw.js:5498 | game-fx3.js:378 |
+| `mergeFx` | game-ui.js:1473 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
 | `pilesHtml` | game.js:1558 | game-artx.js:979 |
-| `placeHints` | game-draw.js:6132 | game-fx2.js:246 |
-| `resumeWave` | game-ui.js:1756 | game-anim.js:1007 |
+| `placeHints` | game-draw.js:6362 | game-fx2.js:246 |
+| `resumeWave` | game-ui.js:1756 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:599 | game-fx2.js:353 |
-| `show` | game-screens.js:601 | game-anim.js:1304 |
-| `showAch` | game.js:899 | game-anim.js:1254 |
-| `tapCell` | game-ui.js:1607 | game-ui.js:2043 |
+| `show` | game-screens.js:601 | game-anim.js:1305 |
+| `showAch` | game.js:899 | game-anim.js:1255 |
+| `tapCell` | game-ui.js:1607 | game-ui.js:2046 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
-| `unitAnim` | game-draw.js:2929 | game-fx3.js:327 |
-| `zoomCf` | game-menu.js:246 | game-anim.js:348 |
+| `unitAnim` | game-draw.js:3049 | game-fx3.js:327 |
+| `zoomCf` | game-menu.js:246 | game-anim.js:349 |
 
 ## Actions des boutons
 
@@ -73,7 +73,7 @@ Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, li
 
 testmode:1129 · teststart:1136 · tcards:1154 · tadd:1170 · options:1176 · optclose:1177 · presume:1184 · pquit:1189 · prestart:1193 · prestart2:1197 · pmenu:1206 · closeov:1207 · bpick:1211 · artstyle:1219 · new:1226 · prepdeck:1237 · prepch:1242 · preppl:1246 · preprel:1257 · prepmen:1261 · start:1267 · edit:1282 · dkp:1283 · cfam:1291 · crole:1302 · cpg:1313 · cfmore:1317 · atel:1321 · dkdraw:1328 · dkm:1332 · dkreset:1341 · coll:1346 · mdet:1354 · achs:1355 · gift:1356 · gyes:1357 · gno:1358 · gdone:1359 · mback:1360 · evo:1364 · unlock:1365 · load:1379 · title:1384 · close:1385 · rules:1386 · stats:1390 · rgo:1391 · retuto:1395 · deck:1407 · dawn:1415 · lvl:1416 · relic:1428 · evc:1433 · todraft:1452 · draft:1453 · shop:1462 · day:1514 · nightpick:1515 · nightgo:1519 · daily:1523 · wish:1526 · dpick:1536 · peek:1541
 
-Ajoutées ou remplacées ailleurs : unlock (game-anim.js:527) · dkp (game-anim.js:553) · dkm (game-anim.js:587) · prepdeck (game-anim.js:619) · start (game-anim.js:733) · gift (game-anim.js:804) · relic (game-anim.js:1161) · prepmen (game-anim.js:1237) · fshare (game-fiche.js:689) · credits (game-artx.js:1439)
+Ajoutées ou remplacées ailleurs : unlock (game-anim.js:528) · dkp (game-anim.js:554) · dkm (game-anim.js:588) · prepdeck (game-anim.js:620) · start (game-anim.js:734) · gift (game-anim.js:805) · relic (game-anim.js:1162) · prepmen (game-anim.js:1238) · fshare (game-fiche.js:689) · credits (game-artx.js:1439)
 
 ## Fichier par fichier
 
@@ -126,23 +126,24 @@ _t:19 _tPage:41
 - **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:606 saveOpt:712 applyOpt:720 applyCur:740 toggleFs:759 unpause:778 R:786
 - **817** state
 - **819** progression entre les parties (localStorage) : loadMeta:820 endTest:841 saveMeta:846 ach:887 showAch:899 deckCanAdd:932 edGain:946 edCommit:955 edDrop:985 achCheck:1011 achNight:1036 achScreen:1044 tuto:1063 guideStep:1094 guideOk:1234 tutoTip:1255 tutoHand:1267 tutoPicks:1290 tutoEnd:1295 newGame:1310 fillHand:1360 drawCards:1368 syncBoard:1395 cellRect:1433 fly:1438 animPiles:1500 pilesHtml:1558
-- **1628** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1631 loadSave:1655 clearSave:1678 resume:1684
+- **1628** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1631 loadSave:1656 clearSave:1679 resume:1685
 
 ### src/game-draw.js
 
 > Dernier Abri : dessin de la carte (canvas), effets visuels et boucle d’affichage.
 
 - **3** canvas setup : fit:24 rng:43 leafTree:207 pineTree:260 rockDeco:301 logDeco:324 cactus:352 deadBush:380 carWreck:400 concreteBlock:427 barrel:444 rubble:469 deadTree:485 roofDeco:499 lampPost:576 puddle:597 manhole:607 mushroom:625 tumbleweed:642 skull:651 pumpkin:673 hayBale:698 snowdrift:721 snowman:735 boulderBig:765 buildCity:776 cityRing:793 proj:877 poly:881 tone:889 building3d:894 cactus3d:966 rock3d:1034 ringItem:1099 dirtRoad:1130 drawWoods:1222 setBiome:1295 buildGround:1303 boardEdge:1757 boardFrame:1941 ringFog:2096 drawEdgeNight:2121 clearDecals:2164 splat:2167
-- **2179** live visual state : vib:2199 camZoom:2214 shake:2219 jit:2229 zpos:2233 syncZ:2250
-- **2296** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2298 circ:2305 line:2312 oEll:2322 oCirc:2326 oLine:2330 oRect:2334 rrect:2340 oRound:2344 shade:2353 person:2521 dogShape:2646 hpBar:2673 drawBars:2677 socle:2698 trackBoard:2760 cracks:2851 crater:2872 groundCrack:2897 wallJit:2921 unitAnim:2929 drawUnit:3020 drawUnitInner:3126 wallSect:3887 wallPost:4063 drawRamparts:4125 wireSect:4246 wirePost:4269 drawWires:4273 drawGuide:4350 guideHand:4380 drawKillZones:4449 drawBossRoute:4483 drawShelter:4530 zAnim:4633 drawZombie:4662
-- **4822** effects : addFX:4823 drawGrassBlade:4828 tapScale:4843 tapZoom:4854 boardTapFx:4863 burst:4907 drawHealBolt:4926 drawHealGlow:4950 drawFX:4975 floatTxt:5069 drawFloats:5072 mkGlow:5142 drawSky:5163 drawGlow:5244 lights:5274 drawFog:5354 drawAmbient:5368 drawDark:5445 frame:5499 drawPlace:5515 titleDeco:5574 frameInner:5627 safeTxt:5886 edAura:5896 dmgCached:5987 bTag:5993 dmgBadge:6011 dmgLinks:6032 placeGain:6097 placeHints:6132
+- **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
+- **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
+- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:4009 wallPost:4185 drawRamparts:4247 wireSect:4368 wirePost:4391 drawWires:4395 drawGuide:4472 guideHand:4502 drawKillZones:4571 drawBossRoute:4605 drawShelter:4652 zAnim:4755 drawZombie:4784
+- **4944** effects : addFX:4945 drawGrassBlade:4950 tapScale:4965 tapZoom:4976 boardTapFx:4985 risePuff:5033 pieceTapReact:5049 poseImpactFx:5075 drawPoseFx:5100 burst:5131 drawHealBolt:5150 drawHealGlow:5174 drawFX:5199 floatTxt:5293 drawFloats:5296 mkGlow:5366 drawSky:5387 drawGlow:5468 lights:5498 drawFog:5578 drawAmbient:5592 drawDark:5669 frame:5723 drawPlace:5739 titleDeco:5798 frameInner:5851 safeTxt:6116 edAura:6126 dmgCached:6217 bTag:6223 dmgBadge:6241 dmgLinks:6262 placeGain:6327 placeHints:6362
 
 ### src/game-ui.js
 
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4 showHeal:491
-- **522** UI : ficheHtml:524 trackHtml:555 tagsHtml:572 shelHit:599 render:618 fireAmmo:868 updatePreview:892 curAt:1092 useBuild:1113 spentTrace:1121 countPlay:1129 placeLineUI:1140 dmgInfo:1190 dmgSnap:1204 bonusMsg:1212 unitLine:1254 hint:1412 showHint:1421 checkHints:1449 mergeFx:1473 playReact:1512 snapUndo:1550 doUndo:1565 squadFx:1595 tapCell:1607 peekScreen:1732 wavePause:1745 resumeWave:1756 night:1770 feltLayout:1887 ftPioche:1930 ftHorde:1954 ftJournal:1970 feltTabs:1998
+- **522** UI : ficheHtml:524 trackHtml:555 tagsHtml:572 shelHit:599 render:618 fireAmmo:868 updatePreview:892 curAt:1092 useBuild:1113 spentTrace:1121 countPlay:1129 placeLineUI:1140 dmgInfo:1190 dmgSnap:1204 bonusMsg:1212 unitLine:1254 hint:1412 showHint:1421 checkHints:1449 mergeFx:1473 playReact:1512 snapUndo:1550 doUndo:1565 squadFx:1595 tapCell:1607 peekScreen:1732 wavePause:1745 resumeWave:1756 night:1770 feltLayout:1890 ftPioche:1933 ftHorde:1957 ftJournal:1973 feltTabs:2001
 
 ### src/game-screens.js
 
@@ -165,16 +166,16 @@ _t:19 _tPage:41
 - **28** main : éventail, cartes jouables, refus : handFx:31 shakeCard:60 refuseBubble:76 refuseFx:87
 - **137** glisser : la carte se penche dans le sens du mouvement
 - **160** pose : la carte vole jusqu'à la case et s'écrase : placeFx:161 landFx:177
-- **190** fin du jour : les cartes réutilisables non jouées brûlent : burnFx:191
-- **228** nuit : une défense détruite vole en éclats : shardsFx:229
-- **261** aube : les 3 cartes au choix arrivent face cachée et se retournent : dealPicks:262 goldBurst:318
-- **346** grande carte : elle grandit depuis sa place, penche sous le doigt, reflet qui suit : zoomTilt:370
-- **403** collection : cascade, déblocage : cascade:405 coinsFx:463 unlockFx:496
-- **538** decks : ajout, retrait, deck complet : popEl:540 deckDone:604
-- **617** préparation : le deck choisi avance, les autres reculent
-- **649** lancement : le deck est battu puis plonge dans la pioche : launchFx:650
-- **744** récompense : paquet qui tremble puis explose, retournement selon la rareté : packFx:745 revealFx:778
-- **830** v171 : deuxième série (unités, nuit, économie, menus) : cvPt:832 bolt:837 fuseCardsFx:897 lvFx:954 typeFx:984 bossBanner:998 ejectCartridge:1035 spinChangedCoins:1060 renderFx:1080 endPts:1294
+- **191** fin du jour : les cartes réutilisables non jouées brûlent : burnFx:192
+- **229** nuit : une défense détruite vole en éclats : shardsFx:230
+- **262** aube : les 3 cartes au choix arrivent face cachée et se retournent : dealPicks:263 goldBurst:319
+- **347** grande carte : elle grandit depuis sa place, penche sous le doigt, reflet qui suit : zoomTilt:371
+- **404** collection : cascade, déblocage : cascade:406 coinsFx:464 unlockFx:497
+- **539** decks : ajout, retrait, deck complet : popEl:541 deckDone:605
+- **618** préparation : le deck choisi avance, les autres reculent
+- **650** lancement : le deck est battu puis plonge dans la pioche : launchFx:651
+- **745** récompense : paquet qui tremble puis explose, retournement selon la rareté : packFx:746 revealFx:779
+- **831** v171 : deuxième série (unités, nuit, économie, menus) : cvPt:833 bolt:838 fuseCardsFx:898 lvFx:955 typeFx:985 bossBanner:999 ejectCartridge:1036 spinChangedCoins:1061 renderFx:1081 endPts:1295
 
 ### src/game-fiche.js
 

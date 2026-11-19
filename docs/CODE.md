@@ -85,6 +85,7 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 - **Nouvel effet de nuit** : `playEvents` (`game-ui.js`) reçoit les événements du moteur ; le dessin se fait dans `frameInner` / `drawFX` (`game-draw.js`).
 - **Chargement des images** : `src/game-load.js`. L’écran de chargement (`#boot`, style dans `index.html` ; v254 : fond et logo allégés dans `assets/boot/`, barre dans le panneau noir, étape, pourcentage et astuces `BOOT_TIPS`) attend l’essentiel (`bootUrls`) ; le reste se charge ensuite en arrière-plan (`preloadBackground`), en sautant ce que le service worker garde déjà.
 - **Effets des cartes (v266)** : lumière de la scène (`.cf-lum`, selon `html[data-axph]`), reflet du cadre (`.cf-met`, masque = le cadre), bonus en vert (`bonusCoins`), bandeau Nouveau (`isNewCard`, `META.seenC`), et animations dans `game-anim.js` (voir `docs/IDEES_CARTES.md`).
+- **Traces des nuits (v274)** : `MARKS` (`game-draw.js`) : `h` = passages de la horde sur une grille 40 × 40 (`sampleHordeTrail`, image `trailCv`), `b` = taches de sang (`addBloodMark`, dessinées sur `decal`). Sauvegardé dans `abri-save` (clé `m`), remis à zéro par `resetMarks()` dans `newGame`. Choc à la pose : `poseImpactFx` (appelé par `landFx`), saut `hopT` ; réaction au toucher : `pieceTapReact`.
 - **Dessin** : chaque élément dans un `try{}catch(e){}` pour que la boucle d’affichage ne s’arrête jamais.
 - **Mise en ligne** : voir `CLAUDE.md` (numéro de version à trois endroits, `node tools/test.js`).
 

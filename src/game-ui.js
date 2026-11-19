@@ -1852,6 +1852,9 @@ async function night() {
   syncBoard();
   nightTarget = 0;
   dawnT = performance.now();
+  try {
+    redrawDecals(); // v274 : les éclaboussures de la nuit s'effacent, les taches de sang restent
+  } catch (e) {}
   KC.on = 0;
   S.busy = false;
   S.dawnWait = 1;

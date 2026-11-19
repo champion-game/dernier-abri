@@ -2176,6 +2176,122 @@ function splat(x, y, big) {
   }
 }
 
+/* ---------- v274 : idée 8, le plateau garde les traces des nuits ----------
+   Chemins piétinés là où la horde passe (grille TRN × TRN de passages) et taches de sang qui restent.
+   Seulement de l'affichage : sauvegardé à part dans la partie (MARKS), aucune règle ne change. */
+const TRN = 40,
+  MARK_MAX = 140,
+  trailCv = document.createElement('canvas');
+trailCv.width = trailCv.height = TRN * 2;
+let MARKS = { h: Array(TRN * TRN).fill(0), b: [] },
+  trailDirty = true,
+  trailSampleT = 0,
+  trailBuildT = 0;
+function resetMarks(m) {
+  MARKS = { h: Array(TRN * TRN).fill(0), b: [] };
+  if (m && Array.isArray(m.h) && m.h.length === TRN * TRN) MARKS.h = m.h.map(v => +v || 0);
+  if (m && Array.isArray(m.b)) MARKS.b = m.b.filter(Array.isArray).slice(-MARK_MAX);
+  trailDirty = true;
+  redrawDecals();
+}
+// la horde laisse sa trace : on note où sont les zombies, quelques fois par seconde
+function sampleHordeTrail(now) {
+  if (now - trailSampleT < 220) return;
+  // poids = nombre de tours de jeu écoulés : la trace ne dépend pas de la vitesse choisie
+  const w = Math.min(4, (now - trailSampleT) / Math.max(1, tickMs()));
+  trailSampleT = now;
+  for (const v of V.values()) {
+    if (v.dying) continue;
+    const p = zpos(v, now),
+      cx = Math.floor((p.x / L) * TRN),
+      cy = Math.floor((p.y / L) * TRN);
+    if (cx < 0 || cy < 0 || cx >= TRN || cy >= TRN) continue;
+    MARKS.h[cy * TRN + cx] = Math.min(999, Math.round((MARKS.h[cy * TRN + cx] + w) * 10) / 10);
+    trailDirty = true;
+  }
+}
+// petite image floue (2 points par case, un peu de grain), agrandie sur tout le plateau
+function buildTrail() {
+  const tg = trailCv.getContext('2d'),
+    W = TRN * 2,
+    img = tg.createImageData(W, W),
+    R = rng(7);
+  for (let y = 0; y < W; y++)
+    for (let x = 0; x < W; x++) {
+      const v = MARKS.h[(y >> 1) * TRN + (x >> 1)],
+        a = Math.min(0.55, 0.08 * Math.sqrt(v)) * (0.7 + R() * 0.6),
+        o = (y * W + x) * 4;
+      img.data[o] = 62;
+      img.data[o + 1] = 42;
+      img.data[o + 2] = 20;
+      img.data[o + 3] = Math.round(Math.min(1, a) * 255);
+    }
+  tg.putImageData(img, 0, 0);
+  trailDirty = false;
+}
+function drawHordeTrail(now) {
+  if (S.busy) sampleHordeTrail(now);
+  // la nuit, l'image des traces n'est refaite que toutes les 2 s
+  if (trailDirty && (!S.busy || now - trailBuildT > 2000)) {
+    trailBuildT = now;
+    buildTrail();
+  }
+  ctx.save();
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(trailCv, 0, 0, L, L);
+  ctx.restore();
+}
+// tache de sang qui reste : flaque, gouttes, et parfois une traînée vers l'extérieur (corps tiré vers la forêt)
+function drawBloodMark(m) {
+  const [x, y, seed, smear] = m,
+    R = rng(seed + 11),
+    z = 14 + R() * 12;
+  gx.save();
+  gx.translate(x, y);
+  if (smear) {
+    gx.save();
+    gx.rotate(Math.atan2(y - CEN.y, x - CEN.x));
+    const len = 50 + R() * 40,
+      g = gx.createLinearGradient(0, 0, len, 0);
+    g.addColorStop(0, 'rgba(92,16,12,.5)');
+    g.addColorStop(1, 'rgba(92,16,12,0)');
+    gx.fillStyle = g;
+    for (const o of [-5, 5]) {
+      gx.beginPath();
+      gx.ellipse(len / 2, o, len / 2, 3.6, 0, 0, 7);
+      gx.fill();
+    }
+    gx.restore();
+  }
+  gx.fillStyle = 'rgba(96,16,12,.62)';
+  for (let k = 0; k < 5; k++) {
+    gx.beginPath();
+    gx.ellipse((R() - 0.5) * z, (R() - 0.5) * z * 0.5, z * (0.25 + R() * 0.3), z * (0.14 + R() * 0.14), R() * 3, 0, 7);
+    gx.fill();
+  }
+  gx.fillStyle = 'rgba(64,10,8,.6)';
+  for (let k = 0; k < 6; k++) {
+    gx.beginPath();
+    gx.arc((R() - 0.5) * z * 2.2, (R() - 0.5) * z * 1.2, 1.5 + R() * 2.5, 0, 7);
+    gx.fill();
+  }
+  gx.restore();
+}
+function addBloodMark(x, y) {
+  const m = [Math.round(x), Math.round(y), (Math.random() * 99999) | 0, Math.random() < 0.3 ? 1 : 0];
+  MARKS.b.push(m);
+  if (MARKS.b.length > MARK_MAX) MARKS.b.shift();
+  drawBloodMark(m);
+}
+// à l'aube : les petites éclaboussures de la nuit disparaissent, les taches restent
+function redrawDecals() {
+  clearDecals();
+  for (const m of MARKS.b)
+    try {
+      drawBloodMark(m);
+    } catch (e) {}
+}
+
 /* ---------- live visual state ---------- */
 const V = new Map(),
   FX = [],
@@ -2289,7 +2405,10 @@ function syncZ(now) {
       const p = zpos(v, now);
       v.dx = p.x;
       v.dy = p.y;
-      if (!v.bit) splat(p.x, p.y, true);
+      if (!v.bit) {
+        splat(p.x, p.y, true);
+        if (Math.random() < 0.3) addBloodMark(p.x, p.y);
+      }
     }
 }
 
@@ -2751,6 +2870,7 @@ const NC = Z.N * Z.N,
   bornT = Array(NC).fill(-1e9),
   popT = Array(NC).fill(-1e9),
   tapT = Array(NC).fill(-1e9),
+  hopT = Array(NC).fill(-1e9), // v274 : petit saut d'une unité (voisine d'une pose, ou touchée)
   lvT = Array(NC).fill(-1e9),
   SLD = [];
 let MERGE = null,
@@ -2962,6 +3082,8 @@ function unitAnim(i, u, now, sc) {
   // v272 : pièce touchée par le joueur : elle grossit de 30 % puis reprend sa taille avec un léger rebond
   const tf = tapScale(i, now);
   if (tf !== 1) ctx.scale(tf, tf);
+  const tj = now - hopT[i];
+  if (tj >= 0 && tj < 300) ctx.translate(0, -7 * Math.sin((tj / 300) * Math.PI));
   const tl = now - lvT[i];
   if (tl < 420) {
     const k = Math.sin((tl / 420) * Math.PI);
@@ -4864,6 +4986,9 @@ function boardTapFx(i, empty) {
   const now = performance.now();
   if (!empty) {
     tapT[i] = now;
+    try {
+      pieceTapReact(i, now);
+    } catch (e) {}
     return;
   }
   const p = tc(i),
@@ -4903,6 +5028,105 @@ function boardTapFx(i, empty) {
     });
   }
   addFX({ type: 'ring', x: p.x, y: p.y + 4, r: 22, c: 'rgba(120,96,60,.45)', dur: 260 });
+}
+// v274 : fumée ou vapeur qui monte doucement
+function risePuff(x, y, c, n) {
+  const now = performance.now();
+  for (let m = 0; m < n; m++)
+    PT.push({
+      x: x + (Math.random() - 0.5) * 8,
+      y,
+      vx: (Math.random() - 0.5) * 0.012,
+      vy: -0.025 - Math.random() * 0.02,
+      t0: now + m * 60,
+      dur: 700 + Math.random() * 400,
+      c,
+      r: 3 + Math.random() * 3,
+      light: 0,
+    });
+}
+// v274 : chaque pièce touchée réagit à sa façon (en plus du rebond)
+function pieceTapReact(i, now) {
+  if (S.busy || OPT.eco || reduce) return;
+  const u = G.grid[i],
+    p = tc(i);
+  if (i === Z.C) {
+    risePuff(p.x + 10, p.y - 20, 'rgba(95,90,85,.55)', 5);
+    burst(p.x, p.y - 8, 'rgba(170,150,115,.6)', 8, 0.05, 2.5);
+    return;
+  }
+  if (!u) return;
+  const D = Z.U[u.t] || {},
+    dog = /dog|k9/.test(u.t);
+  if (Z.isUnit(u.t)) hopT[i] = now;
+  if (dog) {
+    hopT[i] = now;
+    setTimeout(() => (hopT[i] = performance.now()), 280);
+    burst(p.x, p.y + 10, 'rgba(150,120,80,.55)', 5, 0.04, 2.5);
+  } else if (u.t === 'cook' || u.t === 'canteen') risePuff(p.x, p.y - 14, 'rgba(255,255,255,.7)', 7);
+  else if (D.heal) floatTxt(p.x, p.y - 22, '✚', '#5fd16b', 18);
+  else if (D.cat === 'shoot') {
+    const a = facing[i] ?? Math.atan2(p.y - CEN.y, p.x - CEN.x);
+    risePuff(p.x + Math.cos(a) * 14, p.y + Math.sin(a) * 14 - 6, 'rgba(225,220,205,.6)', 4);
+  } else if (!Z.isUnit(u.t) && D.block) burst(p.x, p.y, 'rgba(140,105,65,.8)', 6, 0.06, 2);
+}
+// v274 : idée 3, choc à la pose : petites fissures au sol, trait de lumière, les voisins sautent et se tournent vers la nouvelle pièce
+const POSEFX = [];
+function poseImpactFx(i) {
+  if (OPT.eco || reduce || !G) return;
+  const now = performance.now(),
+    p = tc(i),
+    N = Z.N,
+    c0 = i % N,
+    r0 = (i / N) | 0;
+  POSEFX.push({ x: p.x, y: p.y + 8, t: now, seed: (now | 0) % 9973 });
+  for (let k = 0; k < G.grid.length; k++) {
+    const u = G.grid[k];
+    if (k === i || !u || !Z.isUnit(u.t)) continue;
+    const d = Math.hypot((k % N) - c0, ((k / N) | 0) - r0);
+    if (d > 2.3) continue;
+    hopT[k] = now + d * 70;
+    if (S.busy) continue;
+    const q = tc(k),
+      a = Math.atan2(p.y - q.y, p.x - q.x),
+      before = facing[k];
+    facing[k] = a;
+    // elles regardent la nouvelle venue un instant, puis reprennent leur position
+    setTimeout(() => {
+      if (facing[k] === a && !S.busy) facing[k] = before;
+    }, 1600);
+  }
+}
+function drawPoseFx(now) {
+  for (let n = POSEFX.length - 1; n >= 0; n--) {
+    const f = POSEFX[n],
+      t = now - f.t;
+    if (t > 1600) {
+      POSEFX.splice(n, 1);
+      continue;
+    }
+    if (t < 380) {
+      const k = t / 380,
+        g = ctx.createLinearGradient(0, f.y - T * 2.5, 0, f.y);
+      g.addColorStop(0, 'rgba(255,240,200,0)');
+      g.addColorStop(1, `rgba(255,240,200,${0.5 * (1 - k)})`);
+      ctx.fillStyle = g;
+      ctx.fillRect(f.x - T * 0.32, f.y - T * 2.5, T * 0.64, T * 2.5);
+    }
+    const R = rng(f.seed + 1),
+      a = Math.min(1, (1600 - t) / 600) * 0.6;
+    ctx.strokeStyle = `rgba(35,24,10,${a})`;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    for (let m = 0; m < 5; m++) {
+      const an = R() * 6.28,
+        l = T * (0.28 + R() * 0.22);
+      ctx.moveTo(f.x, f.y);
+      ctx.lineTo(f.x + Math.cos(an) * l * 0.5 + (R() - 0.5) * 5, f.y + Math.sin(an) * l * 0.18);
+      ctx.lineTo(f.x + Math.cos(an) * l, f.y + Math.sin(an) * l * 0.35);
+    }
+    ctx.stroke();
+  }
 }
 function burst(x, y, c, n, spd, r) {
   const now = performance.now();
@@ -5681,9 +5905,15 @@ function frameInner(now) {
   LABELS = [];
   ctx.drawImage(ground, 0, 0, L, L);
   try {
+    if (G) drawHordeTrail(now);
+  } catch (e) {}
+  try {
     drawPlace(now);
   } catch (e) {}
   ctx.drawImage(decal, 0, 0, L, L);
+  try {
+    drawPoseFx(now);
+  } catch (e) {}
   if (!S.busy && S.drag) {
     const t = selCard();
     ctx.fillStyle = 'rgba(242,179,61,.28)';
