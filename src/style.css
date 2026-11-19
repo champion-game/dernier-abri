@@ -12638,6 +12638,17 @@ html.artx .lc.lc-pend .cf {
 }
 html.artx .lc.lcb-on {
   z-index: 6;
+  animation: none;
+}
+/* v270 : les cartes de la collection respirent légèrement, décalées les unes des autres */
+html.artx .lc {
+  animation: lcbreath 4.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -370ms);
+}
+@keyframes lcbreath {
+  50% {
+    scale: 1.018;
+  }
 }
 html.artx .lcb {
   position: absolute;
@@ -13071,11 +13082,11 @@ html.artx .lcd-sp svg {
     }
   }
 }
-html.artx.eco :is(.lcd-float, .lc.on .lc-tilt, .lc-w.deal) {
+html.artx.eco :is(.lcd-float, .lc.on .lc-tilt, .lc-w.deal, .lc) {
   animation: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  html.artx :is(.lcd-float, .lc.on .lc-tilt, .lc-w.deal, .lc.picked, .lc-det.pop .lcd-info) {
+  html.artx :is(.lcd-float, .lc.on .lc-tilt, .lc-w.deal, .lc, .lc-det.pop .lcd-info) {
     animation: none;
   }
 }

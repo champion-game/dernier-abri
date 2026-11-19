@@ -783,15 +783,14 @@ function lcbDrawParticles(dt) {
   }
 }
 
-// boucle de l’effet : toutes les cartes en cours, les particules, le tremblement de la collection
+// boucle de l’effet : toutes les cartes en cours et les particules
 function lcbFrame(now) {
   const dt = Math.min(100, now - LCB.last); // temps réel : l’effet garde sa durée même sur un appareil lent
   LCB.last = now;
-  let shake = 0;
+  // seule la carte tremble (v270) : la collection ne bouge plus
   for (const b of [...LCB.live]) {
     try {
       b.update(dt);
-      shake = Math.max(shake, b.screen);
     } catch (e) {
       b.finish();
     }
@@ -799,8 +798,6 @@ function lcbFrame(now) {
   try {
     lcbDrawParticles(dt);
   } catch (e) {}
-  const L = panel.querySelector('.lcoll');
-  if (L) L.style.translate = shake > 0.3 ? `${lcbRnd(-0.5, 0.5) * shake}px ${lcbRnd(-0.5, 0.5) * shake}px` : '';
   if (LCB.live.size || LCB.parts.length) LCB.raf = requestAnimationFrame(lcbFrame);
   else {
     LCB.raf = 0;

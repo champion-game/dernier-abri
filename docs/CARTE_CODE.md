@@ -19,7 +19,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (363 lignes)
 14. `src/game-artx.js` (1476 lignes)
-15. `src/game-coll.js` (1266 lignes)
+15. `src/game-coll.js` (1263 lignes)
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (768 lignes)
 18. `src/game-load.js` (195 lignes)
@@ -36,8 +36,8 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `playEvents` | game-ui.js:4 | game-anim.js:1017, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
 | `frameInner` | game-draw.js:5457 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
-| `collectionScreen` | game-screens.js:932 | game-anim.js:437, game-coll.js:1246 |
-| `deckEditor` | game-screens.js:900 | game-anim.js:445, game-coll.js:1256 |
+| `collectionScreen` | game-screens.js:932 | game-anim.js:437, game-coll.js:1243 |
+| `deckEditor` | game-screens.js:900 | game-anim.js:445, game-coll.js:1253 |
 | `feltLayout` | game-ui.js:1861 | game-artx.js:923, game-artx.js:1066 |
 | `syncZ` | game-draw.js:2249 | game-fx2.js:201, game-artx.js:1108 |
 | `unitAnim` | game-draw.js:2927 | game-fx3.js:327, game-fx5.js:476 |
@@ -208,7 +208,7 @@ _t:19 _tPage:41
 > ---------- collection du style artiste (v222) ----------
 
 - **1** (début) : lcItem:43 lcDkItem:60 lcInfo:69 lcDetail:95 lcBase:103 lcList:110 lcCells:115 lcDeckSide:133 lcScreen:161 lcFill:223 lcPage:242 lcSearch:282 lcShow:288 lcOvPlace:342 lcOvOpen:355 lcOvClose:388 lcOri:422 lcGyro:435 lcNo:452 lcReset:619
-- **648** déblocage d’une carte : la coque grise tremble, se fissure de lumière et vole en éclats (v : lcbGeometry:667 lcbCanvas:707 lcbResize:717 lcbEmit:725 lcbDrawParticles:728 lcbFrame:787 lcbStart:811 lcBreak:1202 lcBreakNew:1219 lcBreakBuy:1234
+- **648** déblocage d’une carte : la coque grise tremble, se fissure de lumière et vole en éclats (v : lcbGeometry:667 lcbCanvas:707 lcbResize:717 lcbEmit:725 lcbDrawParticles:728 lcbFrame:787 lcbStart:808 lcBreak:1199 lcBreakNew:1216 lcBreakBuy:1231
 
 ### src/game-fx3.js
 
@@ -230,7 +230,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-16287 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1252 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+16298 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1253 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -465,77 +465,78 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 12367 ===== v222 : collection du style artiste reprise du laboratoire (interfaces/collection) : 
 - 12583 une carte de la grille : inclinaison 3D, reflet, lueur dorée quand elle est choisie
 - 12635 v268 : déblocage d’une carte (game-coll.js, LcBreak) : coque grise, fissures de lumière, é
-- 12794 cartes distribuées : elles tombent de haut en tournant
-- 12812 grande carte : se retourne, flotte, s’incline au survol
-- 12971 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
-- 13101 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
-- 13106 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
-- 13110 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
-- 13198 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
-- 13248 téléphone : grande carte par-dessus la grille
-- 13329 deck sur téléphone : le tiroir reste dans la page, sous la grille
-- 13344 effets des cartes
-- 13478 ordinateur : trois colonnes, rien ne défile
-- 13583 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
-- 13596 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
-- 13690 v227 : onde au clic sur les boutons (src/game-artx.js)
-- 13722 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
-- 13762 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
-- 13882 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
-- 13990 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
-- 14077 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
-- 14193 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
-- 14225 v241 : interface plus lisible (demande d'Amine)
-- 14226 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
-- 14296 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
-- 14302 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
-- 14334 téléphone en portrait
-- 14448 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
-- 14465 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
-- 14527 textes posés sur le décor, sans fiche beige
-- 14588 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
-- 14623 « Jouer » : panneau noir rougi (version B)
-- 14666 « Jouer » respire : il grossit un peu et son halo s'élargit
-- 14693 barre du bas
-- 14776 PC peu haut et téléphone tourné : tout se resserre
-- 14814 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
-- 14899 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
-- 14956 lueurs du décor : étoiles, brume devant la forêt, lucioles
-- 15038 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
-- 15070 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
-- 15075 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
-- 15145 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
-- 15167 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
-- 15173 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
-- 15212 ===== v261 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
-- 15252 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
-- 15279 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
-- 15284 v263 : nouveau cadre de carte d'Amine (assets/art/ui/cadre-barricard.webp, 728 × 1106, fen
-- 15334 reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'apparei
-- 15399 dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte
-- 15437 v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord m
-- 15473 reflet bombé en haut de la pièce + éclat qui la traverse
-- 15517 chiffres gravés : clair en haut, ombre en bas, contour sombre
-- 15541 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
-- 15581 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
-- 15590 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste
-- 15597 v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
-- 15626 liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : da
-- 15637 au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le
-- 15724 emblème de la bande (faction) imprimé en filigrane dans le parchemin
-- 15749 pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et 
-- 15769 Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes
-- 15807 Légendaire animée : braises qui montent et lueur dorée qui respire
-- 15833 ===== v266 : idées validées pour les cartes (docs/IDEES_CARTES.md) =====
-- 15834 12 : lumière de la scène : chaude le jour, bleue la nuit, rouge pendant la nuit rouge (htm
-- 15855 11 : cadre métallique : un reflet glisse sur les ornements du cadre seulement (masque = le
-- 15913 9 : bonus visibles : pièce verte, petite flèche, et elle grossit la première fois qu'on la
-- 15962 10 : carte nouvelle : bandeau NOUVEAU et reflet (main) ; dans la collection, le même refle
-- 16010 Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle
-- 16029 7 : douille éjectée quand on dépense de l'énergie (game-anim.js : ejectCartridge)
-- 16044 4 : pièce qui tourne quand sa valeur change ; la tranche est une ombre qui glisse sur le c
-- 16071 1 : récompense face cachée : une carte rare jaillit avec un éclat doré (game-anim.js : gol
-- 16130 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de b
-- 16190 5 : fusion spectaculaire (game-anim.js : fuseCardsFx)
-- 16234 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte
-- 16265 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
+- 12643 v270 : les cartes de la collection respirent légèrement, décalées les unes des autres
+- 12805 cartes distribuées : elles tombent de haut en tournant
+- 12823 grande carte : se retourne, flotte, s’incline au survol
+- 12982 ordinateur : trois colonnes comme le laboratoire, la grille défile seule
+- 13112 v223 : grand écran : colonnes gauche et droite limitées à 440 px (sinon elles s'étirent et
+- 13117 v224 : écart plateau / colonnes de 12 px, jusqu'à 50 px quand l'écran a de la place (choix
+- 13121 ===== v225 : collection et deck sur le même écran, en pages (plus de défilement) =====
+- 13209 bas de l’écran : pages au-dessus des boutons sur téléphone, sur une ligne sur ordinateur
+- 13259 téléphone : grande carte par-dessus la grille
+- 13340 deck sur téléphone : le tiroir reste dans la page, sous la grille
+- 13355 effets des cartes
+- 13489 ordinateur : trois colonnes, rien ne défile
+- 13594 v225 : en jeu, une carte qu’on ne peut pas jouer est grisée (style artiste)
+- 13607 v226 : pas de barre de défilement dans la collection et le deck ; formes du jeu (panneau n
+- 13701 v227 : onde au clic sur les boutons (src/game-artx.js)
+- 13733 v227 : bouton qui reste enfoncé (filtre, onglet, option choisie) : 2 px plus bas, creusé, 
+- 13773 v228 : menus et panneau du deck dans le style du reste (panneaux noirs, texte crème, Oswal
+- 13893 v229 : sous la liste du deck, les rôles (Tank, Soin, DPS) en tuiles et les maximums par ra
+- 14001 v232 : carte plus haute dans le style artiste (choix d'Amine : ni bande ni zoom). Les illu
+- 14088 v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, 
+- 14204 v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.web
+- 14236 v241 : interface plus lisible (demande d'Amine)
+- 14237 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte
+- 14307 3 : le nom du jeu, coupé sur ordinateur (« Barric… »), n'est plus affiché pendant la parti
+- 14313 7 : plus d'énergie (ou plus rien à jouer) : le bouton de la nuit appelle clairement
+- 14345 téléphone en portrait
+- 14459 ===== v245 : accueil du style artiste sur le modèle d'Amine (game-artx.js, axTitleHtml) ==
+- 14476 v246 : les menus ouverts depuis l'accueil gardent son décor, assombri derrière le panneau
+- 14538 textes posés sur le décor, sans fiche beige
+- 14599 grands boutons (Collection et decks, Défi du jour) : panneau noir, icône, filet, libellé
+- 14634 « Jouer » : panneau noir rougi (version B)
+- 14677 « Jouer » respire : il grossit un peu et son halo s'élargit
+- 14704 barre du bas
+- 14787 PC peu haut et téléphone tourné : tout se resserre
+- 14825 téléphone en hauteur : logo dans le ciel, menu sous le plateau, barre de 4 icônes
+- 14910 entrée : le logo tombe et rebondit, les boutons glissent depuis la gauche, la barre monte 
+- 14967 lueurs du décor : étoiles, brume devant la forêt, lucioles
+- 15049 v246 : flamme de la lanterne de l'accueil plus forte (halo large qui vacille, mélangé en l
+- 15081 v248 : chiffres et étiquette de type des cartes en Oswald (lisibles en petit)
+- 15086 v249 : dégâts dans une bulle ronde (laiton, épée en filigrane), soin en vert ; PV d'un tan
+- 15156 v256 : téléphone tourné (large mais peu haut) : les 13 familles de la collection ne tienne
+- 15178 v257 : accueil sur PC : logo et boutons centrés en hauteur dans la colonne de gauche
+- 15184 v257 : collection sur téléphone tourné : 2 lignes de 5 cartes, grande carte plus haute ave
+- 15223 ===== v261 : énergie en cartouches de fusil (dessinées en SVG, cartoucheSvg dans game.js),
+- 15263 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
+- 15290 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
+- 15295 v263 : nouveau cadre de carte d'Amine (assets/art/ui/cadre-barricard.webp, 728 × 1106, fen
+- 15345 reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'apparei
+- 15410 dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte
+- 15448 v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord m
+- 15484 reflet bombé en haut de la pièce + éclat qui la traverse
+- 15528 chiffres gravés : clair en haut, ombre en bas, contour sombre
+- 15552 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
+- 15592 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
+- 15601 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste
+- 15608 v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
+- 15637 liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : da
+- 15648 au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le
+- 15735 emblème de la bande (faction) imprimé en filigrane dans le parchemin
+- 15760 pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et 
+- 15780 Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes
+- 15818 Légendaire animée : braises qui montent et lueur dorée qui respire
+- 15844 ===== v266 : idées validées pour les cartes (docs/IDEES_CARTES.md) =====
+- 15845 12 : lumière de la scène : chaude le jour, bleue la nuit, rouge pendant la nuit rouge (htm
+- 15866 11 : cadre métallique : un reflet glisse sur les ornements du cadre seulement (masque = le
+- 15924 9 : bonus visibles : pièce verte, petite flèche, et elle grossit la première fois qu'on la
+- 15973 10 : carte nouvelle : bandeau NOUVEAU et reflet (main) ; dans la collection, le même refle
+- 16021 Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle
+- 16040 7 : douille éjectée quand on dépense de l'énergie (game-anim.js : ejectCartridge)
+- 16055 4 : pièce qui tourne quand sa valeur change ; la tranche est une ombre qui glisse sur le c
+- 16082 1 : récompense face cachée : une carte rare jaillit avec un éclat doré (game-anim.js : gol
+- 16141 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de b
+- 16201 5 : fusion spectaculaire (game-anim.js : fuseCardsFx)
+- 16245 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte
+- 16276 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
