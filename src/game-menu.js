@@ -132,6 +132,28 @@ const RULES = [
     () =>
       _t`<p>${ink('tank')} <b>Tank</b> : beaucoup de PV ; les zombies à ${Z.TAUNT} cases ou moins le visent ; il bloque 1 coup sur 3 et frappe peu (1 dégât).</p><p>${ink('heal')} <b>Soin</b> : soigne tes unités, à distance (portée en vert) ou sur les 8 cases autour. Les murs et postes sont réparés par les réparateurs.</p><p>${ink('dps')} <b>DPS</b> : gros dégâts. Le corps à corps rend chaque coup reçu au contact. <b>Tir de soutien</b> : +1 dégât (une fois par tour) sur un zombie au contact d’un Tank. Les tirs lents (La Biathlète…) reçoivent leurs bonus multipliés par leur intervalle.</p><p><b>Escouade</b> : un Tank, un Soin et un DPS voisins gagnent chacun +1.</p>`,
   ],
+  // v276 : matières des murs, enclos et tireurs perchés
+  [
+    'walls',
+    'post',
+    _t('Murs, enclos et perchoirs'),
+    () =>
+      _t(
+        '<p><b>Bois</b> (Planches clouées, Pieux taillés, Barrière de piste, Pneus peints) : prend feu au contact d’un zombie en feu, d’une flaque en feu ou du Brasero forain. Il perd 1 PV par tour pendant 3 tours, brûle les zombies qui le frappent, puis le feu passe aux murs en bois voisins. Pas sous la pluie. Le bois se répare mieux (+1).</p>',
+      ) +
+      _t(
+        '<p><b>Métal</b> (Vieille guimbarde, Mur de portières, Grille cadenassée…) : un Grillage électrifié alimenté électrise tous les murs de métal reliés à lui ; les zombies qui les frappent sont électrocutés (+1 sous la pluie).</p>',
+      ) +
+      _t(
+        '<p><b>Pierre</b> (Mur de sacs, Cages à cailloux, Bunker de jardin) : ne brûle pas, ne conduit pas, et un Sapeur ne lui fait que 5 dégâts.</p>',
+      ) +
+      _t(
+        '<p><b>Enclos</b> : des murs qui forment une boucle fermée. Les cases du milieu sont teintées de vert ; les unités qui s’y trouvent perdent 1 PV de moins par coup.</p>',
+      ) +
+      _t(
+        '<p><b>Grimpe</b> : les tireurs légers (Miss Deux-Colts, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>',
+      ),
+  ],
   [
     'fam',
     'medal',

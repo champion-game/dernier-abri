@@ -6,15 +6,15 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 ## Ordre de chargement (index.html)
 
 1. `src/i18n.js` (57 lignes)
-2. `src/lang-en.js` (2211 lignes)
-3. `src/engine.js` (5765 lignes)
+2. `src/lang-en.js` (2238 lignes)
+3. `src/engine.js` (5966 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1720 lignes)
-7. `src/game-draw.js` (6371 lignes)
-8. `src/game-ui.js` (2058 lignes)
+6. `src/game.js` (1738 lignes)
+7. `src/game-draw.js` (6470 lignes)
+8. `src/game-ui.js` (2075 lignes)
 9. `src/game-screens.js` (1681 lignes)
-10. `src/game-menu.js` (839 lignes)
+10. `src/game-menu.js` (861 lignes)
 11. `src/game-anim.js` (1328 lignes)
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (363 lignes)
@@ -31,41 +31,41 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
-| `render` | game-ui.js:618 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
+| `render` | game-ui.js:628 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
 | `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1291 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
-| `frameInner` | game-draw.js:5851 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
+| `frameInner` | game-draw.js:5945 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
-| `feltLayout` | game-ui.js:1890 | game-artx.js:923, game-artx.js:1066 |
+| `feltLayout` | game-ui.js:1907 | game-artx.js:923, game-artx.js:1066 |
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1108 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
-| `drawFloats` | game-draw.js:5296 | game-fx5.js:746 |
-| `drawFog` | game-draw.js:5578 | game-artx.js:551 |
-| `drawFX` | game-draw.js:5199 | game-fx5.js:636 |
-| `drawPlace` | game-draw.js:5739 | game-fx3.js:315 |
-| `drawShelter` | game-draw.js:4652 | game-fx5.js:506 |
-| `drawSky` | game-draw.js:5387 | game-artx.js:670 |
+| `drawFloats` | game-draw.js:5390 | game-fx5.js:746 |
+| `drawFog` | game-draw.js:5672 | game-artx.js:551 |
+| `drawFX` | game-draw.js:5293 | game-fx5.js:636 |
+| `drawPlace` | game-draw.js:5833 | game-fx3.js:315 |
+| `drawShelter` | game-draw.js:4746 | game-fx5.js:506 |
+| `drawSky` | game-draw.js:5481 | game-artx.js:670 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
-| `hglowFit` | game-menu.js:801 | game-artx.js:326 |
-| `keepEnd` | game-menu.js:560 | game-fiche.js:206 |
-| `lights` | game-draw.js:5498 | game-fx3.js:378 |
-| `mergeFx` | game-ui.js:1473 | game-anim.js:854 |
-| `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
+| `hglowFit` | game-menu.js:823 | game-artx.js:326 |
+| `keepEnd` | game-menu.js:582 | game-fiche.js:206 |
+| `lights` | game-draw.js:5592 | game-fx3.js:378 |
+| `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
+| `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1275 |
-| `pilesHtml` | game.js:1562 | game-artx.js:979 |
-| `placeHints` | game-draw.js:6362 | game-fx2.js:246 |
-| `resumeWave` | game-ui.js:1756 | game-anim.js:1008 |
+| `pilesHtml` | game.js:1583 | game-artx.js:979 |
+| `placeHints` | game-draw.js:6461 | game-fx2.js:246 |
+| `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
-| `shelHit` | game-ui.js:599 | game-fx2.js:353 |
+| `shelHit` | game-ui.js:609 | game-fx2.js:353 |
 | `show` | game-screens.js:601 | game-anim.js:1305 |
-| `showAch` | game.js:899 | game-anim.js:1255 |
-| `tapCell` | game-ui.js:1607 | game-ui.js:2046 |
-| `title` | game-menu.js:430 | game-artx.js:335 |
+| `showAch` | game.js:916 | game-anim.js:1255 |
+| `tapCell` | game-ui.js:1624 | game-ui.js:2063 |
+| `title` | game-menu.js:452 | game-artx.js:335 |
 | `unitAnim` | game-draw.js:3049 | game-fx3.js:327 |
-| `zoomCf` | game-menu.js:246 | game-anim.js:349 |
+| `zoomCf` | game-menu.js:268 | game-anim.js:349 |
 
 ## Actions des boutons
 
@@ -98,14 +98,14 @@ _t:19 _tPage:41
 - **431** extension : nouvelles cartes de faction
 - **981** v89 : 6 nouveaux survivants
 - **1052** v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais e
-- **1162** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1755 baseOf:1855 edOf:1858 ck:1862 levelUp:1881 waveCount:2147 famCounts:2349 famLevel:2358 famLevels:2365 allies:2379 wallGroup:2384 sol:2404 nightOffers:2418 hurt:2436 recruit:2447 dawnEvent:3027 resolveDawn:3039 testProgress:3076 mutate:3091 zhit:3119 moves:3252
-- **3271** chemins des zombies : blockCosts:3277 field:3309 sapBlast:3340 pathStep:3359 killZones:3377 back:3418 shuffle:3427
-- **3435** état d'une partie : newState:3449 unlocks:3535
-- **3545** collection et deck (entre les parties) : giftOffer:3555 edKill:3593 killScrap:3599 applyMenace:3638 deckError:3648 newDay:3669
-- **3707** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3709 stat:3726 upgrade:3776 addRelic:3780 relicChoices:3790 draftChoices:3796 dailyPlan:3818 dailyState:3849 storeOffer:3870 buyStore:3883 pay:3889 fireAmmo:3901
-- **3921** pose des cartes : frees:3937 canMove:3950 move:3954 wallLinks:3964 fixLinks:3971 recall:3979 placeBench:3990 useCharges:4010 lineCells:4022 placeLine:4038 canPlace:4051 place:4074
-- **4140** fusion et évolutions : absorb:4156 merge:4171 mkey:4226 mtr:4232 cure:4245 lose:4258 applyItem:4321
-- **4352** la nuit : waveList:4361 broodDeath:4408 zMaxHp:4414 newcomers:4424 spawn:4429 bigNight:4439 nextWave:4443 startNight:4448 hit:4505 explode:4536 lureTarget:4541 squad:4567 dmgParts:4579 attack:4645 strike:4741 enter:4849 step:4934 endNight:5284 canReact:5354 react:5368 runNight:5518
+- **1162** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1755 vacate:1884 baseOf:1927 edOf:1930 ck:1934 levelUp:1953 waveCount:2219 famCounts:2421 famLevel:2430 famLevels:2437 allies:2451 wallGroup:2456 enclosed:2476 electrified:2495 igniteWall:2520 breakWall:2527 burnWalls:2538 sol:2558 nightOffers:2572 hurt:2590 recruit:2601 dawnEvent:3181 resolveDawn:3193 testProgress:3230 mutate:3245 zhit:3273 moves:3406
+- **3425** chemins des zombies : blockCosts:3431 field:3463 sapBlast:3495 pathStep:3514 killZones:3532 back:3573 shuffle:3582
+- **3590** état d'une partie : newState:3604 unlocks:3690
+- **3700** collection et deck (entre les parties) : giftOffer:3710 edKill:3748 killScrap:3754 applyMenace:3793 deckError:3803 newDay:3824
+- **3862** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3864 stat:3881 upgrade:3931 addRelic:3935 relicChoices:3945 draftChoices:3951 dailyPlan:3973 dailyState:4004 storeOffer:4025 buyStore:4038 pay:4044 fireAmmo:4056
+- **4076** pose des cartes : frees:4092 canMove:4105 move:4109 wallLinks:4121 fixLinks:4128 recall:4136 placeBench:4147 useCharges:4169 lineCells:4181 placeLine:4197 canPlace:4210 place:4233
+- **4305** fusion et évolutions : absorb:4321 merge:4336 mkey:4389 mtr:4395 cure:4408 lose:4421 applyItem:4484
+- **4515** la nuit : waveList:4524 broodDeath:4571 zMaxHp:4577 newcomers:4587 spawn:4592 bigNight:4602 nextWave:4606 startNight:4611 hit:4668 explode:4699 lureTarget:4704 squad:4730 dmgParts:4742 attack:4808 strike:4910 enter:5023 step:5108 endNight:5468 canReact:5540 react:5554 runNight:5710
 
 ### src/audio.js
 
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:606 saveOpt:712 applyOpt:720 applyCur:740 toggleFs:759 unpause:778 R:786
-- **817** state
-- **819** progression entre les parties (localStorage) : loadMeta:820 endTest:841 saveMeta:846 ach:887 showAch:899 deckCanAdd:932 edGain:946 edCommit:955 edDrop:985 achCheck:1011 achNight:1036 achScreen:1044 tuto:1063 guideStep:1094 guideOk:1238 tutoTip:1259 tutoHand:1271 tutoPicks:1294 tutoEnd:1299 newGame:1314 fillHand:1364 drawCards:1372 syncBoard:1399 cellRect:1437 fly:1442 animPiles:1504 pilesHtml:1562
-- **1632** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1635 loadSave:1660 clearSave:1683 resume:1689
+- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:623 saveOpt:729 applyOpt:737 applyCur:757 toggleFs:776 unpause:795 R:803
+- **834** state
+- **836** progression entre les parties (localStorage) : loadMeta:837 endTest:858 saveMeta:863 ach:904 showAch:916 deckCanAdd:949 edGain:963 edCommit:972 edDrop:1002 achCheck:1028 achNight:1053 achScreen:1061 tuto:1080 guideStep:1111 guideOk:1255 tutoTip:1276 tutoHand:1288 tutoPicks:1311 tutoEnd:1316 newGame:1331 fillHand:1378 drawCards:1386 syncBoard:1415 rebuildPos:1447 cellRect:1458 fly:1463 animPiles:1525 pilesHtml:1583
+- **1653** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1656 loadSave:1681 clearSave:1704 resume:1710
 
 ### src/game-draw.js
 
@@ -135,15 +135,15 @@ _t:19 _tPage:41
 - **3** canvas setup : fit:24 rng:43 leafTree:207 pineTree:260 rockDeco:301 logDeco:324 cactus:352 deadBush:380 carWreck:400 concreteBlock:427 barrel:444 rubble:469 deadTree:485 roofDeco:499 lampPost:576 puddle:597 manhole:607 mushroom:625 tumbleweed:642 skull:651 pumpkin:673 hayBale:698 snowdrift:721 snowman:735 boulderBig:765 buildCity:776 cityRing:793 proj:877 poly:881 tone:889 building3d:894 cactus3d:966 rock3d:1034 ringItem:1099 dirtRoad:1130 drawWoods:1222 setBiome:1295 buildGround:1303 boardEdge:1757 boardFrame:1941 ringFog:2096 drawEdgeNight:2121 clearDecals:2164 splat:2167
 - **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
 - **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
-- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:4009 wallPost:4185 drawRamparts:4247 wireSect:4368 wirePost:4391 drawWires:4395 drawGuide:4472 guideHand:4502 drawKillZones:4571 drawBossRoute:4605 drawShelter:4652 zAnim:4755 drawZombie:4784
-- **4944** effects : addFX:4945 drawGrassBlade:4950 tapScale:4965 tapZoom:4976 boardTapFx:4985 risePuff:5033 pieceTapReact:5049 poseImpactFx:5075 drawPoseFx:5100 burst:5131 drawHealBolt:5150 drawHealGlow:5174 drawFX:5199 floatTxt:5293 drawFloats:5296 mkGlow:5366 drawSky:5387 drawGlow:5468 lights:5498 drawFog:5578 drawAmbient:5592 drawDark:5669 frame:5723 drawPlace:5739 titleDeco:5798 frameInner:5851 safeTxt:6116 edAura:6126 dmgCached:6217 bTag:6223 dmgBadge:6241 dmgLinks:6262 placeGain:6327 placeHints:6362
+- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:4009 wallPost:4185 drawPerched:4249 drawWallFires:4257 drawCurrent:4282 drawEnclosure:4310 drawRamparts:4327 wireSect:4462 wirePost:4485 drawWires:4489 drawGuide:4566 guideHand:4596 drawKillZones:4665 drawBossRoute:4699 drawShelter:4746 zAnim:4849 drawZombie:4878
+- **5038** effects : addFX:5039 drawGrassBlade:5044 tapScale:5059 tapZoom:5070 boardTapFx:5079 risePuff:5127 pieceTapReact:5143 poseImpactFx:5169 drawPoseFx:5194 burst:5225 drawHealBolt:5244 drawHealGlow:5268 drawFX:5293 floatTxt:5387 drawFloats:5390 mkGlow:5460 drawSky:5481 drawGlow:5562 lights:5592 drawFog:5672 drawAmbient:5686 drawDark:5763 frame:5817 drawPlace:5833 titleDeco:5892 frameInner:5945 safeTxt:6215 edAura:6225 dmgCached:6316 bTag:6322 dmgBadge:6340 dmgLinks:6361 placeGain:6426 placeHints:6461
 
 ### src/game-ui.js
 
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
-- **3** combat events → visuals : playEvents:4 showHeal:491
-- **522** UI : ficheHtml:524 trackHtml:555 tagsHtml:572 shelHit:599 render:618 fireAmmo:868 updatePreview:892 curAt:1092 useBuild:1113 spentTrace:1121 countPlay:1129 placeLineUI:1140 dmgInfo:1190 dmgSnap:1204 bonusMsg:1212 unitLine:1254 hint:1412 showHint:1421 checkHints:1449 mergeFx:1473 playReact:1512 snapUndo:1550 doUndo:1565 squadFx:1595 tapCell:1607 peekScreen:1732 wavePause:1745 resumeWave:1756 night:1770 feltLayout:1890 ftPioche:1933 ftHorde:1957 ftJournal:1973 feltTabs:2001
+- **3** combat events → visuals : playEvents:4 showHeal:501
+- **532** UI : ficheHtml:534 trackHtml:565 tagsHtml:582 shelHit:609 render:628 fireAmmo:879 updatePreview:903 curAt:1103 useBuild:1124 spentTrace:1132 countPlay:1140 placeLineUI:1151 dmgInfo:1201 dmgSnap:1215 bonusMsg:1223 unitLine:1265 hint:1432 showHint:1441 checkHints:1469 mergeFx:1493 playReact:1532 snapUndo:1570 doUndo:1585 squadFx:1612 tapCell:1624 peekScreen:1749 wavePause:1762 resumeWave:1773 night:1787 feltLayout:1907 ftPioche:1950 ftHorde:1974 ftJournal:1990 feltTabs:2018
 
 ### src/game-screens.js
 
@@ -156,7 +156,7 @@ _t:19 _tPage:41
 
 > Dernier Abri : défi quotidien, tableau des combats, menu pause, raccourcis, accueil et dém
 
-- **3** défi du jour (v151) : une seule nuit contre la horde du jour, 8 cartes tirées « 1 parmi 3  : dailyEnd:9 dailyBest:13 dailyScreen:34 dailyDraft:44 dailyStart:54 dailyOver:63 pauseMenu:192 abortNight:202 nightBanner:227 zoomCf:246 zoomClose:261 title:430 meterHead:480 meterBody:485 meterSync:516 keepEnd:560 detScreen:563 detSync:570 muteIcon:589 iosHint:598 hglowFit:801
+- **3** défi du jour (v151) : une seule nuit contre la horde du jour, 8 cartes tirées « 1 parmi 3  : dailyEnd:9 dailyBest:13 dailyScreen:34 dailyDraft:44 dailyStart:54 dailyOver:63 pauseMenu:214 abortNight:224 nightBanner:249 zoomCf:268 zoomClose:283 title:452 meterHead:502 meterBody:507 meterSync:538 keepEnd:582 detScreen:585 detSync:592 muteIcon:611 iosHint:620 hglowFit:823
 
 ### src/game-anim.js
 

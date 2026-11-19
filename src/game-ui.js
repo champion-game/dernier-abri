@@ -304,6 +304,16 @@ function playEvents(ev, types, now) {
       } else if (t === 'trap') addFX({ type: 'ring', x: sp.x, y: sp.y, r: 22, c: '#d9dde0', dur: 250 });
       else if (t === 'fire') burst(tp.x, tp.y, '#ff9a2e', 3, 0.04, 3);
     }
+    // v276 : un mur en bois prend feu, puis brûle
+    if (e.k === 'wallfire') {
+      const p = tc(e.i);
+      floatTxt(p.x, p.y - 18, _t('En feu !'), '#ff9a2e', 14);
+      burst(p.x, p.y, '#ff9a2e', 10, 0.1, 3);
+    }
+    if (e.k === 'wallburn') {
+      const p = tc(e.i);
+      floatTxt(p.x, p.y - 8, e.txt, '#ffb35c');
+    }
     if (e.k === 'boom') {
       const p = tc(e.i);
       addFX({ type: 'flash', x: p.x, y: p.y, r: 46, c: 'rgba(255,160,60,.9)', dur: 380, light: T * 2.2 });
@@ -718,6 +728,7 @@ function render() {
         ? _t`<b>Limite de ${Z.unitCap(G)} unités atteinte.</b> Fusionne, ou rappelle une unité dans la réserve. `
         : '') +
       _t`<b>${cardName(t)}</b> (${selCost()} énergie${selReuse() ? _t(', réutilisée') : ''}) : ${D.d}.` +
+      keywordLine(t) +
       (Z.isTrace(t)
         ? _t` Carte à tracer : ${Z.charges(G, t, selReuse())} case${Z.charges(G, t, selReuse()) > 1 ? 's' : ''} à poser aujourd’hui${selReuse() ? '' : _t(' pour le prix de la carte')}, une par une ou d’un glissé.`
         : '') +
@@ -1288,7 +1299,7 @@ function unitLine(u) {
     );
   if (St.heal || St.mech) r1.push(chip('heal', '✚ ' + (St.heal || St.mech), St.heal ? _t('Soin') : _t('Réparation')));
   if (St.rng > 1 || St.hrng > 1)
-    r1.push(chip('rng', ii('binoc') + ' ' + (St.hrng > 1 ? St.hrng : St.rng), _t('Portée')));
+    r1.push(chip('rng', ii('binoc') + ' ' + (St.hrng > 1 ? St.hrng : St.rng + (u.perch ? 1 : 0)), _t('Portée')));
   if (D.dmg) {
     const nx = Z.lvKills(Z.lvOf(k) + 1),
       pv = Z.lvKills(Z.lvOf(k));
@@ -1313,6 +1324,15 @@ function unitLine(u) {
   if (ro && !St.dmg && Z.squad(G, i)) x.push(_t('<b>escouade</b> (+1 soin)'));
   if (tr && !tr.dmgB && tr.n) x.push(`<b>${tr.n}</b> (${tr.d})`);
   if (u.leg) x.push(_t`souvenir de <b>${u.leg}</b> (+2 PV)`);
+  // v276 : matière, perchoir, enclos, feu
+  const kw = cardKeyword(u.t);
+  if (u.perch)
+    x.push(_t`<b>perché</b> sur ${cardName(u.perch.t)} (${u.perch.hp}/${Z.maxHp(G, u.perch)} PV) : +1 portée`);
+  else if (kw) x.push(`<b>${kw[0]}</b> : ${kw[1]}`);
+  if (i >= 0 && Z.isUnit(u.t) && Z.enclosed(G).includes(i))
+    x.push(_t('dans un <b>enclos</b> : −1 dégât par coup reçu'));
+  const w = i >= 0 ? Z.wallAt(G, i) : null;
+  if (w && w.fireT > 0) x.push(_t('<b>en feu</b> : −1 PV par tour'));
   const g = Z.wallGroup(G, i);
   if (g.length > 1)
     x.push(
@@ -1577,11 +1597,8 @@ function doUndo() {
       META.played[u.t]--;
       saveMeta(META);
     }
-    S.board = G.grid.filter(Boolean).concat(G.bench || []);
-    POS = new Map();
-    G.grid.forEach((x, j) => {
-      if (x) POS.set(x, j);
-    });
+    S.board = boardUnits();
+    rebuildPos();
     DISC0 = -1;
     facing.fill(null);
     SFX.play('ui');

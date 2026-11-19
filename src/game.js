@@ -603,6 +603,23 @@ function markCardSeen(t) {
     saveMeta(META);
   } catch (e) {}
 }
+// v276 : mots-clés des murs (matière) et des tireurs qui grimpent sur un mur, avec leur explication
+const KEYWORDS = {
+  bois: [_t('Bois'), _t('prend feu (et brûle les zombies qui le frappent), se répare mieux')],
+  metal: [_t('Métal'), _t('conduit le courant d’un Grillage électrifié à tous les murs de métal reliés')],
+  pierre: [_t('Pierre'), _t('ne brûle pas, un Sapeur ne lui fait que 5 dégâts')],
+  perch: [_t('Grimpe'), _t('peut monter sur un mur simple : +1 portée, le mur encaisse les coups au contact')],
+};
+const cardKeyword = t => {
+  const B = Z.baseOf(t),
+    k = Z.matOf(B) || (Z.canPerch(B) ? 'perch' : null);
+  return k ? KEYWORDS[k] : null;
+};
+// la ligne d'explication d'un mot-clé, pour la fiche et l'aide
+const keywordLine = t => {
+  const kw = cardKeyword(t);
+  return kw ? ` <b>${kw[0]}</b> : ${kw[1]}.` : '';
+};
 function cardFace(t, o = {}) {
   const E = Z.edOf(t),
     B = Z.baseOf(t),
@@ -638,7 +655,7 @@ function cardFace(t, o = {}) {
   <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${look.html}${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
   ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost${bonus.cost || ''}">${cost}</span>${neuf ? `<span class="cf-neuf">${_t('Nouveau')}</span>` : ''}
   ${look.wm}<span class="cf-name">${D.n}</span>
-  ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
+  ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${cardKeyword(t) ? `. <b class="cf-kw">${cardKeyword(t)[0]}</b>` : ''}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
   <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
 }
 const art = t => {
@@ -648,7 +665,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v275 · 19 nov.';
+const VERSION = 'v276 · 19 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
@@ -1350,10 +1367,7 @@ function newGame(ch, pl, daily, deck, plan) {
   PT.length = 0;
   facing.fill(null);
   resetMarks();
-  POS = new Map();
-  G.grid.forEach((u, j) => {
-    if (u) POS.set(u, j);
-  });
+  rebuildPos();
   DISC0 = -1;
   if (plan) {
     S.hand = S.draw.splice(0);
@@ -1390,6 +1404,8 @@ const selCost = () => {
   const t = selCard();
   return t ? Z.buildCost(G, t, selReuse()) : 0;
 };
+// v276 : les cartes posées, y compris le mur sous un tireur perché (il reste une carte du deck)
+const boardUnits = () => G.grid.flatMap(u => (!u ? [] : u.perch ? [u, u.perch] : [u])).concat(G.bench || []);
 // les cartes d'une unité posée : une évolution porte ses 2 cartes d'origine (u.src), une unité offerte (gen) aucune
 const cardsOf = u => u.src || (u.gen ? [] : [Z.ck(u)]);
 const deckList = () => [...pileList(), ...(S.board || []).flatMap(cardsOf)];
@@ -1397,7 +1413,7 @@ const deckList = () => [...pileList(), ...(S.board || []).flatMap(cardsOf)];
 // Une unité absorbée par une évolution ne revient pas : ses cartes reviendront quand l'évolution tombera.
 // Un mur tracé en ligne n'a qu'une carte : si la case qui la porte tombe, une autre case du même mur la reprend.
 function syncBoard() {
-  const live = new Set(G.grid.filter(Boolean).concat(G.bench || []));
+  const live = new Set(boardUnits());
   // fusion : les cartes qui composent la nouvelle carte ★ repartent en défausse
   for (const u of live)
     if (u.fbk) {
@@ -1423,13 +1439,18 @@ function syncBoard() {
       S.discard.push(...cs);
     }
   S.board = [...live];
-  POS = new Map();
-  G.grid.forEach((u, j) => {
-    if (u) POS.set(u, j);
-  });
+  rebuildPos();
 }
 // table de jeu : animations des cartes entre la pioche, la main et la défausse
 let POS = new Map();
+// positions des cartes posées sur la carte (le mur sous un tireur perché a la même case que lui)
+function rebuildPos() {
+  POS = new Map();
+  G.grid.forEach((u, j) => {
+    if (u) POS.set(u, j);
+    if (u && u.perch) POS.set(u.perch, j);
+  });
+}
 const FLYSRC = [];
 let LASTRECT = null,
   DISC0 = -1,
@@ -1707,11 +1728,8 @@ function resume(d) {
   S.used = S.used || [];
   G.bench = G.bench || [];
   S.bsel = null;
-  S.board = G.grid.filter(Boolean).concat(G.bench);
-  POS = new Map();
-  G.grid.forEach((u, j) => {
-    if (u) POS.set(u, j);
-  });
+  S.board = boardUnits();
+  rebuildPos();
   DISC0 = -1;
   hide();
   render();

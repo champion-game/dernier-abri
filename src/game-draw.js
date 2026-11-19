@@ -4244,11 +4244,105 @@ function wallPost(m, x, y) {
     [8, 8],
   ].forEach(([a, b]) => circ(x + a, y + b, 1.1, '#d6dde2'));
 }
+// v276 : tireur perché : le mur dessous, le tireur au-dessus, un peu remonté
+const PERCH_LIFT = 11;
+function drawPerched(i, u, now, wallDrawn) {
+  if (!wallDrawn) drawUnit(i, u.perch, now); // un mur de rempart est déjà dessiné par drawRamparts
+  ctx.save();
+  ctx.translate(0, -PERCH_LIFT);
+  drawUnit(i, u, now);
+  ctx.restore();
+}
+// v276 : flammes sur les murs en bois en feu
+function drawWallFires(now) {
+  G.grid.forEach((v, j) => {
+    const w = Z.wallAt(G, j);
+    if (!w || !(w.fireT > 0)) return;
+    const p = tc(j);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let k = 0; k < 5; k++) {
+      const ph = now / 120 + k * 1.7 + j,
+        fx = p.x + (k - 2) * 7 + Math.sin(ph) * 2,
+        h = 14 + 7 * Math.sin(ph * 1.3),
+        base = p.y + 8;
+      ctx.globalAlpha = 0.75;
+      ctx.fillStyle = k % 2 ? '#ff9a2e' : '#ffd25a';
+      ctx.beginPath();
+      ctx.moveTo(fx - 5, base);
+      ctx.quadraticCurveTo(fx - 4, base - h * 0.6, fx, base - h);
+      ctx.quadraticCurveTo(fx + 4, base - h * 0.6, fx + 5, base);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  });
+}
+// v276 : courant dans les murs de métal reliés à un Grillage électrifié (arcs bleus entre les murs)
+function drawCurrent(now) {
+  if (!G.grid.some(u => u && u.t === 'fen')) return;
+  if (S.busy && G.event && G.event.id === 'coupure') return;
+  const el = Z.electrified(G),
+    src = new Set(el);
+  G.grid.forEach((u, j) => {
+    if (u && u.t === 'fen') src.add(j);
+  });
+  ctx.save();
+  ctx.strokeStyle = '#9fe8ff';
+  ctx.lineWidth = 1.6;
+  for (const a of el)
+    for (const b of Z.around(a))
+      if (src.has(b) && (b > a || !el.has(b))) {
+        const pa = tc(a),
+          pb = tc(b);
+        ctx.globalAlpha = 0.35 + 0.35 * Math.max(0, Math.sin(now / 90 + a * 1.3 + b));
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        const mx = (pa.x + pb.x) / 2 + Math.sin(now / 60 + a) * 4,
+          my = (pa.y + pb.y) / 2 + Math.cos(now / 70 + b) * 4;
+        ctx.lineTo(mx, my);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.stroke();
+      }
+  ctx.restore();
+}
+// v276 : le jour, les cases d'un enclos (fermé par des murs) sont teintées de vert
+function drawEnclosure() {
+  if (S.busy) return;
+  const cells = Z.enclosed(G);
+  if (!cells.length) return;
+  ctx.save();
+  ctx.fillStyle = 'rgba(126,224,138,.12)';
+  ctx.strokeStyle = 'rgba(126,224,138,.45)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 4]);
+  for (const j of cells) {
+    const p = tc(j);
+    ctx.fillRect(p.x - T / 2 + 3, p.y - T / 2 + 3, T - 6, T - 6);
+    ctx.strokeRect(p.x - T / 2 + 3, p.y - T / 2 + 3, T - 6, T - 6);
+  }
+  ctx.setLineDash([]);
+  ctx.restore();
+}
 function drawRamparts(ramp) {
   const seen = new Set();
-  G.grid.forEach((u, i) => {
-    if (!u || Z.U[u.t].cat !== 'wall' || seen.has(i)) return;
-    const g = Z.wallGroup(G, i);
+  // v276 : le mur sous un tireur perché fait partie du rempart (W = le mur de la case)
+  const W = k => Z.wallAt(G, k);
+  const groupOf = n => {
+    const out = new Set([n]),
+      q = [n];
+    while (q.length)
+      for (const k of Z.around(q.pop()))
+        if (!out.has(k) && W(k)) {
+          out.add(k);
+          q.push(k);
+        }
+    return [...out];
+  };
+  G.grid.forEach((v, i) => {
+    const u = W(i);
+    if (!u || seen.has(i)) return;
+    const g = groupOf(i);
     g.forEach(j => seen.add(j));
     if (g.length < 2 && !PLAIN.has(u.t)) return;
     const links = [];
@@ -4262,8 +4356,8 @@ function drawRamparts(ramp) {
           links.push([a, b]);
         }
     // chaque mur garde ses PV : l'usure et la barre de vie sont propres à chaque mur
-    const fw = k => Math.max(0, G.grid[k].hp) / Z.maxHp(G, G.grid[k]),
-      mat = k => WMAT[G.grid[k].t] || 'stone',
+    const fw = k => Math.max(0, W(k).hp) / Z.maxHp(G, W(k)),
+      mat = k => WMAT[W(k).t] || 'stone',
       H = 11;
     const wear = (d, r, f) => {
       if (f < 0.66)
@@ -4341,7 +4435,7 @@ function drawRamparts(ramp) {
             [r2, c2] = Z.rc(ls[1]);
           corner = r1 - r0 !== r0 - r2 || c1 - c0 !== c0 - c2;
         }
-        if (corner && PLAIN.has(G.grid[k].t)) {
+        if (corner && PLAIN.has(W(k).t)) {
           ctx.save();
           tapZoom(k, performance.now());
           wallPost(mat(k), p.x, p.y);
@@ -4350,9 +4444,9 @@ function drawRamparts(ramp) {
       });
     }
     g.forEach(k => {
-      if (PLAIN.has(G.grid[k].t)) {
+      if (PLAIN.has(W(k).t)) {
         ramp.add(k);
-        const u2 = G.grid[k],
+        const u2 = W(k),
           p = tc(k);
         if (u2.gold) LABELS.push([p.x, p.y + 4, u2.gold > 1 ? u2.gold + '★' : '★']);
       }
@@ -5992,6 +6086,7 @@ function frameInner(now) {
   safe(() => drawBossRoute(now));
   safe(() => drawGuide(now));
   safe(() => drawWires());
+  safe(() => drawEnclosure());
   G.grid.forEach((u, i) => {
     if (u && !Z.U[u.t].block && u.t !== 'wire') safe(() => drawUnit(i, u, now));
   });
@@ -6038,8 +6133,12 @@ function frameInner(now) {
     ctx.fillRect(p.x - r, p.y - r, 2 * r, 2 * r);
   });
   G.grid.forEach((u, i) => {
-    if (u && Z.U[u.t].block && !ramp.has(i)) safe(() => drawUnit(i, u, now));
+    if (!u || !Z.U[u.t].block) return;
+    if (u.perch) safe(() => drawPerched(i, u, now, ramp.has(i)));
+    else if (!ramp.has(i)) safe(() => drawUnit(i, u, now));
   });
+  safe(() => drawWallFires(now));
+  safe(() => drawCurrent(now));
   drawFX(now);
   safe(() => drawFog(now));
   safe(() => drawSky(now));

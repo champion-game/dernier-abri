@@ -1561,6 +1561,127 @@ for (let d = 0; d < 40; d++) {
   });
 }
 
+// v276 : matières des murs, enclos, tireurs perchés
+{
+  const I = (r, c) => r * Z.N + c;
+  const RING = [I(4, 4), I(4, 5), I(4, 6), I(5, 4), I(5, 6), I(6, 4), I(6, 5), I(6, 6)]; // autour de la maison
+  // une nuit calme, sans événement, avec les zombies donnés (immobiles sauf le premier qui frappe la case du sud)
+  const night = (st, zs) => {
+    Z.startNight(st, rng(1));
+    st.pending = [];
+    st.event = { id: '' };
+    st.z = zs.map((z, j) => Object.assign({ id: j + 1, k: 'walk', hp: 50, max: 50, cd: 0, style: 0 }, z));
+    return st;
+  };
+  check('matières : chaque mur a une matière, sauf le Brasero forain', () => {
+    for (const t of KEYS) if (Z.U[t].cat === 'wall' && t !== 'brasero') ok(Z.matOf(t), t + ' sans matière');
+  });
+  check('tireur perché : monte sur un mur simple, le mur prend les coups au contact', () => {
+    const st = fresh();
+    RING.forEach(j => Z.place(st, 'car', j, rng(1), true));
+    Z.place(st, 'gun', I(6, 5), rng(1), true);
+    const u = st.grid[I(6, 5)];
+    eq(u.t, 'gun');
+    eq(u.perch && u.perch.t, 'car');
+    const h0 = u.hp,
+      w0 = u.perch.hp;
+    night(st, [{ pos: I(7, 5) }]);
+    Z.step(st);
+    eq(u.hp, h0, 'le tireur ne doit pas être touché');
+    ok(u.perch.hp < w0, 'le mur doit encaisser');
+  });
+  check('tireur perché : seuls les tireurs légers montent, sur un mur simple', () => {
+    const st = fresh();
+    Z.place(st, 'bar', I(6, 5), rng(1), true);
+    ok(Z.perchOk(st, 'snp', I(6, 5)));
+    ok(!Z.perchOk(st, 'mg', I(6, 5)), 'la Tondeuse de guerre ne monte pas');
+    ok(!Z.perchOk(st, 'axe', I(6, 5)), 'le corps à corps ne monte pas');
+    Z.place(st, 'fen', I(3, 3), rng(1), true);
+    ok(!Z.perchOk(st, 'gun', I(3, 3)), 'pas sur le Grillage électrifié');
+  });
+  check('tireur perché : chute quand le mur tombe (2 dégâts), le déplacer laisse le mur', () => {
+    const st = fresh();
+    RING.forEach(j => Z.place(st, 'car', j, rng(1), true));
+    Z.place(st, 'gun', I(6, 5), rng(1), true);
+    const u = st.grid[I(6, 5)];
+    u.perch.hp = 1;
+    const h0 = u.hp;
+    night(st, [{ pos: I(7, 5) }]);
+    Z.step(st);
+    ok(!u.perch, 'le mur doit être tombé');
+    eq(u.hp, h0 - 2);
+    const st2 = fresh();
+    Z.place(st2, 'bar', I(2, 2), rng(1), true);
+    Z.place(st2, 'gun', I(2, 2), rng(1), true);
+    ok(Z.move(st2, I(2, 2), I(2, 3)), 'déplacement refusé');
+    eq(st2.grid[I(2, 2)].t, 'bar');
+    ok(Z.canMove(st2, I(2, 3), I(2, 2)), 'remonter sur le mur refusé');
+  });
+  check('tireur perché : +1 portée', () => {
+    const shots = perch => {
+      const st = fresh();
+      if (perch) Z.place(st, 'bar', I(2, 2), rng(1), true);
+      Z.place(st, 'gun', I(2, 2), rng(1), true);
+      night(st, [{ pos: I(2, 5), cd: 99, hp: 1e6, max: 1e6 }]);
+      Z.step(st);
+      return 1e6 - st.z[0].hp;
+    };
+    eq(shots(false), 0);
+    ok(shots(true) > 0, 'le tireur perché doit atteindre 3 cases');
+  });
+  check('enclos : une boucle de murs fermée protège les cases du milieu', () => {
+    const st = fresh();
+    const X = I(2, 2);
+    ok(!Z.enclosed(st).includes(X));
+    Z.around(X).forEach(j => Z.place(st, 'bar', j, rng(1), true));
+    ok(Z.enclosed(st).includes(X), 'case non enclose');
+  });
+  check('métal : un Grillage électrifié électrise les murs de métal reliés', () => {
+    const st = fresh();
+    RING.forEach(j => Z.place(st, 'car', j, rng(1), true));
+    Z.place(st, 'fen', I(3, 5), rng(1), true);
+    ok(Z.electrified(st).has(I(6, 5)), 'courant non conduit');
+    night(st, [{ pos: I(7, 5) }]);
+    Z.step(st);
+    ok(st.z[0].hp < 50, 'le zombie doit être électrocuté');
+    const st2 = fresh();
+    RING.forEach(j => Z.place(st2, 'sand', j, rng(1), true));
+    Z.place(st2, 'fen', I(3, 5), rng(1), true);
+    ok(!Z.electrified(st2).has(I(6, 5)), 'la pierre ne conduit pas');
+  });
+  check('bois : un zombie en feu enflamme le mur, le feu brûle et passe aux voisins ; pas sous la pluie', () => {
+    const st = fresh();
+    RING.forEach(j => Z.place(st, 'bar', j, rng(1), true));
+    night(st, [{ pos: I(7, 5), burnT: 9, hp: 1e6, max: 1e6 }]);
+    Z.step(st);
+    const w = st.grid[I(6, 5)];
+    ok(w.fireT > 0, 'le mur doit prendre feu');
+    for (let k = 0; k < 4; k++) {
+      st.z[0].cd = 99;
+      Z.step(st);
+    }
+    ok(st.grid[I(6, 4)].fireN === st.night, 'le feu doit passer au voisin');
+    const st2 = fresh();
+    RING.forEach(j => Z.place(st2, 'bar', j, rng(1), true));
+    night(st2, [{ pos: I(7, 5), burnT: 9 }]);
+    st2.event = { id: 'pluie' };
+    Z.step(st2);
+    ok(!(st2.grid[I(6, 5)].fireT > 0), 'pas de feu sous la pluie');
+  });
+  check('pierre : un Sapeur ne fait que 5 dégâts à un mur en pierre (plus son souffle de 3 autour)', () => {
+    const loss = t => {
+      const st = fresh();
+      RING.forEach(j => Z.place(st, t, j, rng(1), true));
+      const h0 = RING.reduce((a, j) => a + st.grid[j].hp, 0);
+      night(st, [{ pos: I(7, 5), k: 'sap' }]);
+      Z.step(st);
+      return h0 - RING.reduce((a, j) => a + (st.grid[j] ? st.grid[j].hp : 0), 0);
+    };
+    eq(loss('sand'), 5 + 3 * 3);
+    ok(loss('car') > loss('sand'), 'le métal doit perdre plus');
+  });
+}
+
 console.log(
   `Moteur : ${pass} tests réussis, ${fail} échoué(s). Nuits aléatoires : ${NIGHTS} (jusqu’à ${maxZ} zombies, la plus lente ${worst} ms).`,
 );

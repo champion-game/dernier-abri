@@ -1815,11 +1815,83 @@ const Z = (() => {
   const isUnit = t => !!(U[t] && U[t].block && (U[t].cat === 'shoot' || U[t].cat === 'melee' || U[t].cat === 'help'));
   const DOGS = ['dog', 'dogs', 'k9', 'k9squad', 'v_rdog'];
   const isWallU = v => !!(v && U[v.t] && U[v.t].cat === 'wall' && U[v.t].block);
-  const linkB = (st, j) => (j < 0 ? 0 : Math.min(3, around(j).filter(k => isWallU(st.grid[k])).length));
+  // v276 : matière des murs. Bois : prend feu, brûle les zombies qui le frappent, se répare mieux.
+  // Métal : conduit le courant d'un Grillage électrifié à tous les murs de métal reliés. Pierre : ne brûle pas, résiste aux Sapeurs.
+  const WALL_MAT = {
+    bar: 'bois',
+    palis: 'bois',
+    barrier: 'bois',
+    tire: 'bois',
+    car: 'metal',
+    modwall: 'metal',
+    gate: 'metal',
+    door: 'metal',
+    fourgon: 'metal',
+    butoir: 'metal',
+    v_cont: 'metal',
+    fortin: 'metal',
+    express: 'metal',
+    fen: 'metal',
+    sand: 'pierre',
+    gabion: 'pierre',
+    bunker: 'pierre',
+  };
+  const matOf = t => WALL_MAT[t] || null;
+  // v276 : tireurs perchés. Seuls les tireurs légers (une personne, une arme portée à la main) montent sur un mur simple
+  // (sans effet propre) : +1 portée, les coups au contact frappent le mur ; si le mur tombe, le tireur chute (2 dégâts).
+  const PERCH_SHOOTERS = [
+    'gun',
+    'snp',
+    'xbow',
+    'kid',
+    'swat',
+    'hunter',
+    'scout',
+    'ranger',
+    'molo',
+    'v_sniper',
+    'nightsnp',
+    'tracker',
+    'chief_trap',
+    'hirond',
+    'veuve',
+    'rosa',
+  ];
+  const PERCH_WALLS = [
+    'bar',
+    'car',
+    'sand',
+    'door',
+    'barrier',
+    'modwall',
+    'v_cont',
+    'palis',
+    'gate',
+    'gabion',
+    'fourgon',
+  ];
+  const PERCH_FALL = 2;
+  const canPerch = t => PERCH_SHOOTERS.includes(baseOf(t));
+  const perchWall = t => PERCH_WALLS.includes(t);
+  // la case j porte-t-elle un mur libre sur lequel le tireur t peut monter ?
+  const perchOk = (st, t, j) => !!(st.grid[j] && perchWall(st.grid[j].t) && canPerch(t));
+  // le mur d'une case : posé seul, ou sous un tireur perché
+  const wallAt = (st, j) => {
+    const v = st.grid[j];
+    return !v ? null : isWallU(v) ? v : v.perch || null;
+  };
+  // libère une case : le mur sous un tireur perché reste en place
+  function vacate(st, j) {
+    const v = st.grid[j];
+    st.grid[j] = v && v.perch ? v.perch : null;
+    if (v) delete v.perch;
+  }
+  const wallPos = (st, w) => st.grid.findIndex(v => v === w || (v && v.perch === w));
+  const linkB = (st, j) => (j < 0 ? 0 : Math.min(3, around(j).filter(k => wallAt(st, k)).length));
   const maxHp = (st, u) =>
     Math.max(
       1,
-      (st && st.grid && isWallU(u) ? linkB(st, st.grid.indexOf(u)) : 0) +
+      (st && st.grid && isWallU(u) ? linkB(st, wallPos(st, u)) : 0) +
         Math.ceil(stat(st, u.t).hp * (1 + 1.2 * (u.gold || 0)) * (u.ed === 'arm' ? 1.5 : 1)) +
         ((TRAITS[u.trait] || {}).hpB || 0) +
         (u.lvD || 0) * 3 +
@@ -2398,6 +2470,88 @@ const Z = (() => {
         }
     }
     return [...seen];
+  }
+  // v276 : enclos. Une case que la horde ne peut pas atteindre depuis les routes sans casser un mur est dans un enclos :
+  // les unités qui s'y trouvent perdent 1 PV de moins par coup. Les zombies ne passent pas en diagonale entre deux murs.
+  function enclosed(st) {
+    const isW = j => !!wallAt(st, j);
+    const seen = new Set(ROADS.filter(j => !isW(j))),
+      q = [...seen];
+    while (q.length) {
+      const j = q.pop();
+      if (j === C) continue; // la maison arrête la marche
+      const [r, c] = rc(j);
+      for (const k of around(j)) {
+        if (seen.has(k) || isW(k) || isForest(k)) continue;
+        const [kr, kc] = rc(k);
+        if (kr !== r && kc !== c && isW(idx(r, kc)) && isW(idx(kr, c))) continue;
+        seen.add(k);
+        q.push(k);
+      }
+    }
+    return INNER.filter(j => !seen.has(j) && !isW(j));
+  }
+  // v276 : courant. Un Grillage électrifié alimenté électrifie tous les murs de métal reliés à lui (de proche en proche).
+  function electrified(st) {
+    const out = new Set(),
+      q = [];
+    st.grid.forEach((v, j) => {
+      if (v && v.t === 'fen') q.push(j);
+    });
+    while (q.length) {
+      const j = q.pop();
+      for (const k of around(j)) {
+        const w = wallAt(st, k);
+        if (!out.has(k) && w && matOf(w.t) === 'metal' && w.t !== 'fen') {
+          out.add(k);
+          q.push(k);
+        }
+      }
+    }
+    return out;
+  }
+  // dégâts du courant (Grillage électrifié et murs de métal reliés) ; la pluie le renforce
+  const shockDmg = st =>
+    (st.relics.includes('groupe') || has(st, 'solar') || has(st, 'genmech') ? 2 : 1) +
+    ((st._fl || {}).tech ? 1 : 0) +
+    (st.event.id === 'pluie' ? 1 : 0);
+  // v276 : un mur en bois prend feu (3 tours, 1 dégât par tour), une seule fois par nuit ; jamais sous la pluie
+  const WALL_FIRE = 3;
+  function igniteWall(st, j, w, ev) {
+    if (!w || matOf(w.t) !== 'bois' || st.event.id === 'pluie' || w.fireN === st.night) return;
+    w.fireT = WALL_FIRE;
+    w.fireN = st.night;
+    ev.push({ i: j, k: 'wallfire' });
+  }
+  // un mur détruit : seul, il tombe ; sous un tireur perché, le tireur chute
+  function breakWall(st, j, w, ev) {
+    if (st.grid[j] === w) return lose(st, j, w, ev);
+    const u = st.grid[j];
+    if (!u || u.perch !== w) return false;
+    delete u.perch;
+    u.hp -= PERCH_FALL;
+    ev.push({ i: j, txt: _t('chute') + ' −' + PERCH_FALL, k: 'bite' });
+    if (u.hp <= 0) lose(st, j, u, ev);
+    return true;
+  }
+  // v276 : chaque tour, un mur en feu perd 1 PV ; quand son feu s'éteint, il passe aux murs en bois voisins
+  function burnWalls(st, ev) {
+    const burning = [];
+    st.grid.forEach((v, j) => {
+      const w = wallAt(st, j);
+      if (w && w.fireT > 0) burning.push([j, w]);
+    });
+    for (const [j, w] of burning) {
+      if (st.event.id === 'pluie') {
+        w.fireT = 0;
+        continue;
+      }
+      w.fireT--;
+      w.hp -= 1;
+      ev.push({ i: j, txt: '−1', k: 'wallburn' });
+      if (w.hp <= 0) breakWall(st, j, w, ev);
+      else if (w.fireT === 0) around(j).forEach(k => igniteWall(st, k, wallAt(st, k), ev));
+    }
   }
   // solidarité : chaque voisin de la même faction donne +1 (dégât, soin ou réparation), au plus +2
   // solidarité supprimée (v82) : doublon avec les factions et l'escouade
@@ -3335,6 +3489,7 @@ const Z = (() => {
   // le pas suivant d'un zombie : la case voisine qui minimise (coût d'entrée + distance restante) ; à égalité, son style de marche décide
   const zmode = T => (T.crawl ? 'crawl' : T.sap ? 'sap' : '');
   // explosion du sapeur : les unités (et les zombies) autour prennent des dégâts
+  const STONE_SAP = 5; // v276 : un mur en pierre ne perd que 5 PV face à un Sapeur
   const SAP_WALL = 15,
     SAP_AROUND = 3;
   function sapBlast(st, pos, ev) {
@@ -3949,14 +4104,16 @@ const Z = (() => {
   // déplacer ses cartes posées : librement pendant le jour, vers une case libre où elles pourraient être posées
   function canMove(st, a, b) {
     const u = st.grid[a];
-    return !!u && a !== b && !st.grid[b] && canPlace(st, u.t, b, 1);
+    return !!u && a !== b && (!st.grid[b] || perchOk(st, u.t, b)) && canPlace(st, u.t, b, 1);
   }
   function move(st, a, b) {
     if (!canMove(st, a, b)) return false;
     const u = st.grid[a],
+      dest = st.grid[b],
       w0 = wallLinks(st);
+    vacate(st, a);
     st.grid[b] = u;
-    st.grid[a] = null;
+    if (dest) u.perch = dest;
     fixLinks(st, w0);
     return merge(st, b) || true;
   }
@@ -3979,18 +4136,20 @@ const Z = (() => {
   function recall(st, i) {
     if (!canRecall(st, i)) return false;
     const u = st.grid[i];
-    st.grid[i] = null;
+    vacate(st, i);
     (st.bench = st.bench || []).push(u);
     return true;
   }
   const canPlaceBench = (st, k, i) => {
     const u = (st.bench || [])[k];
-    return !!u && !u.koUntil && !st.grid[i] && canPlace(st, ck(u), i);
+    return !!u && !u.koUntil && (!st.grid[i] || perchOk(st, u.t, i)) && canPlace(st, ck(u), i);
   };
   function placeBench(st, k, i) {
     if (!canPlaceBench(st, k, i)) return false;
-    const u = st.bench.splice(k, 1)[0];
+    const u = st.bench.splice(k, 1)[0],
+      under = st.grid[i];
     st.grid[i] = u;
+    if (under) u.perch = under;
     return merge(st, i) || true;
   }
   // constructions à tracer (barricade, clôture, sacs de sable, pneus, barrage, mur modulaire, barbelés) : une carte = 4 cases pour la journée, pour le prix de la carte.
@@ -4124,14 +4283,20 @@ const Z = (() => {
     // un mur posé : lui et ses murs voisins gagnent leur bonus de liaison (+1 PV par voisin relié, jusqu'à +3)
     const wn = isWallU(u)
       ? around(i)
-          .filter(k => isWallU(st.grid[k]))
+          .filter(k => wallAt(st, k))
           .map(k => [k, linkB(st, k)])
       : [];
+    // v276 : un tireur léger posé sur un mur simple monte dessus (le mur reste, sous lui)
+    const under = st.grid[i];
+    if (under && canPerch(t)) {
+      if (perchWall(under.t)) u.perch = under;
+      else if (under.perch) u.perch = under.perch;
+    }
     st.grid[i] = u;
     if (isWallU(u)) {
       u.hp += linkB(st, i);
       wn.forEach(([k, b]) => {
-        const v = st.grid[k];
+        const v = wallAt(st, k);
         v.hp += linkB(st, k) - b;
       });
     }
@@ -4185,7 +4350,7 @@ const Z = (() => {
         delete u.gen;
         absorb(u, [v]);
         v.absorbed = 1;
-        st.grid[j] = null;
+        vacate(st, j);
         u.t = k;
         u.hp = maxHp(st, u);
         return { k: 'evo', i, j, t: k, from };
@@ -4211,9 +4376,7 @@ const Z = (() => {
         u,
         js.map(j => st.grid[j]),
       );
-      js.forEach(j => {
-        st.grid[j] = null;
-      });
+      js.forEach(j => vacate(st, j));
       u.gold = g + 1;
       u.hp = maxHp(st, u);
       from.push(...js);
@@ -4291,7 +4454,7 @@ const Z = (() => {
       dlog(1);
       u.nts = 0;
       if (!U[u.t].evo) (st.edKO = st.edKO || {})[u.t] = (st.edKO[u.t] || 0) + 1;
-      st.grid[j] = null;
+      vacate(st, j);
       u.scar = 1;
       u.hp = 0;
       u.koUntil = st.night + (men(st, 7) ? 4 : 3) - (hasR(st, 'serum') ? 1 : 0);
@@ -4301,7 +4464,7 @@ const Z = (() => {
     }
     dlog(0);
     u.nts = 0;
-    st.grid[j] = null;
+    vacate(st, j);
     ev.push({ i: j, k: 'lost', t: u.t, name: u.name });
     if (isWallU(u))
       around(j).forEach(k => {
@@ -4731,6 +4894,12 @@ const Z = (() => {
   }
   // réparateurs (Mécanicien, Atelier, Charpentier, L'Ingénieur) : ils réparent les murs et les postes de soutien ; les soigneurs, eux, soignent les unités
   const repairable = t => !!(U[t] && U[t].block && (U[t].cat === 'wall' || U[t].cat === 'post'));
+  // v276 : ce qu'un réparateur répare sur une case : la défense ou le poste, ou le mur sous un tireur perché
+  const repTarget = (st, j) => {
+    const v = st.grid[j];
+    return !v ? null : repairable(v.t) ? v : v.perch || null;
+  };
+  const woodRep = w => (matOf(w.t) === 'bois' ? 1 : 0); // le bois se répare mieux
   // réparations : une même case de défense ne reçoit qu'une réparation par tour
   const repOK = (st, j) => (st._rep || {})[j] !== st.tick,
     repDone = (st, j) => {
@@ -4744,12 +4913,14 @@ const Z = (() => {
       z.reach = 1;
       st.reached = (st.reached || 0) + 1;
     }
+    // v276 : un tireur perché est protégé par son mur au contact (les crachats le visent, lui)
+    if (u.perch && !ranged) u = u.perch;
     const T = ZT[z.k],
       D = stat(st, u.t);
     if (T.sap) {
       z.hp = 0;
       z.bit = 1;
-      let left = D.cat === 'wall' ? D.antiSap || SAP_WALL : 6;
+      let left = D.cat === 'wall' ? D.antiSap || (matOf(u.t) === 'pierre' ? STONE_SAP : SAP_WALL) : 6;
       // 15 dégâts au mur frappé (le surplus passe aux murs reliés les plus proches), 6 à une unité, puis 3 autour
       const cells =
         D.cat === 'wall'
@@ -4761,14 +4932,14 @@ const Z = (() => {
             ]
           : [n];
       for (const j of cells) {
-        const v = st.grid[j];
+        const v = j === n ? u : st.grid[j];
         if (!v || left <= 0) continue;
         const d = Math.min(left, v.hp);
         v.hp -= d;
         ouch(st, v, d, d);
         left -= d;
         ev.push({ i: j, txt: '−' + d, k: 'bite', zid: z.id });
-        if (v.hp <= 0) lose(st, j, v, ev);
+        if (v.hp <= 0) breakWall(st, j, v, ev);
       }
       sapBlast(st, z.pos, ev);
       return;
@@ -4783,6 +4954,7 @@ const Z = (() => {
     }
     if (!T.boss && (st._fl || {}).police && famOf(u.t) === 'police') d = Math.max(1, d - 1);
     if (!T.boss && isUnit(u.t) && nearPost(st, n, 'trench')) d = Math.max(1, d - 1);
+    if (!T.boss && isUnit(u.t) && st._encl && st._encl.has(n)) d = Math.max(1, d - 1);
     // curée (v114) : une unité encerclée prend +1 dégât par autre zombie à son contact (+2 au plus). v132 : les Tanks l'ignorent (ils sont faits pour être encerclés)
     if (!T.boss && isUnit(u.t) && roleOf(u.t) !== 'tank')
       d += Math.min(
@@ -4796,15 +4968,16 @@ const Z = (() => {
     ouch(st, tu, d, tu.hp);
     tu.hp -= d;
     ev.push({ i: tn, txt: '−' + d, k: ranged ? 'spit' : 'bite', zid: z.id, from: z.pos });
+    // v276 : matières. Un mur en feu enflamme le zombie qui le frappe ; un zombie en feu enflamme le bois ;
+    // un mur de métal relié à un Grillage électrifié alimenté électrocute.
+    if (!ranged && D.cat === 'wall') {
+      if (u.fireT > 0) z.burnT = Math.max(z.burnT || 0, WALL_FIRE);
+      else if (z.burnT > 0) igniteWall(st, n, u, ev);
+      if (pow && st._elec && st._elec.has(n)) hit(st, z, shockDmg(st), ev, n);
+    }
     if (!ranged && u.t === 'fen' && pow) {
       const el = (st._fl || {}).tech || 0;
-      hit(
-        st,
-        z,
-        (st.relics.includes('groupe') || has(st, 'solar') || has(st, 'genmech') ? 2 : 1) + (el ? 1 : 0),
-        ev,
-        n,
-      );
+      hit(st, z, shockDmg(st), ev, n);
       if (el >= 2) z.cd += 1;
       if (ally(st, 'short')) z.burnT = Math.max(z.burnT || 0, 3);
     }
@@ -4843,7 +5016,8 @@ const Z = (() => {
       st._su = null;
       return;
     }
-    if (tu.hp <= 0 && lose(st, tn, tu, ev) && stat(st, tu.t).tire) st.grid[tn] = { t: 'fire', hp: 1, gen: 1 };
+    if (tu.hp <= 0 && breakWall(st, tn, tu, ev) && stat(st, tu.t).tire && !st.grid[tn])
+      st.grid[tn] = { t: 'fire', hp: 1, gen: 1 };
   }
   // un zombie entre sur une case sans obstacle
   function enter(st, z, n, u, ev) {
@@ -4955,6 +5129,9 @@ const Z = (() => {
       z.inFire = 0;
     }
     st._flood = pow ? st.grid.map((u, j) => (u && u.t === 'flood' ? j : -1)).filter(j => j >= 0) : [];
+    st._encl = new Set(enclosed(st));
+    st._elec = pow ? electrified(st) : null;
+    burnWalls(st, ev);
     st._su = { t: 'x_burn' };
     for (const z of alive())
       if (z.burnT > 0) {
@@ -4997,6 +5174,7 @@ const Z = (() => {
               (D.rng > 1 && hasEq(u, 'binoc') ? 1 : 0) +
               (D.cat === 'shoot' && D.rng > 1 && nearPost(st, i, 'tower') ? 1 : 0) +
               (D.railRng && onRoad(i) ? 1 : 0) +
+              (u.perch && D.rng > 1 ? 1 : 0) +
               (F === 'rail' && D.rng > 1 && nearNid(st, i) ? 1 : 0) +
               (e === 'brume' && D.cat === 'shoot' && hasEq(u, 'torch') ? 1 : 0),
           ),
@@ -5024,12 +5202,13 @@ const Z = (() => {
         }
       }
       if (D.mech && !D.mechAll) {
-        const ns = around(i).filter(
-          j => st.grid[j] && repairable(st.grid[j].t) && st.grid[j].hp < maxHp(st, st.grid[j]) && repOK(st, j),
-        );
+        const ns = around(i).filter(j => {
+          const w = repTarget(st, j);
+          return w && w.hp < maxHp(st, w) && repOK(st, j);
+        });
         if (ns.length) {
           repDone(st, ns[0]);
-          const w = st.grid[ns[0]];
+          const w = repTarget(st, ns[0]);
           cure(
             st,
             w,
@@ -5037,7 +5216,8 @@ const Z = (() => {
               (fl.tech >= 2 ? 1 : 0) +
               (u.gold || 0) +
               (sol(st, i, u) ? 1 : 0) +
-              (D.mechRail && RAILW.includes(w.t) ? 1 : 0),
+              (D.mechRail && RAILW.includes(w.t) ? 1 : 0) +
+              woodRep(w),
             u,
           );
           ev.push({ i: ns[0], k: 'heal', src: i, rep: 1 });
@@ -5072,13 +5252,15 @@ const Z = (() => {
         });
       if (D.mechAll)
         around(i).forEach(j => {
-          const v = st.grid[j];
-          if (v && repairable(v.t) && v.hp < maxHp(st, v) && repOK(st, j)) {
+          const v = repTarget(st, j);
+          if (v && v.hp < maxHp(st, v) && repOK(st, j)) {
             repDone(st, j);
-            cure(st, v, 1 + (fl.tech >= 2 ? 1 : 0), u);
+            cure(st, v, 1 + (fl.tech >= 2 ? 1 : 0) + woodRep(v), u);
             ev.push({ i: j, k: 'heal', src: i, rep: 1 });
           }
         });
+      // v276 : le Brasero forain met le feu aux murs en bois collés à lui
+      if (D.aura && st.tick % 2 === 0) around(i).forEach(k => igniteWall(st, k, wallAt(st, k), ev));
       if (D.aura && st.tick % 2 === 0)
         alive()
           .filter(z => cheb(z.pos, i) <= 1)
@@ -5086,6 +5268,8 @@ const Z = (() => {
             hit(st, z, 1 + (fl.pyro ? 1 : 0), ev, i, 1);
             z.burnT = Math.max(z.burnT || 0, 2);
           });
+      // v276 : une flaque en feu enflamme les murs en bois voisins
+      if (D.burn && e !== 'pluie') around(i).forEach(k => igniteWall(st, k, wallAt(st, k), ev));
       if (D.burn && e !== 'pluie')
         alive()
           .filter(z => z.pos === i)
@@ -5290,6 +5474,8 @@ const Z = (() => {
     st.grid.forEach((u, i) => {
       if (u && u.t === 'fire') st.grid[i] = null;
       else if (u && u.trait === 'coriace' && u.hp > 0) u.hp = Math.min(maxHp(st, u), u.hp + 1);
+      const w = wallAt(st, i);
+      if (w) w.fireT = 0; // v276 : le feu des murs s'éteint à l'aube
     });
     st.z = [];
     st.side = -1;
@@ -5331,8 +5517,8 @@ const Z = (() => {
     st.grid.forEach((u, i) => {
       if (u && U[u.t].carp)
         around(i).forEach(j => {
-          const v = st.grid[j];
-          if (v && repairable(v.t)) v.hp = Math.min(maxHp(st, v), v.hp + U[u.t].carp);
+          const v = repTarget(st, j);
+          if (v) v.hp = Math.min(maxHp(st, v), v.hp + U[u.t].carp + woodRep(v));
         });
     });
     st.grid.forEach((u, i) => {
@@ -5433,8 +5619,12 @@ const Z = (() => {
       b.forEach((v, j) => {
         if (!v.koUntil && (k < 0 || v.hp > b[k].hp)) k = j;
       });
-      const v = b.splice(k, 1)[0];
-      b.push(st.grid[i]);
+      const v = b.splice(k, 1)[0],
+        out = st.grid[i];
+      // le mur sous un tireur perché reste sous celui qui le remplace
+      if (out.perch) v.perch = out.perch;
+      delete out.perch;
+      b.push(out);
       st.grid[i] = v;
       ev.push({ i, k: 'heal' });
     }
@@ -5454,6 +5644,8 @@ const Z = (() => {
       });
       st.grid.forEach((u, j) => {
         if (u && u.t === 'fire') st.grid[j] = null;
+        const w = wallAt(st, j);
+        if (w) w.fireT = 0; // v276 : l'orage éteint aussi les murs en feu
       });
       ev.push({ i: C, k: 'horn' });
     }
@@ -5685,6 +5877,15 @@ const Z = (() => {
     touch,
     canPlace,
     place,
+    WALL_MAT,
+    matOf,
+    PERCH_SHOOTERS,
+    PERCH_WALLS,
+    canPerch,
+    perchOk,
+    wallAt,
+    enclosed,
+    electrified,
     startNight,
     step,
     endNight,

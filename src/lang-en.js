@@ -1,6 +1,33 @@
 // Dictionnaire anglais (v146) : clé = texte français exact, valeur = traduction. {0}, {1}… = trous remplis par le jeu.
 // Une clé absente garde le français. Le test (tools/test-engine.js) vérifie que chaque texte du jeu a sa traduction.
 I18N.en = {
+  Bois: 'Wood',
+  'prend feu (et brûle les zombies qui le frappent), se répare mieux':
+    'catches fire (and burns zombies that hit it), repairs better',
+  Métal: 'Metal',
+  'conduit le courant d’un Grillage électrifié à tous les murs de métal reliés':
+    "carries an Electrified Fence's current to every linked metal wall",
+  Pierre: 'Stone',
+  'ne brûle pas, un Sapeur ne lui fait que 5 dégâts': "doesn't burn, a Sapper only deals 5 damage to it",
+  Grimpe: 'Climber',
+  'peut monter sur un mur simple : +1 portée, le mur encaisse les coups au contact':
+    'can climb onto a plain wall: +1 range, the wall takes melee hits',
+  'En feu !': 'On fire!',
+  '<b>perché</b> sur {0} ({1}/{2} PV) : +1 portée': '<b>perched</b> on {0} ({1}/{2} HP): +1 range',
+  'dans un <b>enclos</b> : −1 dégât par coup reçu': 'in an <b>enclosure</b>: −1 damage per hit taken',
+  '<b>en feu</b> : −1 PV par tour': '<b>on fire</b>: −1 HP per turn',
+  'Murs, enclos et perchoirs': 'Walls, enclosures and perches',
+  '<p><b>Bois</b> (Planches clouées, Pieux taillés, Barrière de piste, Pneus peints) : prend feu au contact d’un zombie en feu, d’une flaque en feu ou du Brasero forain. Il perd 1 PV par tour pendant 3 tours, brûle les zombies qui le frappent, puis le feu passe aux murs en bois voisins. Pas sous la pluie. Le bois se répare mieux (+1).</p>':
+    '<p><b>Wood</b> (Nailed Boards, Sharpened Stakes, Ring Barrier, Painted Tires): catches fire from a burning zombie, a burning puddle or the Fairground Brazier. It loses 1 HP per turn for 3 turns, burns the zombies that hit it, then the fire spreads to neighboring wooden walls. Not in the rain. Wood repairs better (+1).</p>',
+  '<p><b>Métal</b> (Vieille guimbarde, Mur de portières, Grille cadenassée…) : un Grillage électrifié alimenté électrise tous les murs de métal reliés à lui ; les zombies qui les frappent sont électrocutés (+1 sous la pluie).</p>':
+    '<p><b>Metal</b> (Old Jalopy, Car-Door Wall, Padlocked Gate…): a powered Electrified Fence electrifies every metal wall linked to it; zombies that hit them get shocked (+1 in the rain).</p>',
+  '<p><b>Pierre</b> (Mur de sacs, Cages à cailloux, Bunker de jardin) : ne brûle pas, ne conduit pas, et un Sapeur ne lui fait que 5 dégâts.</p>':
+    "<p><b>Stone</b> (Sandbag Wall, Rock Cages, Garden Bunker): doesn't burn, doesn't conduct, and a Sapper only deals 5 damage to it.</p>",
+  '<p><b>Enclos</b> : des murs qui forment une boucle fermée. Les cases du milieu sont teintées de vert ; les unités qui s’y trouvent perdent 1 PV de moins par coup.</p>':
+    '<p><b>Enclosure</b>: walls forming a closed loop. The squares inside are tinted green; units there lose 1 less HP per hit.</p>',
+  '<p><b>Grimpe</b> : les tireurs légers (Miss Deux-Colts, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>':
+    '<p><b>Climber</b>: light shooters (Miss Two-Guns, The Biathlete, Camp Crossbow…) climb onto a plain wall when placed on it: +1 range, and the wall takes melee hits (spit still targets the shooter). If the wall falls, the shooter falls too (2 damage). When moved, the wall stays in place.</p>',
+  chute: 'fall',
   Choisie: 'Chosen',
   'Une carte pour toi.': 'A card for you.',
   'Les {0} cartes sont pour toi.': 'All {0} cards are yours.',
