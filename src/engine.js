@@ -4652,7 +4652,7 @@ const Z = (() => {
             const v = st.grid[j];
             if (v && U[v.t].block && v.hp < maxHp(st, v)) {
               cure(st, v, 1, u);
-              ev.push({ i: j, k: 'heal' });
+              ev.push({ i: j, k: 'heal', src: i });
             }
           });
       }
@@ -5003,18 +5003,20 @@ const Z = (() => {
         for (let r = 0; r < reps; r++) attack(st, i, u, D, rng, dmgF, ev);
       }
       if (D.heal && (D.hfast || st.tick % 2 === 0)) {
-        const ns = (D.hrng > 1 ? st.grid.map((v, j) => j).filter(j => j !== i && inRange(j, i, D.hrng)) : around(i))
-          .map(j => st.grid[j])
-          .filter(v => v && isUnit(v.t) && v.hp < maxHp(st, v));
+        // les cases des blessés (pas les unités) : l'affichage relie le soigneur à sa cible
+        const ns = (
+          D.hrng > 1 ? st.grid.map((v, j) => j).filter(j => j !== i && inRange(j, i, D.hrng)) : around(i)
+        ).filter(j => st.grid[j] && isUnit(st.grid[j].t) && st.grid[j].hp < maxHp(st, st.grid[j]));
         if (ns.length) {
-          ns.sort((a, b) => a.hp - maxHp(st, a) - (b.hp - maxHp(st, b)));
+          const lack = j => st.grid[j].hp - maxHp(st, st.grid[j]);
+          ns.sort((a, b) => lack(a) - lack(b));
           cure(
             st,
-            ns[0],
+            st.grid[ns[0]],
             D.heal + (fl.care ? 1 : 0) + (hasR(st, 'chirurgien') ? 1 : 0) + (u.gold || 0) + (squad(st, i) ? 1 : 0),
             u,
           );
-          ev.push({ i, k: 'heal' });
+          ev.push({ i: ns[0], k: 'heal', src: i });
         }
       }
       if (D.mech && !D.mechAll) {
@@ -5034,7 +5036,7 @@ const Z = (() => {
               (D.mechRail && RAILW.includes(w.t) ? 1 : 0),
             u,
           );
-          ev.push({ i: ns[0], k: 'heal' });
+          ev.push({ i: ns[0], k: 'heal', src: i, rep: 1 });
         }
       }
       if (D.selfHeal && st.tick % 2 === 0 && u.hp < maxHp(st, u)) {
@@ -5049,7 +5051,7 @@ const Z = (() => {
         if (ns.length) {
           const v = st.grid[ns[0]];
           cure(st, v, 1, u);
-          ev.push({ i: ns[0], k: 'heal' });
+          ev.push({ i: ns[0], k: 'heal', src: i });
         }
       }
       if (D.regen && st.tick % D.regen === 0 && u.hp < maxHp(st, u)) {
@@ -5061,7 +5063,7 @@ const Z = (() => {
           const v = st.grid[j];
           if (v && isUnit(v.t) && v.hp < maxHp(st, v)) {
             cure(st, v, 1 + (fl.care ? 1 : 0) + (hasR(st, 'chirurgien') ? 1 : 0), u);
-            ev.push({ i: j, k: 'heal' });
+            ev.push({ i: j, k: 'heal', src: i });
           }
         });
       if (D.mechAll)
@@ -5070,7 +5072,7 @@ const Z = (() => {
           if (v && repairable(v.t) && v.hp < maxHp(st, v) && repOK(st, j)) {
             repDone(st, j);
             cure(st, v, 1 + (fl.tech >= 2 ? 1 : 0), u);
-            ev.push({ i: j, k: 'heal' });
+            ev.push({ i: j, k: 'heal', src: i, rep: 1 });
           }
         });
       if (D.aura && st.tick % 2 === 0)

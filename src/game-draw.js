@@ -2182,6 +2182,7 @@ const V = new Map(),
   PT = [],
   facing = Array(Z.N * Z.N).fill(null),
   atkT = Array(Z.N * Z.N).fill(0),
+  castT = Array(Z.N * Z.N).fill(0), // v271 : instant où le soigneur (ou réparateur) lance un soin
   ouchT = Array(Z.N * Z.N).fill(0);
 const SLAM = {},
   UHIT = {},
@@ -2990,6 +2991,13 @@ function unitAnim(i, u, now, sc) {
       ctx.translate(-Math.cos(facing[i]) * d, -Math.sin(facing[i]) * d);
       ctx.scale(1 + 0.06 * k, 1 + 0.06 * k);
     }
+  }
+  // v271 : geste du soin : le soigneur se soulève et grandit un peu, comme s'il tendait les mains
+  const tc0 = now - castT[i];
+  if (tc0 < 320) {
+    const k = Math.sin((tc0 / 320) * Math.PI);
+    ctx.translate(0, (-6 * k) / sc);
+    ctx.scale(1 + 0.07 * k, 1 + 0.07 * k);
   }
   if (th < 240) {
     const k = 1 - th / 240;
@@ -4805,6 +4813,56 @@ function burst(x, y, c, n, spd, r) {
     });
   }
 }
+// v271 : soin à distance : une lueur part du soigneur, vole en arc jusqu'au blessé, puis s'ouvre en anneau et en croix
+function drawHealBolt(f, p) {
+  const TRAVEL = 0.5;
+  if (p < TRAVEL) {
+    const q = p / TRAVEL,
+      e = q * (2 - q);
+    ctx.globalAlpha = 1;
+    // traînée : quelques lueurs en retard sur la tête
+    for (let k = OPT.eco ? 0 : 4; k >= 0; k--) {
+      const qk = Math.max(0, e - k * 0.07),
+        lift = Math.sin(qk * Math.PI) * f.arc,
+        x = f.x1 + (f.x2 - f.x1) * qk,
+        y = f.y1 + (f.y2 - f.y1) * qk - lift;
+      ctx.globalAlpha = k ? 0.5 - k * 0.1 : 1;
+      circ(x, y, k ? 8 - k * 1.2 : 10, k ? f.c : '#f4fff0');
+      if (!k) {
+        ctx.globalAlpha = 0.4;
+        circ(x, y, 20, f.c);
+      }
+    }
+    return;
+  }
+  drawHealGlow(f.x2, f.y2, (p - TRAVEL) / (1 - TRAVEL), f.c, 1);
+}
+// lueur d'arrivée : anneau qui s'ouvre et deux petites croix qui montent
+function drawHealGlow(x, y, q, c, n) {
+  ctx.globalAlpha = (1 - q) * 0.9;
+  ctx.strokeStyle = c;
+  ctx.lineWidth = 5 * (1 - q) + 1.5;
+  ctx.beginPath();
+  ctx.arc(x, y, 16 + 26 * q, 0, 7);
+  ctx.stroke();
+  ctx.globalAlpha = (1 - q) * 0.25;
+  circ(x, y, 30 * (1 - q * 0.4), c);
+  ctx.globalAlpha = 1 - q * q;
+  ctx.fillStyle = c;
+  for (const [dx, d0] of [
+    [-16, 0],
+    [14, 0.25],
+  ]) {
+    const qq = Math.max(0, q - d0),
+      cx = x + dx,
+      cy = y - 18 - 30 * qq,
+      a = 8 * (1 - qq * 0.4),
+      b = 2.8;
+    if (q < d0) continue;
+    ctx.fillRect(cx - a, cy - b, a * 2, b * 2);
+    ctx.fillRect(cx - b, cy - a, b * 2, a * 2);
+  }
+}
 function drawFX(now) {
   // v115 : au plus 220 particules (70 en mode économie) : les plus anciennes disparaissent d'abord
   {
@@ -4822,6 +4880,8 @@ function drawFX(now) {
     if (f.type === 'tracer')
       line(f.x1, f.y1, f.x1 + (f.x2 - f.x1) * Math.min(1, p * 3), f.y1 + (f.y2 - f.y1) * Math.min(1, p * 3), f.c, f.w);
     if (f.type === 'flash') circ(f.x, f.y, f.r * (1 - p * 0.5), f.c);
+    if (f.type === 'healbolt') drawHealBolt(f, p);
+    if (f.type === 'healglow') drawHealGlow(f.x, f.y, p, f.c, 1);
     if (f.type === 'swing') {
       ctx.strokeStyle = 'rgba(255,255,255,.7)';
       ctx.lineWidth = 3;

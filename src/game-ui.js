@@ -483,22 +483,40 @@ function playEvents(ev, types, now) {
       addFX({ type: 'tracer', x1: CEN.x, y1: CEN.y - 10, x2: tp.x, y2: tp.y, c: '#fff4c8', w: 2, dur: 260 });
       addFX({ type: 'flash', x: CEN.x, y: CEN.y - 10, r: 8, c: '#ffe08a', dur: 120, light: T });
     }
-    if (e.k === 'heal') {
-      const p = tc(e.i);
-      for (let k = 0; k < 3; k++)
-        PT.push({
-          x: p.x + (Math.random() - 0.5) * 20,
-          y: p.y,
-          vx: 0,
-          vy: -0.03,
-          t0: now,
-          dur: 500,
-          c: '#7ee08a',
-          r: 2.5,
-          light: 0,
-        });
-    }
+    if (e.k === 'heal') showHeal(e, now);
   }
+}
+
+// v271 : animation du soin (vert) ou de la réparation (doré) : le soigneur fait un geste et envoie une lueur au blessé
+function showHeal(e, now) {
+  const c = e.rep ? '#f2c23d' : '#7ee08a',
+    to = tc(e.i);
+  if (e.src == null || e.src === e.i) {
+    if (e.src === e.i) castT[e.i] = now;
+    addFX({ type: 'healglow', x: to.x, y: to.y, c, dur: 520 });
+    return;
+  }
+  const from = tc(e.src);
+  castT[e.src] = now;
+  addFX({
+    type: 'flash',
+    x: from.x,
+    y: from.y - 6,
+    r: 14,
+    c: e.rep ? 'rgba(242,194,61,.45)' : 'rgba(126,224,138,.45)',
+    dur: 260,
+    light: T * 0.8,
+  });
+  addFX({
+    type: 'healbolt',
+    x1: from.x,
+    y1: from.y - 8,
+    x2: to.x,
+    y2: to.y,
+    arc: 14 + Math.hypot(to.x - from.x, to.y - from.y) * 0.18,
+    c,
+    dur: 760,
+  });
 }
 
 /* ---------- UI ---------- */
