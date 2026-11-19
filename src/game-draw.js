@@ -2959,16 +2959,9 @@ function unitAnim(i, u, now, sc) {
     const k = Math.sin((tp / 480) * Math.PI) * (1 - tp / 960) * 0.45;
     ctx.scale(1 + k, 1 + k);
   }
-  // v272 : pièce touchée par le joueur : elle grossit d'un coup puis reprend sa taille avec un léger rebond
-  const tt = now - tapT[i];
-  if (tt < 360) {
-    const q = tt / 360,
-      k =
-        q < 0.35
-          ? Math.sin((q / 0.35) * (Math.PI / 2)) * 0.2
-          : 0.2 * Math.cos(((q - 0.35) / 0.65) * Math.PI * 1.5) * (1 - q);
-    ctx.scale(1 + k, 1 + k);
-  }
+  // v272 : pièce touchée par le joueur : elle grossit de 30 % puis reprend sa taille avec un léger rebond
+  const tf = tapScale(i, now);
+  if (tf !== 1) ctx.scale(tf, tf);
   const tl = now - lvT[i];
   if (tl < 420) {
     const k = Math.sin((tl / 420) * Math.PI);
@@ -2982,16 +2975,19 @@ function unitAnim(i, u, now, sc) {
     }
     return;
   }
-  // v272 : respiration : les survivants gonflent doucement (plus lent et plus marqué quand ils sont blessés),
-  // les autres pièces (tours, outils) à peine ; les murs restent immobiles
+  // v272 : respiration bien visible : le survivant gonfle depuis ses pieds (il grandit, s'élargit à peine) ;
+  // blessé, il respire plus lentement et plus fort. Tours et outils bougent à peine, les murs restent immobiles
   if (live) {
     const low = u.hp / Math.max(1, Z.maxHp(G, u)) < 0.35,
-      b = Math.sin(now / (low ? 1150 : 700) + i * 1.7),
-      a = low ? 0.04 : 0.03;
-    ctx.scale(1 + a * b, 1 + a * 0.6 * b);
+      b = Math.sin(now / (low ? 560 : 380) + i * 1.7),
+      a = low ? 0.12 : 0.09,
+      FEET = 12;
+    ctx.translate(0, FEET);
+    ctx.scale(1 + a * 0.35 * b, 1 + a * b);
+    ctx.translate(0, -FEET);
   } else if (!(Z.U[u.t] || {}).block) {
-    const b = Math.sin(now / 900 + i * 1.3);
-    ctx.scale(1 + 0.012 * b, 1 + 0.012 * b);
+    const b = Math.sin(now / 520 + i * 1.3);
+    ctx.scale(1 + 0.025 * b, 1 + 0.025 * b);
   }
   // v170+ : attaque façon Hearthstone : le corps à corps fait un pas vers sa cible puis revient, le tireur recule plus net
   if (facing[i] != null) {
@@ -4167,6 +4163,7 @@ function drawRamparts(ramp) {
         half = T * 0.42,
         r = rng(i * 977);
       ctx.save();
+      tapZoom(i, performance.now());
       ctx.translate(p.x + wallJit(performance.now(), i), p.y);
       ctx.rotate(out);
       ctx.fillStyle = 'rgba(0,0,0,.38)';
@@ -4177,8 +4174,11 @@ function drawRamparts(ramp) {
       ctx.restore();
       const e1 = { x: p.x - Math.cos(out) * half, y: p.y - Math.sin(out) * half },
         e2 = { x: p.x + Math.cos(out) * half, y: p.y + Math.sin(out) * half };
+      ctx.save();
+      tapZoom(i, performance.now());
       wallPost(mat(i), e1.x, e1.y);
       wallPost(mat(i), e2.x, e2.y);
+      ctx.restore();
     } else {
       // ombre portée de tout l'ouvrage
       links.forEach(([a, b]) => {
@@ -4194,6 +4194,7 @@ function drawRamparts(ramp) {
           d = Math.hypot(q.x - p.x, q.y - p.y),
           r = rng(a * 131 + b);
         ctx.save();
+        tapZoom(tapScale(a, performance.now()) !== 1 ? a : b, performance.now());
         ctx.translate(p.x + wallJit(performance.now(), a, b), p.y);
         ctx.rotate(Math.atan2(q.y - p.y, q.x - p.x));
         if (mat(a) === mat(b)) wallSect(mat(a), 0, d, H, r);
@@ -4218,7 +4219,12 @@ function drawRamparts(ramp) {
             [r2, c2] = Z.rc(ls[1]);
           corner = r1 - r0 !== r0 - r2 || c1 - c0 !== c0 - c2;
         }
-        if (corner && PLAIN.has(G.grid[k].t)) wallPost(mat(k), p.x, p.y);
+        if (corner && PLAIN.has(G.grid[k].t)) {
+          ctx.save();
+          tapZoom(k, performance.now());
+          wallPost(mat(k), p.x, p.y);
+          ctx.restore();
+        }
       });
     }
     g.forEach(k => {
@@ -4295,6 +4301,8 @@ function drawWires() {
         out = Math.atan2(p.y - CEN.y, p.x - CEN.x) + Math.PI / 2,
         half = T * 0.42;
       ctx.save();
+      tapZoom(i, performance.now());
+      ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(out);
       ctx.translate(-half, 0);
@@ -4302,6 +4310,7 @@ function drawWires() {
       ctx.restore();
       wirePost(p.x - Math.cos(out) * half, p.y - Math.sin(out) * half);
       wirePost(p.x + Math.cos(out) * half, p.y + Math.sin(out) * half);
+      ctx.restore();
       return;
     }
     links.forEach(([a, b]) => {
@@ -4309,6 +4318,7 @@ function drawWires() {
         q2 = tc(b),
         d = Math.hypot(q2.x - p.x, q2.y - p.y);
       ctx.save();
+      tapZoom(tapScale(a, performance.now()) !== 1 ? a : b, performance.now());
       ctx.translate(p.x, p.y);
       ctx.rotate(Math.atan2(q2.y - p.y, q2.x - p.x));
       wireSect(d, rng(a * 31 + b));
@@ -4326,7 +4336,10 @@ function drawWires() {
       }
       if (corner) {
         const p = tc(k);
+        ctx.save();
+        tapZoom(k, performance.now());
         wirePost(p.x, p.y);
+        ctx.restore();
       }
     });
   });
@@ -4826,6 +4839,27 @@ function drawGrassBlade(q, dt) {
   ctx.restore();
 }
 // v272 : le joueur touche le plateau : une pièce rebondit, une case vide soulève de la poussière et quelques brins d'herbe
+// facteur d'échelle du rebond au toucher : 1,3 au sommet, puis retour à 1 avec un petit rebond
+function tapScale(i, now) {
+  const tt = now - tapT[i];
+  if (!(tt >= 0 && tt < 380)) return 1;
+  const q = tt / 380,
+    k =
+      q < 0.35
+        ? Math.sin((q / 0.35) * (Math.PI / 2)) * 0.3
+        : 0.3 * Math.cos(((q - 0.35) / 0.65) * Math.PI * 1.5) * (1 - q);
+  return 1 + k;
+}
+// agrandit autour du centre de la case touchée (murs, barbelés, abri : dessinés hors de drawUnit)
+function tapZoom(i, now, pivot) {
+  const f = tapScale(i, now);
+  if (f === 1) return false;
+  const p = pivot || tc(i);
+  ctx.translate(p.x, p.y);
+  ctx.scale(f, f);
+  ctx.translate(-p.x, -p.y);
+  return true;
+}
 function boardTapFx(i, empty) {
   const now = performance.now();
   if (!empty) {
@@ -5719,7 +5753,12 @@ function frameInner(now) {
     trackBoard(now);
   } catch (e) {}
   safe(() => drawKillZones(now));
-  safe(() => drawShelter(now));
+  safe(() => {
+    ctx.save();
+    tapZoom(Z.C, now, CEN);
+    drawShelter(now);
+    ctx.restore();
+  });
   safe(() => drawBossRoute(now));
   safe(() => drawGuide(now));
   safe(() => drawWires());

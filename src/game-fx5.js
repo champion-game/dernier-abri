@@ -470,20 +470,6 @@ function fx5Chores(now) {
     ctx.restore();
   });
 }
-// les unités respirent doucement le jour
-{
-  const u0 = unitAnim;
-  unitAnim = function (i, u, now, sc) {
-    try {
-      if (!reduce && !S.busy && Z.isUnit(u.t)) {
-        const k = 1 + 0.02 * Math.sin(now / 850 + i * 1.3);
-        ctx.scale(k, 1 + 0.02 * Math.sin(now / 850 + i * 1.3 + 0.6));
-      }
-    } catch (e) {}
-    return u0.apply(this, arguments);
-  };
-}
-
 // 2 : fumée de la cheminée (plus noire quand l'abri est abîmé)
 function fx5Smoke(now) {
   if (reduce) return;
