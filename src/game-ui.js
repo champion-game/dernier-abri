@@ -1042,7 +1042,15 @@ cv.addEventListener('click', e => {
     S.skipClick = false;
     return;
   }
-  tapCell(cellAt(e));
+  const i = cellAt(e);
+  // v272 : retour visuel du toucher (rebond de la pièce, ou poussière sur une case vide quand rien n'est en main)
+  try {
+    if (G && !S.dawnWait) {
+      if (G.grid[i]) boardTapFx(i, false);
+      else if (i !== Z.C && S.sel === null && S.moveFrom === null && S.bsel == null) boardTapFx(i, true);
+    }
+  } catch (x) {}
+  tapCell(i);
 });
 // murs en ligne : appuyer sur la 1ʳᵉ case, glisser jusqu'à 4 cases, relâcher
 const lineCard = () => (!S.busy && Z.LINE.includes(selCard()) ? selCard() : null);

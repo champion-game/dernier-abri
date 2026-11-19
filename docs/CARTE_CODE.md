@@ -11,8 +11,8 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1714 lignes)
-7. `src/game-draw.js` (6026 lignes)
-8. `src/game-ui.js` (2047 lignes)
+7. `src/game-draw.js` (6102 lignes)
+8. `src/game-ui.js` (2055 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (839 lignes)
 11. `src/game-anim.js` (1327 lignes)
@@ -34,36 +34,36 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `render` | game-ui.js:618 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
 | `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1386, game-artx.js:1464 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1017, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
-| `frameInner` | game-draw.js:5517 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
+| `frameInner` | game-draw.js:5593 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:437, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:445, game-coll.js:1253 |
-| `feltLayout` | game-ui.js:1879 | game-artx.js:923, game-artx.js:1066 |
+| `feltLayout` | game-ui.js:1887 | game-artx.js:923, game-artx.js:1066 |
 | `syncZ` | game-draw.js:2250 | game-fx2.js:201, game-artx.js:1108 |
-| `unitAnim` | game-draw.js:2928 | game-fx3.js:327, game-fx5.js:476 |
+| `unitAnim` | game-draw.js:2929 | game-fx3.js:327, game-fx5.js:476 |
 | `countUp` | game-screens.js:639 | game-anim.js:1263 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:332 |
-| `drawFloats` | game-draw.js:4962 | game-fx5.js:760 |
-| `drawFog` | game-draw.js:5244 | game-artx.js:551 |
-| `drawFX` | game-draw.js:4866 | game-fx5.js:650 |
-| `drawPlace` | game-draw.js:5405 | game-fx3.js:315 |
-| `drawShelter` | game-draw.js:4501 | game-fx5.js:520 |
-| `drawSky` | game-draw.js:5053 | game-artx.js:670 |
+| `drawFloats` | game-draw.js:5038 | game-fx5.js:760 |
+| `drawFog` | game-draw.js:5320 | game-artx.js:551 |
+| `drawFX` | game-draw.js:4941 | game-fx5.js:650 |
+| `drawPlace` | game-draw.js:5481 | game-fx3.js:315 |
+| `drawShelter` | game-draw.js:4517 | game-fx5.js:520 |
+| `drawSky` | game-draw.js:5129 | game-artx.js:670 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:770 |
 | `hglowFit` | game-menu.js:801 | game-artx.js:326 |
 | `keepEnd` | game-menu.js:560 | game-fiche.js:206 |
-| `lights` | game-draw.js:5164 | game-fx3.js:378 |
-| `mergeFx` | game-ui.js:1465 | game-anim.js:853 |
+| `lights` | game-draw.js:5240 | game-fx3.js:378 |
+| `mergeFx` | game-ui.js:1473 | game-anim.js:853 |
 | `nightBanner` | game-menu.js:227 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1448 |
 | `pilesHtml` | game.js:1558 | game-artx.js:979 |
-| `placeHints` | game-draw.js:6017 | game-fx2.js:246 |
-| `resumeWave` | game-ui.js:1748 | game-anim.js:1007 |
+| `placeHints` | game-draw.js:6093 | game-fx2.js:246 |
+| `resumeWave` | game-ui.js:1756 | game-anim.js:1007 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:599 | game-fx2.js:353 |
 | `show` | game-screens.js:601 | game-anim.js:1304 |
 | `showAch` | game.js:899 | game-anim.js:1254 |
-| `tapCell` | game-ui.js:1599 | game-ui.js:2035 |
+| `tapCell` | game-ui.js:1607 | game-ui.js:2043 |
 | `title` | game-menu.js:430 | game-artx.js:335 |
 | `zoomCf` | game-menu.js:246 | game-anim.js:348 |
 
@@ -134,15 +134,15 @@ _t:19 _tPage:41
 
 - **3** canvas setup : fit:24 rng:43 leafTree:207 pineTree:260 rockDeco:301 logDeco:324 cactus:352 deadBush:380 carWreck:400 concreteBlock:427 barrel:444 rubble:469 deadTree:485 roofDeco:499 lampPost:576 puddle:597 manhole:607 mushroom:625 tumbleweed:642 skull:651 pumpkin:673 hayBale:698 snowdrift:721 snowman:735 boulderBig:765 buildCity:776 cityRing:793 proj:877 poly:881 tone:889 building3d:894 cactus3d:966 rock3d:1034 ringItem:1099 dirtRoad:1130 drawWoods:1222 setBiome:1295 buildGround:1303 boardEdge:1757 boardFrame:1941 ringFog:2096 drawEdgeNight:2121 clearDecals:2164 splat:2167
 - **2179** live visual state : vib:2199 camZoom:2214 shake:2219 jit:2229 zpos:2233 syncZ:2250
-- **2296** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2298 circ:2305 line:2312 oEll:2322 oCirc:2326 oLine:2330 oRect:2334 rrect:2340 oRound:2344 shade:2353 person:2521 dogShape:2646 hpBar:2673 drawBars:2677 socle:2698 trackBoard:2759 cracks:2850 crater:2871 groundCrack:2896 wallJit:2920 unitAnim:2928 drawUnit:3008 drawUnitInner:3114 wallSect:3875 wallPost:4051 drawRamparts:4113 wireSect:4224 wirePost:4247 drawWires:4251 drawGuide:4321 guideHand:4351 drawKillZones:4420 drawBossRoute:4454 drawShelter:4501 zAnim:4604 drawZombie:4633
-- **4793** effects : addFX:4794 burst:4798 drawHealBolt:4817 drawHealGlow:4841 drawFX:4866 floatTxt:4959 drawFloats:4962 mkGlow:5032 drawSky:5053 drawGlow:5134 lights:5164 drawFog:5244 drawAmbient:5258 drawDark:5335 frame:5389 drawPlace:5405 titleDeco:5464 frameInner:5517 safeTxt:5771 edAura:5781 dmgCached:5872 bTag:5878 dmgBadge:5896 dmgLinks:5917 placeGain:5982 placeHints:6017
+- **2296** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2298 circ:2305 line:2312 oEll:2322 oCirc:2326 oLine:2330 oRect:2334 rrect:2340 oRound:2344 shade:2353 person:2521 dogShape:2646 hpBar:2673 drawBars:2677 socle:2698 trackBoard:2760 cracks:2851 crater:2872 groundCrack:2897 wallJit:2921 unitAnim:2929 drawUnit:3024 drawUnitInner:3130 wallSect:3891 wallPost:4067 drawRamparts:4129 wireSect:4240 wirePost:4263 drawWires:4267 drawGuide:4337 guideHand:4367 drawKillZones:4436 drawBossRoute:4470 drawShelter:4517 zAnim:4620 drawZombie:4649
+- **4809** effects : addFX:4810 drawGrassBlade:4815 boardTapFx:4829 burst:4873 drawHealBolt:4892 drawHealGlow:4916 drawFX:4941 floatTxt:5035 drawFloats:5038 mkGlow:5108 drawSky:5129 drawGlow:5210 lights:5240 drawFog:5320 drawAmbient:5334 drawDark:5411 frame:5465 drawPlace:5481 titleDeco:5540 frameInner:5593 safeTxt:5847 edAura:5857 dmgCached:5948 bTag:5954 dmgBadge:5972 dmgLinks:5993 placeGain:6058 placeHints:6093
 
 ### src/game-ui.js
 
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4 showHeal:491
-- **522** UI : ficheHtml:524 trackHtml:555 tagsHtml:572 shelHit:599 render:618 fireAmmo:868 updatePreview:892 curAt:1084 useBuild:1105 spentTrace:1113 countPlay:1121 placeLineUI:1132 dmgInfo:1182 dmgSnap:1196 bonusMsg:1204 unitLine:1246 hint:1404 showHint:1413 checkHints:1441 mergeFx:1465 playReact:1504 snapUndo:1542 doUndo:1557 squadFx:1587 tapCell:1599 peekScreen:1724 wavePause:1737 resumeWave:1748 night:1762 feltLayout:1879 ftPioche:1922 ftHorde:1946 ftJournal:1962 feltTabs:1990
+- **522** UI : ficheHtml:524 trackHtml:555 tagsHtml:572 shelHit:599 render:618 fireAmmo:868 updatePreview:892 curAt:1092 useBuild:1113 spentTrace:1121 countPlay:1129 placeLineUI:1140 dmgInfo:1190 dmgSnap:1204 bonusMsg:1212 unitLine:1254 hint:1412 showHint:1421 checkHints:1449 mergeFx:1473 playReact:1512 snapUndo:1550 doUndo:1565 squadFx:1595 tapCell:1607 peekScreen:1732 wavePause:1745 resumeWave:1756 night:1770 feltLayout:1887 ftPioche:1930 ftHorde:1954 ftJournal:1970 feltTabs:1998
 
 ### src/game-screens.js
 

@@ -2750,6 +2750,7 @@ const NC = Z.N * Z.N,
   TRK = { grid: null, u: [], t: [], gold: [], lv: [], dust: [] },
   bornT = Array(NC).fill(-1e9),
   popT = Array(NC).fill(-1e9),
+  tapT = Array(NC).fill(-1e9),
   lvT = Array(NC).fill(-1e9),
   SLD = [];
 let MERGE = null,
@@ -2958,6 +2959,16 @@ function unitAnim(i, u, now, sc) {
     const k = Math.sin((tp / 480) * Math.PI) * (1 - tp / 960) * 0.45;
     ctx.scale(1 + k, 1 + k);
   }
+  // v272 : pièce touchée par le joueur : elle grossit d'un coup puis reprend sa taille avec un léger rebond
+  const tt = now - tapT[i];
+  if (tt < 360) {
+    const q = tt / 360,
+      k =
+        q < 0.35
+          ? Math.sin((q / 0.35) * (Math.PI / 2)) * 0.2
+          : 0.2 * Math.cos(((q - 0.35) / 0.65) * Math.PI * 1.5) * (1 - q);
+    ctx.scale(1 + k, 1 + k);
+  }
   const tl = now - lvT[i];
   if (tl < 420) {
     const k = Math.sin((tl / 420) * Math.PI);
@@ -2971,11 +2982,16 @@ function unitAnim(i, u, now, sc) {
     }
     return;
   }
+  // v272 : respiration : les survivants gonflent doucement (plus lent et plus marqué quand ils sont blessés),
+  // les autres pièces (tours, outils) à peine ; les murs restent immobiles
   if (live) {
     const low = u.hp / Math.max(1, Z.maxHp(G, u)) < 0.35,
-      b = Math.sin(now / (low ? 1150 : 650) + i * 1.7),
-      a = low ? 0.035 : 0.018;
-    ctx.scale(1 + a * b, 1 - a * b);
+      b = Math.sin(now / (low ? 1150 : 700) + i * 1.7),
+      a = low ? 0.04 : 0.03;
+    ctx.scale(1 + a * b, 1 + a * 0.6 * b);
+  } else if (!(Z.U[u.t] || {}).block) {
+    const b = Math.sin(now / 900 + i * 1.3);
+    ctx.scale(1 + 0.012 * b, 1 + 0.012 * b);
   }
   // v170+ : attaque façon Hearthstone : le corps à corps fait un pas vers sa cible puis revient, le tireur recule plus net
   if (facing[i] != null) {
@@ -4795,6 +4811,65 @@ function addFX(f) {
   f.t0 = performance.now();
   FX.push(f);
 }
+// v272 : brin d'herbe arraché : il saute, tourne sur lui-même et retombe
+function drawGrassBlade(q, dt) {
+  ctx.save();
+  ctx.translate(q.x + q.vx * dt, q.y + q.vy * dt + q.g * dt * dt);
+  ctx.rotate(q.rot + q.spin * dt);
+  ctx.strokeStyle = q.c;
+  ctx.lineWidth = 1.8;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, -q.len / 2);
+  ctx.quadraticCurveTo(q.len * 0.25, 0, 0, q.len / 2);
+  ctx.stroke();
+  ctx.restore();
+}
+// v272 : le joueur touche le plateau : une pièce rebondit, une case vide soulève de la poussière et quelques brins d'herbe
+function boardTapFx(i, empty) {
+  const now = performance.now();
+  if (!empty) {
+    tapT[i] = now;
+    return;
+  }
+  const p = tc(i),
+    eco = OPT.eco || reduce;
+  for (let m = 0; m < (eco ? 4 : 8); m++) {
+    const a = Math.random() * 6.28,
+      sp = 0.035 + Math.random() * 0.04;
+    PT.push({
+      x: p.x + Math.cos(a) * 5,
+      y: p.y + 6 + Math.sin(a) * 3,
+      vx: Math.cos(a) * sp,
+      vy: Math.sin(a) * sp * 0.5 - 0.012,
+      t0: now,
+      dur: 420 + Math.random() * 260,
+      c: 'rgba(130,104,66,.6)',
+      r: 3.5 + Math.random() * 3.5,
+      light: 0,
+    });
+  }
+  const GRASS = ['#4f7a25', '#6a9a30', '#3e6520'];
+  for (let m = 0; m < (eco ? 3 : 6); m++) {
+    const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
+    PT.push({
+      blade: 1,
+      x: p.x + (Math.random() - 0.5) * 10,
+      y: p.y + 4,
+      vx: Math.cos(a) * (0.03 + Math.random() * 0.03),
+      vy: Math.sin(a) * (0.07 + Math.random() * 0.05),
+      g: 0.00028,
+      rot: Math.random() * 6.28,
+      spin: (Math.random() - 0.5) * 0.02,
+      len: 7 + Math.random() * 5,
+      t0: now,
+      dur: 520 + Math.random() * 200,
+      c: GRASS[m % 3],
+      light: 0,
+    });
+  }
+  addFX({ type: 'ring', x: p.x, y: p.y + 4, r: 22, c: 'rgba(120,96,60,.45)', dur: 260 });
+}
 function burst(x, y, c, n, spd, r) {
   const now = performance.now();
   for (let k = 0; k < n; k++) {
@@ -4951,7 +5026,8 @@ function drawFX(now) {
     }
     const dt = now - q.t0;
     ctx.globalAlpha = 1 - p;
-    circ(q.x + q.vx * dt, q.y + q.vy * dt, q.r * (1 - p * 0.5), q.c);
+    if (q.blade) drawGrassBlade(q, dt);
+    else circ(q.x + q.vx * dt, q.y + q.vy * dt + (q.g || 0) * dt * dt, q.r * (1 - p * 0.5), q.c);
     ctx.globalAlpha = 1;
   }
 }
