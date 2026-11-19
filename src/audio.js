@@ -319,6 +319,21 @@ const SFX = (() => {
       [392, 523, 659, 784, 1047].forEach((f, k) => tone(t + k * 0.07, 0.7, { f, vol: 0.11, type: 'triangle' }));
       noise(t + 0.3, 0.6, { f: 7000, q: 3, vol: 0.09 });
     },
+    // déblocage d’une carte (collection) : grondement qui monte pendant que la carte tremble
+    rumble: t => {
+      noise(t, 1.7, { f: 90, f2: 420, type: 'lowpass', vol: 0.35, attack: 1.4 });
+    },
+    // déblocage d’une carte : la coque grise vole en éclats
+    shatter: t => {
+      noise(t, 0.55, { f: 3200, f2: 1200, q: 1.2, vol: 0.4 });
+      tone(t, 0.5, { f: 80, f2: 35, vol: 0.35 });
+      for (let k = 0; k < 8; k++)
+        tone(t + Math.random() * 0.35, 0.08 + Math.random() * 0.12, {
+          f: 2200 + Math.random() * 3000,
+          vol: 0.05,
+          type: 'triangle',
+        });
+    },
   };
   // v115 : nombre de sons joués en même temps plafonné (10, ou 5 en mode économie) : au-delà, on n'entend plus rien de plus,
   // mais chaque son coûte du calcul, surtout sur un petit téléphone pendant les grosses nuits

@@ -1,5 +1,5 @@
 // v230 : quatrième série d'effets (validée par Amine). Affichage seulement, aucune règle ne change.
-// 1 gel court sur les gros coups ; 2 morts selon l'arme (cendres, morceaux, flèche, coup de lame) ; 3 corps et douilles au sol jusqu'à l'aube ;
+// 1 (gel court retiré : la nuit ne s'arrête jamais) ; 2 morts selon l'arme (cendres, morceaux, flèche, coup de lame) ; 3 corps et douilles au sol jusqu'à l'aube ;
 // 4 douilles éjectées ; 5 pluie et orage visibles ; 6 réactions des unités (sursaut, poing levé) ; 7 petits gestes le jour ;
 // 8 lumière de l'abri qui s'allume en vacillant à la tombée de la nuit ; 9 caméra qui suit la pression de la horde (ordinateur).
 // Rien ne bouge si le système demande moins d'animations ; le Mode économie garde l'essentiel en plus léger.
@@ -72,22 +72,6 @@ function fx3Reset() {
   FX3.g = G;
 }
 
-// 1 : gel court (40 à 120 ms) : tout le plateau s'arrête une fraction de seconde, ce qui donne du poids au coup
-function hitStop(ms) {
-  if (reduce || !OPT.shake) return;
-  const now = performance.now();
-  if (now < FX3.hs) return;
-  FX3.hs = now + ms;
-  FX3.hsT = now;
-}
-{
-  const f0 = frameInner;
-  frameInner = function (now) {
-    if (now < FX3.hs) now = FX3.hsT;
-    return f0.call(this, now);
-  };
-}
-
 // 2, 3, 4 et 6 : lecture des événements de la nuit
 {
   const p0 = playEvents;
@@ -109,7 +93,6 @@ function fx3Events(ev, types, now) {
       const t = e.src >= 0 ? types[e.src] : null;
       src[e.zid] = t || 'r';
       const dm = parseInt(String(e.txt || '').replace('−', '')) || 0;
-      if (dm >= 10) hitStop(55);
       // douilles : chaque tir d'arme à feu éjecte une douille sur le côté, qui reste au sol jusqu'à l'aube
       if (t && FX3_GUN.has(t) && e.src >= 0) {
         const sp = tc(e.src),
@@ -138,10 +121,7 @@ function fx3Events(ev, types, now) {
     const v = V.get(e.zid),
       p = v ? (v.dying ? { x: v.dx, y: v.dy } : zpos(v, now)) : tc(e.i),
       t = src[e.zid],
-      k = v ? v.k : 'walk',
-      big = ['fat', 'armor', 'howl', 'sap'].includes(k) || e.boss;
-    if (e.boss) hitStop(120);
-    else if (big) hitStop(70);
+      k = v ? v.k : 'walk';
     if (t && t !== 'r') kills[t] = (kills[t] || 0) + 1;
     const boom = (t && FX3_BOOM.has(t)) || booms.some(b => Math.hypot(b.x - p.x, b.y - p.y) < T * 1.6);
     const ang = Math.random() * 6.28,
@@ -227,7 +207,6 @@ function fx3Events(ev, types, now) {
   for (const s in multi)
     if (multi[s].size >= 4) {
       FX3.react[s] = { t: now + 150, k: 'cheer' };
-      hitStop(60);
     }
   if (ev.some(e => e.k === 'die' && e.boss))
     G.grid.forEach((u, j) => {

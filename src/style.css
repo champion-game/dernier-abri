@@ -12632,6 +12632,101 @@ html.artx .lc.s-vic .cf {
 html.artx .lc.s-buy .cf {
   filter: grayscale(0.35) brightness(0.8);
 }
+/* v268 : déblocage d’une carte (game-coll.js, LcBreak) : coque grise, fissures de lumière, éclats, rayons */
+html.artx .lc.lc-pend .cf {
+  filter: grayscale(1) brightness(0.45);
+}
+html.artx .lc.lcb-on {
+  z-index: 6;
+}
+html.artx .lcb {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+}
+html.artx .lcb-shell,
+html.artx .lcb-shard {
+  position: absolute;
+  inset: 0;
+  filter: grayscale(1) brightness(0.45);
+}
+html.artx .lcb-shard {
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+html.artx .lcb-leak,
+html.artx .lcb-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 5%/3.8%;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+html.artx .lcb-leak {
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(255, 210, 110, 0.9),
+    rgba(255, 140, 30, 0.35) 55%,
+    transparent 80%
+  );
+}
+html.artx .lcb-shine {
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 250, 225, 0.75) 48%, transparent 62%);
+  background-size: 250% 100%;
+}
+html.artx .lcb-flash {
+  position: absolute;
+  inset: -14%;
+  opacity: 0;
+  background: radial-gradient(circle, #fff 0, #fff4cc 30%, rgba(255, 200, 90, 0.55) 52%, transparent 72%);
+}
+html.artx .lcb-cracks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+html.artx .lcb-cracks path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+html.artx .lcb-cracks .g1 {
+  stroke: rgba(255, 140, 30, 0.45);
+}
+html.artx .lcb-cracks .g2 {
+  stroke: rgba(255, 205, 100, 0.8);
+}
+html.artx .lcb-cracks .c {
+  stroke: #fffbea;
+}
+html.artx .lcb-rays {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 260%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 215, 120, 0.6) 0 5deg, transparent 5deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0.5) 25%, transparent 55%);
+  mask: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0.5) 25%, transparent 55%);
+}
+.lcb-fx {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9000;
+  pointer-events: none;
+}
 html.artx .lc.on .lc-tilt {
   box-shadow:
     0 0 0 3px var(--lgold-hi),

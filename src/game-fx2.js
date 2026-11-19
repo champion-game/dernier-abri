@@ -4,7 +4,7 @@
    3 : bouton « trous » : les cases du chemin des zombies qu'aucune unité n'atteint
    5 : bouton de la nuit vivant quand l'énergie est dépensée
    6 : nuit rouge en cinématique (ciel rouge, caméra qui avance, titre tapé à la machine, cri lointain)
-   7 : gros zombie abattu : ralenti et zoom à l'endroit
+   7 : gros zombie abattu : zoom à l'endroit
    8 : maison touchée : les bords de l'écran s'allument en rouge
    9 : aube : un rayon de soleil balaie la carte, les zombies restants partent en fumée */
 
@@ -343,7 +343,6 @@ playEvents = function (ev, types, now) {
       }
       if (now < BIGK) continue;
       BIGK = now + 5000;
-      slowT = Math.max(slowT, now + 650);
       camZoom(now, p.x, p.y, 0.11, 1100);
     }
   } catch (x) {}

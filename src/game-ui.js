@@ -4,7 +4,7 @@
 function playEvents(ev, types, now) {
   const shots = new Set(),
     dead = ev.filter(e => e.k === 'die');
-  // victimes : compteur ; v166 : multi-éliminations par attaque (une même source tue plusieurs zombies dans le tour), ralenti à la mort du Colosse
+  // victimes : compteur ; v166 : multi-éliminations par attaque (une même source tue plusieurs zombies dans le tour) (jamais de ralenti : la nuit ne s'arrête pas)
   if (dead.length) {
     KC.n += dead.length;
     KC.t = now;
@@ -49,7 +49,6 @@ function playEvents(ev, types, now) {
           floatTxt(cx, cy - 14, _t`MASSACRE ×${n} !`, '#e5484d', 24);
           shake(now, 9);
           addFX({ type: 'ring', x: cx, y: cy, r: 90, c: '#e5484d', dur: 600 });
-          slowT = Math.max(slowT, now + 700);
           camZoom(now, cx, cy, 0.08, 1000);
         }
         if (n >= 3) {
@@ -75,7 +74,6 @@ function playEvents(ev, types, now) {
       }
       if (e.boss) {
         vib(220);
-        slowT = now + 1800;
         shake(now, 14);
         addFX({ type: 'ring', x: p.x, y: p.y, r: 120, c: '#f2b33d', dur: 900 });
         addFX({ type: 'flash', x: p.x, y: p.y, r: 50, c: 'rgba(255,200,90,.9)', dur: 700, light: T * 3 });
@@ -369,7 +367,7 @@ function playEvents(ev, types, now) {
       burst(p.x, p.y, '#8a6a45', 16, 0.12, 3);
       burst(p.x, p.y, 'rgba(140,20,24,.9)', 6, 0.08, 2);
       splat(p.x, p.y, true);
-      // v166 : un mur qui cède : éclats de son matériau, secousse, et (au plus une fois toutes les 12 s) ralenti et zoom sur la brèche
+      // v166 : un mur qui cède : éclats de son matériau, secousse, et (au plus une fois toutes les 12 s) zoom sur la brèche
       if ((Z.U[types[e.i]] || {}).cat === 'wall') {
         const wc = {
           wood: '#a07a4a',
@@ -394,7 +392,6 @@ function playEvents(ev, types, now) {
         } catch (x) {}
         if (now > wallSlowT) {
           wallSlowT = now + 12000;
-          slowT = Math.max(slowT, now + 1200);
           camZoom(now, p.x, p.y, 0.16, 1500);
           floatTxt(p.x, p.y - 20, _t('LE MUR CÈDE !'), '#e5484d', 18);
         }

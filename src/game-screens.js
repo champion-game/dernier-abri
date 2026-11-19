@@ -1370,7 +1370,7 @@ const ACT = {
       META.cards.push(v);
       if (META.seenC) META.seenC.push(v);
       saveMeta(META);
-      SFX.play('dawn');
+      if (!ARTX()) SFX.play('dawn'); // style artiste : l’effet de déblocage a ses propres sons
       achCheck();
     }
     collectionScreen(1);
