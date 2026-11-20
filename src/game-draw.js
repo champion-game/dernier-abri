@@ -3967,9 +3967,10 @@ function drawUnitInner(i, u, now) {
    Des murs voisins se raccordent automatiquement : une section continue relie leurs centres (moitié du matériau de chacun),
    avec un poteau aux extrémités et aux angles, et une seule barre de PV par ouvrage.
    Un mur seul est un tronçon posé en travers de la route, prêt à se raccorder. */
-const PLAIN = new Set(['bar', 'car', 'fen', 'sand', 'tire', 'barrier', 'modwall', 'door', 'palis']),
+const PLAIN = new Set(['bar', 'fen', 'sand', 'tire', 'barrier', 'modwall', 'palis']),
   METAL = new Set(['car', 'modwall', 'door', 'barrier']);
 const WMAT = {
+  bar: 'wood',
   palis: 'stake',
   gate: 'metal',
   gabion: 'stone',
@@ -3984,6 +3985,8 @@ const WMAT = {
   brasero: 'metal',
   fortin: 'stone',
 };
+// v278 : murs « objets » qui ne se raccordent jamais à un autre mur
+const WALL_SOLO = new Set(['car', 'door', 'bunker', 'v_cont', 'fortin', 'fourgon', 'butoir', 'express', 'brasero']);
 // section de mur dans le repère local : de x0 à x1, épaisseur 2h centrée sur y=0
 function wallSect(m, x0, x1, h, r) {
   const w = x1 - x0;
@@ -4580,12 +4583,17 @@ function drawRamparts(ramp) {
   const seen = new Set();
   // v276 : le mur sous un tireur perché fait partie du rempart (W = le mur de la case)
   const W = k => Z.wallAt(G, k);
+  // v278 : un mur ne se raccorde qu'aux murs de la même matière (bois, métal, pierre) ;
+  // les objets (épave, porte blindée, bunker, conteneurs, véhicules, brasero) restent toujours seuls
+  const fam = k => (W(k) && !WALL_SOLO.has(W(k).t) && Z.matOf(W(k).t)) || null;
   const groupOf = n => {
     const out = new Set([n]),
-      q = [n];
+      q = [n],
+      f0 = fam(n);
+    if (!f0) return [n];
     while (q.length)
       for (const k of Z.around(q.pop()))
-        if (!out.has(k) && W(k)) {
+        if (!out.has(k) && fam(k) === f0) {
           out.add(k);
           q.push(k);
         }
