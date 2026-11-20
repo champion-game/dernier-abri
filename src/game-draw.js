@@ -4232,31 +4232,6 @@ function drawPerched(i, u, now, wallDrawn) {
   drawUnit(i, u, now);
   ctx.restore();
 }
-// v276 : flammes sur les murs en bois en feu
-function drawWallFires(now) {
-  G.grid.forEach((v, j) => {
-    const w = Z.wallAt(G, j);
-    if (!w || !(w.fireT > 0)) return;
-    const p = tc(j);
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    for (let k = 0; k < 5; k++) {
-      const ph = now / 120 + k * 1.7 + j,
-        fx = p.x + (k - 2) * 7 + Math.sin(ph) * 2,
-        h = 14 + 7 * Math.sin(ph * 1.3),
-        base = p.y + 8;
-      ctx.globalAlpha = 0.75;
-      ctx.fillStyle = k % 2 ? '#ff9a2e' : '#ffd25a';
-      ctx.beginPath();
-      ctx.moveTo(fx - 5, base);
-      ctx.quadraticCurveTo(fx - 4, base - h * 0.6, fx, base - h);
-      ctx.quadraticCurveTo(fx + 4, base - h * 0.6, fx + 5, base);
-      ctx.closePath();
-      ctx.fill();
-    }
-    ctx.restore();
-  });
-}
 // v277 : Nappes de feu animées. Les cases en feu voisines (haut, bas, gauche, droite) forment un seul brasier :
 // un lit de cendres d'un seul tenant, des flammes posées sur les jonctions, et plus haut au centre.
 let FEU_KEY = '',
@@ -4267,9 +4242,17 @@ const FEU_LICKS = [],
   FEU_SMOKE = [];
 // recalcule régions et points de flamme seulement quand les cases en feu changent
 function feuLayout() {
-  const idx = [];
-  G.grid.forEach((u, j) => u && u.t === 'fire' && idx.push(j));
-  const key = idx.join(',') + (OPT.eco ? 'e' : '');
+  // v278 : un mur en bois en feu fait partie du brasier, comme une Nappe
+  const idx = [],
+    murs = new Set();
+  G.grid.forEach((u, j) => {
+    if (u && u.t === 'fire') idx.push(j);
+    else {
+      const w = Z.wallAt(G, j);
+      if (w && w.fireT > 0) idx.push(j), murs.add(j);
+    }
+  });
+  const key = idx.join(',') + '|' + [...murs].join(',') + (OPT.eco ? 'e' : '');
   if (key === FEU_KEY) return;
   FEU_KEY = key;
   const set = new Set(idx),
@@ -4277,7 +4260,7 @@ function feuLayout() {
   FEU_CELLS = idx.map(j => {
     const [r, c] = Z.rc(j);
     const n = { u: at(r - 1, c) >= 0, d: at(r + 1, c) >= 0, l: at(r, c - 1) >= 0, rt: at(r, c + 1) >= 0 };
-    return { j, r, c, n, nb: n.u + n.d + n.l + n.rt };
+    return { j, r, c, n, nb: n.u + n.d + n.l + n.rt, wall: murs.has(j) };
   });
   const byJ = new Map(FEU_CELLS.map(o => [o.j, o])),
     seen = new Set();
@@ -4302,11 +4285,16 @@ function feuLayout() {
     const rnd = rng(o.j * 7919 + 13);
     o.pts = [];
     o.cracks = [];
-    for (let a = 0; a < grille; a++)
-      for (let b = 0; b < grille; b++)
-        o.pts.push(
-          feuPoint((a + 0.5) / grille + (rnd() - 0.5) * 0.22, (b + 0.5) / grille + (rnd() - 0.5) * 0.22, rnd, 1),
-        );
+    // sur un mur, une rangée serrée de flammes qui part du haut des planches
+    if (o.wall)
+      for (let a = 0; a < grille + 1; a++)
+        o.pts.push(feuPoint((a + 0.5) / (grille + 1) + (rnd() - 0.5) * 0.1, 0.42 + rnd() * 0.12, rnd, 1));
+    else
+      for (let a = 0; a < grille; a++)
+        for (let b = 0; b < grille; b++)
+          o.pts.push(
+            feuPoint((a + 0.5) / grille + (rnd() - 0.5) * 0.22, (b + 0.5) / grille + (rnd() - 0.5) * 0.22, rnd, 1),
+          );
     // flammes sur la jonction : c'est ce qui soude deux cases
     if (o.n.rt) for (let k = 0; k < 2; k++) o.pts.push(feuPoint(1, 0.3 + k * 0.4, rnd, 1.15));
     if (o.n.d) for (let k = 0; k < 2; k++) o.pts.push(feuPoint(0.3 + k * 0.4, 1, rnd, 1.15));
@@ -4415,14 +4403,26 @@ const FEU_LAYERS = [
   [0.5, 'rgba(255,180,60,0.45)'],
   [0.28, 'rgba(255,240,190,0.5)'],
 ];
+// une flamme complète (4 couches) : la même pour les cases, les murs et les zombies
+function feuFlame(x, y, w, h, sway) {
+  FEU_LAYERS.forEach(([s, col]) => {
+    ctx.fillStyle = col;
+    feuTongue(x, y, w * s, h * (0.55 + s * 0.45), sway * s);
+  });
+}
 // par-dessus les zombies : corps du brasier, langues de feu, flammèches, étincelles, fumée
 function drawFireFlames(now) {
-  if (!FEU_CELLS.length && !FEU_LICKS.length && !FEU_SPARKS.length && !FEU_SMOKE.length) return;
+  const brulent = [...V.values()].filter(v => v.burn && !v.dying);
+  if (!FEU_CELLS.length && !brulent.length && !FEU_LICKS.length && !FEU_SPARKS.length && !FEU_SMOKE.length) return;
   // sous la pluie, le feu couve : flammes basses, pas de fumée
   const pluie = S.busy && G.event && G.event.id === 'pluie',
     force = pluie ? 0.45 : 1,
     wind = Math.sin(now / 1700) * 0.25,
     maxP = OPT.eco ? 40 : 120;
+  // un mur en feu noircit sous ses flammes
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.fillStyle = 'rgba(70,35,20,.55)';
+  FEU_CELLS.forEach(o => o.wall && ctx.fillRect(o.c * T + T * 0.08, o.r * T + T * 0.08, T * 0.84, T * 0.84));
   ctx.globalCompositeOperation = 'lighter';
   FEU_CELLS.forEach(o => {
     const cx = (o.c + 0.5) * T,
@@ -4444,10 +4444,7 @@ function drawFireFlames(now) {
         h = p.h * T * big * flick,
         w = p.w * T * (0.9 + 0.15 * Math.sin(now * p.f2 + p.ph)),
         sway = (Math.sin(now * p.f3 * 2 + p.ph) * 0.5 + wind) * w * 1.6;
-      FEU_LAYERS.forEach(([s, col]) => {
-        ctx.fillStyle = col;
-        feuTongue(x, y, w * s, h * (0.55 + s * 0.45), sway * s);
-      });
+      feuFlame(x, y, w, h, sway);
       if (now < p.next || FEU_LICKS.length > maxP) return;
       p.next = now + 260 + Math.random() * 520;
       FEU_LICKS.push({
@@ -4479,6 +4476,18 @@ function drawFireFlames(now) {
           vx: wind * 0.012 + 0.004,
         });
     });
+  });
+  // v278 : un zombie qui brûle porte trois petites langues du même feu
+  brulent.forEach(v => {
+    const p = zpos(v, now);
+    for (let k = 0; k < 3; k++) {
+      const ph = now / 110 + k * 2.1 + v.id,
+        w = 5 + (k % 2),
+        h = (16 + 6 * Math.sin(ph)) * force;
+      feuFlame(p.x + (k - 1) * 6, p.y + 4, w, h, (Math.sin(ph * 0.7) * 0.5 + wind) * w * 1.6);
+    }
+    if (Math.random() < 0.08 && FEU_LICKS.length < maxP)
+      FEU_LICKS.push({ x: p.x, y: p.y - 14, w: 3, h: 6, t0: now, dur: 360, vx: wind * 0.02 });
   });
   for (let i = FEU_LICKS.length - 1; i >= 0; i--) {
     const l = FEU_LICKS[i],
@@ -5133,18 +5142,6 @@ function drawZombie(v, now) {
   const sz = Lk.sz * 1.5,
     skin = Lk.skin,
     cloth = Lk.cloth;
-  if (v.burn && !v.dying && Math.random() < 0.3)
-    PT.push({
-      x: p.x + (Math.random() - 0.5) * 10,
-      y: p.y - 4,
-      vx: 0,
-      vy: -0.04,
-      t0: now,
-      dur: 300,
-      c: Math.random() < 0.5 ? '#ff9a2e' : '#ffd25a',
-      r: 2.5,
-      light: 0,
-    });
   ctx.save();
   ctx.globalAlpha = alpha;
   ctx.translate(p.x, p.y);
@@ -5856,6 +5853,23 @@ function lights(now) {
       ls.push({ x: p.x, y: p.y, r: T * (1.05 + Math.sin(now / 80 + i) * 0.08), c: 'fire', a: 0.34 });
     else ls.push({ x: p.x, y: p.y, r: T * 0.95, a: 0.1 });
   });
+  // v278 : les murs en feu et les zombies qui brûlent éclairent aussi la nuit
+  FEU_CELLS.forEach(o => {
+    if (o.wall)
+      ls.push({
+        x: (o.c + 0.5) * T,
+        y: (o.r + 0.5) * T,
+        r: T * (1.05 + Math.sin(now / 80 + o.j) * 0.08),
+        c: 'fire',
+        a: 0.34,
+      });
+  });
+  V.forEach(v => {
+    if (v.burn && !v.dying) {
+      const p = zpos(v, now);
+      ls.push({ x: p.x, y: p.y, r: T * (0.6 + Math.sin(now / 70 + v.id) * 0.05), c: 'fire', a: 0.3 });
+    }
+  });
   FX.forEach(f => {
     if (f.light) {
       const p = (now - f.t0) / f.dur;
@@ -6381,7 +6395,6 @@ function frameInner(now) {
     if (u.perch) safe(() => drawPerched(i, u, now, ramp.has(i)));
     else if (!ramp.has(i)) safe(() => drawUnit(i, u, now));
   });
-  safe(() => drawWallFires(now));
   safe(() => drawFireFlames(now));
   safe(() => drawCurrent(now));
   drawFX(now);
