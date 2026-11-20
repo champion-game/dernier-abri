@@ -3967,7 +3967,9 @@ function drawUnitInner(i, u, now) {
    Des murs voisins se raccordent automatiquement : une section continue relie leurs centres (moitié du matériau de chacun),
    avec un poteau aux extrémités et aux angles, et une seule barre de PV par ouvrage.
    Un mur seul est un tronçon posé en travers de la route, prêt à se raccorder. */
-let MUR_VAR = '';
+let MUR_VAR = '',
+  MUR_PROP = 0; // prototype : 1 relief, 2 couleur de famille, 3 murs seuls alignés, 4 usure lisible
+const MUR_FAM_COL = { bois: '#e0a05a', pierre: '#e6e1d4', metal: '#7cc4e8' };
 const PLAIN = new Set(['bar', 'fen', 'sand', 'tire', 'barrier', 'modwall', 'palis', 'gabion', 'gate']),
   METAL = new Set(['car', 'modwall', 'door', 'barrier']);
 const WMAT = {
@@ -4662,6 +4664,24 @@ function drawEnclosure() {
   ctx.setLineDash([]);
   ctx.restore();
 }
+// prototype 1 : face avant du mur (relief), dessinée 6 px plus bas à l'écran et assombrie
+function murRelief(draw, d, H) {
+  ctx.save();
+  const a = ctx.getTransform();
+  ctx.setTransform(a.a, a.b, a.c, a.d, a.e, a.f + 8 * Math.hypot(a.a, a.b));
+  draw();
+  ctx.fillStyle = 'rgba(0,0,0,.42)';
+  ctx.fillRect(-1, -H - 2, d + 2, 2 * H + 4);
+  ctx.restore();
+}
+// prototype 2 : liseré de la couleur de la matière (bois, pierre, métal)
+function murLisere(k, d, H) {
+  const col = MUR_FAM_COL[Z.matOf(Z.wallAt(G, k).t)];
+  if (!col) return;
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(0, -H - 1, d, 2 * H + 2);
+}
 function drawRamparts(ramp) {
   const seen = new Set();
   // v276 : le mur sous un tireur perché fait partie du rempart (W = le mur de la case)
@@ -4707,7 +4727,22 @@ function drawRamparts(ramp) {
         return WMAT[t] || 'stone';
       },
       H = 11;
-    const wear = (d, r, f) => {
+    const wear = (d, r, f, k) => {
+      if (MUR_PROP === 4) {
+        // débris au pied du mur, de la couleur de sa matière
+        const col = MUR_FAM_COL[Z.matOf(W(k).t)] || '#bbb';
+        const n = f < 0.33 ? 16 : f < 0.66 ? 8 : 0;
+        for (let q = 0; q < n; q++) {
+          ctx.fillStyle = col;
+          ctx.globalAlpha = 0.85;
+          ctx.fillRect(r() * d, (r() < 0.5 ? -1 : 1) * (H + 2 + r() * 9), 3 + r() * 4, 3 + r() * 3);
+          ctx.globalAlpha = 1;
+        }
+        if (f < 0.33) {
+          ctx.fillStyle = 'rgba(0,0,0,.28)';
+          ctx.fillRect(0, -H, d, 2 * H);
+        }
+      }
       if (f < 0.66)
         for (let k = 0; k < 3; k++) {
           const x = r() * d;
@@ -4723,7 +4758,8 @@ function drawRamparts(ramp) {
     if (!links.length) {
       // mur seul : un tronçon en travers de la route
       const p = tc(i),
-        out = Math.atan2(p.y - CEN.y, p.x - CEN.x) + Math.PI / 2,
+        out0 = Math.atan2(p.y - CEN.y, p.x - CEN.x) + Math.PI / 2,
+        out = MUR_PROP === 3 ? Math.round(out0 / (Math.PI / 4)) * (Math.PI / 4) : out0,
         half = T * 0.42,
         r = rng(i * 977);
       ctx.save();
@@ -4733,8 +4769,10 @@ function drawRamparts(ramp) {
       ctx.fillStyle = 'rgba(0,0,0,.38)';
       ctx.fillRect(-half + 4, -H + 7, 2 * half, 2 * H);
       ctx.translate(-half, 0);
+      if (MUR_PROP === 1) murRelief(() => wallSect(mat(i), 0, 2 * half, H, rng(i * 977)), 2 * half, H);
       wallSect(mat(i), 0, 2 * half, H, r);
-      wear(2 * half, r, fw(i));
+      if (MUR_PROP === 2) murLisere(i, 2 * half, H);
+      wear(2 * half, r, fw(i), i);
       ctx.restore();
       const e1 = { x: p.x - Math.cos(out) * half, y: p.y - Math.sin(out) * half },
         e2 = { x: p.x + Math.cos(out) * half, y: p.y + Math.sin(out) * half };
@@ -4761,6 +4799,7 @@ function drawRamparts(ramp) {
         tapZoom(tapScale(a, performance.now()) !== 1 ? a : b, performance.now());
         ctx.translate(p.x + wallJit(performance.now(), a, b), p.y);
         ctx.rotate(Math.atan2(q.y - p.y, q.x - p.x));
+        if (MUR_PROP === 1) murRelief(() => wallSect(mat(a), 0, d, H, rng(a * 131 + b)), d, H);
         if (mat(a) === mat(b)) wallSect(mat(a), 0, d, H, r);
         else {
           wallSect(mat(a), 0, d / 2, H, r);
@@ -4768,7 +4807,8 @@ function drawRamparts(ramp) {
           ctx.fillStyle = INK;
           ctx.fillRect(d / 2 - 1.5, -H - 2, 3, 2 * H + 4);
         }
-        wear(d, r, Math.min(fw(a), fw(b)));
+        if (MUR_PROP === 2) murLisere(a, d, H);
+        wear(d, r, Math.min(fw(a), fw(b)), a);
         ctx.restore();
       });
       // poteaux aux extrémités et aux angles
