@@ -3967,7 +3967,8 @@ function drawUnitInner(i, u, now) {
    Des murs voisins se raccordent automatiquement : une section continue relie leurs centres (moitié du matériau de chacun),
    avec un poteau aux extrémités et aux angles, et une seule barre de PV par ouvrage.
    Un mur seul est un tronçon posé en travers de la route, prêt à se raccorder. */
-const PLAIN = new Set(['bar', 'fen', 'sand', 'tire', 'barrier', 'modwall', 'palis']),
+let MUR_VAR = '';
+const PLAIN = new Set(['bar', 'fen', 'sand', 'tire', 'barrier', 'modwall', 'palis', 'gabion', 'gate']),
   METAL = new Set(['car', 'modwall', 'door', 'barrier']);
 const WMAT = {
   bar: 'wood',
@@ -4131,6 +4132,73 @@ function wallSect(m, x0, x1, h, r) {
       }
       if (r() < 0.3) circ(x + ww / 2 + (r() - 0.5) * 6, (r() - 0.5) * h, 1.8 + r() * 2, 'rgba(150,75,30,.55)');
     }
+  } else if (m === 'gabion' || m === 'gabionB') {
+    // v278 : cages à cailloux : paniers de grillage remplis de pierres grises, un panier par demi-case
+    const nb = Math.max(1, Math.round(w / 32)),
+      pw = w / nb;
+    for (let k = 0; k < nb; k++) {
+      const px = x0 + k * pw;
+      ctx.fillStyle = m === 'gabion' ? '#5f6366' : '#6d5e4c';
+      ctx.fillRect(px, -h, pw, 2 * h);
+      for (let n = 0; n < pw / 2; n++) {
+        const sx = px + 2 + r() * (pw - 4),
+          sy = (r() - 0.5) * (2 * h - 4),
+          g = 105 + Math.floor(r() * 55);
+        ctx.fillStyle = m === 'gabion' ? `rgb(${g},${g - 4},${g - 10})` : `rgb(${g + 10},${g - 8},${g - 30})`;
+        ctx.beginPath();
+        ctx.ellipse(sx, sy, 3 + r() * 2.4, 2.4 + r() * 1.8, r() * 3, 0, 7);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,.35)';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(220,225,228,.28)';
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      for (let gx = px; gx <= px + pw; gx += 5) ctx.moveTo(gx, -h), ctx.lineTo(gx, h);
+      for (let gy = -h; gy <= h; gy += 5) ctx.moveTo(px, gy), ctx.lineTo(px + pw, gy);
+      ctx.stroke();
+      ctx.strokeStyle = m === 'gabion' ? '#c9ced2' : '#8a6238';
+      ctx.lineWidth = m === 'gabion' ? 1.6 : 2.4;
+      ctx.strokeRect(px + 0.8, -h + 0.8, pw - 1.6, 2 * h - 1.6);
+    }
+  } else if (m === 'grille' || m === 'grilleB') {
+    // v278 : grille cadenassée : deux rails, du grillage en losange (A) ou des barreaux (B), un cadenas au milieu
+    ctx.fillStyle = 'rgba(20,24,28,.55)';
+    ctx.fillRect(x0, -h, w, 2 * h);
+    ctx.strokeStyle = '#a9b3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (m === 'grille')
+      for (let gx = x0 - 2 * h; gx < x1; gx += 6) {
+        ctx.moveTo(Math.max(x0, gx), -h + Math.max(0, x0 - gx));
+        ctx.lineTo(Math.min(x1, gx + 2 * h), h - Math.max(0, gx + 2 * h - x1));
+        ctx.moveTo(Math.max(x0, gx), h - Math.max(0, x0 - gx));
+        ctx.lineTo(Math.min(x1, gx + 2 * h), -h + Math.max(0, gx + 2 * h - x1));
+      }
+    else for (let gx = x0 + 3; gx < x1; gx += 5) ctx.moveTo(gx, -h), ctx.lineTo(gx, h);
+    ctx.stroke();
+    if (m === 'grilleB') {
+      ctx.strokeStyle = '#2c3237';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let gx = x0 + 3; gx < x1; gx += 5) ctx.moveTo(gx, -h + 1), ctx.lineTo(gx, h - 1);
+      ctx.globalCompositeOperation = 'destination-over';
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    ctx.fillStyle = '#5d666e';
+    ctx.fillRect(x0, -h, w, 3);
+    ctx.fillRect(x0, h - 3, w, 3);
+    if (w > 40) {
+      const cx = (x0 + x1) / 2;
+      ctx.strokeStyle = '#d9c46a';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.arc(cx, -2, 3, Math.PI, 0);
+      ctx.stroke();
+      oRound(cx - 4, -2, 8, 7, 1.5, '#c9a93a', 1.2);
+    }
   } else if (m === 'rust') {
     ctx.fillStyle = '#8a3d24';
     ctx.fillRect(x0, -h, w, 2 * h);
@@ -4207,7 +4275,22 @@ function wallPost(m, x, y) {
     });
     return;
   }
+  if (m === 'gabion' || m === 'gabionB') {
+    oRound(x - 12, y - 12, 24, 24, 2, m === 'gabion' ? '#c9ced2' : '#8a6238', 1.8);
+    ctx.fillStyle = m === 'gabion' ? '#7a7c7c' : '#86745e';
+    ctx.fillRect(x - 9, y - 9, 18, 18);
+    [
+      [-4, -3],
+      [4, -4],
+      [-3, 4],
+      [5, 4],
+      [0, 0],
+    ].forEach(([a, b]) => oEll(x + a, y + b, 3.4, 2.6, '#a3a19a', 1));
+    return;
+  }
   const pc = {
+    grille: ['#3f464d', '#6c767d'],
+    grilleB: ['#3f464d', '#6c767d'],
     rust: ['#6e3426', '#9a4a2c'],
     stripe: ['#a9a59a', '#e0dcd0'],
     steel: ['#3f464d', '#5c656d'],
@@ -4617,7 +4700,12 @@ function drawRamparts(ramp) {
         }
     // chaque mur garde ses PV : l'usure et la barre de vie sont propres à chaque mur
     const fw = k => Math.max(0, W(k).hp) / Z.maxHp(G, W(k)),
-      mat = k => WMAT[W(k).t] || 'stone',
+      mat = k => {
+        const t = W(k).t;
+        if (t === 'gabion') return 'gabion' + MUR_VAR;
+        if (t === 'gate') return 'grille' + MUR_VAR;
+        return WMAT[t] || 'stone';
+      },
       H = 11;
     const wear = (d, r, f) => {
       if (f < 0.66)
