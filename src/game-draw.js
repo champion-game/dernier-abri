@@ -3814,27 +3814,6 @@ function drawUnitInner(i, u, now) {
       ctx.restore();
       break;
     }
-    case 'fire': {
-      ell(x + 1, y + 2, 23, 16, 'rgba(0,0,0,.25)');
-      ell(x, y, 22, 15, 'rgba(30,26,36,.85)');
-      ell(x - 6, y - 4, 9, 4, 'rgba(130,100,170,.28)');
-      ell(x + 7, y + 5, 5, 2, 'rgba(90,140,170,.22)');
-      if (S.busy && G.event.id !== 'pluie') {
-        for (let k = 0; k < 2; k++)
-          PT.push({
-            x: x + (Math.random() - 0.5) * 34,
-            y: y + (Math.random() - 0.5) * 20,
-            vx: (Math.random() - 0.5) * 0.01,
-            vy: -0.045,
-            t0: now,
-            dur: 420,
-            c: Math.random() < 0.5 ? '#ff9a2e' : '#ffd25a',
-            r: 3 + Math.random() * 3,
-            light: 0,
-          });
-      }
-      break;
-    }
     case 'mine': {
       circ(x + 1, y + 3, 10, 'rgba(0,0,0,.3)');
       oCirc(x, y, 8, '#3b3d33');
@@ -4277,6 +4256,270 @@ function drawWallFires(now) {
     }
     ctx.restore();
   });
+}
+// v277 : Nappes de feu animées. Les cases en feu voisines (haut, bas, gauche, droite) forment un seul brasier :
+// un lit de cendres d'un seul tenant, des flammes posées sur les jonctions, et plus haut au centre.
+let FEU_KEY = '',
+  FEU_CELLS = [],
+  FEU_REGIONS = [];
+const FEU_LICKS = [],
+  FEU_SPARKS = [],
+  FEU_SMOKE = [];
+// recalcule régions et points de flamme seulement quand les cases en feu changent
+function feuLayout() {
+  const idx = [];
+  G.grid.forEach((u, j) => u && u.t === 'fire' && idx.push(j));
+  const key = idx.join(',') + (OPT.eco ? 'e' : '');
+  if (key === FEU_KEY) return;
+  FEU_KEY = key;
+  const set = new Set(idx),
+    at = (r, c) => (r >= 0 && c >= 0 && r < Z.N && c < Z.N && set.has(r * Z.N + c) ? r * Z.N + c : -1);
+  FEU_CELLS = idx.map(j => {
+    const [r, c] = Z.rc(j);
+    const n = { u: at(r - 1, c) >= 0, d: at(r + 1, c) >= 0, l: at(r, c - 1) >= 0, rt: at(r, c + 1) >= 0 };
+    return { j, r, c, n, nb: n.u + n.d + n.l + n.rt };
+  });
+  const byJ = new Map(FEU_CELLS.map(o => [o.j, o])),
+    seen = new Set();
+  FEU_REGIONS = [];
+  FEU_CELLS.forEach(o => {
+    if (seen.has(o.j)) return;
+    const reg = [],
+      pile = [o];
+    seen.add(o.j);
+    while (pile.length) {
+      const a = pile.pop();
+      reg.push(a);
+      [at(a.r - 1, a.c), at(a.r + 1, a.c), at(a.r, a.c - 1), at(a.r, a.c + 1)].forEach(k => {
+        if (k >= 0 && !seen.has(k)) seen.add(k), pile.push(byJ.get(k));
+      });
+    }
+    reg.forEach(a => (a.regSize = reg.length));
+    FEU_REGIONS.push(reg);
+  });
+  const grille = OPT.eco ? 2 : 3;
+  FEU_CELLS.forEach(o => {
+    const rnd = rng(o.j * 7919 + 13);
+    o.pts = [];
+    o.cracks = [];
+    for (let a = 0; a < grille; a++)
+      for (let b = 0; b < grille; b++)
+        o.pts.push(
+          feuPoint((a + 0.5) / grille + (rnd() - 0.5) * 0.22, (b + 0.5) / grille + (rnd() - 0.5) * 0.22, rnd, 1),
+        );
+    // flammes sur la jonction : c'est ce qui soude deux cases
+    if (o.n.rt) for (let k = 0; k < 2; k++) o.pts.push(feuPoint(1, 0.3 + k * 0.4, rnd, 1.15));
+    if (o.n.d) for (let k = 0; k < 2; k++) o.pts.push(feuPoint(0.3 + k * 0.4, 1, rnd, 1.15));
+    o.pts.sort((p, q) => p.fy - q.fy);
+    for (let k = 0; k < 5; k++) {
+      const seg = [];
+      let x = 0.15 + rnd() * 0.7,
+        y = 0.15 + rnd() * 0.7;
+      for (let s = 0; s < 4; s++) seg.push([x, y]), (x += (rnd() - 0.5) * 0.3), (y += (rnd() - 0.5) * 0.3);
+      o.cracks.push({ seg, ph: rnd() * 6.28 });
+    }
+  });
+}
+function feuPoint(fx, fy, rnd, boost) {
+  const center = 1 - (Math.abs(fx - 0.5) + Math.abs(fy - 0.5)) * 0.6;
+  return {
+    fx,
+    fy,
+    ph: rnd() * 6.28,
+    f1: 0.006 + rnd() * 0.004,
+    f2: 0.013 + rnd() * 0.006,
+    f3: 0.003 + rnd() * 0.003,
+    h: (0.42 + rnd() * 0.25) * center * boost,
+    w: 0.15 + rnd() * 0.07,
+    next: 0,
+  };
+}
+// contour d'une case brûlée : marge sur les côtés libres, aucune du côté d'une autre case en feu
+function feuCellPath(o, m, rad) {
+  const x0 = o.c * T + (o.n.l ? 0 : m),
+    x1 = (o.c + 1) * T - (o.n.rt ? 0 : m),
+    y0 = o.r * T + (o.n.u ? 0 : m),
+    y1 = (o.r + 1) * T - (o.n.d ? 0 : m);
+  const tl = !o.n.u && !o.n.l ? rad : 0,
+    tr = !o.n.u && !o.n.rt ? rad : 0,
+    br = !o.n.d && !o.n.rt ? rad : 0,
+    bl = !o.n.d && !o.n.l ? rad : 0;
+  ctx.moveTo(x0 + tl, y0);
+  ctx.lineTo(x1 - tr, y0);
+  if (tr) ctx.quadraticCurveTo(x1, y0, x1, y0 + tr);
+  ctx.lineTo(x1, y1 - br);
+  if (br) ctx.quadraticCurveTo(x1, y1, x1 - br, y1);
+  ctx.lineTo(x0 + bl, y1);
+  if (bl) ctx.quadraticCurveTo(x0, y1, x0, y1 - bl);
+  ctx.lineTo(x0, y0 + tl);
+  if (tl) ctx.quadraticCurveTo(x0, y0, x0 + tl, y0);
+  ctx.closePath();
+}
+// langue de feu : base en (x, y), pointe en (x + sway, y - h)
+function feuTongue(x, y, w, h, sway) {
+  ctx.beginPath();
+  ctx.moveTo(x - w, y);
+  ctx.bezierCurveTo(x - w * 1.05, y - h * 0.45, x + sway * 0.35 - w * 0.4, y - h * 0.72, x + sway, y - h);
+  ctx.bezierCurveTo(x + sway * 0.35 + w * 0.4, y - h * 0.72, x + w * 1.05, y - h * 0.45, x + w, y);
+  ctx.quadraticCurveTo(x, y + w * 0.7, x - w, y);
+  ctx.fill();
+}
+const feuPulse = t => 0.5 + 0.5 * Math.sin(t);
+// sous les zombies : halo de chaleur, lit de cendres, braises qui respirent
+function drawFireBeds(now) {
+  feuLayout();
+  if (!FEU_CELLS.length) return;
+  FEU_REGIONS.forEach(reg => {
+    ctx.globalCompositeOperation = 'lighter';
+    reg.forEach(o => {
+      const cx = (o.c + 0.5) * T,
+        cy = (o.r + 0.5) * T,
+        rr = T * (1.05 + o.nb * 0.12);
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+      g.addColorStop(0, `rgba(255,110,30,${0.22 + 0.05 * Math.sin(now / 90 + o.c)})`);
+      g.addColorStop(1, 'rgba(255,80,20,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(cx - rr, cy - rr, rr * 2, rr * 2);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.beginPath();
+    reg.forEach(o => feuCellPath(o, T * 0.08, T * 0.22));
+    ctx.fillStyle = '#1a0f0a';
+    ctx.fill();
+    ctx.save();
+    ctx.clip();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 1.6;
+    ctx.lineCap = 'round';
+    reg.forEach(o => {
+      const cx = (o.c + 0.5) * T,
+        cy = (o.r + 0.5) * T;
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, T * 0.75);
+      g.addColorStop(0, `rgba(255,90,20,${0.35 + 0.15 * feuPulse(now / 300 + o.c * 1.7)})`);
+      g.addColorStop(1, 'rgba(120,20,0,0.05)');
+      ctx.fillStyle = g;
+      ctx.fillRect(o.c * T - T * 0.3, o.r * T - T * 0.3, T * 1.6, T * 1.6);
+      o.cracks.forEach(k => {
+        ctx.strokeStyle = `rgba(255,${150 + 60 * feuPulse(now / 220 + k.ph)},40,${0.35 + 0.4 * feuPulse(now / 260 + k.ph)})`;
+        ctx.beginPath();
+        k.seg.forEach(([fx, fy], s) => (s ? ctx.lineTo : ctx.moveTo).call(ctx, (o.c + fx) * T, (o.r + fy) * T));
+        ctx.stroke();
+      });
+    });
+    ctx.restore();
+  });
+}
+const FEU_LAYERS = [
+  [1, 'rgba(170,30,5,0.35)'],
+  [0.75, 'rgba(255,100,15,0.4)'],
+  [0.5, 'rgba(255,180,60,0.45)'],
+  [0.28, 'rgba(255,240,190,0.5)'],
+];
+// par-dessus les zombies : corps du brasier, langues de feu, flammèches, étincelles, fumée
+function drawFireFlames(now) {
+  if (!FEU_CELLS.length && !FEU_LICKS.length && !FEU_SPARKS.length && !FEU_SMOKE.length) return;
+  // sous la pluie, le feu couve : flammes basses, pas de fumée
+  const pluie = S.busy && G.event && G.event.id === 'pluie',
+    force = pluie ? 0.45 : 1,
+    wind = Math.sin(now / 1700) * 0.25,
+    maxP = OPT.eco ? 40 : 120;
+  ctx.globalCompositeOperation = 'lighter';
+  FEU_CELLS.forEach(o => {
+    const cx = (o.c + 0.5) * T,
+      cy = (o.r + 0.42) * T,
+      rr = T * (0.55 + o.nb * 0.08) * (0.6 + 0.4 * force);
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+    g.addColorStop(0, `rgba(255,170,60,${0.4 + 0.08 * Math.sin(now / 70 + o.r)})`);
+    g.addColorStop(0.6, 'rgba(255,80,10,0.18)');
+    g.addColorStop(1, 'rgba(255,60,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(cx - rr, cy - rr, rr * 2, rr * 2);
+  });
+  FEU_CELLS.forEach(o => {
+    const big = (1 + o.nb * 0.22 + Math.min(o.regSize - 1, 4) * 0.06) * force;
+    o.pts.forEach(p => {
+      const x = (o.c + p.fx) * T,
+        y = (o.r + p.fy) * T,
+        flick = 0.72 + 0.22 * Math.sin(now * p.f1 + p.ph) + 0.12 * Math.sin(now * p.f2 + p.ph * 2.3),
+        h = p.h * T * big * flick,
+        w = p.w * T * (0.9 + 0.15 * Math.sin(now * p.f2 + p.ph)),
+        sway = (Math.sin(now * p.f3 * 2 + p.ph) * 0.5 + wind) * w * 1.6;
+      FEU_LAYERS.forEach(([s, col]) => {
+        ctx.fillStyle = col;
+        feuTongue(x, y, w * s, h * (0.55 + s * 0.45), sway * s);
+      });
+      if (now < p.next || FEU_LICKS.length > maxP) return;
+      p.next = now + 260 + Math.random() * 520;
+      FEU_LICKS.push({
+        x: x + sway,
+        y: y - h * 0.9,
+        w: w * 0.55,
+        h: h * 0.35,
+        t0: now,
+        dur: 380 + Math.random() * 200,
+        vx: wind * 0.02,
+      });
+      if (Math.random() < 0.35 && FEU_SPARKS.length < maxP)
+        FEU_SPARKS.push({
+          x: x + (Math.random() - 0.5) * w * 2,
+          y: y - h * 0.6,
+          vx: (Math.random() - 0.5) * 0.03 + wind * 0.03,
+          vy: -0.05 - Math.random() * 0.05,
+          t0: now,
+          dur: 900 + Math.random() * 700,
+          ph: Math.random() * 6,
+        });
+      if (!pluie && !OPT.eco && Math.random() < 0.18 && FEU_SMOKE.length < 40)
+        FEU_SMOKE.push({
+          x: x + sway,
+          y: y - h,
+          r: T * 0.12,
+          t0: now,
+          dur: 2200 + Math.random() * 1200,
+          vx: wind * 0.012 + 0.004,
+        });
+    });
+  });
+  for (let i = FEU_LICKS.length - 1; i >= 0; i--) {
+    const l = FEU_LICKS[i],
+      k = (now - l.t0) / l.dur;
+    if (k >= 1 || k < 0) {
+      FEU_LICKS.splice(i, 1);
+      continue;
+    }
+    const lx = l.x + l.vx * (now - l.t0),
+      ly = l.y - k * T * 0.35,
+      s = 1 - k;
+    ctx.fillStyle = `rgba(255,140,30,${0.6 * s})`;
+    feuTongue(lx, ly, l.w * s, l.h * s, 0);
+    ctx.fillStyle = `rgba(255,230,140,${0.6 * s})`;
+    feuTongue(lx, ly, l.w * s * 0.5, l.h * s * 0.6, 0);
+  }
+  for (let i = FEU_SPARKS.length - 1; i >= 0; i--) {
+    const sp = FEU_SPARKS[i],
+      dt = now - sp.t0,
+      k = dt / sp.dur;
+    if (k >= 1 || k < 0) {
+      FEU_SPARKS.splice(i, 1);
+      continue;
+    }
+    ctx.fillStyle = `rgba(255,${200 - k * 120},80,${1 - k})`;
+    ctx.fillRect(sp.x + sp.vx * dt + Math.sin(dt / 140 + sp.ph) * T * 0.04, sp.y + sp.vy * dt, 2, 2);
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  for (let i = FEU_SMOKE.length - 1; i >= 0; i--) {
+    const s = FEU_SMOKE[i],
+      dt = now - s.t0,
+      k = dt / s.dur;
+    if (k >= 1 || k < 0) {
+      FEU_SMOKE.splice(i, 1);
+      continue;
+    }
+    ctx.fillStyle = `rgba(40,34,32,${0.28 * Math.sin(k * Math.PI)})`;
+    ctx.beginPath();
+    ctx.arc(s.x + s.vx * dt, s.y - dt * 0.018, s.r * (1 + k * 2.5), 0, 7);
+    ctx.fill();
+  }
 }
 // v276 : courant dans les murs de métal reliés à un Grillage électrifié (arcs bleus entre les murs)
 function drawCurrent(now) {
@@ -6087,8 +6330,9 @@ function frameInner(now) {
   safe(() => drawGuide(now));
   safe(() => drawWires());
   safe(() => drawEnclosure());
+  safe(() => drawFireBeds(now));
   G.grid.forEach((u, i) => {
-    if (u && !Z.U[u.t].block && u.t !== 'wire') safe(() => drawUnit(i, u, now));
+    if (u && !Z.U[u.t].block && u.t !== 'wire' && u.t !== 'fire') safe(() => drawUnit(i, u, now));
   });
   const zs = [...V.values()].sort((a, b) => zpos(a, now).y - zpos(b, now).y);
   zs.forEach(v =>
@@ -6138,6 +6382,7 @@ function frameInner(now) {
     else if (!ramp.has(i)) safe(() => drawUnit(i, u, now));
   });
   safe(() => drawWallFires(now));
+  safe(() => drawFireFlames(now));
   safe(() => drawCurrent(now));
   drawFX(now);
   safe(() => drawFog(now));
