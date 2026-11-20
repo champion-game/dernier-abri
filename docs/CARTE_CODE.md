@@ -11,7 +11,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1738 lignes)
-7. `src/game-draw.js` (6715 lignes)
+7. `src/game-draw.js` (6825 lignes)
 8. `src/game-ui.js` (2075 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (861 lignes)
@@ -34,7 +34,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `render` | game-ui.js:628 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
 | `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1291 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
-| `frameInner` | game-draw.js:6188 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
+| `frameInner` | game-draw.js:6299 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
@@ -42,21 +42,21 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1108 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
-| `drawFloats` | game-draw.js:5633 | game-fx5.js:746 |
-| `drawFog` | game-draw.js:5915 | game-artx.js:551 |
-| `drawFX` | game-draw.js:5536 | game-fx5.js:636 |
-| `drawPlace` | game-draw.js:6076 | game-fx3.js:315 |
-| `drawShelter` | game-draw.js:4989 | game-fx5.js:506 |
-| `drawSky` | game-draw.js:5724 | game-artx.js:670 |
+| `drawFloats` | game-draw.js:5727 | game-fx5.js:746 |
+| `drawFog` | game-draw.js:6026 | game-artx.js:551 |
+| `drawFX` | game-draw.js:5630 | game-fx5.js:636 |
+| `drawPlace` | game-draw.js:6187 | game-fx3.js:315 |
+| `drawShelter` | game-draw.js:5095 | game-fx5.js:506 |
+| `drawSky` | game-draw.js:5818 | game-artx.js:670 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:326 |
 | `keepEnd` | game-menu.js:582 | game-fiche.js:206 |
-| `lights` | game-draw.js:5835 | game-fx3.js:378 |
+| `lights` | game-draw.js:5929 | game-fx3.js:378 |
 | `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1275 |
 | `pilesHtml` | game.js:1583 | game-artx.js:979 |
-| `placeHints` | game-draw.js:6706 | game-fx2.js:246 |
+| `placeHints` | game-draw.js:6816 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
@@ -135,8 +135,8 @@ _t:19 _tPage:41
 - **3** canvas setup : fit:24 rng:43 leafTree:207 pineTree:260 rockDeco:301 logDeco:324 cactus:352 deadBush:380 carWreck:400 concreteBlock:427 barrel:444 rubble:469 deadTree:485 roofDeco:499 lampPost:576 puddle:597 manhole:607 mushroom:625 tumbleweed:642 skull:651 pumpkin:673 hayBale:698 snowdrift:721 snowman:735 boulderBig:765 buildCity:776 cityRing:793 proj:877 poly:881 tone:889 building3d:894 cactus3d:966 rock3d:1034 ringItem:1099 dirtRoad:1130 drawWoods:1222 setBiome:1295 buildGround:1303 boardEdge:1757 boardFrame:1941 ringFog:2096 drawEdgeNight:2121 clearDecals:2164 splat:2167
 - **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
 - **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
-- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:3988 wallPost:4164 drawPerched:4228 drawWallFires:4236 feuLayout:4269 feuPoint:4323 feuCellPath:4338 feuTongue:4359 drawFireBeds:4369 drawFireFlames:4419 drawCurrent:4525 drawEnclosure:4553 drawRamparts:4570 wireSect:4705 wirePost:4728 drawWires:4732 drawGuide:4809 guideHand:4839 drawKillZones:4908 drawBossRoute:4942 drawShelter:4989 zAnim:5092 drawZombie:5121
-- **5281** effects : addFX:5282 drawGrassBlade:5287 tapScale:5302 tapZoom:5313 boardTapFx:5322 risePuff:5370 pieceTapReact:5386 poseImpactFx:5412 drawPoseFx:5437 burst:5468 drawHealBolt:5487 drawHealGlow:5511 drawFX:5536 floatTxt:5630 drawFloats:5633 mkGlow:5703 drawSky:5724 drawGlow:5805 lights:5835 drawFog:5915 drawAmbient:5929 drawDark:6006 frame:6060 drawPlace:6076 titleDeco:6135 frameInner:6188 safeTxt:6460 edAura:6470 dmgCached:6561 bTag:6567 dmgBadge:6585 dmgLinks:6606 placeGain:6671 placeHints:6706
+- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:3991 wallPost:4223 drawPerched:4301 feuLayout:4317 feuPoint:4384 feuCellPath:4399 feuTongue:4420 drawFireBeds:4430 feuFlame:4480 drawFireFlames:4487 drawCurrent:4607 drawEnclosure:4635 murRelief:4653 drawRamparts:4662 wireSect:4811 wirePost:4834 drawWires:4838 drawGuide:4915 guideHand:4945 drawKillZones:5014 drawBossRoute:5048 drawShelter:5095 zAnim:5198 drawZombie:5227
+- **5375** effects : addFX:5376 drawGrassBlade:5381 tapScale:5396 tapZoom:5407 boardTapFx:5416 risePuff:5464 pieceTapReact:5480 poseImpactFx:5506 drawPoseFx:5531 burst:5562 drawHealBolt:5581 drawHealGlow:5605 drawFX:5630 floatTxt:5724 drawFloats:5727 mkGlow:5797 drawSky:5818 drawGlow:5899 lights:5929 drawFog:6026 drawAmbient:6040 drawDark:6117 frame:6171 drawPlace:6187 titleDeco:6246 frameInner:6299 safeTxt:6570 edAura:6580 dmgCached:6671 bTag:6677 dmgBadge:6695 dmgLinks:6716 placeGain:6781 placeHints:6816
 
 ### src/game-ui.js
 
