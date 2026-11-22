@@ -1183,8 +1183,11 @@ function axFarDraw(cv) {
       hs = ((p.at * 7919 + p.pos * 31) % 100) / 100,
       lat = (hs - 0.5) * 34,
       bob = Math.sin(now / 260 + hs * 6) * 2.5;
-    const x = sx + (ex + ox * 46 - sx) * q + (oy ? lat : 0) + (ox ? 0 : bob * 0.4),
-      y = sy + (ey + oy * 46 - sy) * q + (ox ? lat : 0) + (oy ? 0 : bob * 0.4);
+    // v294 : sur le plateau à routes en croix, la silhouette finit sa marche sur la case où le zombie apparaît (continuité)
+    const stop = DE.classList.contains('axpal') ? 0 : 46,
+      dl = stop ? lat : lat * (1 - q),
+      x = sx + (ex + ox * stop - sx) * q + (oy ? dl : 0) + (ox ? 0 : bob * 0.4),
+      y = sy + (ey + oy * stop - sy) * q + (ox ? dl : 0) + (oy ? 0 : bob * 0.4);
     const big = Z.ZT && Z.ZT[p.k] && (Z.ZT[p.k].boss || Z.ZT[p.k].hp >= 20) ? 1.5 : 1,
       R = 24 * big,
       a = Math.min(1, q * 2.2) * Math.min(1, nightAmt);

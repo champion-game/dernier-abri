@@ -14202,7 +14202,7 @@ html.artx.ax3 #ax3 #hand {
 }
 
 /* v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cadre compris), téléphone et PC ;
-   cases de 87,2 × 90,4 px à partir de (235, 214) : le canvas (11 × 11 cases) est calé sur sa grille 9 × 9, l'anneau extérieur est masqué */
+   cases de 87,2 × 90,4 px à partir de (235, 214) : le canvas (11 × 11 cases) est calé sur sa grille 9 × 9 ; v294 : l'anneau extérieur reste visible (zombies qui entrent) */
 html.artx.ax3.axpal .axboard {
   height: var(--axB) !important;
 }
@@ -14211,7 +14211,7 @@ html.artx.ax3.axpal #ax3 #map {
   top: 9.85% !important;
   width: 76.5% !important;
   height: 79.3% !important;
-  clip-path: inset(8.6% round 1%);
+  clip-path: none;
 }
 html.artx.ax3.axpal #axBord {
   inset: auto;

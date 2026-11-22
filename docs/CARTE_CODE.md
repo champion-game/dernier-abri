@@ -18,7 +18,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 11. `src/game-anim.js` (1328 lignes)
 12. `src/game-fiche.js` (695 lignes)
 13. `src/game-fx2.js` (363 lignes)
-14. `src/game-artx.js` (1304 lignes)
+14. `src/game-artx.js` (1307 lignes)
 15. `src/game-coll.js` (1263 lignes)
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (754 lignes)
@@ -32,7 +32,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
 | `render` | game-ui.js:628 | game-fx2.js:261, game-artx.js:81, game-artx.js:157, game-artx.js:376, game-artx.js:483, game-artx.js:934, game-artx.js:997 |
-| `applyArt` | game.js:314 | game-artx.js:64, game-artx.js:367, game-artx.js:941, game-artx.js:1292 |
+| `applyArt` | game.js:314 | game-artx.js:64, game-artx.js:367, game-artx.js:941, game-artx.js:1295 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
 | `frameInner` | game-draw.js:6324 | game-artx.js:676, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:25, game-artx.js:688 |
@@ -54,7 +54,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `lights` | game-draw.js:5954 | game-fx3.js:378 |
 | `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
-| `optionsScreen` | game-screens.js:515 | game-artx.js:1276 |
+| `optionsScreen` | game-screens.js:515 | game-artx.js:1279 |
 | `pilesHtml` | game.js:1569 | game-artx.js:978 |
 | `placeHints` | game-draw.js:6841 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
@@ -73,7 +73,7 @@ Un bouton `data-a="nom"` appelle `ACT.nom` (objet `ACT` de `game-screens.js`, li
 
 testmode:1129 · teststart:1136 · tcards:1154 · tadd:1170 · options:1176 · optclose:1177 · presume:1184 · pquit:1189 · prestart:1193 · prestart2:1197 · pmenu:1206 · closeov:1207 · bpick:1211 · artstyle:1219 · new:1226 · prepdeck:1237 · prepch:1242 · preppl:1246 · preprel:1257 · prepmen:1261 · start:1267 · edit:1282 · dkp:1283 · cfam:1291 · crole:1302 · cpg:1313 · cfmore:1317 · atel:1321 · dkdraw:1328 · dkm:1332 · dkreset:1341 · coll:1346 · mdet:1354 · achs:1355 · gift:1356 · gyes:1357 · gno:1358 · gdone:1359 · mback:1360 · evo:1364 · unlock:1365 · load:1379 · title:1384 · close:1385 · rules:1386 · stats:1390 · rgo:1391 · retuto:1395 · deck:1407 · dawn:1415 · lvl:1416 · relic:1428 · evc:1433 · todraft:1452 · draft:1453 · shop:1462 · day:1514 · nightpick:1515 · nightgo:1519 · daily:1523 · wish:1526 · dpick:1536 · peek:1541
 
-Ajoutées ou remplacées ailleurs : unlock (game-anim.js:528) · dkp (game-anim.js:554) · dkm (game-anim.js:588) · prepdeck (game-anim.js:620) · start (game-anim.js:734) · gift (game-anim.js:805) · relic (game-anim.js:1162) · prepmen (game-anim.js:1238) · fshare (game-fiche.js:689) · credits (game-artx.js:1267)
+Ajoutées ou remplacées ailleurs : unlock (game-anim.js:528) · dkp (game-anim.js:554) · dkm (game-anim.js:588) · prepdeck (game-anim.js:620) · start (game-anim.js:734) · gift (game-anim.js:805) · relic (game-anim.js:1162) · prepmen (game-anim.js:1238) · fshare (game-fiche.js:689) · credits (game-artx.js:1270)
 
 ## Fichier par fichier
 
@@ -202,7 +202,7 @@ _t:19 _tPage:41
 
 - **1** (début) : axPalSet:14 axGround:39 axPlat:45 axBig:101 axGlow:248 axGlowHtml:303 axHome:352 axPad:396 axLay:405 axOn:530 axRing:555 axFxDraw:582 axPaint:703
 - **837** v216 : nouvelle disposition du style artiste, d'après les maquettes d'Amine : ax3Want:844 ax3Build:847 ax3Put1:861 ax3Put:880 ax3Back:901 ax3Phase:913 ax3Zoom:1046 axFarDraw:1122
-- **1220** v245 : accueil du style artiste sur le modèle d'Amine : axPlayHtml:1225 axBigBtn:1230 axTitleHtml:1233
+- **1223** v245 : accueil du style artiste sur le modèle d'Amine : axPlayHtml:1228 axBigBtn:1233 axTitleHtml:1236
 
 ### src/game-coll.js
 
