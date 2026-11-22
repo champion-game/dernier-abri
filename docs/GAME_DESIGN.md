@@ -143,7 +143,7 @@ Tous les paliers sont à 3 et 5 unités.
 **Riposte du corps à corps** : une unité de corps à corps frappée au contact rend aussitôt le coup (ses dégâts habituels). Le corps à corps a aussi été renforcé : Bûcheron 7 PV / 3 dégâts, Chien 5 PV, Policier 6 PV / 2, Boucher 6 PV / 3, Moine 8 PV / 2 en zone, Agent anti-émeute 11 PV / 2, Chien policier 6 PV, Meute 7 PV, Fermier à la fourche 7 PV / 3, La Fermière 11 PV. Le Lance-flammes passe à portée 2 et 5 PV.
 
 **Rôles (Tank, Soin, DPS)** : une icône sur chaque carte d'unité.
-- 🛡️ **Tank** (Policier, Moine, Agent anti-émeute, Fermier à la fourche, Ambulancier, La Fermière, Le Saint ; +3 PV chacun) : **provoque** les zombies à 3 cases ou moins, qui le visent au lieu de l'abri ; **bloque 1 coup sur 3**.
+- 🛡️ **Tank** (Policier, Moine, Agent anti-émeute, Fermier à la fourche, Ambulancier, La Fermière, Le Saint ; +3 PV chacun) : **provoque** les zombies à 3 cases ou moins, qui le visent au lieu de l'abri (une fois provoqué, un zombie garde ce tank pour cible jusqu’à sa mort ou son départ, même s’il s’éloigne en contournant un mur, v280) ; **bloque 1 coup sur 3**.
 - ❤️ **Soin** (Infirmière, Pharmacienne, Brancardier, Hôpital, Prêtre, Infirmier costaud, Médecin de garde, La Doctoresse, Cantine) : soigne **le double** sur un Tank.
 - ⚔️ **DPS** (tous les tireurs et le corps à corps offensif) : **+1 dégât** s'il a un Tank voisin (à couvert).
 - **Escouade** : une unité qui a, avec ses voisins, un Tank, un Soin et un DPS gagne +1 dégât (ou +1 soin).

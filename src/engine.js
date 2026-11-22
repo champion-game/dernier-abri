@@ -4701,15 +4701,24 @@ const Z = (() => {
     ev.push({ i, k: 'boom' });
   }
   // la cible d'un zombie : le leurre (Sirène, Épouvantail) ou le Tank le plus proche à portée de provocation, sinon l'abri
-  function lureTarget(st, p) {
+  // v280 : un zombie provoqué garde sa cible (z.lk) tant qu'elle attire encore : sans ce verrou, un détour autour d'un mur
+  // le faisait sortir de portée, il revisait l'abri, revenait, et faisait des allers-retours sans jamais attaquer.
+  const lureRange = u => (u ? U[u.t].lure || (roleOf(u.t) === 'tank' ? TAUNT : 0) : 0);
+  function lureTarget(st, p, z) {
     if (st.rush) return C;
     if (st.noise && st.noise.until >= st.tick) return st.noise.i;
+    if (z && z.lk != null && lureRange(st.grid[z.lk])) return z.lk;
+    const best = nearestLure(st, p);
+    if (z) z.lk = best === C ? null : best;
+    return best;
+  }
+  function nearestLure(st, p) {
     let best = C,
       bd = 99;
     for (let j = 0; j < st.grid.length; j++) {
       const u = st.grid[j];
       if (!u) continue;
-      const r = U[u.t].lure || (roleOf(u.t) === 'tank' ? TAUNT : 0);
+      const r = lureRange(u);
       if (!r) continue;
       const d = cheb(p, j);
       if (d <= r && d < bd) {
@@ -5334,7 +5343,7 @@ const Z = (() => {
       if (st.rush) z.cd = Math.max(1, Math.ceil(z.cd / 2));
       if (hasters.length && !T.boss && hasters.some(h => cheb(h.pos, z.pos) <= ZT[h.k].haste))
         z.cd = Math.max(1, Math.floor((z.cd * 2) / 3));
-      const tgt = lureTarget(st, z.pos);
+      const tgt = lureTarget(st, z.pos, z);
       let n = T.boss ? moves(z.pos, tgt, z.style)[0] : pathStep(st, z.pos, tgt, zmode(T), z.style);
       if (n === C) {
         if (!z.reach) {

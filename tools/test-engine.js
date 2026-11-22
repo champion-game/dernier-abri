@@ -120,6 +120,19 @@ check('ruée de l’aube : temps écoulé, les zombies foncent sur l’abri puis
   Z.endNight(st);
   eq(st.rush, 0);
 });
+check('provocation : un zombie garde le tank qu’il vise même s’il sort de portée (pas d’allers-retours)', () => {
+  const st = fresh(),
+    tank = Z.C - 2;
+  st.grid[tank] = { t: 'riot', hp: 20 };
+  const z = { pos: tank - 3 },
+    loin = { pos: tank - 4 * Z.N };
+  eq(Z.lureTarget(st, z.pos, z), tank);
+  z.pos = tank - 4 * Z.N; // détour : il est maintenant à 4 cases
+  eq(Z.lureTarget(st, z.pos, z), tank);
+  eq(Z.lureTarget(st, loin.pos, loin), Z.C);
+  st.grid[tank] = null; // le tank meurt : retour vers l’abri
+  eq(Z.lureTarget(st, z.pos, z), Z.C);
+});
 check('deck de départ valide', () => eq(Z.deckError(Z.STARTER_DECK, Z.STARTER_CARDS), ''));
 check('cartes offertes : 0/1/2/3 selon les nuits', () =>
   eq([4, 5, 9, 10, 19, 20, 30].map(Z.giftCount), [0, 1, 1, 2, 2, 3, 3]),
