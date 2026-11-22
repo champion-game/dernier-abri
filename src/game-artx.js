@@ -10,8 +10,7 @@ const AXIm = (w, h, cw, ch, x0, y0) => {
 const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
 // v263 : sur téléphone (portrait et paysage), le même plateau resserré sur la grille (plateau-herbe.webp, 890 × 931 px, cases de 84,7 × 88,8 px à partir de (64, 66)) :
 // les cases sont bien plus grandes ; on ne voit plus les zombies arriver de loin (html.axpal)
-const axPalWant = () =>
-  AX.on() && !DE.classList.contains('felton') && (ART_NEW.ui || []).includes('plateau-herbe.webp');
+const axPalWant = () => AX.on() && (ART_NEW.ui || []).includes('plateau-herbe.webp');
 function axPalSet() {
   const on = axPalWant();
   if (on === DE.classList.contains('axpal')) return false;
