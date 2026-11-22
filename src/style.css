@@ -14201,23 +14201,24 @@ html.artx.ax3 #ax3 #hand {
   }
 }
 
-/* v239 : téléphone (portrait et paysage) : plateau à palissade sans forêt (plateau-herbe.webp) ; le canvas (11 × 11 cases) remplit le cadre carré */
+/* v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cadre compris), téléphone et PC ;
+   cases de 87,2 × 90,4 px à partir de (235, 214) : le canvas (11 × 11 cases) est calé sur sa grille 9 × 9, l'anneau extérieur est masqué */
 html.artx.ax3.axpal .axboard {
   height: var(--axB) !important;
 }
 html.artx.ax3.axpal #ax3 #map {
-  left: 0 !important;
-  top: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  clip-path: inset(7.86% 7.73% 7.88% 7.7% round 1.5%);
+  left: 11.8% !important;
+  top: 9.85% !important;
+  width: 76.5% !important;
+  height: 79.3% !important;
+  clip-path: inset(8.6% round 1%);
 }
 html.artx.ax3.axpal #axBord {
   inset: auto;
-  left: 2.22%;
-  top: 2.33%;
-  width: 95.53%;
-  height: 95.31%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background-image: var(--ui-plateau-herbe, none);
 }
 html.artx.ax3.axpal #axBord > i {
@@ -16496,18 +16497,4 @@ html.artx .cf.cs-dia .cf-cost::after {
 html.eco.artx .cf:is(.cs-hex, .cs-dia) .cf-cost {
   filter: drop-shadow(0.5cqw 0 0 #120c06) drop-shadow(-0.5cqw 0 0 #120c06) drop-shadow(0 0.5cqw 0 #120c06)
     drop-shadow(0 -0.5cqw 0 #120c06);
-}
-/* essai : plateau à routes en croix (1254 × 1254, cases de 87,2 × 90,4 à partir de (235, 214)) */
-html.artx.ax3.axpal #ax3 #map {
-  left: 11.8% !important;
-  top: 9.85% !important;
-  width: 76.5% !important;
-  height: 79.3% !important;
-  clip-path: inset(8.6% round 1%);
-}
-html.artx.ax3.axpal #axBord {
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
 }

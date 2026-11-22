@@ -8,8 +8,8 @@ const AXIm = (w, h, cw, ch, x0, y0) => {
   return { w, h, cw, ch, x0, y0, iw: w * sx, ih: h * sy, ox: T - x0 * sx, oy: T - y0 * sy };
 };
 const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
-// v263 : sur téléphone (portrait et paysage), le même plateau resserré sur la grille (plateau-herbe.webp, 890 × 931 px, cases de 84,7 × 88,8 px à partir de (64, 66)) :
-// les cases sont bien plus grandes ; on ne voit plus les zombies arriver de loin (html.axpal)
+// v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cases de 87,2 × 90,4 px à partir de (235, 214)),
+// sur téléphone et sur PC (html.axpal) ; pas de forêt autour : on ne voit plus les zombies arriver de loin
 const axPalWant = () => AX.on() && (ART_NEW.ui || []).includes('plateau-herbe.webp');
 function axPalSet() {
   const on = axPalWant();
