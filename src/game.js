@@ -641,7 +641,7 @@ function cardFace(t, o = {}) {
   <span class="cf-art"${u ? ` style="background-image:url('${u}')"` : ''}>${u ? '' : svg(B)}</span><span class="cf-vig"></span>${look.html}${u && popUrl(B) ? `<span class="cf-pop" style="background-image:url('${popUrl(B, o.big)}')"></span>` : ''}${E ? `<span class="cf-ed"></span><span class="cf-edb">${Z.EDS[E].n}</span>` : ''}
   ${r !== 'com' ? `<span class="cf-rar" title="${Z.RARITY[r].n}"></span>` : ''}<span class="cf-cost${bonus.cost || ''}">${cost}</span>${neuf ? `<span class="cf-neuf">${_t('Nouveau')}</span>` : ''}
   ${look.wm}<span class="cf-name">${D.n}</span>
-  ${o.mini ? (atk || hp ? '' : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${cardKeyword(t) ? `. <b class="cf-kw">${cardKeyword(t)[0]}</b>` : ''}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
+  ${o.mini ? (atk || hp ? `<span class="cf-txt"><span>${txt}</span></span>` : `<span class="cf-v">${o.v || (U0.react ? _t('Nuit') : U0.v)}</span>`) + (o.tag ? `<span class="cf-tag">${o.tag}</span>` : '') : `<span class="cf-rule"></span><span class="cf-txt${txt.length > 80 ? ' xlong' : txt.length > 55 ? ' long' : ''}"><span>${txt}${cardKeyword(t) ? `. <b class="cf-kw">${cardKeyword(t)[0]}</b>` : ''}${D.rng > 1 && !/portée|range/i.test(U0.d) ? _t`. <b>Portée ${D.rng}</b>` : ''}${E ? `. <b class="cf-edt">${Z.EDS[E].d}</b>` : ''}</span></span>`}
   <span class="cf-foot">${atk || '<span></span>'}<span class="cf-marks">${o.mini ? '' : `<em>${CATL[U0.cat] || ''}</em>`}</span>${hp || '<span></span>'}</span></span>`;
 }
 const art = t => {
@@ -651,7 +651,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v289 · 22 nov.';
+const VERSION = 'v290 · 22 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo

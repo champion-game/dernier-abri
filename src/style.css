@@ -16276,15 +16276,15 @@ html.eco :is(.thk, .thk-back) {
 }
 /* v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la carte */
 html.artx .cf .cf-wm {
-  top: 146cqw;
-  width: 34cqw;
-  height: 34cqw;
-  opacity: 0.24;
+  top: 121.5cqw;
+  width: 22cqw;
+  height: 22cqw;
+  opacity: 0.2;
 }
 html.artx .cf.mini .cf-wm {
-  top: 142cqw;
-  width: 36cqw;
-  height: 36cqw;
+  top: 121.5cqw;
+  width: 22cqw;
+  height: 22cqw;
 }
 html.artx .cf .cf-wm-role {
   position: absolute;
@@ -16391,6 +16391,11 @@ html.artx .cf-txt {
   right: 7cqw;
   top: 110cqw;
   bottom: 13cqw;
+}
+/* v290 : les petites cartes (main) affichent aussi leur texte, plus gros pour rester lisible une fois agrandies */
+html.artx .cf.mini .cf-txt {
+  font-size: 6.4cqw;
+  line-height: 1.1;
 }
 html.artx .cf-foot,
 html.artx .cf.mini .cf-foot {
