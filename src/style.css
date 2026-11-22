@@ -14080,10 +14080,10 @@ html.artx .cf-tag {
   top: calc(58.67cqw + var(--cfE) * 0.7);
 }
 html.artx .lcd {
-  width: min(100%, calc((100dvh - 330px) * 100 / 166.16));
+  width: min(100%, calc((100dvh - 330px) * 100 / 146.07));
 }
 html.artx.ax3 #ax3 #hand {
-  --axcw: calc(100cqh * 0.6018);
+  --axcw: calc(100cqh * 0.6846);
 }
 /* v237 : téléphone tourné en style artiste : plateau encadré à gauche sur toute la hauteur, à droite le reste avec la main dans le bac */
 @media (orientation: landscape) {
@@ -15212,7 +15212,7 @@ html.artx .cf.mini .cf-hp.shield {
     padding: 0;
   }
   html.artx .lcx:not(.lcdeck) .lcd {
-    width: min(50%, calc((100dvh - 225px) * 100 / 166.16));
+    width: min(50%, calc((100dvh - 225px) * 100 / 146.07));
     margin: 0;
   }
   html.artx .lcx:not(.lcdeck) .lcd-info {
@@ -15303,35 +15303,6 @@ html.artx .cf::after {
 }
 html.artx .cf.r-rare::after {
   filter: grayscale(0.85) brightness(1.18) contrast(1.05);
-}
-/* v285 (demande d’Amine) : le noir du cadre prend la couleur du type de la carte (assets/art/ui/cadre-barricard-<type>.webp).
-   La rareté ne teinte plus le cadre (elle reste sur le losange) ; les éditions spéciales gardent leur teinte. */
-html.artx .cf.ck-shoot:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-shoot.webp) !important;
-}
-html.artx .cf.ck-melee:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-melee.webp) !important;
-}
-html.artx .cf.ck-help:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-help.webp) !important;
-}
-html.artx .cf.ck-wall:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-wall.webp) !important;
-}
-html.artx .cf.ck-post:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-post.webp) !important;
-}
-html.artx .cf.ck-trap:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-trap.webp) !important;
-}
-html.artx .cf.ck-item:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-item.webp) !important;
-}
-html.artx .cf.ck-react:not(.ed)::after {
-  border-image-source: url(../assets/art/ui/cadre-barricard-react.webp) !important;
-}
-html.artx .cf:not(.ed)::after {
-  filter: none !important;
 }
 
 html.artx .cf.r-epic::after {
@@ -16324,4 +16295,121 @@ html.artx .cf .cf-wm-role {
 }
 html.artx .cf .cf-wm-role svg {
   stroke-width: 2.6;
+}
+
+/* v288 (choix d’Amine) : retour au cadre à fenêtre carrée (assets/art/ui/cadre-noir.webp, 636 × 890), teinté selon le rôle
+   (cadre-noir-<type>.webp), pour voir toute l’illustration (images carrées 640 × 640, sans recadrage).
+   Découpage en 9 : haut 60, côtés 25, bas 330 px ; 1 px = 0,1572cqw. La fenêtre (3,46cqw de marge) est carrée :
+   carte de 146,07cqw de haut. Le nom est sur le bandeau coloré, le texte sur le parchemin, dégâts et PV sur le bord bas. */
+html.artx .cf,
+html.artx .g-in,
+html.artx .lcx .lc {
+  aspect-ratio: 100/146.07;
+}
+html.artx .cf::after {
+  border-image-source: var(--ui-cadre-noir, url(../assets/art/ui/cadre-noir.webp)) !important;
+  border-image-slice: 60 25 330 25 fill !important;
+  border-image-width: 9.43cqw 3.93cqw 51.89cqw 3.93cqw !important;
+  filter: none !important;
+  animation: none;
+}
+html.artx .cf.ck-shoot::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-shoot.webp) !important;
+}
+html.artx .cf.ck-melee::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-melee.webp) !important;
+}
+html.artx .cf.ck-help::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-help.webp) !important;
+}
+html.artx .cf.ck-wall::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-wall.webp) !important;
+}
+html.artx .cf.ck-post::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-post.webp) !important;
+}
+html.artx .cf.ck-trap::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-trap.webp) !important;
+}
+html.artx .cf.ck-item::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-item.webp) !important;
+}
+html.artx .cf.ck-react::after {
+  border-image-source: url(../assets/art/ui/cadre-noir-react.webp) !important;
+}
+/* éditions spéciales : leur propre cadre carré de l’artiste */
+html.artx .cf.ed-dor::after {
+  border-image-source: var(--ui-cadre-or, url(../assets/art/ui/cadre-or.webp)) !important;
+}
+html.artx .cf.ed-arm::after {
+  border-image-source: var(--ui-cadre-acier, url(../assets/art/ui/cadre-acier.webp)) !important;
+}
+html.artx .cf.ed-sang::after {
+  border-image-source: var(--ui-cadre-sang, url(../assets/art/ui/cadre-sang.webp)) !important;
+}
+html.artx .cf.ed-holo::after {
+  border-image-source: var(--ui-cadre-holo, url(../assets/art/ui/cadre-holo.webp)) !important;
+}
+html.artx .cf.ed-fan::after {
+  border-image-source: var(--ui-cadre-glace, url(../assets/art/ui/cadre-glace.webp)) !important;
+}
+html.artx .cf-art,
+html.artx .cf-vig,
+html.artx .cf.ed .cf-ed::before,
+html.artx .cf.ed .cf-ed::after {
+  left: 3.46cqw;
+  right: 3.46cqw;
+  top: 3.46cqw;
+  height: 93.08cqw;
+  border-radius: 3.6cqw;
+}
+html.artx .cf-art {
+  background-size: cover;
+  background-position: center;
+}
+html.artx .cf-name,
+html.artx .cf.mini .cf-name {
+  left: 6cqw;
+  right: 6cqw;
+  top: 98.1cqw;
+  height: 9.43cqw;
+  color: #f6ead0 !important;
+  text-shadow: 0 0.35cqw 0 rgba(0, 0, 0, 0.7);
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+html.artx .cf.up .cf-name {
+  color: #ffd27a;
+}
+html.artx .cf.ed-dor .cf-name,
+html.artx .cf.ed-holo .cf-name {
+  color: #f6ead0;
+}
+html.artx .cf-txt {
+  left: 7cqw;
+  right: 7cqw;
+  top: 110cqw;
+  bottom: 13cqw;
+}
+html.artx .cf-foot,
+html.artx .cf.mini .cf-foot {
+  left: 4cqw;
+  right: 4cqw;
+  bottom: 1.2cqw;
+  height: 11cqw;
+}
+html.artx .cf-v,
+html.artx .cf.mini .cf-v {
+  top: 112cqw;
+}
+html.artx .cf-tag {
+  top: 62cqw;
+}
+html.artx .cf-cost,
+html.artx .cf-stars {
+  top: 5.4cqw;
+}
+html.artx .cf.mini .cf-cost {
+  top: 5cqw;
 }
