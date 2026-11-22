@@ -15304,6 +15304,36 @@ html.artx .cf::after {
 html.artx .cf.r-rare::after {
   filter: grayscale(0.85) brightness(1.18) contrast(1.05);
 }
+/* v285 (demande d’Amine) : le noir du cadre prend la couleur du type de la carte (assets/art/ui/cadre-barricard-<type>.webp).
+   La rareté ne teinte plus le cadre (elle reste sur le losange) ; les éditions spéciales gardent leur teinte. */
+html.artx .cf.ck-shoot:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-shoot.webp) !important;
+}
+html.artx .cf.ck-melee:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-melee.webp) !important;
+}
+html.artx .cf.ck-help:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-help.webp) !important;
+}
+html.artx .cf.ck-wall:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-wall.webp) !important;
+}
+html.artx .cf.ck-post:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-post.webp) !important;
+}
+html.artx .cf.ck-trap:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-trap.webp) !important;
+}
+html.artx .cf.ck-item:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-item.webp) !important;
+}
+html.artx .cf.ck-react:not(.ed)::after {
+  border-image-source: url(../assets/art/ui/cadre-barricard-react.webp) !important;
+}
+html.artx .cf:not(.ed)::after {
+  filter: none !important;
+}
+
 html.artx .cf.r-epic::after {
   filter: sepia(0.4) hue-rotate(225deg) saturate(1.7) brightness(1.05);
 }

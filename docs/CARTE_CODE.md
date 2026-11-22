@@ -231,7 +231,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-16298 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1253 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+16328 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1262 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -513,31 +513,32 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 15263 ===== v258 : points de la collection : écrou de ferraille sur le panneau noir =====
 - 15290 v260 : le décor de l'accueil reste fixe (ne suit plus la souris) ; lueurs et animations ga
 - 15295 v263 : nouveau cadre de carte d'Amine (assets/art/ui/cadre-barricard.webp, 728 × 1106, fen
-- 15345 reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'apparei
-- 15410 dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte
-- 15448 v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord m
-- 15484 reflet bombé en haut de la pièce + éclat qui la traverse
-- 15528 chiffres gravés : clair en haut, ombre en bas, contour sombre
-- 15552 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
-- 15592 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
-- 15601 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste
-- 15608 v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
-- 15637 liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : da
-- 15648 au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le
-- 15735 emblème de la bande (faction) imprimé en filigrane dans le parchemin
-- 15760 pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et 
-- 15780 Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes
-- 15818 Légendaire animée : braises qui montent et lueur dorée qui respire
-- 15844 ===== v266 : idées validées pour les cartes (docs/IDEES_CARTES.md) =====
-- 15845 12 : lumière de la scène : chaude le jour, bleue la nuit, rouge pendant la nuit rouge (htm
-- 15866 11 : cadre métallique : un reflet glisse sur les ornements du cadre seulement (masque = le
-- 15924 9 : bonus visibles : pièce verte, petite flèche, et elle grossit la première fois qu'on la
-- 15973 10 : carte nouvelle : bandeau NOUVEAU et reflet (main) ; dans la collection, le même refle
-- 16021 Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle
-- 16040 7 : douille éjectée quand on dépense de l'énergie (game-anim.js : ejectCartridge)
-- 16055 4 : pièce qui tourne quand sa valeur change ; la tranche est une ombre qui glisse sur le c
-- 16082 1 : récompense face cachée : une carte rare jaillit avec un éclat doré (game-anim.js : gol
-- 16141 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de b
-- 16201 5 : fusion spectaculaire (game-anim.js : fuseCardsFx)
-- 16245 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte
-- 16276 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
+- 15307 v285 (demande d’Amine) : le noir du cadre prend la couleur du type de la carte (assets/art
+- 15375 reflet qui balaie l'illustration de temps en temps (coupé en mode économie et si l'apparei
+- 15440 dégâts et PV posés sur le bord bas du cadre : le parchemin reste au texte
+- 15478 v263 : coût, dégâts et PV en relief : pièces bombées (reflet en haut, ombre en bas, bord m
+- 15514 reflet bombé en haut de la pièce + éclat qui la traverse
+- 15558 chiffres gravés : clair en haut, ombre en bas, contour sombre
+- 15582 v263 : carte survolée (souris) ou touchée : elle grandit et monte au-dessus du bac pour se
+- 15622 v263 : fenêtre de choix de cartes plus grande, pour bien voir les cartes
+- 15631 v263 : onglets Pioche / Horde / Journal repliés : seule la rangée d'onglets reste
+- 15638 v264 : identité visuelle des cartes (game.js : cardLook). Couleurs de rôle de l'artiste :
+- 15667 liseré lumineux autour de l'illustration, teinte en bas de l'illustration, petite vie : da
+- 15678 au-dessus du cadre (sinon caché par son ombre intérieure), en lumière douce qui éclaire le
+- 15765 emblème de la bande (faction) imprimé en filigrane dans le parchemin
+- 15790 pierre de coût : couleur du rôle et forme selon le type (rond survivant, carré défense et 
+- 15810 Holographique : reflet arc-en-ciel qui glisse sur la carte, et paillettes
+- 15848 Légendaire animée : braises qui montent et lueur dorée qui respire
+- 15874 ===== v266 : idées validées pour les cartes (docs/IDEES_CARTES.md) =====
+- 15875 12 : lumière de la scène : chaude le jour, bleue la nuit, rouge pendant la nuit rouge (htm
+- 15896 11 : cadre métallique : un reflet glisse sur les ornements du cadre seulement (masque = le
+- 15954 9 : bonus visibles : pièce verte, petite flèche, et elle grossit la première fois qu'on la
+- 16003 10 : carte nouvelle : bandeau NOUVEAU et reflet (main) ; dans la collection, le même refle
+- 16051 Mode économie et appareils qui demandent moins de mouvement : pas d'effet en boucle
+- 16070 7 : douille éjectée quand on dépense de l'énergie (game-anim.js : ejectCartridge)
+- 16085 4 : pièce qui tourne quand sa valeur change ; la tranche est une ombre qui glisse sur le c
+- 16112 1 : récompense face cachée : une carte rare jaillit avec un éclat doré (game-anim.js : gol
+- 16171 6 : défausse qui brûle : la carte se consume de bas en haut (masque qui monte), ligne de b
+- 16231 5 : fusion spectaculaire (game-anim.js : fuseCardsFx)
+- 16275 2 : carte avec une épaisseur : feuillets empilés (translateZ) et dos, sous la grande carte
+- 16306 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
