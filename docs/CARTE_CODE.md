@@ -10,7 +10,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 3. `src/engine.js` (6020 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1727 lignes)
+6. `src/game.js` (1728 lignes)
 7. `src/game-draw.js` (6850 lignes)
 8. `src/game-ui.js` (2075 lignes)
 9. `src/game-screens.js` (1681 lignes)
@@ -55,13 +55,13 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1275 |
-| `pilesHtml` | game.js:1568 | game-artx.js:979 |
+| `pilesHtml` | game.js:1569 | game-artx.js:979 |
 | `placeHints` | game-draw.js:6841 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
 | `show` | game-screens.js:601 | game-anim.js:1305 |
-| `showAch` | game.js:901 | game-anim.js:1255 |
+| `showAch` | game.js:902 | game-anim.js:1255 |
 | `tapCell` | game-ui.js:1624 | game-ui.js:2063 |
 | `title` | game-menu.js:452 | game-artx.js:335 |
 | `unitAnim` | game-draw.js:3049 | game-fx3.js:327 |
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:212 sprK:229 drawSpr:235 hdArt:300 applyArt:314 cardStats:357 ajouterDefsCartouches:437 cartoucheSvg:441 seen:467 novice:474 cardLook:499 bonusCoins:556 isNewCard:577 markCardSeen:584 cardFace:608 saveOpt:714 applyOpt:722 applyCur:742 toggleFs:761 unpause:780 R:788
-- **819** state
-- **821** progression entre les parties (localStorage) : loadMeta:822 endTest:843 saveMeta:848 ach:889 showAch:901 deckCanAdd:934 edGain:948 edCommit:957 edDrop:987 achCheck:1013 achNight:1038 achScreen:1046 tuto:1065 guideStep:1096 guideOk:1240 tutoTip:1261 tutoHand:1273 tutoPicks:1296 tutoEnd:1301 newGame:1316 fillHand:1363 drawCards:1371 syncBoard:1400 rebuildPos:1432 cellRect:1443 fly:1448 animPiles:1510 pilesHtml:1568
-- **1638** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1641 loadSave:1666 clearSave:1693 resume:1699
+- **1** (début) : loadSprites:212 sprK:229 drawSpr:235 hdArt:300 applyArt:314 cardStats:357 ajouterDefsCartouches:437 cartoucheSvg:441 seen:467 novice:474 cardLook:499 bonusCoins:557 isNewCard:578 markCardSeen:585 cardFace:609 saveOpt:715 applyOpt:723 applyCur:743 toggleFs:762 unpause:781 R:789
+- **820** state
+- **822** progression entre les parties (localStorage) : loadMeta:823 endTest:844 saveMeta:849 ach:890 showAch:902 deckCanAdd:935 edGain:949 edCommit:958 edDrop:988 achCheck:1014 achNight:1039 achScreen:1047 tuto:1066 guideStep:1097 guideOk:1241 tutoTip:1262 tutoHand:1274 tutoPicks:1297 tutoEnd:1302 newGame:1317 fillHand:1364 drawCards:1372 syncBoard:1401 rebuildPos:1433 cellRect:1444 fly:1449 animPiles:1511 pilesHtml:1569
+- **1639** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1642 loadSave:1667 clearSave:1694 resume:1700
 
 ### src/game-draw.js
 

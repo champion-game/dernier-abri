@@ -544,7 +544,8 @@ function cardLook(t, mini) {
   const holo = Z.edOf(t) === 'holo' ? '<span class="cf-foil"></span><span class="cf-spark"></span>' : '';
   const leg = rar(t) === 'leg' && !mini ? `<span class="cf-embers">${pts(8)}</span>` : '';
   return {
-    cls: ` rk-${rk} cs-${cs} ck-${cat}`, // ck- : cadre teinté selon le type (v285)
+    // v286 : couleur du cadre selon le rôle, comme le fond des illustrations (DPS orange, Tank rouge, soutien vert…)
+    cls: ` rk-${rk} cs-${cs} ck-${{ dps: 'shoot', tank: 'melee', soin: 'help', def: 'wall', poste: 'post', piege: 'trap', objet: 'item' }[rk] || 'react'}`,
     // v266 : reflet sur le métal du cadre (cf-met) et lumière de la scène (cf-lum, jour, nuit ou nuit rouge)
     html: `<span class="cf-tint"></span><span class="cf-fx">${fx}</span><span class="cf-rim"></span>${holo}${leg}<span class="cf-met"></span><span class="cf-lum"></span>`,
     wm,
@@ -650,7 +651,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v285 · 22 nov.';
+const VERSION = 'v286 · 22 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
