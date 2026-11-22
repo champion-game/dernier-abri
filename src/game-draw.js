@@ -3097,12 +3097,12 @@ function unitAnim(i, u, now, sc) {
     }
     return;
   }
-  // v272 : respiration bien visible : le survivant gonfle depuis ses pieds (il grandit, s'élargit à peine) ;
+  // v272 : respiration visible (adoucie en v279) : le survivant gonfle depuis ses pieds (il grandit, s'élargit à peine) ;
   // blessé, il respire plus lentement et plus fort. Tours et outils bougent à peine, les murs restent immobiles
   if (live) {
     const low = u.hp / Math.max(1, Z.maxHp(G, u)) < 0.35,
       b = Math.sin(now / (low ? 560 : 380) + i * 1.7),
-      a = low ? 0.12 : 0.09,
+      a = low ? 0.09 : 0.065,
       FEET = 12;
     ctx.translate(0, FEET);
     ctx.scale(1 + a * 0.35 * b, 1 + a * b);
