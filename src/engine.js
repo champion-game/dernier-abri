@@ -174,7 +174,7 @@ const Z = (() => {
       d: _t('5 dégâts par tour au corps à corps, 7 PV'),
     },
     dog: {
-      n: _t('Chien Bandana'),
+      n: _t('Chien moqueur'),
       cat: 'melee',
       hp: 5,
       block: 1,
@@ -1636,7 +1636,7 @@ const Z = (() => {
       evo: 1,
       v: _t('2 ×3 · P2'),
       d: _t(
-        'Professeur Volts et le Grillage : un arc frappe 3 zombies à 2 cases (2 dégâts) à chaque tour, même sans courant',
+        'Professeur Volts et Professeur Hertz : un arc frappe 3 zombies à 2 cases (2 dégâts) à chaque tour, même sans courant',
       ),
     },
     balpaille: {
@@ -1696,6 +1696,74 @@ const Z = (() => {
       v: _t('4 zone · Recul'),
       d: _t('Les Rangers et le Clown : 4 dégâts à tous les zombies autour et les repousse, 14 PV'),
     },
+
+    // v284 : cartes nées des dernières illustrations (demande d’Amine)
+    hertz: {
+      n: _t('Professeur Hertz'),
+      cat: 'help',
+      hp: 3,
+      block: 1,
+      pulse: 3,
+      v: _t('Onde · Étourdit'),
+      d: _t('Tous les 3 tours, une onde étourdit 1 tour les zombies à 2 cases ou moins (pas les boss)'),
+    },
+    redsmoke: {
+      n: _t('Fumée rouge'),
+      cat: 'trap',
+      hp: 1,
+      block: 0,
+      feud: 3,
+      v: _t('Discorde'),
+      d: _t('Le premier zombie qui passe libère la fumée : les zombies autour s’attaquent entre eux pendant 3 actions'),
+    },
+    shell2: {
+      n: _t('Obus anti-Colosse V2'),
+      cat: 'react',
+      react: 'any',
+      needBoss: 1,
+      v: _t('Boss ×2'),
+      d: _t('Pendant la nuit, quand un boss est sur la carte : les boss prennent le double de dégâts jusqu’à l’aube'),
+    },
+    laughdog: {
+      n: _t('Chien rieur'),
+      cat: 'melee',
+      hp: 5,
+      block: 1,
+      rng: 1,
+      dmg: 1,
+      every: 1,
+      hits: 2,
+      lure: 2,
+      v: _t('1 ×2 · Attire'),
+      d: _t('Son rire attire les zombies à 2 cases ou moins ; mord 2 fois par tour (1 dégât), 5 PV'),
+    },
+    mutagen: {
+      n: _t('Mutation génétique'),
+      cat: 'item',
+      instant: 1,
+      onUnit: 1,
+      equip: 1,
+      v: _t('Immortelle ×2'),
+      d: _t(
+        'Sur une unité : jusqu’à l’aube, elle ne peut pas tomber et fait le double de dégâts. Elle est détruite à la fin de la nuit',
+      ),
+    },
+    farceurs: {
+      n: _t('Les Chiens farceurs'),
+      cat: 'melee',
+      hp: 12,
+      block: 1,
+      rng: 1,
+      dmg: 3,
+      every: 1,
+      hits: 2,
+      lure: 3,
+      evo: 1,
+      v: _t('3 ×2 · Attire'),
+      d: _t(
+        'Chien moqueur et Chien rieur : Tank, 12 PV, attirent les zombies à 3 cases, 2 morsures de 3 dégâts par tour',
+      ),
+    },
   };
   /* rôles des unités : 🛡️ Tank, ❤️ Soin, ⚔️ DPS (les autres sont des murs, pièges, objets ou du soutien)
     Tank : provoque les zombies à 3 cases ou moins (ils le visent au lieu de l'abri) et bloque 1 coup sur 3.
@@ -1707,7 +1775,7 @@ const Z = (() => {
     dps: { n: _t('DPS'), ic: '⚔️' },
   };
   const TANKS =
-      'riot amb monk cop pitch chief_farm saint handler v_apc rempart skater ringgiant gladiator balpaille convoi'.split(
+      'riot amb monk cop pitch chief_farm saint handler v_apc rempart skater ringgiant gladiator balpaille convoi farceurs'.split(
         ' ',
       ),
     HEALS = 'med pharma hospital priest orderly doc chief_care fieldnurse v_medic ruban marabout'.split(' ');
@@ -1734,7 +1802,8 @@ const Z = (() => {
     fauves: ['chief_police', 'handler'],
     ringgiant: ['cop', 'riot'],
     gladiator: ['riot', 'pitch'],
-    survolte: ['genmech', 'fen'],
+    survolte: ['genmech', 'hertz'],
+    farceurs: ['dog', 'laughdog'],
     balpaille: ['scare', 'pitch'],
     grandfinal: ['firetrap', 'brasero'],
     convoi: ['v_apc', 'v_hmg'],
@@ -1743,7 +1812,7 @@ const Z = (() => {
   const EVO_KEYS = Object.keys(EVO);
   // survivants nommés : chaque humain ou chien posé reçoit un prénom et un trait, compte ses victimes, et meurt pour de bon
   const HUMANS =
-    'gun snp sht xbow flame mg molo axe cop butch monk med mech lead riot swat pharma priest hunter pitch carp amb doc orderly nailer ranger handler welder assassin fieldnurse genmech v_hmg v_medic v_sniper rempart bielle hirond veuve aiguille rangers skater ruban marabout sauteur'.split(
+    'gun snp sht xbow flame mg molo axe cop butch monk med mech lead riot swat pharma priest hunter pitch carp amb doc orderly nailer ranger handler welder assassin fieldnurse genmech v_hmg v_medic v_sniper rempart bielle hirond veuve aiguille rangers skater ruban marabout sauteur hertz'.split(
       ' ',
     );
   const NAMES =
@@ -1777,7 +1846,7 @@ const Z = (() => {
   const nearPost = (st, i, t) => around(i).some(j => st.grid[j] && st.grid[j].t === t);
   // unités (survivants, chiens, machines, chefs, évolutions) : limitées sur le terrain. Les murs et les pièges ne comptent pas.
   const isUnit = t => !!(U[t] && U[t].block && (U[t].cat === 'shoot' || U[t].cat === 'melee' || U[t].cat === 'help'));
-  const DOGS = ['dog', 'dogs', 'k9', 'k9squad'];
+  const DOGS = ['dog', 'dogs', 'k9', 'k9squad', 'laughdog', 'farceurs'];
   const isWallU = v => !!(v && U[v.t] && U[v.t].cat === 'wall' && U[v.t].block);
   // v276 : matière des murs. Bois : prend feu, brûle les zombies qui le frappent, se répare mieux.
   // Métal : conduit le courant d'un Grillage électrifié à tous les murs de métal reliés. Pierre : ne brûle pas, résiste aux Sapeurs.
@@ -2019,6 +2088,7 @@ const Z = (() => {
     bomber: 2,
     noise: 1,
   });
+  Object.assign(COST, { hertz: 2, redsmoke: 2, shell2: 2, laughdog: 2, mutagen: 3 });
   Object.assign(COST, { rangers: 2, skater: 3, ruban: 2, wagon: 2, marabout: 3, sauteur: 2, blade: 2, ronin: 3 });
   const cost = t => COST[t] ?? 2;
   const ZT = {
@@ -2252,7 +2322,7 @@ const Z = (() => {
     trap: {
       n: _t('Trappeurs'),
       ic: '🪤',
-      cards: ['net', 'bear', 'hunter', 'trap', 'spike', 'wire', 'smoke', 'bait', 'xbow', 'chief_trap'],
+      cards: ['net', 'bear', 'hunter', 'trap', 'spike', 'wire', 'smoke', 'redsmoke', 'bait', 'xbow', 'chief_trap'],
       lv: [2, 5],
       d: [
         _t('pièges : +2 dégâts'),
@@ -2262,7 +2332,7 @@ const Z = (() => {
     farm: {
       n: _t('Fermiers'),
       ic: '🐕',
-      cards: ['dogs', 'pitch', 'scare', 'dog', 'axe', 'butch', 'chief_farm'],
+      cards: ['dogs', 'pitch', 'scare', 'dog', 'laughdog', 'axe', 'butch', 'chief_farm'],
       lv: [2, 5],
       d: [
         _t('corps à corps : +1 dégât'),
@@ -2284,6 +2354,7 @@ const Z = (() => {
         'radio',
         'welder',
         'genmech',
+        'hertz',
         'skater',
         'chief_tech',
       ],
@@ -3288,6 +3359,8 @@ const Z = (() => {
   'rangers sauteur wagon'.split(' ').forEach(t => (RAR[t] = 'com'));
   'skater ruban blade'.split(' ').forEach(t => (RAR[t] = 'rare'));
   'marabout ronin'.split(' ').forEach(t => (RAR[t] = 'epic'));
+  'hertz redsmoke laughdog shell2'.split(' ').forEach(t => (RAR[t] = 'rare'));
+  RAR.mutagen = 'epic';
   const SIDES = [_t('le nord'), _t('le sud'), _t('l’ouest'), _t('l’est')];
   const rc = i => [Math.floor(i / N), i % N],
     idx = (r, c) => r * N + c;
@@ -4348,6 +4421,10 @@ const Z = (() => {
   const ouch = (st, u, d, hp0) => mtr(st, u, 'tak', Math.max(0, Math.min(d, hp0)));
   // une unité tombe : un survivant nommé rejoint le mémorial (sauf s'il est Increvable et n'a pas encore utilisé sa chance)
   function lose(st, j, u, ev) {
+    if (hasEq(u, 'mutagen')) {
+      u.hp = 1; // v284 : Mutation génétique, ne tombe pas avant l’aube
+      return false;
+    }
     if (u.trait === 'increvable' && !u.saved) {
       u.hp = 1;
       u.saved = 1;
@@ -4612,6 +4689,11 @@ const Z = (() => {
       }
     }
     if (d > 0 && st._flood && st._flood.some(j => cheb(j, z.pos) <= 2)) d++;
+    if (d > 0 && st.bossX2 && ZT[z.k].boss) d *= 2; // v284 : Obus anti-Colosse V2
+    if (d > 0) {
+      const m = st._su || (src >= 0 ? st.grid[src] : null);
+      if (m && hasEq(m, 'mutagen')) d *= 2; // v284 : Mutation génétique
+    }
     if (!fire) {
       const a = (ZT[z.k].armor || 0) + (z.k === 'walk' ? Math.min(3, mc(st, 'carapace')) : 0);
       if (a) d = Math.max(0, d - a);
@@ -5011,6 +5093,11 @@ const Z = (() => {
       u.hp--;
       if (u.hp <= 0) st.grid[n] = null;
     }
+    if (D.feud) {
+      st.z.filter(o => o.hp > 0 && cheb(o.pos, n) <= 1).forEach(o => (o.feudT = D.feud));
+      ev.push({ i: n, k: 'smoke' });
+      st.grid[n] = null;
+    }
     if (D.smoke) {
       st.z.filter(o => o.hp > 0 && cheb(o.pos, n) <= 1).forEach(o => (o.cd += D.smoke));
       ev.push({ i: n, k: 'smoke' });
@@ -5206,6 +5293,12 @@ const Z = (() => {
         });
       // v276 : le Brasero forain met le feu aux murs en bois collés à lui
       if (D.aura && st.tick % 2 === 0) around(i).forEach(k => igniteWall(st, k, wallAt(st, k), ev));
+      if (D.pulse && st.tick % D.pulse === 0) {
+        alive()
+          .filter(z => cheb(z.pos, i) <= 2 && !ZT[z.k].boss)
+          .forEach(z => (z.cd += 1));
+        ev.push({ i, k: 'smoke' });
+      }
       if (D.aura && (D.auraFast || st.tick % 2 === 0))
         alive()
           .filter(z => cheb(z.pos, i) <= 1)
@@ -5279,6 +5372,15 @@ const Z = (() => {
       if (st.rush) z.cd = Math.max(1, Math.ceil(z.cd / 2));
       if (hasters.length && !T.boss && hasters.some(h => cheb(h.pos, z.pos) <= ZT[h.k].haste))
         z.cd = Math.max(1, Math.floor((z.cd * 2) / 3));
+      // v284 : Fumée rouge, le zombie frappe un autre zombie voisin au lieu d’avancer
+      if (z.feudT > 0) {
+        z.feudT--;
+        const o = st.z.find(v => v !== z && v.hp > 0 && !isEdge(v.pos) && cheb(v.pos, z.pos) <= 1);
+        if (o) {
+          hit(st, o, zhit(st, z), ev, -1, 1);
+          continue;
+        }
+      }
       const tgt = lureTarget(st, z.pos, z);
       let n = T.boss ? moves(z.pos, tgt, z.style)[0] : pathStep(st, z.pos, tgt, zmode(T), z.style);
       if (n === C) {
@@ -5425,6 +5527,11 @@ const Z = (() => {
     st.z = [];
     st.side = -1;
     st.rush = 0;
+    st.bossX2 = 0;
+    // v284 : une unité mutée est détruite à la fin de la nuit (le mur sous un tireur perché reste)
+    st.grid.forEach((u, i) => {
+      if (u && hasEq(u, 'mutagen')) vacate(st, i);
+    });
     if (st.shelter <= 0) return { heal: 0, scrap: 0 };
     // v181 : nuits d'affilée survécues sur le terrain (Blindée à 20)
     st.grid.forEach(u => {
@@ -5485,7 +5592,7 @@ const Z = (() => {
   function canReact(st, t, i) {
     const D = U[t];
     if (!D || !D.react || !canPay(st, t)) return false;
-    if (D.antiboss) return bossAlive(st);
+    if (D.antiboss || D.needBoss) return bossAlive(st);
     if (t === 'talkie')
       return !!(
         st.grid[i] &&
@@ -5579,6 +5686,10 @@ const Z = (() => {
         hit(st, z, ammoDmg(z), ev, -1, 1);
         ev.push({ i: C, k: 'shot', zid: z.id });
       }
+    }
+    if (t === 'shell2') {
+      st.bossX2 = 1;
+      ev.push({ i: C, k: 'horn' });
     }
     if (t === 'storm') {
       al().forEach(z => {

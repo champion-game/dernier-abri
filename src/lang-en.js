@@ -2329,4 +2329,32 @@ I18N.en = {
   '4 zone · Recul': '4 area · Push',
   'Les Rangers et le Clown : 4 dégâts à tous les zombies autour et les repousse, 14 PV':
     'The Rangers and the Clown: 4 damage to every zombie around and pushes them back, 14 HP',
+  // v284
+  'Chien moqueur': 'Mocking Dog',
+  'Professeur Volts et Professeur Hertz : un arc frappe 3 zombies à 2 cases (2 dégâts) à chaque tour, même sans courant':
+    'Professor Volts and Professor Hertz: an arc hits 3 zombies within 2 tiles (2 damage) every turn, even without power',
+  'Professeur Hertz': 'Professor Hertz',
+  'Onde · Étourdit': 'Wave · Stuns',
+  'Tous les 3 tours, une onde étourdit 1 tour les zombies à 2 cases ou moins (pas les boss)':
+    'Every 3 turns, a wave stuns zombies within 2 tiles for 1 turn (not bosses)',
+  'Fumée rouge': 'Red Smoke',
+  Discorde: 'Discord',
+  'Le premier zombie qui passe libère la fumée : les zombies autour s’attaquent entre eux pendant 3 actions':
+    'The first zombie to pass releases the smoke: nearby zombies attack each other for 3 actions',
+  'Obus anti-Colosse V2': 'Anti-Colossus Shell V2',
+  'Boss ×2': 'Boss ×2',
+  'Pendant la nuit, quand un boss est sur la carte : les boss prennent le double de dégâts jusqu’à l’aube':
+    'During the night, when a boss is on the map: bosses take double damage until dawn',
+  'Chien rieur': 'Laughing Dog',
+  '1 ×2 · Attire': '1 ×2 · Lures',
+  'Son rire attire les zombies à 2 cases ou moins ; mord 2 fois par tour (1 dégât), 5 PV':
+    'Its laugh lures zombies within 2 tiles; bites twice per turn (1 damage), 5 HP',
+  'Mutation génétique': 'Genetic Mutation',
+  'Immortelle ×2': 'Immortal ×2',
+  'Sur une unité : jusqu’à l’aube, elle ne peut pas tomber et fait le double de dégâts. Elle est détruite à la fin de la nuit':
+    'On a unit: until dawn, it cannot fall and deals double damage. It is destroyed at the end of the night',
+  'Les Chiens farceurs': 'The Prankster Dogs',
+  '3 ×2 · Attire': '3 ×2 · Lures',
+  'Chien moqueur et Chien rieur : Tank, 12 PV, attirent les zombies à 3 cases, 2 morsures de 3 dégâts par tour':
+    'Mocking Dog and Laughing Dog: Tank, 12 HP, lure zombies within 3 tiles, 2 bites of 3 damage per turn',
 };

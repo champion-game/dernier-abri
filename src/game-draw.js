@@ -3275,6 +3275,9 @@ function drawUnitInner(i, u, now) {
       grandfinal: 'brasero',
       convoi: 'v_apc',
       pogo: 'pitch',
+      hertz: 'genmech',
+      laughdog: 'dog',
+      farceurs: 'dogs',
     }[u.t];
     if (ra) u = { ...u, t: ra };
   }

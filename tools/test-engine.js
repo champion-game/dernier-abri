@@ -1247,6 +1247,47 @@ check('éditions : deck (limite partagée, 1 spéciale par carte, 5 au plus)', (
   eq(Z.deckError(base.concat(['gun~dor', 'gun']), own), '');
 });
 
+check('v284 : Mutation génétique, immortelle, double dégâts, détruite à la fin de la nuit', () => {
+  const st = fresh();
+  const i = 3 * Z.N + 4;
+  st.grid[i] = { t: 'axe', hp: 7 };
+  Z.place(st, 'mutagen', i, rng(1));
+  ok(Z.hasEq(st.grid[i], 'mutagen'), 'pas équipée');
+  Z.startNight(st, rng(1));
+  st.pending = [];
+  const z = { id: 1, k: 'fat', pos: 2 * Z.N + 4, hp: 999, max: 999, cd: 99, style: 0 };
+  st.z = [z];
+  Z.step(st);
+  eq(999 - z.hp, 2 * Z.U.axe.dmg, 'dégâts');
+  st.grid[i].hp = -5;
+  Z.endNight(st);
+  eq(st.grid[i], null, 'pas détruite');
+});
+check('v284 : Obus anti-Colosse V2, seulement avec un boss, double les dégâts des boss', () => {
+  const st = fresh();
+  Z.startNight(st, rng(1));
+  st.pending = [];
+  st.energy = 9;
+  st.z = [];
+  ok(!Z.canReact(st, 'shell2', Z.C), 'jouable sans boss');
+  const b = { id: 2, k: 'boss', pos: 2 * Z.N + 4, hp: 500, max: 500, cd: 99, style: 0 };
+  st.z = [b];
+  ok(Z.canReact(st, 'shell2', Z.C), 'refusé avec un boss');
+  Z.react(st, 'shell2', Z.C);
+  ok(st.bossX2, 'pas actif');
+});
+check('v284 : Fumée rouge, les zombies voisins se frappent entre eux', () => {
+  const st = fresh();
+  const n = 2 * Z.N + 4;
+  st.grid[n] = { t: 'redsmoke', hp: 1 };
+  Z.startNight(st, rng(1));
+  st.pending = [];
+  const a = { id: 1, k: 'walk', pos: n - Z.N, hp: 50, max: 50, cd: 1, style: 0 },
+    b = { id: 2, k: 'walk', pos: n - Z.N + 1, hp: 50, max: 50, cd: 99, style: 0 };
+  st.z = [a, b];
+  for (let k = 0; k < 3; k++) Z.step(st);
+  ok(a.hp < 50 || b.hp < 50, 'personne ne se bat');
+});
 /* ---------- 4. nuits aléatoires ---------- */
 const PLACE = PLAY.filter(t => !Z.U[t].react && !Z.U[t].instant && !Z.U[t].onUnit);
 const NIGHTS = +process.env.NIGHTS || 300;
