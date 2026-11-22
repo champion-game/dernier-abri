@@ -706,8 +706,8 @@ try {
     return fi.apply(this, arguments);
   };
 }
-// v296 : plateau à palissade (téléphone) : le canvas déborde un peu de l'image ; on le découpe à la forme du plateau,
-// routes prolongées jusqu'au bord (les zombies y entrent), sinon la lumière du jour blanchit les coins
+// v296 : plateau à palissade (téléphone) : le canvas est découpé sur les 9 × 9 cases et les bouts des routes
+// (les zombies y entrent), sinon sa lumière blanchit la palissade et les coins
 // bouts des quatre routes, dans les ouvertures de la palissade (transparentes sur l'image), en px du canvas (k = px par unité)
 function axMurRoads(g, k, color) {
   const mid = Math.floor(Z.N / 2) * T * k,
@@ -724,8 +724,11 @@ function axMurMask() {
   const c = document.createElement('canvas');
   c.width = cv.width;
   c.height = cv.height;
-  const g = c.getContext('2d');
-  g.drawImage(AX.plat, AXI.ox * k, AXI.oy * k, AXI.iw * k, AXI.ih * k);
+  const g = c.getContext('2d'),
+    n = Z.N - 2;
+  // v297 : la lumière du canvas (jour, soir, nuit) ne couvre que les 9 × 9 cases ; la palissade est celle de l'image dessous (#axBord)
+  g.fillStyle = '#000';
+  g.fillRect(T * k, T * k, n * T * k, n * T * k);
   axMurRoads(g, k, '#000');
   AX.mask = { key, plat: AX.plat, c };
   return c;
