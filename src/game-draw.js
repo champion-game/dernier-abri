@@ -3253,7 +3253,29 @@ function drawUnitInner(i, u, now) {
   const a = facing[i] ?? out,
     s = rng(i + 3);
   {
-    const ra = { fourgon: 'car', express: 'fortin', butoir: 'bar', nid: 'tower', draisine: 'lamp' }[u.t];
+    // sprite d’une carte proche, en attendant celui de l’artiste (v283 : nouvelles cartes et combinaisons)
+    const ra = {
+      fourgon: 'car',
+      express: 'fortin',
+      butoir: 'bar',
+      nid: 'tower',
+      draisine: 'flood',
+      rangers: 'pitch',
+      skater: 'mech',
+      ruban: 'med',
+      wagon: 'palis',
+      marabout: 'priest',
+      sauteur: 'hunter',
+      twocolts: 'gun',
+      fauves: 'chief_police',
+      ringgiant: 'cop',
+      gladiator: 'riot',
+      survolte: 'genmech',
+      balpaille: 'scare',
+      grandfinal: 'brasero',
+      convoi: 'v_apc',
+      pogo: 'pitch',
+    }[u.t];
     if (ra) u = { ...u, t: ra };
   }
   if (!PLAIN.has(u.t) && u.t !== 'wire' && drawSpr(u.t, x, y, a, out)) return;

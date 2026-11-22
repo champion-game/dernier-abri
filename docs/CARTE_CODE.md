@@ -6,12 +6,12 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 ## Ordre de chargement (index.html)
 
 1. `src/i18n.js` (57 lignes)
-2. `src/lang-en.js` (2238 lignes)
-3. `src/engine.js` (5975 lignes)
+2. `src/lang-en.js` (2333 lignes)
+3. `src/engine.js` (5909 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
-6. `src/game.js` (1738 lignes)
-7. `src/game-draw.js` (6825 lignes)
+6. `src/game.js` (1727 lignes)
+7. `src/game-draw.js` (6847 lignes)
 8. `src/game-ui.js` (2075 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (861 lignes)
@@ -32,9 +32,9 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | Fonction | Définie dans | Enveloppée ensuite par (ordre de chargement) |
 |---|---|---|
 | `render` | game-ui.js:628 | game-fx2.js:261, game-artx.js:82, game-artx.js:158, game-artx.js:377, game-artx.js:484, game-artx.js:935, game-artx.js:998 |
-| `applyArt` | game.js:329 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1291 |
+| `applyArt` | game.js:314 | game-artx.js:65, game-artx.js:368, game-artx.js:942, game-artx.js:1291 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
-| `frameInner` | game-draw.js:6299 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
+| `frameInner` | game-draw.js:6321 | game-artx.js:677, game-fx3.js:480, game-fx5.js:155 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:26, game-artx.js:689 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
@@ -42,26 +42,26 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1108 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
-| `drawFloats` | game-draw.js:5727 | game-fx5.js:746 |
-| `drawFog` | game-draw.js:6026 | game-artx.js:551 |
-| `drawFX` | game-draw.js:5630 | game-fx5.js:636 |
-| `drawPlace` | game-draw.js:6187 | game-fx3.js:315 |
-| `drawShelter` | game-draw.js:5095 | game-fx5.js:506 |
-| `drawSky` | game-draw.js:5818 | game-artx.js:670 |
+| `drawFloats` | game-draw.js:5749 | game-fx5.js:746 |
+| `drawFog` | game-draw.js:6048 | game-artx.js:551 |
+| `drawFX` | game-draw.js:5652 | game-fx5.js:636 |
+| `drawPlace` | game-draw.js:6209 | game-fx3.js:315 |
+| `drawShelter` | game-draw.js:5117 | game-fx5.js:506 |
+| `drawSky` | game-draw.js:5840 | game-artx.js:670 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:326 |
 | `keepEnd` | game-menu.js:582 | game-fiche.js:206 |
-| `lights` | game-draw.js:5929 | game-fx3.js:378 |
+| `lights` | game-draw.js:5951 | game-fx3.js:378 |
 | `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1275 |
-| `pilesHtml` | game.js:1583 | game-artx.js:979 |
-| `placeHints` | game-draw.js:6816 | game-fx2.js:246 |
+| `pilesHtml` | game.js:1568 | game-artx.js:979 |
+| `placeHints` | game-draw.js:6838 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:538 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
 | `show` | game-screens.js:601 | game-anim.js:1305 |
-| `showAch` | game.js:916 | game-anim.js:1255 |
+| `showAch` | game.js:901 | game-anim.js:1255 |
 | `tapCell` | game-ui.js:1624 | game-ui.js:2063 |
 | `title` | game-menu.js:452 | game-artx.js:335 |
 | `unitAnim` | game-draw.js:3049 | game-fx3.js:327 |
@@ -95,17 +95,17 @@ _t:19 _tPage:41
 
 > Moteur du jeu : règles pures, sans DOM. Utilisé par le jeu (navigateur) et par les outils 
 
-- **431** extension : nouvelles cartes de faction
-- **981** v89 : 6 nouveaux survivants
-- **1052** v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais e
-- **1162** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1755 vacate:1884 baseOf:1927 edOf:1930 ck:1934 levelUp:1953 waveCount:2219 famCounts:2421 famLevel:2430 famLevels:2437 allies:2451 wallGroup:2456 enclosed:2476 electrified:2495 igniteWall:2520 breakWall:2527 burnWalls:2538 sol:2558 nightOffers:2572 hurt:2590 recruit:2601 dawnEvent:3181 resolveDawn:3193 testProgress:3230 mutate:3245 zhit:3273 moves:3406
-- **3425** chemins des zombies : blockCosts:3431 field:3463 sapBlast:3495 pathStep:3514 killZones:3532 back:3573 shuffle:3582
-- **3590** état d'une partie : newState:3604 unlocks:3690
-- **3700** collection et deck (entre les parties) : giftOffer:3710 edKill:3748 killScrap:3754 applyMenace:3793 deckError:3803 newDay:3824
-- **3862** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3864 stat:3881 upgrade:3931 addRelic:3935 relicChoices:3945 draftChoices:3951 dailyPlan:3973 dailyState:4004 storeOffer:4025 buyStore:4038 pay:4044 fireAmmo:4056
-- **4076** pose des cartes : frees:4092 canMove:4105 move:4109 wallLinks:4121 fixLinks:4128 recall:4136 placeBench:4147 useCharges:4169 lineCells:4181 placeLine:4197 canPlace:4210 place:4233
-- **4305** fusion et évolutions : absorb:4321 merge:4336 mkey:4389 mtr:4395 cure:4408 lose:4421 applyItem:4484
-- **4515** la nuit : waveList:4524 broodDeath:4571 zMaxHp:4577 newcomers:4587 spawn:4592 bigNight:4602 nextWave:4606 startNight:4611 hit:4668 explode:4699 lureTarget:4707 nearestLure:4715 squad:4739 dmgParts:4751 attack:4817 strike:4919 enter:5032 step:5117 endNight:5477 canReact:5549 react:5563 runNight:5719
+- **401** extension : nouvelles cartes de faction
+- **885** v89 : 6 nouveaux survivants
+- **944** v120 : cartes de victoire (vic = niveau de Mutation à vaincre pour la débloquer ; jamais e
+- **1030** v76 : logistique (équipements, postes de soutien, nouvelles défenses, pièges, objets et ré : roleOf:1715 vacate:1831 baseOf:1875 edOf:1878 ck:1882 levelUp:1901 waveCount:2151 famCounts:2351 famLevel:2360 famLevels:2367 allies:2381 wallGroup:2386 enclosed:2406 electrified:2425 igniteWall:2450 breakWall:2457 burnWalls:2468 sol:2488 nightOffers:2502 hurt:2520 recruit:2531 dawnEvent:3111 resolveDawn:3123 testProgress:3160 mutate:3175 zhit:3203 moves:3335
+- **3354** chemins des zombies : blockCosts:3360 field:3392 sapBlast:3424 pathStep:3443 killZones:3461 back:3502 shuffle:3511
+- **3519** état d'une partie : newState:3533 unlocks:3619
+- **3629** collection et deck (entre les parties) : giftOffer:3639 edKill:3675 killScrap:3681 applyMenace:3720 deckError:3730 newDay:3751
+- **3789** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3791 stat:3808 upgrade:3858 addRelic:3862 relicChoices:3872 draftChoices:3878 dailyPlan:3900 dailyState:3931 storeOffer:3952 buyStore:3965 pay:3971 fireAmmo:3983
+- **4003** pose des cartes : frees:4019 canMove:4032 move:4036 wallLinks:4048 fixLinks:4055 recall:4063 placeBench:4074 useCharges:4096 lineCells:4108 placeLine:4124 canPlace:4137 place:4162
+- **4234** fusion et évolutions : absorb:4250 merge:4265 mkey:4318 mtr:4324 cure:4337 lose:4350 applyItem:4413
+- **4445** la nuit : waveList:4454 broodDeath:4501 zMaxHp:4507 newcomers:4517 spawn:4522 bigNight:4532 nextWave:4536 startNight:4541 hit:4598 explode:4629 lureTarget:4637 nearestLure:4645 squad:4669 dmgParts:4681 attack:4747 strike:4850 enter:4968 step:5053 endNight:5413 canReact:5485 react:5499 runNight:5653
 
 ### src/audio.js
 
@@ -123,10 +123,10 @@ _t:19 _tPage:41
 
 > Rendu canvas, interface et boucle de jeu. Dépend de src/engine.js (global Z).
 
-- **1** (début) : loadSprites:227 sprK:244 drawSpr:250 hdArt:315 applyArt:329 cardStats:372 ajouterDefsCartouches:452 cartoucheSvg:456 seen:482 novice:489 cardLook:514 bonusCoins:571 isNewCard:592 markCardSeen:599 cardFace:623 saveOpt:729 applyOpt:737 applyCur:757 toggleFs:776 unpause:795 R:803
-- **834** state
-- **836** progression entre les parties (localStorage) : loadMeta:837 endTest:858 saveMeta:863 ach:904 showAch:916 deckCanAdd:949 edGain:963 edCommit:972 edDrop:1002 achCheck:1028 achNight:1053 achScreen:1061 tuto:1080 guideStep:1111 guideOk:1255 tutoTip:1276 tutoHand:1288 tutoPicks:1311 tutoEnd:1316 newGame:1331 fillHand:1378 drawCards:1386 syncBoard:1415 rebuildPos:1447 cellRect:1458 fly:1463 animPiles:1525 pilesHtml:1583
-- **1653** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1656 loadSave:1681 clearSave:1704 resume:1710
+- **1** (début) : loadSprites:212 sprK:229 drawSpr:235 hdArt:300 applyArt:314 cardStats:357 ajouterDefsCartouches:437 cartoucheSvg:441 seen:467 novice:474 cardLook:499 bonusCoins:556 isNewCard:577 markCardSeen:584 cardFace:608 saveOpt:714 applyOpt:722 applyCur:742 toggleFs:761 unpause:780 R:788
+- **819** state
+- **821** progression entre les parties (localStorage) : loadMeta:822 endTest:843 saveMeta:848 ach:889 showAch:901 deckCanAdd:934 edGain:948 edCommit:957 edDrop:987 achCheck:1013 achNight:1038 achScreen:1046 tuto:1065 guideStep:1096 guideOk:1240 tutoTip:1261 tutoHand:1273 tutoPicks:1296 tutoEnd:1301 newGame:1316 fillHand:1363 drawCards:1371 syncBoard:1400 rebuildPos:1432 cellRect:1443 fly:1448 animPiles:1510 pilesHtml:1568
+- **1638** sauvegarde (localStorage, marche aussi dans Electron/Tauri) : save:1641 loadSave:1666 clearSave:1693 resume:1699
 
 ### src/game-draw.js
 
@@ -135,8 +135,8 @@ _t:19 _tPage:41
 - **3** canvas setup : fit:24 rng:43 leafTree:207 pineTree:260 rockDeco:301 logDeco:324 cactus:352 deadBush:380 carWreck:400 concreteBlock:427 barrel:444 rubble:469 deadTree:485 roofDeco:499 lampPost:576 puddle:597 manhole:607 mushroom:625 tumbleweed:642 skull:651 pumpkin:673 hayBale:698 snowdrift:721 snowman:735 boulderBig:765 buildCity:776 cityRing:793 proj:877 poly:881 tone:889 building3d:894 cactus3d:966 rock3d:1034 ringItem:1099 dirtRoad:1130 drawWoods:1222 setBiome:1295 buildGround:1303 boardEdge:1757 boardFrame:1941 ringFog:2096 drawEdgeNight:2121 clearDecals:2164 splat:2167
 - **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
 - **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
-- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:3991 wallPost:4223 drawPerched:4301 feuLayout:4317 feuPoint:4384 feuCellPath:4399 feuTongue:4420 drawFireBeds:4430 feuFlame:4480 drawFireFlames:4487 drawCurrent:4607 drawEnclosure:4635 murRelief:4653 drawRamparts:4662 wireSect:4811 wirePost:4834 drawWires:4838 drawGuide:4915 guideHand:4945 drawKillZones:5014 drawBossRoute:5048 drawShelter:5095 zAnim:5198 drawZombie:5227
-- **5375** effects : addFX:5376 drawGrassBlade:5381 tapScale:5396 tapZoom:5407 boardTapFx:5416 risePuff:5464 pieceTapReact:5480 poseImpactFx:5506 drawPoseFx:5531 burst:5562 drawHealBolt:5581 drawHealGlow:5605 drawFX:5630 floatTxt:5724 drawFloats:5727 mkGlow:5797 drawSky:5818 drawGlow:5899 lights:5929 drawFog:6026 drawAmbient:6040 drawDark:6117 frame:6171 drawPlace:6187 titleDeco:6246 frameInner:6299 safeTxt:6570 edAura:6580 dmgCached:6671 bTag:6677 dmgBadge:6695 dmgLinks:6716 placeGain:6781 placeHints:6816
+- **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 hpBar:2792 drawBars:2796 socle:2817 trackBoard:2880 cracks:2971 crater:2992 groundCrack:3017 wallJit:3041 unitAnim:3049 drawUnit:3142 drawUnitInner:3248 wallSect:4013 wallPost:4245 drawPerched:4323 feuLayout:4339 feuPoint:4406 feuCellPath:4421 feuTongue:4442 drawFireBeds:4452 feuFlame:4502 drawFireFlames:4509 drawCurrent:4629 drawEnclosure:4657 murRelief:4675 drawRamparts:4684 wireSect:4833 wirePost:4856 drawWires:4860 drawGuide:4937 guideHand:4967 drawKillZones:5036 drawBossRoute:5070 drawShelter:5117 zAnim:5220 drawZombie:5249
+- **5397** effects : addFX:5398 drawGrassBlade:5403 tapScale:5418 tapZoom:5429 boardTapFx:5438 risePuff:5486 pieceTapReact:5502 poseImpactFx:5528 drawPoseFx:5553 burst:5584 drawHealBolt:5603 drawHealGlow:5627 drawFX:5652 floatTxt:5746 drawFloats:5749 mkGlow:5819 drawSky:5840 drawGlow:5921 lights:5951 drawFog:6048 drawAmbient:6062 drawDark:6139 frame:6193 drawPlace:6209 titleDeco:6268 frameInner:6321 safeTxt:6592 edAura:6602 dmgCached:6693 bTag:6699 dmgBadge:6717 dmgLinks:6738 placeGain:6803 placeHints:6838
 
 ### src/game-ui.js
 

@@ -2264,4 +2264,69 @@ I18N.en = {
   '16 en ligne': '16 in a row',
   'Pendant la nuit : 16 dégâts à tous les zombies de la ligne visée':
     'During the night: 16 damage to every zombie on the target row',
+  // v283 : nouvelles cartes et combinaisons
+  'Fourgon et Rempart du 7 h 12 : bloque, 20 PV, frappe au contact (3 dégâts). Une fois par nuit, dès que 3 zombies sont sur sa ligne ou sa colonne, il charge : 6 dégâts à chacun':
+    'Iron Van and 7:12 Rampart: blocks, 20 HP, strikes on contact (3 damage). Once per night, as soon as 3 zombies are on its row or column, it charges: 6 damage to each',
+  'Rangers d’Acier': 'Steel Rangers',
+  '3 · Recul': '3 · Push',
+  '3 dégâts au contact et repousse le zombie d’une case, 6 PV':
+    '3 damage on contact and pushes the zombie back one tile, 6 HP',
+  'Skateur à clé': 'Wrench Skater',
+  'Tank · Répare': 'Tank · Repairs',
+  'Tank : 12 PV, 1 dégât au contact, et répare 1 PV à une défense ou un poste voisin à chaque tour':
+    'Tank: 12 HP, 1 damage on contact, and repairs 1 HP to an adjacent defense or post each turn',
+  'La Rubanière': 'The Bandager',
+  'Soin 2': 'Heal 2',
+  'Tous les 2 tours, bande l’unité voisine la plus blessée : +2 PV':
+    'Every 2 turns, bandages the most wounded adjacent unit: +2 HP',
+  'Wagonnet à pieux': 'Spiked Mine Cart',
+  '10 PV · pieux': '10 HP · spikes',
+  'Bloque, 10 PV, 1 dégât à chaque zombie qui le frappe': 'Blocks, 10 HP, 1 damage to each zombie that hits it',
+  'Le Marabout': 'The Witch Doctor',
+  'Soin · Protège': 'Heal · Protects',
+  'Soin à distance : 1 PV tous les 2 tours à l’unité la plus blessée à 2 cases. Les unités à 2 cases ou moins perdent 1 PV de moins par coup':
+    'Ranged heal: 1 HP every 2 turns to the most wounded unit within 2 tiles. Units within 2 tiles lose 1 less HP per hit',
+  'Le Saute-Viaduc': 'The Viaduct Jumper',
+  '2 · P3': '2 · R3',
+  '2 dégâts par tour, portée 3': '2 damage per turn, range 3',
+  'La Lame punk': 'The Punk Blade',
+  'Équipement d’un combattant au corps à corps : +2 dégâts': 'Gear for a melee fighter: +2 damage',
+  'Le Ronin': 'The Ronin',
+  Exécute: 'Executes',
+  'Équipement d’un combattant au corps à corps : toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas les boss)':
+    'Gear for a melee fighter: every 4 attacks, kills an ordinary zombie in one blow (not bosses)',
+  'Miss Two-Colts': 'Miss Two-Colts',
+  'Miss One-Colt et La Barmaid : 2 tirs de 2 dégâts par tour, portée 3':
+    'Miss One-Colt and the Barmaid: 2 shots of 2 damage per turn, range 3',
+  'La Reine des fauves': 'The Queen of Beasts',
+  '6 · Étourdit': '6 · Stuns',
+  'La Dompteuse et Madame Pompon : le tigre frappe 6 dégâts au contact et étourdit 1 tour, 14 PV':
+    'The Tamer and Madame Pompon: the tiger strikes for 6 damage on contact and stuns for 1 turn, 14 HP',
+  'Le Géant du ring': 'The Ring Giant',
+  '22 PV · 3 · Recul 2': '22 HP · 3 · Push 2',
+  'L’Hercule et le Videur : Tank, 22 PV, 3 dégâts au contact, chaque coup repousse de 2 cases':
+    'The Strongman and the Bouncer: Tank, 22 HP, 3 damage on contact, each hit pushes back 2 tiles',
+  'Le Gladiateur punk': 'The Punk Gladiator',
+  '16 PV · 3 · Bouclier': '16 HP · 3 · Shield',
+  'Le Videur et le Clown : Tank, 16 PV, ne perd jamais plus de 3 PV par coup, 3 dégâts et repousse':
+    'The Bouncer and the Clown: Tank, 16 HP, never loses more than 3 HP per hit, 3 damage and pushes back',
+  'Le Survolté': 'The Supercharged',
+  'Professeur Volts et le Grillage : un arc frappe 3 zombies à 2 cases (2 dégâts) à chaque tour, même sans courant':
+    'Professor Volts and the Fence: an arc hits 3 zombies within 2 tiles (2 damage) every turn, even without power',
+  'Le Bal des épouvantails': 'The Scarecrow Ball',
+  '16 PV · 3 · Attire': '16 HP · 3 · Lures',
+  'Monsieur Paille et le Clown : les zombies à 3 cases viennent danser vers lui ; 3 dégâts et repousse, 16 PV':
+    'Mister Straw and the Clown: zombies within 3 tiles come dance toward him; 3 damage and pushes back, 16 HP',
+  'Le Grand Final forain': 'The Fairground Finale',
+  '12 PV · Brûle 2': '12 HP · Burns 2',
+  'Baril surprise et Brasero : bloque, 12 PV, à chaque tour 2 dégâts et feu aux zombies collés à lui':
+    'Surprise Barrel and Brazier: blocks, 12 HP, every turn 2 damage and fire to zombies next to it',
+  'Le Convoi des secours': 'The Rescue Convoy',
+  '30 PV · 2 ×3': '30 HP · 2 ×3',
+  'Le Mastodonte et le Calibre 50 : Tank, 30 PV, attire les zombies proches, 3 tirs de 2 dégâts par tour, portée 2':
+    'The Mastodon and the .50 Cal: Tank, 30 HP, lures nearby zombies, 3 shots of 2 damage per turn, range 2',
+  'Le Roi du pogo': 'The Mosh Pit King',
+  '4 zone · Recul': '4 area · Push',
+  'Les Rangers et le Clown : 4 dégâts à tous les zombies autour et les repousse, 14 PV':
+    'The Rangers and the Clown: 4 damage to every zombie around and pushes them back, 14 HP',
 };

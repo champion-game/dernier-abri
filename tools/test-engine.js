@@ -323,7 +323,7 @@ for (const t of PLAY) {
   if (D.react) continue;
   check(`pose de ${t}`, () => {
     const st = fresh();
-    st.grid[2 * Z.N + 4] = { t: 'gun', hp: 1, gold: D.gold ? 1 : 0 };
+    st.grid[2 * Z.N + 4] = { t: D.melee ? 'axe' : 'gun', hp: 1, gold: D.gold ? 1 : 0 };
     const i = D.onUnit ? 2 * Z.N + 4 : D.instant ? Z.C : freeCells(st).find(j => Z.canPlace(st, t, j));
     ok(i != null, 'aucune case valide');
     ok(Z.canPlace(st, t, i), 'canPlace refuse');
@@ -548,14 +548,10 @@ check('tirs lents : bonus fixes multipliés par l’intervalle (v136)', () => {
     ok(Z.canPlace(st, 'fourgon', I(M, 3)), 'refusé sur la route');
     ok(!Z.canPlace(st, 'fourgon', I(3, 3)), 'accepté hors route');
   });
-  check('Cheminots : Rosa a +1 portée sur une route', () => {
-    ok(drop('rosa', I(1, M), [I(4, M)], 2)[0] > 0, 'ne tire pas à 3 cases sur la route');
-    eq(drop('rosa', I(1, 3), [I(4, 3)], 2)[0], 0, 'tire à 3 cases hors route');
-  });
-  check('Cheminots : Fourgon + Gros Charbon donnent l’Express de minuit', () => {
+  check('Cheminots : Fourgon + Rempart du 7 h 12 donnent l’Express de minuit', () => {
     const st = fresh();
     Z.place(st, 'fourgon', I(M, 2), rng(1));
-    Z.place(st, 'charbon', I(M, 3), rng(1));
+    Z.place(st, 'rempart', I(M, 3), rng(1));
     ok(
       st.grid.some(u => u && u.t === 'express'),
       'pas d’évolution',
@@ -572,7 +568,7 @@ check('tirs lents : bonus fixes multipliés par l’intervalle (v136)', () => {
   });
   check('Cheminots : palier 2, un train passe tous les 5 tours sur la route la plus chargée', () => {
     const d = drop('chief_rail', I(1, 1), [I(M, 2), I(M, 3), I(8, 8)], 5, st => {
-      ['rosa', 'bielle', 'aiguille'].forEach((k, j) => Z.place(st, k, I(9, 1 + j), rng(1), true));
+      ['hirond', 'bielle', 'aiguille'].forEach((k, j) => Z.place(st, k, I(9, 1 + j), rng(1), true));
     });
     ok(d[0] >= 4 && d[1] >= 4, 'pas de train ' + d);
     eq(d[2], 0, 'train hors route');
@@ -600,7 +596,7 @@ check('nuit de pression : plus de zombies que la nuit d’avant', () => {
 check('Communauté palier 2 : 1re carte moins chère une seule fois', () => {
   const st = fresh();
   st.energy = 10;
-  ['vigile', 'teacher', 'market', 'carp', 'lead', 'monk'].forEach((t, k) => (st.grid[2 * Z.N + 1 + k] = { t, hp: 3 }));
+  ['ranger', 'rangers', 'market', 'carp', 'lead', 'monk'].forEach((t, k) => (st.grid[2 * Z.N + 1 + k] = { t, hp: 3 }));
   const c1 = Z.costOf(st, 'gun');
   Z.place(st, 'gun', 6 * Z.N + 4, rng(2));
   ok(Z.costOf(st, 'gun') === c1 + 1, 'remise appliquée deux fois');
@@ -705,8 +701,8 @@ check('factions : paliers à 2 et 5 survivants ; constructions et machines ne co
 });
 check('Chef : compte pour 2 survivants', () => {
   const st = fresh();
-  st.grid[10] = { t: 'chief_mil', hp: 5 };
-  eq(Z.famLevels(st).mil, 1);
+  st.grid[10] = { t: 'chief_police', hp: 5 };
+  eq(Z.famLevels(st).police, 1);
 });
 check('équipe complète : +2 PV', () => {
   const st = fresh();
@@ -825,7 +821,7 @@ check('postes de soutien : hors limite et non cumulables', () => {
   const st = fresh();
   ['gun', 'axe', 'med', 'snp', 'dog'].forEach((t, k) => Z.place(st, t, 2 * Z.N + 2 + k, rng(1)));
   ok(Z.canPlace(st, 'pump', 6 * Z.N + 4));
-  ok(Z.canPlace(st, 'lamp', 6 * Z.N + 5));
+  ok(Z.canPlace(st, 'flood', 6 * Z.N + 5));
   ok(!Z.isUnit('hospital'));
 });
 check('Opérateur radio : +1 à la limite, une seule fois', () => {
@@ -956,7 +952,7 @@ check('les soigneurs ne soignent pas les murs', () => {
 check('les réparateurs réparent les postes de soutien', () => {
   const st = fresh();
   st.grid[2 * Z.N + 2] = { t: 'mech', hp: 3 };
-  st.grid[2 * Z.N + 3] = { t: 'lamp', hp: 1 };
+  st.grid[2 * Z.N + 3] = { t: 'flood', hp: 1 };
   Z.startNight(st, rng(1));
   st.pending = [];
   st.z = [];
@@ -992,16 +988,6 @@ check('Maître-chien : les chiens voisins font +1 dégât', () => {
   z.hp = 99;
   Z.step(st);
   ok(99 - z.hp > a, 'pas de bonus');
-});
-check('Éclaireur : le zombie touché est marqué (+1 dégât)', () => {
-  const st = fresh();
-  st.grid[5 * Z.N + 4] = { t: 'scout', hp: 3 };
-  Z.startNight(st, rng(1));
-  st.pending = [];
-  const z = { id: 1, k: 'fat', pos: 2 * Z.N + 4, hp: 99, max: 99, cd: 99, style: 0 };
-  st.z = [z];
-  Z.step(st);
-  ok(z.markT > 0, 'pas marqué');
 });
 check('Assassin : exécute un zombie ordinaire toutes les 4 attaques, jamais le Colosse', () => {
   const st = fresh();
@@ -1199,7 +1185,7 @@ check('éditions : Dorée +1 dégât, Blindée +50 % PV, la carte revient avec s
 check('éditions : 2 Fantômes hors limite, pas 3', () => {
   const st = fresh();
   for (let k = 0; k < Z.unitCap(st); k++)
-    Z.place(st, ['gun', 'axe', 'med', 'snp', 'cook', 'monk', 'kid'][k], 2 * Z.N + 1 + k, rng(1));
+    Z.place(st, ['gun', 'axe', 'med', 'snp', 'pharma', 'monk', 'hunter'][k], 2 * Z.N + 1 + k, rng(1));
   ok(!Z.canPlace(st, 'dog', 6 * Z.N + 4), 'limite non atteinte');
   ok(Z.canPlace(st, 'dog~fan', 6 * Z.N + 4), 'Fantôme refusé');
   Z.place(st, 'dog~fan', 6 * Z.N + 4, rng(1));
@@ -1254,7 +1240,7 @@ check('éditions : deck (limite partagée, 1 spéciale par carte, 5 au plus)', (
   ok(/une seule/.test(Z.deckError(base.concat(['gun~dor', 'gun~arm']), own)), '2 spéciales du même type');
   ok(
     /au maximum/.test(
-      Z.deckError(base.concat(['gun~dor', 'axe~dor', 'dog~dor', 'cop~arm', 'kid~dor', 'monk~arm']), own),
+      Z.deckError(base.concat(['gun~dor', 'axe~dor', 'dog~dor', 'cop~arm', 'hunter~dor', 'monk~arm']), own),
     ),
     '6 spéciales acceptées',
   );

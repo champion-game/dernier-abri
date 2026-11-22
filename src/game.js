@@ -120,11 +120,11 @@ const svg = t => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICON[
 const ART_DIR = 'assets/cards/',
   ART_TEST = '';
 const ART_FILES =
-  'air amb axe bar barrier brasero bunker butch car carp chief_care chief_comm chief_farm chief_mil chief_police chief_pyro chief_tech chief_trap coffee cook cop doc dog dogs door fen flame flare food grenade gun hospital hunter k9 kid kit lamp lead market mech med mg modwall molo monk mortar nailer napalm orderly patch pharma pitch priest radio ranger rep riot roadmap rocket sand scare sentry shot sht siren snp solar stretch swat teacher tear tesla tire turret vigile workshop xbow trap fire mine wire spike gas smoke bait dyn clay firetrap net bear horn rush molotov k9squad nightsnp heavyflame fortin autogun slaughter canteen gang saint tracker'.split(
+  'air amb axe bar barrier brasero bunker butch car carp chief_care chief_comm chief_farm chief_police chief_tech chief_trap coffee cop doc dog dogs door fen flame flare food grenade gun hospital hunter k9 kit lead market mech med mg modwall molo monk mortar nailer napalm orderly patch pharma pitch priest radio ranger rep riot roadmap rocket sand scare sentry shot sht siren snp solar swat tesla tire turret workshop xbow trap fire mine wire spike gas smoke bait dyn clay firetrap net bear horn rush molotov k9squad heavyflame fortin autogun saint'.split(
     ' ',
   );
 const ART_POP = ART_FILES.filter(t => t.startsWith('chief_')).concat(
-  'k9squad nightsnp heavyflame fortin autogun slaughter canteen gang saint tracker'.split(' '),
+  'k9squad heavyflame fortin autogun saint'.split(' '),
 );
 /* sprites du plateau (assets/sprites/<id>.webp, fond transparent) : remplacent le dessin en code dès que l'image est chargée.
    [mode, angle, taille] : rot = vu du dessus, tourné vers la cible (angle = direction regardée dans l'image) ;
@@ -134,16 +134,14 @@ const SPRD = {},
   SPR = {};
 [
   ['rot', 0, 40, 'gun'],
-  ['rot', 0, 46, 'snp chief_trap chief_care tracker'],
-  ['rot', 0.15, 46, 'chief_mil'],
-  ['rot', 0.3, 46, 'chief_pyro'],
+  ['rot', 0, 46, 'snp chief_trap chief_care'],
   ['rot', 0.5, 44, 'chief_farm'],
   ['rot', 0.6, 44, 'chief_tech'],
   ['rot', -0.4, 44, 'chief_comm'],
-  ['rot', 0.1, 48, 'nightsnp heavyflame'],
-  ['up', 0, 38, 'vigile cop butch med nailer ranger rocket priest stretch teacher flame cook pharma'],
+  ['rot', 0.1, 48, 'heavyflame'],
+  ['up', 0, 38, 'cop butch med nailer ranger rocket priest flame pharma'],
   ['up', 0, 34, 'dog dogs'],
-  ['up', 0, 44, 'k9squad gang slaughter'],
+  ['up', 0, 44, 'k9squad'],
   ['up', 0, 50, 'saint'],
   ['rot', 0, 34, 'z_walk'],
   ['up', 0, 30, 'z_crawl z_howl z_spit z_armor z_fat z_run'],
@@ -157,9 +155,8 @@ const SPRD = {},
   ['fix', 0, 48, 'bunker hospital'],
   ['fix', 0, 44, 'workshop market fire'],
   ['fix', 0, 40, 'scare spike net'],
-  ['fix', 0, 38, 'lamp'],
   ['fix', 0, 36, 'solar'],
-  ['fix', 0, 34, 'radio tesla canteen bear'],
+  ['fix', 0, 34, 'radio tesla bear'],
   ['fix', 0, 30, 'trap brasero smoke'],
   ['fix', 0, 28, 'siren dyn clay firetrap'],
   ['fix', 0, 26, 'gas mine'],
@@ -176,43 +173,31 @@ const SPRDC = {},
   SPRQ = [], // sprites en attente de chargement
   DOWN = Math.PI / 2;
 [
-  ['rot', DOWN, 44, 'gun snp sht xbow flame mg molo kid swat hunter vigile doc nailer ranger rocket'],
+  ['rot', DOWN, 44, 'gun snp sht xbow flame mg molo swat hunter doc nailer ranger rocket'],
   ['rot', DOWN, 46, 'mortar sentry turret'],
   ['fix', 0, 40, 'tesla'],
-  [
-    'rot',
-    DOWN,
-    46,
-    'axe cop butch monk riot pitch amb orderly med radio cook mech lead pharma priest stretch teacher carp',
-  ],
+  ['rot', DOWN, 46, 'axe cop butch monk riot pitch amb orderly med radio mech lead pharma priest carp'],
   ['rot', DOWN, 40, 'dog k9'],
   ['rot', DOWN, 46, 'dogs'],
-  [
-    'rot',
-    DOWN,
-    50,
-    'chief_police chief_mil chief_pyro chief_trap chief_farm chief_care chief_tech chief_comm k9squad nightsnp heavyflame slaughter saint tracker',
-  ],
-  ['rot', DOWN, 52, 'gang autogun'],
-  ['fix', 0, 50, 'canteen hospital market workshop'],
-  ['fix', 0, 42, 'lamp siren solar scare'],
+  ['rot', DOWN, 50, 'chief_police chief_trap chief_farm chief_care chief_tech chief_comm k9squad heavyflame saint'],
+  ['rot', DOWN, 52, 'autogun'],
+  ['fix', 0, 50, 'hospital market workshop'],
+  ['fix', 0, 42, 'siren solar scare'],
   ['wallh', 0, 54, 'sand bar barrier modwall fen'],
   ['fix', 0, 46, 'bunker'],
   ['fix', 0, 40, 'tire'],
   ['fix', 0, 40, 'fire spike net bear wire'],
   ['fix', 0, 32, 'trap mine clay gas smoke bait dyn firetrap'],
   ['fix', 0, 48, 'tower'],
-  ['rot', DOWN, 46, 'handler welder scout assassin fieldnurse genmech'],
+  ['rot', DOWN, 46, 'handler welder assassin fieldnurse genmech'],
   ['fix', 0, 40, 'brasero'],
   ['fix', 0, 40, 'trench rocks'],
   ['fix', 0, 36, 'pump flood'],
   ['fix', 0, 42, 'pit'],
   ['wallh', 0, 50, 'gate gabion'],
   ['rot', DOWN, 48, 'v_hmg v_medic v_sniper'],
-  ['rot', DOWN, 42, 'v_rdog'],
   ['rot', DOWN, 56, 'v_apc'],
   ['fix', 0, 46, 'v_radio'],
-  ['fix', 0, 52, 'v_cont'],
   ['fix', 0, 40, 'v_mines'],
   ['rot', DOWN, 34, 'z_walk z_run z_sap z_armor z_howl z_crawl z_spit z_boss z_mere z_zero'],
   ['rot', DOWN, 40, 'z_fat'],
@@ -238,7 +223,7 @@ else addEventListener('load', loadSprites);
 // cheminots : sprites de l'artiste seulement (pas d'image cartoon), v238
 const SPRDA = {};
 [
-  ['rot', DOWN, 46, 'rosa rempart bielle hirond charbon veuve aiguille'],
+  ['rot', DOWN, 46, 'rempart bielle hirond veuve aiguille'],
   ['rot', DOWN, 50, 'chief_rail'],
 ].forEach(([m, b, z, ids]) => ids.split(' ').forEach(k => (SPRDA[k] = [m, b, z])));
 function sprK(k) {
@@ -271,15 +256,15 @@ const popOK = t => Z.RAR[t] === 'leg' || !!(Z.U[t] && Z.U[t].evo);
 // style graphique : cartoon pour tout le monde (v77). Les cartes sans image cartoon gardent leur image réaliste.
 let ART_STYLE = 'cartoon';
 const CART_FILES = (
-  'chief_police chief_mil chief_pyro chief_trap chief_farm chief_care chief_tech chief_comm k9squad nightsnp ' +
-  'chief_rail rosa rempart bielle hirond charbon veuve aiguille fourgon nid butoir draisine billets retard coupsif express ' +
-  'gun snp sht xbow flame mg molo kid swat mortar sentry hunter turret tesla vigile doc nailer ranger rocket axe dog cop butch monk riot k9 dogs pitch amb orderly ' +
-  'med lamp radio cook mech siren lead solar pharma hospital priest stretch scare workshop teacher market carp canteen ' +
-  'fortin autogun tracker brasero dyn bear food kit rep roadmap gas molotov grenade shot flare bait patch napalm rush horn air trap wire mine spike tear firetrap fen fire clay sand bar modwall barrier bunker door car ' +
-  'tire smoke coffee net heavyflame slaughter gang saint handler welder scout assassin fieldnurse genmech shell gear binoc bandage medkit torch pills pack tape keys tower trench pump flood palis gate gabion log pit glass cans rocks supply airdrop jerry rest radioop talkie storm bomber noise v_heli v_hmg v_radio v_medic v_cont v_sniper v_mines v_rdog v_napalm v_apc'
+  'chief_police chief_trap chief_farm chief_care chief_tech chief_comm k9squad ' +
+  'chief_rail rempart bielle hirond veuve aiguille fourgon nid draisine billets coupsif express ' +
+  'gun snp sht xbow flame mg molo swat mortar sentry hunter turret tesla doc nailer ranger rocket axe dog cop butch monk riot k9 dogs pitch amb orderly ' +
+  'med radio mech siren lead solar pharma hospital priest scare workshop market carp ' +
+  'fortin autogun brasero dyn bear food kit rep roadmap gas molotov grenade shot flare bait patch napalm rush horn air trap wire mine spike firetrap fen fire clay sand bar modwall barrier bunker door car ' +
+  'tire smoke coffee net heavyflame saint handler welder assassin fieldnurse genmech shell gear binoc bandage medkit torch pills tape keys tower trench pump flood palis gate gabion log pit glass rocks supply airdrop jerry rest radioop talkie storm bomber noise v_heli v_hmg v_radio v_medic v_sniper v_mines v_napalm v_apc'
 ).split(' ');
 const CART_ZOMB = 'walk fat sap armor zdog crawl run howl spit boss mere zero'.split(' ');
-const CART_POP = CART_FILES.slice(0, 10);
+const CART_POP = CART_FILES.slice(0, 7); // chefs et Grand Numéro (v283 : liste raccourcie)
 const cartoon = t => CART_FILES.includes(t) && (ART_STYLE === 'cartoon' || !ART_FILES.includes(t));
 /* style artiste (v193, style officiel depuis la v246) : les images de l'artiste sont dans assets/art/<cards|sprites|relics|ui>/,
    avec le même nom de fichier que l'ancienne image. src/art-liste.js (node tools/art-liste.js) dit lesquelles existent ;
@@ -665,7 +650,7 @@ const art = t => {
 };
 const cc = t => `var(--k-${Z.U[t].cat})`;
 // à changer à chaque mise en ligne : permet de vérifier sur le téléphone qu'on a la dernière version
-const VERSION = 'v282 · 22 nov.';
+const VERSION = 'v283 · 22 nov.';
 // Police des chiffres et étiquettes dessinés sur la carte (même que les boutons : Oswald)
 const FONT_CHIFFRE = '"Oswald", "Arial Narrow", sans-serif';
 /* démo publique (v153) : DEMO_BUILD passe à true seulement dans la copie envoyée sur la page itch.io de la démo
@@ -1694,6 +1679,10 @@ function loadSave() {
         if (Array.isArray(d.s[k])) d.s[k] = d.s[k].filter(t => Z.U[t]);
       });
       if (d.s.next && !Z.U[d.s.next]) d.s.next = null;
+      // v283 : des cartes ont été retirées du jeu ; on les enlève de la boutique et des choix en attente
+      ['store', 'picks'].forEach(k => {
+        if (Array.isArray(d.s[k])) d.s[k] = d.s[k].filter(t => typeof t !== 'string' || Z.U[t]);
+      });
       if (Array.isArray(d.g.grid)) d.g.grid = d.g.grid.map(u => (u && Z.U[u.t] ? u : null));
       if (Array.isArray(d.g.bench)) d.g.bench = d.g.bench.filter(u => u && Z.U[u.t]);
       return d;
