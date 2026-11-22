@@ -14231,6 +14231,35 @@ html.artx.ax3.axpal #axBord > i {
   }
 }
 
+/* v296 : téléphone en portrait : plateau à palissade sans forêt (plateau-mur.webp, cases de 120,2 × 116,1 px à partir de (88, 104)) ;
+   le canvas (11 × 11 cases) prend toute la largeur, l'image (9 × 9 cases + palissade, un peu plus petite) est calée dessous */
+html.artx.ax3.axpal.axmur .axboard {
+  height: calc(var(--axB) * 0.96589) !important;
+}
+html.artx.ax3.axpal.axmur #ax3 #map {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  -webkit-mask: none;
+  mask: none;
+}
+html.artx.ax3.axpal.axmur #axBord,
+html.artx.ax3.axpal.axmur #axFar {
+  inset: auto;
+  left: 2.436%;
+  top: 0.947%;
+  width: 94.856%;
+  height: 98.19%;
+}
+html.artx.ax3.axpal.axmur #axBord {
+  background-image: var(--ui-plateau-mur, none);
+}
+html.artx.ax3.axpal.axmur #axBord > i {
+  -webkit-mask-image: var(--ui-plateau-mur);
+  mask-image: var(--ui-plateau-mur);
+}
+
 /* v241 : interface plus lisible (demande d'Amine) */
 /* 1 : compteur d'énergie toujours visible le jour : gros chiffre, jetons, à gauche du texte */
 .info.wn {

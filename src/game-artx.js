@@ -11,11 +11,27 @@ const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
 // v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cases de 87,2 × 90,4 px à partir de (235, 214)),
 // sur téléphone et sur PC (html.axpal) ; les zombies qui arrivent se voient dans les buissons autour (axFarDraw)
 const axPalWant = () => AX.on() && (ART_NEW.ui || []).includes('plateau-herbe.webp');
+// v296 : sur téléphone en portrait, plateau à palissade sans forêt (plateau-mur.webp, 1254 × 1254 px, cases de 120,2 × 116,1 px
+// à partir de (88, 104)) : la palissade couvre l'anneau d'où arrivent les zombies, le plateau prend toute la largeur (html.axmur)
+const axMurWant = () =>
+  axPalWant() &&
+  (ART_NEW.ui || []).includes('plateau-mur.webp') &&
+  !DE.classList.contains('felton') &&
+  matchMedia('(orientation:portrait)').matches;
 function axPalSet() {
-  const on = axPalWant();
-  if (on === DE.classList.contains('axpal')) return false;
+  const on = axPalWant(),
+    mur = on && axMurWant();
+  if (on === DE.classList.contains('axpal') && mur === DE.classList.contains('axmur')) return false;
   DE.classList.toggle('axpal', on);
-  Object.assign(AXI, on ? AXIm(1254, 1254, 87.2, 90.4, 235, 214) : AXIm(1254, 1254, 84.7, 88.8, 248, 204));
+  DE.classList.toggle('axmur', mur);
+  Object.assign(
+    AXI,
+    mur
+      ? AXIm(1254, 1254, 120.2, 116.1, 88, 104)
+      : on
+        ? AXIm(1254, 1254, 87.2, 90.4, 235, 214)
+        : AXIm(1254, 1254, 84.7, 88.8, 248, 204),
+  );
   AX.plat = null;
   return true;
 }
@@ -32,6 +48,11 @@ function axPalSet() {
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.clearRect(0, 0, ground.width, ground.height);
       g.drawImage(AX.plat, AXI.ox * k, AXI.oy * k, AXI.iw * k, AXI.ih * k);
+      // v296 : sous le plateau à palissade, terre des routes dans les ouvertures (là où les zombies entrent)
+      if (DE.classList.contains('axmur')) {
+        g.globalCompositeOperation = 'destination-over';
+        axMurRoads(g, k, '#5e3f24');
+      }
       g.restore();
     } catch (e) {}
   };
@@ -45,11 +66,13 @@ function axGround() {
 function axPlat() {
   const u = ART_NEW.ui || [];
   if (AX.plat || !u.includes('plateau.webp')) return axGround();
-  const f = DE.classList.contains('axpal')
-      ? 'plateau-herbe.webp'
-      : u.includes('plateau-foret.webp')
-        ? 'plateau-foret.webp'
-        : 'plateau.webp',
+  const f = DE.classList.contains('axmur')
+      ? 'plateau-mur.webp'
+      : DE.classList.contains('axpal')
+        ? 'plateau-herbe.webp'
+        : u.includes('plateau-foret.webp')
+          ? 'plateau-foret.webp'
+          : 'plateau.webp',
     im = new Image();
   AX.want = f;
   im.onload = () => {
@@ -683,6 +706,46 @@ try {
     return fi.apply(this, arguments);
   };
 }
+// v296 : plateau à palissade (téléphone) : le canvas déborde un peu de l'image ; on le découpe à la forme du plateau,
+// routes prolongées jusqu'au bord (les zombies y entrent), sinon la lumière du jour blanchit les coins
+// bouts des quatre routes, dans les ouvertures de la palissade (transparentes sur l'image), en px du canvas (k = px par unité)
+function axMurRoads(g, k, color) {
+  const mid = Math.floor(Z.N / 2) * T * k,
+    x0 = AXI.ox * k,
+    y0 = AXI.oy * k;
+  g.fillStyle = color;
+  g.fillRect(mid, y0, T * k, AXI.ih * k);
+  g.fillRect(x0, mid, AXI.iw * k, T * k);
+}
+function axMurMask() {
+  const k = cv.width / L,
+    key = cv.width + 'x' + cv.height;
+  if (AX.mask && AX.mask.key === key && AX.mask.plat === AX.plat) return AX.mask.c;
+  const c = document.createElement('canvas');
+  c.width = cv.width;
+  c.height = cv.height;
+  const g = c.getContext('2d');
+  g.drawImage(AX.plat, AXI.ox * k, AXI.oy * k, AXI.iw * k, AXI.ih * k);
+  axMurRoads(g, k, '#000');
+  AX.mask = { key, plat: AX.plat, c };
+  return c;
+}
+{
+  const fm = frameInner;
+  frameInner = function () {
+    const r = fm.apply(this, arguments);
+    try {
+      if (AX.plat && DE.classList.contains('axmur')) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.drawImage(axMurMask(), 0, 0);
+        ctx.restore();
+      }
+    } catch (e) {}
+    return r;
+  };
+}
 {
   const bg = buildGround;
   buildGround = function () {
@@ -1156,11 +1219,13 @@ function axFarDraw(cv) {
   const cx = c => AXI.x0 + (c - 0.5) * AXI.cw,
     cy = r => ((AXI.y0 + (r - 0.5) * AXI.ch) * AXI.cw) / AXI.ch; // centre d'une case du jeu, en px de l'image (hauteur redressée)
   // intérieur du cadre, en px de l'image : forêt (v230) ou buissons du plateau à routes en croix (v293)
+  // v296 : plateau à palissade (téléphone) : les silhouettes partent du bord de l'image
   const pal = DE.classList.contains('axpal'),
-    X0 = pal ? 78 : 72,
-    X1 = pal ? 1176 : 1242,
-    Y0 = ((pal ? 78 : 64) * AXI.cw) / AXI.ch,
-    Y1 = ((pal ? 1176 : 1028) * AXI.cw) / AXI.ch;
+    mur = DE.classList.contains('axmur'),
+    X0 = mur ? 0 : pal ? 78 : 72,
+    X1 = mur ? 1254 : pal ? 1176 : 1242,
+    Y0 = ((mur ? 0 : pal ? 78 : 64) * AXI.cw) / AXI.ch,
+    Y1 = ((mur ? 1254 : pal ? 1176 : 1028) * AXI.cw) / AXI.ch;
   g.save();
   g.scale(kx, ky);
   g.beginPath();
