@@ -14225,9 +14225,6 @@ html.artx.ax3.axpal #axBord > i {
   -webkit-mask-image: var(--ui-plateau-herbe);
   mask-image: var(--ui-plateau-herbe);
 }
-html.artx.ax3.axpal #axFar {
-  display: none;
-}
 @media (orientation: landscape) {
   html.artx.ax3.axpal:not(.felton) {
     --axBd: min(var(--axH), calc((100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) * 0.52));

@@ -9,7 +9,7 @@ const AXIm = (w, h, cw, ch, x0, y0) => {
 };
 const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
 // v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cases de 87,2 × 90,4 px à partir de (235, 214)),
-// sur téléphone et sur PC (html.axpal) ; pas de forêt autour : on ne voit plus les zombies arriver de loin
+// sur téléphone et sur PC (html.axpal) ; les zombies qui arrivent se voient dans les buissons autour (axFarDraw)
 const axPalWant = () => AX.on() && (ART_NEW.ui || []).includes('plateau-herbe.webp');
 function axPalSet() {
   const on = axPalWant();
@@ -1155,10 +1155,12 @@ function axFarDraw(cv) {
     wv = G.wave || 1;
   const cx = c => AXI.x0 + (c - 0.5) * AXI.cw,
     cy = r => ((AXI.y0 + (r - 0.5) * AXI.ch) * AXI.cw) / AXI.ch; // centre d'une case du jeu, en px de l'image (hauteur redressée)
-  const X0 = 72,
-    X1 = 1242,
-    Y0 = (64 * AXI.cw) / AXI.ch,
-    Y1 = (1028 * AXI.cw) / AXI.ch; // intérieur du cadre
+  // intérieur du cadre, en px de l'image : forêt (v230) ou buissons du plateau à routes en croix (v293)
+  const pal = DE.classList.contains('axpal'),
+    X0 = pal ? 78 : 72,
+    X1 = pal ? 1176 : 1242,
+    Y0 = ((pal ? 78 : 64) * AXI.cw) / AXI.ch,
+    Y1 = ((pal ? 1176 : 1028) * AXI.cw) / AXI.ch;
   g.save();
   g.scale(kx, ky);
   g.beginPath();
