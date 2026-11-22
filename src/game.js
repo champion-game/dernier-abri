@@ -1089,8 +1089,8 @@ function tuto(n) {
    La maison devient un fortin à une seule porte, au nord : la horde arrive par les 4 routes et fait le tour jusqu'à elle.
    Jour 1 : Fend-la-Bûche au nord de la maison, Planches clouées sur 4 cases (ouest, est et sud de la maison, et devant Fend-la-Bûche) : il est frappé.
    Jour 2 : Boîte à pharmacie sur Fend-la-Bûche, Fend-la-Bûche décalé à gauche, planches de devant déplacées à droite, L’Hercule dans la porte.
-   Jour 3 : L’Hercule avancé d'une case, Casque et plaques sur lui, Miss Deux-Colts derrière lui, Ronces de fer sur les 4 routes.
-   Jour 4 : planches de droite avancées (elles protègent Miss Deux-Colts), Miss Deux-Colts décalée à droite, Sœur Bicyclette derrière L’Hercule : Escouade.
+   Jour 3 : L’Hercule avancé d'une case, Casque et plaques sur lui, Miss One-Colt derrière lui, Ronces de fer sur les 4 routes.
+   Jour 4 : planches de droite avancées (elles protègent Miss One-Colt), Miss One-Colt décalée à droite, Sœur Bicyclette derrière L’Hercule : Escouade.
    Jour 5 : nuit rouge, sans guide. Les nuits du tutoriel sont réglées dans le moteur (Z.tutoOn).
    Pendant les jours guidés, seule l'action demandée est possible et seules les cases qui brillent l'acceptent. */
 const TUTO_DECK = [...Z.STARTER_DECK, 'kit', 'cop', 'wire', 'gear'];
@@ -1209,7 +1209,7 @@ function guideStep() {
       return ask(
         'gun',
         [T9(31)],
-        _t('Touche Miss Deux-Colts : un DPS à distance, elle tire à 2 cases.'),
+        _t('Touche Miss One-Colt : un DPS à distance, elle tire à 2 cases.'),
         _t('Pose-la juste derrière l’Hercule, à l’abri.'),
       );
     const w = TUTO_ROADS.filter(i => !at(i, 'wire'));
@@ -1228,7 +1228,7 @@ function guideStep() {
       T9(23),
       'bar',
       _t(
-        'Miss Deux-Colts va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.',
+        'Miss One-Colt va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.',
       ),
     ))
   )
@@ -1238,7 +1238,7 @@ function guideStep() {
       T9(31),
       T9(32),
       'gun',
-      _t('Touche Miss Deux-Colts pour la décaler à droite : la place derrière l’Hercule sera libre.'),
+      _t('Touche Miss One-Colt pour la décaler à droite : la place derrière l’Hercule sera libre.'),
     ))
   )
     return m;
@@ -1261,14 +1261,14 @@ const TUTO_NIGHT = [
   null,
   _t('Les zombies arrivent par les 4 routes et font le tour jusqu’à Fend-la-Bûche. Le bouton du bas accélère la nuit.'),
   _t('L’Hercule attire les zombies et les repousse ; Fend-la-Bûche frappe à côté de lui.'),
-  _t('Les Ronces de fer blessent et ralentissent les zombies pendant que Miss Deux-Colts les abat.'),
+  _t('Les Ronces de fer blessent et ralentissent les zombies pendant que Miss One-Colt les abat.'),
   _t('Escouade : Tank, Soin et DPS côte à côte gagnent chacun +1 dégât (ou +1 soin).'),
   _t('Nuit rouge : la horde est plus nombreuse !'),
 ];
 const TUTO_DAWN = [
   null,
   _t('Fend-la-Bûche a tenu la porte, mais il est blessé. Prends l’Hercule : demain, il encaissera à sa place.'),
-  _t('L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss Deux-Colts : elle tirera de derrière.'),
+  _t('L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss One-Colt : elle tirera de derrière.'),
   _t('Prends Sœur Bicyclette : avec l’Hercule et tes DPS, elle formera une escouade.'),
   _t('Ton escouade a tenu. Demain soir, c’est la nuit rouge : plus de zombies, et plus de guide.'),
   _t('Tutoriel terminé : tu sais tout l’essentiel. À toi de jouer !'),

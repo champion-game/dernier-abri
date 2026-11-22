@@ -25,8 +25,8 @@ I18N.en = {
     "<p><b>Stone</b> (Sandbag Wall, Rock Cages, Garden Bunker): doesn't burn, doesn't conduct, and a Sapper only deals 5 damage to it.</p>",
   '<p><b>Enclos</b> : des murs qui forment une boucle fermée. Les cases du milieu sont teintées de vert ; les unités qui s’y trouvent perdent 1 PV de moins par coup.</p>':
     '<p><b>Enclosure</b>: walls forming a closed loop. The squares inside are tinted green; units there lose 1 less HP per hit.</p>',
-  '<p><b>Grimpe</b> : les tireurs légers (Miss Deux-Colts, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>':
-    '<p><b>Climber</b>: light shooters (Miss Two-Guns, The Biathlete, Camp Crossbow…) climb onto a plain wall when placed on it: +1 range, and the wall takes melee hits (spit still targets the shooter). If the wall falls, the shooter falls too (2 damage). When moved, the wall stays in place.</p>',
+  '<p><b>Grimpe</b> : les tireurs légers (Miss One-Colt, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>':
+    '<p><b>Climber</b>: light shooters (Miss One-Colt, The Biathlete, Camp Crossbow…) climb onto a plain wall when placed on it: +1 range, and the wall takes melee hits (spit still targets the shooter). If the wall falls, the shooter falls too (2 damage). When moved, the wall stays in place.</p>',
   chute: 'fall',
   Choisie: 'Chosen',
   'Une carte pour toi.': 'A card for you.',
@@ -906,8 +906,8 @@ I18N.en = {
   'Deux survivants armés': 'Two armed survivors',
   'Un frère et une sœur, prêts à se battre, mais affamés.': 'A brother and a sister, ready to fight, but starving.',
   'Les nourrir': 'Feed them',
-  'Miss Deux-Colts et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.':
-    'Miss Two-Guns and Log Splitter join the shelter, but the shelter loses 3 HP.',
+  'Miss One-Colt et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.':
+    'Miss One-Colt and Log Splitter join the shelter, but the shelter loses 3 HP.',
   ' et ': ' and ',
   '{0} rejoignent l’abri.': '{0} join the shelter.',
   'Pas de place autour de l’abri : ils mangent et repartent.': 'No room around the shelter: they eat and leave.',
@@ -1716,8 +1716,8 @@ I18N.en = {
     "Tap the Strongman: he's a Tank. He draws zombies within 3 squares onto himself and pushes them back.",
   'L’Hercule encaisse, Fend-la-Bûche frappe. Touche « Affronter la nuit ».':
     'The Strongman takes the hits, Log Splitter strikes. Tap “Face the night”.',
-  'Touche Miss Deux-Colts : un DPS à distance, elle tire à 2 cases.':
-    'Tap Miss Two-Guns: a ranged DPS, she shoots 2 squares away.',
+  'Touche Miss One-Colt : un DPS à distance, elle tire à 2 cases.':
+    'Tap Miss One-Colt: a ranged DPS, she shoots 2 squares away.',
   'Touche Sœur Bicyclette : elle soigne à 2 cases, et deux fois plus un Tank.':
     'Tap Sister Bicycle: she heals 2 squares away, and twice as much on a Tank.',
   'Pose-la derrière l’Hercule.': 'Place her behind the Strongman.',
@@ -1728,8 +1728,8 @@ I18N.en = {
     'The Strongman draws the zombies and pushes them back; Log Splitter strikes beside him.',
   'Escouade : Tank, Soin et DPS côte à côte gagnent chacun +1 dégât (ou +1 soin).':
     'Squad: a Tank, a Heal and a DPS side by side each gain +1 damage (or +1 heal).',
-  'L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss Deux-Colts : elle tirera de derrière.':
-    "The Strongman took the hits for Log Splitter. Take Miss Two-Guns: she'll shoot from behind.",
+  'L’Hercule a pris les coups à la place de Fend-la-Bûche. Prends Miss One-Colt : elle tirera de derrière.':
+    "The Strongman took the hits for Log Splitter. Take Miss One-Colt: she'll shoot from behind.",
   'Prends Sœur Bicyclette : avec l’Hercule et tes DPS, elle formera une escouade.':
     "Take Sister Bicycle: with the Strongman and your DPS, she'll form a squad.",
   'Tutoriel terminé : tu sais tout l’essentiel. À toi de jouer !':
@@ -1766,14 +1766,14 @@ I18N.en = {
     'Place it on the 4 roads, where they leave the forest: every zombie gets hit as soon as it arrives.',
   'Les zombies seront ralentis dès les routes, puis abattus. Touche « Affronter la nuit ».':
     'The zombies will be slowed on the roads, then shot down. Tap “Face the night”.',
-  'Miss Deux-Colts va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.':
-    'Miss Two-Guns will move right: first tap the right boards to move them forward, they will protect her.',
-  'Touche Miss Deux-Colts pour la décaler à droite : la place derrière l’Hercule sera libre.':
-    'Tap Miss Two-Guns to shift her right: the spot behind the Strongman will be free.',
+  'Miss One-Colt va passer à droite : touche d’abord les planches de droite pour les avancer, elles la protégeront.':
+    'Miss One-Colt will move right: first tap the right boards to move them forward, they will protect her.',
+  'Touche Miss One-Colt pour la décaler à droite : la place derrière l’Hercule sera libre.':
+    'Tap Miss One-Colt to shift her right: the spot behind the Strongman will be free.',
   'Les zombies arrivent par les 4 routes et font le tour jusqu’à Fend-la-Bûche. Le bouton du bas accélère la nuit.':
     'The zombies come by all 4 roads and go around to Log Splitter. The bottom button speeds up the night.',
-  'Les Ronces de fer blessent et ralentissent les zombies pendant que Miss Deux-Colts les abat.':
-    'The Iron Brambles hurt and slow the zombies while Miss Two-Guns shoots them down.',
+  'Les Ronces de fer blessent et ralentissent les zombies pendant que Miss One-Colt les abat.':
+    'The Iron Brambles hurt and slow the zombies while Miss One-Colt shoots them down.',
   'Nuit rouge : la horde est plus nombreuse !': 'Red night: the horde is bigger!',
   'Fend-la-Bûche a tenu la porte, mais il est blessé. Prends l’Hercule : demain, il encaissera à sa place.':
     "Log Splitter held the door, but he's hurt. Take the Strongman: tomorrow he'll take the hits instead.",
@@ -1947,7 +1947,7 @@ I18N.en = {
   'Sœur Mêlée': 'Sister Scrum',
   'Sœur Pistole': 'Sister Pistol',
   'Frère Carillon': 'Brother Bell',
-  'Miss Deux-Colts': 'Miss Two-Guns',
+  'Miss One-Colt': 'Miss One-Colt',
   "L'Hercule": 'The Strongman',
   'Videur du chapiteau': 'Big Top Bouncer',
   'Caniche savant': 'Clever Poodle',
@@ -1964,7 +1964,7 @@ I18N.en = {
   'Le Samouraï': 'The Samurai',
   'Œil-de-Nuit': 'Night-Eye',
   'La Mère Abbesse': 'Mother Abbess',
-  'Sœur Lanterne': 'Sister Lantern',
+  'L’Infirmière': 'The Nurse',
   'La Kermesse': 'The Church Fete',
   'Dortoir des sœurs': "Sisters' Dormitory",
   'Cracheur de feu': 'Fire Breather',
@@ -2234,4 +2234,34 @@ I18N.en = {
     'A Hanger Radio in play adds one card to your hand each day.',
   'Les unités posées restent en place d’une nuit à l’autre et gardent leurs dégâts.':
     'Placed units stay put from one night to the next and keep their damage.',
+  // v283 : nouvelles valeurs des cartes
+  'Le premier zombie qui passe libère la fumée : les zombies autour sont désorientés 3 tours':
+    'The first zombie to pass releases the smoke: nearby zombies are disoriented for 3 turns',
+  '15 zone': '15 area',
+  'Pendant la nuit : 15 dégâts à tous les zombies à 2 cases ou moins de la case visée':
+    'During the night: 15 damage to every zombie within 2 tiles of the target tile',
+  'Pendant la nuit : 10 dégâts sur la case visée et autour':
+    'During the night: 10 damage on the target tile and around it',
+  'Pendant la nuit : 20 dégâts au zombie le plus proche de l’abri':
+    'During the night: 20 damage to the zombie closest to the shelter',
+  'PV max': 'Full HP',
+  'Pendant la nuit : une de tes unités récupère tous ses PV': 'During the night: one of your units recovers all its HP',
+  'Pendant la nuit : 10 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours':
+    'During the night: 10 damage on the target tile and around it, and the zombies there burn for 4 turns',
+  'Pendant la nuit : tous les zombies reculent de 3 cases (arrêtés par une défense)':
+    'During the night: every zombie is pushed back 3 tiles (stopped by a defense)',
+  'Tout sauf boss': 'All but bosses',
+  'Pendant la nuit : tous les zombies meurent, les boss tombent à 20 % de leurs PV':
+    'During the night: every zombie dies, bosses drop to 20% of their HP',
+  'Équipement : l’unité ne compte plus dans la limite d’unités (une seule fois par partie)':
+    'Gear: the unit no longer counts toward the unit limit (once per run)',
+  '+2 portée': '+2 range',
+  'Les tireurs voisins ont +2 portée': 'Adjacent shooters get +2 range',
+  'Les zombies qui passent saignent : 2 dégâts par tour pendant 3 tours':
+    'Zombies that walk over bleed: 2 damage per turn for 3 turns',
+  'Pendant la nuit : tous les zombies perdent 3 tours, mais le feu s’éteint':
+    'During the night: every zombie loses 3 turns, but fires go out',
+  '16 en ligne': '16 in a row',
+  'Pendant la nuit : 16 dégâts à tous les zombies de la ligne visée':
+    'During the night: 16 damage to every zombie on the target row',
 };

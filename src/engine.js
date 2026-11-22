@@ -77,7 +77,7 @@ const Z = (() => {
     },
     // tireurs
     gun: {
-      n: _t('Miss Deux-Colts'),
+      n: _t('Miss One-Colt'),
       cat: 'shoot',
       hp: 3,
       block: 1,
@@ -368,7 +368,7 @@ const Z = (() => {
       block: 0,
       smoke: 3,
       v: _t('Étourdit'),
-      d: _t('Le premier zombie qui passe libère la fumée : les zombies autour sont perdus 3 tours'),
+      d: _t('Le premier zombie qui passe libère la fumée : les zombies autour sont désorientés 3 tours'),
     },
     bait: {
       n: _t('Steak pendu'),
@@ -737,8 +737,8 @@ const Z = (() => {
       n: _t('Bombardement'),
       cat: 'react',
       react: 'cell',
-      v: _t('10 zone'),
-      d: _t('Pendant la nuit : 10 dégâts à tous les zombies à 2 cases ou moins de la case visée'),
+      v: _t('15 zone'),
+      d: _t('Pendant la nuit : 15 dégâts à tous les zombies à 2 cases ou moins de la case visée'),
     },
     // combattants des factions de soutien
     amb: {
@@ -918,36 +918,36 @@ const Z = (() => {
       n: _t("L'Ananas"),
       cat: 'react',
       react: 'cell',
-      v: _t('5 zone'),
-      d: _t('Pendant la nuit : 5 dégâts sur la case visée et autour'),
+      v: _t('10 zone'),
+      d: _t('Pendant la nuit : 10 dégâts sur la case visée et autour'),
     },
     shot: {
       n: _t('Tir de couverture'),
       cat: 'react',
       react: 'any',
-      v: '6',
-      d: _t('Pendant la nuit : 6 dégâts au zombie le plus proche de l’abri'),
+      v: '20',
+      d: _t('Pendant la nuit : 20 dégâts au zombie le plus proche de l’abri'),
     },
     patch: {
       n: _t('Rafistolage'),
       cat: 'react',
       react: 'unit',
-      v: _t('+5 PV'),
-      d: _t('Pendant la nuit : une de tes unités récupère 5 PV'),
+      v: _t('PV max'),
+      d: _t('Pendant la nuit : une de tes unités récupère tous ses PV'),
     },
     molotov: {
       n: _t('Molotov'),
       cat: 'react',
       react: 'cell',
       v: _t('Feu zone'),
-      d: _t('Pendant la nuit : 2 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours'),
+      d: _t('Pendant la nuit : 10 dégâts sur la case visée et autour, et les zombies y brûlent 4 tours'),
     },
     horn: {
       n: _t('Klaxon de détresse'),
       cat: 'react',
       react: 'any',
       v: _t('Recul'),
-      d: _t('Pendant la nuit : tous les zombies reculent d’une case'),
+      d: _t('Pendant la nuit : tous les zombies reculent de 3 cases (arrêtés par une défense)'),
     },
     rush: {
       n: _t("Shoot d'adrénaline"),
@@ -1025,7 +1025,7 @@ const Z = (() => {
       d: _t('2 dégâts au contact. Toutes les 4 attaques, il tue d’un coup un zombie ordinaire (pas le Colosse)'),
     },
     fieldnurse: {
-      n: _t('Sœur Lanterne'),
+      n: _t('L’Infirmière'),
       cat: 'help',
       hp: 3,
       block: 1,
@@ -1141,10 +1141,10 @@ const Z = (() => {
     v_napalm: {
       n: _t('Terre brûlée'),
       cat: 'react',
-      react: 'cell',
+      react: 'any',
       vic: 8,
-      v: _t('4 · Feu zone'),
-      d: _t('Pendant la nuit : 4 dégâts sur la case visée et autour, qui s’embrasent ensuite'),
+      v: _t('Tout sauf boss'),
+      d: _t('Pendant la nuit : tous les zombies meurent, les boss tombent à 20 % de leurs PV'),
     },
     v_apc: {
       n: _t('Le Mastodonte'),
@@ -1245,7 +1245,7 @@ const Z = (() => {
       onUnit: 1,
       equip: 1,
       v: _t('Hors limite'),
-      d: _t('Équipement : l’unité ne compte plus dans la limite d’unités'),
+      d: _t('Équipement : l’unité ne compte plus dans la limite d’unités (une seule fois par partie)'),
     },
     // postes de soutien : ne comptent pas dans la limite d'unités. Leur effet ne se cumule pas (une unité profite d'un seul poste de chaque sorte).
     tower: {
@@ -1253,8 +1253,8 @@ const Z = (() => {
       cat: 'post',
       hp: 8,
       block: 1,
-      v: _t('+1 portée'),
-      d: _t('Les tireurs voisins ont +1 portée'),
+      v: _t('+2 portée'),
+      d: _t('Les tireurs voisins ont +2 portée'),
     },
     trench: {
       n: _t('Le Boyau'),
@@ -1334,7 +1334,7 @@ const Z = (() => {
       block: 0,
       bleed: 3,
       v: _t('Saigne'),
-      d: _t('Les zombies qui passent saignent : 1 dégât par tour pendant 3 tours'),
+      d: _t('Les zombies qui passent saignent : 2 dégâts par tour pendant 3 tours'),
     },
     cans: {
       n: _t('Carillon de boîtes'),
@@ -1405,14 +1405,14 @@ const Z = (() => {
       cat: 'react',
       react: 'any',
       v: _t('Ralentit'),
-      d: _t('Pendant la nuit : tous les zombies perdent 2 tours, mais le feu s’éteint'),
+      d: _t('Pendant la nuit : tous les zombies perdent 3 tours, mais le feu s’éteint'),
     },
     bomber: {
       n: _t('Raid aérien'),
       cat: 'react',
       react: 'cell',
-      v: _t('8 en ligne'),
-      d: _t('Pendant la nuit : 8 dégâts à tous les zombies de la ligne visée'),
+      v: _t('16 en ligne'),
+      d: _t('Pendant la nuit : 16 dégâts à tous les zombies de la ligne visée'),
     },
     shell: {
       n: _t('Obus anti-Colosse'),
@@ -1972,7 +1972,7 @@ const Z = (() => {
     v_sniper: 3,
     v_mines: 2,
     v_rdog: 2,
-    v_napalm: 2,
+    v_napalm: 4,
     v_apc: 3,
     rocket: 3,
     amb: 2,
@@ -2031,7 +2031,7 @@ const Z = (() => {
     nid: 3,
     butoir: 1,
     draisine: 2,
-    billets: 1,
+    billets: 0,
     retard: 2,
     coupsif: 1,
     coffee: 0,
@@ -2085,7 +2085,7 @@ const Z = (() => {
     radioop: 3,
     talkie: 1,
     storm: 2,
-    bomber: 3,
+    bomber: 2,
     noise: 1,
   });
   const cost = t => COST[t] ?? 2;
@@ -3093,7 +3093,7 @@ const Z = (() => {
       ch: [
         {
           n: _t('Les nourrir'),
-          d: _t('Miss Deux-Colts et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.'),
+          d: _t('Miss One-Colt et Fend-la-Bûche rejoignent l’abri, mais l’abri perd 3 PV.'),
           go: (st, rnd) => {
             st.shelter = Math.max(1, st.shelter - 3);
             const a = recruit(st, 'gun', rnd),
@@ -4212,6 +4212,7 @@ const Z = (() => {
     if (D.react) return false;
     if (!moving && capFull(st, t, i)) return false;
     if (D.equip) {
+      if (t === 'keys' && st.keysUsed) return false; // v283 : une seule fois par partie
       const u = st.grid[i];
       return !!(
         u &&
@@ -4493,6 +4494,7 @@ const Z = (() => {
     if (D.equip && st.grid[i]) {
       const u = st.grid[i];
       (u.eq = u.eq || []).push(t);
+      if (t === 'keys') st.keysUsed = 1;
       if (t === 'gear') u.hp += 4;
     }
     if (t === 'supply') st.scrap += 6;
@@ -5151,7 +5153,7 @@ const Z = (() => {
     for (const z of alive())
       if (z.bleedT > 0) {
         z.bleedT--;
-        hit(st, z, 1, ev, -1, 1);
+        hit(st, z, 2, ev, -1, 1); // v283 : Tessons renforcés
       }
     st._su = null;
     for (const z of alive()) if (z.markT > 0) z.markT--;
@@ -5181,7 +5183,7 @@ const Z = (() => {
               (fl.police >= 2 && F === 'police' ? 1 : 0) +
               (fl.comm && F === 'comm' && D.rng > 1 ? 1 : 0) +
               (D.rng > 1 && hasEq(u, 'binoc') ? 1 : 0) +
-              (D.cat === 'shoot' && D.rng > 1 && nearPost(st, i, 'tower') ? 1 : 0) +
+              (D.cat === 'shoot' && D.rng > 1 && nearPost(st, i, 'tower') ? 2 : 0) +
               (D.railRng && onRoad(i) ? 1 : 0) +
               (u.perch && D.rng > 1 ? 1 : 0) +
               (F === 'rail' && D.rng > 1 && nearNid(st, i) ? 1 : 0) +
@@ -5567,48 +5569,46 @@ const Z = (() => {
     st.energy -= costOf(st, t);
     st.disc = 1;
     const al = () => st.z.filter(z => z.hp > 0 && !isEdge(z.pos));
-    if (t === 'grenade') explode(st, i, 5, ev);
+    if (t === 'grenade') explode(st, i, 10, ev);
     if (t === 'v_napalm') {
-      explode(st, i, 4, ev);
-      around(i)
-        .concat(i)
-        .forEach(j => {
-          if (!isEdge(j) && j !== C && !st.grid[j]) st.grid[j] = { t: 'fire', hp: 1, gen: 1 };
-        });
-      al()
-        .filter(z => z.hp > 0 && cheb(z.pos, i) <= 1)
-        .forEach(z => {
-          z.burnT = Math.max(z.burnT || 0, 3);
-        });
-      ev.push({ i, k: 'molo', src: C });
+      // v283 : tous les zombies meurent, les boss tombent à 20 % de leurs PV
+      al().forEach(z => {
+        if (ZT[z.k].boss) z.hp = Math.min(z.hp, Math.max(1, Math.ceil(z.max * 0.2)));
+        else hit(st, z, z.hp * 10 + 100, ev, -1, 1);
+      });
+      ev.push({ i: C, k: 'air' });
     }
     if (t === 'shot') {
       const z = al().sort((a, b) => cheb(a.pos, C) - cheb(b.pos, C) || a.hp - b.hp)[0];
       if (z) {
-        hit(st, z, 6, ev, -1, 1);
+        hit(st, z, 20, ev, -1, 1);
         ev.push({ i: C, k: 'shot', zid: z.id });
       }
     }
     if (t === 'patch') {
       const u = st.grid[i];
-      cure(st, u, 5, { t });
+      cure(st, u, maxHp(st, u), { t }); // v283 : tous ses PV
       ev.push({ i, k: 'heal' });
     }
     if (t === 'molotov') {
       al()
         .filter(z => cheb(z.pos, i) <= 1)
         .forEach(z => {
-          hit(st, z, 2, ev, -1, 1);
+          hit(st, z, 10, ev, -1, 1);
           z.burnT = Math.max(z.burnT || 0, 4);
         });
       ev.push({ i, k: 'molo', src: C });
     }
     if (t === 'horn') {
+      // v283 : recul de 3 cases, arrêté par une défense
       al().forEach(z => {
         if (ZT[z.k].boss) return;
-        const b = back(z.pos),
-          bu = st.grid[b];
-        if (!(bu && U[bu.t].block)) z.pos = b;
+        for (let n = 0; n < 3; n++) {
+          const b = back(z.pos),
+            bu = st.grid[b];
+          if (bu && U[bu.t].block) break;
+          z.pos = b;
+        }
       });
       ev.push({ i: C, k: 'horn' });
     }
@@ -5648,7 +5648,7 @@ const Z = (() => {
     }
     if (t === 'storm') {
       al().forEach(z => {
-        z.cd += 2;
+        z.cd += 3;
         z.burnT = 0;
       });
       st.grid.forEach((u, j) => {
@@ -5662,7 +5662,7 @@ const Z = (() => {
       const r = rc(i)[0];
       al()
         .filter(z => rc(z.pos)[0] === r)
-        .forEach(z => hit(st, z, 8, ev, -1, 1));
+        .forEach(z => hit(st, z, 16, ev, -1, 1));
       for (let c = 1; c < N - 1; c++) ev.push({ i: idx(r, c), k: 'boom' });
     }
     if (t === 'noise') {
@@ -5687,7 +5687,7 @@ const Z = (() => {
     if (t === 'air') {
       al()
         .filter(z => cheb(z.pos, i) <= 2)
-        .forEach(z => hit(st, z, 10, ev, -1, 1));
+        .forEach(z => hit(st, z, 15, ev, -1, 1));
       ev.push({ i, k: 'air' });
     }
     if (t === 'napalm') {

@@ -151,7 +151,7 @@ const RULES = [
         '<p><b>Enclos</b> : des murs qui forment une boucle fermée. Les cases du milieu sont teintées de vert ; les unités qui s’y trouvent perdent 1 PV de moins par coup.</p>',
       ) +
       _t(
-        '<p><b>Grimpe</b> : les tireurs légers (Miss Deux-Colts, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>',
+        '<p><b>Grimpe</b> : les tireurs légers (Miss One-Colt, La Biathlète, Arbalète de camp…) montent sur un mur simple en y étant posés : +1 portée, et le mur encaisse les coups au contact (les crachats visent le tireur). Si le mur tombe, le tireur chute (2 dégâts). Déplacé, il laisse le mur en place.</p>',
       ),
   ],
   [

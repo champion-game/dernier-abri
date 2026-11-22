@@ -56,9 +56,9 @@ for (const t of KEYS) {
   const D = Z.U[t];
   check(`carte ${t} : nom, type et texte`, () => ok(D.n && D.cat && D.d, 'champ manquant'));
   if (!D.evo)
-    check(`carte ${t} : coût entre 0 et 3`, () => {
+    check(`carte ${t} : coût entre 0 et 4`, () => {
       const c = Z.cost(t);
-      ok(fin(c) && c >= 0 && c <= 3, 'coût ' + c);
+      ok(fin(c) && c >= 0 && c <= 4, 'coût ' + c);
     });
   if (D.block) check(`carte ${t} : PV positifs`, () => ok(fin(D.hp) && D.hp > 0, 'PV ' + D.hp));
   if (D.dmg != null)
@@ -1533,7 +1533,7 @@ for (let d = 0; d < 40; d++) {
     );
   const ZE = g.Z;
   check('traduction : moteur en anglais (noms de cartes et de zombies)', () => {
-    eq(ZE.U.gun.n, 'Miss Two-Guns');
+    eq(ZE.U.gun.n, 'Miss One-Colt');
     eq(ZE.ZT.walk.n, 'Walker');
     eq(ZE.U.gun.v, '2 · R2');
   });
