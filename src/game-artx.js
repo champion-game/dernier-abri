@@ -16,7 +16,7 @@ function axPalSet() {
   const on = axPalWant();
   if (on === DE.classList.contains('axpal')) return false;
   DE.classList.toggle('axpal', on);
-  Object.assign(AXI, on ? AXIm(890, 931, 84.7, 88.8, 64, 66) : AXIm(1254, 1254, 84.7, 88.8, 248, 204));
+  Object.assign(AXI, on ? AXIm(1254, 1254, 87.2, 90.4, 235, 214) : AXIm(1254, 1254, 84.7, 88.8, 248, 204));
   AX.plat = null;
   return true;
 }
