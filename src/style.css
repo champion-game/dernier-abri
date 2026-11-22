@@ -16495,3 +16495,13 @@ html.eco.artx .cf:is(.cs-hex, .cs-dia) .cf-cost {
   filter: drop-shadow(0.5cqw 0 0 #120c06) drop-shadow(-0.5cqw 0 0 #120c06) drop-shadow(0 0.5cqw 0 #120c06)
     drop-shadow(0 -0.5cqw 0 #120c06);
 }
+/* v295 : sur ordinateur, tout bouton cliquable grossit un peu au survol (demande d’Amine).
+   La propriété « scale » s’ajoute aux « transform » existants sans les écraser ; les cartes gardent leur propre animation. */
+@media (hover: hover) {
+  html.artx button:not(.card, .citem, .gift, .pick) {
+    transition: scale 0.12s ease-out;
+  }
+  html.artx button:not(.card, .citem, .gift, .pick):not(:disabled):hover {
+    scale: 1.06;
+  }
+}
