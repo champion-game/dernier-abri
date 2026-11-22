@@ -11,13 +11,10 @@ const AXI = AXIm(1254, 1254, 84.7, 88.8, 248, 204);
 // v292 : plateau à routes en croix d'Amine (plateau-herbe.webp, 1254 × 1254 px, cases de 87,2 × 90,4 px à partir de (235, 214)),
 // sur téléphone et sur PC (html.axpal) ; les zombies qui arrivent se voient dans les buissons autour (axFarDraw)
 const axPalWant = () => AX.on() && (ART_NEW.ui || []).includes('plateau-herbe.webp');
-// v296 : sur téléphone en portrait, plateau à palissade sans forêt (plateau-mur.webp, 1254 × 1254 px, cases de 120,2 × 116,1 px
+// v296 : sur téléphone (portrait, et paysage depuis la v298), plateau à palissade sans forêt (plateau-mur.webp, 1254 × 1254 px, cases de 120,2 × 116,1 px
 // à partir de (88, 104)) : la palissade couvre l'anneau d'où arrivent les zombies, le plateau prend toute la largeur (html.axmur)
 const axMurWant = () =>
-  axPalWant() &&
-  (ART_NEW.ui || []).includes('plateau-mur.webp') &&
-  !DE.classList.contains('felton') &&
-  matchMedia('(orientation:portrait)').matches;
+  axPalWant() && (ART_NEW.ui || []).includes('plateau-mur.webp') && !DE.classList.contains('felton');
 function axPalSet() {
   const on = axPalWant(),
     mur = on && axMurWant();

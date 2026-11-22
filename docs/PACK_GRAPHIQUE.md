@@ -16,7 +16,7 @@ Règle : chaque nouvelle image garde **le même nom de fichier** que celle qu’
 | Fonds d’écran | 7 paysage + 1 portrait | webp, 1672 × 941 / 841 × 1870 | `assets/ui/fond*.webp` |
 | Logo, affiche | 4 | webp, svg | `barricard.webp`, `logo.svg`, `keyart*.webp` |
 | Abri fortifié, hélicoptère | 2 | webp transparent | `shelter_fort.webp`, `heli.webp` |
-| Plateau (style artiste) | 3 | webp (`plateau-mur` : fond transparent) | `assets/art/ui/plateau.webp` (active le style), `plateau-herbe.webp` (PC, téléphone tourné), `plateau-mur.webp` (téléphone en portrait, v296) |
+| Plateau (style artiste) | 3 | webp (`plateau-mur` : fond transparent) | `assets/art/ui/plateau.webp` (active le style), `plateau-herbe.webp` (PC), `plateau-mur.webp` (téléphone, portrait et paysage, v296-v298) |
 | Matières de l’interface | 2 en image (bois, clou) + 6 en essai | webp, raccordables | `wood.webp`, `nail.png`, `tools/textures.py` |
 | Curseurs | 3 jeux × 4 (normal, clic, glisser, interdit) | png 32 × 32 | `assets/cursors/` |
 | Icônes de l’application | 3 | png 180 / 192 / 512 | `assets/icons/` |
