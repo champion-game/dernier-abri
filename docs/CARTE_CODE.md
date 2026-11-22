@@ -231,7 +231,7 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 ## src/style.css
 
-16416 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1289 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+16495 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1301 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -543,3 +543,5 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 16277 v267 (option B) : faction et rôle en un seul filigrane : plus de pastille en bas de la car
 - 16300 v288 (choix d’Amine) : retour au cadre à fenêtre carrée (assets/art/ui/cadre-noir.webp, 63
 - 16340 éditions spéciales : leur propre cadre carré de l’artiste
+- 16416 v289 : effets de la fenêtre (liseré, teinte, particules, reflet du métal) suivent la fenêt
+- 16455 v289 : coût des pièges (hexagone) et des objets et réactions (losange) : même relief que l
