@@ -4528,6 +4528,8 @@ const Z = (() => {
   const TUTO_N = 5,
     TUTO_W = [{ walk: 2 }, { walk: 3 }, { walk: 3 }, { walk: 4 }];
   const tutoOn = st => !!(st && st.tuto && st.night <= TUTO_N);
+  // v291 (demande d'Amine, jeu trop facile) : +20 % de zombies ordinaires à chaque nuit (hors tutoriel, sa nuit rouge comprise, et défi du jour)
+  const WAVE_MULT = 1.2;
   function waveList(st) {
     const e = st.event.id,
       w = {};
@@ -4541,6 +4543,7 @@ const Z = (() => {
         if (e === 'lune') v *= 1.5;
         v = Math.round(
           v *
+            (st.fixedW || tutoOn(st) ? 1 : WAVE_MULT) *
             (1 + 0.15 * mc(st, 'nombre')) *
             (respite(st.night, st) ? 0.7 : 1) *
             ((PLACES[st.place] || {}).count || 1) *
@@ -5858,6 +5861,7 @@ const Z = (() => {
     RARITY,
     RAR,
     waveCount,
+    WAVE_MULT,
     SIDES,
     UPGRADABLE,
     get HPS() {

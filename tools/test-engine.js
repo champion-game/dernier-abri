@@ -377,28 +377,32 @@ check('PV zombies : par paliers réguliers, pas d’explosion', () => {
   ok(Math.abs(a - b) < 1e-9, 'croissance non linéaire');
 });
 // tutoriel guidé (v164) : la disposition demandée au joueur doit marcher (presque) à tous les coups
-check('tutoriel : nuits 1 à 4 à horde fixe par les 4 routes, sans événement ; nuit 5 normale', () => {
-  const st = Z.newState('surv', 'bois', rng(3));
-  st.tuto = 1;
-  for (let n = 1; n <= 4; n++) {
-    st.night = n;
-    Z.newDay(st, rng(n));
-    st.night = n;
-    eq(st.event.id, 'calme');
-    Z.startNight(st, rng(n));
-    const w = Z.TUTO_W[n - 1];
-    eq(
-      st.pending.length,
-      Object.values(w).reduce((a, b) => a + b, 0),
-    );
-  }
-  st.night = 5;
-  Z.startNight(st, rng(5));
-  const n5 = st.pending.length;
-  st.tuto = 0;
-  Z.startNight(st, rng(5));
-  eq(n5, st.pending.length);
-});
+check(
+  'tutoriel : nuits 1 à 4 à horde fixe par les 4 routes, sans événement ; nuit 5 normale sans les +20 % (v291)',
+  () => {
+    const st = Z.newState('surv', 'bois', rng(3));
+    st.tuto = 1;
+    for (let n = 1; n <= 4; n++) {
+      st.night = n;
+      Z.newDay(st, rng(n));
+      st.night = n;
+      eq(st.event.id, 'calme');
+      Z.startNight(st, rng(n));
+      const w = Z.TUTO_W[n - 1];
+      eq(
+        st.pending.length,
+        Object.values(w).reduce((a, b) => a + b, 0),
+      );
+    }
+    st.night = 5;
+    Z.startNight(st, rng(5));
+    const n5 = st.pending.length;
+    st.tuto = 0;
+    Z.startNight(st, rng(5));
+    // v291 : la nuit rouge du tutoriel garde l'effectif d'avant les +20 % (premiers pas du joueur)
+    ok(n5 < st.pending.length && n5 >= Math.round(st.pending.length / Z.WAVE_MULT) - 1, n5 + ' / ' + st.pending.length);
+  },
+);
 check('tutoriel : Bûcheron blessé la nuit 1, escouade au jour 4, la maison tient', () => {
   let lost = 0,
     deaths = 0;
@@ -578,12 +582,18 @@ check('tanks : 1 dégât de base (v136)', () => {
   ['cop', 'monk', 'riot', 'amb', 'handler', 'v_apc', 'saint', 'chief_farm'].forEach(k => eq(Z.U[k].dmg, 1));
   eq(Z.U.pitch.dmg, 2);
 });
+check('vagues : +20 % de zombies ordinaires (v291)', () => {
+  const st = fresh();
+  st.night = 12;
+  const a = Z.waveList(st).walk;
+  eq(a, Math.round(Z.waveCount('walk', 12) * 1.2));
+});
 check('nuit rouge : +15 % de zombies sur le total (v132)', () => {
   const st = fresh(),
     sum = w => Z.ZK.filter(k => !Z.ZT[k].boss).reduce((a, k) => a + w[k], 0);
   st.night = 15;
   const a = sum(Z.waveList(st));
-  const b = Z.ZK.filter(k => !Z.ZT[k].boss).reduce((x, k) => x + Z.waveCount(k, 15), 0);
+  const b = Z.ZK.filter(k => !Z.ZT[k].boss).reduce((x, k) => x + Math.round(Z.waveCount(k, 15) * Z.WAVE_MULT), 0);
   eq(a, b + Math.round(b * Z.PRESSURE));
 });
 check('nuit de pression : plus de zombies que la nuit d’avant', () => {

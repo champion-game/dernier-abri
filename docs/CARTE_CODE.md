@@ -7,7 +7,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 
 1. `src/i18n.js` (57 lignes)
 2. `src/lang-en.js` (2361 lignes)
-3. `src/engine.js` (6020 lignes)
+3. `src/engine.js` (6024 lignes)
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1728 lignes)
@@ -105,7 +105,7 @@ _t:19 _tPage:41
 - **3862** améliorations et reliques : statistiques réelles d'une carte : upgDesc:3864 stat:3881 upgrade:3931 addRelic:3935 relicChoices:3945 draftChoices:3951 dailyPlan:3973 dailyState:4004 storeOffer:4025 buyStore:4038 pay:4044 fireAmmo:4056
 - **4076** pose des cartes : frees:4092 canMove:4105 move:4109 wallLinks:4121 fixLinks:4128 recall:4136 placeBench:4147 useCharges:4169 lineCells:4181 placeLine:4197 canPlace:4210 place:4235
 - **4307** fusion et évolutions : absorb:4323 merge:4338 mkey:4391 mtr:4397 cure:4410 lose:4423 applyItem:4490
-- **4522** la nuit : waveList:4531 broodDeath:4578 zMaxHp:4584 newcomers:4594 spawn:4599 bigNight:4609 nextWave:4613 startNight:4618 hit:4675 explode:4711 lureTarget:4719 nearestLure:4727 squad:4751 dmgParts:4763 attack:4829 strike:4932 enter:5050 step:5140 endNight:5515 canReact:5592 react:5606 runNight:5764
+- **4522** la nuit : waveList:4533 broodDeath:4581 zMaxHp:4587 newcomers:4597 spawn:4602 bigNight:4612 nextWave:4616 startNight:4621 hit:4678 explode:4714 lureTarget:4722 nearestLure:4730 squad:4754 dmgParts:4766 attack:4832 strike:4935 enter:5053 step:5143 endNight:5518 canReact:5595 react:5609 runNight:5767
 
 ### src/audio.js
 
