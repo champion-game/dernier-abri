@@ -2785,7 +2785,74 @@ const CATC = {
 };
 let BARS = [],
   EYES = [],
-  LABELS = [];
+  LABELS = [],
+  LAST_LIGHTS = []; // lumières de la nuit en cours (drawDark), pour savoir si un zombie est dans le noir
+/* v299 : yeux lumineux des zombies dessinés par l'artiste. Position des yeux dans l'image (fraction de la largeur et de la
+   hauteur, sprite tourné vers le bas), couleur par famille (on devine ce qui arrive avant de le voir), taille (boss plus gros). */
+const ZOMBIE_EYES = {
+  walk: [0.47, 0.72, '#ff4a3a', 1],
+  crawl: [0.47, 0.74, '#ff4a3a', 1],
+  fat: [0.5, 0.63, '#ff4a3a', 1.1],
+  armor: [0.49, 0.78, '#ff4a3a', 1],
+  sap: [0.42, 0.62, '#ff4a3a', 1],
+  run: [0.46, 0.68, '#9fd8ff', 1],
+  zdog: [0.44, 0.9, '#ffe23a', 0.8],
+  spit: [0.46, 0.68, '#b6ff3a', 1],
+  howl: [0.37, 0.8, '#c58bff', 1],
+  boss: [0.4, 0.72, '#ff9a1a', 1.4],
+  mere: [0.47, 0.4, '#ff5ad2', 1.3],
+  zero: [0.46, 0.7, '#ff3a6a', 1.3],
+};
+// clignement : chaque zombie ferme les yeux 130 ms, à son propre rythme (2,6 à 5 s)
+function zombieBlinkOpen(v, now) {
+  if (reduce) return 1;
+  const period = 2600 + ((v.id * 613) % 2400);
+  return (now + v.id * 977) % period < 130 ? 0.2 : 1;
+}
+// part de lumière (0 à 1) à un point du plateau, selon le même dégradé que le disque LIGHT de l'obscurité
+function lightAt(x, y) {
+  let lit = 0;
+  for (const l of LAST_LIGHTS) {
+    const t = Math.hypot(x - l.x, y - l.y) / l.r;
+    if (t >= 1) continue;
+    lit += t < 0.55 ? 1 - (0.3 * t) / 0.55 : 0.7 * (1 - (t - 0.55) / 0.45);
+    if (lit >= 1) return 1;
+  }
+  return lit;
+}
+// note la place des yeux d'un zombie dessiné par l'artiste, en pixels de l'écran (le repère courant est celui du zombie)
+function pushSpriteEyes(v, p, now, alpha) {
+  const spec = ZOMBIE_EYES[v.k],
+    [im, dn] = sprK('z_' + v.k);
+  if (!spec || !im || !dn || dn[0] !== 'rot' || !ctx.getTransform) return;
+  const [fx, fy, color, big] = spec,
+    z = dn[2],
+    b = dn[1],
+    ratio = im.width / im.height,
+    w = ratio >= 1 ? z : z * ratio,
+    h = ratio >= 1 ? z / ratio : z,
+    m = ctx.getTransform(),
+    // drawSpr tourne le sprite de -b : on applique la même rotation au point des yeux et à leur écartement
+    toLocal = (dx, dy) => [dx * Math.cos(b) + dy * Math.sin(b), -dx * Math.sin(b) + dy * Math.cos(b)],
+    toScreen = ([x, y]) => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f],
+    cx = (fx - 0.5) * w,
+    cy = (fy - 0.5) * h,
+    gap = 2.4 * big,
+    left = toScreen(toLocal(cx - gap, cy)),
+    right = toScreen(toLocal(cx + gap, cy)),
+    scale = Math.hypot(m.a, m.b);
+  EYES.push({
+    screen: true,
+    left,
+    right,
+    r: 1.5 * big * scale,
+    color,
+    alpha,
+    wx: p.x,
+    wy: p.y,
+    open: zombieBlinkOpen(v, now),
+  });
+}
 // v139 : couleurs adaptées au daltonisme (palette Okabe-Ito) : bleu et orange pour tes unités, rose pour les zombies
 const HPC = () =>
   OPT.cb ? { ok: '#56b4e9', low: '#e69f00', z: '#cc79a7' } : { ok: '#9fd86b', low: '#e5484d', z: '#e5484d' };
@@ -5303,6 +5370,10 @@ function drawZombie(v, now) {
   if (zim) {
     if (zup && Math.cos(a) < -0.1) ctx.scale(-1, 1);
     drawSpr(zk, 0, 0, 0, 0);
+    if (!v.dying)
+      try {
+        pushSpriteEyes(v, p, now, alpha);
+      } catch (e) {}
     // v266 : touché, le zombie blanchit un instant (le dessin repassé en lumière ajoutée)
     const tw = now - (v.flash || -1e9);
     if (tw < 130 && !v.dying) {
@@ -6139,6 +6210,36 @@ function drawAmbient(now) {
   }
   ctx.restore();
 }
+// v299 : yeux des zombies de l'artiste, au-dessus de l'obscurité ; à fond dans le noir, 30 % dans la lumière
+function drawSpriteEyes() {
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  for (const e of EYES) {
+    if (!e.screen) continue;
+    const glow = 0.3 + 0.7 * (1 - lightAt(e.wx, e.wy));
+    ctx.globalAlpha = e.alpha * nightAmt * glow;
+    ctx.shadowColor = e.color;
+    ctx.shadowBlur = OPT.eco ? 0 : e.r * 4 * glow;
+    ctx.fillStyle = e.color;
+    for (const [x, y] of [e.left, e.right]) {
+      ctx.beginPath();
+      ctx.ellipse(x, y, e.r, e.r * e.open, 0, 0, 7);
+      ctx.fill();
+    }
+    // reflet blanc au centre : l'œil paraît briller, pas juste coloré
+    if (e.open === 1) {
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#fff';
+      ctx.globalAlpha *= 0.85;
+      for (const [x, y] of [e.left, e.right]) {
+        ctx.beginPath();
+        ctx.arc(x, y, e.r * 0.4, 0, 7);
+        ctx.fill();
+      }
+    }
+  }
+  ctx.restore();
+}
 function drawDark(now) {
   if (nightAmt < 0.01) return;
   const k = dark.width / (L + 2 * PADU);
@@ -6159,7 +6260,8 @@ function drawDark(now) {
   dctx.fillRect(0, 0, dark.width, dark.height);
   dctx.setTransform(k, 0, 0, k, PADU * k, PADU * k);
   dctx.globalCompositeOperation = 'destination-out';
-  for (const l of lights(now)) dctx.drawImage(LIGHT, l.x - l.r, l.y - l.r, 2 * l.r, 2 * l.r);
+  LAST_LIGHTS = lights(now);
+  for (const l of LAST_LIGHTS) dctx.drawImage(LIGHT, l.x - l.r, l.y - l.r, 2 * l.r, 2 * l.r);
   ctx.save();
   ctx.setTransform(...CAMZ);
   ctx.drawImage(dark, 0, 0, cv.width, cv.height);
@@ -6530,12 +6632,15 @@ function frameInner(now) {
     ctx.save();
     ctx.shadowColor = '#ff2a2a';
     ctx.shadowBlur = 6;
-    for (const [x, y, nx, ny, sz, al] of EYES) {
+    for (const e of EYES) {
+      if (e.screen) continue;
+      const [x, y, nx, ny, sz, al] = e;
       ctx.globalAlpha = al * nightAmt;
       circ(x + nx * 2 * sz, y + ny * 2 * sz, 1.3 * sz, '#ff4a3a');
       circ(x - nx * 2 * sz, y - ny * 2 * sz, 1.3 * sz, '#ff4a3a');
     }
     ctx.restore();
+    safe(() => drawSpriteEyes());
   }
   drawBars();
   ctx.save();
