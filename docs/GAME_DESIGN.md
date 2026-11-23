@@ -412,6 +412,8 @@ Les zombies sont peu nombreux mais coriaces : ils doivent arriver jusqu'aux déf
 Leurs PV restent stables jusqu'à la nuit 10, puis augmentent de 12 % par nuit (en plus des mutations).
 
 **v291 (demande d’Amine, jeu trop facile)** : chaque nuit amène **20 % de zombies ordinaires en plus** que les tables de vagues (`WAVE_MULT` dans `engine.js`), avant les autres bonus (lune, nuit rouge, lieu, mutations). Ni le tutoriel (nuit rouge comprise) ni le défi du jour ne changent.
+
+**v300 (demande d’Amine)** : dès qu’un boss (Colosse, Mère, Patient Zéro) entre sur le plateau, la vitesse de la nuit repasse à ×1 pour qu’on le voie arriver ; le bouton de vitesse permet de réaccélérer aussitôt.
 Les zombies apparaissent de façon échelonnée pendant la nuit, à une position aléatoire de la forêt (d'un seul côté après une Fusée de détresse). Les Colosses arrivent à partir du 10ᵉ tour des nuits 10, 20, 30…
 
 **Sapeur** (dès la nuit 4, 1 à 2 par nuit puis de plus en plus) : 12 PV, lent. Bardé d'explosifs, il ne contourne pas les murs : il fonce dedans et se fait sauter. 15 dégâts au rempart (le mur frappé, puis les plus solides du rempart), 6 à une unité, 3 aux unités et aux zombies autour. À l'abri : 3 dégâts. Tué avant, il explose quand même (3 autour, abri −1 s'il est collé). Contre lui : le tuer à distance, ou des murs isolés en avant comme leurres.

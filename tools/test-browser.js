@@ -384,6 +384,10 @@ async function run(vp, label, lang = 'fr') {
       while ((await p.evaluate(() => S.busy)) && t < 300) {
         await p.waitForTimeout(200);
         t++;
+        // l'arrivée d'un boss remet la vitesse à ×1 : on réaccélère
+        await p.evaluate(() => {
+          if (SPEED === 1) SPEED = 16;
+        });
         // nuit du Colosse : pause entre les 2 vagues, on relance
         if (await p.evaluate(() => !!S.pause)) {
           if (n === 10) await shot('09-pause-colosse');

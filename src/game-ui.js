@@ -1784,6 +1784,15 @@ function resumeWave() {
   render();
   f && f();
 }
+// demande d'Amine : la vitesse repasse à ×1 dès qu'un boss (Colosse, Mère, Patient Zéro) entre sur le plateau, pour le voir arriver
+function countBosses() {
+  return G.z.filter(z => Z.BOSSES.includes(z.k)).length;
+}
+function slowOnBoss(before) {
+  const now = countBosses();
+  if (now > before && SPEED !== 1) SPEED = 1;
+  return now;
+}
 async function night() {
   if (S.busy || S.dawnWait) return;
   S.busy = true;
@@ -1824,13 +1833,15 @@ async function night() {
   } catch (e) {}
   await nwait(900);
   if (run !== RUN) return;
-  let r;
+  let r,
+    bossCount = countBosses();
   do {
     const types = G.grid.map(u => u && u.t);
     r = Z.step(G);
     syncBoard();
     const now = performance.now();
     syncZ(now);
+    bossCount = slowOnBoss(bossCount);
     playEvents(r.ev, types, now);
     render();
     if (r.pause) {

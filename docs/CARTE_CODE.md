@@ -12,7 +12,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1728 lignes)
 7. `src/game-draw.js` (6955 lignes)
-8. `src/game-ui.js` (2075 lignes)
+8. `src/game-ui.js` (2086 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (861 lignes)
 11. `src/game-anim.js` (1328 lignes)
@@ -38,7 +38,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `buildGround` | game-draw.js:1303 | game-artx.js:38, game-artx.js:751 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
-| `feltLayout` | game-ui.js:1907 | game-artx.js:985, game-artx.js:1128 |
+| `feltLayout` | game-ui.js:1918 | game-artx.js:985, game-artx.js:1128 |
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1170 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
@@ -62,7 +62,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
 | `show` | game-screens.js:601 | game-anim.js:1305 |
 | `showAch` | game.js:902 | game-anim.js:1255 |
-| `tapCell` | game-ui.js:1624 | game-ui.js:2063 |
+| `tapCell` | game-ui.js:1624 | game-ui.js:2074 |
 | `title` | game-menu.js:452 | game-artx.js:354 |
 | `unitAnim` | game-draw.js:3116 | game-fx3.js:327 |
 | `zoomCf` | game-menu.js:268 | game-anim.js:349 |
@@ -143,7 +143,7 @@ _t:19 _tPage:41
 > Dernier Abri : interface du jour et de la nuit (fiche, main, plateau, déroulé de la nuit).
 
 - **3** combat events → visuals : playEvents:4 showHeal:501
-- **532** UI : ficheHtml:534 trackHtml:565 tagsHtml:582 shelHit:609 render:628 fireAmmo:879 updatePreview:903 curAt:1103 useBuild:1124 spentTrace:1132 countPlay:1140 placeLineUI:1151 dmgInfo:1201 dmgSnap:1215 bonusMsg:1223 unitLine:1265 hint:1432 showHint:1441 checkHints:1469 mergeFx:1493 playReact:1532 snapUndo:1570 doUndo:1585 squadFx:1612 tapCell:1624 peekScreen:1749 wavePause:1762 resumeWave:1773 night:1787 feltLayout:1907 ftPioche:1950 ftHorde:1974 ftJournal:1990 feltTabs:2018
+- **532** UI : ficheHtml:534 trackHtml:565 tagsHtml:582 shelHit:609 render:628 fireAmmo:879 updatePreview:903 curAt:1103 useBuild:1124 spentTrace:1132 countPlay:1140 placeLineUI:1151 dmgInfo:1201 dmgSnap:1215 bonusMsg:1223 unitLine:1265 hint:1432 showHint:1441 checkHints:1469 mergeFx:1493 playReact:1532 snapUndo:1570 doUndo:1585 squadFx:1612 tapCell:1624 peekScreen:1749 wavePause:1762 resumeWave:1773 countBosses:1788 slowOnBoss:1791 night:1796 feltLayout:1918 ftPioche:1961 ftHorde:1985 ftJournal:2001 feltTabs:2029
 
 ### src/game-screens.js
 
