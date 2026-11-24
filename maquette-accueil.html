@@ -4,7 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Barricard – maquette de l’accueil</title>
-    <!-- Maquette autonome de l’écran d’accueil : rien ici n’est branché au jeu. Images dans assets/maquette-accueil/. -->
+    <!-- Maquette autonome de l’écran d’accueil : rien ici n’est branché au jeu. Images dans assets/maquette-accueil/.
+     Les boutons sont ceux de l’accueil actuel (Jouer, Collection et decks, Défi du jour, barre du bas, roue dentée) ;
+     seuls Jouer, Collection et Défi prennent le nouveau style de plaque. -->
     <style>
       @font-face {
         font-family: Oswald;
@@ -19,9 +21,8 @@
         font-display: swap;
       }
       :root {
-        --creme: #f1dfb8;
-        --or: #d9a85f;
-        --rouge: #c4161c;
+        --creme: #f1e4c8;
+        --or: #c9a46a;
         --nuit: #0c0a0b;
       }
       * {
@@ -46,15 +47,12 @@
         cursor: pointer;
       }
 
-      /* fond flou qui remplit les bords quand la scène ne couvre pas tout l’écran */
       #flou {
         position: fixed;
         inset: -40px;
         background: url(assets/maquette-accueil/fond.webp) center/cover;
         filter: blur(18px) brightness(0.45);
       }
-
-      /* scène : l’image 1672 × 941 en pixels, mise à l’échelle par le script */
       #scene {
         position: absolute;
         left: 0;
@@ -78,21 +76,15 @@
       .calque {
         position: absolute;
         inset: 0;
-        will-change: transform;
+        pointer-events: none;
       }
       #fond {
         background: url(assets/maquette-accueil/fond.webp) 0 0/100% 100%;
       }
-      .abs {
-        position: absolute;
-        pointer-events: none;
-      }
 
-      /* étoiles qui scintillent */
+      /* ciel */
       .etoile {
         position: absolute;
-        width: 3px;
-        height: 3px;
         border-radius: 50%;
         background: #fff;
         box-shadow: 0 0 6px 1px #fff8;
@@ -134,33 +126,41 @@
           translate: -420px 140px;
         }
       }
-
-      /* lune rouge */
-      #lune {
-        left: 342px;
-        top: 47px;
-        width: 176px;
-        height: 176px;
-        border-radius: 50%;
-        box-shadow:
-          0 0 60px 20px #e0201844,
-          0 0 140px 50px #b0101022;
-        animation: lune 5s ease-in-out infinite;
+      #eclair {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 420px;
+        background: linear-gradient(#b8c6ff33, #0000);
+        opacity: 0;
       }
-      @keyframes lune {
-        50% {
-          box-shadow:
-            0 0 80px 30px #e0201866,
-            0 0 180px 70px #b0101033;
+      #eclair.go {
+        animation: eclair 0.9s ease-out;
+      }
+      @keyframes eclair {
+        0% {
+          opacity: 0;
+        }
+        8% {
+          opacity: 1;
+        }
+        16% {
+          opacity: 0.2;
+        }
+        24% {
+          opacity: 0.9;
+        }
+        100% {
+          opacity: 0;
         }
       }
 
-      /* lumières : fenêtres, mirador, lanterne */
+      /* lumières */
       .lueur {
         position: absolute;
         border-radius: 50%;
         mix-blend-mode: screen;
-        pointer-events: none;
       }
       #mirador {
         left: 975px;
@@ -225,8 +225,6 @@
           transform: scale(1.02);
         }
       }
-
-      /* fumée de la cheminée */
       .fumee {
         position: absolute;
         left: 1104px;
@@ -252,8 +250,6 @@
           transform: translate(46px, -150px) scale(3.2);
         }
       }
-
-      /* braises et lucioles */
       .braise {
         position: absolute;
         width: 4px;
@@ -277,8 +273,6 @@
           transform: translate(var(--x), -260px);
         }
       }
-
-      /* brume qui passe sur la table */
       .brume {
         position: absolute;
         left: -400px;
@@ -295,47 +289,12 @@
           transform: translateX(300px);
         }
       }
-
-      /* éclair lointain : tout le ciel s’éclaire un instant */
-      #eclair {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 420px;
-        background: linear-gradient(#b8c6ff33, #0000);
-        opacity: 0;
-        pointer-events: none;
-      }
-      #eclair.go {
-        animation: eclair 0.9s ease-out;
-      }
-      @keyframes eclair {
-        0% {
-          opacity: 0;
-        }
-        8% {
-          opacity: 1;
-        }
-        16% {
-          opacity: 0.2;
-        }
-        24% {
-          opacity: 0.9;
-        }
-        100% {
-          opacity: 0;
-        }
-      }
-
-      /* jetons étoile : petit reflet qui passe */
       .jeton {
         position: absolute;
         width: 118px;
         height: 118px;
         border-radius: 50%;
         overflow: hidden;
-        pointer-events: none;
       }
       .jeton::after {
         content: '';
@@ -357,70 +316,56 @@
         }
       }
 
-      /* cartes posées sur la table */
-      #table {
-        perspective: 1300px;
-        perspective-origin: 50% 0;
-      }
+      /* cartes : posées avec la même perspective que les cartes peintes (matrice 2D calculée par le script) */
       .carte {
         position: absolute;
+        left: 0;
+        top: 0;
         width: 158px;
-        aspect-ratio: 100/146;
-        transform-style: preserve-3d;
-        transition:
-          transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.25),
-          filter 0.35s;
-        cursor: pointer;
+        height: 231px;
+        transform-origin: 0 0;
+        pointer-events: none;
+      }
+      .carte .zone {
+        position: absolute;
+        inset: 0;
         pointer-events: auto;
+        cursor: pointer;
+      }
+      .carte .rot {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+        transition: transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
+      }
+      .carte.face .rot {
+        transform: perspective(700px) rotateY(180deg);
       }
       .carte .f,
       .carte .d {
         position: absolute;
         inset: 0;
-        border-radius: 7px;
+        border-radius: 9px;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
+      }
+      .carte .d {
+        background: url(assets/maquette-accueil/dos.webp) center/100% 100%;
+        box-shadow: 0 0 0 2px #1a120c;
       }
       .carte .f {
         background: center/100% 100% no-repeat;
         transform: rotateY(180deg);
-      }
-      .carte .d {
-        background: url(assets/maquette-accueil/dos.webp) center/100% 100%;
-        box-shadow: inset 0 0 0 2px #0006;
-      }
-      .carte .rot {
-        position: absolute;
-        inset: 0;
-        transform-style: preserve-3d;
-        transition: transform 0.6s cubic-bezier(0.3, 1.3, 0.5, 1);
-      }
-      .ombre {
-        position: absolute;
-        inset: 6% -2% -6% 4%;
-        border-radius: 10px;
-        background: #0009;
-        filter: blur(8px);
-      }
-      .carte .rot {
-        transform: translateZ(1px);
-      }
-      .carte.face .rot {
-        transform: translateZ(1px) rotateY(180deg);
-      }
-      .carte:hover,
-      .carte.zoom {
-        z-index: 20;
-        filter: drop-shadow(0 30px 30px #000c);
+        box-shadow: 0 0 0 2px #1a120c;
       }
       .carte .eclat {
         position: absolute;
         inset: 0;
-        border-radius: 7px;
+        border-radius: 9px;
         overflow: hidden;
         transform: rotateY(180deg) translateZ(0.5px);
         backface-visibility: hidden;
-        pointer-events: none;
+        -webkit-backface-visibility: hidden;
       }
       .carte .eclat::after {
         content: '';
@@ -437,50 +382,38 @@
           transform: translateX(130%);
         }
       }
-
-      /* pioche : pile de dos avec épaisseur */
-      #pioche {
+      .ombreC {
         position: absolute;
-        left: 520px;
-        top: 640px;
-        width: 170px;
-        aspect-ratio: 100/146;
-        transform: rotateX(46deg) rotateZ(4deg);
-        transform-style: preserve-3d;
-        transform-origin: 50% 100%;
-      }
-      #pioche i {
-        position: absolute;
-        inset: 0;
-        border-radius: 8px;
-        background: url(assets/maquette-accueil/dos.webp) center/100% 100%;
-        box-shadow: 0 0 0 1px #2a1d10;
-      }
-      #pioche .tr {
-        position: absolute;
-        inset: 0;
-        border-radius: 8px;
-        background: #e8d3a6;
-        box-shadow: 0 0 0 1px #2a1d10;
-      }
-      #pioche .ombreP {
-        position: absolute;
-        inset: 4% -6% -10% 2%;
-        background: #000b;
-        filter: blur(10px);
+        left: 0;
+        top: 0;
+        width: 158px;
+        height: 231px;
+        transform-origin: 0 0;
         border-radius: 12px;
+        background: #000;
+        opacity: 0.55;
+        filter: blur(7px);
       }
-      #pioche .haut {
-        transition: transform 0.5s;
+      .carte.levee {
+        z-index: 20;
+        filter: drop-shadow(0 26px 22px #000d);
       }
-      #pioche:hover .haut {
-        transform: translate3d(6px, -14px, 30px) rotateZ(-4deg);
+      /* tranches de la pioche */
+      .tranche {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 158px;
+        height: 231px;
+        transform-origin: 0 0;
+        border-radius: 9px;
+        background: #e6cf9f;
+        box-shadow: 0 0 0 2px #1a120c;
       }
 
-      /* logo, menu, icônes : placés par le script */
+      /* logo et menu (placés par le script) */
       #logo {
         position: absolute;
-        transform-origin: 50% 60%;
         opacity: 0;
         pointer-events: none;
       }
@@ -535,36 +468,19 @@
           transform: translate(2px, 0);
         }
       }
+
       #menu {
         position: absolute;
         display: flex;
         flex-direction: column;
-        gap: 0.55em;
+        align-items: stretch;
+        gap: 0.45em;
       }
-      .btn {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.6em;
-        width: 92%;
-        aspect-ratio: 803/192;
-        margin: 0 auto 0 4%;
-        background: url(assets/maquette-accueil/plaque.webp) center/100% 100% no-repeat;
-        font: 600 1em Oswald;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: var(--creme);
-        text-shadow:
-          0 2px 0 #000,
-          0 0 10px #0008;
+      .apparait {
         opacity: 0;
-        transform: translateX(-60px);
-        transition:
-          transform 0.18s,
-          filter 0.18s;
+        transform: translateX(-50px);
       }
-      .btn.go {
+      .apparait.go {
         animation: glisse 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
       }
       @keyframes glisse {
@@ -573,34 +489,65 @@
           transform: none;
         }
       }
+      .tag {
+        display: flex;
+        align-items: center;
+        gap: 0.6em;
+        margin: 0 0 0.3em;
+        font-size: 0.5em;
+        white-space: nowrap;
+        text-align: center;
+        text-shadow: 0 2px 4px #000;
+      }
+      .tag i {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, #0000, var(--or), #0000);
+      }
+      .info {
+        margin: 0.2em 0 0;
+        font-size: 0.5em;
+        text-align: center;
+        line-height: 1.35;
+        text-shadow: 0 2px 4px #000;
+      }
+      .btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55em;
+        width: 100%;
+        aspect-ratio: 803/192;
+        background: url(assets/maquette-accueil/plaque.webp) center/100% 100% no-repeat;
+        font: 600 0.78em Oswald;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--creme);
+        text-shadow:
+          0 2px 0 #000,
+          0 0 10px #0008;
+        transition:
+          transform 0.18s,
+          filter 0.18s;
+      }
       .btn svg {
-        width: 1.25em;
-        height: 1.25em;
+        width: 1.2em;
+        height: 1.2em;
         flex: none;
         fill: var(--creme);
         filter: drop-shadow(0 2px 0 #000);
       }
-      .btn span {
-        min-width: 6.2em;
-        text-align: left;
-      }
       .btn.jouer {
-        width: 100%;
-        margin-left: 0;
-        font-size: 1.32em;
+        font-size: 1.15em;
         background-image: url(assets/maquette-accueil/plaque-rouge.webp);
       }
-      .btn.jouer.vit {
-        animation: none;
-        opacity: 1;
-        transform: none;
-      }
-      .btn.jouer.vit::after {
+      .btn.jouer::after {
         content: '';
         position: absolute;
-        inset: 6% 4%;
+        inset: 8% 4%;
         border-radius: 4px;
-        box-shadow: 0 0 22px 4px #ff3a2a55;
+        box-shadow: 0 0 22px 4px #ff3a2a44;
         animation: pouls 2.2s ease-in-out infinite;
         pointer-events: none;
       }
@@ -609,21 +556,19 @@
           box-shadow: 0 0 34px 10px #ff3a2a88;
         }
       }
-      .btn.go:hover,
-      .btn.vit:hover {
-        transform: translateX(8px) scale(1.03);
+      .btn:hover {
+        transform: translateX(6px) scale(1.03);
         filter: brightness(1.18);
       }
       .btn:active {
-        transform: scale(0.97) !important;
+        transform: scale(0.97);
         filter: brightness(0.9);
       }
       .btn::before {
         content: '';
         position: absolute;
-        inset: 8% 3%;
+        inset: 10% 3%;
         border-radius: 4px;
-        overflow: hidden;
         background: linear-gradient(105deg, #0000 40%, #fff3 50%, #0000 60%) -200% 0/200% 100% no-repeat;
         transition: background-position 0.6s;
         pointer-events: none;
@@ -632,49 +577,96 @@
         background-position: 200% 0;
       }
 
-      #icones {
+      /* barre du bas et roue dentée : style actuel du jeu (panneau noir) */
+      #barre {
         position: fixed;
-        top: max(12px, env(safe-area-inset-top));
-        right: 14px;
+        left: 50%;
+        bottom: max(2vh, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
         display: flex;
-        gap: 10px;
+        width: min(60vw, 780px);
+        border-image: url(assets/art/ui/panneau-noir.webp) 36 fill / 10px stretch;
+        filter: drop-shadow(0 6px 10px #000c);
         z-index: 30;
+        opacity: 0;
+        transition: opacity 0.6s;
       }
-      .ico {
-        width: clamp(42px, 4.2vw, 62px);
-        aspect-ratio: 1;
+      #barre.go {
+        opacity: 1;
+      }
+      .tab {
+        flex: 1 1 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 0;
+        padding: 9px 6px;
+        border-left: 1px solid #c9a46a66;
+        font: 600 clamp(13px, 1.15vw, 16px) Oswald;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .tab:first-child {
+        border-left: 0;
+      }
+      .tab:hover {
+        color: #ffd88a;
+      }
+      .tab svg {
+        width: 21px;
+        height: 21px;
+        flex: none;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tab.cr {
+        flex: 0.6 1 0;
+        font: 400 14px Atkinson;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      #roue {
+        position: fixed;
+        top: max(2vh, env(safe-area-inset-top));
+        right: 1.5vw;
+        width: 46px;
+        height: 46px;
         display: grid;
         place-items: center;
-        background: #120e0c;
-        border: 2px solid var(--or);
-        box-shadow:
-          inset 0 0 0 2px #000,
-          0 4px 10px #000a;
-        clip-path: polygon(14% 0, 86% 0, 100% 14%, 100% 86%, 86% 100%, 14% 100%, 0 86%, 0 14%);
-        opacity: 0;
-        transform: translateY(-20px);
-        transition:
-          transform 0.2s,
-          filter 0.2s;
+        border-image: url(assets/art/ui/panneau-noir.webp) 36 fill / 8px stretch;
+        filter: drop-shadow(0 6px 10px #000c);
+        z-index: 30;
       }
-      .ico.go {
-        animation: glisse 0.5s ease-out forwards;
+      #roue svg {
+        width: 28px;
+        height: 28px;
+        fill: none;
+        stroke: var(--creme);
+        stroke-width: 2;
       }
-      .ico svg {
-        width: 56%;
-        height: 56%;
-        fill: var(--creme);
+      #roue:hover {
+        filter: brightness(1.35);
       }
-      .ico:hover {
-        filter: brightness(1.3);
+      #ver {
+        position: fixed;
+        right: 10px;
+        bottom: 6px;
+        margin: 0;
+        font-size: 11px;
+        opacity: 0.6;
+        z-index: 30;
       }
 
-      /* toast de la maquette */
       #toast {
         position: fixed;
         left: 50%;
-        bottom: 22px;
-        transform: translate(-50%, 30px);
+        top: 70px;
+        transform: translate(-50%, -20px);
         opacity: 0;
         background: #120e0ccc;
         border: 1px solid var(--or);
@@ -690,22 +682,22 @@
         opacity: 1;
         transform: translate(-50%, 0);
       }
-      #voile {
-        position: fixed;
-        inset: 0;
-        background: #000;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 50;
-        transition: opacity 0.5s;
-      }
-      #voile.on {
-        opacity: 1;
-      }
 
-      /* portrait (téléphone) : logo en haut, scène au milieu, boutons dessous */
-      body.portrait #menu {
-        gap: 12px;
+      /* téléphone en portrait : onglets icône au-dessus du texte, comme dans le jeu */
+      body.portrait #barre {
+        width: calc(100vw - 32px);
+      }
+      body.portrait .tab {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 2px;
+        font-size: 12px;
+      }
+      body.portrait .tab.cr {
+        display: none;
+      }
+      body.portrait #ver {
+        display: none;
       }
       body.portrait #scene {
         -webkit-mask-image: linear-gradient(#0000 0, #000 22%);
@@ -732,10 +724,8 @@
         <div class="jeton" style="left: 1266px; top: 770px; --d: 1s"></div>
         <div class="jeton" style="left: 1378px; top: 798px; --d: 1.6s"></div>
       </div>
-      <div class="calque" id="table">
-        <div id="pioche"></div>
-      </div>
-      <div class="calque" style="pointer-events: none">
+      <div class="calque" id="table"></div>
+      <div class="calque">
         <div class="brume" style="top: 600px"></div>
         <div
           class="brume"
@@ -746,10 +736,9 @@
 
     <div id="logo"><img src="assets/maquette-accueil/logo.webp" alt="Barricard" /></div>
     <nav id="menu">
-      <button class="btn jouer" data-msg="Jouer : lancement d’une partie">
-        <svg viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z" /></svg><span>Jouer</span>
-      </button>
-      <button class="btn" data-msg="Collection">
+      <p class="tag apparait"><i></i>Tiens 30 nuits jusqu’à l’arrivée des secours.<i></i></p>
+      <button class="btn jouer apparait" data-msg="Jouer">Jouer</button>
+      <button class="btn apparait" data-msg="Collection et decks">
         <svg viewBox="0 0 24 24">
           <rect x="3" y="5" width="10" height="15" rx="1.6" transform="rotate(-14 8 12.5)" />
           <rect
@@ -762,138 +751,181 @@
             stroke="#1a0f0c"
             stroke-width="1.8"
           /></svg
-        ><span>Collection</span>
+        >Collection et decks
       </button>
-      <button class="btn" data-msg="Progression">
+      <button class="btn apparait" data-msg="Défi du jour">
         <svg viewBox="0 0 24 24">
           <path
-            d="M12 2l5 2.6v5.2l-5 2.6-5-2.6V4.6zM6.5 11.3l5 2.6v5.4l-5 2.6-5-2.6v-5.4zM17.5 11.3l5 2.6v5.4l-5 2.6-5-2.6v-5.4z"
-          /></svg
-        ><span>Progression</span>
-      </button>
-      <button class="btn" data-msg="Options">
-        <svg viewBox="0 0 24 24">
-          <path
-            id="roue"
-            d="M10.3 2h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9L2 13.7v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8zM12 8.2a3.8 3.8 0 100 7.6 3.8 3.8 0 000-7.6z"
+            d="M7 2h2v2h6V2h2v2h2.5A1.5 1.5 0 0121 5.5v14a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 19.5v-14A1.5 1.5 0 014.5 4H7zM5 9v10h14V9zm2 2h3v3H7zm4.5 0h3v3h-3zm4.5 0h3v3h-3zm-9 4.5h3V18H7zm4.5 0h3V18h-3z"
             fill-rule="evenodd"
           /></svg
-        ><span>Options</span>
+        >Défi du jour
       </button>
+      <p class="info apparait">Prochain déblocage : La policière dans 8 nuits au total.</p>
     </nav>
-    <div id="icones">
-      <button class="ico" data-msg="Statistiques">
-        <svg viewBox="0 0 24 24"><path d="M3 15h4v6H3zM10 10h4v11h-4zM17 4h4v17h-4z" /></svg>
+    <nav id="barre">
+      <button class="tab" data-msg="Règles">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 5c3-1.5 6-1.5 9 0v15c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v15c3-1.5 6-1.5 9 0z" /></svg
+        ><span>Règles</span>
       </button>
-      <button class="ico" data-msg="Succès">
+      <button class="tab" data-msg="Bestiaire">
         <svg viewBox="0 0 24 24">
           <path
-            d="M7 3h10v2h4v3a5 5 0 01-4.6 5A5 5 0 0113 15.9V18h3v3H8v-3h3v-2.1A5 5 0 017.6 13 5 5 0 013 8V5h4zm10 4v4a3 3 0 002-3V7zM5 7v1a3 3 0 002 3V7z"
+            d="M12 3c-4.4 0-7.5 3-7.5 7 0 2.4 1.1 4 2.5 5v3h10v-3c1.4-1 2.5-2.6 2.5-5 0-4-3.1-7-7.5-7zM9 18v3M12 18v3M15 18v3"
           />
-        </svg>
+          <circle cx="9" cy="11" r="1.6" />
+          <circle cx="15" cy="11" r="1.6" /></svg
+        ><span>Bestiaire</span>
       </button>
-      <button class="ico" data-msg="Options">
-        <svg viewBox="0 0 24 24"><use href="#roue" /></svg>
+      <button class="tab" data-msg="Stats">
+        <svg viewBox="0 0 24 24"><path d="M5 20v-6M10 20V9M15 20v-8M20 20V5M3 20h19" /></svg><span>Stats</span>
       </button>
-    </div>
+      <button class="tab" data-msg="Succès">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 4h10v5a5 5 0 01-10 0zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3M12 14v4M8 21h8M9 18h6" /></svg
+        ><span>Succès 0/28</span>
+      </button>
+      <button class="tab cr" data-msg="Crédits">Crédits</button>
+    </nav>
+    <button id="roue" data-msg="Options" aria-label="Options">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3.2" />
+        <path
+          d="M12 2.5v2.6M12 18.9v2.6M21.5 12h-2.6M5.1 12H2.5M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8M18.7 18.7l-1.8-1.8M7.1 7.1L5.3 5.3"
+        />
+        <circle cx="12" cy="12" r="6.6" />
+      </svg>
+    </button>
+    <p id="ver">maquette · accueil</p>
     <div id="toast"></div>
-    <div id="voile"></div>
 
     <script>
       'use strict';
       const W = 1672,
-        H = 941;
+        H = 941,
+        CW = 158,
+        CH = 231;
       const $ = s => document.querySelector(s);
       const scene = $('#scene'),
         logo = $('#logo'),
-        menu = $('#menu');
+        menu = $('#menu'),
+        table = $('#table');
       const MAQ = 'assets/maquette-accueil/';
 
-      // --- Cartes de la main : les vraies cartes du jeu, à l'endroit des cartes peintes ---
-      const MAIN = [
-        { id: 'gun', x: 718, y: 690, rz: 4 },
-        { id: 'bar', x: 868, y: 700, rz: 3 },
-        { id: 'medkit', x: 1022, y: 708, rz: 6 },
-      ];
-      const POSE = 'rotateX(46deg)';
-      const table = $('#table');
-      // pioche : 8 dos empilés vers le bas pour montrer l'épaisseur
-      const pioche = $('#pioche');
-      pioche.innerHTML =
-        '<div class="ombreP"></div>' +
-        Array.from(
-          { length: 8 },
-          (_, i) => `<div class="tr" style="transform:translate3d(0,${(8 - i) * 2.2}px,${-(8 - i) * 1.4}px)"></div>`,
-        ).join('') +
-        '<i class="haut"></i>';
+      /* Coins (haut-gauche, haut-droit, bas-gauche) des cartes peintes, mesurés sur l'image 1672 × 941.
+   Chaque vraie carte reçoit la matrice qui l'envoie sur ces trois coins : même perspective que le dessin. */
+      const COINS = {
+        pioche: [
+          [590, 645],
+          [742, 670],
+          [490, 777],
+        ],
+        gun: [
+          [772, 725],
+          [915, 727],
+          [712, 872],
+        ],
+        bar: [
+          [920, 736],
+          [1052, 741],
+          [859, 892],
+        ],
+        medkit: [
+          [1065, 744],
+          [1209, 764],
+          [995, 890],
+        ],
+      };
+      const matrice = ([tl, tr, bl], dx = 0, dy = 0) =>
+        `matrix(${(tr[0] - tl[0]) / CW},${(tr[1] - tl[1]) / CW},${(bl[0] - tl[0]) / CH},${(bl[1] - tl[1]) / CH},${tl[0] + dx},${tl[1] + dy})`;
 
-      const cartes = MAIN.map((c, i) => {
+      function creer(cls, html = '') {
         const el = document.createElement('div');
-        el.className = 'carte';
-        el.innerHTML = `<div class="ombre"></div><div class="rot"><div class="d"></div><div class="f" style="background-image:url(${MAQ}carte-${c.id}.webp)"></div><div class="eclat"></div></div>`;
-        el.style.left = c.x + 'px';
-        el.style.top = c.y + 'px';
-        el.style.transformOrigin = '50% 100%';
-        // départ : sur la pioche, face cachée
-        const dx = 525 - c.x,
-          dy = 650 - c.y;
-        el.dataset.repos = `${POSE} rotateZ(${c.rz}deg)`;
-        el.style.transform = `translate3d(${dx}px,${dy}px,${10 + i}px) ${POSE} rotateZ(4deg)`;
-        el.style.opacity = '0';
+        el.className = cls;
+        el.innerHTML = html;
         table.appendChild(el);
-        // survol / toucher : la carte se lève vers le joueur pour être lue
-        const leve = () => {
-          el.style.transform = `translate3d(0,-150px,120px) rotateX(0deg) rotateZ(0deg) scale(1.45)`;
-        };
-        const repose = () => {
-          el.classList.remove('zoom');
-          el.style.transform = el.dataset.repos;
-        };
-        el.addEventListener(
-          'mouseenter',
-          () => matchMedia('(hover:hover)').matches && el.classList.contains('posee') && leve(),
+        return el;
+      }
+      // pioche : tranches empilées sous la carte du dessus (épaisseur vers le bas, comme sur le dessin)
+      const EPAISSEUR = 9;
+      creer('ombreC').style.transform = matrice(COINS.pioche, 10, EPAISSEUR * 6 + 8);
+      for (let i = EPAISSEUR; i >= 1; i--) creer('tranche').style.transform = matrice(COINS.pioche, 0, i * 6);
+      creer('carte', '<div class="rot"><div class="d"></div></div>').style.transform = matrice(COINS.pioche);
+
+      // main : les vraies cartes du jeu
+      const MAIN = ['gun', 'bar', 'medkit'];
+      const cartes = MAIN.map(id => {
+        const ombre = creer('ombreC');
+        ombre.style.transform = matrice(COINS[id], 8, 8);
+        ombre.style.opacity = 0;
+        const el = creer(
+          'carte',
+          `<div class="rot"><div class="d"></div><div class="f" style="background-image:url(${MAQ}carte-${id}.webp)"></div><div class="eclat"></div></div><div class="zone"></div>`,
         );
-        el.addEventListener(
-          'mouseleave',
-          () => el.classList.contains('posee') && !el.classList.contains('zoom') && repose(),
-        );
-        el.addEventListener('click', e => {
-          e.stopPropagation();
-          if (!el.classList.contains('posee')) return;
-          if (el.classList.toggle('zoom')) {
-            cartes.forEach(o => o !== el && o.classList.contains('zoom') && o.click());
-            leve();
-          } else repose();
-        });
+        el.repos = matrice(COINS[id]);
+        el.ombre = ombre;
+        el.carte = id;
+        el.style.transform = matrice(COINS.pioche);
+        el.style.visibility = 'hidden';
         return el;
       });
-      document.addEventListener('click', () => cartes.forEach(c => c.classList.contains('zoom') && c.click()));
+      const TRANSITION = 'transform .35s cubic-bezier(.2,.9,.3,1.15)';
 
-      // distribution : chaque carte part de la pioche, se retourne et se pose
+      // carte levée : droite, agrandie, au-dessus de sa place, pour être lue
+      function matriceLevee(el) {
+        const [, tr, bl] = COINS[el.carte];
+        const cx = (tr[0] + bl[0]) / 2;
+        const k = 1.5;
+        return `matrix(${k},0,0,${k},${cx - (CW * k) / 2},${H - CH * k - 95})`;
+      }
+      function lever(el) {
+        cartes.forEach(c => c !== el && reposer(c));
+        el.classList.add('levee');
+        el.style.transform = matriceLevee(el);
+      }
+      function reposer(el) {
+        if (!el.posee) return;
+        el.classList.remove('levee');
+        el.style.transform = el.repos;
+      }
+      // la carte ne réagit que si la souris est vraiment dessus (zone = la carte elle-même)
+      const survol = matchMedia('(hover:hover)').matches;
+      cartes.forEach(el => {
+        const zone = el.querySelector('.zone');
+        if (survol) {
+          zone.addEventListener('mouseenter', () => el.posee && lever(el));
+          zone.addEventListener('mouseleave', () => reposer(el));
+        } else {
+          zone.addEventListener('click', e => {
+            e.stopPropagation();
+            if (el.posee) el.classList.contains('levee') ? reposer(el) : lever(el);
+          });
+        }
+      });
+      document.addEventListener('click', () => cartes.forEach(reposer));
+
+      // distribution : chaque carte quitte la pioche, se retourne en vol et se pose à sa place
       function distribuer() {
         cartes.forEach((el, i) =>
           setTimeout(() => {
-            el.style.opacity = '1';
-            el.style.transition = 'transform .75s cubic-bezier(.25,1.2,.4,1)';
-            el.style.transform = `translate3d(0,-60px,80px) rotateX(20deg) rotateZ(${MAIN[i].rz}deg)`;
-            pioche.animate(
-              [
-                { transform: 'rotateX(46deg) rotateZ(4deg)' },
-                { transform: 'rotateX(46deg) rotateZ(4deg) translateY(4px)' },
-                { transform: 'rotateX(46deg) rotateZ(4deg)' },
-              ],
-              220,
+            el.style.visibility = 'visible';
+            const [tl] = COINS[el.carte];
+            const milieu = `matrix(1.1,0,0,1.1,${(tl[0] + 590) / 2 - 30},${(tl[1] + 645) / 2 - 170})`;
+            const anim = el.animate(
+              [{ transform: matrice(COINS.pioche) }, { transform: milieu, offset: 0.5 }, { transform: el.repos }],
+              { duration: 800, easing: 'cubic-bezier(.3,.8,.4,1)' },
             );
-            setTimeout(() => el.classList.add('face'), 180);
-            setTimeout(() => {
-              el.style.transform = el.dataset.repos;
-            }, 650);
-            setTimeout(() => {
-              el.style.transition = '';
-              el.classList.add('posee');
+            el.style.transform = el.repos;
+            setTimeout(() => el.classList.add('face'), 200);
+            anim.onfinish = () => {
+              el.style.transition = TRANSITION;
+              el.ombre.style.transition = 'opacity .3s';
+              el.ombre.style.opacity = 0.55;
+              el.posee = true;
               briller(el);
-            }, 1100);
-          }, i * 260),
+            };
+          }, i * 280),
         );
       }
       function briller(el) {
@@ -901,24 +933,24 @@
         void el.offsetWidth;
         el.classList.add('brille');
       }
-      // de temps en temps, un reflet passe sur une carte
       setInterval(() => {
         const c = cartes[Math.floor(Math.random() * 3)];
-        if (c.classList.contains('posee')) briller(c);
+        if (c.posee && !c.classList.contains('levee')) briller(c);
       }, 4200);
 
       // --- Ciel : étoiles, étoiles filantes, éclairs ---
       const ciel = $('#ciel');
       for (let i = 0; i < 46; i++) {
-        const s = document.createElement('div');
-        s.className = 'etoile';
         const x = Math.random() * W,
           y = Math.random() * 230;
         if (x < 640 && y < 320) {
           i--;
           continue;
-        } // le logo couvre ce coin
-        s.style.cssText = `left:${x}px;top:${y}px;--d:${2 + Math.random() * 4}s;--r:-${Math.random() * 5}s;width:${2 + Math.random() * 2.5}px;height:${2 + Math.random() * 2.5}px`;
+        } // coin du logo
+        const s = document.createElement('div');
+        const t = 2 + Math.random() * 2.5;
+        s.className = 'etoile';
+        s.style.cssText = `left:${x}px;top:${y}px;width:${t}px;height:${t}px;--d:${2 + Math.random() * 4}s;--r:-${Math.random() * 5}s`;
         ciel.appendChild(s);
       }
       const filante = document.createElement('div');
@@ -938,13 +970,18 @@
             eclair.classList.remove('go');
             void eclair.offsetWidth;
             eclair.classList.add('go');
+            if (logo.classList.contains('vit')) {
+              logo.classList.remove('tremble');
+              void logo.offsetWidth;
+              logo.classList.add('tremble');
+            }
             orage();
           },
           9000 + Math.random() * 9000,
         );
       })();
 
-      // --- Fumée de la cheminée et braises de la lanterne ---
+      // --- Fumée et braises ---
       const lum = $('#lumieres');
       for (let i = 0; i < 7; i++) {
         const f = document.createElement('div');
@@ -955,46 +992,52 @@
       for (let i = 0; i < 18; i++) {
         const b = document.createElement('div');
         b.className = 'braise';
-        const autourLanterne = i < 7;
-        b.style.cssText = autourLanterne
-          ? `left:${1555 + Math.random() * 40}px;top:${330 + Math.random() * 30}px;--d:${3 + Math.random() * 3}s;--r:-${Math.random() * 6}s;--x:${-30 + Math.random() * 60}px`
-          : `left:${560 + Math.random() * 900}px;top:${300 + Math.random() * 300}px;--d:${6 + Math.random() * 6}s;--r:-${Math.random() * 12}s;--x:${-80 + Math.random() * 160}px;background:#e9ff9a;box-shadow:0 0 8px 2px #c8ff5a88;width:3px;height:3px`;
+        b.style.cssText =
+          i < 7
+            ? `left:${1555 + Math.random() * 40}px;top:${330 + Math.random() * 30}px;--d:${3 + Math.random() * 3}s;--r:-${Math.random() * 6}s;--x:${-30 + Math.random() * 60}px`
+            : `left:${560 + Math.random() * 900}px;top:${300 + Math.random() * 300}px;--d:${6 + Math.random() * 6}s;--r:-${Math.random() * 12}s;--x:${-80 + Math.random() * 160}px;background:#e9ff9a;box-shadow:0 0 8px 2px #c8ff5a88;width:3px;height:3px`;
         lum.appendChild(b);
       }
 
-      // --- Mise en page : la scène couvre l'écran (paysage) ou se place au milieu (portrait) ---
+      // --- Mise en page (l'écran ne bouge pas avec la souris) ---
       let echelle = 1,
         ox = 0,
-        oy = 0,
-        portrait = false;
+        oy = 0;
       function placer() {
         const vw = innerWidth,
           vh = innerHeight;
-        portrait = vw / vh < 1.05;
+        const portrait = vw / vh < 1.05;
         document.body.classList.toggle('portrait', portrait);
         if (!portrait) {
-          // couvre l'écran, sans jamais couper le menu à gauche ni le logo en haut
+          // la scène couvre l'écran sans couper le menu à gauche ni le logo en haut
           echelle = Math.min(Math.max(vw / W, vh / H), vw / 1600, vh / 880);
           ox = (vw - W * echelle) / 2;
           oy = (vh - H * echelle) / 2;
-          if (ox < 0) ox = Math.max(ox, vw - W * echelle); // garde la droite (lanterne) si on rogne
-          // logo et boutons aux positions de la maquette de l'artiste
-          poser(logo, 40, 70, 565);
-          poser(menu, 50, 340, 460);
-          menu.style.fontSize = 34 * echelle + 'px';
+          if (ox < 0) ox = Math.max(ox, vw - W * echelle);
+          poser(logo, 45, 60, 540);
+          poser(menu, 55, 300, 430);
+          menu.style.fontSize = 40 * echelle + 'px';
         } else {
-          // portrait : la scène montre le plateau et les cartes (x 470 à 1500)
+          // portrait : logo en haut, plateau et cartes au milieu, boutons dessous
           echelle = vw / 1040;
           ox = -470 * echelle;
-          const hautMenu = Math.min(vh * 0.42, 350);
-          oy = vh - hautMenu - 945 * echelle;
-          const lw = Math.min(vw - 60, 400);
-          logo.style.cssText += `;left:${(vw - lw) / 2}px;top:${Math.max(66, oy + 90 * echelle - lw * 0.36 - 6)}px;width:${lw}px`;
-          const mw = Math.min(vw - 70, 310);
-          menu.style.left = (vw - mw) / 2 + 'px';
-          menu.style.width = mw + 'px';
-          menu.style.top = vh - hautMenu + 'px';
-          menu.style.fontSize = Math.min(23, mw / 13.5) + 'px';
+          const mw = Math.min(vw - 70, 300);
+          Object.assign(menu.style, {
+            left: (vw - mw) / 2 + 'px',
+            width: mw + 'px',
+            fontSize: Math.min(26, mw / 12) + 'px',
+          });
+          // le menu se place juste au-dessus de la barre du bas, la scène juste au-dessus du menu
+          const hautBarre = $('#barre').offsetHeight + 24;
+          const topMenu = vh - hautBarre - menu.offsetHeight - 6;
+          menu.style.top = topMenu + 'px';
+          oy = topMenu - 925 * echelle;
+          const lw = Math.min(vw - 80, 380);
+          Object.assign(logo.style, {
+            left: (vw - lw) / 2 + 'px',
+            top: Math.max(56, oy + 90 * echelle - lw * 0.36) + 'px',
+            width: lw + 'px',
+          });
         }
         scene.style.transform = `translate(${ox}px,${oy}px) scale(${echelle})`;
       }
@@ -1006,49 +1049,18 @@
       addEventListener('resize', placer);
       placer();
 
-      // --- Parallaxe à la souris (PC) ---
-      const calques = [
-        ['#fond', 4],
-        ['#ciel', 9],
-        ['#lumieres', 5],
-        ['#table', 12],
-      ].map(([s, f]) => [$(s), f]);
-      addEventListener('mousemove', e => {
-        if (portrait) return;
-        const nx = e.clientX / innerWidth - 0.5,
-          ny = e.clientY / innerHeight - 0.5;
-        calques.forEach(([el, f]) => {
-          el.style.transform = `translate(${-nx * f}px,${-ny * f}px)`;
-        });
-      });
-
-      // --- Entrée : logo, boutons, icônes, puis distribution des cartes ---
-      setTimeout(() => {
-        logo.classList.add('go');
-      }, 700);
+      // --- Entrée : logo, menu, barre, puis distribution des cartes ---
+      setTimeout(() => logo.classList.add('go'), 700);
       setTimeout(() => {
         logo.classList.remove('go');
         logo.style.opacity = 1;
         logo.classList.add('vit');
       }, 1850);
-      document.querySelectorAll('.btn').forEach((b, i) => setTimeout(() => b.classList.add('go'), 1300 + i * 120));
-      setTimeout(() => {
-        const j = $('.btn.jouer');
-        j.classList.remove('go');
-        j.classList.add('vit');
-      }, 2000);
-      document.querySelectorAll('.ico').forEach((b, i) => setTimeout(() => b.classList.add('go'), 1600 + i * 100));
+      document.querySelectorAll('.apparait').forEach((b, i) => setTimeout(() => b.classList.add('go'), 1250 + i * 110));
+      setTimeout(() => $('#barre').classList.add('go'), 1700);
       setTimeout(distribuer, 1900);
-      // le logo tremble à chaque éclair
-      new MutationObserver(() => {
-        if (eclair.classList.contains('go')) {
-          logo.classList.remove('tremble');
-          void logo.offsetWidth;
-          logo.classList.add('tremble');
-        }
-      }).observe(eclair, { attributes: true, attributeFilter: ['class'] });
 
-      // --- Boutons : simple message (maquette) ; Jouer fait un fondu au noir ---
+      // --- Boutons : simple message (maquette) ---
       const toast = $('#toast');
       let tt;
       document.querySelectorAll('[data-msg]').forEach(b =>
@@ -1058,11 +1070,6 @@
           toast.classList.add('on');
           clearTimeout(tt);
           tt = setTimeout(() => toast.classList.remove('on'), 1600);
-          if (b.classList.contains('jouer')) {
-            const v = $('#voile');
-            v.classList.add('on');
-            setTimeout(() => v.classList.remove('on'), 1100);
-          }
         }),
       );
     </script>
