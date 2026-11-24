@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Barricard – maquette de l’accueil</title>
     <!-- Maquette autonome de l’écran d’accueil : rien ici n’est branché au jeu. Images dans assets/maquette-accueil/.
-     Les boutons sont ceux de l’accueil actuel (Jouer, Collection et decks, Défi du jour, barre du bas, roue dentée) ;
-     seuls Jouer, Collection et Défi prennent le nouveau style de plaque. -->
+     Fond : l’image d’Amine, telle quelle. Toutes les fonctions de l’accueil actuel y sont (Jouer / Continuer + Nouvelle
+     partie, Collection et decks, Défi du jour, Mutation vaincue, record, prochain déblocage, Règles, Bestiaire, Stats,
+     Succès, Crédits, Options, version). Le sélecteur en haut montre les trois états : nouveau joueur, partie en cours, vétéran. -->
     <style>
       @font-face {
         font-family: Oswald;
@@ -20,9 +21,23 @@
         font-weight: 400;
         font-display: swap;
       }
+      @font-face {
+        font-family: Atkinson;
+        src: url(assets/fonts/atkinson-700.woff2) format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Special Elite';
+        src: url(assets/fonts/special-elite.woff2) format('woff2');
+        font-display: swap;
+      }
       :root {
         --creme: #f1e4c8;
-        --or: #c9a46a;
+        --or: #d9a85f;
+        --or2: #c9a46a;
+        --sous: #d6bf8e;
+        --rouge: #e0302a;
         --nuit: #0c0a0b;
       }
       * {
@@ -80,6 +95,17 @@
       }
       #fond {
         background: url(assets/maquette-accueil/fond.webp) 0 0/100% 100%;
+      }
+      /* voile sombre à gauche, derrière le menu, pour qu'il se détache du décor (PC) */
+      #voileG {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #000b 0, #0007 24%, #0000 40%);
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      body:not(.portrait) #voileG {
+        opacity: 1;
       }
 
       /* ciel */
@@ -155,6 +181,23 @@
           opacity: 0;
         }
       }
+      #lune {
+        position: absolute;
+        left: 330px;
+        top: 46px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(#ff2a1a00 45%, #ff2a1a33 52%, #0000 70%);
+        mix-blend-mode: screen;
+        animation: lune 5s ease-in-out infinite;
+      }
+      @keyframes lune {
+        50% {
+          transform: scale(1.08);
+          opacity: 0.6;
+        }
+      }
 
       /* lumières */
       .lueur {
@@ -164,7 +207,7 @@
       }
       #mirador {
         left: 975px;
-        top: 100px;
+        top: 120px;
         width: 62px;
         height: 50px;
         background: radial-gradient(#ffd25a 0, #ffb03055 40%, #0000 70%);
@@ -184,7 +227,7 @@
       }
       #maison {
         left: 1095px;
-        top: 425px;
+        top: 440px;
         width: 90px;
         height: 90px;
         background: radial-gradient(#ffcf55 0, #ffa02866 35%, #0000 70%);
@@ -192,7 +235,7 @@
       }
       #lanterne {
         left: 1435px;
-        top: 190px;
+        top: 200px;
         width: 280px;
         height: 300px;
         background: radial-gradient(#ffd27a88 0, #ff9a2a33 30%, #0000 68%);
@@ -228,7 +271,7 @@
       .fumee {
         position: absolute;
         left: 1104px;
-        top: 390px;
+        top: 392px;
         width: 26px;
         height: 26px;
         border-radius: 50%;
@@ -296,27 +339,28 @@
         border-radius: 50%;
         overflow: hidden;
       }
-      .jeton::after {
+      .jeton::after,
+      .reflet::after {
         content: '';
         position: absolute;
-        inset: -30%;
-        background: linear-gradient(115deg, #0000 40%, #fff6 50%, #0000 60%);
-        transform: translateX(-120%);
-        animation: reflet 6s ease-in-out infinite;
+        inset: -40%;
+        background: linear-gradient(110deg, #0000 42%, #fff4 50%, #0000 58%);
+        transform: translateX(-130%);
+      }
+      .jeton::after {
+        animation: refletJ 6s ease-in-out infinite;
         animation-delay: var(--d);
       }
-      @keyframes reflet {
+      @keyframes refletJ {
         0%,
         70% {
-          transform: translateX(-120%);
+          transform: translateX(-130%);
         }
         90%,
         100% {
-          transform: translateX(120%);
+          transform: translateX(130%);
         }
       }
-
-      /* reflet sur les cartes du dessin (même forme que chaque carte, matrice calculée par le script) */
       .reflet {
         position: absolute;
         left: 0;
@@ -327,13 +371,6 @@
         border-radius: 10px;
         overflow: hidden;
       }
-      .reflet::after {
-        content: '';
-        position: absolute;
-        inset: -40%;
-        background: linear-gradient(110deg, #0000 42%, #fff4 50%, #0000 58%);
-        transform: translateX(-130%);
-      }
       .reflet.go::after {
         animation: eclat 1.2s ease-out;
       }
@@ -343,7 +380,69 @@
         }
       }
 
-      /* logo et menu (placés par le script) */
+      /* radio « Dernier Abri » qui défile */
+      #radio {
+        position: fixed;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 30px;
+        padding: 0 14px;
+        overflow: hidden;
+        font:
+          15px 'Special Elite',
+          monospace;
+        color: #e9dcbf;
+        background: linear-gradient(90deg, #0000, #000a 10%, #000a 90%, #0000);
+        z-index: 25;
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      #radio.go {
+        opacity: 1;
+      }
+      #radio b {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font: 600 12px Oswald;
+        letter-spacing: 0.12em;
+        color: #ff6a55;
+      }
+      #radio b::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--rouge);
+        box-shadow: 0 0 8px var(--rouge);
+        animation: clignR 1.2s steps(1) infinite;
+      }
+      @keyframes clignR {
+        50% {
+          opacity: 0.2;
+        }
+      }
+      #radio .defile {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        -webkit-mask-image: linear-gradient(90deg, #0000, #000 6%, #000 94%, #0000);
+        mask-image: linear-gradient(90deg, #0000, #000 6%, #000 94%, #0000);
+      }
+      #radio .defile span {
+        display: inline-block;
+        padding-left: 100%;
+        animation: defile 34s linear infinite;
+      }
+      @keyframes defile {
+        to {
+          transform: translateX(-100%);
+        }
+      }
+
+      /* logo */
       #logo {
         position: absolute;
         opacity: 0;
@@ -380,7 +479,7 @@
       @keyframes respire {
         50% {
           transform: scale(1.015);
-          filter: drop-shadow(0 8px 18px #000c) drop-shadow(0 0 18px #e0201855);
+          filter: drop-shadow(0 8px 18px #000c) drop-shadow(0 0 22px #e0201866);
         }
       }
       #logo.tremble {
@@ -401,12 +500,13 @@
         }
       }
 
+      /* menu */
       #menu {
         position: absolute;
         display: flex;
         flex-direction: column;
-        align-items: stretch;
-        gap: 0.45em;
+        align-items: center;
+        gap: 0.36em;
       }
       .apparait {
         opacity: 0;
@@ -425,54 +525,111 @@
         display: flex;
         align-items: center;
         gap: 0.6em;
-        margin: 0 0 0.3em;
-        font-size: 0.5em;
+        width: 100%;
+        margin: 0;
+        font:
+          0.46em 'Special Elite',
+          monospace;
         white-space: nowrap;
-        text-align: center;
+        color: #eadbb8;
         text-shadow: 0 2px 4px #000;
       }
       .tag i {
         flex: 1;
         height: 1px;
-        background: linear-gradient(90deg, #0000, var(--or), #0000);
+        background: linear-gradient(90deg, #0000, var(--or2), #0000);
       }
-      .info {
-        margin: 0.2em 0 0;
-        font-size: 0.5em;
-        text-align: center;
-        line-height: 1.35;
-        text-shadow: 0 2px 4px #000;
+      .mwon {
+        display: flex;
+        align-items: center;
+        gap: 0.4em;
+        margin: 0;
+        padding: 0.18em 0.7em;
+        font: 600 0.42em Oswald;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffd27a;
+        border: 1px solid #d9a85f88;
+        border-radius: 3px;
+        background: #1a0f08cc;
+        box-shadow: 0 0 14px #ffb34733;
       }
+      .mwon svg {
+        width: 1.2em;
+        height: 1.2em;
+        fill: #ffd27a;
+      }
+
       .btn {
         position: relative;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 0.55em;
+        gap: 0.6em;
         width: 100%;
         aspect-ratio: 803/192;
+        padding: 0 9% 0 10%;
         background: url(assets/maquette-accueil/plaque.webp) center/100% 100% no-repeat;
-        font: 600 0.78em Oswald;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
         color: var(--creme);
-        text-shadow:
-          0 2px 0 #000,
-          0 0 10px #0008;
+        text-align: left;
         transition:
           transform 0.18s,
           filter 0.18s;
       }
-      .btn svg {
-        width: 1.2em;
-        height: 1.2em;
+      .btn .ic {
         flex: none;
+        display: grid;
+        place-items: center;
+        width: 1.25em;
+        height: 1.25em;
+      }
+      .btn svg {
+        width: 100%;
+        height: 100%;
         fill: var(--creme);
         filter: drop-shadow(0 2px 0 #000);
       }
+      .btn .tx {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.05;
+      }
+      .btn .tx b {
+        font: 600 0.64em Oswald;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-shadow:
+          0 2px 0 #000,
+          0 0 10px #0008;
+        white-space: nowrap;
+      }
+      .btn .tx small {
+        margin-top: 0.25em;
+        font: 400 0.36em Atkinson;
+        color: var(--sous);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .btn.second {
+        width: 90%;
+      }
       .btn.jouer {
-        font-size: 1.15em;
+        justify-content: center;
+        text-align: center;
+        padding: 0 8%;
         background-image: url(assets/maquette-accueil/plaque-rouge.webp);
+      }
+      .btn.jouer .tx {
+        align-items: center;
+      }
+      .btn.jouer .tx b {
+        font-size: 0.9em;
+        letter-spacing: 0.07em;
+      }
+      .btn.jouer .tx small {
+        font-size: 0.44em;
+        color: #ffe2c4;
       }
       .btn.jouer::after {
         content: '';
@@ -489,7 +646,7 @@
         }
       }
       .btn:hover {
-        transform: translateX(6px) scale(1.03);
+        transform: scale(1.035);
         filter: brightness(1.18);
       }
       .btn:active {
@@ -508,16 +665,125 @@
       .btn:hover::before {
         background-position: 200% 0;
       }
+      .nouveau {
+        position: absolute;
+        right: 4%;
+        top: -14%;
+        padding: 0.12em 0.5em;
+        font: 600 0.38em Oswald;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #fff;
+        background: #c4161c;
+        border: 1.5px solid #ffd27a;
+        border-radius: 3px;
+        transform: rotate(6deg);
+        box-shadow: 0 3px 8px #000a;
+        animation: tampon 1.6s ease-in-out infinite;
+      }
+      @keyframes tampon {
+        50% {
+          transform: rotate(6deg) scale(1.12);
+        }
+      }
+      .etat {
+        position: absolute;
+        right: 4%;
+        top: -14%;
+        transform: rotate(6deg);
+        box-shadow: 0 3px 8px #000a;
+        padding: 0.12em 0.5em;
+        font: 600 0.36em Oswald;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 3px;
+      }
+      .etat.afaire {
+        color: #1a0f08;
+        background: #ffd27a;
+        animation: tampon2 1.8s ease-in-out infinite;
+      }
+      @keyframes tampon2 {
+        50% {
+          box-shadow:
+            0 0 14px #ffd27a,
+            0 3px 8px #000a;
+        }
+      }
+      .lien {
+        margin: -0.1em 0 0.1em;
+        font: 600 0.42em Oswald;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #e9d6ae;
+        text-shadow: 0 2px 3px #000;
+        border-bottom: 1px solid #d9a85f88;
+        padding: 0.1em 0.1em;
+        transition: color 0.2s;
+      }
+      .lien:hover {
+        color: #ffd27a;
+      }
 
-      /* barre du bas et roue dentée : style actuel du jeu (panneau noir) */
+      /* carnet du survivant : record et prochain déblocage */
+      .carnet {
+        width: 90%;
+        margin-top: 0.15em;
+        padding: 0.45em 0.7em 0.5em;
+        border-radius: 4px;
+        background: linear-gradient(#e9d9b4, #d9c393);
+        color: #2a1d10;
+        box-shadow:
+          0 6px 14px #000c,
+          inset 0 0 0 1px #8a6a3a66;
+        transform: rotate(-1deg);
+      }
+      .carnet .lg {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5em;
+        font:
+          0.4em 'Special Elite',
+          monospace;
+      }
+      .carnet .lg b {
+        font: 600 1.15em Oswald;
+        letter-spacing: 0.03em;
+        color: #7a1410;
+      }
+      .carnet .bar {
+        height: 0.32em;
+        margin: 0.3em 0 0.2em;
+        border-radius: 1em;
+        background: #2a1d1033;
+        overflow: hidden;
+      }
+      .carnet .bar i {
+        display: block;
+        height: 100%;
+        width: 0;
+        border-radius: 1em;
+        background: linear-gradient(90deg, #7a1410, #c4161c);
+        transition: width 1.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+      }
+      .carnet .pr {
+        font: 0.38em Atkinson;
+        color: #3a2a18;
+      }
+
+      /* barre du bas et roue : plaque dorée, comme les boutons */
       #barre {
         position: fixed;
         left: 50%;
-        bottom: max(2vh, env(safe-area-inset-bottom));
+        bottom: max(1.6vh, env(safe-area-inset-bottom));
         transform: translateX(-50%);
         display: flex;
-        width: min(60vw, 780px);
-        border-image: url(assets/art/ui/panneau-noir.webp) 36 fill / 10px stretch;
+        width: min(64vw, 820px);
+        padding: 4px 10px;
+        border-style: solid;
+        border-width: 16px;
+        border-image: url(assets/maquette-accueil/plaque.webp) 52 fill / 16px stretch;
         filter: drop-shadow(0 6px 10px #000c);
         z-index: 30;
         opacity: 0;
@@ -527,24 +793,29 @@
         opacity: 1;
       }
       .tab {
+        position: relative;
         flex: 1 1 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 9px;
         min-width: 0;
-        padding: 9px 6px;
-        border-left: 1px solid #c9a46a66;
+        padding: 4px 4px;
+        border-left: 1px solid #c9a46a55;
         font: 600 clamp(13px, 1.15vw, 16px) Oswald;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         white-space: nowrap;
+        transition:
+          color 0.2s,
+          transform 0.2s;
       }
       .tab:first-child {
         border-left: 0;
       }
       .tab:hover {
         color: #ffd88a;
+        transform: translateY(-2px);
       }
       .tab svg {
         width: 21px;
@@ -556,6 +827,21 @@
         stroke-linecap: round;
         stroke-linejoin: round;
       }
+      .tab .mini {
+        position: absolute;
+        left: 22%;
+        right: 22%;
+        bottom: -3px;
+        height: 3px;
+        border-radius: 2px;
+        background: #ffffff22;
+        overflow: hidden;
+      }
+      .tab .mini i {
+        display: block;
+        height: 100%;
+        background: var(--or);
+      }
       .tab.cr {
         flex: 0.6 1 0;
         font: 400 14px Atkinson;
@@ -564,15 +850,18 @@
       }
       #roue {
         position: fixed;
-        top: max(2vh, env(safe-area-inset-top));
-        right: 1.5vw;
-        width: 46px;
-        height: 46px;
+        top: max(1.6vh, env(safe-area-inset-top));
+        right: 1.4vw;
+        width: 58px;
+        height: 58px;
         display: grid;
         place-items: center;
-        border-image: url(assets/art/ui/panneau-noir.webp) 36 fill / 8px stretch;
+        border-style: solid;
+        border-width: 12px;
+        border-image: url(assets/maquette-accueil/plaque.webp) 52 fill / 12px stretch;
         filter: drop-shadow(0 6px 10px #000c);
         z-index: 30;
+        transition: transform 0.4s;
       }
       #roue svg {
         width: 28px;
@@ -582,7 +871,8 @@
         stroke-width: 2;
       }
       #roue:hover {
-        filter: brightness(1.35);
+        transform: rotate(60deg);
+        filter: drop-shadow(0 6px 10px #000c) brightness(1.3);
       }
       #ver {
         position: fixed;
@@ -594,17 +884,43 @@
         z-index: 30;
       }
 
+      /* sélecteur d'état de la maquette */
+      #etats {
+        position: fixed;
+        left: 10px;
+        bottom: 10px;
+        display: flex;
+        gap: 2px;
+        padding: 3px;
+        border-radius: 6px;
+        background: #000c;
+        border: 1px dashed #d9a85f88;
+        z-index: 45;
+        font: 600 11px Oswald;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      #etats button {
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #bfae8a;
+      }
+      #etats button.on {
+        background: var(--or);
+        color: #1a0f08;
+      }
+
       #toast {
         position: fixed;
         left: 50%;
-        top: 70px;
-        transform: translate(-50%, -20px);
+        top: 50%;
+        transform: translate(-50%, -30%);
         opacity: 0;
-        background: #120e0ccc;
+        background: #120e0ce6;
         border: 1px solid var(--or);
-        padding: 8px 16px;
+        padding: 10px 18px;
         border-radius: 6px;
-        font-size: 14px;
+        font-size: 15px;
         transition: 0.3s;
         z-index: 40;
         pointer-events: none;
@@ -612,18 +928,19 @@
       }
       #toast.on {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: translate(-50%, -50%);
       }
 
-      /* téléphone en portrait : onglets icône au-dessus du texte, comme dans le jeu */
+      /* téléphone en portrait */
       body.portrait #barre {
-        width: calc(100vw - 32px);
+        width: calc(100vw - 20px);
+        padding: 2px 4px;
       }
       body.portrait .tab {
         flex-direction: column;
-        gap: 4px;
-        padding: 8px 2px;
-        font-size: 12px;
+        gap: 3px;
+        padding: 4px 1px;
+        font-size: 11px;
       }
       body.portrait .tab.cr {
         display: none;
@@ -631,9 +948,35 @@
       body.portrait #ver {
         display: none;
       }
+      body.portrait #etats {
+        left: 8px;
+        bottom: auto;
+        top: max(10px, env(safe-area-inset-top));
+        font-size: 10px;
+      }
+      body.portrait #etats button {
+        padding: 4px 6px;
+      }
+      body.portrait .carnet .pr,
+      body.portrait .tag {
+        display: none;
+      }
+      body.portrait .carnet {
+        padding: 0.35em 0.7em 0.4em;
+      }
       body.portrait #scene {
         -webkit-mask-image: linear-gradient(#0000 0, #000 22%);
         mask-image: linear-gradient(#0000 0, #000 22%);
+      }
+      body.portrait #roue {
+        width: 48px;
+        height: 48px;
+        border-width: 10px;
+        border-image-width: 10px;
+      }
+      body.portrait #roue svg {
+        width: 22px;
+        height: 22px;
       }
       @media (prefers-reduced-motion: reduce) {
         * {
@@ -647,14 +990,18 @@
     <div id="flou"></div>
     <div id="scene">
       <div class="calque" id="fond"></div>
-      <div class="calque" id="ciel"><div id="eclair"></div></div>
+      <div class="calque" id="voileG"></div>
+      <div class="calque" id="ciel">
+        <div id="lune"></div>
+        <div id="eclair"></div>
+      </div>
       <div class="calque" id="lumieres">
         <div class="lueur" id="mirador"></div>
         <div class="lueur" id="maison"></div>
         <div class="lueur" id="lanterne2"></div>
         <div class="lueur" id="lanterne"></div>
-        <div class="jeton" style="left: 1266px; top: 770px; --d: 1s"></div>
-        <div class="jeton" style="left: 1378px; top: 798px; --d: 1.6s"></div>
+        <div class="jeton" style="left: 1272px; top: 778px; --d: 1s"></div>
+        <div class="jeton" style="left: 1383px; top: 808px; --d: 1.6s"></div>
       </div>
       <div class="calque" id="table"></div>
       <div class="calque">
@@ -666,35 +1013,18 @@
       </div>
     </div>
 
+    <div id="radio">
+      <b>Radio</b>
+      <div class="defile">
+        <span
+          >Ici Dernier Abri, Ici Dernier Abri… Si vous entendez ce message, tenez bon : les secours arrivent dans 30
+          nuits. Barricadez portes et fenêtres. Ne sortez jamais la nuit. Et surtout, ne vous laissez pas mordre. Ici
+          Dernier Abri, terminé.</span
+        >
+      </div>
+    </div>
     <div id="logo"><img src="assets/maquette-accueil/logo.webp" alt="Barricard" /></div>
-    <nav id="menu">
-      <p class="tag apparait"><i></i>Tiens 30 nuits jusqu’à l’arrivée des secours.<i></i></p>
-      <button class="btn jouer apparait" data-msg="Jouer">Jouer</button>
-      <button class="btn apparait" data-msg="Collection et decks">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="5" width="10" height="15" rx="1.6" transform="rotate(-14 8 12.5)" />
-          <rect
-            x="10.5"
-            y="4"
-            width="10"
-            height="15"
-            rx="1.6"
-            transform="rotate(10 15.5 11.5)"
-            stroke="#1a0f0c"
-            stroke-width="1.8"
-          /></svg
-        >Collection et decks
-      </button>
-      <button class="btn apparait" data-msg="Défi du jour">
-        <svg viewBox="0 0 24 24">
-          <path
-            d="M7 2h2v2h6V2h2v2h2.5A1.5 1.5 0 0121 5.5v14a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 19.5v-14A1.5 1.5 0 014.5 4H7zM5 9v10h14V9zm2 2h3v3H7zm4.5 0h3v3h-3zm4.5 0h3v3h-3zm-9 4.5h3V18H7zm4.5 0h3V18h-3z"
-            fill-rule="evenodd"
-          /></svg
-        >Défi du jour
-      </button>
-      <p class="info apparait">Prochain déblocage : La policière dans 8 nuits au total.</p>
-    </nav>
+    <nav id="menu"></nav>
     <nav id="barre">
       <button class="tab" data-msg="Règles">
         <svg viewBox="0 0 24 24">
@@ -716,7 +1046,7 @@
       <button class="tab" data-msg="Succès">
         <svg viewBox="0 0 24 24">
           <path d="M7 4h10v5a5 5 0 01-10 0zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3M12 14v4M8 21h8M9 18h6" /></svg
-        ><span>Succès 0/28</span>
+        ><span id="succes">Succès 0/28</span><span class="mini"><i id="succesBar"></i></span>
       </button>
       <button class="tab cr" data-msg="Crédits">Crédits</button>
     </nav>
@@ -729,7 +1059,11 @@
         <circle cx="12" cy="12" r="6.6" />
       </svg>
     </button>
-    <p id="ver">maquette · accueil</p>
+    <p id="ver">v300 · 23 nov.</p>
+    <div id="etats">
+      <button data-e="nouveau">Nouveau joueur</button><button data-e="encours" class="on">Partie en cours</button
+      ><button data-e="veteran">Vétéran</button>
+    </div>
     <div id="toast"></div>
 
     <script>
@@ -743,48 +1077,158 @@
         logo = $('#logo'),
         menu = $('#menu'),
         table = $('#table');
-      const MAQ = 'assets/maquette-accueil/';
 
-      /* Coins (haut-gauche, haut-droit, bas-gauche) des cartes peintes, mesurés sur l'image 1672 × 941.
-   Chaque vraie carte reçoit la matrice qui l'envoie sur ces trois coins : même perspective que le dessin. */
-      const COINS = {
-        pioche: [
+      // --- Icônes dessinées (jamais d'emoji) ---
+      const ICO = {
+        coll: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="10" height="15" rx="1.6" transform="rotate(-14 8 12.5)"/><rect x="10.5" y="4" width="10" height="15" rx="1.6" transform="rotate(10 15.5 11.5)" stroke="#1a0f0c" stroke-width="1.8"/></svg>',
+        defi: '<svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2.5A1.5 1.5 0 0121 5.5v14a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 19.5v-14A1.5 1.5 0 014.5 4H7zM5 9v10h14V9zm2 2h3v3H7zm4.5 0h3v3h-3zm4.5 0h3v3h-3zm-9 4.5h3V18H7zm4.5 0h3V18h-3z" fill-rule="evenodd"/></svg>',
+        trophee:
+          '<svg viewBox="0 0 24 24"><path d="M7 3h10v2h4v3a5 5 0 01-4.6 5A5 5 0 0113 15.9V18h3v3H8v-3h3v-2.1A5 5 0 017.6 13 5 5 0 013 8V5h4zm10 4v4a3 3 0 002-3V7zM5 7v1a3 3 0 002 3V7z"/></svg>',
+      };
+
+      /* --- Les trois états de l'accueil (données d'exemple) ---
+   nouveau : première partie (pas de Collection, comme dans le jeu pour un novice) ;
+   encours : une partie sauvegardée (Continuer + Nouvelle partie) ;
+   veteran : Mutation vaincue, record, nouvelles cartes à voir. */
+      const ETATS = {
+        nouveau: {
+          save: null,
+          coll: false,
+          won: null,
+          best: 0,
+          unlock: ['La policière', 0, 8],
+          ach: 0,
+          defiFait: false,
+        },
+        encours: {
+          save: { phase: 'Jour', nuit: 7, deck: 'Fusillade', mut: 1 },
+          coll: true,
+          nouveau: true,
+          won: null,
+          best: 12,
+          unlock: ['La policière', 22, 30],
+          ach: 6,
+          defiFait: false,
+        },
+        veteran: {
+          save: null,
+          coll: true,
+          won: { mut: 3, wins: 5 },
+          best: 38,
+          unlock: ['Le moine', 141, 150],
+          ach: 19,
+          defiFait: true,
+        },
+      };
+      let etat = 'encours';
+
+      function plaque(cls, act, icone, titre, sous, extra = '') {
+        return `<button class="btn ${cls} apparait" data-msg="${act}">${icone ? `<span class="ic">${icone}</span>` : ''}<span class="tx"><b>${titre}</b>${sous ? `<small>${sous}</small>` : ''}</span>${extra}</button>`;
+      }
+      function construireMenu() {
+        const e = ETATS[etat];
+        let h = '<p class="tag apparait"><i></i>Tiens 30 nuits jusqu’à l’arrivée des secours.<i></i></p>';
+        if (e.won)
+          h += `<p class="mwon apparait">${ICO.trophee} Mutation ${e.won.mut} vaincue · ${e.won.wins} victoires</p>`;
+        if (e.save) {
+          const s = e.save;
+          h += plaque(
+            'jouer',
+            'Continuer',
+            '',
+            `Continuer · ${s.phase} ${s.nuit}`,
+            `Deck ${s.deck} · Mutation ${s.mut}`,
+          );
+          h += '<button class="lien apparait" data-msg="Nouvelle partie">Nouvelle partie</button>';
+        } else {
+          h += plaque(
+            'jouer',
+            'Jouer',
+            '',
+            'Jouer',
+            e.best ? 'Choisis ton deck et ta Mutation' : 'Première nuit : le tutoriel te guide',
+          );
+        }
+        if (e.coll)
+          h += plaque(
+            'second',
+            'Collection et decks',
+            ICO.coll,
+            'Collection et decks',
+            '96 / 180 cartes · 3 decks',
+            e.nouveau ? '<span class="nouveau">Nouveau !</span>' : '',
+          );
+        h += plaque(
+          'second',
+          'Défi du jour',
+          ICO.defi,
+          'Défi du jour',
+          '<span id="compte">Nouveau défi dans --:--:--</span>',
+          e.defiFait ? '' : '<span class="etat afaire">À faire</span>',
+        );
+        const [nom, fait, total] = e.unlock;
+        h += `<div class="carnet apparait">
+    ${e.best ? `<div class="lg"><span>Record</span><b>${e.best} nuits</b></div>` : ''}
+    <div class="lg"><span>Prochain déblocage</span><b>${nom}</b></div>
+    <div class="bar"><i data-w="${Math.round((fait / total) * 100)}"></i></div>
+    <div class="pr">${total - fait} nuits au total avant le déblocage</div></div>`;
+        menu.innerHTML = h;
+        $('#succes').textContent = `Succès ${e.ach}/28`;
+        $('#succesBar').style.width = (e.ach / 28) * 100 + '%';
+        brancherBoutons(menu);
+        majCompte();
+        placer();
+      }
+      // apparition en cascade du menu, puis la barre de progression se remplit
+      function animerMenu(delai = 0) {
+        menu.querySelectorAll('.apparait').forEach((b, i) => setTimeout(() => b.classList.add('go'), delai + i * 100));
+        setTimeout(
+          () => menu.querySelectorAll('.bar i').forEach(i => (i.style.width = i.dataset.w + '%')),
+          delai + 700,
+        );
+      }
+
+      // compte à rebours jusqu'au prochain défi (minuit)
+      function majCompte() {
+        const c = $('#compte');
+        if (!c) return;
+        const n = new Date(),
+          m = new Date(n);
+        m.setHours(24, 0, 0, 0);
+        const s = Math.floor((m - n) / 1000);
+        const p = v => String(v).padStart(2, '0');
+        c.textContent = `Nouveau défi dans ${p(Math.floor(s / 3600))}:${p(Math.floor((s % 3600) / 60))}:${p(s % 60)}`;
+      }
+      setInterval(majCompte, 1000);
+
+      // --- Cartes du dessin : un reflet passe de temps en temps (coins mesurés sur l'image) ---
+      const COINS = [
+        [
           [595, 640],
           [750, 660],
           [482, 790],
         ],
-        gun: [
+        [
           [775, 717],
           [927, 725],
           [705, 887],
         ],
-        bar: [
+        [
           [920, 732],
           [1062, 737],
           [857, 892],
         ],
-        medkit: [
+        [
           [1057, 737],
           [1222, 755],
           [992, 902],
         ],
-      };
-      const matrice = ([tl, tr, bl], dx = 0, dy = 0) =>
-        `matrix(${(tr[0] - tl[0]) / CW},${(tr[1] - tl[1]) / CW},${(bl[0] - tl[0]) / CH},${(bl[1] - tl[1]) / CH},${tl[0] + dx},${tl[1] + dy})`;
-
-      function creer(cls, html = '') {
+      ];
+      const reflets = COINS.map(([tl, tr, bl]) => {
         const el = document.createElement('div');
-        el.className = cls;
-        el.innerHTML = html;
+        el.className = 'reflet';
+        el.style.transform = `matrix(${(tr[0] - tl[0]) / CW},${(tr[1] - tl[1]) / CW},${(bl[0] - tl[0]) / CH},${(bl[1] - tl[1]) / CH},${tl[0]},${tl[1]})`;
         table.appendChild(el);
-        return el;
-      }
-      // la pioche est celle du dessin : les cartes partent de sa carte du dessus
-
-      // cartes du dessin : un reflet passe de temps en temps sur l'une d'elles
-      const reflets = ['pioche', 'gun', 'bar', 'medkit'].map(id => {
-        const el = creer('reflet');
-        el.style.transform = matrice(COINS[id]);
         return el;
       });
       setInterval(() => {
@@ -794,7 +1238,7 @@
         el.classList.add('go');
       }, 2600);
 
-      // --- Ciel : étoiles, étoiles filantes, éclairs ---
+      // --- Ciel ---
       const ciel = $('#ciel');
       for (let i = 0; i < 46; i++) {
         const x = Math.random() * W,
@@ -802,7 +1246,7 @@
         if (x < 640 && y < 320) {
           i--;
           continue;
-        } // coin du logo
+        }
         const s = document.createElement('div');
         const t = 2 + Math.random() * 2.5;
         s.className = 'etoile';
@@ -826,6 +1270,7 @@
             eclair.classList.remove('go');
             void eclair.offsetWidth;
             eclair.classList.add('go');
+            son('tonnerre');
             if (logo.classList.contains('vit')) {
               logo.classList.remove('tremble');
               void logo.offsetWidth;
@@ -855,7 +1300,76 @@
         lum.appendChild(b);
       }
 
-      // --- Mise en page (l'écran ne bouge pas avec la souris) ---
+      // --- Petits sons (générés, comme dans le jeu) : survol, clic, tonnerre lointain ---
+      let ctx = null;
+      function son(type) {
+        if (!ctx) return;
+        const t = ctx.currentTime;
+        if (type === 'tonnerre') {
+          const n = ctx.createBufferSource(),
+            b = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate),
+            d = b.getChannelData(0);
+          for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+          n.buffer = b;
+          const f = ctx.createBiquadFilter();
+          f.type = 'lowpass';
+          f.frequency.value = 180;
+          const g = ctx.createGain();
+          g.gain.value = 0.35;
+          n.connect(f).connect(g).connect(ctx.destination);
+          n.start(t + 0.3);
+          return;
+        }
+        const o = ctx.createOscillator(),
+          g = ctx.createGain();
+        o.type = type === 'clic' ? 'triangle' : 'sine';
+        o.frequency.setValueAtTime(type === 'clic' ? 180 : 620, t);
+        o.frequency.exponentialRampToValueAtTime(type === 'clic' ? 60 : 900, t + 0.08);
+        g.gain.setValueAtTime(type === 'clic' ? 0.25 : 0.04, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + (type === 'clic' ? 0.18 : 0.06));
+        o.connect(g).connect(ctx.destination);
+        o.start(t);
+        o.stop(t + 0.2);
+      }
+      addEventListener(
+        'pointerdown',
+        () => {
+          if (!ctx)
+            try {
+              ctx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {}
+        },
+        { once: true },
+      );
+
+      // --- Boutons : message (maquette) ---
+      const toast = $('#toast');
+      let tt;
+      function brancherBoutons(racine) {
+        racine.querySelectorAll('[data-msg]').forEach(b => {
+          b.addEventListener('mouseenter', () => son('survol'));
+          b.addEventListener('click', e => {
+            e.stopPropagation();
+            son('clic');
+            toast.textContent = b.dataset.msg + ' (maquette)';
+            toast.classList.add('on');
+            clearTimeout(tt);
+            tt = setTimeout(() => toast.classList.remove('on'), 1400);
+          });
+        });
+      }
+      brancherBoutons($('#barre'));
+      brancherBoutons({ querySelectorAll: () => [$('#roue')] });
+      document.querySelectorAll('#etats button').forEach(b =>
+        b.addEventListener('click', () => {
+          document.querySelectorAll('#etats button').forEach(x => x.classList.toggle('on', x === b));
+          etat = b.dataset.e;
+          construireMenu();
+          animerMenu();
+        }),
+      );
+
+      // --- Mise en page ---
       let echelle = 1,
         ox = 0,
         oy = 0;
@@ -864,36 +1378,39 @@
           vh = innerHeight;
         const portrait = vw / vh < 1.05;
         document.body.classList.toggle('portrait', portrait);
+        const radio = $('#radio');
         if (!portrait) {
-          // la scène couvre l'écran sans couper le menu à gauche ni le logo en haut
           echelle = Math.min(Math.max(vw / W, vh / H), vw / 1600, vh / 880);
           ox = (vw - W * echelle) / 2;
           oy = (vh - H * echelle) / 2;
           if (ox < 0) ox = Math.max(ox, vw - W * echelle);
-          poser(logo, 45, 60, 540);
-          poser(menu, 55, 300, 430);
+          poser(logo, 55, 30, 500);
+          poser(menu, 55, 238, 430);
           menu.style.fontSize = 40 * echelle + 'px';
+          Object.assign(radio.style, {
+            left: ox + 620 * echelle + 'px',
+            top: oy + 18 * echelle + 'px',
+            width: 760 * echelle + 'px',
+          });
         } else {
-          // portrait : logo en haut, plateau et cartes au milieu, boutons dessous
-          echelle = vw / 1040;
-          ox = -470 * echelle;
-          const mw = Math.min(vw - 70, 300);
+          echelle = vw / 1100;
+          ox = -440 * echelle;
+          const mw = Math.min(vw - 60, 310);
           Object.assign(menu.style, {
             left: (vw - mw) / 2 + 'px',
             width: mw + 'px',
-            fontSize: Math.min(26, mw / 12) + 'px',
+            fontSize: Math.min(26, mw / 13) + 'px',
           });
-          // le menu se place juste au-dessus de la barre du bas, la scène juste au-dessus du menu
-          const hautBarre = $('#barre').offsetHeight + 24;
-          const topMenu = vh - hautBarre - menu.offsetHeight - 6;
+          const topMenu = vh - ($('#barre').offsetHeight + 20) - menu.offsetHeight - 6;
           menu.style.top = topMenu + 'px';
           oy = topMenu - 925 * echelle;
-          const lw = Math.min(vw - 80, 380);
+          const lw = Math.min(vw - 110, 300);
           Object.assign(logo.style, {
             left: (vw - lw) / 2 + 'px',
-            top: Math.max(56, oy + 90 * echelle - lw * 0.36) + 'px',
+            top: Math.max(90, oy + 255 * echelle - lw * 0.36) + 'px',
             width: lw + 'px',
           });
+          Object.assign(radio.style, { left: '0px', top: '58px', width: vw + 'px' });
         }
         scene.style.transform = `translate(${ox}px,${oy}px) scale(${echelle})`;
       }
@@ -903,30 +1420,18 @@
         el.style.width = w * echelle + 'px';
       }
       addEventListener('resize', placer);
-      placer();
+      construireMenu();
 
-      // --- Entrée : logo, menu, barre, puis distribution des cartes ---
+      // --- Entrée ---
       setTimeout(() => logo.classList.add('go'), 700);
       setTimeout(() => {
         logo.classList.remove('go');
         logo.style.opacity = 1;
         logo.classList.add('vit');
       }, 1850);
-      document.querySelectorAll('.apparait').forEach((b, i) => setTimeout(() => b.classList.add('go'), 1250 + i * 110));
+      animerMenu(1250);
       setTimeout(() => $('#barre').classList.add('go'), 1700);
-
-      // --- Boutons : simple message (maquette) ---
-      const toast = $('#toast');
-      let tt;
-      document.querySelectorAll('[data-msg]').forEach(b =>
-        b.addEventListener('click', e => {
-          e.stopPropagation();
-          toast.textContent = b.dataset.msg + ' (maquette)';
-          toast.classList.add('on');
-          clearTimeout(tt);
-          tt = setTimeout(() => toast.classList.remove('on'), 1600);
-        }),
-      );
+      setTimeout(() => $('#radio').classList.add('go'), 2300);
     </script>
   </body>
 </html>
