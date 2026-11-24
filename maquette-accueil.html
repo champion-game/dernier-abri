@@ -817,24 +817,24 @@
    Chaque vraie carte reçoit la matrice qui l'envoie sur ces trois coins : même perspective que le dessin. */
       const COINS = {
         pioche: [
-          [590, 645],
-          [742, 670],
-          [490, 777],
+          [595, 640],
+          [750, 660],
+          [482, 790],
         ],
         gun: [
-          [772, 725],
-          [915, 727],
-          [712, 872],
+          [775, 717],
+          [927, 725],
+          [705, 887],
         ],
         bar: [
-          [920, 736],
-          [1052, 741],
-          [859, 892],
+          [920, 732],
+          [1062, 737],
+          [857, 892],
         ],
         medkit: [
-          [1065, 744],
-          [1209, 764],
-          [995, 890],
+          [1057, 737],
+          [1222, 755],
+          [992, 902],
         ],
       };
       const matrice = ([tl, tr, bl], dx = 0, dy = 0) =>
@@ -847,11 +847,7 @@
         table.appendChild(el);
         return el;
       }
-      // pioche : tranches empilées sous la carte du dessus (épaisseur vers le bas, comme sur le dessin)
-      const EPAISSEUR = 9;
-      creer('ombreC').style.transform = matrice(COINS.pioche, 10, EPAISSEUR * 6 + 8);
-      for (let i = EPAISSEUR; i >= 1; i--) creer('tranche').style.transform = matrice(COINS.pioche, 0, i * 6);
-      creer('carte', '<div class="rot"><div class="d"></div></div>').style.transform = matrice(COINS.pioche);
+      // la pioche est celle du dessin : les cartes partent de sa carte du dessus
 
       // main : les vraies cartes du jeu
       const MAIN = ['gun', 'bar', 'medkit'];
