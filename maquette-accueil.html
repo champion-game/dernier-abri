@@ -316,99 +316,31 @@
         }
       }
 
-      /* cartes : posées avec la même perspective que les cartes peintes (matrice 2D calculée par le script) */
-      .carte {
+      /* reflet sur les cartes du dessin (même forme que chaque carte, matrice calculée par le script) */
+      .reflet {
         position: absolute;
         left: 0;
         top: 0;
         width: 158px;
         height: 231px;
         transform-origin: 0 0;
-        pointer-events: none;
-      }
-      .carte .zone {
-        position: absolute;
-        inset: 0;
-        pointer-events: auto;
-        cursor: pointer;
-      }
-      .carte .rot {
-        position: absolute;
-        inset: 0;
-        transform-style: preserve-3d;
-        transition: transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
-      }
-      .carte.face .rot {
-        transform: perspective(700px) rotateY(180deg);
-      }
-      .carte .f,
-      .carte .d {
-        position: absolute;
-        inset: 0;
-        border-radius: 9px;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-      }
-      .carte .d {
-        background: url(assets/maquette-accueil/dos.webp) center/100% 100%;
-        box-shadow: 0 0 0 2px #1a120c;
-      }
-      .carte .f {
-        background: center/100% 100% no-repeat;
-        transform: rotateY(180deg);
-        box-shadow: 0 0 0 2px #1a120c;
-      }
-      .carte .eclat {
-        position: absolute;
-        inset: 0;
-        border-radius: 9px;
+        border-radius: 10px;
         overflow: hidden;
-        transform: rotateY(180deg) translateZ(0.5px);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
       }
-      .carte .eclat::after {
+      .reflet::after {
         content: '';
         position: absolute;
         inset: -40%;
-        background: linear-gradient(110deg, #0000 42%, #fff5 50%, #0000 58%);
+        background: linear-gradient(110deg, #0000 42%, #fff4 50%, #0000 58%);
         transform: translateX(-130%);
       }
-      .carte.brille .eclat::after {
-        animation: eclat 1.1s ease-out;
+      .reflet.go::after {
+        animation: eclat 1.2s ease-out;
       }
       @keyframes eclat {
         to {
           transform: translateX(130%);
         }
-      }
-      .ombreC {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 158px;
-        height: 231px;
-        transform-origin: 0 0;
-        border-radius: 12px;
-        background: #000;
-        opacity: 0.55;
-        filter: blur(7px);
-      }
-      .carte.levee {
-        z-index: 20;
-        filter: drop-shadow(0 26px 22px #000d);
-      }
-      /* tranches de la pioche */
-      .tranche {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 158px;
-        height: 231px;
-        transform-origin: 0 0;
-        border-radius: 9px;
-        background: #e6cf9f;
-        box-shadow: 0 0 0 2px #1a120c;
       }
 
       /* logo et menu (placés par le script) */
@@ -849,90 +781,18 @@
       }
       // la pioche est celle du dessin : les cartes partent de sa carte du dessus
 
-      // main : les vraies cartes du jeu
-      const MAIN = ['gun', 'bar', 'medkit'];
-      const cartes = MAIN.map(id => {
-        const ombre = creer('ombreC');
-        ombre.style.transform = matrice(COINS[id], 8, 8);
-        ombre.style.opacity = 0;
-        const el = creer(
-          'carte',
-          `<div class="rot"><div class="d"></div><div class="f" style="background-image:url(${MAQ}carte-${id}.webp)"></div><div class="eclat"></div></div><div class="zone"></div>`,
-        );
-        el.repos = matrice(COINS[id]);
-        el.ombre = ombre;
-        el.carte = id;
-        el.style.transform = matrice(COINS.pioche);
-        el.style.visibility = 'hidden';
+      // cartes du dessin : un reflet passe de temps en temps sur l'une d'elles
+      const reflets = ['pioche', 'gun', 'bar', 'medkit'].map(id => {
+        const el = creer('reflet');
+        el.style.transform = matrice(COINS[id]);
         return el;
       });
-      const TRANSITION = 'transform .35s cubic-bezier(.2,.9,.3,1.15)';
-
-      // carte levée : droite, agrandie, au-dessus de sa place, pour être lue
-      function matriceLevee(el) {
-        const [, tr, bl] = COINS[el.carte];
-        const cx = (tr[0] + bl[0]) / 2;
-        const k = 1.5;
-        return `matrix(${k},0,0,${k},${cx - (CW * k) / 2},${H - CH * k - 95})`;
-      }
-      function lever(el) {
-        cartes.forEach(c => c !== el && reposer(c));
-        el.classList.add('levee');
-        el.style.transform = matriceLevee(el);
-      }
-      function reposer(el) {
-        if (!el.posee) return;
-        el.classList.remove('levee');
-        el.style.transform = el.repos;
-      }
-      // la carte ne réagit que si la souris est vraiment dessus (zone = la carte elle-même)
-      const survol = matchMedia('(hover:hover)').matches;
-      cartes.forEach(el => {
-        const zone = el.querySelector('.zone');
-        if (survol) {
-          zone.addEventListener('mouseenter', () => el.posee && lever(el));
-          zone.addEventListener('mouseleave', () => reposer(el));
-        } else {
-          zone.addEventListener('click', e => {
-            e.stopPropagation();
-            if (el.posee) el.classList.contains('levee') ? reposer(el) : lever(el);
-          });
-        }
-      });
-      document.addEventListener('click', () => cartes.forEach(reposer));
-
-      // distribution : chaque carte quitte la pioche, se retourne en vol et se pose à sa place
-      function distribuer() {
-        cartes.forEach((el, i) =>
-          setTimeout(() => {
-            el.style.visibility = 'visible';
-            const [tl] = COINS[el.carte];
-            const milieu = `matrix(1.1,0,0,1.1,${(tl[0] + 590) / 2 - 30},${(tl[1] + 645) / 2 - 170})`;
-            const anim = el.animate(
-              [{ transform: matrice(COINS.pioche) }, { transform: milieu, offset: 0.5 }, { transform: el.repos }],
-              { duration: 800, easing: 'cubic-bezier(.3,.8,.4,1)' },
-            );
-            el.style.transform = el.repos;
-            setTimeout(() => el.classList.add('face'), 200);
-            anim.onfinish = () => {
-              el.style.transition = TRANSITION;
-              el.ombre.style.transition = 'opacity .3s';
-              el.ombre.style.opacity = 0.55;
-              el.posee = true;
-              briller(el);
-            };
-          }, i * 280),
-        );
-      }
-      function briller(el) {
-        el.classList.remove('brille');
-        void el.offsetWidth;
-        el.classList.add('brille');
-      }
       setInterval(() => {
-        const c = cartes[Math.floor(Math.random() * 3)];
-        if (c.posee && !c.classList.contains('levee')) briller(c);
-      }, 4200);
+        const el = reflets[Math.floor(Math.random() * reflets.length)];
+        el.classList.remove('go');
+        void el.offsetWidth;
+        el.classList.add('go');
+      }, 2600);
 
       // --- Ciel : étoiles, étoiles filantes, éclairs ---
       const ciel = $('#ciel');
@@ -1054,7 +914,6 @@
       }, 1850);
       document.querySelectorAll('.apparait').forEach((b, i) => setTimeout(() => b.classList.add('go'), 1250 + i * 110));
       setTimeout(() => $('#barre').classList.add('go'), 1700);
-      setTimeout(distribuer, 1900);
 
       // --- Boutons : simple message (maquette) ---
       const toast = $('#toast');
