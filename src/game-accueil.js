@@ -178,7 +178,7 @@ function accAmbiance() {
         () => {
           const e = $('#accScene .acc-eclair');
           if (!e) return;
-          relance(e, 'go');
+          relance(e, 'acc-go');
           const logo = $('#ov.axh .axh-col .logo');
           if (logo) relance(logo, 'acc-tremble');
           orage();
@@ -195,7 +195,7 @@ function accAmbiance() {
         const portrait = f.closest('#accScene').dataset.k === 'p';
         f.style.left = (portrait ? 350 : 900) + Math.random() * (portrait ? 550 : 650) + 'px';
         f.style.top = 20 + Math.random() * 90 + 'px';
-        relance(f, 'go');
+        relance(f, 'acc-go');
         filante();
       }, 7000),
     );
@@ -205,7 +205,7 @@ function accAmbiance() {
       setTimeout(() => {
         const r = document.querySelectorAll('#accScene .acc-reflet');
         if (!r.length) return;
-        relance(r[Math.floor(Math.random() * r.length)], 'go');
+        relance(r[Math.floor(Math.random() * r.length)], 'acc-go');
         reflet();
       }, 2600),
     );
