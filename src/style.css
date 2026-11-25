@@ -16563,6 +16563,9 @@ html.artx #ov.home #axbg.acc #axglow {
   background: var(--ui-accueil) 0 0 / 100% 100% no-repeat;
   pointer-events: none;
 }
+#accScene[data-k='p'] {
+  background-image: var(--ui-accueil-portrait);
+}
 #accScene > div,
 #accScene .acc-lum > i,
 #accScene .acc-ciel > i {
@@ -16571,11 +16574,11 @@ html.artx #ov.home #axbg.acc #axglow {
 #accScene > div {
   inset: 0;
 }
-/* téléphone : le haut de l'image se fond dans le noir derrière le logo */
+/* téléphone : le bas de l'image se fond dans le noir sous le menu */
 @media (max-aspect-ratio: 3/4) {
   #accScene {
-    -webkit-mask-image: linear-gradient(#0000 0, #000 22%, #000 90%, #0000);
-    mask-image: linear-gradient(#0000 0, #000 22%, #000 90%, #0000);
+    -webkit-mask-image: linear-gradient(#000 88%, #0000);
+    mask-image: linear-gradient(#000 88%, #0000);
   }
 }
 /* PC : voile sombre à gauche derrière le menu */
