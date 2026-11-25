@@ -23,6 +23,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (754 lignes)
 18. `src/game-load.js` (195 lignes)
+19. `src/game-accueil.js` (200 lignes)
 
 ## Fonctions enveloppées
 
@@ -40,6 +41,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
 | `feltLayout` | game-ui.js:1918 | game-artx.js:985, game-artx.js:1128 |
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1170 |
+| `axGlow` | game-artx.js:268 | game-accueil.js:182 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
 | `drawFloats` | game-draw.js:5823 | game-fx5.js:746 |
@@ -229,9 +231,15 @@ fx5On:64 fx5Named:71 fx5Line:80 fx5Say:87 fx5Events:114 fx5Tick:163 fx5Edge:232 
 
 preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:63 bootBar:70 bootTips:99 bootEnd:118 preloadBoot:129 preloadBigOk:153 preloadIdle:159 preloadBackground:173
 
+### src/game-accueil.js
+
+> v301 : nouvel accueil d'Amine (maquette-accueil.html validée) : son image de fond telle qu
+
+accMatrice:36 accSceneHtml:42 accPlacer:73 accAmbiance:104 accScene:155 accLogo:172
+
 ## src/style.css
 
-16537 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1309 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+17004 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1340 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -548,3 +556,9 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 - 16448 v289 : effets de la fenêtre (liseré, teinte, particules, reflet du métal) suivent la fenêt
 - 16487 v289 : coût des pièges (hexagone) et des objets et réactions (losange) : même relief que l
 - 16527 v295 : sur ordinateur, tout bouton cliquable grossit un peu au survol (demande d’Amine).
+- 16538 ===== v301 : nouvel accueil d'Amine (game-accueil.js, maquette-accueil.html) =====
+- 16575 téléphone : le haut de l'image se fond dans le noir derrière le logo
+- 16582 PC : voile sombre à gauche derrière le menu
+- 16846 logo : respire avec une lueur rouge, tremble à chaque éclair
+- 16867 plaques : Jouer (rouge), Collection et Défi (noire dorée)
+- 16964 barre du bas et roue dentée : même plaque dorée
