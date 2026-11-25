@@ -2,7 +2,7 @@
    - Code (page, scripts, styles) : réseau d'abord, copie gardée pour jouer hors ligne. Les mises à jour arrivent donc tout de suite.
    - Images, sons, polices : copie locale d'abord (chargement instantané), rafraîchie en arrière-plan.
    - version.txt : toujours le réseau (vérification de mise à jour). */
-const CACHE = 'abri-7'; // v288 : cadre à fenêtre carrée et illustrations carrées (mêmes noms de fichier)
+const CACHE = 'abri-8'; // v301 : nouvel accueil (accueil.webp remplacée, même nom)
 const CORE = [
   './',
   'index.html',
@@ -35,6 +35,9 @@ const CORE = [
   'assets/art/ui/accueil-portrait.webp',
   'assets/art/ui/fond.webp',
   'assets/art/ui/barricard.webp',
+  'assets/art/ui/logo-accueil.webp',
+  'assets/art/ui/plaque-noire.webp',
+  'assets/art/ui/plaque-rouge.webp',
   'assets/art/ui/panneau-noir.webp',
   'assets/boot/logo.webp',
   'assets/boot/fond.webp',

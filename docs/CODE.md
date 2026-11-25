@@ -49,7 +49,7 @@ Clés `localStorage` : `abri-save` (partie en cours, `SAVE_V`), `abri-meta` (pro
 
 ## Le piège principal : les fonctions enveloppées
 
-Les fichiers chargés tard (`game-anim.js`, `game-fx2.js`, `game-artx.js`, `game-fx3.js`, `game-fx5.js`, `game-coll.js`, `game-fiche.js`) ajoutent des effets en **remplaçant** des fonctions existantes :
+Les fichiers chargés tard (`game-anim.js`, `game-fx2.js`, `game-artx.js`, `game-fx3.js`, `game-fx5.js`, `game-coll.js`, `game-fiche.js`, `game-accueil.js`) ajoutent des effets en **remplaçant** des fonctions existantes :
 
 ```js
 {const r0=render;render=function(){r0.apply(this,arguments);/* effet en plus */}}
@@ -83,6 +83,7 @@ Pour un **nouvel** effet visuel, préférer modifier directement la fonction d�
 - **Nouveau texte** : en français dans `_t('…')`, traduction dans `src/lang-en.js` (clé = texte français exact). Le test moteur signale les oublis.
 - **Nouveau bouton** : `<button data-a="nom">` et une entrée `nom:()=>{…}` dans `ACT` (`game-screens.js`).
 - **Nouvel effet de nuit** : `playEvents` (`game-ui.js`) reçoit les événements du moteur ; le dessin se fait dans `frameInner` / `drawFX` (`game-draw.js`).
+- **Accueil (v301)** : `src/game-accueil.js`, chargé en tout dernier. Il enveloppe `axGlow` (game-artx.js) : logo `logo-accueil.webp`, et une scène `#accScene` (1672 × 941, fond `accueil.webp`) dans `#axbg`, placée par `accPlacer` (couvre l’écran sur PC ; sur téléphone, plateau centré entre logo et menu). Animations (étoiles, éclair, lanterne, fumée, braises, reflets sur les cartes dessinées via `accMatrice`) en CSS `.acc-*` (fin de `style.css`). Plaques des boutons : `plaque-rouge.webp`, `plaque-noire.webp`. Maquette d’origine : `maquette-accueil.html`.
 - **Chargement des images** : `src/game-load.js`. L’écran de chargement (`#boot`, style dans `index.html` ; v254 : fond et logo allégés dans `assets/boot/`, barre dans le panneau noir, étape, pourcentage et astuces `BOOT_TIPS`) attend l’essentiel (`bootUrls`) ; le reste se charge ensuite en arrière-plan (`preloadBackground`), en sautant ce que le service worker garde déjà.
 - **Effets des cartes (v266)** : lumière de la scène (`.cf-lum`, selon `html[data-axph]`), reflet du cadre (`.cf-met`, masque = le cadre), bonus en vert (`bonusCoins`), bandeau Nouveau (`isNewCard`, `META.seenC`), et animations dans `game-anim.js` (voir `docs/IDEES_CARTES.md`).
 - **Traces des nuits (v274)** : `MARKS` (`game-draw.js`) : `h` = passages de la horde sur une grille 40 × 40 (`sampleHordeTrail`, image `trailCv`), `b` = taches de sang (`addBloodMark`, dessinées sur `decal`). Sauvegardé dans `abri-save` (clé `m`), remis à zéro par `resetMarks()` dans `newGame`. Choc à la pose : `poseImpactFx` (appelé par `landFx`), saut `hopT` ; réaction au toucher : `pieceTapReact`.
