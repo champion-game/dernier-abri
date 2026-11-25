@@ -265,6 +265,7 @@ document.addEventListener(
   },
   true,
 );
-addEventListener('resize', accPlacer);
+// en tournant le téléphone, l'image change (portrait ↔ paysage) : on refait la scène, pas seulement sa place
+addEventListener('resize', accScene);
 // l'accueil est déjà affiché quand ce fichier se charge : on pose tout de suite logo et décor
 axGlow();
