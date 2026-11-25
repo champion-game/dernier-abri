@@ -23,7 +23,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (754 lignes)
 18. `src/game-load.js` (195 lignes)
-19. `src/game-accueil.js` (271 lignes)
+19. `src/game-accueil.js` (272 lignes)
 
 ## Fonctions enveloppées
 
