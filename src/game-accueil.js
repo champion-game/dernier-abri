@@ -1,5 +1,5 @@
 // v301 : nouvel accueil d'Amine (maquette-accueil.html validée) : son image de fond telle quelle (accueil.webp),
-// le logo Barricard de la maquette, des plaques dorées pour Jouer, Collection et Défi, et un décor animé :
+// le logo Barricard de la maquette, les boutons d'avant (qui ne grossissent plus) et un décor animé :
 // étoiles, étoile filante, éclair lointain (le logo tremble), mirador et fenêtre qui clignotent, lanterne,
 // fumée de la cheminée, braises, lucioles, brume, reflets sur les cartes et les jetons dessinés.
 // Le décor est une « scène » à la taille de l'image (1672 × 941) mise à l'échelle dans le calque #axbg :

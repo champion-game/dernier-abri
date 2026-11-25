@@ -39,7 +39,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-fx2.js` : troisième série d’effets (avant → après, zones non couvertes, bouton de la nuit, nuit rouge, gros coups, maison touchée, aube).
   - `game-fx3.js` : quatrième série d’effets (gel court, morts selon l’arme, corps et douilles, pluie et orage, réactions et gestes des unités) ; chargé tout à la fin.
   - `game-fx5.js` : le camp prend vie (répliques des survivants en bulles, occupations du jour, fumée, corbeaux, feuilles, lumière du soir, traces sur la maison) ; chargé tout à la fin, après `game-fx3.js`.
-  - `game-accueil.js` (v301) : nouvel accueil d’Amine (fond `accueil.webp` intact, logo, plaques dorées, décor animé) ; enveloppe `axGlow`, chargé après `game-load.js`.
+  - `game-accueil.js` (v301) : nouvel accueil d’Amine (fond `accueil.webp` intact, logo, décor animé, anciens boutons) ; enveloppe `axGlow`, chargé après `game-load.js`.
   - `game-load.js` : écran de chargement au lancement (l’essentiel : page, sprites, cadres, cartes du deck) puis chargement en arrière-plan des autres images ; chargé en tout dernier.
   - `game-coll.js` : collection du style artiste reprise du laboratoire (`champion-game/laboratoire-`, `interfaces/collection`) : filtres, grille, grande carte qui se retourne ; chargé tout à la fin.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).

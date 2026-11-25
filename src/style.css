@@ -16537,8 +16537,7 @@ html.eco.artx .cf:is(.cs-hex, .cs-dia) .cf-cost {
 
 /* ===== v301 : nouvel accueil d'Amine (game-accueil.js, maquette-accueil.html) =====
    Fond : accueil.webp (image d'Amine telle quelle) dans une scène 1672 × 941 placée par accPlacer, avec ses animations.
-   Jouer : plaque rouge ; Collection et Défi : plaque noire dorée ; barre du bas et roue : même plaque.
-   Les boutons ne grossissent plus (ni au survol ni en respirant) : ils s'éclairent et un reflet passe. */
+   Boutons : ceux d'avant (choix d'Amine), qui ne grossissent plus. */
 html.artx #ov.home #axbg.acc {
   background: #0c0a0b !important;
   overflow: hidden;
@@ -16864,140 +16863,28 @@ html.artx #ov.axh .axh-col .logo.acc-tremble {
     transform: translate(2px, 0);
   }
 }
-/* plaques : Jouer (rouge), Collection et Défi (noire dorée) */
-html.artx #ov.axh #panel .axh-play,
-html.artx #ov.axh .axh-big {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6em;
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  aspect-ratio: 803 / 192;
-  margin: 0;
-  padding: 0 8%;
-  border: 0 !important;
-  border-image: none !important;
-  border-radius: 0;
-  background: url(../assets/art/ui/plaque-noire.webp) center / 100% 100% no-repeat !important;
-  box-shadow: none !important;
-  filter: drop-shadow(0 6px 10px #000a) !important;
-  color: #f1e4c8 !important;
-  text-shadow:
-    0 2px 0 #000,
-    0 0 10px #0008;
-  animation: none;
-  transform: none !important;
-  transition: filter 0.18s;
+/* boutons : les anciens boutons de l'accueil, mais ils ne grossissent plus (ni au survol ni en respirant) :
+   « Jouer » garde seulement son halo de braise qui respire */
+@keyframes accHalo {
+  0%,
+  100% {
+    box-shadow: 0 0 18px 2px rgba(255, 100, 35, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 40px 10px rgba(255, 120, 45, 0.65);
+  }
 }
 html.artx #ov.axh #panel .axh-play {
-  background-image: url(../assets/art/ui/plaque-rouge.webp) !important;
-  font-size: clamp(22px, 2.3vw, 30px);
-}
-html.artx #ov.axh #panel .axh-play::after {
-  content: '';
-  position: absolute;
-  inset: 8% 4%;
-  z-index: -1;
-  border-radius: 4px;
-  background: none;
-  mix-blend-mode: normal;
-  box-shadow: 0 0 22px 4px #ff3a2a44;
-  animation: accPouls 2.2s ease-in-out infinite;
-}
-@keyframes accPouls {
-  50% {
-    box-shadow: 0 0 34px 10px #ff3a2a88;
-  }
-}
-html.artx #ov.axh #panel .axh-play::before,
-html.artx #ov.axh .axh-big::before {
-  content: '';
-  position: absolute;
-  inset: 10% 3%;
-  border-radius: 4px;
-  background: linear-gradient(105deg, #0000 40%, #fff3 50%, #0000 60%) -200% 0 / 200% 100% no-repeat;
-  transition: background-position 0.6s;
-  pointer-events: none;
-}
-html.artx #ov.axh #panel .axh-play:hover,
-html.artx #ov.axh .axh-big:hover {
-  filter: drop-shadow(0 6px 10px #000a) brightness(1.18) !important;
-}
-html.artx #ov.axh #panel .axh-play:hover::before,
-html.artx #ov.axh .axh-big:hover::before {
-  background-position: 200% 0;
-}
-html.artx #ov.axh #panel .axh-play:active,
-html.artx #ov.axh .axh-big:active {
-  filter: drop-shadow(0 4px 6px #000a) brightness(0.9) !important;
-}
-html.artx #ov.axh .axh-big {
-  width: 92%;
-  align-self: center;
-}
-html.artx #ov.axh .axh-big .ink {
-  margin: 0;
-}
-html.artx #ov.axh .axh-big b {
-  padding-left: 0;
-  border-left: 0;
-}
-html.artx #ov.axh .axh-big .newb {
-  position: absolute;
-  right: 4%;
-  top: -14%;
-  padding: 0.15em 0.55em;
-  color: #fff;
-  background: #c4161c;
-  border: 1.5px solid #ffd27a;
-  border-radius: 3px;
-  transform: rotate(6deg);
-  box-shadow: 0 3px 8px #000a;
+  animation: accHalo 2.6s ease-in-out infinite;
 }
 html.artx .axh-in .axh-menu > .axh-play {
-  animation: axhSlide 0.45s 0.2s ease-out both;
+  animation:
+    axhSlide 0.45s 0.2s ease-out both,
+    accHalo 2.6s 0.7s ease-in-out infinite;
 }
-/* barre du bas et roue dentée : même plaque dorée */
-html.artx #ov.axh .axh-bar {
-  border-style: solid;
-  border-width: 16px;
-  border-image: url(../assets/art/ui/plaque-noire.webp) 52 fill / 16px stretch;
-  padding: 0 6px;
-}
-html.artx #ov.axh .axh-tab {
-  padding: 4px;
-}
-html.artx #ov.axh .axh-gear {
-  width: 56px;
-  height: 56px;
-  border-style: solid;
-  border-width: 12px;
-  border-image: url(../assets/art/ui/plaque-noire.webp) 52 fill / 12px stretch;
-  transition: transform 0.4s;
-}
+html.artx #ov.axh #panel .axh-play:hover,
+html.artx #ov.axh .axh-big:hover,
+html.artx #ov.axh .axh-tab:hover,
 html.artx #ov.axh .axh-gear:hover {
-  transform: rotate(60deg);
-}
-@media (max-aspect-ratio: 3/4) {
-  html.artx #ov.axh .axh-big {
-    height: auto;
-    font-size: 16px;
-  }
-  html.artx #ov.axh #panel .axh-play {
-    padding: 0 8%;
-    font-size: 25px;
-  }
-  html.artx #ov.axh .axh-tab {
-    padding: 2px 1px;
-  }
-  html.artx #ov.axh .axh-gear {
-    width: 46px;
-    height: 46px;
-    border-width: 10px;
-    border-image-width: 10px;
-  }
+  transform: none;
 }

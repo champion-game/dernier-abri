@@ -36,8 +36,6 @@ const CORE = [
   'assets/art/ui/fond.webp',
   'assets/art/ui/barricard.webp',
   'assets/art/ui/logo-accueil.webp',
-  'assets/art/ui/plaque-noire.webp',
-  'assets/art/ui/plaque-rouge.webp',
   'assets/art/ui/panneau-noir.webp',
   'assets/boot/logo.webp',
   'assets/boot/fond.webp',
