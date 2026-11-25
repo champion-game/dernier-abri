@@ -23,7 +23,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 16. `src/game-fx3.js` (535 lignes)
 17. `src/game-fx5.js` (754 lignes)
 18. `src/game-load.js` (195 lignes)
-19. `src/game-accueil.js` (200 lignes)
+19. `src/game-accueil.js` (271 lignes)
 
 ## Fonctions enveloppées
 
@@ -41,7 +41,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
 | `feltLayout` | game-ui.js:1918 | game-artx.js:985, game-artx.js:1128 |
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1170 |
-| `axGlow` | game-artx.js:268 | game-accueil.js:182 |
+| `axGlow` | game-artx.js:268 | game-accueil.js:253 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
 | `dawnStep` | game-screens.js:35 | game-anim.js:333 |
 | `drawFloats` | game-draw.js:5823 | game-fx5.js:746 |
@@ -235,11 +235,11 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 > v301 : nouvel accueil d'Amine (maquette-accueil.html validée) : son image de fond telle qu
 
-accMatrice:36 accSceneHtml:42 accPlacer:73 accAmbiance:104 accScene:155 accLogo:172
+accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLogo:243
 
 ## src/style.css
 
-17004 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1340 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+16894 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1321 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -557,8 +557,7 @@ accMatrice:36 accSceneHtml:42 accPlacer:73 accAmbiance:104 accScene:155 accLogo:
 - 16487 v289 : coût des pièges (hexagone) et des objets et réactions (losange) : même relief que l
 - 16527 v295 : sur ordinateur, tout bouton cliquable grossit un peu au survol (demande d’Amine).
 - 16538 ===== v301 : nouvel accueil d'Amine (game-accueil.js, maquette-accueil.html) =====
-- 16575 téléphone : le haut de l'image se fond dans le noir derrière le logo
-- 16582 PC : voile sombre à gauche derrière le menu
-- 16846 logo : respire avec une lueur rouge, tremble à chaque éclair
-- 16867 plaques : Jouer (rouge), Collection et Défi (noire dorée)
-- 16964 barre du bas et roue dentée : même plaque dorée
+- 16577 téléphone : le bas de l'image se fond dans le noir sous le menu
+- 16584 PC : voile sombre à gauche derrière le menu
+- 16848 logo : respire avec une lueur rouge, tremble à chaque éclair
+- 16869 boutons : les anciens boutons de l'accueil, mais ils ne grossissent plus (ni au survol ni 
