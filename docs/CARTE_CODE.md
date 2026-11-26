@@ -24,6 +24,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 17. `src/game-fx5.js` (754 lignes)
 18. `src/game-load.js` (195 lignes)
 19. `src/game-accueil.js` (272 lignes)
+20. `src/game-menufx.js` (308 lignes)
 
 ## Fonctions enveloppées
 
@@ -40,6 +41,8 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
 | `deckEditor` | game-screens.js:900 | game-anim.js:446, game-coll.js:1253 |
 | `feltLayout` | game-ui.js:1918 | game-artx.js:985, game-artx.js:1128 |
+| `show` | game-screens.js:601 | game-anim.js:1305, game-menufx.js:276 |
+| `showAch` | game.js:902 | game-anim.js:1255, game-menufx.js:247 |
 | `syncZ` | game-draw.js:2366 | game-fx2.js:201, game-artx.js:1170 |
 | `axGlow` | game-artx.js:268 | game-accueil.js:253 |
 | `countUp` | game-screens.js:639 | game-anim.js:1264 |
@@ -52,6 +55,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `drawSky` | game-draw.js:5914 | game-artx.js:689 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:345 |
+| `hide` | game-screens.js:654 | game-menufx.js:29 |
 | `keepEnd` | game-menu.js:582 | game-fiche.js:206 |
 | `lights` | game-draw.js:6025 | game-fx3.js:378 |
 | `mergeFx` | game-ui.js:1493 | game-anim.js:854 |
@@ -62,8 +66,6 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:557 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
-| `show` | game-screens.js:601 | game-anim.js:1305 |
-| `showAch` | game.js:902 | game-anim.js:1255 |
 | `tapCell` | game-ui.js:1624 | game-ui.js:2074 |
 | `title` | game-menu.js:452 | game-artx.js:354 |
 | `unitAnim` | game-draw.js:3116 | game-fx3.js:327 |
@@ -237,9 +239,22 @@ preloadImg:11 inCache:24 preloadUi:35 preloadCards:41 bootUrls:52 bootStepLabel:
 
 accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLogo:243
 
+### src/game-menufx.js
+
+> v302 : animations des menus (validées par Amine sur la maquette)
+
+- **8** 1 : fermeture en fondu : closeGhost:10
+- **37** 3 : vague au toucher et lueur qui suit la souris : rippleAt:39
+- **93** 4 : le panneau grésille comme un poste radio : radioCrackle:94
+- **115** 5 : l'onglet choisi glisse vers le nouveau : slideTabs:118
+- **150** 8 : barres qui se remplissent : growBars:151
+- **170** 9 : boutique : refusePrice:173 rememberBuy:187 buyFx:192
+- **219** 7 : succès : sparksAround:220
+- **273** show : tout ce qui joue quand un écran s'affiche
+
 ## src/style.css
 
-16894 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1321 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
+17112 lignes. Les règles s’empilent par version : **à sélecteur égal, la dernière l’emporte**. Le style artiste est sous `html.artx` (1326 lignes). Chercher un sélecteur avec `grep -n` plutôt que par section.
 
 - 1 polices intégrées au jeu (licence SIL OFL), pour jouer sans internet
 - 2 v252 : Creepster, police d'horreur réservée au bouton « Affronter la nuit »
@@ -561,3 +576,13 @@ accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLog
 - 16584 PC : voile sombre à gauche derrière le menu
 - 16848 logo : respire avec une lueur rouge, tremble à chaque éclair
 - 16869 boutons : les anciens boutons de l'accueil, mais ils ne grossissent plus (ni au survol ni 
+- 16895 v302 : animations des menus (game-menufx.js) ; rien en Mode économie ni en « mouvement réd
+- 16896 1 : copie du panneau qui s'efface à la fermeture
+- 16915 2 : cascade, un bloc après l'autre (--mi posé par show)
+- 16926 3 : boutons qui s'enfoncent, vague au toucher, lueur sous la souris
+- 16960 4 : lignes de balayage d'un vieux poste radio à l'ouverture
+- 16990 5 : reflet rouge qui glisse de l'ancien onglet au nouveau ; interrupteurs qui rebondissent
+- 17013 6 : la pause floute et assombrit le plateau peu à peu
+- 17029 7 : médaille du succès (reflet, éclats) et cadenas qui secoue
+- 17074 8 : reflet sur les barres une fois remplies
+- 17087 9 : trop cher, le prix secoue en rouge

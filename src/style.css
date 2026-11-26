@@ -16891,3 +16891,221 @@ html.artx #ov.axh .axh-tab:hover,
 html.artx #ov.axh .axh-gear:hover {
   transform: none;
 }
+
+/* v302 : animations des menus (game-menufx.js) ; rien en Mode économie ni en « mouvement réduit » */
+/* 1 : copie du panneau qui s'efface à la fermeture */
+.overlay.mfx-ghost {
+  pointer-events: none;
+  z-index: 11;
+  animation: mfxOut 0.24s ease-in forwards;
+}
+.overlay.mfx-ghost .panel {
+  animation: mfxPanelOut 0.24s ease-in forwards;
+}
+@keyframes mfxOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes mfxPanelOut {
+  to {
+    transform: scale(0.94) translateY(8px);
+  }
+}
+/* 2 : cascade, un bloc après l'autre (--mi posé par show) */
+html:not(.eco) .panel.pin > * {
+  animation: mfxCascade 0.34s cubic-bezier(0.2, 0.8, 0.3, 1.15) both;
+  animation-delay: calc(var(--mi, 0) * 40ms);
+}
+@keyframes mfxCascade {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+/* 3 : boutons qui s'enfoncent, vague au toucher, lueur sous la souris */
+html.artx .panel :is(.go, .skip, .tab, .shopi, button.char, .rchip) {
+  transition:
+    transform 0.08s,
+    box-shadow 0.12s;
+}
+html.artx .panel :is(.go, .skip, .tab, .shopi, button.char, .rchip):not(:disabled):active {
+  transform: translateY(2px) scale(0.98);
+}
+.mfx-host {
+  position: relative;
+  overflow: hidden;
+}
+.mfx-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 240, 210, 0.45);
+  transform: scale(0);
+  pointer-events: none;
+  animation: mfxWave 0.5s ease-out forwards;
+}
+@keyframes mfxWave {
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.mfx-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(90px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 236, 196, 0.32), transparent 65%);
+  mix-blend-mode: screen;
+}
+/* 4 : lignes de balayage d'un vieux poste radio à l'ouverture */
+.mfx-scan {
+  position: fixed;
+  z-index: 12;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 6px;
+  background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, 0.28) 2px 3px);
+  animation: mfxScanFade 0.75s ease-out forwards;
+}
+.mfx-scan::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60px;
+  top: -60px;
+  background: linear-gradient(transparent, rgba(232, 194, 122, 0.28), transparent);
+  animation: mfxSweep 0.6s ease-in-out forwards;
+}
+@keyframes mfxScanFade {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes mfxSweep {
+  to {
+    top: 100%;
+  }
+}
+/* 5 : reflet rouge qui glisse de l'ancien onglet au nouveau ; interrupteurs qui rebondissent */
+.mfx-tabslide {
+  position: fixed;
+  z-index: 12;
+  pointer-events: none;
+  border-radius: 4px;
+  transform-origin: 0 0;
+  background: rgba(207, 51, 38, 0.35);
+  box-shadow:
+    0 0 0 1.5px rgba(255, 190, 160, 0.6),
+    0 0 14px rgba(200, 40, 30, 0.55);
+}
+html.artx .opts .chk input[type='checkbox']::before {
+  transition:
+    transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1),
+    width 0.12s;
+}
+html.artx:not(.eco) .opts .chk input[type='checkbox']:active::before {
+  width: 20px;
+}
+html.artx:not(.eco) .opts .chk input[type='checkbox']:checked:active::before {
+  transform: translateX(13px);
+}
+/* 6 : la pause floute et assombrit le plateau peu à peu */
+html:not(.eco) #ov.mfx-pause {
+  background: rgba(8, 7, 6, 0.6);
+  backdrop-filter: blur(7px) saturate(0.6);
+  -webkit-backdrop-filter: blur(7px) saturate(0.6);
+}
+html:not(.eco) #ov.mfx-pause.oin {
+  animation: mfxPauseIn 0.4s ease-out;
+}
+@keyframes mfxPauseIn {
+  from {
+    background: rgba(8, 7, 6, 0);
+    backdrop-filter: blur(0) saturate(1);
+    -webkit-backdrop-filter: blur(0) saturate(1);
+  }
+}
+/* 7 : médaille du succès (reflet, éclats) et cadenas qui secoue */
+.achtoast .ach-ic.mfx-medal {
+  position: relative;
+  overflow: hidden;
+}
+.achtoast .ach-ic.mfx-medal::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.75) 50%, transparent 60%);
+  transform: translateX(-130%);
+  animation: mfxShine 0.8s 0.7s ease-out forwards;
+}
+@keyframes mfxShine {
+  to {
+    transform: translateX(130%);
+  }
+}
+.mfx-spark {
+  position: fixed;
+  z-index: 31;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: #f2c770;
+  box-shadow: 0 0 6px #f2b33d;
+}
+.achi .ach-ic.mfx-lock {
+  animation: mfxLock 0.4s;
+}
+@keyframes mfxLock {
+  20% {
+    transform: rotate(-14deg);
+  }
+  40% {
+    transform: rotate(12deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
+}
+/* 8 : reflet sur les barres une fois remplies */
+.mfx-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.mfx-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: mfxShine 0.6s ease-out forwards;
+}
+/* 9 : trop cher, le prix secoue en rouge */
+.mfx-nope {
+  animation: mfxNope 0.4s;
+  color: #ff5a4a !important;
+}
+@keyframes mfxNope {
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html .panel.pin > *,
+  #ov.mfx-pause.oin {
+    animation: none;
+  }
+}

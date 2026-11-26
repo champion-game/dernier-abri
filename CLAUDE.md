@@ -40,6 +40,7 @@ Le document de conception complet est dans `docs/GAME_DESIGN.md`. Lis-le avant t
   - `game-fx3.js` : quatrième série d’effets (gel court, morts selon l’arme, corps et douilles, pluie et orage, réactions et gestes des unités) ; chargé tout à la fin.
   - `game-fx5.js` : le camp prend vie (répliques des survivants en bulles, occupations du jour, fumée, corbeaux, feuilles, lumière du soir, traces sur la maison) ; chargé tout à la fin, après `game-fx3.js`.
   - `game-accueil.js` (v301) : nouvel accueil d’Amine (fond `accueil.webp` intact, logo, décor animé, anciens boutons) ; enveloppe `axGlow`, chargé après `game-load.js`.
+  - `game-menufx.js` (v302) : animations des menus (fermeture en fondu, cascade, boutons, grésillement radio, onglets, pause floutée, succès, barres, boutique) ; enveloppe `show`, `hide` et `showAch`, chargé en tout dernier.
   - `game-load.js` : écran de chargement au lancement (l’essentiel : page, sprites, cadres, cartes du deck) puis chargement en arrière-plan des autres images ; chargé en tout dernier.
   - `game-coll.js` : collection du style artiste reprise du laboratoire (`champion-game/laboratoire-`, `interfaces/collection`) : filtres, grille, grande carte qui se retourne ; chargé tout à la fin.
 - `sw.js` : rend le jeu jouable sans internet une fois chargé (code : réseau d’abord ; images et sons : copie locale d’abord).
