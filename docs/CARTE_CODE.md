@@ -25,7 +25,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 18. `src/game-load.js` (195 lignes)
 19. `src/game-accueil.js` (272 lignes)
 20. `src/game-menufx.js` (308 lignes)
-21. `src/game-3d.js` (1582 lignes)
+21. `src/game-3d.js` (1681 lignes)
 
 ## Fonctions enveloppées
 
@@ -54,9 +54,9 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `drawPlace` | game-draw.js:6314 | game-fx3.js:315 |
 | `drawShelter` | game-draw.js:5187 | game-fx5.js:506 |
 | `drawSky` | game-draw.js:5914 | game-artx.js:689 |
-| `drawSpr` | game.js:235 | game-3d.js:21 |
-| `drawUnit` | game-draw.js:3209 | game-3d.js:49 |
-| `drawZombie` | game-draw.js:5319 | game-3d.js:40 |
+| `drawSpr` | game.js:235 | game-3d.js:50 |
+| `drawUnit` | game-draw.js:3209 | game-3d.js:75 |
+| `drawZombie` | game-draw.js:5319 | game-3d.js:66 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:345 |
 | `hide` | game-screens.js:654 | game-menufx.js:29 |
@@ -67,7 +67,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1344 |
 | `pilesHtml` | game.js:1569 | game-artx.js:1041 |
 | `placeHints` | game-draw.js:7025 | game-fx2.js:246 |
-| `pushSpriteEyes` | game-draw.js:2824 | game-3d.js:59 |
+| `pushSpriteEyes` | game-draw.js:2824 | game-3d.js:85 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:557 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
@@ -262,12 +262,12 @@ accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLog
 
 > v304 : aperçu des personnages en 3D dans le vrai jeu (essai, pas encore validé par Amine).
 
-- **81** Textures peintes en code
-- **355** Formes arrondies
-- **636** Les personnages
-- **1149** Animations souples
-- **1352** Les défenseurs
-- **1479** Photo des boucles d'animation
+- **107** Textures peintes en code
+- **381** Formes arrondies
+- **662** Les personnages
+- **1175** Animations souples
+- **1378** Les défenseurs
+- **1505** Photo des animations
 
 ## src/style.css
 
