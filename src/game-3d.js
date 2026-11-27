@@ -13,10 +13,39 @@
   } catch (e) {}
   if (!actif) return;
 
-  const ATLAS = {}; // clé du sprite -> { images, boucle, echelle }
-  let enCours = null; // personnage en train d'être dessiné : décalage d'animation et marche
+  const ATLAS = {}; // clé du sprite -> { clips: { repos, marche, attaque, tir0, tir1, touche, mort }, echelle }
+  let enCours = null; // personnage en train d'être dessiné (unité ou zombie), pour choisir son geste
 
-  // drawSpr dessine l'image animée quand elle existe, sinon le dessin d'origine
+  // image d'un geste : en boucle selon l'horloge, ou jouée une fois depuis son début (puis figée sur la dernière)
+  function imageClip(clip, t, boucle) {
+    const n = clip.images.length,
+      k = Math.floor((t / clip.duree) * n);
+    return clip.images[boucle ? ((k % n) + n) % n : Math.min(n - 1, Math.max(0, k))];
+  }
+  // le geste à montrer selon ce que fait le personnage dans le jeu
+  function choisirImage(A) {
+    const C = A.clips,
+      e = enCours,
+      horloge = performance.now() / 1000 + (e ? e.decalage : 0);
+    if (e && e.zombie) {
+      const v = e.zombie,
+        now = e.now;
+      if (v.dying) return imageClip(C.mort, (now - v.dying) / 1000, false);
+      if (now - (v.flash || -1e9) < C.touche.duree * 1000) return imageClip(C.touche, (now - v.flash) / 1000, false);
+      if (now - (v.atk || -1e9) < 600) return imageClip(C.attaque, horloge, true);
+      return e.bouge ? imageClip(C.marche, horloge, true) : imageClip(C.repos, horloge, true);
+    }
+    if (e && e.unite != null) {
+      const ta = (e.now - atkT[e.unite]) / 1000;
+      if (C.tir0 && ta >= 0 && ta < C.tir0.duree)
+        return imageClip(Math.round(atkT[e.unite]) % 2 ? C.tir1 : C.tir0, ta, false);
+      if (C.attaque && !C.attaque.boucle && ta >= 0 && ta < C.attaque.duree) return imageClip(C.attaque, ta, false);
+      if (C.attaque && C.attaque.boucle && ta >= 0 && ta < 0.9) return imageClip(C.attaque, horloge, true);
+    }
+    return imageClip(C.repos, horloge, true);
+  }
+
+  // drawSpr dessine le modèle animé quand il existe, sinon le dessin d'origine
   const drawSprDessin = drawSpr;
   drawSpr = function (k, x, y, a, out, mul) {
     const A = ATLAS[k];
@@ -24,21 +53,18 @@
     const d = sprK(k)[1];
     if (!d) return drawSprDessin.apply(this, arguments);
     const [m, b, z] = d,
-      sz = z * (mul || 1) * A.echelle,
-      vitesse = enCours && !enCours.bouge ? 0.3 : 1,
-      t = (performance.now() / 1000) * vitesse + (enCours ? enCours.decalage : 0),
-      image = A.images[Math.floor((t / A.boucle) * A.images.length) % A.images.length];
+      sz = z * (mul || 1) * A.echelle;
     ctx.save();
     ctx.translate(x, y);
     if (m === 'rot') ctx.rotate(a - b);
-    ctx.drawImage(image, -sz / 2, -sz / 2, sz, sz);
+    ctx.drawImage(choisirImage(A), -sz / 2, -sz / 2, sz, sz);
     ctx.restore();
     return true;
   };
   // chaque zombie et chaque unité a son propre temps d'animation, pour ne pas bouger tous ensemble
   const drawZombieDessin = drawZombie;
   drawZombie = function (v, now) {
-    enCours = { decalage: ((v.id || 0) * 0.37) % 7, bouge: now - v.t0 < v.dur };
+    enCours = { zombie: v, now, decalage: ((v.id || 0) * 0.37) % 7, bouge: now - v.t0 < v.dur };
     try {
       return drawZombieDessin.apply(this, arguments);
     } finally {
@@ -46,8 +72,8 @@
     }
   };
   const drawUnitDessin = drawUnit;
-  drawUnit = function (i) {
-    enCours = { decalage: (i * 0.53) % 7, bouge: true };
+  drawUnit = function (i, u, now) {
+    enCours = { unite: i, now, decalage: (i * 0.53) % 7 };
     try {
       return drawUnitDessin.apply(this, arguments);
     } finally {
@@ -1476,9 +1502,13 @@
       chaine(p, p.barbe, 'b', dt, { base: 0, inertie: 0.02, vent: 0, k: 70, amort: 6 });
     }
 
-    // ---------- Photo des boucles d'animation ----------
+    // ---------- Photo des animations ----------
+    // Mouvements plus amples qu'en maquette : à 40 px de large, un petit balancement ne se voit pas
+    Object.assign(ZTYPES.facteur, { balBras: 0.32, roulis: 0.15, torsion: 0.24 });
+    Object.assign(ZTYPES.coureuse, { balBras: 0.7, roulis: 0.09, torsion: 0.38 });
+    Object.assign(ZTYPES.gros, { balBras: 0.35, roulis: 0.26, torsion: 0.14 });
     const rendu = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-    const TAILLE = 192;
+    const TAILLE = 128;
     rendu.setPixelRatio(1);
     rendu.setSize(TAILLE, TAILLE, false);
     rendu.setClearColor(0x000000, 0);
@@ -1488,83 +1518,152 @@
     soleil.position.set(-3, 10, 3);
     scene.add(soleil);
     const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 50);
-    cam.position.set(0, 20, 0.001);
-    cam.up.set(0, 0, -1);
     const TOUR = Math.PI * 2;
+    const zombieType = z => ({ type: z, phase: 0, marche: true, attaque: false });
+    // Chaque personnage : une boucle de repos (ou de marche) et ses gestes, joués quand le jeu le demande
     const LISTE = [
       {
         cle: 'gun',
         faire: pistolero,
         demi: 0.62,
         cz: 0.12,
-        boucle: 4,
-        n: 24,
-        anim: (p, dt, t) => poseGun(p, dt, t, false, 0, 0, true),
+        clips: {
+          repos: { duree: 4, n: 24, boucle: true, anim: (p, dt, t) => poseGun(p, dt, t, false, 0, 0, true) },
+          tir0: { duree: 0.36, n: 6, anim: (p, dt, t) => poseGun(p, dt, t, t === 0, 0, 0, true) },
+          tir1: { duree: 0.36, n: 6, anim: (p, dt, t) => poseGun(p, dt, t, t === 0, 1, 0, true) },
+        },
       },
       {
         cle: 'axe',
         faire: bucheron,
-        demi: 0.75,
+        demi: 0.78,
         cz: 0.15,
-        boucle: 4,
-        n: 24,
-        anim: (p, dt, t) => poseHache(p, dt, t, -1, 0),
+        clips: {
+          repos: { duree: 4, n: 24, boucle: true, anim: (p, dt, t) => poseHache(p, dt, t, -1, 0) },
+          attaque: { duree: 0.6, n: 10, anim: (p, dt, t) => poseHache(p, dt, t, Math.min(1, 0.3 + t / 0.6), 0) },
+        },
       },
       {
         cle: 'flame',
         faire: lanceFlammes,
-        demi: 0.78,
+        demi: 0.8,
         cz: 0.2,
-        boucle: 4,
-        n: 24,
-        anim: (p, dt, t) => poseFeu(p, dt, t, false, 0),
+        clips: {
+          repos: { duree: 4, n: 24, boucle: true, anim: (p, dt, t) => poseFeu(p, dt, t, false, 0) },
+          attaque: { duree: TOUR / 2.2, n: 18, boucle: true, anim: (p, dt, t) => poseFeu(p, dt, t, true, 0) },
+        },
       },
-      { cle: 'z_walk', faire: facteur, z: 'facteur', demi: 0.62, cz: 0.18, n: 16 },
-      { cle: 'z_run', faire: coureuse, z: 'coureuse', demi: 0.58, cz: 0.18, n: 12 },
-      { cle: 'z_fat', faire: gros, z: 'gros', demi: 0.8, cz: 0.15, n: 20 },
     ];
+    // les trois zombies ont les mêmes gestes : marche, attente, griffes, coup reçu, chute
+    [
+      ['z_walk', facteur, 'facteur', 0.64],
+      ['z_run', coureuse, 'coureuse', 0.6],
+      ['z_fat', gros, 'gros', 0.82],
+    ].forEach(([cle, faire, z, demi]) => {
+      const pas = TOUR / ZTYPES[z].cadence;
+      LISTE.push({
+        cle,
+        faire,
+        demi,
+        cz: 0.15,
+        z,
+        clips: {
+          marche: {
+            duree: pas,
+            n: 14,
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = true), (p.attaque = false), animZombie(p, dt, t)),
+          },
+          repos: {
+            duree: pas / 0.3,
+            n: 16,
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = false), (p.attaque = false), animZombie(p, dt, t)),
+          },
+          attaque: {
+            duree: TOUR / 6,
+            n: 10,
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = false), (p.attaque = true), animZombie(p, dt, t)),
+          },
+          touche: {
+            duree: 0.3,
+            n: 5,
+            anim: (p, dt, t) => {
+              if (t === 0) {
+                pousser(p, 'tx', -9);
+                pousser(p, 'recul', -5);
+                pousser(p, 'ex0', -4);
+                pousser(p, 'ex1', -4);
+                p.titube = 0.3;
+              }
+              p.marche = true;
+              animZombie(p, dt, t);
+            },
+          },
+          mort: {
+            duree: 0.5,
+            n: 8,
+            anim: (p, dt, t) => {
+              p.t = t;
+              p.chute.rotation.x = -mourir(p, dt);
+            },
+          },
+        },
+      });
+    });
     function photographier(o) {
-      const p = o.faire();
-      scene.add(p.racine);
-      const boucle = o.z ? TOUR / ZTYPES[o.z].cadence : o.boucle,
-        W = TOUR / boucle;
-      BOUCLE = { souffle: W * 2, poids: W };
-      bruit = (t, s) =>
-        Math.sin(t * W + s) * 0.5 + Math.sin(t * W * 2 + s * 1.7) * 0.3 + Math.sin(t * W * 3 + s * 2.3) * 0.2;
-      if (o.z) {
-        p.type = o.z;
-        p.phase = 0;
-        p.marche = true;
-        p.perso = {
-          boite: o.z === 'facteur' ? 0.5 : 0,
-          cote: 0,
-          inclin: 0.15,
-          brasMou: -1,
-          rythme: 1,
-          graine: 1,
-          tic: 1e9,
-        };
+      const clips = {};
+      for (const nom in o.clips) {
+        const c = o.clips[nom];
+        // un modèle neuf par geste, mis en route sur sa pose de départ
+        const p = o.faire();
+        if (o.z)
+          Object.assign(p, zombieType(o.z), {
+            perso: {
+              boite: o.z === 'facteur' ? 0.5 : 0,
+              cote: 0,
+              inclin: 0.15,
+              brasMou: -1,
+              rythme: 1,
+              graine: 1,
+              tic: 1e9,
+            },
+          });
+        scene.add(p.racine);
+        const depart = c.boucle ? c : o.clips[o.z ? 'marche' : 'repos'],
+          W = TOUR / depart.duree;
+        BOUCLE = { souffle: W * 2, poids: W };
+        bruit = (t, s) =>
+          Math.sin(t * W + s) * 0.5 + Math.sin(t * W * 2 + s * 1.7) * 0.3 + Math.sin(t * W * 3 + s * 2.3) * 0.2;
+        const pasDepart = depart.duree / depart.n / 4;
+        for (let t = 0; t < depart.duree * 3; t += pasDepart) depart.anim(p, pasDepart, t);
+        const pas = c.duree / c.n / 4,
+          t0 = c.boucle ? depart.duree * 3 : 0;
+        if (!c.boucle) {
+          const W2 = TOUR / c.duree;
+          bruit = (t, s) => Math.sin(t * W2 + s) * 0.5 + Math.sin(t * W2 * 2 + s * 1.7) * 0.3;
+        }
+        Object.assign(cam, { left: -o.demi, right: o.demi, top: o.demi, bottom: -o.demi });
+        cam.position.set(0, 20, o.cz + 0.001);
+        cam.up.set(0, 0, -1);
+        cam.lookAt(0, 0.5, o.cz);
+        cam.updateProjectionMatrix();
+        const images = [];
+        for (let i = 0; i < c.n; i++) {
+          for (let k = 0; k < 4; k++) c.anim(p, pas, t0 + (i * c.duree) / c.n + k * pas);
+          rendu.render(scene, cam);
+          const cv = document.createElement('canvas');
+          cv.width = cv.height = TAILLE;
+          cv.getContext('2d').drawImage(rendu.domElement, 0, 0);
+          images.push(cv);
+        }
+        scene.remove(p.racine);
+        BOUCLE = null;
+        clips[nom] = { images, duree: c.duree, boucle: !!c.boucle };
       }
-      const anime = (dt, t) => (o.z ? animZombie(p, dt, t) : o.anim(p, dt, t));
-      const pas = boucle / o.n;
-      for (let t = 0; t < boucle * 3; t += pas / 4) anime(pas / 4, t); // mise en route des ressorts
-      Object.assign(cam, { left: -o.demi, right: o.demi, top: o.demi, bottom: -o.demi });
-      cam.position.set(0, 20, o.cz + 0.001);
-      cam.lookAt(0, 0.5, o.cz);
-      cam.updateProjectionMatrix();
-      const images = [];
-      for (let i = 0; i < o.n; i++) {
-        for (let k = 0; k < 4; k++) anime(pas / 4, boucle * 3 + i * pas + (k * pas) / 4);
-        rendu.render(scene, cam);
-        const c = document.createElement('canvas');
-        c.width = c.height = TAILLE;
-        c.getContext('2d').drawImage(rendu.domElement, 0, 0);
-        images.push(c);
-      }
-      scene.remove(p.racine);
-      BOUCLE = null;
       // le dessin de l'artiste remplit son image ; le modèle laisse une marge autour
-      ATLAS[o.cle] = { images, boucle, echelle: 1.25 };
+      ATLAS[o.cle] = { clips, echelle: 1.25 };
     }
     // un personnage à la fois, pour ne pas figer l'écran au lancement
     let i = 0;
