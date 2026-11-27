@@ -11,7 +11,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1728 lignes)
-7. `src/game-draw.js` (6955 lignes)
+7. `src/game-draw.js` (7034 lignes)
 8. `src/game-ui.js` (2086 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (861 lignes)
@@ -62,7 +62,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1344 |
 | `pilesHtml` | game.js:1569 | game-artx.js:1041 |
-| `placeHints` | game-draw.js:6946 | game-fx2.js:246 |
+| `placeHints` | game-draw.js:7025 | game-fx2.js:246 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:557 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
@@ -140,7 +140,8 @@ _t:19 _tPage:41
 - **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
 - **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
 - **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 zombieBlinkOpen:2807 lightAt:2813 pushSpriteEyes:2824 hpBar:2859 drawBars:2863 socle:2884 trackBoard:2947 cracks:3038 crater:3059 groundCrack:3084 wallJit:3108 unitAnim:3116 drawUnit:3209 drawUnitInner:3315 wallSect:4083 wallPost:4315 drawPerched:4393 feuLayout:4409 feuPoint:4476 feuCellPath:4491 feuTongue:4512 drawFireBeds:4522 feuFlame:4572 drawFireFlames:4579 drawCurrent:4699 drawEnclosure:4727 murRelief:4745 drawRamparts:4754 wireSect:4903 wirePost:4926 drawWires:4930 drawGuide:5007 guideHand:5037 drawKillZones:5106 drawBossRoute:5140 drawShelter:5187 zAnim:5290 drawZombie:5319
-- **5471** effects : addFX:5472 drawGrassBlade:5477 tapScale:5492 tapZoom:5503 boardTapFx:5512 risePuff:5560 pieceTapReact:5576 poseImpactFx:5602 drawPoseFx:5627 burst:5658 drawHealBolt:5677 drawHealGlow:5701 drawFX:5726 floatTxt:5820 drawFloats:5823 mkGlow:5893 drawSky:5914 drawGlow:5995 lights:6025 drawFog:6122 drawAmbient:6136 drawSpriteEyes:6214 drawDark:6243 frame:6298 drawPlace:6314 titleDeco:6373 frameInner:6426 safeTxt:6700 edAura:6710 dmgCached:6801 bTag:6807 dmgBadge:6825 dmgLinks:6846 placeGain:6911 placeHints:6946
+- **5471** effects : addFX:5472 drawGrassBlade:5477 tapScale:5492 tapZoom:5503 boardTapFx:5512 risePuff:5560 pieceTapReact:5576 poseImpactFx:5602 drawPoseFx:5627 burst:5658 drawHealBolt:5677 drawHealGlow:5701 drawFX:5726 floatTxt:5820 drawFloats:5823 mkGlow:5893 drawSky:5914 drawGlow:5995 lights:6025 drawFog:6122 drawAmbient:6136 drawSpriteEyes:6214 drawDark:6243 frame:6298 drawPlace:6314 titleDeco:6373 frameInner:6426 safeTxt:6681
+- **6691** portée d'une unité touchée (v303, proposition C) : reachCells:6695 reachOutlinePath:6701 drawHealCross:6714 drawReticle:6723 drawReachZone:6745 edAura:6789 dmgCached:6880 bTag:6886 dmgBadge:6904 dmgLinks:6925 placeGain:6990 placeHints:7025
 
 ### src/game-ui.js
 

@@ -6580,26 +6580,6 @@ function frameInner(now) {
   );
   const ramp = new Set();
   safe(() => drawRamparts(ramp));
-  // zone de tir d'une unité touchée (portée 2 et plus : un losange)
-  safe(() => {
-    const k = S.inspect ?? S.moveFrom;
-    const u = k != null && G.grid[k];
-    if (!u || S.busy) return;
-    const D = Z.stat(G, u.t),
-      hr = D.hrng > 1,
-      rg = hr ? D.hrng : D.rng;
-    if (!(rg > 1)) return;
-    // portée de tir en jaune, portée de soin en vert
-    ctx.fillStyle = hr ? 'rgba(126,224,138,.13)' : 'rgba(242,179,61,.13)';
-    ctx.strokeStyle = hr ? 'rgba(126,224,138,.55)' : 'rgba(242,179,61,.55)';
-    ctx.lineWidth = 1.5;
-    for (let j = 0; j < Z.N * Z.N; j++)
-      if (j !== k && Z.inRange(j, k, rg)) {
-        const p = tc(j);
-        ctx.fillRect(p.x - T / 2 + 2, p.y - T / 2 + 2, T - 4, T - 4);
-        ctx.strokeRect(p.x - T / 2 + 2, p.y - T / 2 + 2, T - 4, T - 4);
-      }
-  });
   safe(() => {
     const k = S.inspect ?? S.moveFrom;
     const u = k != null && G.grid[k];
@@ -6627,6 +6607,7 @@ function frameInner(now) {
   drawDark(now);
   safe(() => drawEdgeNight(now));
   safe(() => drawGlow(now));
+  safe(() => drawReachZone(now));
   safe(() => drawAmbient(now));
   if (nightAmt > 0.05) {
     ctx.save();
@@ -6707,6 +6688,104 @@ function safeTxt(x, y, t, c) {
 }
 
 /* v181 : pion d'une carte spéciale (édition) : halo et anneau reconnaissables la nuit. Économie : sans animation. */
+/* ---------- portée d'une unité touchée (v303, proposition C) ----------
+   Dessinée au-dessus de l'obscurité pour rester lisible de jour comme de nuit :
+   le reste du plateau s'assombrit, un contour en pointillés qui avance entoure la zone,
+   puis une croix verte sur chaque allié que le soigneur atteint, ou un viseur sur chaque case où le tireur peut tirer. */
+function reachCells(k, rg) {
+  const cells = new Set([k]);
+  for (let j = 0; j < Z.N * Z.N; j++) if (Z.inRange(j, k, rg)) cells.add(j);
+  return cells;
+}
+// trace seulement les bords des cases dont la voisine est hors de la zone : un seul contour net
+function reachOutlinePath(cells) {
+  const inZone = (r, c) => r >= 0 && c >= 0 && r < Z.N && c < Z.N && cells.has(r * Z.N + c);
+  ctx.beginPath();
+  for (const j of cells) {
+    const [r, c] = Z.rc(j),
+      x = c * T,
+      y = r * T;
+    if (!inZone(r - 1, c)) ctx.moveTo(x, y), ctx.lineTo(x + T, y);
+    if (!inZone(r + 1, c)) ctx.moveTo(x, y + T), ctx.lineTo(x + T, y + T);
+    if (!inZone(r, c - 1)) ctx.moveTo(x, y), ctx.lineTo(x, y + T);
+    if (!inZone(r, c + 1)) ctx.moveTo(x + T, y), ctx.lineTo(x + T, y + T);
+  }
+}
+function drawHealCross(x, y, sz, color) {
+  const bar = sz / 3;
+  ctx.fillStyle = 'rgba(20,40,24,.9)';
+  ctx.fillRect(x - sz / 2 - 2, y - bar / 2 - 2, sz + 4, bar + 4);
+  ctx.fillRect(x - bar / 2 - 2, y - sz / 2 - 2, bar + 4, sz + 4);
+  ctx.fillStyle = color;
+  ctx.fillRect(x - sz / 2, y - bar / 2, sz, bar);
+  ctx.fillRect(x - bar / 2, y - sz / 2, bar, sz);
+}
+function drawReticle(x, y, r, color) {
+  const trace = () => {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    for (const [dx, dy] of [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ]) {
+      ctx.moveTo(x + dx * r * 0.5, y + dy * r * 0.5);
+      ctx.lineTo(x + dx * r * 1.35, y + dy * r * 1.35);
+    }
+    ctx.stroke();
+  };
+  ctx.strokeStyle = 'rgba(30,20,0,.9)';
+  ctx.lineWidth = 5;
+  trace();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  trace();
+}
+function drawReachZone(now) {
+  const k = S.inspect ?? S.moveFrom;
+  const u = k != null && G.grid[k];
+  if (!u || S.busy) return;
+  const D = Z.stat(G, u.t),
+    isHeal = D.hrng > 1,
+    rg = isHeal ? D.hrng : D.rng;
+  if (!(rg > 1)) return;
+  const cells = reachCells(k, rg),
+    rgb = isHeal ? '126,224,138' : '242,179,61',
+    pulse = 0.85 + 0.15 * Math.sin(now / 220);
+  ctx.save();
+  ctx.fillStyle = 'rgba(8,10,14,.4)';
+  for (let j = 0; j < Z.N * Z.N; j++)
+    if (!cells.has(j)) {
+      const p = tc(j);
+      ctx.fillRect(p.x - T / 2, p.y - T / 2, T, T);
+    }
+  ctx.fillStyle = `rgba(${rgb},.12)`;
+  for (const j of cells) {
+    const p = tc(j);
+    ctx.fillRect(p.x - T / 2, p.y - T / 2, T, T);
+  }
+  reachOutlinePath(cells);
+  ctx.strokeStyle = 'rgba(0,0,0,.7)';
+  ctx.lineWidth = 6;
+  ctx.stroke();
+  ctx.strokeStyle = `rgb(${rgb})`;
+  ctx.lineWidth = 3;
+  ctx.setLineDash([10, 6]);
+  ctx.lineDashOffset = -now / 40;
+  ctx.stroke();
+  ctx.setLineDash([]);
+  for (const j of cells) {
+    if (j === k) continue;
+    const p = tc(j),
+      v = G.grid[j];
+    if (isHeal) {
+      if (v && Z.isUnit(v.t)) drawHealCross(p.x + T * 0.28, p.y - T * 0.28, 16 * pulse, `rgb(${rgb})`);
+    } else if (!v) drawReticle(p.x, p.y, 8 * pulse, `rgba(${rgb},.95)`);
+  }
+  ctx.restore();
+}
+
 function edAura(x, y, e, now, i) {
   const eco = OPT && OPT.eco,
     t = eco ? 0 : now,
