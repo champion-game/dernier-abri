@@ -2696,13 +2696,13 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       ATLAS[o.cle] = { clips, echelle: 1.25 };
     }
     // ---------- Zombies : corps Mixamo habillés, animés par la capture de mouvement ----------
-    const ZTAILLE = 112; // images un peu plus petites : 11 zombies, 4 gestes chacun
+    const ZTAILLE = 96; // images un peu plus petites : 11 zombies, 4 gestes chacun
     // geste du jeu -> rôle Mixamo du zombie ; la chute n'en garde que le début (le jeu l'efface en 0,5 s)
-    // [rôle Mixamo, images par seconde, en boucle, durée gardée]
+    // [rôle Mixamo, images par seconde, en boucle, durée gardée au plus (secondes de jeu)]
     const gestesZombie = Z => ({
-      marche: [Z.id === 'run' || Z.id === 'zero' ? 'courir' : 'marcher', 15, true],
-      repos: ['attendre', 10, true],
-      attaque: ['attaquer', 15, true],
+      marche: [Z.id === 'run' || Z.id === 'zero' ? 'courir' : 'marcher', 15, true, 2],
+      repos: ['attendre', 8, true, 3],
+      attaque: ['attaquer', 12, true, 2.5],
       mort: ['mourir', 15, false, 0.6],
     });
     // pose du squelette (rotations de tous les os) à un instant du clip
@@ -2724,11 +2724,10 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
         mesures = [];
       for (let t = pas; t < duree - pas / 2; t += pas) mesures.push([t, ecart(t)]);
       const moyenne = mesures.reduce((s, m) => s + m[1], 0) / Math.max(1, mesures.length);
-      for (let i = 1; i < mesures.length - 1; i++) {
-        const [t, e] = mesures[i];
-        if (t > 0.5 && e < moyenne * 0.12 && e <= mesures[i - 1][1] && e <= mesures[i + 1][1]) return t;
-      }
-      return duree;
+      // la pose la plus proche du départ après 0,6 s, si elle lui ressemble assez
+      let meilleur = null;
+      for (const [t, e] of mesures) if (t > 0.6 && (!meilleur || e < meilleur[1])) meilleur = [t, e];
+      return meilleur && meilleur[1] < moyenne * 0.3 ? meilleur[0] : 0;
     }
     // le corps X Bot est lu une seule fois : on retire la tenue précédente avant d'habiller le zombie suivant
     function preparerCorps(base) {
@@ -2769,14 +2768,36 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       corps.mixer.stopAllAction();
       const action = corps.mixer.clipAction(clip);
       action.play();
-      // durée dans le clip (secondes du clip), puis durée jouée en jeu (vitesse du zombie)
-      const dureeClip = coupe ? coupe * vitesse : boucle ? dureeCycle(corps, action, clip.duration) : clip.duration,
+      // boucle : un cycle si l'animation en a un, sinon un morceau dont la fin se fond dans le début (FONDU s)
+      const cycle = boucle ? dureeCycle(corps, action, clip.duration) : 0,
+        FONDU = 0.4 * vitesse,
+        morceau = Math.min(clip.duration, coupe * vitesse),
+        fondre = boucle && !(cycle && cycle <= morceau),
+        dureeClip = !boucle ? morceau : cycle && cycle <= morceau ? cycle : morceau - FONDU,
         duree = dureeClip / vitesse,
-        n = Math.max(4, Math.min(120, Math.round(duree * parSeconde)));
+        n = Math.max(4, Math.round(duree * parSeconde));
+      // seconde lecture du même clip, pour le fondu de la boucle
+      const copie = clip.clone();
+      copie.uuid = THREE.MathUtils.generateUUID();
+      const action2 = corps.mixer.clipAction(copie);
+      action2.play();
+      action2.setEffectiveWeight(0);
       console.log(`${Z.nom} : ${geste}, ${n} images pour ${duree.toFixed(2)} s`);
       const planche = nouvellePlanche(ZTAILLE, n);
       for (let i = 0; i < n; i++) {
-        action.time = (i / n) * dureeClip;
+        const u = (i / n) * dureeClip;
+        if (fondre && u < FONDU) {
+          // début de boucle : on part de la fin du morceau et on glisse vers le début du clip
+          const w = u / FONDU;
+          action.time = u + dureeClip;
+          action.setEffectiveWeight(1 - w);
+          action2.time = u;
+          action2.setEffectiveWeight(w);
+        } else {
+          action.time = u;
+          action.setEffectiveWeight(1);
+          action2.setEffectiveWeight(0);
+        }
         corps.mixer.update(0);
         rendu.render(scene, cam);
         planche.getContext('2d').drawImage(rendu.domElement, i * ZTAILLE, 0);
