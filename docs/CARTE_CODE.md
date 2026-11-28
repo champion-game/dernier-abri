@@ -11,7 +11,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 4. `src/audio.js` (826 lignes)
 5. `src/art-liste.js` (3 lignes)
 6. `src/game.js` (1728 lignes)
-7. `src/game-draw.js` (7034 lignes)
+7. `src/game-draw.js` (7036 lignes)
 8. `src/game-ui.js` (2086 lignes)
 9. `src/game-screens.js` (1681 lignes)
 10. `src/game-menu.js` (861 lignes)
@@ -25,7 +25,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 18. `src/game-load.js` (195 lignes)
 19. `src/game-accueil.js` (272 lignes)
 20. `src/game-menufx.js` (308 lignes)
-21. `src/game-3d.js` (379 lignes)
+21. `src/game-3d.js` (380 lignes)
 
 ## Fonctions enveloppées
 
@@ -36,7 +36,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 |---|---|---|
 | `render` | game-ui.js:628 | game-fx2.js:261, game-artx.js:101, game-artx.js:177, game-artx.js:396, game-artx.js:503, game-artx.js:997, game-artx.js:1060 |
 | `applyArt` | game.js:314 | game-artx.js:84, game-artx.js:387, game-artx.js:1004, game-artx.js:1360 |
-| `frameInner` | game-draw.js:6426 | game-artx.js:696, game-artx.js:735, game-fx3.js:480, game-fx5.js:155 |
+| `frameInner` | game-draw.js:6428 | game-artx.js:696, game-artx.js:735, game-fx3.js:480, game-fx5.js:155 |
 | `playEvents` | game-ui.js:4 | game-anim.js:1018, game-fx2.js:329, game-fx3.js:78, game-fx5.js:106 |
 | `buildGround` | game-draw.js:1303 | game-artx.js:38, game-artx.js:751 |
 | `collectionScreen` | game-screens.js:932 | game-anim.js:438, game-coll.js:1243 |
@@ -51,7 +51,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `drawFloats` | game-draw.js:5823 | game-fx5.js:746 |
 | `drawFog` | game-draw.js:6122 | game-artx.js:570 |
 | `drawFX` | game-draw.js:5726 | game-fx5.js:636 |
-| `drawPlace` | game-draw.js:6314 | game-fx3.js:315 |
+| `drawPlace` | game-draw.js:6316 | game-fx3.js:315 |
 | `drawShelter` | game-draw.js:5187 | game-fx5.js:506 |
 | `drawSky` | game-draw.js:5914 | game-artx.js:689 |
 | `drawSpr` | game.js:235 | game-3d.js:57 |
@@ -66,7 +66,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `nightBanner` | game-menu.js:249 | game-fx2.js:286 |
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1344 |
 | `pilesHtml` | game.js:1569 | game-artx.js:1041 |
-| `placeHints` | game-draw.js:7025 | game-fx2.js:246 |
+| `placeHints` | game-draw.js:7027 | game-fx2.js:246 |
 | `pushSpriteEyes` | game-draw.js:2824 | game-3d.js:86 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:557 |
@@ -145,8 +145,8 @@ _t:19 _tPage:41
 - **2179** v274 : idée 8, le plateau garde les traces des nuits : resetMarks:2190 sampleHordeTrail:2198 buildTrail:2214 drawHordeTrail:2232 drawBloodMark:2245 addBloodMark:2280 redrawDecals:2287
 - **2295** live visual state : vib:2315 camZoom:2330 shake:2335 jit:2345 zpos:2349 syncZ:2366
 - **2415** dessin : un seul style pour tout le jeu (contour sombre, ombre portée, ombrage, petits dét : ell:2417 circ:2424 line:2431 oEll:2441 oCirc:2445 oLine:2449 oRect:2453 rrect:2459 oRound:2463 shade:2472 person:2640 dogShape:2765 zombieBlinkOpen:2807 lightAt:2813 pushSpriteEyes:2824 hpBar:2859 drawBars:2863 socle:2884 trackBoard:2947 cracks:3038 crater:3059 groundCrack:3084 wallJit:3108 unitAnim:3116 drawUnit:3209 drawUnitInner:3315 wallSect:4083 wallPost:4315 drawPerched:4393 feuLayout:4409 feuPoint:4476 feuCellPath:4491 feuTongue:4512 drawFireBeds:4522 feuFlame:4572 drawFireFlames:4579 drawCurrent:4699 drawEnclosure:4727 murRelief:4745 drawRamparts:4754 wireSect:4903 wirePost:4926 drawWires:4930 drawGuide:5007 guideHand:5037 drawKillZones:5106 drawBossRoute:5140 drawShelter:5187 zAnim:5290 drawZombie:5319
-- **5471** effects : addFX:5472 drawGrassBlade:5477 tapScale:5492 tapZoom:5503 boardTapFx:5512 risePuff:5560 pieceTapReact:5576 poseImpactFx:5602 drawPoseFx:5627 burst:5658 drawHealBolt:5677 drawHealGlow:5701 drawFX:5726 floatTxt:5820 drawFloats:5823 mkGlow:5893 drawSky:5914 drawGlow:5995 lights:6025 drawFog:6122 drawAmbient:6136 drawSpriteEyes:6214 drawDark:6243 frame:6298 drawPlace:6314 titleDeco:6373 frameInner:6426 safeTxt:6681
-- **6691** portée d'une unité touchée (v303, proposition C) : reachCells:6695 reachOutlinePath:6701 drawHealCross:6714 drawReticle:6723 drawReachZone:6745 edAura:6789 dmgCached:6880 bTag:6886 dmgBadge:6904 dmgLinks:6925 placeGain:6990 placeHints:7025
+- **5471** effects : addFX:5472 drawGrassBlade:5477 tapScale:5492 tapZoom:5503 boardTapFx:5512 risePuff:5560 pieceTapReact:5576 poseImpactFx:5602 drawPoseFx:5627 burst:5658 drawHealBolt:5677 drawHealGlow:5701 drawFX:5726 floatTxt:5820 drawFloats:5823 mkGlow:5893 drawSky:5914 drawGlow:5995 lights:6025 drawFog:6122 drawAmbient:6136 drawSpriteEyes:6214 drawDark:6245 frame:6300 drawPlace:6316 titleDeco:6375 frameInner:6428 safeTxt:6683
+- **6693** portée d'une unité touchée (v303, proposition C) : reachCells:6697 reachOutlinePath:6703 drawHealCross:6716 drawReticle:6725 drawReachZone:6747 edAura:6791 dmgCached:6882 bTag:6888 dmgBadge:6906 dmgLinks:6927 placeGain:6992 placeHints:7027
 
 ### src/game-ui.js
 
