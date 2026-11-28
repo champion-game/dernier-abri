@@ -25,7 +25,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 18. `src/game-load.js` (195 lignes)
 19. `src/game-accueil.js` (272 lignes)
 20. `src/game-menufx.js` (308 lignes)
-21. `src/game-3d.js` (109 lignes)
+21. `src/game-3d.js` (327 lignes)
 
 ## Fonctions enveloppées
 
@@ -54,9 +54,9 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `drawPlace` | game-draw.js:6314 | game-fx3.js:315 |
 | `drawShelter` | game-draw.js:5187 | game-fx5.js:506 |
 | `drawSky` | game-draw.js:5914 | game-artx.js:689 |
-| `drawSpr` | game.js:235 | game-3d.js:51 |
-| `drawUnit` | game-draw.js:3209 | game-3d.js:78 |
-| `drawZombie` | game-draw.js:5319 | game-3d.js:69 |
+| `drawSpr` | game.js:235 | game-3d.js:57 |
+| `drawUnit` | game-draw.js:3209 | game-3d.js:85 |
+| `drawZombie` | game-draw.js:5319 | game-3d.js:76 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:345 |
 | `hide` | game-screens.js:654 | game-menufx.js:29 |
@@ -261,7 +261,7 @@ accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLog
 
 > v304 : aperçu des personnages en 3D dans le vrai jeu (essai, pas encore validé par Amine).
 
-(aucune fonction nommée)
+- **116** Zombies en 3D en direct
 
 ## src/style.css
 
