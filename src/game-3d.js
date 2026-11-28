@@ -1,5 +1,5 @@
 /* v304 : aperçu des personnages en 3D dans le vrai jeu (essai, pas encore validé par Amine).
-   Actif seulement avec ?3d=1 dans l'adresse (mémorisé ; ?3d=0 pour revenir aux dessins ; ?3d=force : 3D en direct sans garde-fou).
+   Actif seulement avec ?3d=1 dans l'adresse (mémorisé ; ?3d=0 pour revenir aux dessins ; ?3d=force : 3D en direct sans garde-fou ; ?3d=code : zombies faits en code).
    v307 : les personnages 3D sont photographiés à l'avance (node tools/export-3d.js) en planches d'images vues du dessus
    (assets/3d/planches/, index assets/3d/planches.js). Le jeu les affiche comme des dessins : aucun calcul 3D en jeu.
    v309 : les zombies sont rendus en vraie 3D en direct (corps Mixamo, src/zombies-3d.js), comme dans la maquette :
@@ -8,13 +8,15 @@
    Maquettes : artifacts « Barricard test 3D » et « Barricard roster zombies 3D ». */
 (function () {
   let actif = false,
-    force = false; // ?3d=force : 3D en direct même si l'appareil est lent (pour comparer)
+    force = false, // ?3d=force : 3D en direct même si l'appareil est lent (pour comparer)
+    modeCode = false; // ?3d=code : zombies faits en code (première maquette) au lieu des zombies Mixamo
   try {
     const q = new URLSearchParams(location.search).get('3d');
-    if (q === '1' || q === 'force') localStorage.setItem('abri-3d', q);
+    if (q === '1' || q === 'force' || q === 'code') localStorage.setItem('abri-3d', q);
     if (q === '0') localStorage.removeItem('abri-3d');
     actif = !!localStorage.getItem('abri-3d');
     force = localStorage.getItem('abri-3d') === 'force';
+    modeCode = localStorage.getItem('abri-3d') === 'code';
   } catch (e) {}
   if (!actif) return;
 
@@ -56,7 +58,7 @@
   const drawSprDessin = drawSpr;
   drawSpr = function (k, x, y, a, out, mul) {
     if (DIRECT && enCours && enCours.zombie && DIRECT.dessiner(enCours, k, x, y, a, mul)) return true;
-    const A = ATLAS[k];
+    const A = (modeCode && ATLAS['code_' + k]) || ATLAS[k];
     if (!A) return drawSprDessin.apply(this, arguments);
     const d = sprK(k)[1];
     if (!d) return drawSprDessin.apply(this, arguments);
@@ -126,6 +128,7 @@
   );
   LIBS.push('src/zombies-3d.js?v=' + (typeof VERSION === 'string' ? VERSION.split(' ')[0] : ''));
   (function charger(k) {
+    if (modeCode) return; // zombies faits en code : planches seulement, pas de 3D en direct
     if (k >= LIBS.length) {
       Promise.all([
         fetch('assets/3d/xbot.fbx').then(r => r.arrayBuffer()),

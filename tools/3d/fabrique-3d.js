@@ -1499,12 +1499,91 @@ window.fabriquerPlanches3d = function (THREE, base, json) {
       c.height = taille;
       return c;
     }
+    // zombies faits en code (maquette « Barricard test 3D ») : planches à part (code_z_…), pour l'adresse ?3d=code
+    // mouvements plus amples qu'en maquette : à 40 px de large, un petit balancement ne se voit pas
+    Object.assign(ZTYPES.facteur, { balBras: 0.32, roulis: 0.15, torsion: 0.24 });
+    Object.assign(ZTYPES.coureuse, { balBras: 0.7, roulis: 0.09, torsion: 0.38 });
+    Object.assign(ZTYPES.gros, { balBras: 0.35, roulis: 0.26, torsion: 0.14 });
+    [
+      ['z_walk', facteur, 'facteur', 0.64],
+      ['z_run', coureuse, 'coureuse', 0.6],
+      ['z_fat', gros, 'gros', 0.82],
+    ].forEach(([cle, faire, z, demi]) => {
+      const pas = TOUR / ZTYPES[z].cadence,
+        images = d => Math.max(4, Math.round(d * 15)); // 15 images par seconde
+      LISTE.push({
+        cle: 'code_' + cle,
+        faire,
+        demi,
+        cz: 0.15,
+        prepare: p =>
+          Object.assign(p, {
+            type: z,
+            phase: 0,
+            marche: true,
+            attaque: false,
+            perso: {
+              boite: z === 'facteur' ? 0.5 : 0,
+              cote: 0,
+              inclin: 0.15,
+              brasMou: -1,
+              rythme: 1,
+              graine: 1,
+              tic: 1e9,
+            },
+          }),
+        clips: {
+          repos: {
+            duree: pas / 0.3,
+            n: images(pas / 0.3),
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = false), (p.attaque = false), animZombie(p, dt, t)),
+          },
+          marche: {
+            duree: pas,
+            n: images(pas),
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = true), (p.attaque = false), animZombie(p, dt, t)),
+          },
+          attaque: {
+            duree: TOUR / 6,
+            n: images(TOUR / 6),
+            boucle: true,
+            anim: (p, dt, t) => ((p.marche = false), (p.attaque = true), animZombie(p, dt, t)),
+          },
+          touche: {
+            duree: 0.3,
+            n: 5,
+            anim: (p, dt, t) => {
+              if (t === 0) {
+                pousser(p, 'tx', -9);
+                pousser(p, 'recul', -5);
+                pousser(p, 'ex0', -4);
+                pousser(p, 'ex1', -4);
+                p.titube = 0.3;
+              }
+              p.marche = true;
+              animZombie(p, dt, t);
+            },
+          },
+          mort: {
+            duree: 0.5,
+            n: 8,
+            anim: (p, dt, t) => {
+              p.t = t;
+              p.chute.rotation.x = -mourir(p, dt);
+            },
+          },
+        },
+      });
+    });
     function photographier(o) {
       const clips = {};
       for (const nom in o.clips) {
         const c = o.clips[nom];
         // un modèle neuf par geste, mis en route sur sa pose de départ
         const p = o.faire();
+        if (o.prepare) o.prepare(p);
         scene.add(p.racine);
         const depart = c.boucle ? c : o.clips.repos,
           W = TOUR / depart.duree;
