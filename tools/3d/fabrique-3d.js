@@ -2727,12 +2727,14 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
         },
       };
     }
+    // le rampant est allongé : cadre plus grand (et image agrandie d'autant en jeu, pour garder sa taille)
+    const cadreZombie = Z => (Z.id === 'crawl' ? 1.45 : 1);
     function photographierGeste(corps, Z, geste, CLIPS) {
       const [role, n, boucle, coupe] = gestesZombie(Z)[geste],
         [nomClip, vitesse] = Z.roles[role],
         clip = CLIPS[nomClip],
         duree = coupe || clip.duration / vitesse,
-        demi = 0.62 * (Z.taille || 1);
+        demi = 0.62 * (Z.taille || 1) * cadreZombie(Z);
       Object.assign(cam, { left: -demi, right: demi, top: demi, bottom: -demi });
       cam.position.set(0, 20, 0.12 * (Z.taille || 1) + 0.001);
       cam.up.set(0, 0, -1);
@@ -2753,7 +2755,7 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       const cle = 'z_' + Z.id;
       (Z.enCours = Z.enCours || {})[geste] = { planche, taille: ZTAILLE, n, duree, boucle };
       // le zombie passe en 3D seulement quand tous ses gestes sont prêts
-      if (Object.keys(Z.enCours).length === 4) ATLAS[cle] = { clips: Z.enCours, echelle: 1.3 };
+      if (Object.keys(Z.enCours).length === 4) ATLAS[cle] = { clips: Z.enCours, echelle: 1.3 * cadreZombie(Z) };
     }
     // un personnage à la fois, pour ne pas figer l'écran au lancement : d'abord les survivants, puis les zombies
     const file = LISTE.map(o => () => photographier(o));
