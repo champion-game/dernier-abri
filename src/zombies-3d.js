@@ -1122,6 +1122,21 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     },
   ];
 
+  // couleur et taille des yeux, reprises du jeu (ZOMBIE_EYES dans game-draw.js)
+  const COULEUR_YEUX = {
+    walk: '#ff4a3a',
+    crawl: '#ff4a3a',
+    fat: '#ff4a3a',
+    armor: '#ff4a3a',
+    sap: '#ff4a3a',
+    run: '#9fd8ff',
+    spit: '#b6ff3a',
+    howl: '#c58bff',
+    boss: '#ff9a1a',
+    mere: '#ff5ad2',
+    zero: '#ff3a6a',
+  };
+  const TAILLE_YEUX = { fat: 1.1, boss: 1.4, mere: 1.3, zero: 1.3 };
   // habille un corps X Bot : silhouette, proportions, peinture du corps, accessoires et coiffure
   function habiller(obj, Z) {
     const meshes = [];
@@ -1134,14 +1149,28 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     meshes.forEach(m => peindreCorps(m, Z.couleurs, Z.salete, Z.sang, Z));
     Z.habiller(obj, {});
     // repères des yeux sur la tête (en centimètres, devant le visage) : le jeu y dessine la lueur des yeux
+    // deux points lumineux par œil (couleur du zombie, cœur blanc), toujours devant le visage, comme dans la maquette
+    const coul = new THREE.Color(COULEUR_YEUX[Z.id] || '#ff4a3a'),
+      t = TAILLE_YEUX[Z.id] || 1;
     [
       ['oeilG', 3],
       ['oeilD', -3],
     ].forEach(([nom, x]) => {
       const oeil = new THREE.Object3D();
       oeil.name = nom;
-      oeil.position.set(x, 8, 9.5);
+      oeil.position.set(x, 8, 12);
       os(obj, 'Head').add(oeil);
+      [
+        [coul, 2.3, 0, 10],
+        [coul.clone().lerp(new THREE.Color('#ffffff'), 0.75), 1.15, 1, 11],
+      ].forEach(([c, r, z, ordre]) => {
+        const point = new THREE.Mesh(SPH, new THREE.MeshBasicMaterial({ color: c, depthTest: false }));
+        point.scale.setScalar(r * t);
+        point.position.z = z;
+        point.renderOrder = ordre;
+        point.userData.oeil = true; // gardé tel quel par fusionner (matériau lumineux à part)
+        oeil.add(point);
+      });
     });
   }
   // Réunit les accessoires de chaque os en quelques objets (un par texture, plus un seul contour) :
@@ -1154,7 +1183,7 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       inv = new THREE.Matrix4(),
       m = new THREE.Matrix4();
     obj.traverse(o => {
-      if (!o.isMesh || o.isSkinnedMesh) return;
+      if (!o.isMesh || o.isSkinnedMesh || o.userData.oeil) return;
       let os_ = o.parent;
       while (os_ && !os_.isBone) os_ = os_.parent;
       if (!os_) return;

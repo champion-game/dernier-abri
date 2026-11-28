@@ -341,6 +341,7 @@
           wx: p.x,
           wy: p.y,
           open: zombieBlinkOpen(v, now),
+          point: true, // yeux du modèle 3D : deux points nets, sans flou lumineux autour
         });
         return true;
       },

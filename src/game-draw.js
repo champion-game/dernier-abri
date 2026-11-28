@@ -6217,13 +6217,15 @@ function drawSpriteEyes() {
   for (const e of EYES) {
     if (!e.screen) continue;
     const glow = 0.3 + 0.7 * (1 - lightAt(e.wx, e.wy));
-    ctx.globalAlpha = e.alpha * nightAmt * glow;
+    // v311 : yeux des zombies 3D (e.point) : deux points nets plus gros, sans flou lumineux, à fond dans le noir
+    const r = e.point ? e.r * 1.5 : e.r;
+    ctx.globalAlpha = e.point ? e.alpha * nightAmt : e.alpha * nightAmt * glow;
     ctx.shadowColor = e.color;
-    ctx.shadowBlur = OPT.eco ? 0 : e.r * 4 * glow;
+    ctx.shadowBlur = OPT.eco || e.point ? 0 : e.r * 4 * glow;
     ctx.fillStyle = e.color;
     for (const [x, y] of [e.left, e.right]) {
       ctx.beginPath();
-      ctx.ellipse(x, y, e.r, e.r * e.open, 0, 0, 7);
+      ctx.ellipse(x, y, r, r * e.open, 0, 0, 7);
       ctx.fill();
     }
     // reflet blanc au centre : l'œil paraît briller, pas juste coloré
@@ -6233,7 +6235,7 @@ function drawSpriteEyes() {
       ctx.globalAlpha *= 0.85;
       for (const [x, y] of [e.left, e.right]) {
         ctx.beginPath();
-        ctx.arc(x, y, e.r * 0.4, 0, 7);
+        ctx.arc(x, y, r * (e.point ? 0.5 : 0.4), 0, 7);
         ctx.fill();
       }
     }
