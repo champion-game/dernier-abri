@@ -69,29 +69,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_walk-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 4.033,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_walk-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.267,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_walk-attaque.webp",
-    "taille": 112,
-    "n": 10,
+    "taille": 96,
+    "n": 30,
     "duree": 2.5,
     "boucle": true
    },
    "mort": {
     "fichier": "z_walk-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -102,29 +102,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_run-marche.webp",
-    "taille": 112,
+    "taille": 96,
     "n": 12,
     "duree": 0.8,
     "boucle": true
    },
    "repos": {
     "fichier": "z_run-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 3.556,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_run-attaque.webp",
-    "taille": 112,
-    "n": 10,
+    "taille": 96,
+    "n": 23,
     "duree": 1.923,
     "boucle": true
    },
    "mort": {
     "fichier": "z_run-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -135,29 +135,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_fat-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 2.044,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_fat-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 5.334,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_fat-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 3.125,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_fat-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -168,29 +168,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_crawl-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 5.133,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_crawl-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 20.532,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_crawl-attaque.webp",
-    "taille": 112,
-    "n": 10,
+    "taille": 96,
+    "n": 5,
     "duree": 0.452,
     "boucle": true
    },
    "mort": {
     "fichier": "z_crawl-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -201,29 +201,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_spit-marche.webp",
-    "taille": 112,
-    "n": 12,
+    "taille": 96,
+    "n": 26,
     "duree": 1.703,
     "boucle": true
    },
    "repos": {
     "fichier": "z_spit-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.267,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_spit-attaque.webp",
-    "taille": 112,
-    "n": 10,
+    "taille": 96,
+    "n": 28,
     "duree": 2.333,
     "boucle": true
    },
    "mort": {
     "fichier": "z_spit-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -234,29 +234,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_armor-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 4.745,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_armor-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.741,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_armor-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 2.778,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_armor-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -267,29 +267,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_howl-marche.webp",
-    "taille": 112,
-    "n": 12,
+    "taille": 96,
+    "n": 26,
     "duree": 1.703,
     "boucle": true
    },
    "repos": {
     "fichier": "z_howl-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.267,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_howl-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 4.067,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_howl-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -300,29 +300,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_sap-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 3.666,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_sap-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.267,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_sap-attaque.webp",
-    "taille": 112,
-    "n": 10,
+    "taille": 96,
+    "n": 27,
     "duree": 2.273,
     "boucle": true
    },
    "mort": {
     "fichier": "z_sap-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -333,29 +333,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_boss-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 5.761,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_boss-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 6.096,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_boss-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 3.333,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_boss-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -366,29 +366,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_mere-marche.webp",
-    "taille": 112,
-    "n": 12,
-    "duree": 2.19,
+    "taille": 96,
+    "n": 24,
+    "duree": 1.6,
     "boucle": true
    },
    "repos": {
     "fichier": "z_mere-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 5.334,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_mere-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 3.125,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_mere-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
@@ -399,29 +399,29 @@ window.PLANCHES_3D = {
   "clips": {
    "marche": {
     "fichier": "z_zero-marche.webp",
-    "taille": 112,
-    "n": 12,
+    "taille": 96,
+    "n": 11,
     "duree": 0.762,
     "boucle": true
    },
    "repos": {
     "fichier": "z_zero-repos.webp",
-    "taille": 112,
-    "n": 8,
-    "duree": 4.267,
+    "taille": 96,
+    "n": 21,
+    "duree": 2.6,
     "boucle": true
    },
    "attaque": {
     "fichier": "z_zero-attaque.webp",
-    "taille": 112,
-    "n": 10,
-    "duree": 3.389,
+    "taille": 96,
+    "n": 25,
+    "duree": 2.1,
     "boucle": true
    },
    "mort": {
     "fichier": "z_zero-mort.webp",
-    "taille": 112,
-    "n": 6,
+    "taille": 96,
+    "n": 9,
     "duree": 0.6,
     "boucle": false
    }
