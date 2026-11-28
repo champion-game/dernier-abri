@@ -31,8 +31,8 @@
 
 # Bibliothèques
 
-- **three.js** r128 (auteurs de three.js) : licence MIT, `tools/3d/lib/three.min.js`, avec son lecteur FBX (`tools/3d/lib/FBXLoader.js`, corrigé) et **fflate** (licence MIT, `tools/3d/lib/fflate.min.js`). Utilisés seulement par l’outil `tools/export-3d.js`, pas par le jeu.
+- **three.js** r128 (auteurs de three.js) : licence MIT, `assets/lib/three.min.js`, avec son lecteur FBX (`assets/lib/FBXLoader.js`, corrigé), `BufferGeometryUtils.js`, `SkeletonUtils.js` et **fflate** (licence MIT, `assets/lib/fflate.min.js`). Chargés seulement pour l’aperçu 3D (`?3d=1`).
 
 # Animations 3D
 
-- **Mixamo** (Adobe) : corps X Bot (`tools/3d/xbot.fbx`) et 13 animations de zombies (`tools/3d/zombies-clips.json`), rendus en images dans `assets/3d/planches/`, téléchargés par Amine ; utilisables gratuitement dans un jeu commercial selon les conditions de Mixamo.
+- **Mixamo** (Adobe) : corps X Bot (`assets/3d/xbot.fbx`) et 13 animations de zombies (`assets/3d/zombies-clips.json`), téléchargés par Amine ; utilisables gratuitement dans un jeu commercial selon les conditions de Mixamo.

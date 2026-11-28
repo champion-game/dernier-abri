@@ -1,6 +1,6 @@
 // Exporte les personnages 3D en planches d'images vues du dessus, pour l'aperçu ?3d=1 du jeu.
 // Usage : node tools/export-3d.js   (≈ 5 à 10 min dans le navigateur de test, sans carte graphique)
-// Entrées : tools/3d/fabrique-3d.js (modèles et gestes), tools/3d/xbot.fbx (corps Mixamo), tools/3d/zombies-clips.json
+// Entrées : tools/3d/fabrique-3d.js (modèles et gestes), src/zombies-3d.js, assets/3d/xbot.fbx (corps Mixamo), assets/3d/zombies-clips.json
 // Sorties : assets/3d/planches/<personnage>-<geste>.webp et l'index assets/3d/planches.js (lu par src/game-3d.js)
 const path = require('path'),
   fs = require('fs'),
@@ -31,10 +31,16 @@ const RACINE = path.join(__dirname, '..'),
       console.log('Avertissement :', m.text().slice(0, 200));
   });
   await p.setContent('<html><body></body></html>');
-  for (const s of ['lib/three.min.js', 'lib/fflate.min.js', 'lib/FBXLoader.js', 'fabrique-3d.js'])
-    await p.addScriptTag({ content: fs.readFileSync(path.join(RACINE, 'tools/3d', s), 'utf8') });
-  const base64 = fs.readFileSync(path.join(RACINE, 'tools/3d/xbot.fbx')).toString('base64'),
-    json = JSON.parse(fs.readFileSync(path.join(RACINE, 'tools/3d/zombies-clips.json'), 'utf8'));
+  for (const s of [
+    'assets/lib/three.min.js',
+    'assets/lib/fflate.min.js',
+    'assets/lib/FBXLoader.js',
+    'src/zombies-3d.js',
+    'tools/3d/fabrique-3d.js',
+  ])
+    await p.addScriptTag({ content: fs.readFileSync(path.join(RACINE, s), 'utf8') });
+  const base64 = fs.readFileSync(path.join(RACINE, 'assets/3d/xbot.fbx')).toString('base64'),
+    json = JSON.parse(fs.readFileSync(path.join(RACINE, 'assets/3d/zombies-clips.json'), 'utf8'));
   console.log('Fabrication des planches…');
   const resultat = await p.evaluate(
     async ([base64, json]) => {
