@@ -64,6 +64,126 @@ window.PLANCHES_3D = {
    }
   }
  },
+ "code_z_walk": {
+  "echelle": 1.25,
+  "clips": {
+   "repos": {
+    "fichier": "code_z_walk-repos.webp",
+    "taille": 128,
+    "n": 75,
+    "duree": 4.987,
+    "boucle": true
+   },
+   "marche": {
+    "fichier": "code_z_walk-marche.webp",
+    "taille": 128,
+    "n": 22,
+    "duree": 1.496,
+    "boucle": true
+   },
+   "attaque": {
+    "fichier": "code_z_walk-attaque.webp",
+    "taille": 128,
+    "n": 16,
+    "duree": 1.047,
+    "boucle": true
+   },
+   "touche": {
+    "fichier": "code_z_walk-touche.webp",
+    "taille": 128,
+    "n": 5,
+    "duree": 0.3,
+    "boucle": false
+   },
+   "mort": {
+    "fichier": "code_z_walk-mort.webp",
+    "taille": 128,
+    "n": 8,
+    "duree": 0.5,
+    "boucle": false
+   }
+  }
+ },
+ "code_z_run": {
+  "echelle": 1.25,
+  "clips": {
+   "repos": {
+    "fichier": "code_z_run-repos.webp",
+    "taille": 128,
+    "n": 35,
+    "duree": 2.327,
+    "boucle": true
+   },
+   "marche": {
+    "fichier": "code_z_run-marche.webp",
+    "taille": 128,
+    "n": 10,
+    "duree": 0.698,
+    "boucle": true
+   },
+   "attaque": {
+    "fichier": "code_z_run-attaque.webp",
+    "taille": 128,
+    "n": 16,
+    "duree": 1.047,
+    "boucle": true
+   },
+   "touche": {
+    "fichier": "code_z_run-touche.webp",
+    "taille": 128,
+    "n": 5,
+    "duree": 0.3,
+    "boucle": false
+   },
+   "mort": {
+    "fichier": "code_z_run-mort.webp",
+    "taille": 128,
+    "n": 8,
+    "duree": 0.5,
+    "boucle": false
+   }
+  }
+ },
+ "code_z_fat": {
+  "echelle": 1.25,
+  "clips": {
+   "repos": {
+    "fichier": "code_z_fat-repos.webp",
+    "taille": 128,
+    "n": 131,
+    "duree": 8.727,
+    "boucle": true
+   },
+   "marche": {
+    "fichier": "code_z_fat-marche.webp",
+    "taille": 128,
+    "n": 39,
+    "duree": 2.618,
+    "boucle": true
+   },
+   "attaque": {
+    "fichier": "code_z_fat-attaque.webp",
+    "taille": 128,
+    "n": 16,
+    "duree": 1.047,
+    "boucle": true
+   },
+   "touche": {
+    "fichier": "code_z_fat-touche.webp",
+    "taille": 128,
+    "n": 5,
+    "duree": 0.3,
+    "boucle": false
+   },
+   "mort": {
+    "fichier": "code_z_fat-mort.webp",
+    "taille": 128,
+    "n": 8,
+    "duree": 0.5,
+    "boucle": false
+   }
+  }
+ },
  "z_walk": {
   "echelle": 1.3,
   "clips": {
