@@ -25,7 +25,7 @@ Guide écrit à la main : `docs/CODE.md`. Les numéros de ligne permettent `sed 
 18. `src/game-load.js` (195 lignes)
 19. `src/game-accueil.js` (272 lignes)
 20. `src/game-menufx.js` (308 lignes)
-21. `src/game-3d.js` (1681 lignes)
+21. `src/game-3d.js` (2871 lignes)
 
 ## Fonctions enveloppées
 
@@ -54,9 +54,9 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `drawPlace` | game-draw.js:6314 | game-fx3.js:315 |
 | `drawShelter` | game-draw.js:5187 | game-fx5.js:506 |
 | `drawSky` | game-draw.js:5914 | game-artx.js:689 |
-| `drawSpr` | game.js:235 | game-3d.js:50 |
-| `drawUnit` | game-draw.js:3209 | game-3d.js:75 |
-| `drawZombie` | game-draw.js:5319 | game-3d.js:66 |
+| `drawSpr` | game.js:235 | game-3d.js:51 |
+| `drawUnit` | game-draw.js:3209 | game-3d.js:76 |
+| `drawZombie` | game-draw.js:5319 | game-3d.js:67 |
 | `giftScreen` | game-screens.js:309 | game-anim.js:771 |
 | `hglowFit` | game-menu.js:823 | game-artx.js:345 |
 | `hide` | game-screens.js:654 | game-menufx.js:29 |
@@ -67,7 +67,7 @@ Pour modifier ou déboguer une de ces fonctions, **regarder toute la chaîne**, 
 | `optionsScreen` | game-screens.js:515 | game-artx.js:1344 |
 | `pilesHtml` | game.js:1569 | game-artx.js:1041 |
 | `placeHints` | game-draw.js:7025 | game-fx2.js:246 |
-| `pushSpriteEyes` | game-draw.js:2824 | game-3d.js:85 |
+| `pushSpriteEyes` | game-draw.js:2824 | game-3d.js:86 |
 | `resumeWave` | game-ui.js:1773 | game-anim.js:1008 |
 | `ringFog` | game-draw.js:2096 | game-artx.js:557 |
 | `shelHit` | game-ui.js:609 | game-fx2.js:353 |
@@ -262,12 +262,18 @@ accMatrice:92 accSceneHtml:101 accPlacer:141 accAmbiance:167 accScene:219 accLog
 
 > v304 : aperçu des personnages en 3D dans le vrai jeu (essai, pas encore validé par Amine).
 
-- **107** Textures peintes en code
-- **381** Formes arrondies
-- **662** Les personnages
-- **1175** Animations souples
-- **1378** Les défenseurs
-- **1505** Photo des animations
+- **114** Textures peintes en code
+- **388** Formes arrondies
+- **669** Les personnages
+- **1182** Animations souples
+- **1423** Les défenseurs
+- **1550** Zombies Mixamo (maquette « Barricard roster zombies 3D »)
+- **1555** Textures peintes
+- **1649** Ombrage en aplats et contour sombre
+- **1696** Habiller le mannequin
+- **1995** Le roster
+- **2708** Photo des animations
+- **2796** Zombies : corps Mixamo habillés, animés par la capture de mouvement
 
 ## src/style.css
 
