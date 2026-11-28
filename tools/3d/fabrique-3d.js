@@ -2772,8 +2772,10 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       const cycle = boucle ? dureeCycle(corps, action, clip.duration) : 0,
         FONDU = 0.4 * vitesse,
         morceau = Math.min(clip.duration, coupe * vitesse),
-        fondre = boucle && !(cycle && cycle <= morceau),
-        dureeClip = !boucle ? morceau : cycle && cycle <= morceau ? cycle : morceau - FONDU,
+        // un clip court (déjà fait pour tourner en boucle) est gardé entier, sans fondu
+        entier = boucle && clip.duration <= coupe * vitesse,
+        fondre = boucle && !entier && !(cycle && cycle <= morceau),
+        dureeClip = !boucle || entier ? morceau : cycle && cycle <= morceau ? cycle : morceau - FONDU,
         duree = dureeClip / vitesse,
         n = Math.max(4, Math.round(duree * parSeconde));
       // seconde lecture du même clip, pour le fondu de la boucle
