@@ -25,7 +25,11 @@ const RACINE = path.join(__dirname, '..'),
   const ctx = await b.newContext();
   const p = await ctx.newPage();
   p.on('pageerror', e => console.log('Erreur dans la page :', e.message));
-  p.on('console', m => m.type() === 'warning' && console.log('Avertissement :', m.text().slice(0, 200)));
+  p.on('console', m => {
+    if (m.type() === 'log') console.log('  ' + m.text());
+    else if (m.type() === 'warning' && !/GPU stall/.test(m.text()))
+      console.log('Avertissement :', m.text().slice(0, 200));
+  });
   await p.setContent('<html><body></body></html>');
   for (const s of ['lib/three.min.js', 'lib/fflate.min.js', 'lib/FBXLoader.js', 'fabrique-3d.js'])
     await p.addScriptTag({ content: fs.readFileSync(path.join(RACINE, 'tools/3d', s), 'utf8') });

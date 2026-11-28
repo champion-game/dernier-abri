@@ -2698,12 +2698,38 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     // ---------- Zombies : corps Mixamo habillés, animés par la capture de mouvement ----------
     const ZTAILLE = 112; // images un peu plus petites : 11 zombies, 4 gestes chacun
     // geste du jeu -> rôle Mixamo du zombie ; la chute n'en garde que le début (le jeu l'efface en 0,5 s)
+    // [rôle Mixamo, images par seconde, en boucle, durée gardée]
     const gestesZombie = Z => ({
-      marche: [Z.id === 'run' || Z.id === 'zero' ? 'courir' : 'marcher', 12, true],
-      repos: ['attendre', 8, true],
-      attaque: ['attaquer', 10, true],
-      mort: ['mourir', 6, false, 0.6],
+      marche: [Z.id === 'run' || Z.id === 'zero' ? 'courir' : 'marcher', 15, true],
+      repos: ['attendre', 10, true],
+      attaque: ['attaquer', 15, true],
+      mort: ['mourir', 15, false, 0.6],
     });
+    // pose du squelette (rotations de tous les os) à un instant du clip
+    function pose(corps, action, t) {
+      action.time = t;
+      corps.mixer.update(0);
+      const q = [];
+      corps.obj.traverse(o => {
+        if (o.isBone) q.push(o.quaternion.clone());
+      });
+      return q;
+    }
+    // durée d'un cycle : une marche Mixamo répète plusieurs fois le même pas ; on cherche le premier instant
+    // où le squelette retrouve sa pose de départ, pour ne photographier qu'un pas (plus d'images par seconde, même poids)
+    function dureeCycle(corps, action, duree) {
+      const depart = pose(corps, action, 0),
+        ecart = t => pose(corps, action, t).reduce((s, q, i) => s + 1 - Math.abs(q.dot(depart[i])), 0);
+      const pas = 1 / 30,
+        mesures = [];
+      for (let t = pas; t < duree - pas / 2; t += pas) mesures.push([t, ecart(t)]);
+      const moyenne = mesures.reduce((s, m) => s + m[1], 0) / Math.max(1, mesures.length);
+      for (let i = 1; i < mesures.length - 1; i++) {
+        const [t, e] = mesures[i];
+        if (t > 0.5 && e < moyenne * 0.12 && e <= mesures[i - 1][1] && e <= mesures[i + 1][1]) return t;
+      }
+      return duree;
+    }
     // le corps X Bot est lu une seule fois : on retire la tenue précédente avant d'habiller le zombie suivant
     function preparerCorps(base) {
       const obj = new THREE.FBXLoader().parse(base, ''),
@@ -2730,10 +2756,9 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     // le rampant est allongé : cadre plus grand (et image agrandie d'autant en jeu, pour garder sa taille)
     const cadreZombie = Z => (Z.id === 'crawl' ? 1.45 : 1);
     function photographierGeste(corps, Z, geste, CLIPS) {
-      const [role, n, boucle, coupe] = gestesZombie(Z)[geste],
+      const [role, parSeconde, boucle, coupe] = gestesZombie(Z)[geste],
         [nomClip, vitesse] = Z.roles[role],
         clip = CLIPS[nomClip],
-        duree = coupe || clip.duration / vitesse,
         demi = 0.62 * (Z.taille || 1) * cadreZombie(Z);
       Object.assign(cam, { left: -demi, right: demi, top: demi, bottom: -demi });
       cam.position.set(0, 20, 0.12 * (Z.taille || 1) + 0.001);
@@ -2744,9 +2769,14 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
       corps.mixer.stopAllAction();
       const action = corps.mixer.clipAction(clip);
       action.play();
+      // durée dans le clip (secondes du clip), puis durée jouée en jeu (vitesse du zombie)
+      const dureeClip = coupe ? coupe * vitesse : boucle ? dureeCycle(corps, action, clip.duration) : clip.duration,
+        duree = dureeClip / vitesse,
+        n = Math.max(4, Math.min(120, Math.round(duree * parSeconde)));
+      console.log(`${Z.nom} : ${geste}, ${n} images pour ${duree.toFixed(2)} s`);
       const planche = nouvellePlanche(ZTAILLE, n);
       for (let i = 0; i < n; i++) {
-        action.time = (i / n) * duree * vitesse;
+        action.time = (i / n) * dureeClip;
         corps.mixer.update(0);
         rendu.render(scene, cam);
         planche.getContext('2d').drawImage(rendu.domElement, i * ZTAILLE, 0);
