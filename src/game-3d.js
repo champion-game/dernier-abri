@@ -335,7 +335,7 @@
           screen: true,
           left: versEcran(inst.yeux[0]),
           right: versEcran(inst.yeux[1]),
-          r: 1.5 * spec[3] * Math.hypot(m.a, m.b),
+          r: 1.25 * Math.min(spec[3], 1.1) * Math.hypot(m.a, m.b), // taille plafonnée : un gros œil de boss faisait une torche
           color: spec[2],
           alpha,
           wx: p.x,

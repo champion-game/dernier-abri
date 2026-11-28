@@ -6217,8 +6217,8 @@ function drawSpriteEyes() {
   for (const e of EYES) {
     if (!e.screen) continue;
     const glow = 0.3 + 0.7 * (1 - lightAt(e.wx, e.wy));
-    // v311 : yeux des zombies 3D (e.point) : deux points nets plus gros, sans flou lumineux, à fond dans le noir
-    const r = e.point ? e.r * 1.5 : e.r;
+    // v311 : yeux des zombies 3D (e.point) : deux points nets, sans flou lumineux, à fond dans le noir
+    const r = e.r;
     ctx.globalAlpha = e.point ? e.alpha * nightAmt : e.alpha * nightAmt * glow;
     ctx.shadowColor = e.color;
     ctx.shadowBlur = OPT.eco || e.point ? 0 : e.r * 4 * glow;

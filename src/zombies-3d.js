@@ -1136,7 +1136,7 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     mere: '#ff5ad2',
     zero: '#ff3a6a',
   };
-  const TAILLE_YEUX = { fat: 1.1, boss: 1.4, mere: 1.3, zero: 1.3 };
+  const TAILLE_YEUX = { fat: 1.05, boss: 1.1, mere: 1.05, zero: 1.05 }; // plus gros, le Colosse ressemblait à une torche
   // habille un corps X Bot : silhouette, proportions, peinture du corps, accessoires et coiffure
   function habiller(obj, Z) {
     const meshes = [];
@@ -1153,16 +1153,16 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     const coul = new THREE.Color(COULEUR_YEUX[Z.id] || '#ff4a3a'),
       t = TAILLE_YEUX[Z.id] || 1;
     [
-      ['oeilG', 3],
-      ['oeilD', -3],
+      ['oeilG', 4.3],
+      ['oeilD', -4.3],
     ].forEach(([nom, x]) => {
       const oeil = new THREE.Object3D();
       oeil.name = nom;
       oeil.position.set(x, 8, 12);
       os(obj, 'Head').add(oeil);
       [
-        [coul, 2.3, 0, 10],
-        [coul.clone().lerp(new THREE.Color('#ffffff'), 0.75), 1.15, 1, 11],
+        [coul, 1.5, 0, 10],
+        [coul.clone().lerp(new THREE.Color('#ffffff'), 0.75), 0.75, 1, 11],
       ].forEach(([c, r, z, ordre]) => {
         const point = new THREE.Mesh(SPH, new THREE.MeshBasicMaterial({ color: c, depthTest: false }));
         point.scale.setScalar(r * t);
