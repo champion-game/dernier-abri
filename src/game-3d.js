@@ -81,6 +81,12 @@
       enCours = null;
     }
   };
+  // yeux des zombies en 3D en direct : posés sur la tête animée plutôt qu'au point fixe du dessin
+  const yeuxDessin = pushSpriteEyes;
+  pushSpriteEyes = function (v, p, now, alpha) {
+    if (DIRECT && DIRECT.yeux(v, p, now, alpha)) return;
+    return yeuxDessin.apply(this, arguments);
+  };
   const drawUnitDessin = drawUnit;
   drawUnit = function (i, u, now) {
     enCours = { unite: i, now, decalage: (i * 0.53) % 7 };
@@ -255,6 +261,18 @@
       inst.action = a;
       inst.geste = geste;
     }
+    // position des yeux dans la case, en pixels depuis son centre (les repères suivent la tête animée)
+    const point = new THREE.Vector3();
+    function reperesYeux(inst) {
+      if (!inst.oeils) inst.oeils = ['oeilG', 'oeilD'].map(n => inst.obj.getObjectByName(n));
+      if (!inst.oeils[0]) return;
+      inst.yeux = inst.oeils.map(o => {
+        o.getWorldPosition(point).project(cam); // coordonnées de -1 à 1 sur toute la grille
+        const px = ((point.x + 1) / 2) * CASE * GRILLE,
+          py = ((1 - point.y) / 2) * CASE * GRILLE;
+        return [px - ((inst.case % GRILLE) + 0.5) * CASE, py - (Math.floor(inst.case / GRILLE) + 0.5) * CASE];
+      });
+    }
     // garde-fou : si l'appareil n'arrive plus à suivre, retour aux planches d'images
     let lent = 0,
       prec = performance.now();
@@ -274,7 +292,10 @@
         }
         if (instances.size) {
           rendu.render(scene, cam);
-          instances.forEach(inst => (inst.pret = true));
+          instances.forEach(inst => {
+            inst.pret = true;
+            reperesYeux(inst);
+          });
           // plus de 2 s cumulées sous 32 images/s : l'appareil ne suit pas
           lent = reel > 1 / 32 ? lent + reel : Math.max(0, lent - reel);
           if (lent > 2 && !force) {
@@ -292,6 +313,37 @@
     requestAnimationFrame(image);
 
     DIRECT = {
+      // lueur des yeux posée sur les yeux du modèle 3D (même liste EYES que le jeu : couleur, clignement, nuit)
+      yeux(v, p, now, alpha) {
+        const inst = instances.get(v),
+          spec = ZOMBIE_EYES[v.k];
+        if (!inst || !inst.pret || !inst.yeux || !spec || !ctx.getTransform) return false;
+        const d = sprK('z_' + v.k)[1];
+        if (!d) return false;
+        const sz = d[2] * inst.mod.echelle,
+          b = d[0] === 'rot' ? d[1] : 0,
+          m = ctx.getTransform(),
+          // même rotation que drawSpr (-b), puis passage à l'écran
+          versEcran = ([dx, dy]) => {
+            const x = (dx / CASE) * sz,
+              y = (dy / CASE) * sz,
+              lx = x * Math.cos(b) + y * Math.sin(b),
+              ly = -x * Math.sin(b) + y * Math.cos(b);
+            return [m.a * lx + m.c * ly + m.e, m.b * lx + m.d * ly + m.f];
+          };
+        EYES.push({
+          screen: true,
+          left: versEcran(inst.yeux[0]),
+          right: versEcran(inst.yeux[1]),
+          r: 1.5 * spec[3] * Math.hypot(m.a, m.b),
+          color: spec[2],
+          alpha,
+          wx: p.x,
+          wy: p.y,
+          open: zombieBlinkOpen(v, now),
+        });
+        return true;
+      },
       // dessine le zombie depuis sa case de la grille ; faux s'il n'a pas (encore) de modèle 3D
       dessiner(e, k, x, y, a, mul) {
         if (typeof OPT !== 'undefined' && OPT.eco) return false; // Mode économie : images préparées

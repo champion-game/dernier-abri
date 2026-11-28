@@ -1133,6 +1133,16 @@ float bruitDoux(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3. - 2. 
     if (Z.bras) ['LeftArm', 'RightArm'].forEach(n => os(obj, n).scale.set(1, Z.bras, 1));
     meshes.forEach(m => peindreCorps(m, Z.couleurs, Z.salete, Z.sang, Z));
     Z.habiller(obj, {});
+    // repères des yeux sur la tête (en centimètres, devant le visage) : le jeu y dessine la lueur des yeux
+    [
+      ['oeilG', 3],
+      ['oeilD', -3],
+    ].forEach(([nom, x]) => {
+      const oeil = new THREE.Object3D();
+      oeil.name = nom;
+      oeil.position.set(x, 8, 9.5);
+      os(obj, 'Head').add(oeil);
+    });
   }
   // Réunit les accessoires de chaque os en quelques objets (un par texture, plus un seul contour) :
   // un zombie passe d'environ 80 objets à dessiner à une quinzaine, indispensable pour une horde en 3D en direct
